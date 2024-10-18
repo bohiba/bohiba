@@ -1,0 +1,877 @@
+{
+  "companyList": [
+
+    {
+      "id": 1,
+      "consignerName": "O M C",
+      "consigneeLogo": "https://brandslogos.com/wp-content/uploads/images/large/omc-logo.png",
+      "loc": "Khandadhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "consignerName": "Rungta Mines",
+      "consigneeLogo": "https://media-exp1.licdn.com/dms/image/C560BAQHu3_2CxB3YYQ/company-logo_200_200/0/1631346700796?e=2147483647&v=beta&t=NmnscI2EpYhzMhD_UzsJoAh0Y9AGha6QsnRjJDbVKq0",
+      "loc": "Keonjhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "consignerName": "Essel Mining",
+      "consigneeLogo": "https://indianewsdiary.com/wp-content/uploads/2020/02/unnamed-1.png",
+      "loc": "Koira",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "consignerName": "Khandadhar Minning",
+      "consigneeLogo": "https://cdn4.vectorstock.com/i/1000x1000/47/18/coat-arms-odisha-is-a-indian-region-emblem-vector-36364718.jpg",
+      "loc": "Khandadhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "consignerName": "MCL",
+      "loc": "Jharsugda",
+      "consigneeLogo": "https://img.etimg.com/thumb/width-1200,height-900,imgsize-95811,resizemode-1,msid-76964829/industry/indl-goods/svs/metals-mining/pesb-makes-no-recommendation-for-top-post-at-mahanadi-coalfields-after-interviews.jpg",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "consignerName": "Rungta Mines",
+      "consigneeLogo": "https://media-exp1.licdn.com/dms/image/C510BAQEF_Ucx0RLLpw/company-logo_200_200/0/1569218015500?e=2147483647&v=beta&t=YGurjdSMz3d32-bTQEWeSRAA5PLWZ7AlJyFAuqIhECw",
+      "loc": "Keonjhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "consignerName": "Essel Mining",
+      "loc": "Koira",
+      "consigneeLogo": "https://indianewsdiary.com/wp-content/uploads/2020/02/unnamed-1.png",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "consignerName": "O M C",
+      "consigneeLogo": "https://brandslogos.com/wp-content/uploads/images/large/omc-logo.png",
+      "loc": "Khandadhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "consignerName": "Khandadhar",
+      "consigneeLogo": "https://cdn4.vectorstock.com/i/1000x1000/47/18/coat-arms-odisha-is-a-indian-region-emblem-vector-36364718.jpg",
+      "loc": "Khandadhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "consignerName": "MCL",
+      "consigneeLogo": "https://img.etimg.com/thumb/width-1200,height-900,imgsize-95811,resizemode-1,msid-76964829/industry/indl-goods/svs/metals-mining/pesb-makes-no-recommendation-for-top-post-at-mahanadi-coalfields-after-interviews.jpg",
+      "loc": "Jharsugda",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "consignerName": "Rungta Mines",
+      "consigneeLogo": "https://media-exp1.licdn.com/dms/image/C560BAQHu3_2CxB3YYQ/company-logo_200_200/0/1631346700796?e=2147483647&v=beta&t=NmnscI2EpYhzMhD_UzsJoAh0Y9AGha6QsnRjJDbVKq0",
+      "loc": "Keonjhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "consignerName": "Essel Mining",
+      "consigneeLogo": "https://indianewsdiary.com/wp-content/uploads/2020/02/unnamed-1.png",
+      "loc": "Koira",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "consignerName": "O M C",
+      "consigneeLogo": "https://brandslogos.com/wp-content/uploads/images/large/omc-logo.png",
+      "loc": "Khandadhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "consignerName": "Khandadhar",
+      "consigneeLogo": "https://cdn4.vectorstock.com/i/1000x1000/47/18/coat-arms-odisha-is-a-indian-region-emblem-vector-36364718.jpg",
+      "loc": "Khandadhar",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "consignerName": "MCL",
+      "loc": "Jharsugda",
+      "consigneeLogo": "https://img.etimg.com/thumb/width-1200,height-900,imgsize-95811,resizemode-1,msid-76964829/industry/indl-goods/svs/metals-mining/pesb-makes-no-recommendation-for-top-post-at-mahanadi-coalfields-after-interviews.jpg",
+      "consigneeDetails": [
+        {
+          "id": "BAP230001",
+          "date": "26/07/2023",
+          "permitNo": "L72303172",
+          "consigneeName": "Shyam Sel and Power Limited",
+          "transportPrice": 749.79,
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        },
+        {
+          "id": "BAP230002",
+          "date": "10/07/2023",
+          "permitNo": "L72302271",
+          "consigneeName": "Bhusan Power and Steel Ltd.",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhusan Power and Steel Ltd.,THELKOLOI,SAMBALPUR,ODISHA BPSL Rly. Siding Via Barsuan Siding On Dump A"
+        },
+        {
+          "id": "BAP230003",
+          "date": "21/07/2023",
+          "permitNo": "L82300680",
+          "consigneeName": "Bhaskar Steel and Ferro Alloy Private Limited",
+          "mineralName": "Iron",
+          "mineralType": "Lumps (CLO)",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Bhaskar Steel and Ferro Alloy Private Limited,BADTUMKELA,RAJAMUNDA,SUNDARGARH,ODISHA. ROUTE:BARSUAN-"
+        },
+        {
+          "id": "BAP230004",
+          "date": "25/07/2023",
+          "permitNo": "L82300289",
+          "consigneeName": "Shyam Metalics and Energy Ltd",
+          "mineralName": "Iron",
+          "mineralType": "Screened Fines",
+          "transporterName": "Bashukinath Roadways Pvt.Ltd.",
+          "transportPrice": 749.79,
+          "driverBonus": 2000.00,
+          "fuelBonus": 1300.00,
+          "consigneeAddress": "Shyam Sel and Power Limited,BAHADURPUR,JAMURIA,BURDWAN,WB SSPL Rly. Siding Via Barsuan Rly. Siding o"
+        }
+      ]
+    }
+  ]
+}
