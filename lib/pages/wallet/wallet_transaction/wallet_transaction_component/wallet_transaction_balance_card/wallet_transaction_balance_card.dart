@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../utils/bohiba_colors.dart';
+import '../../../../../component/bohiba_colors.dart';
 
 class BankTransactionBalanceCard extends StatelessWidget {
   const BankTransactionBalanceCard({Key? key}) : super(key: key);

@@ -4,7 +4,7 @@ import 'package:bohiba/controllers/signin_controller.dart';
 import 'package:bohiba/controllers/signup_controller.dart';
 import 'package:bohiba/controllers/user_auth_controller.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/controllers/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';

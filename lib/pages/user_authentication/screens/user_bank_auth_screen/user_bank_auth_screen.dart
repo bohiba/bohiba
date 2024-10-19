@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bohiba/pages/user_authentication/user_auth_string/user_auth_string.dart';
 
-import '../../../../utils/bohiba_dropdown/bohiba_dropdown.dart';
-import '../../../../utils/bohiba_inputfield/text_inputfield.dart';
+import '../../../../component/bohiba_dropdown/bohiba_dropdown.dart';
+import '../../../../component/bohiba_inputfield/text_inputfield.dart';
 import '../../user_auth_widget/user_auth_image_upload/user_auth_image_upload.dart';
 
 class UserBankAuthScreen extends StatefulWidget {

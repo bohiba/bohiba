@@ -1,13 +1,12 @@
+import 'package:bohiba/pages/wishlist/wish_list_card.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/pages/home/home_string/home_strings.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
-import '../../../../data/models/company_details_model.dart';
-import '../../../market/market_component/market_card/market_card.dart';
 
 class HomeWishListSection extends StatefulWidget {
   const HomeWishListSection({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class _HomeWishListSectionState extends State<HomeWishListSection> {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: CompanyModel.companyList.isEmpty ? false : true,
+      // visible: CompanyModel.companyList.isEmpty ? false : true,
       child: Column(
         children: [
           // Home WishList Header
@@ -62,14 +61,13 @@ class _HomeWishListSectionState extends State<HomeWishListSection> {
               ],
             ),
           ),
-          SizedBox(height: BohibaResponsiveScreen.height5),
+          Gap(BohibaResponsiveScreen.height5),
 
           // Home WishList Section
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: 0.087 * BohibaResponsiveScreen.width50,
-            ),
-            child: CompanyModel.companyList.isEmpty
+          Container(
+            alignment: Alignment.center,
+            child:
+                /*CompanyModel.companyList.isEmpty
                 ? Center(
                     child: TextButton(
                       onPressed: () => Get.offNamedUntil(
@@ -83,28 +81,16 @@ class _HomeWishListSectionState extends State<HomeWishListSection> {
                       child: const Text('Add Company'),
                     ),
                   )
-                : ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return MarketHorizonCard(
-                        onTap: () {
-                          Get.toNamed(
-                            BohibaRoute.companyScreen,
-                            arguments: {
-                              "id": CompanyModel.companyList[index].id,
-                              "consigner_name":
-                                  CompanyModel.companyList[index].consignerName,
-                              "consigner_Logo":
-                                  CompanyModel.companyList[index].consigneeLogo,
-                              "loc": CompanyModel.companyList[index].loc,
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
+                : */
+
+                ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return const HomeWishListCard();
+              },
+            ),
           ),
         ],
       ),

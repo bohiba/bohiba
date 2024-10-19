@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_icon.dart';
+import 'package:bohiba/component/bohiba_icon.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {

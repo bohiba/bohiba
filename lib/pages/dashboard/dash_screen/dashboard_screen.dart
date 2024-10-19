@@ -1,10 +1,11 @@
+import 'package:bohiba/pages/driver/screen/driver_list_page.dart';
 import 'package:bohiba/pages/load/screen/all_load_screen.dart';
 import 'package:bohiba/pages/vehicle/all_vechile_screen/all_vehicle_screen.dart';
 import 'package:bohiba/pages/vehicle/map.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/dashboard_appbar.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_appbar/dashboard_appbar.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/pages/dashboard/dashboard_component/bluebox_component.dart';
 import 'package:bohiba/pages/dashboard/dashboard_component/single_tile_tab_component.dart';
 import 'package:bohiba/pages/user/user_kyc/kyc_screen.dart';
@@ -147,7 +148,7 @@ class _Dashboardpagestate extends State<DashboardScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MapScreen(),
+                                builder: (context) => const DriverListPage(),
                               ),
                             );
                           },

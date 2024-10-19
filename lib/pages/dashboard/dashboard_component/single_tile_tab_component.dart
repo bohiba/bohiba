@@ -1,4 +1,4 @@
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:flutter/material.dart';
 
 class SingleTileTabComponent extends StatelessWidget {

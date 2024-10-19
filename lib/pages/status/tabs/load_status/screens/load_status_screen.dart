@@ -1,6 +1,6 @@
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 
 class LoadStatusScreen extends StatelessWidget {
   const LoadStatusScreen({Key? key}) : super(key: key);

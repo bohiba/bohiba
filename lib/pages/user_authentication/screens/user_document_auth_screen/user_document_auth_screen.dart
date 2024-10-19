@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bohiba/utils/bohiba_inputfield/text_inputfield.dart';
+import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
 
-import '../../../../utils/bohiba_inputfield/input_formatters/aadhar_number_formatter.dart';
+import '../../../../component/bohiba_inputfield/input_formatters/aadhar_number_formatter.dart';
 import '../../user_auth_widget/user_auth_image_upload/user_auth_image_upload.dart';
 
 class UserDocAuthScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _UserDocAuthScreenState extends State<UserDocAuthScreen> {
     double height = MediaQuery.sizeOf(context).height;
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
             Align(
@@ -44,8 +44,9 @@ class _UserDocAuthScreenState extends State<UserDocAuthScreen> {
                 debugPrint(v.length.toString());
               },
             ),
-            const UserAuthContainerImageUpload(
+            UserAuthContainerImageUpload(
               label: 'Upload your Aadhar-image',
+              onTap: () {},
             ),
             SizedBox(height: height * 0.02),
             TextInputField(
@@ -55,14 +56,14 @@ class _UserDocAuthScreenState extends State<UserDocAuthScreen> {
               textCapitalization: TextCapitalization.characters,
               onChanged: (value) {},
             ),
-            // Discard the class
-            // const DocumentImagePicker(
-            //   label: 'Upload your PAN image',
-            // ),
-            const UserAuthContainerImageUpload(
+            UserAuthContainerImageUpload(
               label: 'Upload your PAN-image',
+              onTap: () {},
             ),
-            const UserAuthContainerImageUpload(label: "Upload your Signature")
+            UserAuthContainerImageUpload(
+              label: "Upload your Signature",
+              onTap: () {},
+            )
           ],
         ),
       ),

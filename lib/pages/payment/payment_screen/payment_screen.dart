@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/utils/bohiba_text/payment_text.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_text/payment_text.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../utils/bohiba_colors.dart';
+import '../../../component/bohiba_colors.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({Key? key}) : super(key: key);

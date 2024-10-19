@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/market_appbar.dart';
-import 'package:bohiba/utils/bohiba_strings/market_strings.dart';
+import 'package:bohiba/component/bohiba_appbar/market_appbar.dart';
+import 'package:bohiba/component/bohiba_strings/market_strings.dart';
 import 'package:bohiba/pages/market/market_component/market_companylist_demo.dart';
 
-import '../../../utils/bohiba_colors.dart';
-import '../../../data/models/company_details_model.dart';
+import '../../../component/bohiba_colors.dart';
+import '../../../models/company_details_model.dart';
 
 class MarketPage extends StatefulWidget {
   final int moveToTab;

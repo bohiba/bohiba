@@ -1,13 +1,13 @@
 import 'package:bohiba/pages/vehicle/add_vehicle_component/driver_details_component.dart';
 import 'package:bohiba/pages/vehicle/add_vehicle_component/trailing_button.dart';
-import 'package:bohiba/pages/vehicle/add_vehicle_component/vehicle_doc_component.dart';
+import 'package:bohiba/pages/vehicle/add_vehicle_component/document_tile.dart';
 import 'package:bohiba/pages/vehicle/add_vehicle_widget/edit_vehicle_modal_sheet.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 
-import '../../../utils/bottom_nav_button/bottom_nav_button.dart';
-import '../../../utils/bohiba_appbar/add_vehicle_appbar.dart';
+import '../../../component/bottom_nav_button/bottom_nav_button.dart';
+import '../../../component/bohiba_appbar/add_vehicle_appbar.dart';
 import '../add_vehicle_widget/add_vehicle_modal_sheet.dart';
 
 class AllVehicleScreen extends StatefulWidget {
@@ -36,6 +36,7 @@ class _AddVehiclepagestate extends State<AllVehicleScreen> {
               (index) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2.5),
                 child: Card(
+                  elevation: 0,
                   color: Colors.grey.shade100,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -72,52 +73,6 @@ class _AddVehiclepagestate extends State<AllVehicleScreen> {
                                 return const EditVechileDetailsModalSheet();
                               },
                             );
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (context) {
-                            //       return Dialog(
-                            //         insetPadding: const EdgeInsets.symmetric(
-                            //           vertical: 10.0,
-                            //           horizontal: 15.0,
-                            //         ),
-                            //         child: Container(
-                            //           height: height * 0.36,
-                            //           padding: const EdgeInsets.symmetric(
-                            //             vertical: 10.0,
-                            //             horizontal: 15.0,
-                            //           ),
-                            //           child: Column(
-                            //             children: [
-                            //               Align(
-                            //                 alignment: Alignment.centerLeft,
-                            //                 child: Text(
-                            //                   'Edit Driver info',
-                            //                   style: Theme.of(context)
-                            //                       .textTheme
-                            //                       .headlineMedium,
-                            //                 ),
-                            //               ),
-                            //               const Gap(10.0),
-                            //               const TextInputField(
-                            //                 hintText: 'DL Number',
-                            //               ),
-                            //               const TextInputField(
-                            //                 hintText: 'Name',
-                            //               ),
-                            //               const TextInputField(
-                            //                 maxLength: 10,
-                            //                 keyboardType: TextInputType.phone,
-                            //                 hintText: 'Mobile Number',
-                            //               ),
-                            //               PrimaryButton(
-                            //                 onPressed: () {},
-                            //                 label: 'SUBMIT',
-                            //               )
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       );
-                            //     });
                           },
                           icon: Icons.edit,
                           iconColor: bohibaColors.primaryColor,
@@ -137,15 +92,15 @@ class _AddVehiclepagestate extends State<AllVehicleScreen> {
                     ),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      VehicleDocuments(
+                      DocumentTile(
                         vehicleDocument: "Engine Number",
                         expiryDate: "MJPZ1054XX",
                       ),
-                      VehicleDocuments(
+                      DocumentTile(
                         vehicleDocument: "Chassis Number",
                         expiryDate: "MB1KJLHD5MPJXXXXX",
                       ),
-                      VehicleDocuments(
+                      DocumentTile(
                         vehicleDocument: "Vehicle Insurance",
                         expiryDate: "26/07/2027",
                         trailing: TextButton(
@@ -153,7 +108,7 @@ class _AddVehiclepagestate extends State<AllVehicleScreen> {
                           child: Text("Renew"),
                         ),
                       ),
-                      VehicleDocuments(
+                      DocumentTile(
                         vehicleDocument: "Permit",
                         expiryDate: "01/02/2027",
                         trailing: TextButton(
@@ -161,7 +116,7 @@ class _AddVehiclepagestate extends State<AllVehicleScreen> {
                           child: Text("Renew"),
                         ),
                       ),
-                      VehicleDocuments(
+                      DocumentTile(
                         vehicleDocument: "Fitness Certificate",
                         expiryDate: "01/02/2027",
                         trailing: TextButton(
@@ -209,7 +164,7 @@ class _AddVehiclepagestate extends State<AllVehicleScreen> {
                 },
               );
             },
-            label: "Add Vehicle",
+            label: "Add New Vehicle",
           ),
         ),
       ),

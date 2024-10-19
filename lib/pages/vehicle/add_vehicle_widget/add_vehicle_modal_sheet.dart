@@ -1,10 +1,10 @@
-import 'package:bohiba/utils/bohiba_inputfield/date_inputfield.dart';
+import 'package:bohiba/component/bohiba_inputfield/date_inputfield.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../utils/bohiba_buttons/primary_button.dart';
-import '../../../utils/bohiba_inputfield/text_inputfield.dart';
+import '../../../component/bohiba_buttons/primary_button.dart';
+import '../../../component/bohiba_inputfield/text_inputfield.dart';
 import '../vechile_dash_string/vehicle_dash_string.dart';
 import 'add_vehicle_input_field.dart';
 

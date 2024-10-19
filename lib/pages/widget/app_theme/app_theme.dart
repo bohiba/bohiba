@@ -1,6 +1,6 @@
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:get/get.dart';
 
 import '../../../services/pref_utils.dart';
@@ -46,6 +46,7 @@ class ThemeHelper {
       ),
       primaryColor: bohibaColors.primaryColor,
       scaffoldBackgroundColor: bohibaColors.bgColor,
+      cardColor: Colors.grey.shade50,
       fontFamily: 'Poppins',
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -71,7 +72,7 @@ class ThemeHelper {
           color: bohibaColors.primaryColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
-          fontSize: 22.fontSize,
+          fontSize: 12.fontSize,
           // fontStyle: FontStyle.italic
         ),
         iconTheme: IconThemeData(
@@ -108,7 +109,6 @@ class ThemeHelper {
           side: BorderSide.none,
         ),
       ),
-      cardColor: Colors.grey.shade50,
       cardTheme: CardTheme(
           elevation: 0.5,
           shape: RoundedRectangleBorder(

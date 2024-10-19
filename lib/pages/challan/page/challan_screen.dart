@@ -4,7 +4,7 @@ import 'package:bohiba/pages/challan/component/vehicle_detail_component/vehicle_
 import 'package:flutter/material.dart';
 import 'package:bohiba/pages/status/tabs/tab_widget/row_text.dart';
 
-import '../../../utils/bohiba_appbar/tab_appbar.dart';
+import '../../../component/bohiba_appbar/tab_appbar.dart';
 
 class ChallanScreen extends StatelessWidget {
   const ChallanScreen({Key? key}) : super(key: key);

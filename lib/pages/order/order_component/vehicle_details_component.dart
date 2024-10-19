@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/bohiba_inputfield/text_inputfield.dart';
-import '../../../utils/bohiba_colors.dart';
+import '../../../component/bohiba_inputfield/text_inputfield.dart';
+import '../../../component/bohiba_colors.dart';
 
 class VehicleDetailsComponent extends StatelessWidget {
   const VehicleDetailsComponent({Key? key}) : super(key: key);

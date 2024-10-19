@@ -1,4 +1,4 @@
-import 'package:bohiba/utils/bohiba_appbar/load_appbar.dart';
+import 'package:bohiba/component/bohiba_appbar/load_appbar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 

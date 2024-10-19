@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:bohiba/utils/bohiba_dropdown/bohiba_dropdown.dart';
+import 'package:bohiba/component/bohiba_dropdown/bohiba_dropdown.dart';
 
-import '../../../../utils/bohiba_buttons/document_image_picker_button.dart';
-import '../../../../utils/bohiba_inputfield/text_inputfield.dart';
+import '../../../../component/bohiba_buttons/document_image_picker_button.dart';
+import '../../../../component/bohiba_inputfield/text_inputfield.dart';
 import '../../user_auth_string/user_auth_string.dart';
 
 class UserAddressAuthScreen extends StatefulWidget {
@@ -16,7 +16,6 @@ class UserAddressAuthScreen extends StatefulWidget {
 }
 
 class _UserAddressAuthScreenState extends State<UserAddressAuthScreen> {
-
   String? dropdownValue;
   List<String> items = [
     'Aadhaar Card',
@@ -72,16 +71,18 @@ class _UserAddressAuthScreenState extends State<UserAddressAuthScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 5.0,),
+          const SizedBox(
+            height: 5.0,
+          ),
           Visibility(
               maintainState: true,
               maintainAnimation: true,
-              visible: dropdownValue == null || dropdownValue == "Aadhaar Card"  ? false :true,
+              visible: dropdownValue == null || dropdownValue == "Aadhaar Card"
+                  ? false
+                  : true,
               child: DocumentImagePicker(
                 label: "Upload your $dropdownValue",
-              )
-          ),
-
+              )),
           TextInputField(
             hintText: UserAddressAuthString.houseNo,
           ),

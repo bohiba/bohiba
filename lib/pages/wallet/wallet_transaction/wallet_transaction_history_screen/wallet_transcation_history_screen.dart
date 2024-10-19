@@ -1,7 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/pages/wallet/wallet_string/wallet_string.dart';
 
 import '../wallet_transaction_component/wallet_transaction_balance_card/wallet_transaction_balance_card.dart';

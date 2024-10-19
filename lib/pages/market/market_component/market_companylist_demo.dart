@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/company_details_model.dart';
+import '../../../models/company_details_model.dart';
 import 'market_card/market_card.dart';
 
 class CompanyListDemo extends StatefulWidget {

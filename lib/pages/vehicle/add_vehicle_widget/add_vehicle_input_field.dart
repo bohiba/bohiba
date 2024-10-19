@@ -1,7 +1,7 @@
-import 'package:bohiba/utils/bohiba_colors.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_icon.dart';
+import 'package:bohiba/component/bohiba_icon.dart';
 import 'package:remixicon/remixicon.dart';
 
 class ChooseVehicleWheel extends StatefulWidget {

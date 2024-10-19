@@ -1,12 +1,12 @@
 import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/utils/bohiba_inputfield/text_inputfield.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/bohiba_buttons/primary_button.dart';
-import '../../../utils/bohiba_inputfield/password_inputfield.dart';
+import '../../../component/bohiba_buttons/primary_button.dart';
+import '../../../component/bohiba_inputfield/password_inputfield.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -127,9 +127,7 @@ class _SignInpagestate extends State<SignInScreen> {
               style: bohibaTheme.textTheme.titleSmall,
             ),
             InkWell(
-              onTap: () => {
-                
-                Get.offNamed(BohibaRoute.signUp)},
+              onTap: () => {Get.offNamed(BohibaRoute.signUp)},
               child: Container(
                 height: BohibaResponsiveScreen.height30,
                 width: BohibaResponsiveScreen.width50,

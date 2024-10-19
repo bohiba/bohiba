@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../utils/bohiba_buttons/primary_button.dart';
-import '../../../utils/bohiba_colors.dart';
+import '../../../component/bohiba_buttons/primary_button.dart';
+import '../../../component/bohiba_colors.dart';
 
 class OtpScreen extends StatelessWidget {
   final String email;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/utils/bohiba_inputfield/text_inputfield.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
 
-import '../../../utils/bohiba_buttons/bottom_button.dart';
-import '../../../utils/bohiba_colors.dart';
+import '../../../component/bohiba_buttons/bottom_button.dart';
+import '../../../component/bohiba_colors.dart';
 
 class EditUserProfileScreen extends StatefulWidget {
   const EditUserProfileScreen({Key? key}) : super(key: key);

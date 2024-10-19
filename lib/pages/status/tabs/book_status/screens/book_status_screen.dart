@@ -1,6 +1,6 @@
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 
 class BookStatusScreen extends StatelessWidget {
   const BookStatusScreen({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class BookStatusScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 2.5),
               child: ListTile(
                 onTap: () {},
-                minTileHeight: 65,
+                // minTileHeight: 65,s
                 title: const Text('0D 14A 7224'),
                 subtitle: const Text('24-22 Tonne'),
                 trailing: const Text('Paid'),

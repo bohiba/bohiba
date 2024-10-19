@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
 
 class KYCScreen extends StatefulWidget {
   const KYCScreen({Key? key}) : super(key: key);
@@ -11,7 +11,6 @@ class KYCScreen extends StatefulWidget {
 class _KYCScreenState extends State<KYCScreen> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const TitleAppbar(
         title: "KYC",

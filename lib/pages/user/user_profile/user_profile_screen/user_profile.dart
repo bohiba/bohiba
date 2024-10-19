@@ -2,7 +2,7 @@ import 'package:bohiba/pages/user/user_profile/edit_user_profile_screen.dart';
 import 'package:bohiba/pages/user/user_profile/user_profile_component/user_profile_card.dart';
 import 'package:bohiba/pages/user/user_profile/user_profile_component/user_profile_contact_card_component.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({Key? key}) : super(key: key);

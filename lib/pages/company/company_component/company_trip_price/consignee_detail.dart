@@ -1,201 +1,305 @@
-import 'package:bohiba/utils/screen_utils.dart';
-import 'package:bohiba/pages/company/company_string/company_string.dart';
+import 'package:bohiba/component/bohiba_buttons/small_tile_button.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
+import 'package:bohiba/component/screen_utils.dart';
+import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:gap/gap.dart';
 
 class ConsigneeDetails extends StatelessWidget {
-  final List<dynamic> consigneeDetails;
-  const ConsigneeDetails({required this.consigneeDetails, Key? key})
-      : super(key: key);
+  final List<dynamic>? consigneeDetails;
+  const ConsigneeDetails({this.consigneeDetails, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: BohibaResponsiveScreen.width * 0.95,
-        height: BohibaResponsiveScreen.height * 0.50,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: const Color(0xFFEAEAEA),
-          borderRadius: BorderRadius.circular(
-            BohibaResponsiveScreen.width10,
-          ),
-        ),
-        child: PageView.builder(
-            itemCount: consigneeDetails.length,
-            scrollDirection: Axis.horizontal,
+    return Expanded(
+      child: Scrollbar(
+        child: Padding(
+          padding:
+              EdgeInsets.symmetric(horizontal: BohibaResponsiveScreen.width20),
+          child: ListView.builder(
+            itemCount: 12,
             itemBuilder: (context, index) {
-              var loadDetails = consigneeDetails[index];
-              debugPrint(loadDetails.toString());
-              return Container(
-                width: BohibaResponsiveScreen.width * 0.95,
-                height: BohibaResponsiveScreen.height * 0.50,
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      CompanyScreenString.transportPrice,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    Text(
-                      '₹ ',
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .fontWeight,
-                          color: bohibaColors.primaryVariantColor),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Column(
-                      children: [
-                        Row(
+              return GestureDetector(
+                onTap: () {},
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(bottom: 5.0),
+                  height: BohibaResponsiveScreen.height * 0.12,
+                  decoration: BoxDecoration(
+                      color: bohibaColors.lightGreyColor,
+                      borderRadius: BorderRadius.circular(
+                          BohibaResponsiveScreen.height10)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: BohibaResponsiveScreen.height5,
+                            horizontal: BohibaResponsiveScreen.width15),
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '₹ 2000.00',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                Text(CompanyScreenString.driverBonus,
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontSize,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall!
-                                          .color,
-                                      fontWeight: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontWeight,
-                                    )),
-                              ],
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: bohibaColors.white,
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '₹ 1500.00',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                Text(CompanyScreenString.fuelBonus,
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontSize,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall!
-                                          .color,
-                                      fontWeight: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontWeight,
-                                    )),
-                              ],
+                            Gap(BohibaResponsiveScreen.height10),
+                            Text(
+                              'company_name',
+                              style: bohibaTheme.textTheme.labelMedium,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '12345.76 Ton',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                Text(CompanyScreenString.availableMaterial,
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontSize,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall!
-                                          .color,
-                                      fontWeight: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontWeight,
-                                    )),
-                              ],
-                            ),
+                            /*const Spacer(),
+                            SmallTileButton(
+                              onTap: () {},
+                              label: 'Book',
+                            )*/
                           ],
                         ),
-                        const SizedBox(
-                          height: 20,
+                      ),
+                      const Divider(),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.only(
+                              top: 5.0, bottom: 5.0, left: 10.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: bohibaColors.black,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                  children: const [
+                                    TextSpan(text: 'Metal: '),
+                                    TextSpan(text: 'Iron'),
+                                  ],
+                                ),
+                              ),
+                              Gap(BohibaResponsiveScreen.width15),
+                              RichText(
+                                text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: bohibaColors.black,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                  children: const [
+                                    TextSpan(text: 'Location: '),
+                                    TextSpan(text: 'Khandadhar'),
+                                  ],
+                                ),
+                              ),
+                              Gap(BohibaResponsiveScreen.width15),
+                              RichText(
+                                text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: bohibaColors.black,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                  children: const [
+                                    TextSpan(text: 'Price: '),
+                                    TextSpan(text: '2334.0 /tonne'),
+                                  ],
+                                ),
+                              ),
+                              Gap(BohibaResponsiveScreen.width15),
+                              RichText(
+                                text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: bohibaColors.black,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                  children: [
+                                    const TextSpan(text: 'Wheels: '),
+                                    WidgetSpan(
+                                      child: Row(
+                                        children: List.generate(
+                                          4,
+                                          (index) => Text(
+                                            "${index + 10},",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: bohibaColors.black,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Iron',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                Text(CompanyScreenString.materialType,
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontSize,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall!
-                                          .color,
-                                      fontWeight: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontWeight,
-                                    )),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '12345.76 Tonne',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                Text(CompanyScreenString.transportTo,
-                                    style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontSize,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall!
-                                          .color,
-                                      fontWeight: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .fontWeight,
-                                    )),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               );
-            }));
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
+/*PageView.builder(
+        itemCount: consigneeDetails.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          var loadDetails = consigneeDetails[index];
+          debugPrint(loadDetails.toString());
+          return Container(
+            width: BohibaResponsiveScreen.width * 0.95,
+            height: BohibaResponsiveScreen.height * 0.50,
+            padding: EdgeInsets.zero,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  CompanyScreenString.transportPrice,
+                  style: bohibaTheme.textTheme.headlineSmall,
+                ),
+                Text(
+                  '₹ ',
+                  style: TextStyle(
+                      fontSize: 32,
+                      fontWeight:
+                          bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                      color: bohibaColors.primaryVariantColor),
+                ),
+                Gap(25),
+                Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '₹ 2000.00',
+                              style: bohibaTheme.textTheme.labelLarge,
+                            ),
+                            Text(
+                              CompanyScreenString.driverBonus,
+                              style: TextStyle(
+                                fontSize:
+                                    bohibaTheme.textTheme.labelSmall!.fontSize,
+                                color:
+                                    bohibaTheme.textTheme.displaySmall!.color,
+                                fontWeight: bohibaTheme
+                                    .textTheme.labelSmall!.fontWeight,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '₹ 1500.00',
+                              style: bohibaTheme.textTheme.labelLarge,
+                            ),
+                            Text(CompanyScreenString.fuelBonus,
+                                style: TextStyle(
+                                  fontSize: bohibaTheme
+                                      .textTheme.labelSmall!.fontSize,
+                                  color:
+                                      bohibaTheme.textTheme.displaySmall!.color,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.labelSmall!.fontWeight,
+                                )),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '12345.76 Ton',
+                              style: bohibaTheme.textTheme.labelLarge,
+                            ),
+                            Text(
+                              CompanyScreenString.availableMaterial,
+                              style: TextStyle(
+                                fontSize:
+                                    bohibaTheme.textTheme.labelSmall!.fontSize,
+                                color:
+                                    bohibaTheme.textTheme.displaySmall!.color,
+                                fontWeight: bohibaTheme
+                                    .textTheme.labelSmall!.fontWeight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Iron',
+                              style: bohibaTheme.textTheme.labelLarge,
+                            ),
+                            Text(CompanyScreenString.materialType,
+                                style: TextStyle(
+                                  fontSize: bohibaTheme
+                                      .textTheme.labelSmall!.fontSize,
+                                  color:
+                                      bohibaTheme.textTheme.displaySmall!.color,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.labelSmall!.fontWeight,
+                                )),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '12345.76 Tonne',
+                              style: bohibaTheme.textTheme.labelLarge,
+                            ),
+                            Text(
+                              CompanyScreenString.transportTo,
+                              style: TextStyle(
+                                fontSize:
+                                    bohibaTheme.textTheme.labelSmall!.fontSize,
+                                color:
+                                    bohibaTheme.textTheme.displaySmall!.color,
+                                fontWeight: bohibaTheme
+                                    .textTheme.labelSmall!.fontWeight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ) */

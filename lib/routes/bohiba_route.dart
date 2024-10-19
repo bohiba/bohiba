@@ -1,9 +1,10 @@
-import 'package:bohiba/utils/bohiba_navbar/bohiba_navbar.dart';
+import 'package:bohiba/component/bohiba_navbar/bohiba_navbar.dart';
 import 'package:bohiba/pages/authentication/forgot_screen/forgot_password.dart';
 import 'package:bohiba/pages/authentication/otp_screen/otp_screen.dart';
 import 'package:bohiba/pages/authentication/signin_screen/signin_screen.dart';
 import 'package:bohiba/pages/company/company_screen/company_screen.dart';
 import 'package:bohiba/pages/dashboard/dash_screen/dashboard_screen.dart';
+import 'package:bohiba/pages/driver/screen/driver_list_page.dart';
 import 'package:bohiba/pages/load/screen/add_load_screen.dart';
 import 'package:bohiba/pages/load/screen/all_load_screen.dart';
 import 'package:bohiba/pages/load/screen/load_screen.dart';
@@ -17,6 +18,8 @@ import 'package:bohiba/pages/splashscreen.dart';
 import 'package:bohiba/pages/status/tabs/complete_status/screen/challan_screen/challan_screen.dart';
 import 'package:bohiba/pages/user_authentication/screens/user_auth_screen/user_auth_screen.dart';
 import 'package:bohiba/pages/vehicle/all_vechile_screen/all_vehicle_screen.dart';
+import 'package:bohiba/pages/wallet/wallet_deposit/wallet_deposit_screen/wallet_deposit_screen.dart';
+import 'package:bohiba/pages/wallet/wallet_screen/wallet_screen.dart';
 import 'package:get/get.dart';
 
 import '../pages/authentication/signup_screen/signup_screen.dart';
@@ -43,6 +46,9 @@ class BohibaRoute {
 
   // Vechile pages Strings
   static const String addVehicle = "/add-vehicle";
+
+  // Driver
+  static const String driverList = "/add-driver";
 
   // Main pages String
   static const String homeScreen = "/home";
@@ -151,6 +157,18 @@ class BohibaRoute {
     GetPage(
       name: loadScreen,
       page: () => const LoadScreen(),
-    )
+    ),
+    GetPage(
+      name: walletScreen,
+      page: () => const WalletScreen(),
+    ),
+    GetPage(
+      name: walletScreen,
+      page: () => const WalletDepositScreen(),
+    ),
+    GetPage(
+      name: driverList,
+      page: () => const DriverListPage(),
+    ),
   ];
 }

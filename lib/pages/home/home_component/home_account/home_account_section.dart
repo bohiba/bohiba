@@ -1,14 +1,14 @@
 import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_buttons/secoundary_button.dart';
+import 'package:bohiba/component/bohiba_buttons/secoundary_button.dart';
 import 'package:bohiba/pages/home/home_string/home_strings.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../../utils/bohiba_buttons/primary_icon_button.dart';
-import '../../../../utils/bohiba_colors.dart';
+import '../../../../component/bohiba_buttons/primary_icon_button.dart';
+import '../../../../component/bohiba_colors.dart';
 
 class HomeAccountSection extends StatefulWidget {
   const HomeAccountSection({Key? key}) : super(key: key);

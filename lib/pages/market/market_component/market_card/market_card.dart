@@ -1,13 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bohiba/utils/bohiba_text/bohiba_marquee_text.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/bohiba_text/bohiba_marquee_text.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:marquee_text/marquee_text.dart';
-import '../../../../utils/bohiba_colors.dart';
-import '../../../../data/models/company_details_model.dart';
+import '../../../../component/bohiba_colors.dart';
+import '../../../../models/company_details_model.dart';
 import '../../../company/company_screen/company_screen.dart';
 
 class MarketHorizonCard extends StatefulWidget {

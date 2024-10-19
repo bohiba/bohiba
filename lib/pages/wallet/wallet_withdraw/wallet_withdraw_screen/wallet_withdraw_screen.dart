@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/utils/bohiba_inputfield/currency_inputfield.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_inputfield/currency_inputfield.dart';
 import 'package:bohiba/pages/wallet/wallet_string/wallet_string.dart';
 
-import '../../../../utils/bohiba_buttons/bottom_button.dart';
-import '../../../../utils/bohiba_colors.dart';
+import '../../../../component/bohiba_buttons/bottom_button.dart';
+import '../../../../component/bohiba_colors.dart';
 
 class WalletWithdrawScreen extends StatefulWidget {
   const WalletWithdrawScreen({Key? key}) : super(key: key);

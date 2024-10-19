@@ -1,7 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/pages/order/order_component/driver_detail_component.dart';
 import 'package:bohiba/pages/order/order_component/from_to_details_component.dart';
 import 'package:bohiba/pages/order/order_component/vehicle_details_component.dart';

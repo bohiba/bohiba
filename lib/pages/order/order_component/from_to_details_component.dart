@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/bohiba_dropdown/bohiba_dropdown.dart';
-import '../../../utils/bohiba_inputfield/text_inputfield.dart';
+import '../../../component/bohiba_dropdown/bohiba_dropdown.dart';
+import '../../../component/bohiba_inputfield/text_inputfield.dart';
 
 class FromToDetailsComponent extends StatelessWidget {
   final bool fromReadOnly;

@@ -1,9 +1,8 @@
-import 'package:bohiba/utils/bohiba_navbar/helper_navbar/helper_navbar.dart';
+import 'package:bohiba/component/bohiba_navbar/helper_navbar/helper_navbar.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
-import 'package:gap/gap.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:get/get.dart';
 
 import '../user_address_auth_screen/user_address_auth_screen.dart';
@@ -33,6 +32,7 @@ class _UserAuthScreenState extends State<UserAuthScreen> {
               canvasColor: bohibaColors.white,
               inputDecorationTheme: Theme.of(context).inputDecorationTheme),
           child: Stepper(
+            connectorThickness: 1.5,
             type: StepperType.horizontal,
             elevation: 0,
             steps: [
@@ -97,7 +97,10 @@ class _UserAuthScreenState extends State<UserAuthScreen> {
                       ),
                     ),
                   )
-                : const Gap(35),
+                : CircleAvatar(
+                    radius: 30,
+                    backgroundColor: bohibaColors.transparent,
+                  ),
             _currentStep == 2
                 ? GestureDetector(
                     onTap: () => Get.toNamed(

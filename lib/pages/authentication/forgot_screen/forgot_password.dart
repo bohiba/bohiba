@@ -1,9 +1,9 @@
 import 'package:bohiba/pages/authentication/otp_screen/otp_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/bohiba_buttons/primary_button.dart';
-import '../../../utils/bohiba_inputfield/email_inputfield.dart';
-import '../../../utils/bohiba_colors.dart';
+import '../../../component/bohiba_buttons/primary_button.dart';
+import '../../../component/bohiba_inputfield/email_inputfield.dart';
+import '../../../component/bohiba_colors.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);

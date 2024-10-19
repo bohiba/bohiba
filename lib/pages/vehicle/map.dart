@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_appbar/map_appbar.dart';
+import 'package:bohiba/component/bohiba_appbar/map_appbar.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -14,7 +14,6 @@ class _MapScreenState extends State<MapScreen> {
     return const Scaffold(
         //AppBar
         appBar: MapAppBar(),
-        body: Center(child: Text('Map Screen'))
-    );
+        body: Center(child: Text('Map Screen')));
   }
 }

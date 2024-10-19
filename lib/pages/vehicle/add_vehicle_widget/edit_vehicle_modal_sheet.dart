@@ -1,6 +1,6 @@
-import 'package:bohiba/utils/bohiba_buttons/primary_button.dart';
-import 'package:bohiba/utils/bohiba_inputfield/text_inputfield.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/bohiba_buttons/primary_button.dart';
+import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/vehicle/vechile_dash_string/vehicle_dash_string.dart';
 import 'package:flutter/material.dart';
 

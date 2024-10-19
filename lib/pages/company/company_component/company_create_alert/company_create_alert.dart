@@ -1,10 +1,10 @@
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-import 'package:bohiba/utils/bohiba_inputfield/currency_inputfield.dart';
-import '../../../../utils/bohiba_buttons/primary_icon_button.dart';
+import 'package:bohiba/component/bohiba_inputfield/currency_inputfield.dart';
+import '../../../../component/bohiba_buttons/primary_icon_button.dart';
 
 class CompanyCreateAlert extends StatefulWidget {
   const CompanyCreateAlert({
@@ -39,9 +39,10 @@ class _CompanyCreateAlertState extends State<CompanyCreateAlert> {
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
         width: double.maxFinite,
-        height: 240,
+        height: BohibaResponsiveScreen.height * 0.26,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: 20.0, vertical: BohibaResponsiveScreen.height10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

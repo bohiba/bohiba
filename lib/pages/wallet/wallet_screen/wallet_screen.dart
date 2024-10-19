@@ -1,11 +1,11 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_buttons/secoundary_button.dart';
+import 'package:bohiba/component/bohiba_buttons/secoundary_button.dart';
 import 'package:bohiba/pages/wallet/wallet_string/wallet_string.dart';
 import 'package:bohiba/pages/wallet/wallet_withdraw/wallet_withdraw_screen/wallet_withdraw_screen.dart';
 
-import '../../../utils/bohiba_buttons/primary_icon_button.dart';
-import '../../../utils/bohiba_colors.dart';
+import '../../../component/bohiba_buttons/primary_icon_button.dart';
+import '../../../component/bohiba_colors.dart';
 import '../wallet_deposit/wallet_deposit_screen/wallet_deposit_screen.dart';
 
 class WalletScreen extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:bohiba/utils/bohiba_appbar/title_appbar.dart';
+import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
 import 'package:flutter/material.dart';
 
 class AddLoadScreen extends StatelessWidget {

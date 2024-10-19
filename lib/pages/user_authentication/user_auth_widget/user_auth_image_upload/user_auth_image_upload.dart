@@ -1,19 +1,21 @@
 import 'dart:io';
 
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UserAuthContainerImageUpload extends StatefulWidget {
   final String label;
   final DecorationImage? imageDec;
+  final VoidCallback? onTap;
+  final File? img;
 
   const UserAuthContainerImageUpload({
     Key? key,
     this.label = "User Auth Container Image Upload",
     this.imageDec,
+    this.onTap,
+    this.img,
   }) : super(key: key);
 
   @override
@@ -23,22 +25,6 @@ class UserAuthContainerImageUpload extends StatefulWidget {
 
 class _UserAuthContainerImageUploadState
     extends State<UserAuthContainerImageUpload> {
-  File? img;
-
-  void imagePicker() async {
-    try {
-      XFile? image = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 25);
-
-      if (image == null) return;
-      setState(() {
-        img = File(image.path);
-      });
-    } on PlatformException catch (e) {
-      debugPrint('Failed to pick image: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -50,26 +36,26 @@ class _UserAuthContainerImageUploadState
         color: bohibaColors.lightGreyColor,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        elevation: 2.0,
+        elevation: 1.5,
         child: InkWell(
-          onTap: imagePicker,
-          // onTap: onTap,
+          // onTap: imagePicker,
+          onTap: widget.onTap,
           borderRadius: BorderRadius.circular(10.0),
           child: Container(
             height: height * 0.2,
             width: width,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              image: img != null
+              image: widget.img != null
                   ? DecorationImage(
                       image: FileImage(
-                        File(img!.path),
+                        File(widget.img!.path),
                       ),
                       fit: BoxFit.cover)
                   : null,
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: img == null
+            child: widget.img == null
                 ? Text(
                     widget.label,
                     style: TextStyle(

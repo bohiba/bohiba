@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/pages/home/home_string/home_strings.dart';
 import 'package:gap/gap.dart';
 import 'package:marquee_text/marquee_text.dart';
@@ -104,13 +104,14 @@ class _HomePopularSectionState extends State<HomePopularSection> {
             child: Text(HomePopularString.popular,
                 style: Theme.of(context).textTheme.headlineLarge),
           ),
-          SizedBox(height: height * 0.005),
+          Gap(height * 0.005),
           SizedBox(
             width: width,
             height: height * 0.45,
             child: GridView.builder(
               itemCount: materialType.length,
               scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 2.5,

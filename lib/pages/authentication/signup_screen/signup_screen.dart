@@ -1,12 +1,12 @@
 import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/utils/bohiba_icon.dart';
-import 'package:bohiba/utils/screen_utils.dart';
+import 'package:bohiba/component/bohiba_icon.dart';
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/utils/bohiba_inputfield/password_inputfield.dart';
+import 'package:bohiba/component/bohiba_inputfield/password_inputfield.dart';
 import 'package:get/get.dart';
-import '../../../utils/bohiba_buttons/primary_button.dart';
-import '../../../utils/bohiba_inputfield/email_inputfield.dart';
-import '../../../utils/bohiba_inputfield/text_inputfield.dart';
+import '../../../component/bohiba_buttons/primary_button.dart';
+import '../../../component/bohiba_inputfield/email_inputfield.dart';
+import '../../../component/bohiba_inputfield/text_inputfield.dart';
 import '../../widget/app_theme/app_theme.dart';
 
 class SignupScreen extends StatefulWidget {

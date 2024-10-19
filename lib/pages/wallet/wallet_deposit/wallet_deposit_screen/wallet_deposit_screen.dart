@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-import 'package:bohiba/utils/bohiba_inputfield/currency_inputfield.dart';
+import 'package:bohiba/component/bohiba_inputfield/currency_inputfield.dart';
 
-import '../../../../utils/bohiba_appbar/title_appbar.dart';
-import '../../../../utils/bohiba_buttons/bottom_button.dart';
+import '../../../../component/bohiba_appbar/title_appbar.dart';
+import '../../../../component/bohiba_buttons/bottom_button.dart';
 import '../../wallet_string/wallet_string.dart';
 import '../wallet_deposit_component/current_balance/current_balance.dart';
 
@@ -17,8 +17,11 @@ class WalletDepositScreen extends StatefulWidget {
 class _WalletDepositScreenState extends State<WalletDepositScreen> {
   String depositAmount = "₹100.00";
   final MoneyMaskedTextController depositController = MoneyMaskedTextController(
-      initialValue: 100, precision: 2, leftSymbol: "₹",
-      decimalSeparator: ".", thousandSeparator: ",",
+    initialValue: 100,
+    precision: 2,
+    leftSymbol: "₹",
+    decimalSeparator: ".",
+    thousandSeparator: ",",
   );
 
   @override
@@ -80,18 +83,20 @@ class _WalletDepositScreenState extends State<WalletDepositScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: depositController.numberValue >= 100.00 && depositController.numberValue <= 10000.00?
-      BottomButton(
-        width: width,
-        onTap: () {
-          debugPrint("Value: ${depositController.numberValue}");
-        },
-        labelPrice: "Deposit $depositAmount",
-      ): BottomButton(
-        width: width,
-        onTap: null,
-        labelPrice: "Deposit $depositAmount",
-      ),
+      bottomNavigationBar: depositController.numberValue >= 100.00 &&
+              depositController.numberValue <= 10000.00
+          ? BottomButton(
+              width: width,
+              onTap: () {
+                debugPrint("Value: ${depositController.numberValue}");
+              },
+              labelPrice: "Deposit $depositAmount",
+            )
+          : BottomButton(
+              width: width,
+              onTap: null,
+              labelPrice: "Deposit $depositAmount",
+            ),
     );
   }
 }
