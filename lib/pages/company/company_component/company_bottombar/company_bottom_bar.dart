@@ -5,10 +5,7 @@ import 'package:remixicon/remixicon.dart';
 class CompanyHistoryButton extends StatelessWidget {
   final VoidCallback onTap;
 
-  const CompanyHistoryButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
+  const CompanyHistoryButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +44,7 @@ class CompanyBookLoadButton extends StatelessWidget {
   final TextStyle? style;
 
   const CompanyBookLoadButton(
-      {Key? key, this.onTap, this.label = "Text", this.style})
-      : super(key: key);
+      {super.key, this.onTap, this.label = "Text", this.style});
 
   @override
   Widget build(BuildContext context) {

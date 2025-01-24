@@ -49,7 +49,7 @@ class UserAuthController extends GetxController {
 
   Future<void> saveUserDetails(SaveUserDetails userDetails) async {
     Get.toNamed(
-      BohibaRoute.navBar,
+      AppRoute.navBar,
     );
   }
 

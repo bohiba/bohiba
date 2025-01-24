@@ -1,3 +1,4 @@
+import '/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../bohiba_colors.dart';
@@ -11,14 +12,14 @@ class PrimaryIconButton extends StatelessWidget {
   final Color backgroundColor;
 
   const PrimaryIconButton({
-    Key? key,
+    super.key,
     this.onPressed,
     this.label = 'Submit',
     this.icon = const Icon(Icons.add),
     this.fixedSize = const Size(125, 40),
     this.shape = const RoundedRectangleBorder(),
     this.backgroundColor = const Color(0xFF047BFC),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class PrimaryIconButton extends StatelessWidget {
       onPressed: onPressed,
       label: Text(label,
           style: TextStyle(
-              fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
+              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
               color: bohibaColors.white)),
       icon: icon,
       style: ElevatedButton.styleFrom(

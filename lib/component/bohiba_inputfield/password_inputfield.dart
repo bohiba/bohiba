@@ -1,5 +1,5 @@
 import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -7,8 +7,8 @@ class PasswordInputField extends StatefulWidget {
   final String hintText;
   final TextEditingController? controller;
 
-  const PasswordInputField({Key? key, required this.hintText, this.controller})
-      : super(key: key);
+  const PasswordInputField(
+      {super.key, required this.hintText, this.controller});
 
   @override
   State<PasswordInputField> createState() => _PasswordInputFieldState();

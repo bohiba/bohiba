@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bohiba/pages/status/tabs/tab_widget/row_text.dart';
 
 class DriverDetailTile extends StatelessWidget {
-  const DriverDetailTile({Key? key}) : super(key: key);
+  const DriverDetailTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +13,7 @@ class DriverDetailTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       decoration: BoxDecoration(
           color: Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(8.0)
-      ),
+          borderRadius: BorderRadius.circular(8.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

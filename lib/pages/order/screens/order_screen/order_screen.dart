@@ -8,9 +8,7 @@ import 'package:bohiba/pages/order/order_component/vehicle_details_component.dar
 import 'package:get/get.dart';
 
 class OrderScreen extends StatelessWidget {
-  const OrderScreen({
-    Key? key,
-  }) : super(key: key);
+  const OrderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +17,25 @@ class OrderScreen extends StatelessWidget {
       appBar: const TitleAppbar(
         title: "Book Load",
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            children: [
-              FromToDetailsComponent(
-                fromReadOnly: fromReadOnly,
-              ),
-              const VehicleDetailsComponent(),
-              const DriverDetailComponent(),
-            ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            child: Column(
+              children: [
+                FromToDetailsComponent(
+                  fromReadOnly: fromReadOnly,
+                ),
+                const VehicleDetailsComponent(),
+                const DriverDetailComponent(),
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25.0),
         color: bohibaColors.primaryColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

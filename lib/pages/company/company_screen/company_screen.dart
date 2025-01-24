@@ -1,12 +1,12 @@
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/component/bohiba_appbar/company_appbar.dart';
 import 'package:bohiba/pages/company/company_component/company_trip_price/consignee_detail.dart';
 import 'package:gap/gap.dart';
 
 class CompanyScreen extends StatefulWidget {
-  const CompanyScreen({Key? key}) : super(key: key);
+  const CompanyScreen({super.key});
 
   @override
   State<CompanyScreen> createState() => _Companypagestate();
@@ -25,20 +25,19 @@ class _Companypagestate extends State<CompanyScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: BohibaResponsiveScreen.width20),
+            padding: EdgeInsets.only(
+              left: BohibaResponsiveScreen.width15,
+              right: BohibaResponsiveScreen.width15,
+              top: BohibaResponsiveScreen.height10,
+            ),
             child: Text(
               "Vehicle Entry Point",
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                // color: bohibaTheme.textTheme.bodySmall!.color,
-              ),
+              style: bohibaTheme.textTheme.headlineLarge,
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: BohibaResponsiveScreen.width20),
+                horizontal: BohibaResponsiveScreen.width15),
             child: Text(
               "Plot No. 25, Gate no: 2, Industrial Area, Sundergarh, Odisha, 770001, +91 1234567890",
               style: TextStyle(
@@ -50,14 +49,10 @@ class _Companypagestate extends State<CompanyScreen> {
           Gap(BohibaResponsiveScreen.height20),
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: BohibaResponsiveScreen.width20),
+                horizontal: BohibaResponsiveScreen.width15),
             child: Text(
               "Available Load",
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                // color: bohibaTheme.textTheme.bodySmall!.color,
-              ),
+              style: bohibaTheme.textTheme.headlineLarge,
             ),
           ),
           const ConsigneeDetails(consigneeDetails: [])

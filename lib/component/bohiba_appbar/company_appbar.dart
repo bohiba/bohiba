@@ -2,7 +2,7 @@ import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/component/bohiba_text/bohiba_marquee_text.dart';
 import 'package:bohiba/component/screen_utils.dart';
 import 'package:bohiba/pages/company/company_component/company_create_alert/company_create_alert.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:bohiba/services/company_option_service.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -12,10 +12,7 @@ import 'package:remixicon/remixicon.dart';
 class CompanyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
 
-  const CompanyAppBar({
-    Key? key,
-    this.title = 'Title',
-  }) : super(key: key);
+  const CompanyAppBar({super.key, this.title = 'Title'});
 
   @override
   State<CompanyAppBar> createState() => _CompanyAppBarState();
@@ -25,45 +22,19 @@ class CompanyAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CompanyAppBarState extends State<CompanyAppBar> {
-  bool favorite = true;
-
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: widget.preferredSize,
       child: AppBar(
-        centerTitle: false,
+        centerTitle: true,
         leading: InkWell(
           onTap: () => Get.back(),
-          child: const Icon(
-            Remix.arrow_left_line,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
-        title: const CompanyNameLogo(
-          companyName: 'OMC',
-        ),
+        title: const CompanyNameLogo(companyName: 'OMC'),
+        titleSpacing: 0,
         actions: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                favorite = !favorite;
-              });
-            },
-            child: SizedBox.fromSize(
-              size: Size(
-                BohibaResponsiveScreen.height47,
-                BohibaResponsiveScreen.height47,
-              ),
-              child: favorite
-                  ? const Icon(
-                      Remix.heart_3_line,
-                    )
-                  : const Icon(
-                      Remix.heart_3_fill,
-                      color: Colors.redAccent,
-                    ),
-            ),
-          ),
           GestureDetector(
             onTapDown: (TapDownDetails tapDownDetails) {
               showMenu(
@@ -138,13 +109,13 @@ class CompanyNameLogo extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 15,
-          backgroundColor: bohibaColors.lightGreyColor,
+          backgroundColor: bohibaColors.black,
           backgroundImage: imageProvider,
         ),
-        Gap(BohibaResponsiveScreen.width5),
+        Gap(BohibaResponsiveScreen.width20),
         BohibaMarqueeText(
-          width: BohibaResponsiveScreen.width * 0.5,
-          text: 'company_name',
+          width: BohibaResponsiveScreen.width * 0.35,
+          text: companyName,
           overflowText: 'OMC',
         )
       ],

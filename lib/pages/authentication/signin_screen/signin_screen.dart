@@ -1,7 +1,7 @@
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +9,7 @@ import '../../../component/bohiba_buttons/primary_button.dart';
 import '../../../component/bohiba_inputfield/password_inputfield.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({super.key});
 
   @override
   State<SignInScreen> createState() => _SignInpagestate();
@@ -82,7 +82,7 @@ class _SignInpagestate extends State<SignInScreen> {
               Align(
                 alignment: Alignment.centerRight,
                 child: InkWell(
-                  onTap: () => Get.toNamed(BohibaRoute.forgotScreen),
+                  onTap: () => Get.toNamed(AppRoute.forgotScreen),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: BohibaResponsiveScreen.height10,
@@ -103,7 +103,7 @@ class _SignInpagestate extends State<SignInScreen> {
               PrimaryButton(
                 label: 'SIGN IN',
                 onPressed: () => Get.toNamed(
-                  BohibaRoute.navBar,
+                  AppRoute.navBar,
                   arguments: {
                     "current_index": 0,
                   },
@@ -127,7 +127,7 @@ class _SignInpagestate extends State<SignInScreen> {
               style: bohibaTheme.textTheme.titleSmall,
             ),
             InkWell(
-              onTap: () => {Get.offNamed(BohibaRoute.signUp)},
+              onTap: () => {Get.offNamed(AppRoute.signUp)},
               child: Container(
                 height: BohibaResponsiveScreen.height30,
                 width: BohibaResponsiveScreen.width50,

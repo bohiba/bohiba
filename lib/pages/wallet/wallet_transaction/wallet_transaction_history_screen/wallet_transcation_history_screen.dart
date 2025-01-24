@@ -7,7 +7,7 @@ import 'package:bohiba/pages/wallet/wallet_string/wallet_string.dart';
 import '../wallet_transaction_component/wallet_transaction_balance_card/wallet_transaction_balance_card.dart';
 
 class WalletTransactionHistoryScreen extends StatelessWidget {
-  const WalletTransactionHistoryScreen({Key? key}) : super(key: key);
+  const WalletTransactionHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

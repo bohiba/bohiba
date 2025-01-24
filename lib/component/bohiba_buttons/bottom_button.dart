@@ -9,12 +9,12 @@ class BottomButton extends StatelessWidget {
   final String labelPrice;
 
   const BottomButton({
-    Key? key,
+    super.key,
     this.onTap,
     this.height = 47,
     this.width = 210,
     this.labelPrice = "Bank Button",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

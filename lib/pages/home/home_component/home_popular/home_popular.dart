@@ -1,17 +1,16 @@
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/dist/component_exports.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/pages/home/home_string/home_strings.dart';
 import 'package:gap/gap.dart';
 import 'package:marquee_text/marquee_text.dart';
 
 class HomePopularSection extends StatefulWidget {
-  const HomePopularSection({Key? key}) : super(key: key);
+  const HomePopularSection({super.key});
 
   @override
   State<HomePopularSection> createState() => _HomePopularSectionState();
@@ -20,8 +19,6 @@ class HomePopularSection extends StatefulWidget {
 class _HomePopularSectionState extends State<HomePopularSection> {
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     List materialType = [
       MaterialType(
         material: "Bauxite",
@@ -80,7 +77,7 @@ class _HomePopularSectionState extends State<HomePopularSection> {
         },
       ),
       MaterialType(
-        material: "Manganesessssss",
+        material: "Manganese",
         arguments: {
           "current_index": 1,
           "market_screen_index": 9,
@@ -94,65 +91,72 @@ class _HomePopularSectionState extends State<HomePopularSection> {
         },
       ),
     ];
+
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
+      padding: EdgeInsets.only(
+        left: BohibaResponsiveScreen.width15,
+        bottom: BohibaResponsiveScreen.height25,
+      ),
       child: Column(
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(right: 8.0, left: 8.0),
             child: Text(HomePopularString.popular,
-                style: Theme.of(context).textTheme.headlineLarge),
+                style: bohibaTheme.textTheme.headlineLarge),
           ),
-          Gap(height * 0.005),
+          Gap(BohibaResponsiveScreen.height * 0.005),
           SizedBox(
-            width: width,
-            height: height * 0.45,
+            width: BohibaResponsiveScreen.width,
+            height: BohibaResponsiveScreen.height * 0.45,
             child: GridView.builder(
               itemCount: materialType.length,
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 2.5,
-                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 10.5,
+                  crossAxisSpacing: 10,
                   childAspectRatio: 1.0),
               itemBuilder: (context, index) {
                 MaterialType materialTypes = materialType[index];
-                return InkWell(
+                return GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed(
-                    BohibaRoute.navBar,
+                    AppRoute.navBar,
                     arguments: {
                       "current_index": 1,
                       "market_screen_index": index + 2
                     },
                   ),
                   child: Container(
-                    height: height * 0.14,
-                    width: width * 0.45,
+                    height: BohibaResponsiveScreen.height * 0.14,
+                    width: BohibaResponsiveScreen.width * 0.45,
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 10.0),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: BohibaResponsiveScreen.width10,
+                        vertical: BohibaResponsiveScreen.height10),
                     decoration: BoxDecoration(
-                      color: bohibaColors.lightGreyColor,
-                      borderRadius: BorderRadius.circular(15.0),
+                      color: bohibaColors.tileColor,
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(
+                        width: 0.0,
+                        color: bohibaColors.tileColor,
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0,
-                            vertical: 5.0,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: BohibaResponsiveScreen.width10,
+                            vertical: BohibaResponsiveScreen.height5,
                           ),
                           alignment: Alignment.centerLeft,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
-                                width: 120,
+                                width: BohibaResponsiveScreen.width * 0.30,
                                 child: AutoSizeText(
                                   materialTypes.material,
                                   maxLines: 1,

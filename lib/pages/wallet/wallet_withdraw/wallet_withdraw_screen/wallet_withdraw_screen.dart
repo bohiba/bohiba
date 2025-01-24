@@ -8,7 +8,7 @@ import '../../../../component/bohiba_buttons/bottom_button.dart';
 import '../../../../component/bohiba_colors.dart';
 
 class WalletWithdrawScreen extends StatefulWidget {
-  const WalletWithdrawScreen({Key? key}) : super(key: key);
+  const WalletWithdrawScreen({super.key});
 
   @override
   State<WalletWithdrawScreen> createState() => _WalletWithdrawpagestate();

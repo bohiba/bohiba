@@ -1,14 +1,13 @@
 import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 class EmailInputField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
 
-  const EmailInputField({Key? key, required this.hintText, this.controller})
-      : super(key: key);
+  const EmailInputField({super.key, required this.hintText, this.controller});
 
   @override
   Widget build(BuildContext context) {

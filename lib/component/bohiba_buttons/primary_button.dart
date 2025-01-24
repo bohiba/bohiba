@@ -1,4 +1,4 @@
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../bohiba_colors.dart';
@@ -10,12 +10,12 @@ class PrimaryButton extends StatelessWidget {
   final double height;
 
   const PrimaryButton({
-    Key? key,
+    super.key,
     this.label = "Label",
     this.onPressed,
     this.width = double.maxFinite,
     this.height = 50,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

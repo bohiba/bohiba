@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
 class HomeSearchField extends StatelessWidget {
-  const HomeSearchField({Key? key}) : super(key: key);
+  const HomeSearchField({super.key});
 
   @override
   Widget build(BuildContext context) {

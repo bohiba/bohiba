@@ -1,3 +1,4 @@
+import 'package:bohiba/dist/component_exports.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/pages/status/tabs/tab_widget/row_text.dart';
 
@@ -7,15 +8,19 @@ import '../../../../../challan/component/vehicle_detail_component/vehicle_detail
 import '../../../../../../component/bohiba_appbar/tab_appbar.dart';
 
 class ChallanScreen extends StatelessWidget {
-  const ChallanScreen({Key? key}) : super(key: key);
+  const ChallanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       appBar: TabAppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 10.0),
+          padding: EdgeInsets.only(
+            top: BohibaResponsiveScreen.height10,
+            left: BohibaResponsiveScreen.width15,
+            right: BohibaResponsiveScreen.width15,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -34,7 +39,7 @@ class ChallanScreen extends StatelessWidget {
 }
 
 class DateTimeComponent extends StatelessWidget {
-  const DateTimeComponent({Key? key}) : super(key: key);
+  const DateTimeComponent({super.key});
 
   @override
   Widget build(BuildContext context) {

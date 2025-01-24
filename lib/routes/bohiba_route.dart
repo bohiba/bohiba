@@ -1,36 +1,40 @@
-import 'package:bohiba/component/bohiba_navbar/bohiba_navbar.dart';
-import 'package:bohiba/pages/authentication/forgot_screen/forgot_password.dart';
-import 'package:bohiba/pages/authentication/otp_screen/otp_screen.dart';
-import 'package:bohiba/pages/authentication/signin_screen/signin_screen.dart';
-import 'package:bohiba/pages/company/company_screen/company_screen.dart';
-import 'package:bohiba/pages/dashboard/dash_screen/dashboard_screen.dart';
-import 'package:bohiba/pages/driver/screen/driver_list_page.dart';
-import 'package:bohiba/pages/load/screen/add_load_screen.dart';
-import 'package:bohiba/pages/load/screen/all_load_screen.dart';
-import 'package:bohiba/pages/load/screen/load_screen.dart';
-import 'package:bohiba/pages/load_history/load_history_screen/load_history_screen.dart';
-import 'package:bohiba/pages/market/market_component/market_card/market_card.dart';
-import 'package:bohiba/pages/market/market_screen/market_screen.dart';
-import 'package:bohiba/pages/news/news_screen.dart';
-import 'package:bohiba/pages/notification/notify_screen/notification_screen.dart';
-import 'package:bohiba/pages/order/screens/order_screen/order_screen.dart';
-import 'package:bohiba/pages/splashscreen.dart';
-import 'package:bohiba/pages/status/tabs/complete_status/screen/challan_screen/challan_screen.dart';
-import 'package:bohiba/pages/user_authentication/screens/user_auth_screen/user_auth_screen.dart';
-import 'package:bohiba/pages/vehicle/all_vechile_screen/all_vehicle_screen.dart';
-import 'package:bohiba/pages/wallet/wallet_deposit/wallet_deposit_screen/wallet_deposit_screen.dart';
-import 'package:bohiba/pages/wallet/wallet_screen/wallet_screen.dart';
+import 'package:bohiba/pages/user_authentication/screens/dto_verification_page.dart';
+
+import '/component/bohiba_navbar/bohiba_navbar.dart';
+import '/pages/authentication/forgot_screen/forgot_password.dart';
+import '/pages/authentication/otp_screen/otp_screen.dart';
+import '/pages/authentication/signin_screen/signin_screen.dart';
+import '/pages/company/company_screen/company_screen.dart';
+import '/pages/dashboard/dash_screen/dashboard_screen.dart';
+import '/pages/driver/all_driver_screen/all_driver_page.dart';
+import '/pages/load/screen/add_load_screen.dart';
+import '/pages/load/screen/all_load_screen.dart';
+import '/pages/load/screen/load_screen.dart';
+import '/pages/load_history/load_history_screen/load_history_screen.dart';
+import '/pages/market/market_component/market_card/market_card.dart';
+import '/pages/market/market_screen/market_screen.dart';
+import '/pages/news/news_screen.dart';
+import '/pages/notification/notify_screen/notification_screen.dart';
+import '/pages/order/screens/order_screen/order_screen.dart';
+import '/pages/splashscreen.dart';
+import '/pages/status/tabs/complete_status/screen/challan_screen/challan_screen.dart';
+import '/pages/user_authentication/screens/user_auth_page.dart';
+import '../pages/vehicle/all_vechile_page/all_vehicle_page.dart';
+import '/pages/wallet/wallet_deposit/wallet_deposit_screen/wallet_deposit_screen.dart';
+import '/pages/wallet/wallet_screen/wallet_screen.dart';
 import 'package:get/get.dart';
 
-import '../pages/authentication/signup_screen/signup_screen.dart';
+import '/pages/authentication/signup_screen/signup_screen.dart';
 
-class BohibaRoute {
+class AppRoute {
   // Auth Screen Strings
   static const String splashScreen = "/splash";
   static const String signUp = "/signup";
   static const String signIn = "/signin";
   static const String otpScreen = "/otp";
   static const String forgotScreen = "/forgot-password";
+
+  static const String dtoAuthScreen = "/dtoAuth";
 
   // Status-sub Screen
   static const String viewChallan = "/view-challan";
@@ -99,6 +103,10 @@ class BohibaRoute {
       page: () => const ForgotPasswordScreen(),
     ),
     GetPage(
+      name: dtoAuthScreen,
+      page: () => const DtoVerificationPage(),
+    ),
+    GetPage(
       name: navBar,
       page: () => const BohibaNavBar(),
     ),
@@ -163,12 +171,12 @@ class BohibaRoute {
       page: () => const WalletScreen(),
     ),
     GetPage(
-      name: walletScreen,
+      name: walletDepositScreen,
       page: () => const WalletDepositScreen(),
     ),
     GetPage(
       name: driverList,
-      page: () => const DriverListPage(),
+      page: () => const AllDriverPage(),
     ),
   ];
 }

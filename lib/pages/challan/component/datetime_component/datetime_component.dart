@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DateTimeComponent extends StatelessWidget {
-  const DateTimeComponent({Key? key}) : super(key: key);
+  const DateTimeComponent({super.key});
 
   @override
   Widget build(BuildContext context) {

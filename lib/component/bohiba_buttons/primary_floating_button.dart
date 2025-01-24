@@ -8,8 +8,7 @@ class PrimaryFloatingButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const PrimaryFloatingButton(
-      {Key? key, this.heroTag, required this.label, required this.onPressed})
-      : super(key: key);
+      {super.key, this.heroTag, required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

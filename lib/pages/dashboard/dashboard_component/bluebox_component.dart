@@ -1,6 +1,6 @@
 import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 class BlueBoxComponent extends StatelessWidget {
@@ -9,18 +9,18 @@ class BlueBoxComponent extends StatelessWidget {
   final Widget child;
 
   const BlueBoxComponent({
-    Key? key,
+    super.key,
     this.label1 = "Header",
     this.label2 = "Sub Header",
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: BohibaResponsiveScreen.width,
-      height: 219,
-      margin: const EdgeInsets.only(bottom: 10),
+      height: BohibaResponsiveScreen.height * 0.233,
+      margin: EdgeInsets.only(bottom: BohibaResponsiveScreen.height15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: bohibaColors.primaryVariantColor,
@@ -29,17 +29,21 @@ class BlueBoxComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 10, top: 25),
+            padding: EdgeInsets.only(
+              left: BohibaResponsiveScreen.width10,
+              top: BohibaResponsiveScreen.width25,
+            ),
             child: Text(
               label1,
               style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
-                  color: bohibaColors.white),
+                fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
+                fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
+                color: bohibaColors.white,
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: BohibaResponsiveScreen.width10),
             child: Text(
               label2,
               style: TextStyle(
@@ -48,18 +52,16 @@ class BlueBoxComponent extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Divider(
-            color: Colors.white,
-            height: 45,
-            thickness: 0.5,
+          Spacer(),
+          Divider(
+            color: bohibaColors.white,
+            // height: 45,
+            thickness: 1,
             indent: 0,
             endIndent: 0,
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: BohibaResponsiveScreen.width10),
             width: BohibaResponsiveScreen.width,
             height: 70,
             child: child,

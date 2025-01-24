@@ -1,11 +1,12 @@
 import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/component/screen_utils.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/component/bohiba_icon.dart';
 import 'package:remixicon/remixicon.dart';
 
 class ChooseVehicleWheel extends StatefulWidget {
-  const ChooseVehicleWheel({Key? key}) : super(key: key);
+  const ChooseVehicleWheel({super.key});
 
   @override
   State<ChooseVehicleWheel> createState() => _ChooseVehicleWheelState();
@@ -32,7 +33,7 @@ class _ChooseVehicleWheelState extends State<ChooseVehicleWheel> {
         vertical: BohibaResponsiveScreen.height5,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: 10.0,
+        horizontal: BohibaResponsiveScreen.width10,
         vertical: BohibaResponsiveScreen.height10,
       ),
       alignment: Alignment.center,
@@ -44,6 +45,7 @@ class _ChooseVehicleWheelState extends State<ChooseVehicleWheel> {
         ),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           ImageIcon(
             AssetImage(BohibaIcons.twoWheel),
@@ -55,7 +57,6 @@ class _ChooseVehicleWheelState extends State<ChooseVehicleWheel> {
             endIndent: 5,
             indent: 5,
           ),
-          const Spacer(),
           DropdownButtonHideUnderline(
             child: DropdownButton(
               value: wheel,
@@ -69,7 +70,7 @@ class _ChooseVehicleWheelState extends State<ChooseVehicleWheel> {
                   value: items,
                   child: Text(
                     items,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: bohibaTheme.textTheme.bodyMedium,
                   ),
                 );
               }).toList(),

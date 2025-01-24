@@ -1,4 +1,4 @@
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 // Colors
@@ -12,6 +12,7 @@ class BohibaColors {
 
   Color get greyColor => const Color.fromRGBO(158, 158, 158, 1);
   Color get lightGreyColor => const Color.fromARGB(255, 245, 245, 245);
+  Color get tileColor => const Color.fromRGBO(245, 245, 245, 1);
   Color get borderColor => const Color.fromRGBO(224, 224, 224, 1);
   Color get secoundaryColor => const Color.fromRGBO(158, 158, 158, 1);
   Color get bgColor => const Color.fromRGBO(255, 255, 255, 1);

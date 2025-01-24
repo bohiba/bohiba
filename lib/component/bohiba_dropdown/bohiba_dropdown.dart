@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 class BohibaDropDown extends StatefulWidget {
@@ -8,11 +9,11 @@ class BohibaDropDown extends StatefulWidget {
   late String? dropDownValue;
 
   BohibaDropDown({
-    Key? key,
-    this.hint = "Label",
+    super.key,
+    this.hint = "Dropdown",
     this.items = const [],
     this.dropDownValue,
-  }) : super(key: key);
+  });
 
   @override
   State<BohibaDropDown> createState() => _BohibaDropDownState();
@@ -34,14 +35,22 @@ class _BohibaDropDownState extends State<BohibaDropDown> {
         child: DropdownButton(
           hint: Text(widget.hint),
           value: widget.dropDownValue,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: TextStyle(
+            fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+            color: bohibaTheme.textTheme.bodyLarge!.color,
+            letterSpacing: 1.2,
+          ),
           icon: const Icon(Icons.keyboard_arrow_down),
           items: widget.items.map((String items) {
             return DropdownMenuItem(
               value: items,
               child: Text(
                 items,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: TextStyle(
+                  fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+                  color: bohibaTheme.textTheme.bodyLarge!.color,
+                  letterSpacing: 1.2,
+                ),
               ),
             );
           }).toList(),

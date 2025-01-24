@@ -1,10 +1,11 @@
+import 'package:bohiba/component/screen_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/pages/home/home_string/home_strings.dart';
 
 import '../../../news/news_screen.dart';
 
 class HomeNewsSection extends StatefulWidget {
-  const HomeNewsSection({Key? key}) : super(key: key);
+  const HomeNewsSection({super.key});
 
   @override
   State<HomeNewsSection> createState() => _HomeNewsSectionState();
@@ -15,14 +16,16 @@ class _HomeNewsSectionState extends State<HomeNewsSection> {
 
   @override
   Widget build(BuildContext context) {
-
     double height = MediaQuery.of(context).size.height;
 
     return Column(
       children: [
         // Header
         Padding(
-          padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+          padding: EdgeInsets.only(
+            right: BohibaResponsiveScreen.width15,
+            left: BohibaResponsiveScreen.width15,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -42,7 +45,10 @@ class _HomeNewsSectionState extends State<HomeNewsSection> {
                     child: Text(
                       HomeNewsString.seeAll,
                       style: TextStyle(
-                          fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize,
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .fontSize,
                           color: Theme.of(context).primaryColor),
                     ),
                   ))

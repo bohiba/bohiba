@@ -1,17 +1,18 @@
-import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_buttons/secoundary_button.dart';
-import 'package:bohiba/pages/home/home_string/home_strings.dart';
+
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
-
-import '../../../../component/bohiba_buttons/primary_icon_button.dart';
-import '../../../../component/bohiba_colors.dart';
+import '/component/screen_utils.dart';
+import '/component/bohiba_buttons/secoundary_button.dart';
+import '/component/bohiba_buttons/primary_icon_button.dart';
+import '/component/bohiba_colors.dart';
+import '../../home_string/home_strings.dart';
+import '/routes/bohiba_route.dart';
+import '/theme/light_theme.dart';
 
 class HomeAccountSection extends StatefulWidget {
-  const HomeAccountSection({Key? key}) : super(key: key);
+  const HomeAccountSection({super.key});
 
   @override
   State<HomeAccountSection> createState() => _HomeAccountSectionState();
@@ -20,22 +21,27 @@ class HomeAccountSection extends StatefulWidget {
 class _HomeAccountSectionState extends State<HomeAccountSection> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: BohibaResponsiveScreen.height20,
-        left: BohibaResponsiveScreen.width8,
-        right: BohibaResponsiveScreen.width8,
-        bottom: BohibaResponsiveScreen.height25,
-      ),
-      child: Column(
-        children: [
-          Container(
+    return GestureDetector(
+      onTap: () => Get.toNamed(AppRoute.walletScreen),
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: BohibaResponsiveScreen.height20,
+          left: BohibaResponsiveScreen.width15,
+          right: BohibaResponsiveScreen.width15,
+          bottom: BohibaResponsiveScreen.height30,
+        ),
+        child: Column(
+          children: [
+            Container(
               width: BohibaResponsiveScreen.width,
               height: BohibaResponsiveScreen.height * 0.135,
               alignment: Alignment.centerLeft,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
                   BohibaResponsiveScreen.width15,
+                ),
+                border: Border.all(
+                  width: 0.0,
                 ),
                 color: bohibaColors.primaryColor,
               ),
@@ -52,7 +58,7 @@ class _HomeAccountSectionState extends State<HomeAccountSection> {
                       color: Colors.blueGrey.shade50,
                       border: Border.all(
                         width: 0.0,
-                        color: Colors.blueGrey.shade50,
+                        color: bohibaColors.tileColor,
                       ),
                       borderRadius: BorderRadius.circular(
                         BohibaResponsiveScreen.width15,
@@ -87,79 +93,75 @@ class _HomeAccountSectionState extends State<HomeAccountSection> {
                     alignment: Alignment.centerRight,
                     child: Padding(
                       padding: EdgeInsets.only(
-                        right: BohibaResponsiveScreen.width25,
-                      ),
-                      child: InkWell(
-                        onTap: () => Get.toNamed(BohibaRoute.walletScreen),
-                        child: Container(
-                          height: BohibaResponsiveScreen.height50,
-                          width: BohibaResponsiveScreen.width50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(
-                              BohibaResponsiveScreen.width8,
-                            ),
+                          right: BohibaResponsiveScreen.width25),
+                      child: Container(
+                        height: BohibaResponsiveScreen.height50,
+                        width: BohibaResponsiveScreen.width50,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(
+                            BohibaResponsiveScreen.width8,
                           ),
-                          child: const Icon(
-                            Icons.keyboard_double_arrow_right_rounded,
-                            color: Colors.white,
-                          ),
+                        ),
+                        child: const Icon(
+                          Icons.keyboard_double_arrow_right_rounded,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   )
                 ],
-              )),
-          SizedBox(
-            height: BohibaResponsiveScreen.height5,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              PrimaryIconButton(
-                onPressed: () => Get.toNamed(
-                  BohibaRoute.orderScreen,
-                  arguments: {
-                    "from_read_only": true,
-                  },
-                ),
-                label: 'Book Load',
-                icon: const Icon(
-                  Remix.ticket_2_fill,
-                ),
-                fixedSize: Size(
-                  BohibaResponsiveScreen.width * 0.45,
-                  BohibaResponsiveScreen.height * 0.043,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    BohibaResponsiveScreen.width10,
-                  ),
-                ),
-                backgroundColor: bohibaColors.primaryColor,
               ),
-              SecoundaryButton(
-                onPressed: () => Get.toNamed(BohibaRoute.walletDepositScreen),
-                label: 'Deposit INR',
-                fixedSize: Size(
-                  BohibaResponsiveScreen.width * 0.45,
-                  BohibaResponsiveScreen.height * 0.043,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    BohibaResponsiveScreen.width10,
+            ),
+            Gap(BohibaResponsiveScreen.height5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PrimaryIconButton(
+                  onPressed: () => Get.toNamed(
+                    AppRoute.orderScreen,
+                    arguments: {
+                      "from_read_only": true,
+                    },
                   ),
-                  side: BorderSide(
-                    width: 1.0,
-                    color: bohibaColors.black,
+                  label: 'Book Load',
+                  icon: const Icon(
+                    Remix.ticket_2_fill,
                   ),
+                  fixedSize: Size(
+                    BohibaResponsiveScreen.width * 0.45,
+                    BohibaResponsiveScreen.height * 0.043,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      BohibaResponsiveScreen.width10,
+                    ),
+                  ),
+                  backgroundColor: bohibaColors.primaryColor,
                 ),
-                backgroundColor: bohibaColors.white,
-              )
-            ],
-          )
-        ],
+                SecoundaryButton(
+                  onPressed: () => Get.toNamed(AppRoute.walletDepositScreen),
+                  label: 'Deposit INR',
+                  fixedSize: Size(
+                    BohibaResponsiveScreen.width * 0.45,
+                    BohibaResponsiveScreen.height * 0.043,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      BohibaResponsiveScreen.width10,
+                    ),
+                    side: BorderSide(
+                      color: bohibaColors.primaryVariantColor,
+                      width: 1,
+                    ),
+                  ),
+                  backgroundColor: bohibaColors.white,
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

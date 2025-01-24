@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import '../../../component/bohiba_buttons/primary_button.dart';
 import '../../../component/bohiba_inputfield/email_inputfield.dart';
 import '../../../component/bohiba_inputfield/text_inputfield.dart';
-import '../../widget/app_theme/app_theme.dart';
+import '../../../theme/light_theme.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -86,7 +86,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 PrimaryButton(
                   label: 'SIGNUP',
                   onPressed: () => Get.toNamed(
-                    BohibaRoute.userAuthScreen,
+                    AppRoute.userAuthScreen,
                     preventDuplicates: true,
                   ),
                 )
@@ -106,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
               style: bohibaTheme.textTheme.titleSmall,
             ),
             InkWell(
-              onTap: () => Get.offNamed(BohibaRoute.signIn),
+              onTap: () => Get.offNamed(AppRoute.signIn),
               child: Container(
                 height: BohibaResponsiveScreen.height30,
                 width: BohibaResponsiveScreen.width50,

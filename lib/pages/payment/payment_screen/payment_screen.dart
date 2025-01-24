@@ -6,7 +6,7 @@ import 'package:remixicon/remixicon.dart';
 import '../../../component/bohiba_colors.dart';
 
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({Key? key}) : super(key: key);
+  const PaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

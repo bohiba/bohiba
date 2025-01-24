@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final List<Widget>? actions;
 
   const TitleAppbar({
-    Key? key,
+    super.key,
     this.title = "Title",
-  }) : super(key: key);
+    this.actions,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,13 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(title),
+        leading: GestureDetector(
+          child: const Icon(Icons.arrow_back_ios_new_rounded),
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: actions,
       ),
     );
   }

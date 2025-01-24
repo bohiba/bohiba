@@ -1,11 +1,14 @@
-import 'package:bohiba/component/bohiba_buttons/primary_button.dart';
-import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/vehicle/vechile_dash_string/vehicle_dash_string.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
-class EditModalSheet extends StatelessWidget {
-  const EditModalSheet({super.key});
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/screen_utils.dart';
+import '/pages/vehicle/vechile_dash_string/vehicle_dash_string.dart';
+import '/theme/light_theme.dart';
+
+class EditDriverDetialsModalSheet extends StatelessWidget {
+  const EditDriverDetialsModalSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,27 +21,33 @@ class EditModalSheet extends StatelessWidget {
           Container(
             height: 5.0,
             width: BohibaResponsiveScreen.width * 0.25,
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            margin:
+                EdgeInsets.symmetric(vertical: BohibaResponsiveScreen.height10),
             decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                borderRadius: BorderRadius.circular(10.0)),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
-            child: Text(
-              'Edit Driver info',
-              style: TextStyle(fontSize: 16),
+              color: Colors.grey.shade400,
+              borderRadius: BorderRadius.circular(12.0),
             ),
           ),
-          SizedBox(height: BohibaResponsiveScreen.height * 0.02),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.only(
+              left: BohibaResponsiveScreen.width15,
+              right: BohibaResponsiveScreen.width15,
+              top: BohibaResponsiveScreen.height15,
+            ),
+            child: Text(
+              'Edit Driver info',
+              style: bohibaTheme.textTheme.headlineMedium,
+            ),
+          ),
+          Gap(BohibaResponsiveScreen.height10),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: BohibaResponsiveScreen.width15),
             child: Form(
                 child: Column(
               children: [
                 TextInputField(
                   hintText: VehicleDashString.driverName,
-                  // controller: driverNameController,
                   textCapitalization: TextCapitalization.characters,
                 ),
                 TextInputField(
@@ -46,11 +55,12 @@ class EditModalSheet extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   hintText: VehicleDashString.driverMobileNumber,
                 ),
-                const SizedBox(height: 5),
+                Gap(BohibaResponsiveScreen.height10),
                 PrimaryButton(
-                  label: 'VERIFY',
+                  label: 'ADD DRIVER',
                   onPressed: () {},
-                )
+                ),
+                Gap(BohibaResponsiveScreen.height50),
               ],
             )),
           ),

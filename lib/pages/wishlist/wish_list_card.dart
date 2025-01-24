@@ -1,8 +1,8 @@
-import 'package:bohiba/component/bohiba_buttons/small_tile_button.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/wishlist/wishlist_component/stack_wishlist_company_avatar.dart';
+import '/pages/wishlist/wishlist_component/stack_wishlist_company_avatar.dart';
+import 'package:bohiba/theme/light_theme.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import '../../dist/component_exports.dart';
 
 class HomeWishListCard extends StatelessWidget {
   const HomeWishListCard({super.key});
@@ -10,17 +10,14 @@ class HomeWishListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 5.0, left: 10.0, right: 10.0),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      width: BohibaResponsiveScreen.width,
-      height: BohibaResponsiveScreen.height * 0.085,
-      decoration: BoxDecoration(
-        gradient: RadialGradient(colors: [
-          bohibaColors.primaryVariantColor.withOpacity(0.04),
-          Colors.grey.shade100
-        ], radius: 0.8, center: Alignment.bottomRight),
-        borderRadius: BorderRadius.circular(10.0),
+      margin: EdgeInsets.only(bottom: BohibaResponsiveScreen.height10),
+      padding: EdgeInsets.symmetric(
+        horizontal: BohibaResponsiveScreen.width15,
+        vertical: BohibaResponsiveScreen.height10,
       ),
+      width: BohibaResponsiveScreen.width,
+      height: BohibaResponsiveScreen.height * 0.075,
+      decoration: TileDecoration(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -28,7 +25,7 @@ class HomeWishListCard extends StatelessWidget {
           RichText(
             text: TextSpan(
               style: TextStyle(
-                fontSize: 16.fontSize,
+                fontSize: 16.adaptSize,
                 color: bohibaColors.black,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
@@ -36,19 +33,50 @@ class HomeWishListCard extends StatelessWidget {
               children: const [
                 TextSpan(text: 'OMC'),
                 TextSpan(
-                    text: '  -  ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      // color: bohibaColors.greyColor,
-                    )),
+                  text: '  -  ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    // color: bohibaColors.greyColor,
+                  ),
+                ),
                 TextSpan(text: 'Adhunik'),
               ],
             ),
           ),
           const Spacer(),
-          SmallTileButton(
-            onTap: () {},
-            label: 'Book',
+          GestureDetector(
+            onPanDown: (details) => showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                  details.globalPosition.dx,
+                  details.globalPosition.dy,
+                  details.globalPosition.dx,
+                  details.globalPosition.dy,
+                ),
+                elevation: 0.2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                items: [
+                  PopupMenuItem(
+                    child: Text(
+                      'Book',
+                      style: bohibaTheme.textTheme.titleMedium,
+                    ),
+                  ),
+                  PopupMenuItem(
+                    child: Text(
+                      'Remove',
+                      style: TextStyle(
+                        color: bohibaColors.warningColor,
+                        fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleMedium!.fontWeight,
+                      ),
+                    ),
+                  ),
+                ]),
+            child: Icon(EvaIcons.moreVertical),
           )
         ],
       ),

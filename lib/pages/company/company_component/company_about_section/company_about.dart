@@ -1,9 +1,10 @@
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../company_string/company_string.dart';
 
 class CompanyAboutSection extends StatelessWidget {
-  const CompanyAboutSection({Key? key}) : super(key: key);
+  const CompanyAboutSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class CompanyAboutSection extends StatelessWidget {
       children: [
         Text(
           CompanyScreenString.aboutCompany,
-          style: Theme.of(context).textTheme.labelMedium,
+          style: bohibaTheme.textTheme.labelMedium,
         ),
       ],
     );

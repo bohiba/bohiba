@@ -1,6 +1,6 @@
 import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,7 +17,7 @@ class TextInputField extends StatelessWidget {
   final Icon? prefixIcon;
 
   const TextInputField({
-    Key? key,
+    super.key,
     this.hintText,
     this.keyboardType = TextInputType.text,
     this.controller,
@@ -28,7 +28,7 @@ class TextInputField extends StatelessWidget {
     this.inputFormatters,
     this.readOnly = false,
     this.prefixIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

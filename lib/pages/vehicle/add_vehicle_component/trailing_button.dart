@@ -4,12 +4,11 @@ class TrailingButton extends StatelessWidget {
   final VoidCallback? onTap;
   final IconData icon;
   final Color iconColor;
-  const TrailingButton({
-    Key? key,
-    this.onTap,
-    required this.icon,
-    this.iconColor = Colors.black
-  }) : super(key: key);
+  const TrailingButton(
+      {super.key,
+      this.onTap,
+      required this.icon,
+      this.iconColor = Colors.black});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +24,7 @@ class TrailingButton extends StatelessWidget {
               size: 18,
               color: iconColor,
             ),
-          )
-      ),
+          )),
     );
   }
 }

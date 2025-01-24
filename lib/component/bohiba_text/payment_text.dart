@@ -5,11 +5,11 @@ class PaymentText extends StatelessWidget {
   final String trailing;
   final Color? trailingColor;
   const PaymentText({
-    Key? key,
+    super.key,
     this.leading = "",
     this.trailing = "",
     this.trailingColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +18,16 @@ class PaymentText extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(leading,
-              style: Theme.of(context).textTheme.bodyLarge
-          ),
-          Text(trailing,
+          Text(leading, style: Theme.of(context).textTheme.bodyLarge),
+          Text(
+            trailing,
             style: TextStyle(
                 fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
-                letterSpacing: Theme.of(context).textTheme.labelSmall!.letterSpacing,
-                fontWeight: Theme.of(context).textTheme.displaySmall!.fontWeight,
-                color: trailingColor
-            ),
+                letterSpacing:
+                    Theme.of(context).textTheme.labelSmall!.letterSpacing,
+                fontWeight:
+                    Theme.of(context).textTheme.displaySmall!.fontWeight,
+                color: trailingColor),
           ),
         ],
       ),

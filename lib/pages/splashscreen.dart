@@ -6,7 +6,7 @@ import 'package:bohiba/component/bohiba_icon.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Timer(const Duration(seconds: 3), () {
-      Get.toNamed(BohibaRoute.signIn);
+      Get.toNamed(AppRoute.signIn);
     });
     super.initState();
   }

@@ -6,7 +6,7 @@ import '../../../component/bohiba_inputfield/email_inputfield.dart';
 import '../../../component/bohiba_colors.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+  const ForgotPasswordScreen({super.key});
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordpagestate();

@@ -8,12 +8,12 @@ class CompleteButton extends StatelessWidget {
   final String label;
 
   const CompleteButton({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
     this.onPressed,
     this.label = "Complete Button",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

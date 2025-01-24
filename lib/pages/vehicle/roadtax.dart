@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RoadTaxScreen extends StatefulWidget {
-  const RoadTaxScreen({Key? key}) : super(key: key);
+  const RoadTaxScreen({super.key});
 
   @override
   State<RoadTaxScreen> createState() => _RoadTaxScreenState();

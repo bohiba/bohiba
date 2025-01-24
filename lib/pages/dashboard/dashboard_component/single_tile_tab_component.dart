@@ -9,13 +9,12 @@ class SingleTileTabComponent extends StatelessWidget {
   final Widget trailing;
 
   const SingleTileTabComponent(
-      {Key? key,
+      {super.key,
       required this.onTap,
       this.icon = Icons.add,
       this.trailing = const SizedBox(),
       this.iconColor = Colors.black,
-      this.title = "Title"})
-      : super(key: key);
+      this.title = "Title"});
 
   @override
   Widget build(BuildContext context) {

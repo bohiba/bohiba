@@ -1,16 +1,10 @@
 import 'package:bohiba/controllers/global_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class AddVehicleController extends GetxController {
   final GlobalController _globalController = Get.put(GlobalController());
-
-  final CollectionReference drivers =
-      FirebaseFirestore.instance.collection("drivers");
-  final CollectionReference vehicles =
-      FirebaseFirestore.instance.collection("vehicles");
 
   bool isVerfyingVehicle = false;
   bool isfetchingVehicleDetails = false;

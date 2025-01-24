@@ -1,13 +1,11 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bohiba/services/pref_utils.dart';
 
 class SignUpController extends GetxController {
   // final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  CollectionReference users = FirebaseFirestore.instance.collection("users");
   final PrefUtils prefUtils = PrefUtils();
 
   final GlobalKey<FormState> signupKey = GlobalKey<FormState>();
@@ -18,7 +16,7 @@ class SignUpController extends GetxController {
   bool isCreatingUser = false;
 
   Future<void> signUp(String email, String phone, String password) async {
-    // validate 
+    // validate
     // 1. Phone number of 10 digit
     // 2. Email format
     // 3. Password strength

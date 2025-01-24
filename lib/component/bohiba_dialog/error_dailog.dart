@@ -5,8 +5,7 @@ import 'package:bohiba/component/bohiba_colors.dart';
 class ErrorDialog extends StatelessWidget {
   final String error;
 
-  const ErrorDialog({Key? key, this.error = "Something went wrong"})
-      : super(key: key);
+  const ErrorDialog({super.key, this.error = "Something went wrong"});
 
   @override
   Widget build(BuildContext context) {

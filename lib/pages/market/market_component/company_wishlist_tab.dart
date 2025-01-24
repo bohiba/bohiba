@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/company_details_model.dart';
+import '../../../model/company_details_model.dart';
 import 'market_card/market_card.dart';
 
 class CompanyWishListTab extends StatefulWidget {
-  const CompanyWishListTab({Key? key}) : super(key: key);
+  const CompanyWishListTab({super.key});
 
   @override
   State<CompanyWishListTab> createState() => _CompanyWishListTabState();

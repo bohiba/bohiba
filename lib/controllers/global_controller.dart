@@ -4,10 +4,32 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class GlobalController extends GetxController {
   XFile imageFile = XFile("");
   String base64Image = "";
+
+  Future<String> pickDate(
+      {required DateFormat dateFormatter, required String hintText}) async {
+    DateTime? chooseDate = DateTime.now();
+    DateFormat dateFormat = dateFormatter;
+    BuildContext buildContext = Get.context!;
+    chooseDate = await showDatePicker(
+        context: buildContext,
+        firstDate: DateTime(1820),
+        lastDate: DateTime.now(),
+        helpText: hintText,
+        fieldHintText: 'DD-MM-YYYY',
+        fieldLabelText: '',
+        keyboardType: TextInputType.numberWithOptions());
+    if (chooseDate != null) {
+      return dateFormat.format(chooseDate);
+    } else {
+      chooseDate = DateTime.now();
+      return dateFormat.format(chooseDate);
+    }
+  }
 
   Future<String> decodeBase64ToImage(String imagePath) async {
     File imageFile = File(imagePath);

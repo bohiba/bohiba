@@ -1,11 +1,8 @@
 import 'package:bohiba/services/pref_utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignInController extends GetxController {
-  final CollectionReference users =
-      FirebaseFirestore.instance.collection("users");
   final PrefUtils prefUtils = PrefUtils();
   final userIDController = TextEditingController();
   final passwordController = TextEditingController();

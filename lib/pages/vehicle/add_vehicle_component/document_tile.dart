@@ -6,12 +6,12 @@ class DocumentTile extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget? trailing;
   const DocumentTile({
-    Key? key,
+    super.key,
     this.vehicleDocument = "Document Name",
     this.expiryDate = "expiryDate",
     this.onPressed,
     this.trailing = const SizedBox(),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

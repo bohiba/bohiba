@@ -4,7 +4,7 @@ import '../../../component/bohiba_inputfield/text_inputfield.dart';
 import '../../../component/bohiba_colors.dart';
 
 class DriverDetailComponent extends StatelessWidget {
-  const DriverDetailComponent({Key? key}) : super(key: key);
+  const DriverDetailComponent({super.key});
 
   @override
   Widget build(BuildContext context) {

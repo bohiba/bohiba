@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/component_exports.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 class SecoundaryButton extends StatelessWidget {
@@ -9,13 +11,13 @@ class SecoundaryButton extends StatelessWidget {
   final Color backgroundColor;
 
   const SecoundaryButton({
-    Key? key,
+    super.key,
     this.onPressed,
     this.label = 'Submit',
     this.fixedSize = const Size(125, 40),
     this.shape = const RoundedRectangleBorder(),
     this.backgroundColor = const Color(0xFF047BFC),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,13 @@ class SecoundaryButton extends StatelessWidget {
         shape: shape,
         backgroundColor: backgroundColor,
       ),
-      child: Text(label, style: Theme.of(context).textTheme.labelLarge),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: bohibaColors.primaryColor,
+          fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+        ),
+      ),
     );
   }
 }

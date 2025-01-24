@@ -6,7 +6,7 @@ import '../bohiba_search_delegate.dart';
 class MarketAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  const MarketAppBar({Key? key, this.title = "Title"}) : super(key: key);
+  const MarketAppBar({super.key, this.title = "Title"});
 
   @override
   Size get preferredSize => const Size.fromHeight(55);

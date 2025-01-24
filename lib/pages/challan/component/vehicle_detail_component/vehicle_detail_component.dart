@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bohiba/pages/status/tabs/tab_widget/row_text.dart';
 
 class VehicleDetailComponent extends StatelessWidget {
-  const VehicleDetailComponent({Key? key}) : super(key: key);
+  const VehicleDetailComponent({super.key});
 
   @override
   Widget build(BuildContext context) {

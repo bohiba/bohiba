@@ -1,13 +1,8 @@
-import 'package:bohiba/controllers/add_vehicle_controller.dart';
-import 'package:bohiba/controllers/global_controller.dart';
-import 'package:bohiba/controllers/signin_controller.dart';
-import 'package:bohiba/controllers/signup_controller.dart';
-import 'package:bohiba/controllers/user_auth_controller.dart';
+import 'package:bohiba/dist/controller_exports.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/controllers/splash_controller.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,16 +12,14 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then(
-    (_) => runApp(
-      const MyApp(),
-    ),
+    (_) => runApp(const MyApp()),
   );
-  Get.lazyPut(() => AddVehicleController());
-  Get.lazyPut(() => GlobalController());
-  Get.lazyPut(() => SplashController());
-  Get.lazyPut(() => SignInController());
-  Get.lazyPut(() => SignUpController());
-  Get.lazyPut(() => UserAuthController());
+  Get.lazyPut<AddVehicleController>(() => AddVehicleController());
+  Get.lazyPut<GlobalController>(() => GlobalController());
+  Get.lazyPut<SplashController>(() => SplashController());
+  Get.lazyPut<SignInController>(() => SignInController());
+  Get.lazyPut<SignUpController>(() => SignUpController());
+  Get.lazyPut<UserAuthController>(() => UserAuthController());
 }
 
 class MyApp extends StatelessWidget {
@@ -40,8 +33,8 @@ class MyApp extends StatelessWidget {
         theme: bohibaTheme,
         // debugShowMaterialGrid: true,
         debugShowCheckedModeBanner: false,
-        getPages: BohibaRoute.pages,
-        initialRoute: BohibaRoute.signIn,
+        getPages: AppRoute.pages,
+        initialRoute: AppRoute.signIn,
       ),
     );
   }

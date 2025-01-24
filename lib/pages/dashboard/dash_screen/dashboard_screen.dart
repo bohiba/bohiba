@@ -1,23 +1,24 @@
-import 'package:bohiba/pages/driver/screen/driver_list_page.dart';
+import 'package:bohiba/pages/driver/all_driver_screen/all_driver_page.dart';
+import 'package:bohiba/pages/load/screen/add_load_screen.dart';
 import 'package:bohiba/pages/load/screen/all_load_screen.dart';
-import 'package:bohiba/pages/vehicle/all_vechile_screen/all_vehicle_screen.dart';
+import 'package:bohiba/pages/vehicle/all_vechile_page/all_vehicle_page.dart';
 import 'package:bohiba/pages/vehicle/map.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/component/bohiba_appbar/dashboard_appbar.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/pages/dashboard/dashboard_component/bluebox_component.dart';
 import 'package:bohiba/pages/dashboard/dashboard_component/single_tile_tab_component.dart';
 import 'package:bohiba/pages/user/user_kyc/kyc_screen.dart';
 import 'package:bohiba/pages/user/user_profile/user_profile_screen/user_profile.dart';
 import 'package:bohiba/pages/load_history/load_history_screen/load_history_screen.dart';
 import 'package:remixicon/remixicon.dart';
+import '../../../dist/component_exports.dart';
 import '../../wallet/bank_account_screen/bank_accounts_screen.dart';
 import '../../wallet/wallet_screen/wallet_screen.dart';
 import '../dashboard_component/small_tab_component.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _Dashboardpagestate();
@@ -33,7 +34,11 @@ class _Dashboardpagestate extends State<DashboardScreen> {
         appBar: const DashAppBar(),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0),
+            padding: EdgeInsets.only(
+              top: BohibaResponsiveScreen.height20,
+              left: BohibaResponsiveScreen.width15,
+              right: BohibaResponsiveScreen.width15,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -65,12 +70,12 @@ class _Dashboardpagestate extends State<DashboardScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const AllLoadScreen(),
+                                  builder: (context) => const AllDriverPage(),
                                 ),
                               );
                             },
-                            label: "Load",
-                            icon: Icons.landscape_outlined,
+                            label: "Add Driver",
+                            icon: Icons.person_add_alt_1_outlined,
                           ),
 
                           SmallTabComponent(
@@ -78,12 +83,12 @@ class _Dashboardpagestate extends State<DashboardScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const WalletScreen(),
+                                  builder: (context) => const AllLoadScreen(),
                                 ),
                               );
                             },
-                            label: "Add Trip",
-                            icon: EvaIcons.plus,
+                            label: "Load",
+                            icon: Icons.landscape_outlined,
                           ),
 
                           SmallTabComponent(
@@ -142,66 +147,79 @@ class _Dashboardpagestate extends State<DashboardScreen> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      Row(children: [
-                        SmallTabComponent(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const DriverListPage(),
-                              ),
-                            );
-                          },
-                          label: "Add Driver",
-                          icon: Icons.person_add_alt_1_rounded,
-                        ),
-                        SmallTabComponent(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AllVehicleScreen(),
-                              ),
-                            );
-                          },
-                          label: "Add Vehicle",
-                          icon: EvaIcons.carOutline,
-                        ),
-                        SmallTabComponent(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MapScreen(),
-                              ),
-                            );
-                          },
-                          label: "Map",
-                          icon: EvaIcons.navigation2Outline,
-                        ),
-                        SmallTabComponent(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoadHistoryScreen(),
-                              ),
-                            );
-                          },
-                          label: "Load History",
-                          icon: Icons.verified_outlined,
-                        ),
-                        /*SmallTabComponent(
-                            onTap: () => Get.to(const DocumentScreen()),
-                            label: "Vehicle\nDoc",
-                            icon: EvaIcons.fileTextOutline,
+                      Row(
+                        children: [
+                          SmallTabComponent(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const LoadHistoryScreen(),
+                                ),
+                              );
+                            },
+                            label: "Fast Tag",
+                            icon: Remix.bill_line,
                           ),
+                          SmallTabComponent(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AllVehicleScreen(),
+                                ),
+                              );
+                            },
+                            label: "Add Vehicle",
+                            icon: EvaIcons.carOutline,
+                          ),
+                          SmallTabComponent(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AddLoadScreen(),
+                                ),
+                              );
+                            },
+                            label: "Documents",
+                            icon: EvaIcons.plus,
+                          ),
+                          SmallTabComponent(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MapScreen(),
+                                ),
+                              );
+                            },
+                            label: "Map",
+                            icon: EvaIcons.navigation2Outline,
+                          ),
+                          /*SmallTabComponent(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const LoadHistoryScreen(),
+                                ),
+                              );
+                            },
+                            label: "Load History",
+                            icon: Icons.verified_outlined,
+                          ),
+
                           SmallTabComponent(
                             onTap: () => Get.to(const RoadTaxScreen()),
                             label: "Tax",
                             icon: EvaIcons.creditCardOutline,
                           ),*/
-                      ]),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -236,6 +254,12 @@ class _Dashboardpagestate extends State<DashboardScreen> {
                   icon: EvaIcons.shareOutline,
                   iconColor: bohibaColors.primaryColor,
                   title: 'Share and Earn',
+                ),
+                SingleTileTabComponent(
+                  onTap: () {},
+                  icon: EvaIcons.lock,
+                  iconColor: bohibaColors.primaryColor,
+                  title: 'Privacy & Policy',
                 ),
                 SingleTileTabComponent(
                   onTap: () {},

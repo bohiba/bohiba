@@ -8,7 +8,7 @@ import '../../wallet_string/wallet_string.dart';
 import '../wallet_deposit_component/current_balance/current_balance.dart';
 
 class WalletDepositScreen extends StatefulWidget {
-  const WalletDepositScreen({Key? key}) : super(key: key);
+  const WalletDepositScreen({super.key});
 
   @override
   State<WalletDepositScreen> createState() => _WalletDepositScreenState();

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/dist/component_exports.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee_text/marquee_text.dart';
 
@@ -9,38 +10,38 @@ class SmallTabComponent extends StatelessWidget {
   final IconData icon;
   // final bool alwaysScroll;
   const SmallTabComponent({
-    Key? key,
+    super.key,
     required this.onTap,
     this.label = "Label",
     this.icon = Icons.add,
     // this.alwaysScroll = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 45,
-        width: 110,
-        margin: const EdgeInsets.only(right: 20),
+        height: BohibaResponsiveScreen.height47,
+        width: BohibaResponsiveScreen.width * 0.25,
+        margin: EdgeInsets.only(right: BohibaResponsiveScreen.height20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: bohibaColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
             Container(
-              height: 45,
-              width: 45,
+              height: BohibaResponsiveScreen.width * 0.108,
+              width: BohibaResponsiveScreen.width * 0.108,
               decoration: BoxDecoration(
                 color: const Color(0xFF047BFC),
-                border: Border.all(color: Colors.white),
+                border: Border.all(color: bohibaColors.white),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
                 icon,
-                color: Colors.white,
+                color: bohibaColors.white,
               ),
             ),
             Expanded(

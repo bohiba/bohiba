@@ -14,8 +14,8 @@ class StackCompanyAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Colors.green,
       width: BohibaResponsiveScreen.width50,
+      margin: EdgeInsets.only(right: BohibaResponsiveScreen.width15),
       alignment: Alignment.center,
       child: Stack(
         alignment: Alignment.center,
@@ -34,7 +34,7 @@ class StackCompanyAvatar extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 15,
+            top: 10,
             right: 4,
             child: Container(
               height: BohibaResponsiveScreen.height30,

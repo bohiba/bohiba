@@ -6,10 +6,7 @@ import '../../../component/bohiba_inputfield/text_inputfield.dart';
 class FromToDetailsComponent extends StatelessWidget {
   final bool fromReadOnly;
 
-  const FromToDetailsComponent({
-    Key? key,
-    this.fromReadOnly = false,
-  }) : super(key: key);
+  const FromToDetailsComponent({super.key, this.fromReadOnly = false});
 
   @override
   Widget build(BuildContext context) {

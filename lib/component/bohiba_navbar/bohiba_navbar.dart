@@ -1,15 +1,12 @@
-import 'package:bohiba/component/bohiba_navbar/helper_navbar/helper_navbar.dart';
-import 'package:bohiba/pages/status/status_screen/status_screen.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import '/dist/component_exports.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/pages/home/screen/home_screen.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
-
-import '../../pages/dashboard/dash_screen/dashboard_screen.dart';
-import '../../pages/market/market_screen/market_screen.dart';
+import '/pages/home/screen/home_screen.dart';
+import '/pages/dashboard/dash_screen/dashboard_screen.dart';
+import '/pages/market/market_screen/market_screen.dart';
 
 class BohibaNavBar extends StatefulWidget {
   const BohibaNavBar({
@@ -32,13 +29,12 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             activeIcon: Icon(Remix.pulse_fill),
             label: "Market",
             tooltip: "Market"),
-        const BottomNavigationBarItem(
+        /*const BottomNavigationBarItem(
             icon: Icon(EvaIcons.barChart2Outline),
             activeIcon: Icon(EvaIcons.barChart),
             label: "Status",
-            tooltip: "Status"),
+            tooltip: "Status"),*/
         BottomNavigationBarItem(
-          // icon: Icon(Remix.dashboard_fill),
           icon: CircleAvatar(
             radius: 15,
             backgroundColor: bohibaColors.primaryColor,
@@ -65,7 +61,7 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         body: [
           const HomeScreen(),
           MarketPage(moveToTab: marketScreenIndex),
-          StatusPage(moveToTab: statusScreenIndex),
+          // StatusPage(moveToTab: statusScreenIndex),
           const DashboardScreen(),
         ].elementAt(currentIndex),
         bottomNavigationBar: BottomNavigationBar(

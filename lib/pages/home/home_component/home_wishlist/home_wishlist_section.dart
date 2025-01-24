@@ -2,14 +2,13 @@ import 'package:bohiba/pages/wishlist/wish_list_card.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
 import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bohiba/pages/home/home_string/home_strings.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class HomeWishListSection extends StatefulWidget {
-  const HomeWishListSection({Key? key}) : super(key: key);
+  const HomeWishListSection({super.key});
 
   @override
   State<HomeWishListSection> createState() => _HomeWishListSectionState();
@@ -25,7 +24,7 @@ class _HomeWishListSectionState extends State<HomeWishListSection> {
           // Home WishList Header
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: BohibaResponsiveScreen.width8,
+              horizontal: BohibaResponsiveScreen.width15,
             ),
             child: Row(
               children: [
@@ -38,7 +37,7 @@ class _HomeWishListSectionState extends State<HomeWishListSection> {
                   borderRadius:
                       BorderRadius.circular(BohibaResponsiveScreen.width5),
                   onTap: () => Get.offNamedUntil(
-                      BohibaRoute.navBar,
+                      AppRoute.navBar,
                       arguments: {
                         "current_index": 1,
                         "market_screen_index": 1,
@@ -46,8 +45,8 @@ class _HomeWishListSectionState extends State<HomeWishListSection> {
                       (route) => false),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        vertical: BohibaResponsiveScreen.height8,
-                        horizontal: BohibaResponsiveScreen.width10),
+                      vertical: BohibaResponsiveScreen.height10,
+                    ),
                     child: Text(
                       HomeWishListString.seeAll,
                       style: TextStyle(
@@ -61,10 +60,14 @@ class _HomeWishListSectionState extends State<HomeWishListSection> {
               ],
             ),
           ),
-          Gap(BohibaResponsiveScreen.height5),
 
           // Home WishList Section
           Container(
+            padding: EdgeInsets.only(
+              left: BohibaResponsiveScreen.width15,
+              right: BohibaResponsiveScreen.width15,
+              bottom: BohibaResponsiveScreen.height25,
+            ),
             alignment: Alignment.center,
             child:
                 /*CompanyModel.companyList.isEmpty

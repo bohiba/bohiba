@@ -1,15 +1,15 @@
-import 'package:bohiba/services/add_type_service.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import '/services/add_type_service.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/component/screen_utils.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../dist/component_exports.dart';
 import '../bohiba_icon.dart';
-import '../bohiba_search_delegate.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBar({Key? key}) : super(key: key);
+  const HomeAppBar({super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(55);
@@ -19,22 +19,25 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: Size.fromHeight(BohibaResponsiveScreen.height55),
       child: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: false,
+        titleSpacing: 16,
         title: Image.asset(
           BohibaIcons.bohibaIcon,
           width: 55,
+          alignment: Alignment.centerLeft,
         ),
         actions: [
           // Add Vehicle
-          HomeAppBarIconBox(
+          AppBarIconBox(
             onTapDown: (TapDownDetails tapDownDetails) {
               showMenu(
                 context: context,
                 position: RelativeRect.fromLTRB(
                   tapDownDetails.globalPosition.dx,
-                  tapDownDetails.globalPosition.dy,
+                  BohibaResponsiveScreen.height * 0.125,
                   0,
                   0,
                 ),
@@ -44,17 +47,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 items: [
-                  /*PopupMenuItem(
-                    value: AddType.addLoad,
-                    child: Text(
-                      'Add Load',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                      ),
-                    ),
-                  ),*/
                   PopupMenuItem(
                     value: AddTypeService.addDriver,
                     child: Text(
@@ -93,27 +85,25 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 switch (value) {
                   case AddTypeService.addDriver:
                     // Add Driver Page
-                    return Navigator.of(context)
-                        .pushNamed(BohibaRoute.driverList);
+                    return Navigator.of(context).pushNamed(AppRoute.driverList);
 
                   case AddTypeService.addLoad:
                     // Add Load Page
                     break;
                   case AddTypeService.addVehicle:
-                    return Navigator.of(context)
-                        .pushNamed(BohibaRoute.addVehicle);
+                    return Navigator.of(context).pushNamed(
+                      AppRoute.addVehicle,
+                    );
 
                   default:
                 }
               });
             },
-            icon: const Icon(
-              EvaIcons.plus,
-            ),
+            icon: const Icon(EvaIcons.plus),
           ),
 
           // Search
-          HomeAppBarIconBox(
+          AppBarIconBox(
             onTap: () => showSearch(
               context: context,
               delegate: BohibaCompanySearchDelegate(),
@@ -124,31 +114,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
 
           //Notification
-          HomeAppBarIconBox(
-            onTap: () => Get.toNamed(BohibaRoute.notifyScreen),
+          AppBarIconBox(
+            onTap: () => Get.toNamed(AppRoute.notifyScreen),
             icon: const Icon(
               EvaIcons.bellOutline,
             ),
-          )
+          ),
         ],
       ),
-    );
-  }
-}
-
-class HomeAppBarIconBox extends StatelessWidget {
-  const HomeAppBarIconBox({super.key, this.onTap, this.onTapDown, this.icon});
-
-  final VoidCallback? onTap;
-  final Function(TapDownDetails)? onTapDown;
-  final Widget? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      onTapDown: onTapDown,
-      child: SizedBox(height: 40, width: 40, child: icon),
     );
   }
 }

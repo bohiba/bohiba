@@ -4,7 +4,7 @@ import 'package:bohiba/component/bottom_nav_button/bottom_nav_button.dart';
 import 'package:bohiba/component/bohiba_colors.dart';
 
 class BankAccountsScreen extends StatelessWidget {
-  const BankAccountsScreen({Key? key}) : super(key: key);
+  const BankAccountsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

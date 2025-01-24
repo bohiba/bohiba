@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/component_exports.dart';
+import 'package:bohiba/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileContactCardComponent extends StatelessWidget {
@@ -7,54 +9,50 @@ class UserProfileContactCardComponent extends StatelessWidget {
   final String address;
 
   const UserProfileContactCardComponent({
-    Key? key,
+    super.key,
     this.header = "Header",
     this.phoneNumber = "+91- 000 000 0000",
     this.email = "your-mail@example.com",
     this.address = "City State District Pin-Code",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      color: Colors.grey.shade50,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: BohibaResponsiveScreen.width15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
+            padding: EdgeInsets.only(bottom: BohibaResponsiveScreen.height10),
             child: Text(
               header,
               maxLines: 2,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: bohibaTheme.textTheme.headlineLarge,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
+            padding: EdgeInsets.only(bottom: BohibaResponsiveScreen.height5),
             child: Text(
               phoneNumber,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: bohibaTheme.textTheme.bodyLarge,
             ),
           ),
-          const Divider(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
+            padding: EdgeInsets.only(bottom: BohibaResponsiveScreen.height5),
             child: Text(
               email,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: bohibaTheme.textTheme.bodyLarge,
             ),
           ),
-          const Divider(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
+            padding: EdgeInsets.only(bottom: BohibaResponsiveScreen.height5),
             child: Text(
               address,
               maxLines: 2,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: bohibaTheme.textTheme.bodyLarge,
             ),
           ),
         ],
