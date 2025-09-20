@@ -1,21 +1,25 @@
-import 'package:bohiba/pages/challan/component/load_details_component/load_details_component.dart';
-import 'package:bohiba/pages/challan/component/transporter_detail_component/transporter_detail_component.dart';
-import 'package:bohiba/pages/challan/component/vehicle_detail_component/vehicle_detail_component.dart';
+import '/component/screen_utils.dart';
+import '/pages/challan/component/load_details_component/load_details_component.dart';
+import '/pages/challan/component/transporter_detail_component/transporter_detail_component.dart';
+import '/pages/challan/component/vehicle_detail_component/vehicle_detail_component.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/status/tabs/tab_widget/row_text.dart';
+import '/pages/status/tabs/tab_widget/row_text.dart';
 
 import '../../../component/bohiba_appbar/tab_appbar.dart';
 
 class ChallanScreen extends StatelessWidget {
-  const ChallanScreen({Key? key}) : super(key: key);
+  const ChallanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       appBar: TabAppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 10.0),
+          padding: EdgeInsets.only(
+              top: ScreenUtils.height10,
+              left: ScreenUtils.width15,
+              right: ScreenUtils.width15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -34,7 +38,7 @@ class ChallanScreen extends StatelessWidget {
 }
 
 class DateTimeComponent extends StatelessWidget {
-  const DateTimeComponent({Key? key}) : super(key: key);
+  const DateTimeComponent({super.key});
 
   @override
   Widget build(BuildContext context) {

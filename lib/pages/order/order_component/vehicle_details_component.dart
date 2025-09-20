@@ -4,7 +4,7 @@ import '../../../component/bohiba_inputfield/text_inputfield.dart';
 import '../../../component/bohiba_colors.dart';
 
 class VehicleDetailsComponent extends StatelessWidget {
-  const VehicleDetailsComponent({Key? key}) : super(key: key);
+  const VehicleDetailsComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class VehicleDetailsComponent extends StatelessWidget {
               "Only vehicle nearby to destination and available can be booked*",
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                color: bohibaColors.warningColor,
+                color: BohibaColors.warningColor,
               ),
             ),
           ),

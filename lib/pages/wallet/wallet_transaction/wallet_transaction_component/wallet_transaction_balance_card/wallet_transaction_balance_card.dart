@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../component/bohiba_colors.dart';
 
 class BankTransactionBalanceCard extends StatelessWidget {
-  const BankTransactionBalanceCard({Key? key}) : super(key: key);
+  const BankTransactionBalanceCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class BankTransactionBalanceCard extends StatelessWidget {
         height: 180,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0.0),
-            color: bohibaColors.primaryVariantColor),
+            color: BohibaColors.primaryVariantColor),
         child: Column(
           children: [
             Expanded(

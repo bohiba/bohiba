@@ -1,52 +1,140 @@
-import 'package:bohiba/pages/user/user_profile/edit_user_profile_screen.dart';
-import 'package:bohiba/pages/user/user_profile/user_profile_component/user_profile_card.dart';
-import 'package:bohiba/pages/user/user_profile/user_profile_component/user_profile_contact_card_component.dart';
+import '/component/screen_utils.dart';
+import '/controllers/dashboard_controller.dart';
+import '../../../../services/global_service.dart';
+import '/extensions/bohiba_extension.dart';
+import '/pages/user/user_profile/edit_user_profile_screen.dart';
+import '/pages/widget/linear_box_widget.dart';
+import '/routes/app_route.dart';
+import '/theme/bohiba_theme.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+
+// import '/pages/user/user_profile/edit_user_profile_screen.dart';
+import '/pages/user/user_profile/user_profile_component/user_profile_card.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
 
-class UserProfileScreen extends StatelessWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
-
-  final String profileImg =
-      "https://th.bing.com/th/id/R.4b1ebbdf9a6a42f23de2678c80eb02df?rik=SEPvooeqfgw0kA&riu=http%3a%2f%2fimages.unsplash.com%2fphoto-1535713875002-d1d0cf377fde%3fcrop%3dentropy%26cs%3dtinysrgb%26fit%3dmax%26fm%3djpg%26ixid%3dMnwxMjA3fDB8MXxzZWFyY2h8NHx8bWFsZSUyMHByb2ZpbGV8fDB8fHx8MTYyNTY2NzI4OQ%26ixlib%3drb-1.2.1%26q%3d80%26w%3d1080&ehk=Gww3MHYoEwaudln4mR6ssDjrAMbAvyoXYMsyKg5p0Ac%3d&risl=&pid=ImgRaw&r=0";
+class UserProfilePage extends GetView<DashboardController> {
+  const UserProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final navigator = Navigator.of(context);
     return Scaffold(
-        appBar: const TitleAppbar(
-          title: "Profile",
-        ),
+        appBar: const TitleAppbar(title: "Profile"),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UserProfileCard(
-                userImage:
-                    "https://th.bing.com/th/id/R.4b1ebbdf9a6a42f23de2678c80eb02df?rik=SEPvooeqfgw0kA&riu=http%3a%2f%2fimages.unsplash.com%2fphoto-1535713875002-d1d0cf377fde%3fcrop%3dentropy%26cs%3dtinysrgb%26fit%3dmax%26fm%3djpg%26ixid%3dMnwxMjA3fDB8MXxzZWFyY2h8NHx8bWFsZSUyMHByb2ZpbGV8fDB8fHx8MTYyNTY2NzI4OQ%26ixlib%3drb-1.2.1%26q%3d80%26w%3d1080&ehk=Gww3MHYoEwaudln4mR6ssDjrAMbAvyoXYMsyKg5p0Ac%3d&risl=&pid=ImgRaw&r=0",
-                userName: "Mangal Kishore Mahanta",
-                userID: "6ZX096CT",
-                countVehicle: 2,
-                editProfile: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditUserProfileScreen(),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              const UserProfileContactCardComponent(
-                header: "Contact Details",
-                phoneNumber: "+91 000 000 0000",
-                email: "your-mail@example.com",
-                address: "Bonai Sundergarh Odisha 770040",
-              )
-            ],
+          padding: EdgeInsets.only(
+            top: ScreenUtils.height20,
+            right: ScreenUtils.width15,
+            left: ScreenUtils.width15,
           ),
+          child: Obx(() {
+            return SmartRefresher(
+              onRefresh: () async => await controller.onRefreshProfilePage(),
+              controller: controller.refreshProfile,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  UserProfileCard(
+                    userImage: GlobalService.getAvatarUrl(
+                        controller.profileModel.value!.name!),
+                    userName: controller.profileModel.value?.name,
+                    userID: controller.profileModel.value?.uuid,
+                    editProfile: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditUserProfilePage(),
+                        ),
+                      );
+                    },
+                  ),
+                  Gap(ScreenUtils.height20),
+                  Text(
+                    "Basic Info",
+                    style: bohibaTheme.textTheme.headlineMedium,
+                  ),
+                  LinearBoxWidget(
+                    header: 'Role',
+                    title: controller.profileModel.value?.roleId?.roleName(),
+                  ),
+                  LinearBoxWidget(
+                    header: 'D.O.B',
+                    title: controller.profileModel.value?.dob,
+                  ),
+                  LinearBoxWidget(
+                    header: 'Job Status',
+                    title: controller.profileModel.value?.jobStatus
+                        ?.toDisplayLabel(),
+                  ),
+                  LinearBoxWidget(
+                    onClick: () {
+                      navigator
+                          .pushNamed(AppRoute.allTruck)
+                          .then((onValue) async {
+                        await controller.getProfileModel();
+                      });
+                    },
+                    header: 'Total Truck',
+                    title: controller.profileModel.value?.trucks.toString(),
+                    showArrow: true,
+                  ),
+                  LinearBoxWidget(
+                    onClick: () {
+                      navigator.pushNamed(AppRoute.allDriver);
+                    },
+                    header: 'Total Driver',
+                    title: controller.profileModel.value?.drivers.toString(),
+                    showArrow: true,
+                  ),
+                  Gap(ScreenUtils.height20),
+                  Text(
+                    "Contact Info",
+                    style: bohibaTheme.textTheme.headlineMedium,
+                  ),
+                  LinearBoxWidget(
+                    header: 'Mobile Number',
+                    title: controller.profileModel.value?.mobileNumber,
+                  ),
+                  LinearBoxWidget(
+                    header: 'E-Mail',
+                    title: controller.profileModel.value?.email,
+                  ),
+                  Gap(ScreenUtils.height20),
+                  Text(
+                    "Document Info",
+                    style: bohibaTheme.textTheme.headlineMedium,
+                  ),
+                  LinearBoxWidget(
+                    header: 'Aadhar Number',
+                    title: controller
+                            .profileModel.value?.verification?.aadhaarNumber ??
+                        'NA',
+                  ),
+                  LinearBoxWidget(
+                    header: 'Pan Number',
+                    title: controller
+                            .profileModel.value?.verification?.panNumber ??
+                        'NA',
+                  ),
+                  LinearBoxWidget(
+                    header: 'DL Number',
+                    title:
+                        controller.profileModel.value?.verification?.dlNumber ??
+                            'NA',
+                  ),
+                  LinearBoxWidget(
+                    header: 'Verification Status',
+                    title: controller.profileModel.value?.verification
+                            ?.verificationStatus!
+                            .toUpperCase() ??
+                        'NA',
+                  ),
+                ],
+              ),
+            );
+          }),
         ));
   }
 }

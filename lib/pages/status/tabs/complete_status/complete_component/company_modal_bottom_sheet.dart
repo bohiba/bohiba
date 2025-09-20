@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/payment/payment_screen/payment_screen.dart';
+import '/pages/payment/payment_screen.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../screen/challan_screen/challan_screen.dart';
 
 class CompanyModalBottomSheet extends StatefulWidget {
-  const CompanyModalBottomSheet({Key? key}) : super(key: key);
+  const CompanyModalBottomSheet({super.key});
 
   @override
   State<CompanyModalBottomSheet> createState() =>
@@ -61,12 +61,12 @@ class _CompanyModalBottomSheetState extends State<CompanyModalBottomSheet> {
           ),
           CompanyModalListTile(
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ChallanScreen(),
-                ),
-              );
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const ChallanScreen(),
+              //   ),
+              // );
             },
             title: "Raise Ticket",
             leadingIcon: Remix.hand_heart_line,
@@ -83,11 +83,10 @@ class CompanyModalListTile extends StatelessWidget {
   final String title;
 
   const CompanyModalListTile(
-      {Key? key,
+      {super.key,
       this.onTap,
       this.leadingIcon,
-      this.title = "Company Modal List Tile"})
-      : super(key: key);
+      this.title = "Company Modal List Tile"});
 
   @override
   Widget build(BuildContext context) {

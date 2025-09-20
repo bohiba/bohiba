@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bohiba/component/bohiba_colors.dart';
+import '/component/bohiba_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,12 +51,12 @@ class _DocumentImagePickerState extends State<DocumentImagePicker> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: img == null
-                ? bohibaColors.primaryVariantColor
-                : bohibaColors.primaryColor,
+                ? BohibaColors.primaryVariantColor
+                : BohibaColors.primaryColor,
             borderRadius: BorderRadius.circular(8.0)),
         child: Text(widget.label,
             style: TextStyle(
-                color: bohibaColors.white,
+                color: BohibaColors.white,
                 fontWeight:
                     Theme.of(context).textTheme.labelLarge!.fontWeight)),
       ),

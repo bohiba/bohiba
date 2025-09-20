@@ -1,125 +1,111 @@
-import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/component/bohiba_icon.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_inputfield/password_inputfield.dart';
+import '/controllers/auth_controller.dart';
 import 'package:get/get.dart';
-import '../../../component/bohiba_buttons/primary_button.dart';
-import '../../../component/bohiba_inputfield/email_inputfield.dart';
-import '../../../component/bohiba_inputfield/text_inputfield.dart';
-import '../../widget/app_theme/app_theme.dart';
+import '/component/bohiba_inputfield/email_inputfield.dart';
+import 'package:flutter/material.dart';
+import '/dist/component_exports.dart';
+import '/routes/app_route.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/theme/bohiba_theme.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SignupScreen> createState() => _SignupScreenState();
-}
-
-class _SignupScreenState extends State<SignupScreen> {
-  bool showPassword = true;
-  bool loading = false;
-  TextEditingController mobileController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController pwdController = TextEditingController();
-
-  final signupKey = GlobalKey<FormState>();
+class SignupScreen extends GetView<AuthController> {
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          height: BohibaResponsiveScreen.height,
-          width: BohibaResponsiveScreen.width,
-          padding: EdgeInsets.symmetric(
-            horizontal: BohibaResponsiveScreen.width20,
-          ),
-          child: Column(
+      appBar: null,
+      body: Container(
+        height: ScreenUtils.height,
+        width: ScreenUtils.width,
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtils.width20,
+        ),
+        child: Stack(
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Image.asset(
-                    BohibaIcons.bohibaIcon,
-                    height: BohibaResponsiveScreen.height50,
-                  ),
-                ),
-                SizedBox(height: BohibaResponsiveScreen.height10),
-                Align(
-                  alignment: Alignment.centerLeft,
                   child: Text(
                     'Hello!',
-                    style: Theme.of(context).textTheme.displayMedium,
+                    style: bohibaTheme.textTheme.displayMedium,
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Let\'s begin the journey',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                      color: bohibaTheme.textTheme.titleLarge!.color,
+                    ),
                   ),
                 ),
-                Form(
-                  key: signupKey,
-                  child: Column(
-                    children: [
-                      EmailInputField(
-                        hintText: 'Email',
-                        controller: emailController,
-                      ),
-                      TextInputField(
-                        maxLength: 10,
-                        controller: mobileController,
-                        hintText: "Mobile Number",
-                        keyboardType: TextInputType.number,
-                      ),
-                      PasswordInputField(
-                        hintText: 'Password',
-                        controller: pwdController,
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: BohibaResponsiveScreen.height20),
-                PrimaryButton(
-                  label: 'SIGNUP',
-                  onPressed: () => Get.toNamed(
-                    BohibaRoute.userAuthScreen,
-                    preventDuplicates: true,
-                  ),
+                Column(
+                  children: [
+                    EmailInputField(
+                      hintText: 'Email',
+                      controller: controller.emailController,
+                    ),
+                    SizedBox(height: ScreenUtils.height10),
+                    PrimaryButton(
+                      label: 'Verify',
+                      onPressed: () async {
+                        // Get.toNamed(
+                        //   AppRoute.otpScreen,
+                        //   arguments: {
+                        //     "email": controller.emailController.text
+                        //         .trim()
+                        //         .toLowerCase(),
+                        //     "nxtRoute": AppRoute.createUser
+                        //   },
+                        // );
+
+                        await controller.verifyEmail(
+                          email: controller.emailController.text
+                              .trim()
+                              .toLowerCase(),
+                        );
+                      },
+                    )
+                  ],
                 )
-              ]),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: BohibaResponsiveScreen.width8,
-          vertical: BohibaResponsiveScreen.height8,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Already have account? ',
-              style: bohibaTheme.textTheme.titleSmall,
+              ],
             ),
-            InkWell(
-              onTap: () => Get.offNamed(BohibaRoute.signIn),
-              child: Container(
-                height: BohibaResponsiveScreen.height30,
-                width: BohibaResponsiveScreen.width50,
-                alignment: Alignment.center,
-                child: Text(
-                  'Signin',
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                    fontWeight:
-                        bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                    color: bohibaTheme.textTheme.bodySmall!.color,
+            Container(
+              margin: EdgeInsets.only(bottom: ScreenUtils.height47),
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Already have account? ',
+                    style: bohibaTheme.textTheme.titleSmall,
                   ),
-                ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, AppRoute.signIn);
+                    },
+                    child: SizedBox(
+                      // height: BohibaResponsiveScreen.height30,
+                      width: ScreenUtils.width50,
+                      // alignment: Alignment.center,
+                      child: Text(
+                        'Signin',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                          color: bohibaTheme.textTheme.bodySmall!.color,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

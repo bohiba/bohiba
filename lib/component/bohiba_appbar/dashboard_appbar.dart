@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 class DashAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const DashAppBar({
-    Key? key,
-    this.title = "Dashboard",
-  }) : super(key: key);
+  const DashAppBar({super.key, this.title = "Dashboard"});
 
   @override
   Size get preferredSize => const Size.fromHeight(55);
@@ -15,7 +12,6 @@ class DashAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(title),
       ),

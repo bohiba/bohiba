@@ -4,10 +4,10 @@ class ColumnText extends StatelessWidget {
   final String mainLabel;
   final String subLabel;
   const ColumnText({
-    Key? key,
+    super.key,
     this.mainLabel = "",
     this.subLabel = "",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +16,10 @@ class ColumnText extends StatelessWidget {
       children: [
         Text(mainLabel,
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade400
-            )
-        ),
-        Text(subLabel,
-            style: Theme.of(context).textTheme.labelMedium
-        )
+                fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey.shade400)),
+        Text(subLabel, style: Theme.of(context).textTheme.labelMedium)
       ],
     );
   }

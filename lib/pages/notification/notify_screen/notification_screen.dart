@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../homi_section/notify_appbar/homi_appbar.dart';
+import '../../../component/bohiba_appbar/notify_appbar.dart';
 import '../notify_string/notify_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  const NotificationScreen({super.key});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();

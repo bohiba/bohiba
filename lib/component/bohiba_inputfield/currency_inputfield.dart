@@ -8,7 +8,7 @@ class CurrencyInputField extends StatelessWidget {
   final int maxLength;
   final Function(String)? onChanged;
   const CurrencyInputField({
-    Key? key,
+    super.key,
     this.autoFocus = false,
     this.maxLength = 10,
     this.decoration = const InputDecoration(
@@ -16,7 +16,7 @@ class CurrencyInputField extends StatelessWidget {
     ),
     this.onChanged,
     required this.currencyController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

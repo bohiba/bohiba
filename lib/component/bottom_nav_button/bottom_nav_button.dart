@@ -1,6 +1,7 @@
+import '/dist/component_exports.dart';
 import 'package:flutter/material.dart';
 
-import '../bohiba_colors.dart';
+import '/theme/bohiba_theme.dart';
 
 class BottomNavButton extends StatelessWidget {
   final double width;
@@ -8,26 +9,33 @@ class BottomNavButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
 
-  const BottomNavButton(
-      {Key? key,
-      this.onPressed,
-      this.height = 47,
-      this.width = 210,
-      this.label = "Label"})
-      : super(key: key);
+  const BottomNavButton({
+    super.key,
+    this.onPressed,
+    this.height = 47,
+    this.width = 210,
+    this.label = "Button",
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-          backgroundColor: bohibaColors.primaryColor,
-          fixedSize: Size(width, height)),
-      child: Text(
-        label,
-        style: TextStyle(
-            fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
-            color: bohibaColors.white),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: ScreenUtils.height15,
+        right: ScreenUtils.height15,
+        bottom: ScreenUtils.height25,
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+            backgroundColor: BohibaColors.primaryColor,
+            fixedSize: Size(width, height)),
+        child: Text(
+          label,
+          style: TextStyle(
+              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+              color: BohibaColors.white),
+        ),
       ),
     );
   }

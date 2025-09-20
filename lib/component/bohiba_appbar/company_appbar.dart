@@ -1,21 +1,16 @@
-import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/component/bohiba_text/bohiba_marquee_text.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/company/company_component/company_create_alert/company_create_alert.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
-import 'package:bohiba/services/company_option_service.dart';
+import '/theme/bohiba_theme.dart';
+
+import '/component/bohiba_colors.dart';
+import '/component/bohiba_text/bohiba_marquee_text.dart';
+import '/component/screen_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
 
 class CompanyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
 
-  const CompanyAppBar({
-    Key? key,
-    this.title = 'Title',
-  }) : super(key: key);
+  const CompanyAppBar({super.key, this.title = 'NA'});
 
   @override
   State<CompanyAppBar> createState() => _CompanyAppBarState();
@@ -25,45 +20,21 @@ class CompanyAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CompanyAppBarState extends State<CompanyAppBar> {
-  bool favorite = true;
-
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: widget.preferredSize,
       child: AppBar(
-        centerTitle: false,
+        // centerTitle: true,
         leading: InkWell(
-          onTap: () => Get.back(),
-          child: const Icon(
-            Remix.arrow_left_line,
-          ),
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
-        title: const CompanyNameLogo(
-          companyName: 'OMC',
-        ),
+        title: Text(widget.title),
+        titleSpacing: 0,
         actions: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                favorite = !favorite;
-              });
-            },
-            child: SizedBox.fromSize(
-              size: Size(
-                BohibaResponsiveScreen.height47,
-                BohibaResponsiveScreen.height47,
-              ),
-              child: favorite
-                  ? const Icon(
-                      Remix.heart_3_line,
-                    )
-                  : const Icon(
-                      Remix.heart_3_fill,
-                      color: Colors.redAccent,
-                    ),
-            ),
-          ),
           GestureDetector(
             onTapDown: (TapDownDetails tapDownDetails) {
               showMenu(
@@ -82,25 +53,9 @@ class _CompanyAppBarState extends State<CompanyAppBar> {
                 items: _buildPopMenuItemList(),
               ).then((value) {
                 switch (value) {
-                  case CompanyOptionService.alert:
-                    showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight:
-                                Radius.circular(BohibaResponsiveScreen.width15),
-                            topLeft:
-                                Radius.circular(BohibaResponsiveScreen.width15),
-                          ),
-                        ),
-                        builder: (BuildContext context) {
-                          return const CompanyCreateAlert();
-                        });
+                  case 0:
                     break;
-                  case CompanyOptionService.raiseQuery:
-                    break;
-                  case CompanyOptionService.report:
+                  case 1:
                     break;
                   default:
                 }
@@ -108,8 +63,8 @@ class _CompanyAppBarState extends State<CompanyAppBar> {
             },
             child: SizedBox.fromSize(
               size: Size(
-                BohibaResponsiveScreen.height47,
-                BohibaResponsiveScreen.height47,
+                ScreenUtils.height47,
+                ScreenUtils.height47,
               ),
               child: const Icon(
                 Remix.more_2_fill,
@@ -138,34 +93,24 @@ class CompanyNameLogo extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 15,
-          backgroundColor: bohibaColors.lightGreyColor,
+          backgroundColor: BohibaColors.black,
           backgroundImage: imageProvider,
         ),
-        Gap(BohibaResponsiveScreen.width5),
+        Gap(ScreenUtils.width20),
         BohibaMarqueeText(
-          width: BohibaResponsiveScreen.width * 0.5,
-          text: 'company_name',
-          overflowText: 'OMC',
+          width: ScreenUtils.width * 0.35,
+          text: companyName,
+          overflowText: companyName,
         )
       ],
     );
   }
 }
 
-List<PopupMenuItem<String>> _buildPopMenuItemList() {
+List<PopupMenuItem<int>> _buildPopMenuItemList() {
   return [
     PopupMenuItem(
-      value: CompanyOptionService.alert,
-      child: Text(
-        'Alert',
-        style: TextStyle(
-          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
-        ),
-      ),
-    ),
-    PopupMenuItem(
-      value: CompanyOptionService.report,
+      value: 0,
       child: Text(
         'Report',
         style: TextStyle(
@@ -175,7 +120,7 @@ List<PopupMenuItem<String>> _buildPopMenuItemList() {
       ),
     ),
     PopupMenuItem(
-      value: CompanyOptionService.raiseQuery,
+      value: 1,
       child: Text(
         'Raise Query',
         style: TextStyle(

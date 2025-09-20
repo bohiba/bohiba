@@ -1,4 +1,5 @@
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import '/component/screen_utils.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../bohiba_colors.dart';
@@ -6,32 +7,35 @@ import '../bohiba_colors.dart';
 class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
-  final double width;
-  final double height;
-
+  final double? width;
+  final double? height;
+  final Color? color;
   const PrimaryButton({
-    Key? key,
+    super.key,
     this.label = "Label",
     this.onPressed,
-    this.width = double.maxFinite,
-    this.height = 50,
-  }) : super(key: key);
+    this.width,
+    this.height,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            fixedSize: Size(width, height),
-            backgroundColor: bohibaColors.primaryColor),
+          fixedSize: Size(
+              width ?? ScreenUtils.width * 0.9, height ?? ScreenUtils.height47),
+          backgroundColor: color ?? BohibaColors.primaryColor,
+        ),
         child: Text(
-          label,
+          label.toUpperCase(),
           style: TextStyle(
             fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-            fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
-            color: bohibaColors.white,
+            fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+            color: BohibaColors.white,
           ),
         ),
       ),

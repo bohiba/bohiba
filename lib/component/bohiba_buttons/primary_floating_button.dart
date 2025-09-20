@@ -8,8 +8,7 @@ class PrimaryFloatingButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const PrimaryFloatingButton(
-      {Key? key, this.heroTag, required this.label, required this.onPressed})
-      : super(key: key);
+      {super.key, this.heroTag, required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class PrimaryFloatingButton extends StatelessWidget {
         heroTag: heroTag,
         elevation: 0,
         onPressed: onPressed,
-        backgroundColor: bohibaColors.primaryColor,
+        backgroundColor: BohibaColors.primaryColor,
         child: Text(label, style: Theme.of(context).textTheme.labelLarge),
       ),
     );

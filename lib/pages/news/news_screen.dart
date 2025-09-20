@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
 
 class NewsScreen extends StatefulWidget {
-  const NewsScreen({Key? key}) : super(key: key);
+  const NewsScreen({super.key});
 
   @override
   State<NewsScreen> createState() => _NewsScreenState();

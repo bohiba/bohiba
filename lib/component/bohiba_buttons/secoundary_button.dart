@@ -1,32 +1,51 @@
+import '/dist/component_exports.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 class SecoundaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
-
-  final Size fixedSize;
-  final RoundedRectangleBorder shape;
-  final Color backgroundColor;
-
+  final double width;
+  final double height;
+  final Color? color;
+  final Color? textColor;
   const SecoundaryButton({
-    Key? key,
+    super.key,
     this.onPressed,
     this.label = 'Submit',
-    this.fixedSize = const Size(125, 40),
-    this.shape = const RoundedRectangleBorder(),
-    this.backgroundColor = const Color(0xFF047BFC),
-  }) : super(key: key);
+    this.width = 120,
+    this.height = 47,
+    this.color,
+    this.textColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        fixedSize: fixedSize,
-        shape: shape,
-        backgroundColor: backgroundColor,
+        fixedSize: Size(width, height),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            ScreenUtils.width10,
+          ),
+          side: onPressed == null
+              ? BorderSide.none
+              : BorderSide(
+                  color: color ?? bohibaTheme.primaryColor,
+                  width: 1,
+                ),
+        ),
+        backgroundColor: color ?? bohibaTheme.scaffoldBackgroundColor,
       ),
-      child: Text(label, style: Theme.of(context).textTheme.labelLarge),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
+          color: textColor ?? bohibaTheme.textTheme.bodySmall!.color,
+          fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+        ),
+      ),
     );
   }
 }

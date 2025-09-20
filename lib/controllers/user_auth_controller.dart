@@ -1,14 +1,10 @@
-import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/services/pref_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import '../routes/app_route.dart';
+import '/services/pref_utils.dart';
 
-class UserAuthController extends GetxController {
-  // Controller
-  // final GlobalController _globalController = Get.put(GlobalController());
-
+class UserAuthController {
   // Models
 
   // Main Datatype
@@ -47,10 +43,12 @@ class UserAuthController extends GetxController {
   TextEditingController acNoController = TextEditingController();
   TextEditingController ifscController = TextEditingController();
 
-  Future<void> saveUserDetails(SaveUserDetails userDetails) async {
-    Get.toNamed(
-      BohibaRoute.navBar,
-    );
+  Future<void> saveUserDetails({required BuildContext context}) async {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoute.navBar, (Route<dynamic> route) => false);
+    // Navigator.of(context).pushNamedAndRemoveUntil(newRouteName, predicate).toNamed(
+    //   AppRoute.navBar,
+    // );
   }
 
   Future<void> getPinCodeDetails(String pinCode) async {}
@@ -69,7 +67,7 @@ class UserAuthController extends GetxController {
           await ImagePicker().pickImage(source: ImageSource.gallery);
       if (selected != null) {
         imageFile = selected;
-        update();
+
         await uploadImage(selected);
       } else {
         debugPrint("\n============\n| Pick an image. |\n============\n");
@@ -90,7 +88,6 @@ class UserAuthController extends GetxController {
     );
     if (pickedDate != null) {
       dateController.text = DateFormat("dd-MM-yyyy").format(pickedDate);
-      update();
     }
   }
 }

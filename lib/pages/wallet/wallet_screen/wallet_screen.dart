@@ -1,15 +1,16 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_buttons/secoundary_button.dart';
-import 'package:bohiba/pages/wallet/wallet_string/wallet_string.dart';
-import 'package:bohiba/pages/wallet/wallet_withdraw/wallet_withdraw_screen/wallet_withdraw_screen.dart';
 
-import '../../../component/bohiba_buttons/primary_icon_button.dart';
-import '../../../component/bohiba_colors.dart';
-import '../wallet_deposit/wallet_deposit_screen/wallet_deposit_screen.dart';
+import 'package:remixicon/remixicon.dart';
+import '/pages/wallet/wallet_string/wallet_string.dart';
+import '/dist/component_exports.dart';
+import '/dist/widget_exports.dart';
+import '/theme/bohiba_theme.dart';
+import '/component/bohiba_buttons/utility_action_button.dart';
+import '../wallet_deposit/wallet_deposit_component/current_balance/current_balance.dart';
 
 class WalletScreen extends StatefulWidget {
-  const WalletScreen({Key? key}) : super(key: key);
+  const WalletScreen({super.key});
 
   @override
   State<WalletScreen> createState() => _Walletpagestate();
@@ -18,9 +19,143 @@ class WalletScreen extends StatefulWidget {
 class _Walletpagestate extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
+      appBar: TitleAppbar(title: WalletString.title),
+      body: Container(
+        height: ScreenUtils.height,
+        width: ScreenUtils.width,
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtils.width15,
+          vertical: ScreenUtils.height5,
+        ),
+        alignment: Alignment.center,
+        color: BohibaColors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const BankDepositCurrentBalance(currentBalance: "₹1249.89"),
+            Padding(
+              padding: EdgeInsets.only(
+                // left: BohibaResponsiveScreen.width15,
+                // right: BohibaResponsiveScreen.width15,
+                top: ScreenUtils.height20,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    "Transactions History",
+                    style: bohibaTheme.textTheme.headlineSmall,
+                  ),
+                  const Spacer(),
+                  UtilityActionButton(
+                    onPanDown: (tapDownDetails) => showMenu(
+                      context: context,
+                      menuPadding: EdgeInsets.zero,
+                      elevation: 4,
+                      position: RelativeRect.fromLTRB(
+                        tapDownDetails.localPosition.dx,
+                        tapDownDetails.localPosition.dy +
+                            ScreenUtils.height * 0.3,
+                        0,
+                        tapDownDetails.localPosition.dy,
+                      ),
+                      items: [
+                        PopupMenuItem(
+                          padding: EdgeInsets.zero,
+                          enabled: false,
+                          child: SortMenu(
+                            dateSort: true,
+                          ),
+                        )
+                      ],
+                    ),
+                    icon: Remix.arrow_up_down_line,
+                    buttonName: 'Sort',
+                  ),
+                  UtilityActionButton(
+                    onPanDown: (tapDownDetails) => showMenu(
+                      context: context,
+                      menuPadding: EdgeInsets.zero,
+                      position: RelativeRect.fromLTRB(
+                        tapDownDetails.localPosition.dx,
+                        tapDownDetails.localPosition.dy +
+                            ScreenUtils.height * 0.3,
+                        0,
+                        tapDownDetails.localPosition.dy,
+                      ),
+                      items: [
+                        PopupMenuItem(
+                          padding: EdgeInsets.zero,
+                          enabled: false,
+                          child: FilterMenu(
+                            dateRange: true,
+                          ),
+                        )
+                      ],
+                    ),
+                    icon: Remix.equalizer_2_line,
+                    buttonName: 'Filter',
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 15,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: BohibaColors.white,
+                        child: Icon(
+                          index % 2 == 0
+                              ? EvaIcons.arrowUp
+                              : EvaIcons.arrowDown,
+                          color: index % 2 == 0
+                              ? BohibaColors.successColor
+                              : BohibaColors.warningColor,
+                        ),
+                      ),
+                      title: Text(
+                        index % 2 == 0 ? "Credited" : "Debited",
+                        style: TextStyle(
+                          fontStyle:
+                              bohibaTheme.textTheme.labelLarge!.fontStyle,
+                          fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                        ),
+                      ),
+                      subtitle: Text(
+                        index % 2 == 0 ? "22/10/2024" : "02/12/2024",
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                        ),
+                      ),
+                      trailing: Text(
+                        index % 2 == 0 ? "+ ₹5000" : "- ₹1000",
+                        style: TextStyle(
+                            fontSize:
+                                bohibaTheme.textTheme.labelLarge!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.labelLarge!.fontWeight,
+                            color: index % 2 == 0
+                                ? BohibaColors.successColor
+                                : BohibaColors.warningColor),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+
+    /*return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -32,17 +167,16 @@ class _Walletpagestate extends State<WalletScreen> {
               centerTitle: true,
               title: Text(
                 '₹1249.89',
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: bohibaTheme.textTheme.headlineLarge,
               ),
               background: Center(
                 child: Text(
                   WalletString.title,
                   style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.displayLarge!.fontSize,
+                      fontSize: bohibaTheme.textTheme.displayLarge!.fontSize,
                       fontWeight:
-                          Theme.of(context).textTheme.displayLarge!.fontWeight,
-                      color: bohibaColors.primaryColor),
+                          bohibaTheme.textTheme.displayLarge!.fontWeight,
+                      color: BohibaColors.primaryColor),
                 ),
               ),
             ),
@@ -72,7 +206,7 @@ class _Walletpagestate extends State<WalletScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            backgroundColor: bohibaColors.primaryColor),
+                            backgroundColor: BohibaColors.primaryColor),
                         SecoundaryButton(
                           onPressed: () {
                             Navigator.pushReplacement(
@@ -99,57 +233,53 @@ class _Walletpagestate extends State<WalletScreen> {
           SliverList(
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Card(
-                  margin: const EdgeInsets.symmetric(vertical: 2.5),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.white54,
-                      child: Icon(
-                        index % 2 == 0 ? EvaIcons.arrowDown : EvaIcons.arrowUp,
-                        color: index % 2 == 0
-                            ? bohibaColors.successColor
-                            : bohibaColors.primaryColor,
-                      ),
-                    ),
-                    title: Text(
-                      index % 2 == 0 ? "INR Withdraw" : "INR Deposit",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    subtitle: Text(
-                      index % 2 == 0 ? "Credited" : "Debited",
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.labelMedium!.fontSize,
-                          fontWeight: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .fontWeight,
-                          color: index % 2 == 0
-                              ? bohibaColors.successColor
-                              : bohibaColors.primaryColor),
-                    ),
-                    trailing: Text(
-                      index % 2 == 0 ? "+₹5000" : "-₹1000",
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.labelLarge!.fontSize,
-                          fontWeight: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .fontWeight,
-                          color: index % 2 == 0
-                              ? bohibaColors.successColor
-                              : bohibaColors.warningColor),
-                    ),
-                  ),
-                ),
-              );
-            }, childCount: 20),
+              return 
+            }, childCount: 5),
           ),
         ],
       ),
-    );
+    );*/
   }
 }
+/*
+Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: BohibaResponsiveScreen.width15, vertical: 5),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: BohibaColors.white,
+                    child: Icon(
+                      index % 2 == 0 ? EvaIcons.arrowUp : EvaIcons.arrowDown,
+                      color: index % 2 == 0
+                          ? BohibaColors.successColor
+                          : BohibaColors.warningColor,
+                    ),
+                  ),
+                  title: Text(
+                    index % 2 == 0 ? "Credited" : "Debited",
+                    style: TextStyle(
+                      fontStyle: bohibaTheme.textTheme.labelLarge!.fontStyle,
+                      fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                    ),
+                  ),
+                  subtitle: Text(
+                    index % 2 == 0 ? "22/10/2024" : "02/12/2024",
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                      fontWeight:
+                          bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                    ),
+                  ),
+                  trailing: Text(
+                    index % 2 == 0 ? "+ ₹5000" : "- ₹1000",
+                    style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        color: index % 2 == 0
+                            ? BohibaColors.successColor
+                            : BohibaColors.warningColor),
+                  ),
+                ),
+              );
+*/

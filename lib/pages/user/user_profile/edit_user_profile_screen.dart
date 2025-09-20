@@ -1,32 +1,27 @@
+import '../../../component/bohiba_dropdown/app_dropdown_button.dart';
+import '/dist/component_exports.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/bohiba_buttons/bottom_button.dart';
 
-import '../../../component/bohiba_buttons/bottom_button.dart';
-import '../../../component/bohiba_colors.dart';
-
-class EditUserProfileScreen extends StatefulWidget {
-  const EditUserProfileScreen({Key? key}) : super(key: key);
+class EditUserProfilePage extends StatefulWidget {
+  const EditUserProfilePage({super.key});
 
   @override
-  State<EditUserProfileScreen> createState() => _EditUserProfileScreenState();
+  State<EditUserProfilePage> createState() => _EditUserProfilePageState();
 }
 
-class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
+class _EditUserProfilePageState extends State<EditUserProfilePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
+  final TextEditingController dobController = TextEditingController(
+      text: DateFormat("dd-MM-yyyy").format(DateTime.now()));
 
   final formKey = GlobalKey<FormState>();
-  bool isChecked = true;
-
-  @override
-  void dispose() {
-    dobController.dispose();
-    super.dispose();
-  }
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,142 +35,141 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
       body: Container(
         width: width,
         height: height,
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: EdgeInsets.only(
+          // top: BohibaResponsiveScreen.height20,
+          left: ScreenUtils.width15,
+          right: ScreenUtils.width15,
+          bottom: ScreenUtils.height30,
+        ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
               Text(
                 'Setup Profile',
-                style: Theme.of(context).textTheme.displayMedium,
+                style: bohibaTheme.textTheme.displayMedium,
               ),
               Text(
                 'Please set your profile to get started',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: bohibaTheme.textTheme.titleMedium,
               ),
               const SizedBox(height: 10),
-              Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Name",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
+                    child: TextInputField(
+                      hintText: "Mangal Kishore Mahanta",
+                      controller: nameController,
+                    ),
+                  ),
+                  Text(
+                    "Phone Number",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
+                    child: TextInputField(
+                      hintText: "000 000 0000",
+                      controller: mobileController,
+                      keyboardType: TextInputType.phone,
+                    ),
+                  ),
+                  Text(
+                    "Email",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
+                    child: TextInputField(
+                      hintText: "example@mail.com",
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                  ),
+                  Text(
+                    "Update Role",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  AppDropdown(
+                    items: <Map<String, dynamic>>[
+                      {'role_id': 6, 'label': 'Truck Owner'},
+                      {'role_id': 8, 'label': 'Driver'}
+                    ],
+                    labelBuilder: (p0) => p0['label'],
+                    onChanged: (pv) {},
+                  ),
+                  /*Padding(
+                    padding: EdgeInsets.only(
+                        top: ScreenUtils.height5, bottom: ScreenUtils.height5),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          // hintText:
+                          //     DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                          ),
+                      style: bohibaTheme.textTheme.titleMedium,
+                      controller: dobController,
+                      readOnly: true,
+                      onTap: () async {
+                        dobController.text = await GlobalController.pickDate(
+                            context: context,
+                            dateFormatter: 'dd-MM-yyyy',
+                            hintText: "Your DOB");
+                      },
+                    ),
+                  ),*/
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+                child: Row(
                   children: [
-                    Text(
-                      "Name",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: TextInputField(
-                        hintText: "Mangal Kishore Mahanta",
-                        controller: nameController,
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'Agreed to ',
+                            style: TextStyle(color: Colors.grey, fontSize: 11),
+                          ),
+                          TextSpan(
+                            text: 'Term & Conditions',
+                            style: TextStyle(
+                              color: BohibaColors.primaryColor,
+                              // decoration: TextDecoration.underline,
+                              fontSize: 11,
+                            ),
+                          ),
+                          const TextSpan(
+                            text: ' & ',
+                            style: TextStyle(color: Colors.grey, fontSize: 11),
+                          ),
+                          TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(
+                                color: BohibaColors.primaryColor,
+                                // decoration: TextDecoration.underline,
+                                fontSize: 11),
+                          )
+                        ],
                       ),
                     ),
-                    Text(
-                      "Phone Number",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: TextInputField(
-                        hintText: "000 000 0000",
-                        controller: mobileController,
-                        keyboardType: TextInputType.phone,
-                      ),
-                    ),
-                    Text(
-                      "Email",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: TextInputField(
-                        hintText: "example@mail.com",
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                    ),
-                    Text(
-                      "DOB",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            hintText: DateFormat("dd-MM-yyyy")
-                                .format(DateTime.now())),
-                        style: Theme.of(context).textTheme.titleMedium,
-                        controller: dobController,
-                        readOnly: true,
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(
-                                  1900), //DateTime.now() - not to allow to choose before today.
-                              lastDate: DateTime(2101));
-
-                          if (pickedDate != null) {
-                            String formattedDate =
-                                DateFormat('dd-MM-yyyy').format(pickedDate);
-
-                            setState(() {
-                              dobController.text =
-                                  formattedDate; //set output date to TextField value.
-                            });
-                          } else {
-                            dobController.text = "Date not selected";
-                          }
-                        },
-                      ),
+                    Spacer(),
+                    Checkbox(
+                      value: isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = !isChecked;
+                        });
+                      },
                     ),
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ListTile(
-                  trailing: Radio(
-                      toggleable: true,
-                      value: 'agree',
-                      groupValue: 'agree',
-                      activeColor: bohibaColors.primaryColor,
-                      onChanged: (value) {
-                        setState(() {
-                          isChecked = false;
-                        });
-                      }),
-                  title: RichText(
-                      text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'Agreed to ',
-                      style: TextStyle(color: Colors.grey, fontSize: 11),
-                    ),
-                    TextSpan(
-                      text: 'Term & Conditions',
-                      style: TextStyle(
-                          color: bohibaColors.primaryColor,
-                          decoration: TextDecoration.underline,
-                          fontSize: 11),
-                    ),
-                    const TextSpan(
-                      text: ' & ',
-                      style: TextStyle(color: Colors.grey, fontSize: 11),
-                    ),
-                    TextSpan(
-                      text: 'Privacy Policy',
-                      style: TextStyle(
-                          color: bohibaColors.primaryColor,
-                          decoration: TextDecoration.underline,
-                          fontSize: 11),
-                    )
-                  ])),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              )
             ],
           ),
         ),
@@ -183,10 +177,17 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
       bottomNavigationBar: BottomButton(
         width: width,
         onTap: () {
-          debugPrint("Value");
+          debugPrint(
+              "\n-------------\n| is_checked: $isChecked |\n-------------\n");
         },
         labelPrice: "SUBMIT",
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    dobController.dispose();
+    super.dispose();
   }
 }

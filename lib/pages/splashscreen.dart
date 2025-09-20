@@ -1,52 +1,51 @@
-import 'dart:async';
-
-import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_icon.dart';
+import '/controllers/splash_controller.dart';
 import 'package:get/get.dart';
+import '/component/image_path.dart';
+import 'package:flutter/material.dart';
+import '/dist/component_exports.dart';
+import '/theme/bohiba_theme.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    Timer(const Duration(seconds: 3), () {
-      Get.toNamed(BohibaRoute.signIn);
-    });
-    super.initState();
-  }
+class SplashScreen extends GetView<SplashController> {
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
+    return Scaffold(
+      appBar: null,
+      body: SafeArea(
+        child: Stack(
           children: [
             Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Text(
+                  //   'Bohiba',
+                  //   style: TextStyle(
+                  //     fontSize: 48,
+                  //     fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                  //     color: bohibaTheme.textTheme.bodySmall!.color,
+                  //   ),
+                  // )
+
                   Image.asset(
-                    BohibaIcons.bohibaIcon,
-                    width: 220,
-                  ),
+                    ImagePath.bohibaIcon,
+                    width: ScreenUtils.width * 0.5,
+                  )
                 ],
               ),
             ),
-            const Align(
+            Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.only(bottom: ScreenUtils.height30),
                 child: Text(
-                  'Aspiring Mine Transport',
+                  'Aspiring mine transportation',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                    color: bohibaTheme.textTheme.bodyLarge!.color,
                   ),
                 ),
               ),

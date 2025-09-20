@@ -1,28 +1,40 @@
 import 'package:flutter/services.dart';
 
 class AadhaarNumberFormatter extends TextInputFormatter {
+  static const int groupSize = 4;
+  static const int maxDigits = 16;
+
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String text = newValue.text;
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
-    if (newValue.selection.baseOffset == 0) {
-      return newValue;
+    if (digitsOnly.length > maxDigits) {
+      digitsOnly = digitsOnly.substring(0, maxDigits);
     }
 
-    StringBuffer buffer = StringBuffer();
-    for (int i = 0; i < text.length; i++) {
-      buffer.write(text[i]);
-      var nonZeroIndex = i + 1;
-      if (nonZeroIndex % 4 == 0 && nonZeroIndex != text.length) {
-        buffer.write(
-            ' '); // Replace this with anything you want to put after each 4 numbers
+    final buffer = StringBuffer();
+    int selectionIndex = newValue.selection.baseOffset;
+
+    for (int i = 0; i < digitsOnly.length; i++) {
+      if (i > 0 && i % groupSize == 0) {
+        buffer.write('-');
+        if (i < selectionIndex) {
+          selectionIndex++;
+        }
       }
+      buffer.write(digitsOnly[i]);
     }
 
-    var string = buffer.toString();
-    return newValue.copyWith(
-        text: string,
-        selection: TextSelection.collapsed(offset: string.length));
+    final formattedText = buffer.toString();
+
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(
+        offset: selectionIndex.clamp(0, formattedText.length),
+      ),
+    );
   }
 }

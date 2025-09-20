@@ -1,37 +1,38 @@
-import 'package:bohiba/component/bohiba_colors.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 class SingleTileTabComponent extends StatelessWidget {
   final VoidCallback onTap;
   final IconData icon;
   final String title;
-  final Color iconColor;
+  final Color? iconColor;
   final Widget trailing;
 
   const SingleTileTabComponent(
-      {Key? key,
+      {super.key,
       required this.onTap,
       this.icon = Icons.add,
       this.trailing = const SizedBox(),
-      this.iconColor = Colors.black,
-      this.title = "Title"})
-      : super(key: key);
+      this.iconColor,
+      this.title = "Title"});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: ListTile(
-          onTap: onTap,
-          leading: Icon(icon),
-          iconColor: iconColor,
-          title: Text(title),
-          titleTextStyle: TextStyle(
-              fontFamily: "Poppins",
-              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
-              fontWeight: Theme.of(context).textTheme.titleLarge!.fontWeight,
-              color: bohibaColors.black),
-          trailing: trailing),
+        onTap: onTap,
+        leading: Icon(icon),
+        iconColor: iconColor ?? bohibaTheme.primaryColor,
+        title: Text(title),
+        titleTextStyle: TextStyle(
+          fontFamily: bohibaTheme.textTheme.titleLarge!.fontFamily,
+          fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
+          fontWeight: bohibaTheme.textTheme.titleLarge!.fontWeight,
+          color: bohibaTheme.listTileTheme.titleTextStyle!.color,
+        ),
+        trailing: trailing,
+      ),
     );
   }
 }

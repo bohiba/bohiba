@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class BankDepositBalanceOption extends StatefulWidget {
   final TextEditingController controller;
 
-  const BankDepositBalanceOption({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const BankDepositBalanceOption({super.key, required this.controller});
 
   @override
   State<BankDepositBalanceOption> createState() =>

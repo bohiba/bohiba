@@ -9,12 +9,12 @@ class BottomButton extends StatelessWidget {
   final String labelPrice;
 
   const BottomButton({
-    Key? key,
+    super.key,
     this.onTap,
     this.height = 47,
     this.width = 210,
     this.labelPrice = "Bank Button",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class BottomButton extends StatelessWidget {
                 type: MaterialType.button,
                 elevation: 0.5,
                 color: onTap == null
-                    ? bohibaColors.secoundaryColor
-                    : bohibaColors.primaryColor,
+                    ? BohibaColors.secoundaryColor
+                    : BohibaColors.primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -59,7 +59,7 @@ class BottomButton extends StatelessWidget {
                               .textTheme
                               .headlineMedium!
                               .fontWeight,
-                          color: bohibaColors.white),
+                          color: BohibaColors.white),
                     ),
                   ),
                 ),

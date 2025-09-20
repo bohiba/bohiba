@@ -1,66 +1,68 @@
-import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/app_theme/app_theme.dart';
+import '/component/bohiba_colors.dart';
+import '/component/screen_utils.dart';
 import 'package:flutter/material.dart';
 
 class BlueBoxComponent extends StatelessWidget {
   final String label1;
-  final String label2;
+  final String? label2;
   final Widget child;
 
   const BlueBoxComponent({
-    Key? key,
+    super.key,
     this.label1 = "Header",
-    this.label2 = "Sub Header",
+    this.label2,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
+    ThemeData bohibaTheme = Theme.of(context);
     return Container(
-      width: BohibaResponsiveScreen.width,
-      height: 219,
-      margin: const EdgeInsets.only(bottom: 10),
+      width: ScreenUtils.width,
+      height: ScreenUtils.height * 0.233,
+      margin: EdgeInsets.only(bottom: ScreenUtils.height15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: bohibaColors.primaryVariantColor,
+        color: bohibaTheme.primaryColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 10, top: 25),
+            padding: EdgeInsets.only(
+              left: ScreenUtils.width10,
+              top: ScreenUtils.width25,
+            ),
             child: Text(
               label1,
               style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
-                  color: bohibaColors.white),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              label2,
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
-                color: bohibaColors.white,
+                fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
+                fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
+                color: BohibaColors.white,
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
+          Padding(
+            padding: EdgeInsets.only(left: ScreenUtils.width10),
+            child: Text(
+              label2 ?? 'NA',
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
+                color: BohibaColors.white,
+              ),
+            ),
           ),
-          const Divider(
-            color: Colors.white,
-            height: 45,
-            thickness: 0.5,
+          Spacer(),
+          Divider(
+            color: BohibaColors.white,
+            // height: 45,
+            thickness: 1,
             indent: 0,
             endIndent: 0,
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10),
-            width: BohibaResponsiveScreen.width,
+            padding: EdgeInsets.only(left: ScreenUtils.width10),
+            width: ScreenUtils.width,
             height: 70,
             child: child,
           ),

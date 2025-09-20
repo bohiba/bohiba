@@ -4,9 +4,7 @@ import '../../../wallet_string/wallet_string.dart';
 
 class BankDepositCurrentBalance extends StatelessWidget {
   final String currentBalance;
-
-  const BankDepositCurrentBalance({Key? key, this.currentBalance = '₹00.00'})
-      : super(key: key);
+  const BankDepositCurrentBalance({super.key, this.currentBalance = '₹00.00'});
 
   @override
   Widget build(BuildContext context) {
