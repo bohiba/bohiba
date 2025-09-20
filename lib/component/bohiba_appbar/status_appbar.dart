@@ -14,7 +14,7 @@ class StatusAppBar extends StatelessWidget implements PreferredSizeWidget {
       preferredSize: preferredSize,
       child: AppBar(
         automaticallyImplyLeading: false,
-        elevation: 0,
+        // elevation: 0,
         title: Text(title),
         actions: [
           // Add Vehicle

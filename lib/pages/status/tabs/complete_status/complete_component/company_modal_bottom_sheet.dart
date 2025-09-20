@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/payment/payment_screen/payment_screen.dart';
+import '/pages/payment/payment_screen.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../screen/challan_screen/challan_screen.dart';

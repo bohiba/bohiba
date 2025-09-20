@@ -8,3 +8,4 @@ ThemeData getDarkThemeData() {
     colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.red),
   );
 }
+

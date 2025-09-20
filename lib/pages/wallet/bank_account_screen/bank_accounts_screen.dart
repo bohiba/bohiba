@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/component/bottom_nav_button/bottom_nav_button.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
+import '/component/bottom_nav_button/bottom_nav_button.dart';
+import '/component/bohiba_colors.dart';
 
 class BankAccountsScreen extends StatelessWidget {
   const BankAccountsScreen({super.key});
@@ -75,7 +75,7 @@ class BankAccountsScreen extends StatelessWidget {
                                         .textTheme
                                         .labelMedium!
                                         .fontWeight,
-                                    color: bohibaColors.primaryColor),
+                                    color: BohibaColors.primaryColor),
                               ),
                             )
                           : Container()

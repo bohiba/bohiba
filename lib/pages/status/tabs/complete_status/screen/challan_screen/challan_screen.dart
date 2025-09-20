@@ -1,6 +1,6 @@
-import 'package:bohiba/dist/component_exports.dart';
+import '/dist/component_exports.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/status/tabs/tab_widget/row_text.dart';
+import '/pages/status/tabs/tab_widget/row_text.dart';
 
 import '../../../../../challan/component/load_details_component/load_details_component.dart';
 import '../../../../../challan/component/transporter_detail_component/transporter_detail_component.dart';
@@ -17,9 +17,9 @@ class ChallanScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: BohibaResponsiveScreen.height10,
-            left: BohibaResponsiveScreen.width15,
-            right: BohibaResponsiveScreen.width15,
+            top: ScreenUtils.height10,
+            left: ScreenUtils.width15,
+            right: ScreenUtils.width15,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

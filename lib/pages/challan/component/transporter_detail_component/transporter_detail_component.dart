@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/status/tabs/tab_widget/column_text.dart';
-import 'package:bohiba/pages/status/tabs/tab_widget/row_text.dart';
+import '/pages/status/tabs/tab_widget/column_text.dart';
+import '/pages/status/tabs/tab_widget/row_text.dart';
 
 class TransporterDetail extends StatelessWidget {
   const TransporterDetail({super.key});

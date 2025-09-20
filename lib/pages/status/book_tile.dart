@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../dist/component_exports.dart';
-import '../../theme/light_theme.dart';
+import '/theme/bohiba_theme.dart';
 
 class BookTile extends StatelessWidget {
   final int index;
@@ -12,15 +12,15 @@ class BookTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        margin: EdgeInsets.only(bottom: BohibaResponsiveScreen.height10),
+        margin: EdgeInsets.only(bottom: ScreenUtils.height10),
         padding: EdgeInsets.symmetric(
-          horizontal: BohibaResponsiveScreen.width15,
-          vertical: BohibaResponsiveScreen.height10,
+          horizontal: ScreenUtils.width15,
+          vertical: ScreenUtils.height10,
         ),
-        width: BohibaResponsiveScreen.width,
-        height: BohibaResponsiveScreen.height * 0.08,
+        width: ScreenUtils.width,
+        height: ScreenUtils.height * 0.08,
         alignment: Alignment.center,
-        decoration: TileDecoration(),
+        decoration: TileDecorative(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,33 +30,33 @@ class BookTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 BohibaMarqueeText(
-                  width: BohibaResponsiveScreen.width * 0.25,
+                  width: ScreenUtils.width * 0.25,
                   text: 'OD 14 AD 7872',
                   overflowText: 'OD 14 AD 7872',
                   style: TextStyle(
                     fontSize: 14.adaptSize,
                     fontWeight: FontWeight.w600,
-                    color: bohibaColors.black,
+                    color: BohibaColors.black,
                   ),
                   marqueeTextStyle: TextStyle(
                     fontSize: 14.adaptSize,
                     fontWeight: FontWeight.w600,
-                    color: bohibaColors.black,
+                    color: BohibaColors.black,
                   ),
                 ),
                 BohibaMarqueeText(
-                  width: BohibaResponsiveScreen.width * 0.4,
+                  width: ScreenUtils.width * 0.4,
                   text: 'Nandu Mohapatra',
                   overflowText: 'Nandu Mahapatra',
                   style: TextStyle(
                     fontSize: 12.adaptSize,
                     fontWeight: FontWeight.w500,
-                    color: bohibaColors.greyColor,
+                    color: BohibaColors.greyColor,
                   ),
                   marqueeTextStyle: TextStyle(
                     fontSize: 12.adaptSize,
                     fontWeight: FontWeight.w500,
-                    color: bohibaColors.secoundaryColor,
+                    color: BohibaColors.secoundaryColor,
                   ),
                 ),
               ],
@@ -71,8 +71,8 @@ class BookTile extends StatelessWidget {
                 fontSize: bohibaTheme
                     .listTileTheme.leadingAndTrailingTextStyle!.fontSize,
                 color: index % 2 == 0
-                    ? bohibaColors.successColor
-                    : bohibaColors.primaryColor,
+                    ? BohibaColors.successColor
+                    : BohibaColors.primaryColor,
               ),
             ),
           ],

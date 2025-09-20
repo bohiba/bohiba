@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../component/bohiba_dropdown/bohiba_dropdown.dart';
-import '../../../component/bohiba_inputfield/text_inputfield.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
 
 class FromToDetailsComponent extends StatelessWidget {
   final bool fromReadOnly;
@@ -37,16 +36,16 @@ class FromToDetailsComponent extends StatelessWidget {
             ),
           ],
         ),
-        BohibaDropDown(
-          hint: "Material Type",
-          items: const [
-            "Material Type-1",
-            "Material Type-2",
-            "Material Type-3",
-            "Material Type-4",
-            "Material Type-5"
-          ],
-        ),
+        // AppDropDownButton(
+        //   hint: "Material Type",
+        //   items: const [
+        //     "Material Type-1",
+        //     "Material Type-2",
+        //     "Material Type-3",
+        //     "Material Type-4",
+        //     "Material Type-5"
+        //   ],
+        // ),
       ],
     );
   }

@@ -1,22 +1,19 @@
-import 'package:bohiba/dist/component_exports.dart';
-import 'package:bohiba/dist/controller_exports.dart';
-import 'package:bohiba/theme/light_theme.dart';
+import '../../../component/bohiba_dropdown/app_dropdown_button.dart';
+import '/dist/component_exports.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/bohiba_buttons/bottom_button.dart';
 
-import '../../../component/bohiba_buttons/bottom_button.dart';
-
-class EditUserProfileScreen extends StatefulWidget {
-  const EditUserProfileScreen({super.key});
+class EditUserProfilePage extends StatefulWidget {
+  const EditUserProfilePage({super.key});
 
   @override
-  State<EditUserProfileScreen> createState() => _EditUserProfileScreenState();
+  State<EditUserProfilePage> createState() => _EditUserProfilePageState();
 }
 
-class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
-  final GlobalController _globalController = Get.put(GlobalController());
+class _EditUserProfilePageState extends State<EditUserProfilePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -40,9 +37,9 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
         height: height,
         padding: EdgeInsets.only(
           // top: BohibaResponsiveScreen.height20,
-          left: BohibaResponsiveScreen.width15,
-          right: BohibaResponsiveScreen.width15,
-          bottom: BohibaResponsiveScreen.height30,
+          left: ScreenUtils.width15,
+          right: ScreenUtils.width15,
+          bottom: ScreenUtils.height30,
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -57,78 +54,79 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
                 style: bohibaTheme.textTheme.titleMedium,
               ),
               const SizedBox(height: 10),
-              Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Name",
-                      style: bohibaTheme.textTheme.labelLarge,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Name",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
+                    child: TextInputField(
+                      hintText: "Mangal Kishore Mahanta",
+                      controller: nameController,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: BohibaResponsiveScreen.height5),
-                      child: TextInputField(
-                        hintText: "Mangal Kishore Mahanta",
-                        controller: nameController,
-                      ),
+                  ),
+                  Text(
+                    "Phone Number",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
+                    child: TextInputField(
+                      hintText: "000 000 0000",
+                      controller: mobileController,
+                      keyboardType: TextInputType.phone,
                     ),
-                    Text(
-                      "Phone Number",
-                      style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  Text(
+                    "Email",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
+                    child: TextInputField(
+                      hintText: "example@mail.com",
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: BohibaResponsiveScreen.height5),
-                      child: TextInputField(
-                        hintText: "000 000 0000",
-                        controller: mobileController,
-                        keyboardType: TextInputType.phone,
-                      ),
+                  ),
+                  Text(
+                    "Update Role",
+                    style: bohibaTheme.textTheme.labelLarge,
+                  ),
+                  AppDropdown(
+                    items: <Map<String, dynamic>>[
+                      {'role_id': 6, 'label': 'Truck Owner'},
+                      {'role_id': 8, 'label': 'Driver'}
+                    ],
+                    labelBuilder: (p0) => p0['label'],
+                    onChanged: (pv) {},
+                  ),
+                  /*Padding(
+                    padding: EdgeInsets.only(
+                        top: ScreenUtils.height5, bottom: ScreenUtils.height5),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          // hintText:
+                          //     DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                          ),
+                      style: bohibaTheme.textTheme.titleMedium,
+                      controller: dobController,
+                      readOnly: true,
+                      onTap: () async {
+                        dobController.text = await GlobalController.pickDate(
+                            context: context,
+                            dateFormatter: 'dd-MM-yyyy',
+                            hintText: "Your DOB");
+                      },
                     ),
-                    Text(
-                      "Email",
-                      style: bohibaTheme.textTheme.labelLarge,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: BohibaResponsiveScreen.height5),
-                      child: TextInputField(
-                        hintText: "example@mail.com",
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                    ),
-                    Text(
-                      "DOB",
-                      style: bohibaTheme.textTheme.labelLarge,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: BohibaResponsiveScreen.height5,
-                          bottom: BohibaResponsiveScreen.height5),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            // hintText:
-                            //     DateFormat("dd-MM-yyyy").format(DateTime.now()),
-                            ),
-                        style: bohibaTheme.textTheme.titleMedium,
-                        controller: dobController,
-                        readOnly: true,
-                        onTap: () async {
-                          dobController.text = await _globalController.pickDate(
-                              dateFormatter: DateFormat('dd-MM-yyyy'),
-                              hintText: "Your DOB");
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),*/
+                ],
               ),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: BohibaResponsiveScreen.width15),
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
                 child: Row(
                   children: [
                     RichText(
@@ -141,7 +139,7 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
                           TextSpan(
                             text: 'Term & Conditions',
                             style: TextStyle(
-                              color: bohibaColors.primaryColor,
+                              color: BohibaColors.primaryColor,
                               // decoration: TextDecoration.underline,
                               fontSize: 11,
                             ),
@@ -153,7 +151,7 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
                           TextSpan(
                             text: 'Privacy Policy',
                             style: TextStyle(
-                                color: bohibaColors.primaryColor,
+                                color: BohibaColors.primaryColor,
                                 // decoration: TextDecoration.underline,
                                 fontSize: 11),
                           )

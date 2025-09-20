@@ -1,2 +1,2 @@
-export 'package:bohiba/pages/widget/filter_menu.dart';
-export 'package:bohiba/pages/widget/sort_menu.dart';
+export '/pages/widget/filter_menu.dart';
+export '/pages/widget/sort_menu.dart';

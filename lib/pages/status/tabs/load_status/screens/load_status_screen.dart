@@ -1,5 +1,5 @@
-import 'package:bohiba/dist/component_exports.dart';
-import 'package:bohiba/pages/status/load_tile.dart';
+import '/dist/component_exports.dart';
+import '/pages/status/load_tile.dart';
 import 'package:flutter/material.dart';
 
 class LoadStatusScreen extends StatelessWidget {
@@ -8,11 +8,11 @@ class LoadStatusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bohibaColors.bgColor,
+      backgroundColor: BohibaColors.bgColor,
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: BohibaResponsiveScreen.width15,
-          vertical: BohibaResponsiveScreen.height10,
+          horizontal: ScreenUtils.width15,
+          vertical: ScreenUtils.height10,
         ),
         child: ListView.builder(
           itemCount: 6,

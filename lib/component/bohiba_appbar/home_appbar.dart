@@ -1,14 +1,18 @@
-import '/services/add_type_service.dart';
-import 'package:bohiba/theme/light_theme.dart';
-import 'package:bohiba/routes/bohiba_route.dart';
+import '/controllers/home_controller.dart';
+import 'package:get/get.dart';
+import 'package:remixicon/remixicon.dart';
+
+import '../../dist/app_enums.dart';
+import '/theme/bohiba_theme.dart';
+import '/routes/app_route.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../dist/component_exports.dart';
-import '../bohiba_icon.dart';
+import '/dist/component_exports.dart';
+import '../image_path.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBar extends GetView<HomeController>
+    implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
   @override
@@ -17,16 +21,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(BohibaResponsiveScreen.height55),
+      preferredSize: Size.fromHeight(ScreenUtils.height55),
       child: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: false,
         titleSpacing: 16,
         title: Image.asset(
-          BohibaIcons.bohibaIcon,
-          width: 55,
+          ImagePath.bohibaIcon,
+          width: 80,
           alignment: Alignment.centerLeft,
         ),
         actions: [
@@ -37,8 +39,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 context: context,
                 position: RelativeRect.fromLTRB(
                   tapDownDetails.globalPosition.dx,
-                  BohibaResponsiveScreen.height * 0.125,
-                  0,
+                  tapDownDetails.globalPosition.dy + 25,
+                  ScreenUtils.width50,
                   0,
                 ),
                 shape: const RoundedRectangleBorder(
@@ -48,78 +50,106 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 items: [
                   PopupMenuItem(
-                    value: AddTypeService.addDriver,
+                    value: ServiceType.truck,
                     child: Text(
-                      'Add Driver',
+                      'Truck',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                         fontWeight:
                             bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  ),
+                  /*PopupMenuItem(
+                    value: ServiceType.manager,
+                    textStyle: TextStyle(),
+                    child: Text(
+                      'Manager',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  ),*/
+                  PopupMenuItem(
+                    value: ServiceType.driver,
+                    textStyle: TextStyle(),
+                    child: Text(
+                      'Driver',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
                       ),
                     ),
                   ),
                   PopupMenuItem(
-                    value: AddTypeService.addVehicle,
+                    value: ServiceType.trip,
                     child: Text(
-                      'Add Vehicle',
+                      'Trips',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                         fontWeight:
                             bohibaTheme.textTheme.titleSmall!.fontWeight,
-                      ),
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: AddTypeService.addTrip,
-                    child: Text(
-                      'Add Trip',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
                       ),
                     ),
                   ),
                 ],
-              ).then((value) {
+              ).then((value) async {
+                if (!context.mounted) return value;
                 switch (value) {
-                  case AddTypeService.addDriver:
-                    // Add Driver Page
-                    return Navigator.of(context).pushNamed(AppRoute.driverList);
-
-                  case AddTypeService.addLoad:
-                    // Add Load Page
-                    break;
-                  case AddTypeService.addVehicle:
-                    return Navigator.of(context).pushNamed(
-                      AppRoute.addVehicle,
+                  case ServiceType.driver:
+                    return await Get.toNamed(AppRoute.allDriver)!
+                        .then((onValue) async {
+                      if (onValue != null) {
+                        await controller.getDriverList();
+                        await controller.getUserFavList();
+                        controller.arrDriver.refresh();
+                      }
+                    });
+                  case ServiceType.trip:
+                    return Get.toNamed(AppRoute.allTrip);
+                  case ServiceType.truck:
+                    return Get.toNamed(AppRoute.allTruck)!.then(
+                      (onValue) async {
+                        if (onValue != null) {
+                          await controller.getTruckList();
+                          await controller.getUserFavList();
+                          controller.arrTrucks.refresh();
+                        }
+                      },
                     );
-
+                  case ServiceType.manager:
+                    break;
                   default:
+                  // Manager
                 }
               });
             },
             icon: const Icon(EvaIcons.plus),
           ),
 
-          // Search
-          AppBarIconBox(
-            onTap: () => showSearch(
-              context: context,
-              delegate: BohibaCompanySearchDelegate(),
-            ),
-            icon: const Icon(
-              EvaIcons.searchOutline,
-            ),
-          ),
-
           //Notification
           AppBarIconBox(
-            onTap: () => Get.toNamed(AppRoute.notifyScreen),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoute.notifyScreen);
+            },
             icon: const Icon(
               EvaIcons.bellOutline,
             ),
           ),
+
+          AppBarIconBox(
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoute.favList);
+            },
+            icon: Icon(Remix.heart_3_line),
+          )
         ],
       ),
     );

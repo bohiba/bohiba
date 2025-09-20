@@ -16,7 +16,7 @@ class BankTransactionBalanceCard extends StatelessWidget {
         height: 180,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0.0),
-            color: bohibaColors.primaryVariantColor),
+            color: BohibaColors.primaryVariantColor),
         child: Column(
           children: [
             Expanded(

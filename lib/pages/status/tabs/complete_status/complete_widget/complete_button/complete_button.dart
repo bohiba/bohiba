@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
+import '/component/bohiba_colors.dart';
 
 class CompleteButton extends StatelessWidget {
   final double width;
@@ -21,7 +21,7 @@ class CompleteButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
           fixedSize: Size(width, height),
-          backgroundColor: bohibaColors.primaryColor),
+          backgroundColor: BohibaColors.primaryColor),
       child: Text(label),
     );
   }

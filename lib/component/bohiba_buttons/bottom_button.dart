@@ -33,8 +33,8 @@ class BottomButton extends StatelessWidget {
                 type: MaterialType.button,
                 elevation: 0.5,
                 color: onTap == null
-                    ? bohibaColors.secoundaryColor
-                    : bohibaColors.primaryColor,
+                    ? BohibaColors.secoundaryColor
+                    : BohibaColors.primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -59,7 +59,7 @@ class BottomButton extends StatelessWidget {
                               .textTheme
                               .headlineMedium!
                               .fontWeight,
-                          color: bohibaColors.white),
+                          color: BohibaColors.white),
                     ),
                   ),
                 ),

@@ -1,37 +1,44 @@
-import '/theme/light_theme.dart';
+import 'package:bohiba/component/screen_utils.dart';
+
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../bohiba_colors.dart';
 
-class PrimaryIconButton extends StatelessWidget {
+class PrimaryTextIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
+  final Widget? widget;
   final String label;
-  final Widget icon;
-  final Size fixedSize;
-  final RoundedRectangleBorder shape;
-  final Color backgroundColor;
+  final double? width;
+  final double? height;
+  final Color? color;
 
-  const PrimaryIconButton({
+  const PrimaryTextIconButton({
     super.key,
     this.onPressed,
-    this.label = 'Submit',
-    this.icon = const Icon(Icons.add),
-    this.fixedSize = const Size(125, 40),
-    this.shape = const RoundedRectangleBorder(),
-    this.backgroundColor = const Color(0xFF047BFC),
+    this.widget,
+    required this.label,
+    this.width,
+    this.height,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: onPressed,
-      label: Text(label,
-          style: TextStyle(
-              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-              color: bohibaColors.white)),
-      icon: icon,
+      label: Text(
+        label,
+        style: TextStyle(
+          fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+          color: BohibaColors.white,
+        ),
+      ),
+      icon: widget,
       style: ElevatedButton.styleFrom(
-          fixedSize: fixedSize, shape: shape, backgroundColor: backgroundColor),
+        fixedSize: Size(width ?? ScreenUtils.width * 0.9, height ?? 47),
+        backgroundColor: color ?? BohibaColors.primaryColor,
+      ),
     );
   }
 }

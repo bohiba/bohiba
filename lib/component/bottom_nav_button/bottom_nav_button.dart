@@ -1,7 +1,7 @@
-import 'package:bohiba/dist/component_exports.dart';
+import '/dist/component_exports.dart';
 import 'package:flutter/material.dart';
 
-import '../../theme/light_theme.dart';
+import '/theme/bohiba_theme.dart';
 
 class BottomNavButton extends StatelessWidget {
   final double width;
@@ -21,20 +21,20 @@ class BottomNavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: BohibaResponsiveScreen.height15,
-        right: BohibaResponsiveScreen.height15,
-        bottom: BohibaResponsiveScreen.height25,
+        left: ScreenUtils.height15,
+        right: ScreenUtils.height15,
+        bottom: ScreenUtils.height25,
       ),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            backgroundColor: bohibaColors.primaryColor,
+            backgroundColor: BohibaColors.primaryColor,
             fixedSize: Size(width, height)),
         child: Text(
           label,
           style: TextStyle(
               fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-              color: bohibaColors.white),
+              color: BohibaColors.white),
         ),
       ),
     );

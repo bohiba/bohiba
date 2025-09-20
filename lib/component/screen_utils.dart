@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:bohiba/extensions/bohiba_extension.dart';
+import '/extensions/bohiba_extension.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:universal_html/html.dart' as uhtml;
 
-class BohibaResponsiveScreen {
+class ScreenUtils {
   static late double height;
   static late double height5;
   static late double height8;
@@ -17,6 +17,7 @@ class BohibaResponsiveScreen {
   static late double height30;
   static late double height50;
   static late double height55;
+  static late double height65;
   static late double height47;
   static late double width;
   static late double width5;
@@ -40,6 +41,7 @@ class BohibaResponsiveScreen {
     height47 = 0.051 * height;
     height50 = 0.0548 * height;
     height55 = 0.0822 * height;
+    height65 = 0.0972 * height;
 
     width = MediaQuery.sizeOf(context).width;
     width5 = 0.0115 * width;

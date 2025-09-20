@@ -12,7 +12,6 @@ class DashAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(title),
       ),

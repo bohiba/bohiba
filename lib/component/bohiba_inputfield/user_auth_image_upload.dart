@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/theme/light_theme.dart';
+import '/component/bohiba_colors.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 class UserAuthContainerImageUpload extends StatefulWidget {
@@ -33,7 +33,7 @@ class _UserAuthContainerImageUploadState
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Material(
-        color: bohibaColors.lightGreyColor,
+        color: BohibaColors.lightGreyColor,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         elevation: 1.5,

@@ -1,7 +1,8 @@
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
 import 'package:get/get.dart';
+
+import '/component/screen_utils.dart';
+import 'package:flutter/material.dart';
+import '/component/bohiba_colors.dart';
 
 import '../services/pref_utils.dart';
 
@@ -16,9 +17,9 @@ class ThemeHelper {
     'primary': ColorSchemes.bohibaColorsScheme,
   };
 
-  void changeTheme(String newTheme) {
+  Future<void> changeTheme(String newTheme) async {
     PrefUtils().setThemeData(newTheme);
-    Get.forceAppUpdate();
+    await Get.forceAppUpdate();
   }
 
   BohibaColors _getThemeColors() {
@@ -38,13 +39,15 @@ class ThemeHelper {
         _supportBohibaColorScheme[_appTheme] ?? ColorSchemes.bohibaColorsScheme;
     return ThemeData(
       useMaterial3: false,
-      splashColor: bohibaColors.primaryVariantColor,
-      highlightColor: bohibaColors.primaryVariantColor,
+      splashColor: BohibaColors.transparent,
+      highlightColor: BohibaColors.primaryVariantColor,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: bohibaColors.bgColor, elevation: 0),
+        backgroundColor: BohibaColors.bgColor,
+        elevation: 10,
+      ),
       datePickerTheme: DatePickerThemeData(
-        backgroundColor: bohibaColors.white,
-        headerBackgroundColor: bohibaColors.primaryColor,
+        backgroundColor: BohibaColors.white,
+        headerBackgroundColor: BohibaColors.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
@@ -54,45 +57,47 @@ class ThemeHelper {
         ),
         dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return bohibaColors.primaryColor;
+            return BohibaColors.primaryColor;
           }
-          return bohibaColors.white;
+          return BohibaColors.white;
         }),
         todayBackgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return bohibaColors.primaryColor;
+            return BohibaColors.primaryColor;
           }
-          return bohibaColors.white;
+          return BohibaColors.white;
         }),
         todayBorder: BorderSide(
-          width: 0.0,
-          color: bohibaColors.primaryColor,
+          width: 0,
+          color: BohibaColors.transparent,
         ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(
             fontSize: 16,
-            color: bohibaColors.primaryColor,
+            color: BohibaColors.primaryColor,
           ),
           hintStyle: TextStyle(
-            fontSize: 16,
-            color: bohibaColors.primaryColor,
+            fontSize: 12.adaptSize,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            color: BohibaColors.black,
           ),
         ),
       ),
       colorScheme: colorScheme,
-      primaryColor: bohibaColors.primaryColor,
-      scaffoldBackgroundColor: bohibaColors.bgColor,
-      cardColor: bohibaColors.tileColor,
+      primaryColor: BohibaColors.primaryColor,
+      scaffoldBackgroundColor: BohibaColors.bgColor,
+      cardColor: BohibaColors.tileColor,
       fontFamily: 'Poppins',
-      tabBarTheme: TabBarTheme(
-        labelColor: bohibaColors.primaryColor,
-        unselectedLabelColor: bohibaColors.secoundaryColor,
-        indicatorColor: bohibaColors.primaryColor,
+      tabBarTheme: TabBarThemeData(
+        labelColor: BohibaColors.primaryColor,
+        unselectedLabelColor: BohibaColors.secoundaryColor,
+        indicatorColor: BohibaColors.primaryColor,
       ),
       popupMenuTheme: PopupMenuThemeData(
-        elevation: 0.4,
-        color: bohibaColors.white,
-        iconColor: bohibaColors.primaryColor,
+        elevation: 5,
+        color: BohibaColors.white,
+        iconColor: BohibaColors.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
@@ -100,26 +105,26 @@ class ThemeHelper {
       menuTheme: MenuThemeData(
         style: MenuStyle(
           elevation: WidgetStatePropertyAll(0.4),
-          backgroundColor: WidgetStatePropertyAll(bohibaColors.bgColor),
+          backgroundColor: WidgetStatePropertyAll(BohibaColors.bgColor),
         ),
       ),
       primaryIconTheme: IconThemeData(
-        color: bohibaColors.primaryColor,
+        color: BohibaColors.primaryColor,
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
           textStyle: WidgetStateProperty.resolveWith((state) {
             if (state.contains(WidgetState.selected)) {
-              return TextStyle(color: bohibaColors.primaryColor);
+              return TextStyle(color: BohibaColors.primaryColor);
             }
-            return TextStyle(color: bohibaColors.primaryColor);
+            return TextStyle(color: BohibaColors.primaryColor);
           }),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: bohibaColors.primaryColor,
+          backgroundColor: BohibaColors.primaryColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
@@ -132,53 +137,53 @@ class ThemeHelper {
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: bohibaColors.bgColor,
+        backgroundColor: BohibaColors.bgColor,
         elevation: 0.25,
         centerTitle: false,
         titleTextStyle: TextStyle(
           fontFamily: 'Poppins',
-          color: bohibaColors.primaryColor,
+          color: BohibaColors.primaryColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
           fontSize: 24.adaptSize,
           // fontStyle: FontStyle.italic
         ),
         iconTheme: IconThemeData(
-          color: bohibaColors.primaryColor,
+          color: BohibaColors.primaryColor,
         ),
       ),
       iconTheme: IconThemeData(
-        color: bohibaColors.primaryColor,
+        color: BohibaColors.primaryColor,
       ),
       listTileTheme: ListTileThemeData(
         titleTextStyle: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14.adaptSize,
           fontWeight: FontWeight.w700,
-          color: bohibaColors.black,
+          color: BohibaColors.black,
         ),
         subtitleTextStyle: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 12.adaptSize,
           letterSpacing: 1.5,
-          color: bohibaColors.secoundaryColor,
+          color: BohibaColors.secoundaryColor,
           fontWeight: FontWeight.w500,
         ),
         leadingAndTrailingTextStyle: TextStyle(
-          color: bohibaColors.black,
+          color: BohibaColors.black,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500,
           fontSize: 12.adaptSize,
         ),
-        iconColor: bohibaColors.primaryColor,
-        tileColor: Colors.grey.shade100,
+        iconColor: BohibaColors.primaryColor,
+        tileColor: BohibaColors.lightGreyColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide.none,
         ),
       ),
-      cardTheme: CardTheme(
-          elevation: 0.5,
+      cardTheme: CardThemeData(
+          elevation: 1.5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -189,45 +194,88 @@ class ThemeHelper {
           fontWeight: FontWeight.w400,
           fontSize: 13.0.adaptSize,
         ),
-        prefixIconColor: bohibaColors.primaryColor,
-        suffixIconColor: bohibaColors.primaryColor,
+        prefixIconColor: BohibaColors.primaryColor,
+        suffixIconColor: BohibaColors.primaryColor,
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: BohibaColors.borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: bohibaColors.primaryColor),
+          borderSide: BorderSide(color: BohibaColors.borderColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Colors.red),
+          borderSide: BorderSide(color: BohibaColors.warningColor),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: bohibaColors.primaryColor),
+          borderSide: BorderSide(color: BohibaColors.primaryColor),
         ),
       ),
       checkboxTheme: CheckboxThemeData(
-        checkColor: WidgetStatePropertyAll(bohibaColors.white),
+        checkColor: WidgetStatePropertyAll(BohibaColors.white),
         fillColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return bohibaColors.primaryColor;
+            return BohibaColors.primaryColor;
           }
-          return bohibaColors.white;
+          return BohibaColors.white;
         }),
-        // overlayColor: WidgetStatePropertyAll(bohibaColors.warningColor)
+        // overlayColor: WidgetStatePropertyAll(BohibaColors.warningColor)
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (state) {
+            if (state.contains(WidgetState.selected)) {
+              return BohibaColors.primaryColor;
+            }
+            if (state.contains(WidgetState.disabled)) {
+              return BohibaColors.lightGreyColor;
+            }
+            return BohibaColors.white;
+          },
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (state) {
+            if (state.contains(WidgetState.selected)) {
+              return BohibaColors.borderColor;
+            }
+            if (state.contains(WidgetState.focused)) {
+              return BohibaColors.white;
+            }
+            return BohibaColors.borderColor;
+          },
+        ),
       ),
       textSelectionTheme: TextSelectionThemeData(
-        cursorColor: bohibaColors.primaryColor,
-        selectionColor: bohibaColors.primaryVariantColor,
-        selectionHandleColor: bohibaColors.primaryVariantColor,
+        cursorColor: BohibaColors.primaryColor,
+        selectionColor: BohibaColors.primaryVariantColor,
+        selectionHandleColor: BohibaColors.primaryVariantColor,
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: bohibaColors.primaryColor,
+          foregroundColor: BohibaColors.primaryColor,
         ),
+      ),
+      dropdownMenuTheme: DropdownMenuThemeData(),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        linearTrackColor: BohibaColors.borderColor,
+        color: BohibaColors.borderColor,
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BohibaColors.primaryColor;
+          }
+          return BohibaColors.primaryColor;
+        }),
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BohibaColors.white;
+          }
+          return BohibaColors.primaryColor;
+        }),
       ),
       textTheme: _textTheme(),
     );
@@ -243,42 +291,42 @@ TextTheme _textTheme() {
       fontFamily: 'Poppins',
       fontSize: 32.adaptSize,
       fontWeight: FontWeight.w700,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
     displayMedium: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 28.adaptSize,
       fontWeight: FontWeight.w700,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
     displaySmall: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 26.adaptSize,
       fontWeight: FontWeight.w700,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
     headlineLarge: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 22.adaptSize,
       fontWeight: FontWeight.w700,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
     headlineMedium: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 18.adaptSize,
       fontWeight: FontWeight.w600,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
     headlineSmall: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 16.adaptSize,
       fontWeight: FontWeight.w600,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
     titleLarge: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 16.adaptSize,
-      color: Colors.grey.shade700,
+      color: const Color.fromARGB(255, 132, 132, 132),
     ),
     titleMedium: TextStyle(
       fontFamily: 'Poppins',
@@ -290,21 +338,27 @@ TextTheme _textTheme() {
       fontSize: 12.adaptSize,
       color: const Color.fromRGBO(189, 189, 189, 1),
     ),
-    bodyLarge: const TextStyle(
+    bodyLarge: TextStyle(
+      fontSize: 16.adaptSize,
       fontFamily: 'Poppins',
+      fontWeight: FontWeight.w500,
+      color: BohibaColors.black,
     ),
-    bodyMedium: const TextStyle(
+    bodyMedium: TextStyle(
+      fontSize: 14.adaptSize,
       fontFamily: 'Poppins',
+      fontWeight: FontWeight.w600,
+      color: BohibaColors.black,
     ),
     bodySmall: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 12.adaptSize,
       fontWeight: FontWeight.w400,
-      color: bohibaColors.primaryColor,
+      color: BohibaColors.primaryColor,
     ),
     labelLarge: TextStyle(
       fontFamily: 'Poppins',
-      color: bohibaColors.black,
+      color: BohibaColors.black,
       fontSize: 15.adaptSize,
       fontWeight: FontWeight.w600,
     ),
@@ -312,16 +366,16 @@ TextTheme _textTheme() {
       fontFamily: 'Poppins',
       fontSize: 12.adaptSize,
       fontWeight: FontWeight.w600,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
     labelSmall: TextStyle(
       fontFamily: 'Poppins',
       fontSize: 9.5.adaptSize,
       letterSpacing: 1.0,
       fontWeight: FontWeight.w700,
-      color: bohibaColors.black,
+      color: BohibaColors.black,
     ),
   );
 }
 
-ThemeData get bohibaTheme => ThemeHelper().themeData();
+// ThemeData get bohibaTheme => ThemeHelper().themeData();

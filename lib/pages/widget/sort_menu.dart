@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../dist/component_exports.dart';
-import '../../theme/light_theme.dart';
+import '/theme/bohiba_theme.dart';
 
 class SortMenu extends StatefulWidget {
   final bool dateSort;
@@ -26,10 +26,10 @@ class _SortMenuState extends State<SortMenu> {
         // Title
         Padding(
           padding: EdgeInsets.only(
-            top: BohibaResponsiveScreen.height15,
-            left: BohibaResponsiveScreen.width15,
-            right: BohibaResponsiveScreen.width15,
-            bottom: BohibaResponsiveScreen.height15,
+            top: ScreenUtils.height15,
+            left: ScreenUtils.width15,
+            right: ScreenUtils.width15,
+            bottom: ScreenUtils.height15,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,9 +51,9 @@ class _SortMenuState extends State<SortMenu> {
         // Sort by Date
         Padding(
           padding: EdgeInsets.only(
-            left: BohibaResponsiveScreen.width15,
-            right: BohibaResponsiveScreen.width15,
-            bottom: BohibaResponsiveScreen.height10,
+            left: ScreenUtils.width15,
+            right: ScreenUtils.width15,
+            bottom: ScreenUtils.height10,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +102,7 @@ class _SortMenuState extends State<SortMenu> {
                   setState(() {});
                 },
               ),
-              Gap(BohibaResponsiveScreen.height15),
+              Gap(ScreenUtils.height15),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +111,7 @@ class _SortMenuState extends State<SortMenu> {
                     onPressed: () {},
                     child: Text(
                       'Reset All',
-                      style: TextStyle(color: bohibaColors.primaryColor),
+                      style: TextStyle(color: BohibaColors.primaryColor),
                     ),
                   ),
                   ElevatedButton(
@@ -136,7 +136,7 @@ class _SortHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: BohibaResponsiveScreen.height10),
+      padding: EdgeInsets.only(top: ScreenUtils.height10),
       child: Text(title, style: bohibaTheme.textTheme.titleMedium),
     );
   }
@@ -160,12 +160,12 @@ class _SortOption extends StatelessWidget {
           return RadioListTile(
             value: index,
             groupValue: selectedIndex,
-            selectedTileColor: bohibaColors.primaryVariantColor,
+            selectedTileColor: BohibaColors.primaryVariantColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.zero),
             ),
-            tileColor: bohibaColors.bgColor,
-            activeColor: bohibaColors.primaryColor,
+            tileColor: BohibaColors.bgColor,
+            activeColor: BohibaColors.primaryColor,
             title: Text(option, style: bohibaTheme.textTheme.titleMedium),
             onChanged: onChanged,
           );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
 
 class TabAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,12 +9,14 @@ class TabAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        elevation: 0,
+        // elevation: 0,
         centerTitle: true,
         title: const Text('Challan'),
         automaticallyImplyLeading: false,
         leading: InkWell(
-          onTap: () => Get.back(),
+          onTap: () {
+            Navigator.pop(context);
+          },
           child: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         actions: [

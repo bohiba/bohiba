@@ -1,6 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
+import '/component/bohiba_colors.dart';
 
 class ErrorDialog extends StatelessWidget {
   final String error;
@@ -23,14 +23,14 @@ class ErrorDialog extends StatelessWidget {
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: bohibaColors.primaryColor.withOpacity(0.09),
+            color: BohibaColors.primaryColor.withValues( alpha: 0.09),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(
                 EvaIcons.alertCircleOutline,
-                color: bohibaColors.primaryColor,
+                color: BohibaColors.primaryColor,
                 size: 20,
               ),
               const SizedBox(
@@ -41,7 +41,7 @@ class ErrorDialog extends StatelessWidget {
                   error,
                   style: TextStyle(
                     fontSize: 14,
-                    color: bohibaColors.black,
+                    color: BohibaColors.black,
                     fontFamily: 'Poppins',
                   ),
                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bohiba/component/bohiba_colors.dart';
+import '/component/bohiba_colors.dart';
 
 class TextImageInputField extends StatelessWidget {
   final String? hintText;
@@ -42,7 +42,7 @@ class TextImageInputField extends StatelessWidget {
         decoration: InputDecoration(
           counterText: "",
           hintText: hintText,
-          suffixIconColor: bohibaColors.bgColor,
+          suffixIconColor: BohibaColors.bgColor,
           suffixIcon: suffixIcon,
         ),
       ),

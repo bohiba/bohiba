@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/user_authentication/user_auth_string.dart';
+import '/pages/user_authentication/user_auth_string.dart';
 
-import '/component/bohiba_dropdown/bohiba_dropdown.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/bohiba_inputfield/user_auth_image_upload.dart';
 
@@ -40,10 +39,10 @@ class _UserBankAuthpagestate extends State<UserBankAuthScreen> {
               ),
             ),
           ),
-          BohibaDropDown(
-            hint: "Choose your bank",
-            items: items,
-          ),
+          // AppDropDownButton(
+          //   hint: "Choose your bank",
+          //   items: items,
+          // ),
           TextInputField(
             hintText: UserBankAuthString.acNo,
             keyboardType: TextInputType.number,
@@ -60,6 +59,7 @@ class _UserBankAuthpagestate extends State<UserBankAuthScreen> {
                   keyboardType = TextInputType.number;
                 });
                 Future.delayed(const Duration(milliseconds: 150)).then((value) {
+                  if (!context.mounted) return;
                   FocusScope.of(context).requestFocus();
                 });
               } else if (value.isEmpty) {
@@ -67,7 +67,9 @@ class _UserBankAuthpagestate extends State<UserBankAuthScreen> {
                 setState(() {
                   keyboardType = TextInputType.text;
                 });
+
                 Future.delayed(const Duration(milliseconds: 150)).then((value) {
+                  if (!context.mounted) return;
                   FocusScope.of(context).requestFocus();
                 });
               } else {}

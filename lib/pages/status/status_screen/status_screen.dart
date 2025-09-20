@@ -1,7 +1,7 @@
-import 'package:bohiba/pages/status/tabs/book_status/screens/book_status_screen.dart';
-import 'package:bohiba/pages/status/tabs/load_status/screens/load_status_screen.dart';
+import '/pages/status/tabs/book_status/screens/book_status_screen.dart';
+import '/pages/status/tabs/load_status/screens/load_status_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:bohiba/pages/status/status_string/status_string.dart';
+import '/pages/status/status_string/status_string.dart';
 
 import '../../../component/bohiba_appbar/status_appbar.dart';
 import '../tabs/complete_status/screen/complete_status_screen.dart';

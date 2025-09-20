@@ -28,7 +28,7 @@ class VehicleDetailsComponent extends StatelessWidget {
               "Only vehicle nearby to destination and available can be booked*",
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.labelMedium!.fontSize,
-                color: bohibaColors.warningColor,
+                color: BohibaColors.warningColor,
               ),
             ),
           ),

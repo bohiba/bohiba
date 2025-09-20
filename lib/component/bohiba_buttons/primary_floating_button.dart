@@ -22,7 +22,7 @@ class PrimaryFloatingButton extends StatelessWidget {
         heroTag: heroTag,
         elevation: 0,
         onPressed: onPressed,
-        backgroundColor: bohibaColors.primaryColor,
+        backgroundColor: BohibaColors.primaryColor,
         child: Text(label, style: Theme.of(context).textTheme.labelLarge),
       ),
     );

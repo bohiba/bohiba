@@ -1,149 +1,174 @@
-import 'package:bohiba/routes/bohiba_route.dart';
-import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/theme/light_theme.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../component/bohiba_buttons/primary_button.dart';
-import '../../../component/bohiba_inputfield/password_inputfield.dart';
+import '/controllers/auth_controller.dart';
+import 'package:flutter/material.dart';
+import '/dist/component_exports.dart';
+import '/routes/app_route.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/theme/bohiba_theme.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_inputfield/password_inputfield.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends GetView<AuthController> {
   const SignInScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInpagestate();
-}
-
-class _SignInpagestate extends State<SignInScreen> {
-  //TextField State
-  bool showPassword = true;
-
-  //Email and Password Controller
-  final TextEditingController idController = TextEditingController();
-  final TextEditingController pwdController = TextEditingController();
-
-  final formKey = GlobalKey<FormState>();
-
-  @override
   Widget build(BuildContext context) {
+    ScreenUtils.getDimensions(context);
     return Scaffold(
+      appBar: null,
       body: SafeArea(
         child: Container(
-          height: BohibaResponsiveScreen.height,
-          width: BohibaResponsiveScreen.width,
+          height: ScreenUtils.height,
+          width: ScreenUtils.width,
           padding: EdgeInsets.symmetric(
-            horizontal: BohibaResponsiveScreen.width20,
+            horizontal: ScreenUtils.width20,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Stack(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Welcome, Glad to see you.',
-                    style: bohibaTheme.textTheme.headlineLarge,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome, Glad to see you.',
+                        style: bohibaTheme.textTheme.headlineLarge,
+                      ),
+                      Text(
+                        'Login to get Started',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          color: bohibaTheme.textTheme.titleSmall!.color,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Login to get Started',
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
-                      color: bohibaTheme.textTheme.titleSmall!.color,
-                    ),
+
+                  // Login Form
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextInputField(
+                        width: ScreenUtils.width,
+                        hintText: 'User ID',
+                        controller: controller.idController,
+                        maxLength: 6,
+                        textCapitalization: TextCapitalization.characters,
+                        nextActionType: TextInputAction.next,
+                        prefixIcon: Icon(
+                          Icons.person_rounded,
+                          color: BohibaColors.borderColor,
+                        ),
+                      ),
+                      PasswordInputField(
+                        hintText: 'Password',
+                        controller: controller.pwdController,
+                        nextActionType: TextInputAction.done,
+                      ),
+                    ],
+                  ),
+
+                  //Recover Password
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          // Navigator.pushNamed(context, AppRoute.forgotScreen);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtils.height10,
+                          ),
+                          child: Text(
+                            'Forgot UUID?',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.titleMedium!.fontSize,
+                              fontWeight: bohibaTheme
+                                  .textTheme.headlineMedium!.fontWeight,
+                              color: bohibaTheme.textTheme.bodySmall!.color,
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoute.forgotScreen);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtils.height10,
+                          ),
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.titleMedium!.fontSize,
+                              fontWeight: bohibaTheme
+                                  .textTheme.headlineMedium!.fontWeight,
+                              color: bohibaTheme.textTheme.bodySmall!.color,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  PrimaryButton(
+                    label: 'Sign In',
+                    onPressed: () async {
+                      // Navigator.of(context).pushNamed(
+                      //   AppRoute.navBar,
+                      //   arguments: {
+                      //     "current_index": 0,
+                      //   },
+                      // );
+
+                      await controller.signin(
+                        uuid: controller.idController.text.trim(),
+                        password: controller.pwdController.text.trim(),
+                      );
+                    },
                   ),
                 ],
               ),
-
-              // Login Form
-              Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              Container(
+                padding: EdgeInsets.only(bottom: ScreenUtils.height47),
+                alignment: Alignment.bottomCenter,
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextInputField(
-                      hintText: 'User ID',
-                      controller: idController,
-                      maxLength: 6,
-                      textCapitalization: TextCapitalization.characters,
+                    Text(
+                      'Don\'t have account ? ',
+                      style: bohibaTheme.textTheme.titleSmall,
                     ),
-                    PasswordInputField(
-                      hintText: 'Password',
-                      controller: pwdController,
+                    InkWell(
+                      onTap: () {
+                        Get.offAndToNamed(AppRoute.signUp);
+                      },
+                      child: Text(
+                        'Signup',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                          color: bohibaTheme.textTheme.bodySmall!.color,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-
-              //Recover Password
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () => Get.toNamed(AppRoute.forgotScreen),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: BohibaResponsiveScreen.height10,
-                    ),
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                        color: bohibaTheme.textTheme.bodySmall!.color,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              PrimaryButton(
-                label: 'SIGN IN',
-                onPressed: () => Get.toNamed(
-                  AppRoute.navBar,
-                  arguments: {
-                    "current_index": 0,
-                  },
-                ),
-              ),
+              )
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: BohibaResponsiveScreen.width8,
-          vertical: BohibaResponsiveScreen.width10,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Don\'t have account ? ',
-              style: bohibaTheme.textTheme.titleSmall,
-            ),
-            InkWell(
-              onTap: () => {Get.offNamed(AppRoute.signUp)},
-              child: Container(
-                height: BohibaResponsiveScreen.height30,
-                width: BohibaResponsiveScreen.width50,
-                alignment: Alignment.center,
-                child: Text(
-                  'Signup',
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                    fontWeight:
-                        bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                    color: bohibaTheme.textTheme.bodySmall!.color,
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

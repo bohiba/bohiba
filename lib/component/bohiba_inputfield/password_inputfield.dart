@@ -1,14 +1,19 @@
-import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/theme/light_theme.dart';
+import '/component/bohiba_colors.dart';
+import '/theme/bohiba_theme.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
 class PasswordInputField extends StatefulWidget {
   final String hintText;
   final TextEditingController? controller;
+  final TextInputAction? nextActionType;
 
   const PasswordInputField(
-      {super.key, required this.hintText, this.controller});
+      {super.key,
+      required this.hintText,
+      this.controller,
+      this.nextActionType});
 
   @override
   State<PasswordInputField> createState() => _PasswordInputFieldState();
@@ -23,7 +28,11 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: TextFormField(
         controller: widget.controller,
-        style: bohibaTheme.textTheme.bodyMedium,
+        style: TextStyle(
+          fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+          color: bohibaTheme.textTheme.bodyLarge!.color,
+          letterSpacing: 1.2,
+        ),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please Enter Password';
@@ -31,12 +40,17 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
             return null;
           }
         },
-        cursorColor: bohibaColors.primaryColor,
+        cursorColor: BohibaColors.primaryColor,
         cursorRadius: const Radius.circular(10.0),
         obscureText: showPassword,
         enableInteractiveSelection: false,
+        textInputAction: widget.nextActionType,
         decoration: InputDecoration(
           hintText: widget.hintText,
+          prefixIcon: Icon(
+            EvaIcons.lock,
+            color: BohibaColors.borderColor,
+          ),
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -44,7 +58,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
               });
             },
             child: CircleAvatar(
-              backgroundColor: bohibaColors.transparent,
+              backgroundColor: BohibaColors.transparent,
               child: Icon(
                 showPassword ? Remix.eye_close_line : Remix.eye_line,
                 size: 16,

@@ -28,14 +28,14 @@ class DriverDetailComponent extends StatelessWidget {
             keyboardType: TextInputType.number,
           ),
           Container(
-            color: bohibaColors.primaryVariantColor,
+            color: BohibaColors.primaryVariantColor,
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Text(
                 'Once we confirm your order, we will send an OTP (One-Time Password) to your registered number and your driver\'s mobile number.',
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                     fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
-                    color: bohibaColors.white)),
+                    color: BohibaColors.white)),
           )
         ],
       ),

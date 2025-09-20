@@ -1,7 +1,7 @@
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../dist/component_exports.dart';
-import '../../theme/light_theme.dart';
 
 class UtilityActionButton extends StatelessWidget {
   final Function(DragDownDetails)? onPanDown;
@@ -19,14 +19,14 @@ class UtilityActionButton extends StatelessWidget {
       onPanDown: onPanDown,
       child: Container(
         height: 30,
-        width: BohibaResponsiveScreen.width * 0.175,
+        width: ScreenUtils.width * 0.175,
         margin: EdgeInsets.only(
-          left: BohibaResponsiveScreen.width5,
-          right: BohibaResponsiveScreen.width5,
+          left: ScreenUtils.width5,
+          right: ScreenUtils.width5,
         ),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: bohibaColors.primaryColor,
+          color: BohibaColors.primaryColor,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Row(
@@ -35,13 +35,13 @@ class UtilityActionButton extends StatelessWidget {
             Icon(
               icon,
               size: 16,
-              color: bohibaColors.white,
+              color: BohibaColors.white,
             ),
             Text(
               buttonName,
               style: TextStyle(
                   fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                  color: bohibaColors.white
+                  color: BohibaColors.white
                   // color: bohibaTheme.textTheme.bodySmall!.color,
                   ),
             ),

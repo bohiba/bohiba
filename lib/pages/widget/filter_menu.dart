@@ -1,11 +1,10 @@
-import 'package:bohiba/dist/controller_exports.dart';
-import 'package:bohiba/theme/light_theme.dart';
+import '/component/bohiba_dropdown/primary_dropdown_menu.dart';
+import '/dist/controller_exports.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
-import '../../dist/component_exports.dart';
+import '/component/bohiba_dropdown_menu/filter_header_widget.dart';
+import '/dist/component_exports.dart';
 
 class FilterMenu extends StatefulWidget {
   final bool dateRange;
@@ -13,19 +12,19 @@ class FilterMenu extends StatefulWidget {
   final bool search;
   const FilterMenu(
       {super.key,
-      this.dateRange = false,
-      this.status = false,
-      this.search = false});
+      this.dateRange = true,
+      this.status = true,
+      this.search = true});
 
   @override
   State<FilterMenu> createState() => _FilterMenuState();
 }
 
 class _FilterMenuState extends State<FilterMenu> {
-  final GlobalController _globalController = Get.put(GlobalController());
   final TextEditingController _dateFromController = TextEditingController();
   final TextEditingController _dateToController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _menuController = TextEditingController();
   String strStatus = 'Booked';
 
   @override
@@ -37,10 +36,10 @@ class _FilterMenuState extends State<FilterMenu> {
         // Title
         Padding(
           padding: EdgeInsets.only(
-            top: BohibaResponsiveScreen.height15,
-            left: BohibaResponsiveScreen.width15,
-            right: BohibaResponsiveScreen.width15,
-            bottom: BohibaResponsiveScreen.height15,
+            top: ScreenUtils.height15,
+            left: ScreenUtils.width15,
+            right: ScreenUtils.width15,
+            bottom: ScreenUtils.height15,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,9 +63,9 @@ class _FilterMenuState extends State<FilterMenu> {
         Padding(
           padding: EdgeInsets.only(
             // top: BohibaResponsiveScreen.height5,
-            left: BohibaResponsiveScreen.width15,
-            right: BohibaResponsiveScreen.width15,
-            bottom: BohibaResponsiveScreen.height10,
+            left: ScreenUtils.width15,
+            right: ScreenUtils.width15,
+            bottom: ScreenUtils.height10,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,8 +87,9 @@ class _FilterMenuState extends State<FilterMenu> {
                           child: TextFormField(
                             onTap: () async {
                               _dateFromController.text =
-                                  await _globalController.pickDate(
-                                dateFormatter: DateFormat('dd-MM-yyyy'),
+                                  await GlobalService.pickDate(
+                                context: context,
+                                dateFormatter: 'dd-MM-yyyy',
                                 hintText: 'Start Form',
                               );
                             },
@@ -102,13 +102,14 @@ class _FilterMenuState extends State<FilterMenu> {
                             ),
                           ),
                         ),
-                        SizedBox(width: BohibaResponsiveScreen.width5),
+                        SizedBox(width: ScreenUtils.width5),
                         Expanded(
                           child: TextFormField(
                             onTap: () async {
                               _dateToController.text =
-                                  await _globalController.pickDate(
-                                dateFormatter: DateFormat('dd-MM-yyyy'),
+                                  await GlobalService.pickDate(
+                                context: context,
+                                dateFormatter: 'dd-MM-yyyy',
                                 hintText: 'Start Form',
                               );
                             },
@@ -156,28 +157,19 @@ class _FilterMenuState extends State<FilterMenu> {
                   children: [
                     // Status
                     FilterHeaderWidget(
-                        onPressTrailing: () {
-                          strStatus = 'Booked';
-                          setState(() {});
-                        },
-                        title: 'Status'),
-                    DropdownButtonFormField<String>(
-                      value: strStatus,
-                      items: ['Booked', 'Load', 'Completed', 'Cancelled']
-                          .map(
-                            (status) => DropdownMenuItem(
-                              value: status,
-                              child: Text(status),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          strStatus = value!;
-                        });
+                      onPressTrailing: () {
+                        strStatus = 'Booked';
+                        setState(() {});
                       },
-                      icon: Icon(Icons.keyboard_arrow_down_rounded),
-                      decoration: InputDecoration(border: OutlineInputBorder()),
+                      title: 'Status',
+                    ),
+
+                    PrimaryDropDownMenu(
+                      menuController: _menuController,
+                      width: ScreenUtils.width,
+                      hint: "Booked",
+                      items: ['Booked', 'Sucessful', 'Cancelled'],
+                      dropDownValue: 'Driver',
                     ),
                   ],
                 ),
@@ -204,7 +196,7 @@ class _FilterMenuState extends State<FilterMenu> {
                   ],
                 ),
               ),
-              Gap(BohibaResponsiveScreen.height15),
+              Gap(ScreenUtils.height15),
 
               // Buttons
               Row(
@@ -219,7 +211,7 @@ class _FilterMenuState extends State<FilterMenu> {
                       setState(() {});
                     },
                     child: Text('Reset All',
-                        style: TextStyle(color: bohibaColors.warningColor)),
+                        style: TextStyle(color: BohibaColors.warningColor)),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -228,7 +220,7 @@ class _FilterMenuState extends State<FilterMenu> {
                     child: Text(
                       'Apply Now',
                       style: TextStyle(
-                        color: bohibaColors.white,
+                        color: BohibaColors.white,
                       ),
                     ),
                   ),
@@ -238,40 +230,6 @@ class _FilterMenuState extends State<FilterMenu> {
           ),
         )
       ],
-    );
-  }
-}
-
-class FilterHeaderWidget extends StatelessWidget {
-  final VoidCallback onPressTrailing;
-  final String title;
-  const FilterHeaderWidget({
-    super.key,
-    required this.onPressTrailing,
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-          top: BohibaResponsiveScreen.height15,
-          bottom: BohibaResponsiveScreen.height10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                color: bohibaTheme.textTheme.bodySmall!.color),
-          ),
-          GestureDetector(
-            onTap: onPressTrailing,
-            child: Text('Reset'),
-          ),
-        ],
-      ),
     );
   }
 }

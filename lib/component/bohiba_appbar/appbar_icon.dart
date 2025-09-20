@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../dist/component_exports.dart';
+import '/dist/component_exports.dart';
 
 class AppBarIconBox extends StatelessWidget {
   const AppBarIconBox({super.key, this.onTap, this.onTapDown, this.icon});
@@ -15,12 +15,13 @@ class AppBarIconBox extends StatelessWidget {
       onTap: onTap,
       onTapDown: onTapDown,
       child: Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.only(
-            right: BohibaResponsiveScreen.width10,
-          ),
-          width: BohibaResponsiveScreen.width40,
-          child: icon),
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(
+          right: ScreenUtils.width10,
+        ),
+        width: ScreenUtils.width40,
+        child: icon,
+      ),
     );
   }
 }

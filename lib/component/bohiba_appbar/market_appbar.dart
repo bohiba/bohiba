@@ -1,12 +1,10 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
-import '../bohiba_search_delegate.dart';
-
-class MarketAppBar extends StatelessWidget implements PreferredSizeWidget {
+class MinesAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  const MarketAppBar({super.key, this.title = "Title"});
+  const MinesAppBar({super.key, this.title = "Title"});
 
   @override
   Size get preferredSize => const Size.fromHeight(55);
@@ -16,17 +14,16 @@ class MarketAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(title),
         actions: [
           IconButton(
             tooltip: 'Search Company',
             onPressed: () {
-              showSearch(
-                context: context,
-                delegate: BohibaCompanySearchDelegate(),
-              );
+              // showSearch(
+              //   context: context,
+              //   delegate: BohibaCompanySearchDelegate(),
+              // );
             },
             icon: const Icon(EvaIcons.searchOutline),
           ),

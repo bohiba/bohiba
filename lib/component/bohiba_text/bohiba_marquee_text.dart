@@ -9,6 +9,7 @@ class BohibaMarqueeText extends StatelessWidget {
   final bool alwaysScroll;
   final TextStyle? style;
   final TextStyle? marqueeTextStyle;
+  final AlignmentGeometry? alignment;
 
   const BohibaMarqueeText({
     super.key,
@@ -18,12 +19,13 @@ class BohibaMarqueeText extends StatelessWidget {
     this.alwaysScroll = false,
     this.style,
     this.marqueeTextStyle,
+    this.alignment,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.centerLeft,
+      alignment: alignment ?? Alignment.centerLeft,
       width: width,
       child: AutoSizeText(
         text,

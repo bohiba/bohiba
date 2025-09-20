@@ -1,12 +1,12 @@
+import '/dist/component_exports.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:remixicon/remixicon.dart';
-import '/pages/vehicle/vechile_dash_string/vehicle_dash_string.dart';
-import '/pages/vehicle/add_vehicle_widget/add_vehicle_input_field.dart';
+import '../../pages/truck/vechile_dash_string/vehicle_dash_string.dart';
+import '../../pages/truck/add_truck_widget/add_vehicle_input_field.dart';
 import '../bohiba_buttons/primary_button.dart';
 import '../bohiba_inputfield/text_inputfield.dart';
-import '../screen_utils.dart';
 
 class AddVehicleModalSheet extends StatefulWidget {
   const AddVehicleModalSheet({super.key});
@@ -29,9 +29,6 @@ class _AddVehicleModalSheetState extends State<AddVehicleModalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -40,52 +37,46 @@ class _AddVehicleModalSheetState extends State<AddVehicleModalSheet> {
         children: [
           Container(
             height: 5.0,
-            width: width * 0.25,
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            width: ScreenUtils.width * 0.25,
+            margin: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
             decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                borderRadius: BorderRadius.circular(10.0)),
+                color: BohibaColors.lightGreyColor,
+                borderRadius: BorderRadius.circular(12.0)),
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+          Padding(
+            padding: EdgeInsets.only(
+              left: ScreenUtils.width15,
+              right: ScreenUtils.width15,
+              top: ScreenUtils.height15,
+            ),
             child: Text(
               'Vehicle Registration',
               style: TextStyle(fontSize: 16),
             ),
           ),
-          SizedBox(height: height * 0.02),
+          Gap(ScreenUtils.height10),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
             child: Form(
               key: formKey,
               child: Column(
                 children: [
                   TextInputField(
-                    prefixIcon: const Icon(Remix.truck_line),
-                    maxLength: 10,
-                    readOnly: false,
-                    hintText: VehicleDashString.vehicleNo,
-                    keyboardType: regdNoInputType,
-                    textCapitalization: TextCapitalization.characters,
-                    controller: regdNoController,
-                    onChanged: (v) {},
-                  ),
-                  // BohibaDropDown(
-                  //   items: ["Ram", "Shyam", "Filmon"],
-                  //   hint: "Select your Driver",
-                  // ),
-
-                  TextInputField(
-                    prefixIcon: const Icon(EvaIcons.creditCardOutline),
+                    prefixIcon: const Icon(
+                      Remix.user_3_fill,
+                      size: 20,
+                    ),
                     hintText: VehicleDashString.driverLicense,
                     controller: driverLicenseController,
                     textCapitalization: TextCapitalization.characters,
                   ),
 
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const ChooseVehicleWheel(),
                       TextInputField(
+                        width: ScreenUtils.width * 0.60,
                         prefixIcon: const Icon(EvaIcons.hashOutline),
                         maxLength: 10,
                         keyboardType: TextInputType.number,
@@ -126,7 +117,7 @@ class _AddVehicleModalSheetState extends State<AddVehicleModalSheet> {
                     label: 'VERIFY',
                     onPressed: () {},
                   ),
-                  Gap(BohibaResponsiveScreen.height50),
+                  Gap(ScreenUtils.height50),
                 ],
               ),
             ),
