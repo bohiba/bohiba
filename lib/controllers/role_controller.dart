@@ -1,4 +1,4 @@
-import 'package:bohiba/services/global_service.dart';
+import '/services/global_service.dart';
 
 import '/model/profile_model.dart';
 import '/services/profile_service.dart';

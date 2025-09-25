@@ -1,4 +1,4 @@
-import 'package:bohiba/services/job_service.dart';
+import '/services/job_service.dart';
 
 import '/dist/app_enums.dart';
 import '/services/global_service.dart';

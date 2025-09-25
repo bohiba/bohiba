@@ -1,4 +1,4 @@
-import 'package:bohiba/services/pref_utils.dart';
+import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

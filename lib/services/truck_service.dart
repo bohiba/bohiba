@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bohiba/dist/app_enums.dart';
+import '/dist/app_enums.dart';
 
 import '/model/driver_model.dart';
 import '/model/profile_model.dart';

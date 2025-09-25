@@ -25,7 +25,7 @@ class LinearBoxWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onClick,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
+        padding: EdgeInsets.symmetric(vertical: ScreenUtils.height15),
         decoration: BoxDecoration(
           color: titleColor,
           border: Border(

@@ -1,5 +1,5 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/services/profile_service.dart';
+import '/dist/app_enums.dart';
+import '/services/profile_service.dart';
 
 import '/controllers/auth_controller.dart';
 import '/model/profile_model.dart';

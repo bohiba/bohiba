@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:bohiba/pages/widget/role_widget.dart';
+import '/pages/widget/role_widget.dart';
 
 import '/pages/truck/add_truck_component/truck_menu.dart';
 import '/dist/app_enums.dart';
@@ -31,9 +30,9 @@ class TruckTile extends GetView<TruckAllController> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: ScreenUtils.width15),
-      margin: EdgeInsets.only(bottom: ScreenUtils.width5),
       width: ScreenUtils.width,
       height: ScreenUtils.height * 0.075,
+      margin: EdgeInsets.only(bottom: ScreenUtils.width5),
       decoration: TileDecorative(),
       child: Row(
         children: [

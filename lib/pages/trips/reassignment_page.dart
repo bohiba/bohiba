@@ -1,6 +1,6 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/routes/app_route.dart';
-import 'package:bohiba/services/global_service.dart';
+import '/dist/app_enums.dart';
+import '/routes/app_route.dart';
+import '/services/global_service.dart';
 
 import '/theme/bohiba_theme.dart';
 import '/controllers/reassignment_controller.dart';

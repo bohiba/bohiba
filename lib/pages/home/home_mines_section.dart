@@ -1,11 +1,10 @@
+import '/pages/mines/mines_card.dart';
+
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
-import '../mines/mines_card.dart';
-
 import '/routes/app_route.dart';
 import '/component/screen_utils.dart';
-import '/component/bohiba_colors.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +45,7 @@ class HomeMinesSection extends GetView<HomeController> {
                       style: TextStyle(
                         fontSize:
                             bohibaTheme.textTheme.headlineMedium!.fontSize,
-                        color: BohibaColors.primaryColor,
+                        color: bohibaTheme.primaryColor,
                       ),
                     ),
                   ),

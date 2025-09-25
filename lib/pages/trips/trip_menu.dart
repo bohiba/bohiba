@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bohiba/routes/app_route.dart';
+import '/routes/app_route.dart';
 
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';

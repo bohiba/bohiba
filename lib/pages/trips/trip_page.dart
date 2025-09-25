@@ -1,7 +1,7 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/dist/component_exports.dart';
-import 'package:bohiba/pages/widget/status_box_widget.dart';
-import 'package:bohiba/pages/widget/vertical_box.dart';
+import '/dist/app_enums.dart';
+import '/dist/component_exports.dart';
+import '/pages/widget/status_box_widget.dart';
+import '/pages/widget/vertical_box.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';

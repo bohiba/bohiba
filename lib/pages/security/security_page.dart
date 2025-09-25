@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/security_controller.dart';
+import '/controllers/security_controller.dart';
 import 'package:get/get.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';

@@ -1,5 +1,5 @@
-import 'package:bohiba/controllers/role_controller.dart';
-import 'package:bohiba/services/role_permission_service.dart';
+import '/controllers/role_controller.dart';
+import '/services/role_permission_service.dart';
 
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';

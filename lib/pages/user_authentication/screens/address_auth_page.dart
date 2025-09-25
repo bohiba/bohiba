@@ -1,8 +1,9 @@
+import '/services/global_service.dart';
+
 import '/dist/component_exports.dart';
 import '/pages/widget/required_label.dart';
 
 import '/controllers/user_profile_config_controller.dart';
-import '/dist/controller_exports.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:get/get.dart';
 import '/component/bohiba_buttons/primary_button.dart';

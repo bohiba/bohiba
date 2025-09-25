@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bohiba/services/global_service.dart';
+import '/services/global_service.dart';
 
 import '/extensions/bohiba_extension.dart';
 import '/services/trip_service.dart';

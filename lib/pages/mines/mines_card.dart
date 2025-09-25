@@ -8,7 +8,6 @@ import '/model/mines_model.dart';
 import 'package:get/get.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:marquee_text/marquee_text.dart';
@@ -78,9 +77,9 @@ class MinesHorizontalCard extends GetView<MinesController> {
                 ],
               ),
             ),
-            GestureDetector(
+            /*GestureDetector(
               onTapDown: (TapDownDetails tapDownDetails) => {
-                /*showMenu(
+                showMenu(
                   context: context,
                   position: RelativeRect.fromLTRB(
                     tapDownDetails.globalPosition.dx,
@@ -106,8 +105,7 @@ class MinesHorizontalCard extends GetView<MinesController> {
                       child: Text(
                         'Remove',
                         style: TextStyle(
-                          fontSize:
-                              bohibaTheme.textTheme.labelMedium!.fontSize,
+                          fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                           fontWeight:
                               bohibaTheme.textTheme.labelMedium!.fontWeight,
                           color: BohibaColors.warningColor,
@@ -115,10 +113,10 @@ class MinesHorizontalCard extends GetView<MinesController> {
                       ),
                     ),
                   ],
-                ),*/
+                ),
               },
               child: const Icon(EvaIcons.moreVertical),
-            )
+            )*/
           ],
         ),
       ),

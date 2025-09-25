@@ -62,8 +62,7 @@ class _SetRolePageState extends State<SetRolePage> {
                       text: controller.userRoleList[index]['label'].toString(),
                       subtitle:
                           controller.userRoleList[index]['subTitle'].toString(),
-                      widget: Radio(
-                        value: index,
+                      widget: RadioGroup(
                         groupValue: controller.selectedIndex.value,
                         onChanged: (v) {
                           if (v == null) {
@@ -74,6 +73,7 @@ class _SetRolePageState extends State<SetRolePage> {
                             setState(() {});
                           }
                         },
+                        child: Radio(value: index),
                       ),
                     );
                   },

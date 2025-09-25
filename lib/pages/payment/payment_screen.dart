@@ -1,4 +1,4 @@
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_text/payment_text.dart';

@@ -1,5 +1,5 @@
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/screen_utils.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

@@ -1,7 +1,7 @@
-import 'package:bohiba/dist/controller_exports.dart';
-import 'package:bohiba/services/api_end_point.dart';
-import 'package:bohiba/services/device_info_service.dart';
-import 'package:bohiba/services/dio_serivce.dart';
+import '/services/global_service.dart';
+import '/services/api_end_point.dart';
+import '/services/device_info_service.dart';
+import '/services/dio_serivce.dart';
 
 class JobService {
   static final DioService _dioService = DioService();

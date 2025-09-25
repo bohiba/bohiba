@@ -1,4 +1,4 @@
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
 import 'package:flutter/material.dart';
 

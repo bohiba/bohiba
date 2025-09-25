@@ -1,10 +1,10 @@
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/component/bohiba_buttons/primary_button.dart';
-import 'package:bohiba/component/bohiba_dropdown/app_dropdown_button.dart';
-import 'package:bohiba/component/bohiba_inputfield/text_inputfield.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/pages/widget/icon_text_tile.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/screen_utils.dart';
+import '/pages/widget/icon_text_tile.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

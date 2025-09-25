@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '/component/screen_utils.dart';
-import '/dist/controller_exports.dart';
+import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import '/component/bohiba_appbar/company_appbar.dart';
 

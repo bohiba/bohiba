@@ -1,4 +1,4 @@
-import 'package:bohiba/services/user_role_type.dart';
+import '/services/user_role_type.dart';
 
 import '../../controllers/role_controller.dart';
 import 'package:flutter/material.dart';

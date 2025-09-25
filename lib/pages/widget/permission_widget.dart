@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/role_controller.dart';
+import '/controllers/role_controller.dart';
 import 'package:flutter/material.dart';
 
 class PermissionWidget extends StatelessWidget {

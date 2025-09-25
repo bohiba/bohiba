@@ -88,7 +88,7 @@ class DriverEditModel extends GetView<DriverController> {
                         // controller.notifyFavouriteListner(markedFav: value);
                       },
                       activeTrackColor: const Color(0xFF047BFC),
-                      activeColor: Colors.white,
+                      activeThumbColor: Colors.white,
                     ),
                     enableBorder: false,
                     padding: EdgeInsets.symmetric(

@@ -1,3 +1,5 @@
+import '/extensions/bohiba_extension.dart';
+
 import '/controllers/all_job_controller.dart';
 import '/dist/component_exports.dart';
 import '/pages/widget/role_widget.dart';
@@ -134,8 +136,18 @@ class AllJobPage extends GetView<AllJobController> {
                                     ),
                                     Spacer(),
                                     Text(
-                                      job['status'].toString().toUpperCase(),
-                                      style: bohibaTheme.textTheme.labelLarge,
+                                      job['status']
+                                          .toString()
+                                          .toCapitalizedLabel(),
+                                      style: TextStyle(
+                                        fontFamily: bohibaTheme
+                                            .textTheme.labelLarge!.fontFamily,
+                                        fontSize: bohibaTheme
+                                            .textTheme.labelLarge!.fontSize,
+                                        color: controller.statusColor(
+                                          status: job['status'].toString(),
+                                        ),
+                                      ),
                                     )
                                   ],
                                 ),

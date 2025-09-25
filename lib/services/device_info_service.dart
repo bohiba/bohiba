@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bohiba/services/global_service.dart';
+import '/services/global_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 

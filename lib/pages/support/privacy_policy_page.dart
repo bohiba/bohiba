@@ -1,7 +1,7 @@
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/services/global_service.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
+import '/component/screen_utils.dart';
+import '/services/global_service.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';

@@ -1,4 +1,4 @@
-import '/controllers/open_driver_controller.dart';
+import '../controllers/open_driver_list_controller.dart';
 import '/controllers/home_controller.dart';
 import '/controllers/mines_controller.dart';
 import '/controllers/dashboard_controller.dart';
@@ -12,6 +12,6 @@ class NavBarBinding extends Bindings {
     Get.put<HomeController>(HomeController());
     Get.put<MinesController>(MinesController());
     Get.put<DashboardController>(DashboardController());
-    Get.lazyPut<OpenDriverController>(() => OpenDriverController());
+    Get.lazyPut<OpenDriverListController>(() => OpenDriverListController());
   }
 }

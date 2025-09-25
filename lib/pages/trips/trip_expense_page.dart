@@ -1,4 +1,4 @@
-import 'package:bohiba/routes/app_route.dart';
+import '/routes/app_route.dart';
 
 import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';

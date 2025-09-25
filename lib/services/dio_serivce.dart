@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:bohiba/services/api_end_point.dart';
-import 'package:bohiba/services/device_info_service.dart';
-import 'package:bohiba/services/global_service.dart';
-import 'package:bohiba/services/pref_utils.dart';
+import '/services/api_end_point.dart';
+import '/services/device_info_service.dart';
+import '/services/global_service.dart';
+import '/services/pref_utils.dart';
 import 'package:dio/dio.dart';
 
 class DioService {

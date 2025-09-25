@@ -1,3 +1,5 @@
+import '/routes/app_route.dart';
+
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/screen_utils.dart';
 import '/controllers/setting_controller.dart';
@@ -14,6 +16,7 @@ class SettingPage extends GetView<SettingController> {
 
   @override
   Widget build(BuildContext context) {
+    final navigation = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(title: 'Setting'),
       body: Obx(() {
@@ -139,7 +142,9 @@ class SettingPage extends GetView<SettingController> {
                 showArrow: true,
               ),
               LinearBoxWidget(
-                onClick: () {},
+                onClick: () {
+                  navigation.pushNamed(AppRoute.updateContact);
+                },
                 header: 'Change phone/ email',
                 showArrow: true,
               ),

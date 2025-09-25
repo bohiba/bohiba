@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:bohiba/controllers/role_controller.dart';
-import 'package:bohiba/services/role_permission_service.dart';
+import '/controllers/role_controller.dart';
+import '/services/role_permission_service.dart';
 
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';

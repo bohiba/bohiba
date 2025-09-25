@@ -55,7 +55,8 @@ class ApiEndPoint {
   static const String apiDeleteTripReassign =
       '$baseUrl/trip/delete-reassignment';
 
-  static const apiAllJobs = '$baseUrl/owner/job-posted';
-  static const apiCreateJobs = '$baseUrl/owner/job-create';
-  static const apiGetJob = '$baseUrl/owner/job-detail';
+  static const String apiAllJobs = '$baseUrl/owner/job-posted';
+  static const String apiCreateJobs = '$baseUrl/owner/job-create';
+  static const String apiGetJob = '$baseUrl/owner/job-detail';
+  static const String apiExpressIntreset = '$baseUrl/owner/express-interest';
 }

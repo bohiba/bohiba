@@ -145,10 +145,12 @@ class _SortHeaderWidget extends StatelessWidget {
 class _SortOption extends StatelessWidget {
   final List<String> options;
   final int selectedIndex;
-  final Function(int?)? onChanged;
+  final ValueChanged<int?> onChanged;
 
   const _SortOption(
-      {required this.options, required this.selectedIndex, this.onChanged});
+      {required this.options,
+      required this.selectedIndex,
+      required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -157,17 +159,19 @@ class _SortOption extends StatelessWidget {
         (entry) {
           int index = entry.key;
           String option = entry.value;
-          return RadioListTile(
-            value: index,
+          return RadioGroup(
             groupValue: selectedIndex,
-            selectedTileColor: BohibaColors.primaryVariantColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.zero),
-            ),
-            tileColor: BohibaColors.bgColor,
-            activeColor: BohibaColors.primaryColor,
-            title: Text(option, style: bohibaTheme.textTheme.titleMedium),
             onChanged: onChanged,
+            child: RadioListTile(
+              value: index,
+              selectedTileColor: BohibaColors.primaryVariantColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.zero),
+              ),
+              tileColor: BohibaColors.bgColor,
+              activeColor: BohibaColors.primaryColor,
+              title: Text(option, style: bohibaTheme.textTheme.titleMedium),
+            ),
           );
         },
       ).toList(),

@@ -1,5 +1,5 @@
-import 'package:bohiba/component/bohiba_colors.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/bohiba_colors.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

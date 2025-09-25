@@ -1,3 +1,6 @@
+import '/bindings/update_contact_binding.dart';
+import '/pages/user/user_profile/update_contact_info_page.dart';
+
 import '/pages/jobs/add_jobs_page.dart';
 import '/pages/jobs/my_job_detail_page.dart';
 import '/pages/jobs/all_job_page.dart';
@@ -113,11 +116,12 @@ class AppRoute {
   // User Auth Screen
   static const String userAddressAuthScreen = "/user-address-auth";
   static const String userAuthScreen = "/user-auth-screen";
-  static const String userBankAuthScreen = "/user-bank-auth";
+  // static const String userBankAuthScreen = "/user-bank-auth";
   // static const String userDocAuthScreen = "/user-doc-auth";
   static const String imageAuth = "/image-auth";
-
+  static const String updateContact = "/update-contact";
   static const String roleType = "/role-type";
+
   // NavBar
   static const String navBar = "/nav-bar";
   static const String favList = '/favList';
@@ -234,6 +238,12 @@ class AppRoute {
       name: forgotScreen,
       binding: AuthBinding(),
       page: () => const ForgotPasswordScreen(),
+    ),
+
+    GetPage(
+      binding: UpdateContactBinding(),
+      name: updateContact,
+      page: () => const UpdateContactInfoPage(),
     ),
 
     GetPage(

@@ -1,5 +1,5 @@
 import '/component/bohiba_dropdown/primary_dropdown_menu.dart';
-import '/dist/controller_exports.dart';
+import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -136,7 +136,7 @@ class _FilterMenuState extends State<FilterMenu> {
                     FilterHeaderWidget(
                         onPressTrailing: () {}, title: 'Activity Type'),
                     DropdownButtonFormField<String>(
-                      value: 'All warehouses',
+                      initialValue: 'All warehouses',
                       items: ['All warehouses', 'Warehouse 1', 'Warehouse 2']
                           .map((type) => DropdownMenuItem(
                                 value: type,

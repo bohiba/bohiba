@@ -1,4 +1,4 @@
-import 'package:bohiba/pages/widget/role_widget.dart';
+import '/pages/widget/role_widget.dart';
 
 import '/pages/widget/permission_widget.dart';
 import '/services/role_permission_service.dart';

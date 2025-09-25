@@ -1,4 +1,4 @@
-import 'package:bohiba/dist/app_enums.dart';
+import '/dist/app_enums.dart';
 
 import '/model/open_driver_model.dart';
 import '/model/driver_model.dart';

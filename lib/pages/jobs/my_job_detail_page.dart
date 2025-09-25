@@ -1,5 +1,5 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/services/global_service.dart';
+import '/dist/app_enums.dart';
+import '/services/global_service.dart';
 import 'package:readmore/readmore.dart';
 
 import '/extensions/bohiba_extension.dart';
@@ -86,118 +86,206 @@ class MyJobDetailPage extends GetView<MyJobController> {
               top: ScreenUtils.height10,
             ),
             child: Obx(() {
-              return controller.jobObj.isEmpty
-                  ? SizedBox.shrink()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              if (controller.jobObj.isEmpty) {
+                return SizedBox.shrink();
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.jobObj['job_title'] ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: bohibaTheme.textTheme.headlineMedium,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        Icon(EvaIcons.pin, size: 14.w),
                         Text(
-                          controller.jobObj['job_title'] ?? '',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: bohibaTheme.textTheme.headlineMedium,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(EvaIcons.pin, size: 14.w),
-                            Text(
-                              " ${(controller.jobObj['location'] ?? '').toString().toUpperCase()}",
-                              style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodyLarge!.fontSize,
-                                fontWeight: bohibaTheme
-                                    .textTheme.labelMedium!.fontWeight,
-                                color: bohibaTheme.textTheme.titleLarge!.color,
-                              ),
-                            ),
-                            Gap(10.w),
-                            Icon(EvaIcons.briefcase, size: 14.w),
-                            Text(
-                              ' ${(controller.jobObj['job_type'] ?? '').toString().toUpperCase()}',
-                              style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodyLarge!.fontSize,
-                                fontWeight: bohibaTheme
-                                    .textTheme.labelMedium!.fontWeight,
-                                color: bohibaTheme.textTheme.titleLarge!.color,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15.h, bottom: 10.h),
-                          child: Row(
-                            children: [
-                              Icon(EvaIcons.people),
-                              Gap(10.w),
-                              Text(
-                                  '${controller.arrIntDriver.length.toString()} Applicants')
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            height: ScreenUtils.height30,
-                            decoration: BoxDecoration(
-                              color: bohibaTheme.primaryColor,
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Applied Candidates',
-                              style: TextStyle(
-                                color:
-                                    bohibaTheme.textTheme.displayLarge!.color,
-                                fontSize:
-                                    bohibaTheme.textTheme.titleMedium!.fontSize,
-                                fontWeight: bohibaTheme
-                                    .textTheme.labelLarge!.fontWeight,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Gap(25.h),
-                        LinearBoxWidget(
-                          header: 'Status',
-                          title: controller.jobObj['status']
-                              .toString()
-                              .toCapitalizedLabel(),
-                        ),
-                        LinearBoxWidget(
-                          header: 'Truck Number',
-                          title: controller.jobObj['regd_number']
-                              .toString()
-                              .toCapitalizedLabel(),
-                        ),
-                        LinearBoxWidget(
-                          header: 'Last Updated',
-                          title: controller.jobObj['updated_at'].toString(),
-                        ),
-                        LinearBoxWidget(
-                          header: 'Created At',
-                          title: controller.jobObj['created_at'].toString(),
-                        ),
-                        Gap(15.w),
-                        Text(
-                          'Description',
+                          " ${(controller.jobObj['location'] ?? '').toString().toUpperCase()}",
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.headlineMedium!.fontSize,
+                            fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
                             fontWeight:
-                                bohibaTheme.textTheme.titleLarge!.fontWeight,
-                            color: bohibaTheme.textTheme.titleMedium!.color,
+                                bohibaTheme.textTheme.labelMedium!.fontWeight,
+                            color: bohibaTheme.textTheme.titleLarge!.color,
                           ),
                         ),
-                        ReadMoreText(
-                          controller.jobObj['description'].toString(),
-                          trimLines: 10,
-                          trimMode: TrimMode.Line,
+                        Gap(10.w),
+                        Icon(EvaIcons.briefcase, size: 14.w),
+                        Text(
+                          ' ${(controller.jobObj['job_type'] ?? '').toString().toUpperCase()}',
+                          style: TextStyle(
+                            fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.labelMedium!.fontWeight,
+                            color: bohibaTheme.textTheme.titleLarge!.color,
+                          ),
                         ),
                       ],
-                    );
+                    ),
+                    // Divider(),
+                    LinearBoxWidget(
+                      header: 'Status',
+                      title: controller.jobObj['status']
+                          .toString()
+                          .toCapitalizedLabel(),
+                    ),
+                    LinearBoxWidget(
+                      header: 'Truck Number',
+                      title: controller.jobObj['regd_number']
+                          .toString()
+                          .toCapitalizedLabel(),
+                    ),
+                    LinearBoxWidget(
+                      header: 'Last Updated',
+                      title: controller.jobObj['updated_at'].toString(),
+                    ),
+                    LinearBoxWidget(
+                      header: 'Created At',
+                      title: controller.jobObj['created_at'].toString(),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.h),
+                      child: Text(
+                        'Description',
+                        style: bohibaTheme.textTheme.headlineMedium,
+                      ),
+                    ),
+                    ReadMoreText(
+                      controller.jobObj['description'].toString(),
+                      trimLines: 5,
+                      trimMode: TrimMode.Line,
+                      style: bohibaTheme.textTheme.titleMedium,
+                      moreStyle: TextStyle(color: bohibaTheme.primaryColor),
+                      lessStyle: TextStyle(color: bohibaTheme.primaryColor),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Intreseted Drivers',
+                            style: bohibaTheme.textTheme.headlineMedium,
+                          ),
+                          Text(
+                            "See All",
+                            style: TextStyle(
+                              fontSize: bohibaTheme
+                                  .textTheme.headlineMedium!.fontSize,
+                              color: bohibaTheme.primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(EvaIcons.people),
+                        Gap(10.w),
+                        Text(
+                            '${controller.arrIntDriver.length.toString()} Applicants')
+                      ],
+                    ),
+                    Column(
+                      children: List.generate(controller.arrIntDriver.length,
+                          (index) {
+                        Map intDriver = controller.arrIntDriver[index];
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtils.height10),
+                          margin: EdgeInsets.only(bottom: ScreenUtils.width5),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: bohibaTheme.dividerColor,
+                              ),
+                              Gap(10.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    intDriver['name'].toString(),
+                                    style: TextStyle(
+                                      fontSize: bohibaTheme
+                                          .textTheme.bodyMedium!.fontSize,
+                                      fontWeight: bohibaTheme
+                                          .textTheme.bodySmall!.fontWeight,
+                                      color: bohibaTheme
+                                          .textTheme.titleMedium!.color,
+                                    ),
+                                  ),
+                                  Text(
+                                    intDriver['job_status']
+                                        .toString()
+                                        .toCapitalizedLabel(),
+                                    style: TextStyle(
+                                      fontSize: bohibaTheme
+                                          .textTheme.titleMedium!.fontSize,
+                                      fontWeight: bohibaTheme
+                                          .textTheme.bodyMedium!.fontWeight,
+                                      color: bohibaTheme
+                                          .textTheme.bodyMedium!.color,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              GestureDetector(
+                                onTap: () async =>
+                                    await controller.makePhoneCall(
+                                        intDriver['mobile_number'].toString()),
+                                child: Container(
+                                  height: 28.w,
+                                  width: 28.w,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: bohibaTheme.colorScheme.onSurface
+                                        .withValues(alpha: 0.25),
+                                  ),
+                                  child: Icon(
+                                    Icons.phone_sharp,
+                                    size: 16.w,
+                                    color: bohibaTheme.colorScheme.onSurface,
+                                  ),
+                                ),
+                              ),
+                              Gap(10.w),
+                              GestureDetector(
+                                onTap: () {
+                                  GlobalService.showAppToast(
+                                      message: 'Mark as not interested');
+                                },
+                                child: Container(
+                                  height: 28.w,
+                                  width: 28.w,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: bohibaTheme.colorScheme.error
+                                        .withValues(alpha: 0.25),
+                                  ),
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 16.w,
+                                    color: bohibaTheme.colorScheme.error,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              }
             }),
           ),
         ),

@@ -45,6 +45,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
         obscureText: showPassword,
         enableInteractiveSelection: false,
         textInputAction: widget.nextActionType,
+        keyboardType: TextInputType.visiblePassword,
         decoration: InputDecoration(
           hintText: widget.hintText,
           prefixIcon: Icon(

@@ -128,10 +128,8 @@ class AllLocationModal extends StatelessWidget {
                                 child: Text(
                                     '${locObj['name']}, ${locObj['locality']}, ${locObj['street']}, ${locObj['city']}, ${locObj['district']}, ${locObj['state']}, ${locObj['pincode']}, ${locObj['country']}'),
                               ),
-                              Radio.adaptive(
-                                value: index,
+                              RadioGroup(
                                 groupValue: controller.selectedIndex.value,
-                                toggleable: true,
                                 onChanged: (v) {
                                   if (v == null) {
                                     controller.selectedIndex.value = -1;
@@ -139,6 +137,10 @@ class AllLocationModal extends StatelessWidget {
                                   }
                                   controller.selectAddress(v);
                                 },
+                                child: Radio.adaptive(
+                                  value: index,
+                                  toggleable: true,
+                                ),
                               )
                             ],
                           ),

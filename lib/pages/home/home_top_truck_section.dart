@@ -42,7 +42,7 @@ class HomeTopTruck extends GetView<HomeController> {
                         style: TextStyle(
                           fontSize:
                               bohibaTheme.textTheme.headlineMedium!.fontSize,
-                          color: BohibaColors.primaryColor,
+                          color: bohibaTheme.primaryColor,
                         ),
                       ),
                     ),

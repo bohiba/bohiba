@@ -1,5 +1,5 @@
-import 'package:bohiba/pages/widget/permission_widget.dart';
-import 'package:bohiba/services/role_permission_service.dart';
+import '/pages/widget/permission_widget.dart';
+import '/services/role_permission_service.dart';
 
 import '/theme/bohiba_theme.dart';
 

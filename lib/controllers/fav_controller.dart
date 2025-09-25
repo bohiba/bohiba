@@ -1,12 +1,13 @@
-import 'package:bohiba/model/driver_model.dart';
-import 'package:bohiba/model/trip_model.dart';
-import 'package:bohiba/model/truck_model.dart';
-import 'package:bohiba/model/user_fav_model.dart';
-import 'package:bohiba/services/fav_service.dart';
+import '/model/driver_model.dart';
+import '/model/trip_model.dart';
+import '/model/truck_model.dart';
+import '/model/user_fav_model.dart';
+import '/services/fav_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FavController extends GetxController with GetSingleTickerProviderStateMixin {
+class FavController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   RxList<UserFavouriteModel> arrFavList = <UserFavouriteModel>[].obs;
 
   late TabController marketTabController;
@@ -75,7 +76,6 @@ class FavController extends GetxController with GetSingleTickerProviderStateMixi
 
     return result;
   }
-
 
   @override
   void onClose() {

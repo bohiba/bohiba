@@ -1,4 +1,4 @@
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 class RequiredLabel extends StatelessWidget {

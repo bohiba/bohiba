@@ -1,6 +1,6 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/model/profile_model.dart';
-import 'package:bohiba/services/user_role_type.dart';
+import '/dist/app_enums.dart';
+import '/model/profile_model.dart';
+import '/services/user_role_type.dart';
 import '/controllers/master_controller.dart';
 import '/services/dio_serivce.dart';
 

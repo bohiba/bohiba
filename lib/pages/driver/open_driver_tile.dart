@@ -11,20 +11,19 @@ import 'package:gap/gap.dart';
 
 class OpenDriverTile extends StatelessWidget {
   final OpenDriverModel openDriver;
-  const OpenDriverTile({super.key, required this.openDriver});
+  final Function()? onPressConnect;
+  const OpenDriverTile(
+      {super.key, required this.openDriver, this.onPressConnect});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {},
       child: Container(
-        height: ScreenUtils.height * 0.075,
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+        margin: EdgeInsets.only(bottom: ScreenUtils.width5),
         width: ScreenUtils.width,
-        margin: EdgeInsets.only(bottom: 5.h),
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenUtils.height5,
-          horizontal: ScreenUtils.width15,
-        ),
+        height: ScreenUtils.height * 0.075,
         decoration: TileDecorative(),
         child: Row(
           children: [
@@ -33,7 +32,6 @@ class OpenDriverTile extends StatelessWidget {
               backgroundColor: bohibaTheme.dividerColor,
             ),
             Gap(10.w),
-            // Text(openDriver.name ?? ''),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -63,10 +61,19 @@ class OpenDriverTile extends StatelessWidget {
               ],
             ),
             Spacer(),
-            TextButton(
-              onPressed: () {},
-              child: Text('Connect'),
-            ),
+            GestureDetector(
+              onTap: onPressConnect,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
+                child: Text(
+                  'Connect',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                    color: bohibaTheme.textTheme.bodySmall!.color,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
