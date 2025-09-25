@@ -40,7 +40,7 @@ class MinesHorizontalCard extends GetView<MinesController> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: BohibaColors.white,
+                    backgroundColor: bohibaTheme.dividerColor,
                     backgroundImage: NetworkImage(
                         GlobalService.getAvatarUrl(minesInfo.mineName ?? 'NA')),
                   ),
@@ -64,13 +64,13 @@ class MinesHorizontalCard extends GetView<MinesController> {
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                           fontWeight:
                               bohibaTheme.textTheme.bodySmall!.fontWeight,
-                          color: bohibaTheme.textTheme.titleSmall!.color,
+                          color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                         marqueeTextStyle: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                           fontWeight:
                               bohibaTheme.textTheme.bodySmall!.fontWeight,
-                          color: bohibaTheme.textTheme.titleSmall!.color,
+                          color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                       ),
                     ],
@@ -151,7 +151,7 @@ class MinesVerticalCard extends StatelessWidget {
               padding: const EdgeInsets.all(5.0),
               child: CircleAvatar(
                 radius: 40,
-                backgroundColor: BohibaColors.white,
+                backgroundColor: bohibaTheme.dividerColor,
                 backgroundImage: NetworkImage(minesInfo.logo ??
                     GlobalService.getAvatarUrl(minesInfo.mineName!)),
               ),

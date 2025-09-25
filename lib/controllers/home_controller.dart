@@ -1,3 +1,4 @@
+import 'package:bohiba/controllers/role_controller.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '/model/driver_model.dart';
@@ -10,6 +11,7 @@ import '/services/db_service.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
+  RoleService initContorller = RoleService();
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
 

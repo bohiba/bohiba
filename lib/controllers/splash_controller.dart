@@ -1,3 +1,6 @@
+import 'package:bohiba/dist/app_enums.dart';
+import 'package:bohiba/model/profile_model.dart';
+import 'package:bohiba/services/user_role_type.dart';
 import '/controllers/master_controller.dart';
 import '/services/dio_serivce.dart';
 
@@ -11,6 +14,7 @@ class SplashController extends GetxController {
   final MasterController _master =
       Get.put<MasterController>(MasterController());
   final DioService _dio = DioService();
+
   final PrefUtils _prefUtils = PrefUtils();
 
   @override
@@ -28,15 +32,28 @@ class SplashController extends GetxController {
     Future.delayed(const Duration(seconds: 3), () async {
       if (strToken.isEmpty) {
         Get.offAllNamed(AppRoute.signIn);
-      } else {
+      } else if (strToken.isNotEmpty) {
         _dio.setToken(strToken);
-        Get.offAllNamed(AppRoute.navBar);
+        final ProfileModel? profileModel =
+            await _master.profileApi(methodType: MethodType.server);
+        if (profileModel == null) {
+          Get.offAllNamed(AppRoute.signIn);
+          return;
+        } else if (profileModel.mobileNumber == null) {
+          Get.offAllNamed(AppRoute.createUser);
+          return;
+        } else if (profileModel.verification?.pinCode == null) {
+          Get.offAllNamed(AppRoute.userAddressAuthScreen);
+          return;
+        } else if (profileModel.roleId == UserRoles.guest) {
+          Get.offAllNamed(AppRoute.roleType);
+        } else {
+          await _master.mainApi();
+          Get.offAllNamed(AppRoute.navBar);
+        }
       }
     });
-    if (strToken.isNotEmpty) {
-      _dio.setToken(strToken);
-      await _master.mainApi();
-    }
+
     await PermissionService.checkAndRequestPermissions();
   }
 }

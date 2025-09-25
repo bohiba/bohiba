@@ -34,7 +34,7 @@ class AllManagerPage extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20,
-              // backgroundImage: AssetImage(),
+              backgroundColor: bohibaTheme.dividerColor,
             ),
             Gap(ScreenUtils.height15),
             Column(

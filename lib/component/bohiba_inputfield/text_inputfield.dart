@@ -80,7 +80,6 @@ class TextInputField extends StatelessWidget {
           counterText: counterText ?? "",
           prefixIcon: prefixIcon,
           // iconColor: BohibaColors.borderColor,
-          prefixIconColor: bohibaTheme.cardColor,
         ),
       ),
     );

@@ -1,16 +1,15 @@
-import '/dist/app_enums.dart';
 import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 
 class BohibaTheme {
-  final _appTheme = PrefUtils().getAppThemeMode();
+  final _appTheme = PrefUtils.getAppThemeMode();
 
   ThemeData themeData() {
-    if (_appTheme == AppThemeMode.dark) {
+    if (_appTheme == ThemeMode.dark) {
       return darkTheme;
-    } else if (_appTheme == AppThemeMode.light) {
+    } else if (_appTheme == ThemeMode.light) {
       return lightTheme;
     } else {
       return lightTheme;
@@ -255,6 +254,13 @@ class BohibaTheme {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: BohibaColors.primaryColor,
+            iconColor: BohibaColors.primaryColor,
+            textStyle: TextStyle(
+              fontSize: 14.adaptSize,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              color: BohibaColors.black,
+            ),
           ),
         ),
         dropdownMenuTheme: DropdownMenuThemeData(),
@@ -310,17 +316,17 @@ class BohibaTheme {
         centerTitle: false,
         titleTextStyle: TextStyle(
           fontFamily: 'Poppins',
-          color: DarkColors.white,
+          color: DarkColors.secoundaryColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
           fontSize: 24.adaptSize,
         ),
         iconTheme: IconThemeData(
-          color: DarkColors.primaryColor,
+          color: DarkColors.secoundaryColor,
         ),
       ),
       iconTheme: IconThemeData(
-        color: DarkColors.primaryColor,
+        color: DarkColors.secoundaryColor,
       ),
       listTileTheme: ListTileThemeData(
         titleTextStyle: TextStyle(
@@ -342,7 +348,7 @@ class BohibaTheme {
           fontWeight: FontWeight.w500,
           fontSize: 12.adaptSize,
         ),
-        iconColor: DarkColors.primaryColor,
+        iconColor: DarkColors.white,
         tileColor: DarkColors.tileColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -391,6 +397,27 @@ class BohibaTheme {
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             color: DarkColors.greyColor,
+          ),
+          prefixIconColor: DarkColors.secoundaryColor,
+          suffixIconColor: DarkColors.primaryColor,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+          outlineBorder: BorderSide(color: DarkColors.secoundaryColor),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.secoundaryColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.secoundaryColor),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.warningColor),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.secoundaryColor),
           ),
         ),
       ),
@@ -512,15 +539,27 @@ class BohibaTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: DarkColors.primaryVariantColor,
+          foregroundColor: DarkColors.primaryColor,
+          iconColor: DarkColors.primaryColor,
+          textStyle: TextStyle(
+            fontSize: 14.adaptSize,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            color: DarkColors.primaryColor,
+          ),
         ),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
-        linearTrackColor: DarkColors.borderColor,
-        color: DarkColors.primaryVariantColor,
+        linearTrackColor: DarkColors.white,
+        color: DarkColors.white,
       ),
       radioTheme: RadioThemeData(
-        fillColor: WidgetStatePropertyAll(DarkColors.primaryVariantColor),
+        fillColor: WidgetStateColor.resolveWith((state) {
+          if (state.contains(WidgetState.selected)) {
+            return DarkColors.primaryColor;
+          }
+          return DarkColors.white;
+        }),
         overlayColor:
             WidgetStatePropertyAll(DarkColors.white.withValues(alpha: 0.1)),
       ),
@@ -542,7 +581,7 @@ TextTheme lightTextTheme() {
       fontFamily: 'Poppins',
       fontSize: 32.adaptSize,
       fontWeight: FontWeight.w700,
-      color: BohibaColors.black,
+      color: BohibaColors.white,
     ),
     displayMedium: TextStyle(
       fontFamily: 'Poppins',

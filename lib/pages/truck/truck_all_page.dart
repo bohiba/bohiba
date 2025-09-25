@@ -1,3 +1,6 @@
+import 'package:bohiba/pages/widget/permission_widget.dart';
+import 'package:bohiba/services/role_permission_service.dart';
+
 import '/theme/bohiba_theme.dart';
 
 import '/dist/app_enums.dart';
@@ -20,17 +23,20 @@ class AllTruckPage extends GetView<TruckAllController> {
       appBar: TitleAppbar(
         title: "Trucks",
         actions: [
-          AppBarIconBox(
-            icon: const Icon(EvaIcons.plus),
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(AppRoute.addTruck)
-                  .then((value) async {
-                if (value != null) {
-                  await controller.getTruckList();
-                }
-              });
-            },
+          PermissionWidget(
+            permission: RolePermissionService.addTrucks,
+            child: AppBarIconBox(
+              icon: const Icon(EvaIcons.plus),
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(AppRoute.addTruck)
+                    .then((value) async {
+                  if (value != null) {
+                    await controller.getTruckList();
+                  }
+                });
+              },
+            ),
           )
         ],
       ),

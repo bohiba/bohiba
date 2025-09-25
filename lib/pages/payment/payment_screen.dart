@@ -1,3 +1,4 @@
+import 'package:bohiba/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_text/payment_text.dart';
@@ -22,7 +23,7 @@ class PaymentScreen extends StatelessWidget {
               alignment: Alignment.center,
               child: CircleAvatar(
                 radius: 45,
-                backgroundColor: BohibaColors.primaryVariantColor,
+                backgroundColor: bohibaTheme.dividerColor,
                 child: Icon(
                   Remix.time_line,
                   size: 32,

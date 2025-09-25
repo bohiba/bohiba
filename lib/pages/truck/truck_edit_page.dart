@@ -4,7 +4,7 @@ import 'package:remixicon/remixicon.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '/component/bohiba_buttons/primary_button.dart';
-import '../../component/bohiba_dropdown/app_dropdown_button.dart';
+import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/services/global_service.dart';
 import '/controllers/truck_edit_controller.dart';
 import '/dist/component_exports.dart';

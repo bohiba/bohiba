@@ -1,8 +1,10 @@
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/controllers/setting_controller.dart';
-import 'package:bohiba/pages/widget/linear_box_widget.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
+import '/component/screen_utils.dart';
+import '/controllers/setting_controller.dart';
+import '/pages/widget/linear_box_widget.dart';
+
+import '/services/user_role_type.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -99,7 +101,38 @@ class SettingPage extends GetView<SettingController> {
                 ),
               ),
               Gap(ScreenUtils.height30),
-              Text("Account", style: bohibaTheme.textTheme.headlineMedium),
+              Text(
+                "Account",
+                style: bohibaTheme.textTheme.headlineMedium,
+              ),
+              LinearBoxWidget(
+                onClick: null,
+                header: 'Switch Profile',
+                widget: DropdownButtonHideUnderline(
+                  child: DropdownButton<int>(
+                    value: controller.roleId.value,
+                    isDense: true,
+                    borderRadius: BorderRadius.circular(8.0),
+                    items: const [
+                      DropdownMenuItem(
+                        value: UserRoles.driver,
+                        child: Text("Driver"),
+                      ),
+                      DropdownMenuItem(
+                        value: UserRoles.truckOwner,
+                        child: Text("Truck Owner"),
+                      ),
+                    ],
+                    onChanged: (userRole) async {
+                      if (userRole != null &&
+                          controller.roleId.value != userRole) {
+                        controller.roleId.value = userRole;
+                        await controller.switchProfile();
+                      }
+                    },
+                  ),
+                ),
+              ),
               LinearBoxWidget(
                 onClick: () {},
                 header: 'Edit profile',

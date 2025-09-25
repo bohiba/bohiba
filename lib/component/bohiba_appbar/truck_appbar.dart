@@ -83,8 +83,8 @@ class TruckAppbar extends GetView<TruckController>
             truck: truck,
             // icon: const Icon(EvaIcons.plus),
             allowedActions: [
-              ActionType.add,
               ActionType.edit,
+              ActionType.add,
               ActionType.other,
               ActionType.delete,
             ],

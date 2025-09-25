@@ -43,7 +43,7 @@ class TruckService {
           "${truckModel.id}",
           truckModel,
         );
-        ProfileModel? profile = await ProfileService.retrieveProfile();
+        ProfileModel? profile = await ProfileService.getProfile();
         if (profile != null) {
           profile.trucks = profile.trucks == null ? 1 : (profile.trucks! + 1);
         }
@@ -90,7 +90,7 @@ class TruckService {
           int insertSucess =
               await dBService.putAllData<TruckModel>(tblTrucks, truckMap);
           GlobalService.printHandler('Truck insert $insertSucess');
-          ProfileModel? profile = await ProfileService.retrieveProfile();
+          ProfileModel? profile = await ProfileService.getProfile();
           if (profile != null && profile.drivers != null) {
             profile.drivers = arrTruckModel.length;
           }
@@ -259,7 +259,7 @@ class TruckService {
         int dbDeleted =
             await dBService.deleteData<TruckModel>(tblTrucks, '$truckId');
         if (dbDeleted <= 0) return false;
-        ProfileModel? profile = await ProfileService.retrieveProfile();
+        ProfileModel? profile = await ProfileService.getProfile();
         if (profile != null && profile.trucks != null && profile.trucks! > 0) {
           profile.trucks = profile.trucks! - 1;
         }

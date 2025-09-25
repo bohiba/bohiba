@@ -116,7 +116,7 @@ class SecurityPage extends GetView<SecurityController> {
                                     bohibaTheme.textTheme.bodyMedium!.fontSize,
                                 fontWeight:
                                     bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                color: bohibaTheme.textTheme.titleMedium!.color,
+                                color: bohibaTheme.colorScheme.error,
                               ),
                             ),
                             Padding(

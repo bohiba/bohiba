@@ -1,3 +1,6 @@
+import '/pages/widget/permission_widget.dart';
+import '/services/role_permission_service.dart';
+
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:get/get.dart';
@@ -70,15 +73,18 @@ class AllTripPage extends GetView<AllTripController> {
             },
             icon: const Icon(EvaIcons.searchOutline),
           ),
-          AppBarIconBox(
-            icon: const Icon(EvaIcons.plus),
-            onTap: () {
-              navigator.pushNamed(AppRoute.addTrip).then((value) async {
-                if (value != null) {
-                  await controller.getTripList();
-                }
-              });
-            },
+          PermissionWidget(
+            permission: RolePermissionService.addTrips,
+            child: AppBarIconBox(
+              icon: const Icon(EvaIcons.plus),
+              onTap: () {
+                navigator.pushNamed(AppRoute.addTrip).then((value) async {
+                  if (value != null) {
+                    await controller.getTripList();
+                  }
+                });
+              },
+            ),
           ),
         ],
       ),

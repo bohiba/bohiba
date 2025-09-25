@@ -37,6 +37,7 @@ class MinesPage extends GetView<MinesController> {
                     children: [
                       CircleAvatar(
                         radius: ScreenUtils.width25,
+                        backgroundColor: bohibaTheme.dividerColor,
                         backgroundImage: NetworkImage(
                           GlobalService.getAvatarUrl(
                               controller.minesModel.value.mineName ?? 'UN'),

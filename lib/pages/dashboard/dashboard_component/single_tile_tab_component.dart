@@ -23,7 +23,7 @@ class SingleTileTabComponent extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         leading: Icon(icon),
-        iconColor: iconColor ?? bohibaTheme.primaryColor,
+        // iconColor: iconColor ?? bohibaTheme.primaryColor,
         title: Text(title),
         titleTextStyle: TextStyle(
           fontFamily: bohibaTheme.textTheme.titleLarge!.fontFamily,

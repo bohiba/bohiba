@@ -1,3 +1,6 @@
+import 'package:bohiba/controllers/role_controller.dart';
+import 'package:bohiba/services/role_permission_service.dart';
+
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:remixicon/remixicon.dart';
@@ -35,20 +38,10 @@ class HomeAppBar extends GetView<HomeController>
           // Add Vehicle
           AppBarIconBox(
             onTapDown: (TapDownDetails tapDownDetails) {
-              showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(
-                  tapDownDetails.globalPosition.dx,
-                  tapDownDetails.globalPosition.dy + 25,
-                  ScreenUtils.width50,
-                  0,
-                ),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
-                items: [
+              final items = <PopupMenuEntry<ServiceType>>[];
+
+              if (RoleService.hasPermission(RolePermissionService.viewTrucks)) {
+                items.add(
                   PopupMenuItem(
                     value: ServiceType.truck,
                     child: Text(
@@ -61,19 +54,11 @@ class HomeAppBar extends GetView<HomeController>
                       ),
                     ),
                   ),
-                  /*PopupMenuItem(
-                    value: ServiceType.manager,
-                    textStyle: TextStyle(),
-                    child: Text(
-                      'Manager',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
-                      ),
-                    ),
-                  ),*/
+                );
+              }
+
+              if (RoleService.hasPermission(RolePermissionService.viewDriver)) {
+                items.add(
                   PopupMenuItem(
                     value: ServiceType.driver,
                     textStyle: TextStyle(),
@@ -87,6 +72,10 @@ class HomeAppBar extends GetView<HomeController>
                       ),
                     ),
                   ),
+                );
+              }
+              if (RoleService.hasPermission(RolePermissionService.viewTrips)) {
+                items.add(
                   PopupMenuItem(
                     value: ServiceType.trip,
                     child: Text(
@@ -99,7 +88,22 @@ class HomeAppBar extends GetView<HomeController>
                       ),
                     ),
                   ),
-                ],
+                );
+              }
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                  tapDownDetails.globalPosition.dx,
+                  tapDownDetails.globalPosition.dy + 25,
+                  ScreenUtils.width50,
+                  0,
+                ),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                items: items,
               ).then((value) async {
                 if (!context.mounted) return value;
                 switch (value) {

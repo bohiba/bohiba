@@ -15,20 +15,20 @@ class LocationController extends GetxController {
   RxList<Map<String, dynamic>> arrLocation = <Map<String, dynamic>>[].obs;
 
   RxInt selectedIndex = (-1).obs;
+  RxString userTitleMsg = ''.obs;
+  RxString userSubTitle = ''.obs;
 
-  Future<void> init() async {
+  @override
+  onInit() {
+    super.onInit();
     Future.delayed(Duration.zero, () async {
-      latLang.value = await getCurrentAddress();
-      arrLocation.value = (latLang['address'] as List)
-          .map((toElement) => Map<String, dynamic>.from(toElement))
-          .toList();
+      await getCurrentAddress();
     });
   }
 
-  Future<Map<String, dynamic>> getCurrentAddress() async {
+  Future<Map<String, dynamic>?> getCurrentAddress() async {
     if (!await DeviceInfoService.hasInternet()) {
-      
-      return {};
+      return null;
     }
     bool serviceEnabled;
     LocationPermission permission;
@@ -57,7 +57,7 @@ class LocationController extends GetxController {
       position.longitude,
     );
 
-    List arrLocation = [];
+    List locList = [];
     String? pinResObj;
     for (Placemark placemark in arrPlacemarks) {
       if (placemark.postalCode == null || placemark.postalCode!.isEmpty) {
@@ -65,6 +65,13 @@ class LocationController extends GetxController {
         if (pinResObj == null) {
           var response = await Dio()
               .get('${ApiEndPoint.apiPostalCode}/${placemark.postalCode}');
+          if (response.data[0]['PostOffice'] == null) {
+            GlobalService.dismissProgress();
+            userTitleMsg.value = 'No Location Found';
+            userSubTitle.value =
+                'Failed while fetching location. Refresh to try again.';
+            return null;
+          }
           pinResObj = response.data[0]['PostOffice'][0]['District'];
         }
         Map<String, dynamic> placemarkObj = {
@@ -77,12 +84,12 @@ class LocationController extends GetxController {
           'pincode': placemark.postalCode ?? '',
           'country': placemark.country ?? '',
         };
-        arrLocation.add(placemarkObj);
+        locList.add(placemarkObj);
       }
     }
 
     Map<String, dynamic> locationObj = {
-      'address': arrLocation,
+      'address': locList,
       'lat_lang': {
         "latitude": position.latitude,
         "longitude": position.longitude,
@@ -94,6 +101,10 @@ class LocationController extends GetxController {
     }
 
     // final place = arrPlacemarks.first;
+    latLang.value = locationObj;
+    arrLocation.value = (latLang['address'] as List)
+        .map((toElement) => Map<String, dynamic>.from(toElement))
+        .toList();
 
     return locationObj;
   }

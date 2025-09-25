@@ -16,13 +16,12 @@ class CreateUserPage extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    String email = '';
-    String token = '';
+    String? email;
     var route = Get.arguments;
     if (route == null) {
     } else {
       final Map<String, dynamic> argsObj = route as Map<String, dynamic>;
-      email = argsObj['email'] ?? "";
+      email = argsObj['email'];
     }
     return Scaffold(
       appBar: null,
@@ -75,7 +74,6 @@ class CreateUserPage extends GetView<AuthController> {
                           keyboardType: TextInputType.name,
                           prefixIcon: Icon(
                             Icons.person_rounded,
-                            color: BohibaColors.borderColor,
                           ),
                         ),
                         TextInputField(
@@ -111,22 +109,10 @@ class CreateUserPage extends GetView<AuthController> {
                   PrimaryButton(
                     label: 'Submit',
                     onPressed: () async {
-                      if (controller.nameController.text.isEmpty) return;
-                      // if (controller.emailController.text.isEmpty) return;
-                      // Navigator.of(context).popAndPushNamed(
-                      //   AppRoute.userAddressAuthScreen,
-                      // );
-
-                      await controller.registerUser(
-                        txtName:
-                            controller.nameController.text.trim().toUpperCase(),
-                        txtEmail: email,
-                        txtMobile: controller.mobileController.text.trim(),
-                        txtDob: controller.dateController.text.trim(),
-                        txtPwd: controller.vPwdController.text,
-                        txtCnfrmPwd: controller.vCnfrmController.text,
-                        token: token,
-                      );
+                      if (email != null) {
+                        await controller.registerUser(txtEmail: email);
+                        return;
+                      }
                     },
                   )
                 ],

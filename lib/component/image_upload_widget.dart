@@ -1,11 +1,10 @@
 import 'dart:io';
 
+import '/dist/component_exports.dart';
 import '/controllers/image_upload_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_colors.dart';
-import '/component/screen_utils.dart';
 import '/dist/app_enums.dart';
 import '/pages/widget/app_divider.dart';
 import '/theme/bohiba_theme.dart';
@@ -33,17 +32,14 @@ class InitialImageUploadWidget<T extends ImageUploadController>
           child: AspectRatio(
             aspectRatio: 16.h / 9.w,
             child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.r),
-                color: BohibaColors.tileColor,
-              ),
+              decoration: TileDecorative(),
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
                     radius: 25,
-                    backgroundColor: BohibaColors.white,
+                    backgroundColor: bohibaTheme.dividerColor,
                     child: const Icon(EvaIcons.cloudUploadOutline),
                   ),
                   Gap(ScreenUtils.height10),

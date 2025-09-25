@@ -1,6 +1,6 @@
-import '../../../../dist/component_exports.dart';
-import '/pages/vehicle/top_vehicle_tile.dart';
-import 'package:bohiba/theme/light_theme.dart';
+import 'package:bohiba/theme/bohiba_theme.dart';
+
+import '/dist/component_exports.dart';
 import 'package:flutter/material.dart';
 
 class HomeTopTipper extends StatelessWidget {
@@ -12,7 +12,7 @@ class HomeTopTipper extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: BohibaResponsiveScreen.width15,
+            horizontal: ScreenUtils.width15,
           ),
           child: Row(
             children: [
@@ -22,18 +22,17 @@ class HomeTopTipper extends StatelessWidget {
               ),
               const Spacer(),
               InkWell(
-                borderRadius:
-                    BorderRadius.circular(BohibaResponsiveScreen.width5),
+                borderRadius: BorderRadius.circular(ScreenUtils.width5),
                 onTap: () {},
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: BohibaResponsiveScreen.height8,
-                      horizontal: BohibaResponsiveScreen.width10),
+                      vertical: ScreenUtils.height8,
+                      horizontal: ScreenUtils.width10),
                   child: Text(
                     'See All',
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                      color: bohibaColors.primaryColor,
+                      color: bohibaTheme.primaryColor,
                     ),
                   ),
                 ),
@@ -43,23 +42,23 @@ class HomeTopTipper extends StatelessWidget {
         ),
 
         // Top Tipper's List
-        Padding(
-          padding: EdgeInsets.only(
-            left: BohibaResponsiveScreen.width15,
-            right: BohibaResponsiveScreen.width15,
-            bottom: BohibaResponsiveScreen.height25,
-          ),
-          child: Container(
-            alignment: Alignment.center,
-            child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return TopVehicleTile();
-                }),
-          ),
-        )
+        // Padding(
+        //   padding: EdgeInsets.only(
+        //     left: ScreenUtils.width15,
+        //     right: ScreenUtils.width15,
+        //     bottom: ScreenUtils.height25,
+        //   ),
+        //   child: Container(
+        //     alignment: Alignment.center,
+        //     child: ListView.builder(
+        //         physics: const NeverScrollableScrollPhysics(),
+        //         shrinkWrap: true,
+        //         itemCount: 3,
+        //         itemBuilder: (context, index) {
+        //           return TopVehicleTile();
+        //         }),
+        //   ),
+        // )
       ],
     );
   }

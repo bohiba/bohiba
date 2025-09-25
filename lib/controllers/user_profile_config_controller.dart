@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import '/services/profile_service.dart';
 import '/controllers/image_upload_controller.dart';
-import '/services/api_end_point.dart';
-
 import '/dist/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/db_service.dart';
@@ -11,6 +10,7 @@ import '/services/device_info_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/global_service.dart';
 import '/services/pref_utils.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,19 +48,33 @@ class UserProfileConfigController extends ImageUploadController {
     {
       "role_id": 6,
       "label": "Truck Owner",
+      "subTitle":
+          "Truck Owner will able to manage truck, driver, manager, trip with powerful analytics",
     },
     {
       "role_id": 8,
       "label": "Driver",
+      "subTitle":
+          "Driver will able to manage their profile with find jobs opportunity.",
     },
   ];
-  /*
-   ========================================
-   ||               SET ROLE             ||
-   ========================================
-   */
 
-  Future<void> setRole() async {}
+  Future<void> verifyDocument() async {
+    
+  }
+
+  Future<void> setRole() async {
+    Map<String, dynamic> bodyObj = {
+      'role_id': roleObj['role_id'],
+    };
+    int updateRole = await ProfileService.setRole(bodyMap: bodyObj);
+    if (updateRole > 0) {
+      Get.toNamed(
+        AppRoute.userAuthScreen,
+        arguments: {"role_id": roleObj['role_id']},
+      );
+    }
+  }
 
   Map<String, dynamic> selectAddress(int index) {
     selectedIndex.value = index;
@@ -151,42 +165,25 @@ class UserProfileConfigController extends ImageUploadController {
    ||           ADDRESS UPLOAD           ||
    ========================================
    */
-  Future<void> addAddress({
-    // required String token,
-    required String txtHouse,
-    required String txtLocality,
-    required String txtStreet,
-    required String txtCity,
-    required String txtPincode,
-    required String txtDist,
-    required String txtState,
-    required String txtCountry,
-  }) async {
+  Future<void> addAddress() async {
     GlobalService.closeKeyboard();
     if (!await DeviceInfoService.hasInternet()) {
       return;
     }
     Map<String, dynamic> bodyObj = {
-      'house_no': txtHouse,
-      'locality': txtLocality,
-      'city': txtCity,
-      'street': txtStreet,
-      'district': txtDist,
-      'state': txtState,
-      'pin_code': txtPincode,
-      'country': txtCountry
+      'house_no': aHouseCtrl.text.trim(),
+      'locality': aLocalityCtrl.text.trim(),
+      'city': aCityCtrl.text.trim(),
+      'street': aStreetCtrl.text.trim(),
+      'district': aDistrictCtrl.text.trim(),
+      'state': aStateCtrl.text.trim(),
+      'pin_code': aPincodeCtrl.text.trim(),
+      'country': aCountryCtrl.text.trim(),
     };
-    GlobalService.showProgress();
-    ApiResponse response =
-        await dioService.post(ApiEndPoint.apiAddAddress, body: bodyObj);
-    GlobalService.dismissProgress();
-    switch (response.statusCode) {
-      case 201:
-        Get.offAndToNamed(AppRoute.imageAuth);
-        break;
-      case 401:
-        break;
-      default:
+
+    int verifyAddress = await ProfileService.addAddress(bodyMap: bodyObj);
+    if (verifyAddress > 0) {
+      Get.offAndToNamed(AppRoute.imageAuth);
     }
   }
 }

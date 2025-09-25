@@ -12,7 +12,7 @@ class DeviceInfoService {
     bool internet = (connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.wifi));
     if (!internet) {
-      GlobalService.showAppToast(message: 'No Internet.');
+      GlobalService.showAppToast(message: 'No Internet');
     }
     return internet;
   }

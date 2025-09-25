@@ -71,7 +71,7 @@ class RatingAllPage extends GetView<DriverController> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        CircleAvatar(radius: 15.w),
+                        CircleAvatar(radius: 15.w, backgroundColor: bohibaTheme.dividerColor,),
                         Gap(8.w),
                         SizedBox(
                           width: ScreenUtils.width * 0.45.w,

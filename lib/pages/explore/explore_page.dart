@@ -1,8 +1,5 @@
-import '/extensions/bohiba_extension.dart';
+import '/pages/driver/open_driver_tile.dart';
 import '/model/open_driver_model.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-
 import '/controllers/open_driver_controller.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +15,6 @@ class ExplorePage extends GetView<OpenDriverController> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData bohibaTheme = Theme.of(context);
     return Scaffold(
       appBar: ExploreAppBar(
         title: 'Explore',
@@ -44,57 +40,7 @@ class ExplorePage extends GetView<OpenDriverController> {
           itemCount: controller.arrOpenDriver.length,
           itemBuilder: (context, index) {
             OpenDriverModel openDriver = controller.arrOpenDriver[index];
-            return Container(
-              height: ScreenUtils.height * 0.075,
-              width: ScreenUtils.width,
-              margin: EdgeInsets.only(bottom: 5.h),
-              padding: EdgeInsets.symmetric(
-                vertical: ScreenUtils.height5,
-                horizontal: ScreenUtils.width15,
-              ),
-              decoration: TileDecorative(),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: BohibaColors.greyColor,
-                  ),
-                  Gap(10.w),
-                  // Text(openDriver.name ?? ''),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      BohibaMarqueeText(
-                        width: ScreenUtils.width * 0.5,
-                        text: openDriver.name ?? '',
-                        overflowText: openDriver.name ?? '',
-                        style: bohibaTheme.textTheme.bodyMedium,
-                        marqueeTextStyle: bohibaTheme.textTheme.bodyMedium,
-                      ),
-                      BohibaMarqueeText(
-                        width: ScreenUtils.width * 0.3,
-                        text: openDriver.jobStatus!.toCapitalizedLabel(),
-                        overflowText:
-                            openDriver.jobStatus!.toCapitalizedLabel(),
-                        style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodySmall!.fontWeight,
-                          color: bohibaTheme.textTheme.titleLarge!.color,
-                        ),
-                        marqueeTextStyle: TextStyle(
-                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodySmall!.fontWeight,
-                          color: bohibaTheme.textTheme.titleLarge!.color,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
+            return OpenDriverTile(openDriver: openDriver);
           },
         );
       }),

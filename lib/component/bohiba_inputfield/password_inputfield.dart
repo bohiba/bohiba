@@ -49,7 +49,6 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
           hintText: widget.hintText,
           prefixIcon: Icon(
             EvaIcons.lock,
-            color: BohibaColors.borderColor,
           ),
           suffixIcon: GestureDetector(
             onTap: () {

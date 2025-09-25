@@ -104,10 +104,12 @@ class SetImagePage extends GetView<UserProfileConfigController> {
                       ],
                     ),
                     Container(
-                      height: ScreenUtils.height * 0.35,
                       width: double.maxFinite,
                       margin:
                           EdgeInsets.symmetric(vertical: ScreenUtils.height30),
+                      constraints: BoxConstraints(
+                        minHeight: ScreenUtils.height * 0.35,
+                      ),
                       decoration: ShapeDecoration(
                         shape: DashedBorder(
                           radius: 12.0,

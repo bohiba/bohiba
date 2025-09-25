@@ -34,7 +34,7 @@ class CompanyTile extends StatelessWidget {
             // const StackCompanyAvatar(),
             CircleAvatar(
               radius: 25,
-              backgroundColor: BohibaColors.greyColor,
+              backgroundColor: bohibaTheme.dividerColor,
               // backgroundImage: NetworkImage(
               //   GlobalService.getAvatarUrl(minesInfo['mine_name']),
               // ),

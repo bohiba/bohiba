@@ -1,3 +1,4 @@
+import '/pages/analytic/analytic_page.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import '/component/screen_utils.dart';
@@ -33,7 +34,10 @@ class _HomeAccountSectionState extends State<HomeAccountSection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 PrimaryTextIconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    navigate.push(MaterialPageRoute(
+                        builder: (context) => AnalyticPage()));
+                  },
                   label: 'Analytic',
                   widget: const Icon(
                     EvaIcons.pieChart,

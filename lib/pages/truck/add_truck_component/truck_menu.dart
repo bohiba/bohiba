@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:bohiba/controllers/role_controller.dart';
+import 'package:bohiba/services/role_permission_service.dart';
+
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
@@ -42,7 +45,8 @@ class TruckMenu extends GetView<TruckAllController> {
             ),
           );
         }
-        if (allowedActions.contains(ActionType.edit)) {
+        if (allowedActions.contains(ActionType.edit) &&
+            RoleService.hasPermission(RolePermissionService.editTrucks)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.edit,
@@ -50,7 +54,8 @@ class TruckMenu extends GetView<TruckAllController> {
             ),
           );
         }
-        if (allowedActions.contains(ActionType.add)) {
+        if (allowedActions.contains(ActionType.add) &&
+            RoleService.hasPermission(RolePermissionService.viewTrips)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.add,
@@ -59,7 +64,8 @@ class TruckMenu extends GetView<TruckAllController> {
           );
         }
 
-        if (allowedActions.contains(ActionType.other)) {
+        if (allowedActions.contains(ActionType.other) &&
+            RoleService.hasPermission(RolePermissionService.viewMaintainance)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.other,
@@ -68,7 +74,8 @@ class TruckMenu extends GetView<TruckAllController> {
           );
         }
 
-        if (allowedActions.contains(ActionType.delete)) {
+        if (allowedActions.contains(ActionType.delete) &&
+            RoleService.hasPermission(RolePermissionService.deleteTrucks)) {
           menuItems.add(PopupMenuItem(
             value: ActionType.delete,
             child: Text(

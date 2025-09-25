@@ -1,6 +1,9 @@
+import 'package:bohiba/pages/widget/permission_widget.dart';
+import 'package:bohiba/services/role_permission_service.dart';
+
 import '/component/screen_utils.dart';
 import '/controllers/dashboard_controller.dart';
-import '../../../../services/global_service.dart';
+import '/services/global_service.dart';
 import '/extensions/bohiba_extension.dart';
 import '/pages/user/user_profile/edit_user_profile_screen.dart';
 import '/pages/widget/linear_box_widget.dart';
@@ -80,13 +83,16 @@ class UserProfilePage extends GetView<DashboardController> {
                     title: controller.profileModel.value?.trucks.toString(),
                     showArrow: true,
                   ),
-                  LinearBoxWidget(
-                    onClick: () {
-                      navigator.pushNamed(AppRoute.allDriver);
-                    },
-                    header: 'Total Driver',
-                    title: controller.profileModel.value?.drivers.toString(),
-                    showArrow: true,
+                  PermissionWidget(
+                    permission: RolePermissionService.viewDriver,
+                    child: LinearBoxWidget(
+                      onClick: () {
+                        navigator.pushNamed(AppRoute.allDriver);
+                      },
+                      header: 'Total Driver',
+                      title: controller.profileModel.value?.drivers.toString(),
+                      showArrow: true,
+                    ),
                   ),
                   Gap(ScreenUtils.height20),
                   Text(
@@ -109,28 +115,23 @@ class UserProfilePage extends GetView<DashboardController> {
                   LinearBoxWidget(
                     header: 'Aadhar Number',
                     title: controller
-                            .profileModel.value?.verification?.aadhaarNumber ??
-                        'NA',
+                        .profileModel.value?.verification?.aadhaarNumber,
                   ),
                   LinearBoxWidget(
                     header: 'Pan Number',
-                    title: controller
-                            .profileModel.value?.verification?.panNumber ??
-                        'NA',
+                    title:
+                        controller.profileModel.value?.verification?.panNumber,
                   ),
                   LinearBoxWidget(
                     header: 'DL Number',
                     title:
-                        controller.profileModel.value?.verification?.dlNumber ??
-                            'NA',
+                        controller.profileModel.value?.verification?.dlNumber,
                   ),
                   LinearBoxWidget(
-                    header: 'Verification Status',
-                    title: controller.profileModel.value?.verification
-                            ?.verificationStatus!
-                            .toUpperCase() ??
-                        'NA',
-                  ),
+                      header: 'Verification Status',
+                      title: controller
+                          .profileModel.value?.verification?.verificationStatus!
+                          .toUpperCase()),
                 ],
               ),
             );

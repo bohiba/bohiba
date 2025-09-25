@@ -52,7 +52,7 @@ class TruckAllController extends GetxController {
     GlobalService.dismissProgress();
     switch (serviceResponse.statusCode) {
       case 200:
-        await masterController.profileApi();
+        await masterController.profileApi(methodType: MethodType.local);
         int dBSuccess =
             await dBService.deleteData<TruckModel>(tblTrucks, '$truckId');
         if (dBSuccess > 0) {

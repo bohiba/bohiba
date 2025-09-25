@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:bohiba/pages/widget/role_widget.dart';
+
 import '/pages/truck/add_truck_component/truck_menu.dart';
 import '/dist/app_enums.dart';
 import '/dist/component_exports.dart';
@@ -63,12 +65,28 @@ class TruckTile extends GetView<TruckAllController> {
                         maxLines: 1,
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
-                      Text(
-                        truckInfo.driver?.name ?? 'Not Assigned',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                          color: bohibaTheme.textTheme.titleLarge!.color,
+                      RoleWidget(
+                        truckOwnerWidget: Text(
+                          truckInfo.driver?.name ?? 'Not Assigned',
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize:
+                                bohibaTheme.textTheme.titleMedium!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            color: bohibaTheme.textTheme.titleMedium!.color,
+                          ),
+                        ),
+                        driverWidget: Text(
+                          truckInfo.owner?.name ?? 'Not Assigned',
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize:
+                                bohibaTheme.textTheme.titleMedium!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            color: bohibaTheme.textTheme.titleMedium!.color,
+                          ),
                         ),
                       ),
                     ],

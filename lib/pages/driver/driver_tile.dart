@@ -43,7 +43,7 @@ class DriverTile extends GetView<DriverController> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: BohibaColors.white,
+                    backgroundColor: bohibaTheme.dividerColor,
                   ),
                   Gap(ScreenUtils.height15),
                   Column(
@@ -59,8 +59,10 @@ class DriverTile extends GetView<DriverController> {
                         driver.licenseDetail?.licenseNumber ?? 'NA',
                         maxLines: 1,
                         style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                          color: bohibaTheme.textTheme.titleLarge!.color,
+                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                       ),
                     ],

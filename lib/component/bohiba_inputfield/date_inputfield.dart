@@ -1,4 +1,3 @@
-import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -29,7 +28,7 @@ class _DateInputFieldState extends State<DateInputField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width ?? ScreenUtils.width * 0.6,
+      width: widget.width ?? ScreenUtils.width * 0.95,
       height: widget.height ?? 47,
       margin: EdgeInsets.only(
         bottom: ScreenUtils.height10,
@@ -47,10 +46,10 @@ class _DateInputFieldState extends State<DateInputField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: bohibaTheme.inputDecorationTheme.hintStyle,
-          fillColor: BohibaColors.primaryColor,
+          // fillColor: BohibaColors.primaryColor,
           prefixIcon: Icon(
             EvaIcons.calendarOutline,
-            color: BohibaColors.borderColor,
+            // color: BohibaColors.borderColor,
           ),
         ),
       ),

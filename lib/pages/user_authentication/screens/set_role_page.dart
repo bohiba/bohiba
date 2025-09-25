@@ -1,11 +1,9 @@
+import 'package:gap/gap.dart';
+import '/pages/widget/icon_text_tile.dart';
 import '/services/global_service.dart';
-
 import '/controllers/user_profile_config_controller.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '/component/bohiba_buttons/primary_button.dart';
-import '/routes/app_route.dart';
 import '/dist/component_exports.dart';
 import 'package:flutter/material.dart';
 import '/theme/bohiba_theme.dart';
@@ -47,21 +45,26 @@ class _SetRolePageState extends State<SetRolePage> {
                   color: bohibaTheme.textTheme.titleSmall!.color,
                 ),
               ),
-              SizedBox(
-                height: ScreenUtils.height * 0.165,
-                width: ScreenUtils.width,
-                // color: Colors.amberAccent,
+              Gap(ScreenUtils.height10),
+              Expanded(
                 child: ListView.builder(
                   itemCount: controller.userRoleList.length,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 10.0.h),
-                      child: RadioListTile.adaptive(
-                        title: Text(
-                            controller.userRoleList[index]['label'].toString()),
+                    return IconTextTile(
+                      onTap: () {
+                        controller.roleObj = controller.selectAddress(index);
+                        GlobalService.printHandler('${controller.roleObj}');
+                        setState(() {});
+                      },
+                      text: controller.userRoleList[index]['label'].toString(),
+                      subtitle:
+                          controller.userRoleList[index]['subTitle'].toString(),
+                      widget: Radio(
                         value: index,
                         groupValue: controller.selectedIndex.value,
-                        toggleable: true,
                         onChanged: (v) {
                           if (v == null) {
                           } else {
@@ -82,15 +85,10 @@ class _SetRolePageState extends State<SetRolePage> {
                 child: PrimaryButton(
                   onPressed: controller.roleObj.isEmpty
                       ? null
-                      : () {
-                          Navigator.of(context).pushNamed(
-                            AppRoute.userAuthScreen,
-                            arguments: {
-                              "role_id": controller.roleObj['role_id'],
-                            },
-                          );
+                      : () async {
+                          await controller.setRole();
                         },
-                  label: "Next",
+                  label: "Set Role",
                 ),
               )
             ],
