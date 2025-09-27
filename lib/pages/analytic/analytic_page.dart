@@ -1,3 +1,6 @@
+import '/controllers/analytic_conroller.dart';
+import 'package:get/get.dart';
+
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -5,209 +8,243 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-class AnalyticPage extends StatelessWidget {
+class AnalyticPage extends GetView<AnalyticConroller> {
   const AnalyticPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TitleAppbar(title: 'Analytic'),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Scrollable Content
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  top: ScreenUtils.height20,
-                  left: ScreenUtils.width15,
-                  right: ScreenUtils.width15,
-                  bottom: 70,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    sectionTitle("Trip Analytics"),
-                    Wrap(
-                      spacing: 5.w,
-                      runSpacing: 5.h,
-                      children: [
-                        metricCard('Total Trip', '1,250'),
-                        metricCard("Average Trip Distance", "350 miles"),
-                        metricCard("On-Time Delivery Rate", "95%"),
-                      ],
+    return Obx(() {
+      return Scaffold(
+        appBar: TitleAppbar(
+          title: 'Analytic',
+          actions: [
+            Container(
+              padding: EdgeInsetsGeometry.only(right: ScreenUtils.height15),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: controller.selectedRange.value,
+                  borderRadius: BorderRadius.circular(12),
+                  items: const [
+                    DropdownMenuItem(
+                      value: "Week",
+                      child: Text("Week"),
                     ),
-                    chartSection(
-                      title: "Trips Over Time",
-                      value: "1,250",
-                      subLabel: "Last 30 Days",
-                      subValue: "+12%",
-                      subColor: const Color(0xFF0BDA5B),
-                      child: ReusableLineChart(
-                        spots: [
-                          FlSpot(1.5, 4.2),
-                          FlSpot(2.6, 2.8),
-                          FlSpot(4.9, 5),
-                          FlSpot(6.8, 3),
-                          FlSpot(8.2, 4),
-                          FlSpot(9.5, 3),
-                          FlSpot(10.5, 4),
-                        ],
-                      ),
+                    DropdownMenuItem(
+                      value: "1 Month",
+                      child: Text("1 Month"),
                     ),
-                    sectionTitle("Fuel & Expense Analytics"),
-                    Wrap(
-                      spacing: 5.w,
-                      runSpacing: 5.h,
-                      children: [
-                        metricCard("Total Fuel Cost", "\$50,000"),
-                        metricCard("Average Fuel Efficiency", "6.5 MPG"),
-                        metricCard("Maintenance Expenses", "\$10,000"),
-                      ],
+                    DropdownMenuItem(
+                      value: "3 Months",
+                      child: Text("3 Months"),
                     ),
-                    chartSection(
-                      title: "Fuel Costs by Month",
-                      value: "\$50,000",
-                      subLabel: "Last 6 Months",
-                      subValue: "-5%",
-                      subColor: Color(0xFFFA6238),
-                      child: Placeholder(
-                        fallbackHeight: 180,
-                        color: Colors.tealAccent.shade100,
-                      ),
-                    ),
-                    sectionTitle("Driver Analytics"),
-                    Wrap(
-                      spacing: 5.w,
-                      runSpacing: 5.h,
-                      children: [
-                        metricCard("Average Driver Rating", "4.8/5"),
-                        metricCard("Driver Retention Rate", "90%"),
-                        metricCard("Safety Incidents", "5"),
-                      ],
-                    ),
-                    chartSection(
-                      title: "Driver Performance",
-                      value: "4.8/5",
-                      subLabel: "Last Quarter",
-                      subValue: "+2%",
-                      subColor: bohibaTheme.colorScheme.surface,
-                      child: ReusableBarChart(
-                        height: 250,
-                        showBorder: true,
-                        borderColor: bohibaTheme.dividerColor,
-                        showGrid: false,
-                        barGroups: [
-                          BarChartGroupData(
-                            x: 0,
-                            barRods: [
-                              BarChartRodData(
-                                toY: 8,
-                                color: bohibaTheme.primaryColor,
-                                width: 20,
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ],
-                          ),
-                          BarChartGroupData(
-                            x: 1,
-                            barRods: [
-                              BarChartRodData(
-                                toY: 5,
-                                color: bohibaTheme.primaryColor,
-                                width: 20,
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ],
-                          ),
-                          BarChartGroupData(
-                            x: 2,
-                            barRods: [
-                              BarChartRodData(
-                                toY: 10,
-                                color: bohibaTheme.primaryColor,
-                                width: 20,
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ],
-                          ),
-                          BarChartGroupData(
-                            x: 3,
-                            barRods: [
-                              BarChartRodData(
-                                toY: 7,
-                                color: bohibaTheme.primaryColor,
-                                width: 20,
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    sectionTitle("Truck Analytics"),
-                    Wrap(
-                      spacing: 5.w,
-                      runSpacing: 5.h,
-                      children: [
-                        metricCard("Average Truck Utilization", "85%"),
-                        metricCard("Truck Downtime", "10 days"),
-                        metricCard("Maintenance Costs per Truck", "\$2,000"),
-                      ],
-                    ),
-                    chartSection(
-                      title: "Truck Utilization",
-                      value: "85%",
-                      subLabel: "Last Month",
-                      subValue: "+3%",
-                      subColor: Color(0xFF0BDA5B),
-                      child: ReusableLineChart(
-                        spots: [
-                          FlSpot(0, 3),
-                          FlSpot(2.6, 2),
-                          FlSpot(4.9, 5),
-                          FlSpot(6.8, 2.5),
-                          FlSpot(8, 4),
-                          FlSpot(9.5, 3),
-                          FlSpot(11, 4),
-                        ],
-                      ),
-                    ),
-                    sectionTitle("Finance Analytics"),
-                    Wrap(
-                      spacing: 5.w,
-                      runSpacing: 5.h,
-                      children: [
-                        metricCard("Total Revenue", "\$200,000"),
-                        metricCard("Profit Margin", "20%"),
-                        metricCard("Outstanding Invoices", "\$15,000"),
-                      ],
-                    ),
-                    chartSection(
-                      title: "Revenue Over Time",
-                      value: "\$200,000",
-                      subLabel: "Last Year",
-                      subValue: "+15%",
-                      subColor: Color(0xFF0BDA5B),
-                      child: Placeholder(
-                        fallbackHeight: 180,
-                        color: Colors.green.shade200,
-                      ),
-                    ),
-                    sectionTitle("Business Insights"),
-                    sectionText(
-                        "Key trends and insights based on your data, including areas for improvement and opportunities for growth."),
-                    sectionTitle("Alerts & Predictions"),
-                    sectionText(
-                        "Upcoming maintenance alerts, predicted fuel costs, and other important notifications."),
                   ],
+                  onChanged: (val) {
+                    controller.selectedRange.value = val!;
+                  },
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Scrollable Content
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    top: ScreenUtils.height20,
+                    left: ScreenUtils.width15,
+                    right: ScreenUtils.width15,
+                    bottom: 70,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      sectionTitle("Trip Analytics"),
+                      Wrap(
+                        spacing: 5.w,
+                        runSpacing: 5.h,
+                        children: [
+                          metricCard('Total Trip', '1,250'),
+                          metricCard("Average Trip Distance", "350 miles"),
+                          metricCard("On-Time Delivery Rate", "95%"),
+                        ],
+                      ),
+                      chartSection(
+                        title: "Trips Over Time",
+                        value: "1,250",
+                        subLabel: "Last 30 Days",
+                        subValue: "+12%",
+                        subColor: bohibaTheme.colorScheme.onSurface,
+                        child: ReusableLineChart(
+                          bottomTitlesBuilder: controller.bottomTitleWidget,
+                          spots: [
+                            FlSpot(1.5, 4.2),
+                            FlSpot(2.6, 2.8),
+                            FlSpot(4.9, 5),
+                            FlSpot(6.8, 3),
+                            FlSpot(8.2, 4),
+                            FlSpot(9.5, 3),
+                            FlSpot(10.5, 4),
+                          ],
+                        ),
+                      ),
+                      sectionTitle("Fuel & Expense Analytics"),
+                      Wrap(
+                        spacing: 5.w,
+                        runSpacing: 5.h,
+                        children: [
+                          metricCard("Total Fuel Cost", "\$50,000"),
+                          metricCard("Average Fuel Efficiency", "6.5 MPG"),
+                          metricCard("Maintenance Expenses", "\$10,000"),
+                        ],
+                      ),
+                      chartSection(
+                        title: "Fuel Costs by Month",
+                        value: "\$50,000",
+                        subLabel: "Last 6 Months",
+                        subValue: "-5%",
+                        subColor: Color(0xFFFA6238),
+                        child: Placeholder(
+                          fallbackHeight: 180,
+                          color: Colors.tealAccent.shade100,
+                        ),
+                      ),
+                      sectionTitle("Driver Analytics"),
+                      Wrap(
+                        spacing: 5.w,
+                        runSpacing: 5.h,
+                        children: [
+                          metricCard("Average Driver Rating", "4.8/5"),
+                          metricCard("Driver Retention Rate", "90%"),
+                          metricCard("Safety Incidents", "5"),
+                        ],
+                      ),
+                      chartSection(
+                        title: "Driver Performance",
+                        value: "4.8/5",
+                        subLabel: "Last Quarter",
+                        subValue: "+2%",
+                        subColor: bohibaTheme.colorScheme.surface,
+                        child: ReusableBarChart(
+                          height: 250,
+                          showBorder: true,
+                          borderColor: bohibaTheme.dividerColor,
+                          showGrid: false,
+                          barGroups: [
+                            BarChartGroupData(
+                              x: 0,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: 8,
+                                  color: bohibaTheme.primaryColor,
+                                  width: 20,
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                              ],
+                            ),
+                            BarChartGroupData(
+                              x: 1,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: 5,
+                                  color: bohibaTheme.primaryColor,
+                                  width: 20,
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                              ],
+                            ),
+                            BarChartGroupData(
+                              x: 2,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: 10,
+                                  color: bohibaTheme.primaryColor,
+                                  width: 20,
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                              ],
+                            ),
+                            BarChartGroupData(
+                              x: 3,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: 7,
+                                  color: bohibaTheme.primaryColor,
+                                  width: 20,
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      sectionTitle("Truck Analytics"),
+                      Wrap(
+                        spacing: 5.w,
+                        runSpacing: 5.h,
+                        children: [
+                          metricCard("Average Truck Utilization", "85%"),
+                          metricCard("Truck Downtime", "10 days"),
+                          metricCard("Maintenance Costs per Truck", "\$2,000"),
+                        ],
+                      ),
+                      chartSection(
+                        title: "Truck Utilization",
+                        value: "85%",
+                        subLabel: "Last Month",
+                        subValue: "+3%",
+                        subColor: bohibaTheme.colorScheme.onSurface,
+                        child: ReusableLineChart(
+                          bottomTitlesBuilder: controller.bottomTitleWidget,
+                          spots: [
+                            FlSpot(0, 3),
+                            FlSpot(2.6, 2),
+                            FlSpot(4.9, 5),
+                            FlSpot(6.8, 2.5),
+                            FlSpot(8, 4),
+                            FlSpot(9.5, 3),
+                            FlSpot(11, 4),
+                          ],
+                        ),
+                      ),
+                      sectionTitle("Finance Analytics"),
+                      Wrap(
+                        spacing: 5.w,
+                        runSpacing: 5.h,
+                        children: [
+                          metricCard("Total Revenue", "\$200,000"),
+                          metricCard("Profit Margin", "20%"),
+                          metricCard("Outstanding Invoices", "\$15,000"),
+                        ],
+                      ),
+                      chartSection(
+                        title: "Revenue Over Time",
+                        value: "\$200,000",
+                        subLabel: "Last Year",
+                        subValue: "+15%",
+                        subColor: Color(0xFF0BDA5B),
+                        child: Placeholder(
+                          fallbackHeight: 180,
+                          color: Colors.green.shade200,
+                        ),
+                      ),
+                      sectionTitle("Business Insights"),
+                      sectionText(
+                          "Key trends and insights based on your data, including areas for improvement and opportunities for growth."),
+                      sectionTitle("Alerts & Predictions"),
+                      sectionText(
+                          "Upcoming maintenance alerts, predicted fuel costs, and other important notifications."),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   // ======= UI helper widgets =======
@@ -256,13 +293,17 @@ class AnalyticPage extends StatelessWidget {
           children: [
             Text(
               label,
-              style: bohibaTheme.textTheme.labelLarge,
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                color: bohibaTheme.textTheme.titleMedium!.color,
+              ),
             ),
             Text(
               value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
+              style: TextStyle(
+                color: bohibaTheme.textTheme.labelLarge!.color,
+                fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -316,23 +357,23 @@ class AnalyticPage extends StatelessWidget {
 class ReusableLineChart extends StatelessWidget {
   final List<FlSpot> spots;
   final double lineWidth;
-  final bool isCurved;
   final bool showBorder;
   final bool showGrid;
   final bool showTitles;
   final Color? borderColor;
   final double? height;
+  final Widget Function(double, TitleMeta) bottomTitlesBuilder;
 
   const ReusableLineChart({
     required this.spots,
-    this.lineWidth = 2.0,
-    this.isCurved = true,
+    this.lineWidth = 2.5,
     this.showBorder = true,
     this.showGrid = false,
     this.showTitles = true,
     this.borderColor,
     this.height,
     super.key,
+    required this.bottomTitlesBuilder,
   });
 
   @override
@@ -341,11 +382,14 @@ class ReusableLineChart extends StatelessWidget {
       height: height ?? ScreenUtils.height * 0.23,
       child: LineChart(
         LineChartData(
+          minX: spots.first.x,
+          maxX: spots.last.x >= 7 ? 7 : spots.last.x,
+          lineTouchData: LineTouchData(enabled: false),
           borderData: FlBorderData(
             show: showBorder,
             border: Border(
-              left: BorderSide(color: bohibaTheme.dividerColor, width: 1),
-              bottom: BorderSide(color: bohibaTheme.dividerColor, width: 1),
+              left: BorderSide(color: bohibaTheme.dividerColor, width: 2),
+              bottom: BorderSide(color: bohibaTheme.dividerColor, width: 2),
             ),
           ),
           gridData: FlGridData(show: showGrid),
@@ -353,15 +397,16 @@ class ReusableLineChart extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: showTitles,
-                reservedSize: 30,
-                getTitlesWidget: (value, meta) =>
-                    Text(value.toInt().toString()),
+                reservedSize: 15,
+                interval: 1.0,
+                getTitlesWidget: bottomTitlesBuilder,
               ),
             ),
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
-                showTitles: showTitles,
-                reservedSize: 10,
+                showTitles: true,
+                reservedSize: 15,
+                interval: 1,
                 getTitlesWidget: (value, meta) =>
                     Text(value.toInt().toString()),
               ),
@@ -376,14 +421,9 @@ class ReusableLineChart extends StatelessWidget {
           lineBarsData: [
             LineChartBarData(
               spots: spots,
-              isCurved: isCurved,
+              isCurved: true,
+              isStrokeCapRound: true,
               color: bohibaTheme.primaryColor,
-              // gradient: LinearGradient(
-              //   colors: [
-              //     bohibaTheme.disabledColor,
-              //     bohibaTheme.primaryColor,
-              //   ],
-              // ),
               barWidth: lineWidth,
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(
@@ -391,7 +431,7 @@ class ReusableLineChart extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     bohibaTheme.primaryColor.withValues(alpha: 0.2),
-                    Colors.blue.withValues(alpha: 0.0),
+                    bohibaTheme.primaryColor.withValues(alpha: 0.0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

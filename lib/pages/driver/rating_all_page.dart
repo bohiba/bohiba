@@ -22,120 +22,139 @@ class RatingAllPage extends GetView<DriverController> {
     return Obx(() {
       DriverModel driver = controller.driverModel.value;
       return Scaffold(
-        appBar: TitleAppbar(
-          title: driver.profile?.name ?? 'NA',
-        ),
-        bottomNavigationBar: controller.didReviewed.isFalse
-            ? SizedBox()
-            : Padding(
-                padding: EdgeInsets.only(
-                  left: ScreenUtils.width15,
-                  right: ScreenUtils.width15,
+          appBar: TitleAppbar(
+            title: driver.profile?.name ?? 'NA',
+          ),
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: controller.driverModel.value.rating != null ||
+                          controller.driverModel.value.rating!.isNotEmpty
+                      ? ListView.builder(
+                          itemCount:
+                              controller.driverModel.value.rating?.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            RatingModel driverModelRating =
+                                controller.driverModel.value.rating![index];
+                            return Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: ScreenUtils.height5,
+                                  horizontal: ScreenUtils.width15),
+                              padding: EdgeInsets.symmetric(
+                                vertical: ScreenUtils.height5,
+                              ),
+                              alignment: Alignment.center,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 15.w,
+                                    backgroundColor: bohibaTheme.dividerColor,
+                                  ),
+                                  Gap(8.w),
+                                  SizedBox(
+                                    width: ScreenUtils.width * 0.45.w,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          driverModelRating.reviewer?.name ??
+                                              'NA',
+                                          style:
+                                              bohibaTheme.textTheme.labelLarge,
+                                        ),
+                                        ReadMoreText(
+                                          driverModelRating.feedback ?? '',
+                                          trimLines: 2,
+                                          trimMode: TrimMode.Line,
+                                          trimCollapsedText: ' Read more',
+                                          trimExpandedText: ' Show less',
+                                          style: TextStyle(
+                                            fontSize: bohibaTheme.textTheme
+                                                .labelMedium!.fontSize,
+                                            color: bohibaTheme
+                                                .textTheme.titleMedium!.color,
+                                          ),
+                                          moreStyle: TextStyle(
+                                            fontSize: bohibaTheme.textTheme
+                                                .labelMedium!.fontSize,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
+                                          lessStyle: TextStyle(
+                                            fontSize: bohibaTheme.textTheme
+                                                .labelMedium!.fontSize,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Container(
+                                    height: 35.h,
+                                    alignment: Alignment.center,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          driverModelRating.rating
+                                                  ?.toString() ??
+                                              '0',
+                                          style:
+                                              bohibaTheme.textTheme.labelLarge,
+                                        ),
+                                        const Icon(
+                                          Icons.star_rounded,
+                                          color: Colors.amber,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      : SizedBox.shrink(),
                 ),
-                child: PrimaryButton(
-                  label: 'Rate Driver',
-                  onPressed: () => showModalBottomSheet(
-                    isScrollControlled: true,
-                    isDismissible: false,
-                    enableDrag: false,
-                    shape: BottomModalShape(),
-                    context: context,
-                    builder: (context) {
-                      return DriverRatingModal();
-                    },
-                  ).then((onValue) async {
-                    if (onValue != null) {
-                      await controller.updateDriverInfo(
-                        id: controller.driverModel.value.id!.toString(),
-                      );
-                    }
-                  }),
-                ),
-              ),
-        body: controller.driverModel.value.rating != null ||
-                controller.driverModel.value.rating!.isNotEmpty
-            ? ListView.builder(
-                itemCount: controller.driverModel.value.rating?.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  RatingModel driverModelRating =
-                      controller.driverModel.value.rating![index];
-                  return Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtils.height5,
-                        horizontal: ScreenUtils.width15),
-                    padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtils.height5,
-                    ),
-                    alignment: Alignment.center,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(radius: 15.w, backgroundColor: bohibaTheme.dividerColor,),
-                        Gap(8.w),
-                        SizedBox(
-                          width: ScreenUtils.width * 0.45.w,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                driverModelRating.reviewer?.name ?? 'NA',
-                                style: bohibaTheme.textTheme.labelLarge,
-                              ),
-                              ReadMoreText(
-                                driverModelRating.feedback ?? '',
-                                trimLines: 2,
-                                trimMode: TrimMode.Line,
-                                trimCollapsedText: ' Read more',
-                                trimExpandedText: ' Show less',
-                                style: TextStyle(
-                                  fontSize: bohibaTheme
-                                      .textTheme.labelMedium!.fontSize,
-                                  color:
-                                      bohibaTheme.textTheme.titleMedium!.color,
-                                ),
-                                moreStyle: TextStyle(
-                                  fontSize: bohibaTheme
-                                      .textTheme.labelMedium!.fontSize,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
-                                ),
-                                lessStyle: TextStyle(
-                                  fontSize: bohibaTheme
-                                      .textTheme.labelMedium!.fontSize,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            ],
-                          ),
+                controller.didReviewed.isFalse
+                    ? SizedBox.shrink()
+                    : Padding(
+                        padding: EdgeInsets.only(
+                          left: ScreenUtils.width15,
+                          right: ScreenUtils.width15,
                         ),
-                        const Spacer(),
-                        Container(
-                          height: 35.h,
-                          alignment: Alignment.center,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                driverModelRating.rating?.toString() ?? '0',
-                                style: bohibaTheme.textTheme.labelLarge,
-                              ),
-                              const Icon(
-                                Icons.star_rounded,
-                                color: Colors.amber,
-                              ),
-                            ],
-                          ),
+                        child: PrimaryButton(
+                          label: 'Rate Driver',
+                          onPressed: () => showModalBottomSheet(
+                            isScrollControlled: true,
+                            isDismissible: false,
+                            enableDrag: false,
+                            shape: BottomModalShape(),
+                            context: context,
+                            builder: (context) {
+                              return DriverRatingModal();
+                            },
+                          ).then((onValue) async {
+                            if (onValue != null) {
+                              await controller.updateDriverInfo(
+                                id: controller.driverModel.value.id!.toString(),
+                              );
+                            }
+                          }),
                         ),
-                      ],
-                    ),
-                  );
-                },
-              )
-            : Container(),
-      );
+                      ),
+              ],
+            ),
+          ));
     });
   }
 }

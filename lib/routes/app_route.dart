@@ -1,3 +1,6 @@
+import 'package:bohiba/bindings/analytic_binding.dart';
+import 'package:bohiba/pages/analytic/analytic_page.dart';
+
 import '/bindings/update_contact_binding.dart';
 import '/pages/user/user_profile/update_contact_info_page.dart';
 
@@ -158,9 +161,10 @@ class AppRoute {
   static const String expense = '/expense';
 
   // Main pages String
-  static const String homeScreen = "/home";
+  // static const String homeScreen = "/home";
   static const String dashboardScreen = "/dashboard";
   static const String loadHistoryScreen = "/load-history";
+  static const String analytics = "/analytics";
   static const String setting = "/setting";
   static const String security = "/security";
   static const String shareEarn = "/shareEarn";
@@ -290,6 +294,12 @@ class AppRoute {
         DasboardBinding(),
       ],
       page: () => const DashboardPage(),
+    ),
+
+    GetPage(
+      binding: AnalyticBinding(),
+      name: analytics,
+      page: () => AnalyticPage(),
     ),
 
     GetPage(name: loadHistoryScreen, page: () => const AllTripPage()),
