@@ -131,15 +131,17 @@ class GlobalService {
             TextButton(
               onPressed: onDiscard ?? () => Get.back(),
               child: Text(
-                discardBtnTxt,
+                discardBtnTxt.toUpperCase(),
                 style: TextStyle(
-                  color: BohibaColors.warningColor,
+                  color: bohibaTheme.colorScheme.error,
+                  fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                  fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
                 ),
               ),
             ),
             PrimaryButton(
               height: ScreenUtils.height * 0.047,
-              width: 80,
+              width: ScreenUtils.width * 0.25,
               label: saveBtnTxt,
               onPressed: onSave,
             )

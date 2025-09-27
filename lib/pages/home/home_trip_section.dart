@@ -1,7 +1,6 @@
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
-import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/pages/trips/trip_tile.dart';
 import '/theme/bohiba_theme.dart';
@@ -38,7 +37,7 @@ class HomeTripSection extends GetView<HomeController> {
                       style: TextStyle(
                         fontSize:
                             bohibaTheme.textTheme.headlineMedium!.fontSize,
-                        color: BohibaColors.primaryColor,
+                        color: bohibaTheme.primaryColor,
                       ),
                     ),
                   ),

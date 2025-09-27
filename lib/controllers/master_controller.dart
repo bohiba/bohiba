@@ -1,7 +1,6 @@
-import '/model/open_driver_model.dart';
-import '/services/api_end_point.dart';
+import '/dist/app_enums.dart';
 
-import '/services/device_info_service.dart';
+import '/model/open_driver_model.dart';
 import '/model/driver_model.dart';
 import '/model/mines_model.dart';
 import '/model/news_model.dart';
@@ -10,15 +9,19 @@ import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/model/user_fav_model.dart';
 
-import '/controllers/auth_controller.dart';
+import '/services/profile_service.dart';
+import '/services/device_info_service.dart';
 import '/services/db_service.dart';
-import '../services/global_service.dart';
+import '/services/global_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/pref_utils.dart';
+import '/services/api_end_point.dart';
+
 import 'package:get/get.dart';
 
 class MasterController extends GetxController {
-  final AuthController _authController = Get.find<AuthController>();
+  // final InitController _initController = Get.find<InitController>();
+  // final AuthController _authController = Get.find<AuthController>();
   final PrefUtils _prefUtils = PrefUtils();
   final DioService _dio = DioService();
   final DBService _dbService = DBService();
@@ -45,7 +48,7 @@ class MasterController extends GetxController {
     GlobalService.showProgress();
     // await _dbService.resetAndReInitDB();
     ApiResponse serviceResponse =
-        await _handleApiWithRetry(() => _dio.get(ApiEndPoint.apiMain));
+        await _dio.handleApiWithRetry(() => _dio.get(ApiEndPoint.apiMain));
     GlobalService.dismissProgress();
     switch (serviceResponse.statusCode) {
       case 401:
@@ -179,44 +182,7 @@ class MasterController extends GetxController {
     }
   }
 
-  Future<void> profileApi() async {
-    if (!await DeviceInfoService.hasInternet()) {
-      return;
-    }
-    GlobalService.showProgress();
-    await _dbService.clearAllBox();
-    ApiResponse serviceResponse =
-        await _handleApiWithRetry(() => _dio.get(ApiEndPoint.apiProfile));
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        break;
-      case 200:
-        if (serviceResponse.data == null) return;
-        ProfileModel profileModel = ProfileModel.fromJson(serviceResponse.data);
-        int dbSuccess = await _dbService.putData<ProfileModel>(
-          tblProfile,
-          profileKey,
-          profileModel,
-        );
-        GlobalService.printHandler("Profile Added in DB: $dbSuccess");
-        break;
-      default:
-    }
-  }
-
-  Future<ApiResponse> _handleApiWithRetry(
-      Future<ApiResponse> Function() apiCall) async {
-    ApiResponse response = await apiCall();
-
-    if (response.statusCode == 498) {
-      bool refreshed = await _authController.refreshToken();
-      if (refreshed) {
-        return await apiCall();
-      }
-    }
-
-    return response;
+  Future<ProfileModel?> profileApi({required MethodType methodType}) async {
+    return await ProfileService.getProfile(type: methodType);
   }
 }

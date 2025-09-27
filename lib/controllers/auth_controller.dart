@@ -1,3 +1,6 @@
+import '/dist/app_enums.dart';
+import '/services/profile_service.dart';
+
 import '/services/api_end_point.dart';
 
 import '../services/device_info_service.dart';
@@ -40,33 +43,13 @@ class AuthController extends GetxController {
 
   Future<void> verifyEmail({required String email}) async {
     GlobalService.closeKeyboard();
-    if (!await DeviceInfoService.hasInternet()) {
-      return;
-    }
-    if (!GlobalService.isEmail(email)) {
-      GlobalService.showAppToast(message: 'Please Enter Vaild Email.');
-      return;
-    }
-    Map<String, dynamic> bodyObj = {'email': email};
-    GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService.post(
-      ApiEndPoint.apiVerifyEmail,
-      body: bodyObj,
-      withToken: false,
-    );
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        break;
-      case 200:
-        emailController.clear();
-        GlobalService.showAppToast(message: serviceResponse.message);
-        await Get.toNamed(
-          AppRoute.otpScreen,
-          arguments: {"email": email, "nxtRoute": AppRoute.createUser},
-        );
-      default:
+
+    int verfiedEmail = await ProfileService.verifyEmail(txtEmail: email);
+    if (verfiedEmail > 0) {
+      await Get.toNamed(
+        AppRoute.otpScreen,
+        arguments: {"email": email, "nxtRoute": AppRoute.createUser},
+      );
     }
   }
 
@@ -132,45 +115,47 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> registerUser({
-    required String txtName,
-    required String txtEmail,
-    required String txtMobile,
-    required String txtDob,
-    required String txtPwd,
-    required String txtCnfrmPwd,
-    required String token,
-  }) async {
-    if (!await DeviceInfoService.hasInternet()) {
+  Future<void> registerUser({required String txtEmail}) async {
+    GlobalService.closeKeyboard();
+    String? valid = formValidation();
+    if (valid != null) {
       return;
     }
-    GlobalService.closeKeyboard();
-    GlobalService.showProgress();
     Map<String, dynamic> bodyObj = {
-      'name': txtName,
+      'name': nameController.text.trim().toUpperCase(),
       'email': txtEmail,
-      'mobile_number': txtMobile,
-      'dob': txtDob,
-      'password': txtPwd,
+      'mobile_number': mobileController.text.trim(),
+      'dob': dateController.text.trim(),
+      'password': vPwdController.text,
     };
-    ApiResponse serviceResponse = await _dioService.post(
-      ApiEndPoint.apiCreateUser,
-      body: bodyObj,
-    );
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        break;
-      case 200:
-        // Move to Address Verification
-        Get.offNamed(
-          AppRoute.userAddressAuthScreen,
-          arguments: {'email': txtEmail},
-        );
-        break;
-      default:
+
+    int result = await ProfileService.createUser(bodyMap: bodyObj);
+    if (result > 0) {
+      Get.offNamed(
+        AppRoute.userAddressAuthScreen,
+        arguments: {'email': txtEmail},
+      );
     }
+  }
+
+  String? formValidation() {
+    String? errTxt;
+    if (nameController.text.isEmpty) errTxt = 'Name is required';
+    if (mobileController.text.isEmpty) errTxt = 'Mobile no. is required';
+    if (dateController.text.isEmpty) errTxt = 'DOB is required';
+    if (vPwdController.text.isEmpty || vCnfrmController.text.isEmpty) {
+      errTxt = 'Password is required';
+    }
+    if (vPwdController.text != vCnfrmController.text) {
+      errTxt = 'Password doesn`t match';
+    }
+    if (vPwdController.text.length < 6 || vCnfrmController.text.length < 6) {
+      errTxt = 'Password is too short';
+    }
+    if (errTxt != null) {
+      GlobalService.showAppToast(message: errTxt);
+    }
+    return errTxt;
   }
 
   /*
@@ -206,8 +191,7 @@ class AuthController extends GetxController {
 
         await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.printHandler("App Token: $token");
-        await _masterController.profileApi();
-
+        await _masterController.profileApi(methodType: MethodType.server);
         await _masterController.mainApi();
 
         Get.offAllNamed(AppRoute.navBar);
@@ -261,9 +245,27 @@ class AuthController extends GetxController {
         _dbService.clearAllBox();
         _dbService.disposeDB();
         _dioService.clearToken();
-        _prefUtils.clearPreferencesData();
+        await _prefUtils.clearPreferencesData();
         Get.offAllNamed(AppRoute.signIn);
       default:
     }
+  }
+
+  void disposeController() {
+    idController.dispose();
+    pwdController.dispose();
+    emailController.dispose();
+    otpController.dispose();
+    nameController.dispose();
+    mobileController.dispose();
+    dateController.dispose();
+    vPwdController.dispose();
+    vCnfrmController.dispose();
+  }
+
+  @override
+  void onClose() {
+    disposeController();
+    super.onClose();
   }
 }

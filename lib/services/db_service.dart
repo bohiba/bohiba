@@ -29,6 +29,7 @@ class DBService {
     await register(TripTruckAdapter());
     await register(TripDriverAdapter());
     await register(TripOwnerAdapter());
+    await register(TruckOwnerModelAdapter());
     await register(ReassignmentAdapter());
     await register(TripExpenseAdapter());
     await register(TripPaymentAdapter());

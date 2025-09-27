@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/fav_controller.dart';
+import '/controllers/fav_controller.dart';
 import 'package:get/get.dart';
 
 class FavBinding extends Bindings {

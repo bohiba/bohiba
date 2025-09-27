@@ -54,16 +54,6 @@ class SignupScreen extends GetView<AuthController> {
                     PrimaryButton(
                       label: 'Verify',
                       onPressed: () async {
-                        // Get.toNamed(
-                        //   AppRoute.otpScreen,
-                        //   arguments: {
-                        //     "email": controller.emailController.text
-                        //         .trim()
-                        //         .toLowerCase(),
-                        //     "nxtRoute": AppRoute.createUser
-                        //   },
-                        // );
-
                         await controller.verifyEmail(
                           email: controller.emailController.text
                               .trim()

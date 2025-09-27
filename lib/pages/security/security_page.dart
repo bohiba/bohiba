@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/security_controller.dart';
+import '/controllers/security_controller.dart';
 import 'package:get/get.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
@@ -116,7 +116,7 @@ class SecurityPage extends GetView<SecurityController> {
                                     bohibaTheme.textTheme.bodyMedium!.fontSize,
                                 fontWeight:
                                     bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                color: bohibaTheme.textTheme.titleMedium!.color,
+                                color: bohibaTheme.colorScheme.error,
                               ),
                             ),
                             Padding(

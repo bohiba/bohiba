@@ -180,7 +180,7 @@ class DriverPage extends GetView<DriverController> {
                               style: TextStyle(
                                 fontSize: bohibaTheme
                                     .textTheme.headlineMedium!.fontSize,
-                                color: BohibaColors.primaryColor,
+                                color: bohibaTheme.primaryColor,
                               ),
                             ),
                           ),
@@ -212,7 +212,10 @@ class DriverPage extends GetView<DriverController> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CircleAvatar(radius: 15.w),
+                                  CircleAvatar(
+                                    radius: 15.w,
+                                    backgroundColor: bohibaTheme.dividerColor,
+                                  ),
                                   Gap(8.w),
                                   SizedBox(
                                     width: ScreenUtils.width * 0.55.w,

@@ -1,4 +1,3 @@
-import '/dist/app_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,31 +15,32 @@ class PrefUtils {
         "\n================\n    SharedPrefernces Initialized     \n================\n");
   }
 
-  void clearPreferencesData() async {
-    _preferences!.clear();
+  Future<void> clearPreferencesData() async {
+    final keyPrefItems = [
+      token,
+    ];
+    for (var key in keyPrefItems) {
+      await _preferences!.remove(key);
+    }
   }
 
-  Future<void> setAppThemeMode(AppThemeMode mode) async {
-    await _preferences?.setString(_themeKey, mode.name);
-  }
-
-  AppThemeMode getAppThemeMode() {
-    final stored = _preferences?.getString(_themeKey);
-    return AppThemeMode.values.firstWhere(
+  static ThemeMode getAppThemeMode() {
+    final stored = _preferences?.getString(themeKey);
+    return ThemeMode.values.firstWhere(
       (e) => e.name == stored,
-      orElse: () => AppThemeMode.light,
+      orElse: () => ThemeMode.light,
     );
   }
 
   Future<void> setThemeData(String value) {
-    return _preferences!.setString('themeData', value);
+    return _preferences!.setString(themeKey, value);
   }
 
   String getThemeData() {
     try {
-      return _preferences!.getString('themeData')!;
+      return _preferences!.getString(themeKey)!;
     } catch (e) {
-      return 'primary';
+      return 'light';
     }
   }
 
@@ -105,5 +105,5 @@ class PrefUtils {
   }
 
   static const String token = 'app_token';
-  static const String _themeKey = 'theme_mode';
+  static const String themeKey = 'theme_mode';
 }

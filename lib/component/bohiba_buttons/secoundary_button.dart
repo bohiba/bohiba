@@ -39,7 +39,7 @@ class SecoundaryButton extends StatelessWidget {
         backgroundColor: color ?? bohibaTheme.scaffoldBackgroundColor,
       ),
       child: Text(
-        label,
+        label.toUpperCase(),
         style: TextStyle(
           fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
           color: textColor ?? bohibaTheme.textTheme.bodySmall!.color,

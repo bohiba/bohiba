@@ -1,4 +1,4 @@
-import 'package:bohiba/dist/app_enums.dart';
+import '/dist/app_enums.dart';
 
 import '/services/trip_service.dart';
 

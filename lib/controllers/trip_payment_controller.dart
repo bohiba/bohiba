@@ -1,7 +1,7 @@
-import 'package:bohiba/controllers/trip_controller.dart';
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/model/trip_model.dart';
-import 'package:bohiba/services/trip_service.dart';
+import '/controllers/trip_controller.dart';
+import '/dist/app_enums.dart';
+import '/model/trip_model.dart';
+import '/services/trip_service.dart';
 import 'package:get/get.dart';
 
 class TripPaymentController extends GetxController {

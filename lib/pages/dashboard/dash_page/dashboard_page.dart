@@ -1,3 +1,8 @@
+import '/pages/widget/role_widget.dart';
+
+import '/pages/widget/permission_widget.dart';
+import '/services/role_permission_service.dart';
+import '/extensions/bohiba_extension.dart';
 import '/routes/app_route.dart';
 import '/controllers/dashboard_controller.dart';
 import 'package:gap/gap.dart';
@@ -34,6 +39,7 @@ class DashboardPage extends GetView<DashboardController> {
                 return BlueBoxComponent(
                   label1: controller.profileModel.value?.name ?? '',
                   label2: controller.profileModel.value?.uuid,
+                  label3: controller.profileModel.value?.roleId?.roleName(),
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
@@ -41,25 +47,21 @@ class DashboardPage extends GetView<DashboardController> {
                         children: [
                           SmallTabComponent(
                             onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         const UserProfilePage(),
-                              //   ),
-                              // );
                               navigator.pushNamed(AppRoute.userProfile);
                             },
                             label: "Profile",
                             icon: EvaIcons.personOutline,
                           ),
 
-                          SmallTabComponent(
-                            onTap: () {
-                              navigator.pushNamed(AppRoute.allDriver);
-                            },
-                            label: "Drivers",
-                            icon: Icons.person_add_alt_1_outlined,
+                          PermissionWidget(
+                            permission: RolePermissionService.viewDriver,
+                            child: SmallTabComponent(
+                              onTap: () {
+                                navigator.pushNamed(AppRoute.allDriver);
+                              },
+                              label: "Drivers",
+                              icon: Icons.person_add_alt_1_outlined,
+                            ),
                           ),
 
                           SmallTabComponent(
@@ -74,8 +76,18 @@ class DashboardPage extends GetView<DashboardController> {
                             onTap: () {
                               navigator.pushNamed(AppRoute.allTruck);
                             },
-                            label: "Vehicle",
+                            label: "Trucks",
                             icon: EvaIcons.carOutline,
+                          ),
+
+                          RoleWidget(
+                            truckOwnerWidget: SmallTabComponent(
+                              onTap: () {
+                                navigator.pushNamed(AppRoute.allJobs);
+                              },
+                              label: "Jobs",
+                              icon: EvaIcons.briefcaseOutline,
+                            ),
                           ),
 
                           // TODO: On 2nd version
@@ -152,7 +164,11 @@ class DashboardPage extends GetView<DashboardController> {
               ),*/
               SingleTileTabComponent(
                 onTap: () {
-                  navigator.pushNamed(AppRoute.setting);
+                  navigator.pushNamed(AppRoute.setting).then((onValue) async {
+                    if (onValue != null) {
+                      // await controller.getProfileModel();
+                    }
+                  });
                 },
                 icon: EvaIcons.settingsOutline,
                 title: 'Settings',

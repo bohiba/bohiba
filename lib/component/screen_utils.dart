@@ -34,6 +34,7 @@ class ScreenUtils {
     height5 = 0.0054 * height;
     height8 = 0.0087 * height;
     height10 = 0.011 * height;
+
     height15 = 0.0164 * height;
     height20 = 0.021 * height;
     height25 = 0.0274 * height;

@@ -35,7 +35,7 @@ class PrimaryButton extends StatelessWidget {
           style: TextStyle(
             fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
             fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-            color: BohibaColors.white,
+            color: bohibaTheme.textTheme.displayLarge!.color,
           ),
         ),
       ),

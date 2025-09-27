@@ -1,5 +1,5 @@
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/screen_utils.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -38,23 +38,26 @@ class IconTextTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              height: ScreenUtils.height47,
-              width: ScreenUtils.height47,
-              decoration: BoxDecoration(
-                color: bohibaTheme.listTileTheme.tileColor,
-                borderRadius: BorderRadius.circular(8.0),
+            if (icon == null)
+              SizedBox.shrink()
+            else
+              Container(
+                height: ScreenUtils.height47,
+                width: ScreenUtils.height47,
+                decoration: BoxDecoration(
+                  color: bohibaTheme.listTileTheme.tileColor,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Icon(icon),
               ),
-              child: Icon(icon),
-            ),
-            Gap(ScreenUtils.width25),
+            if (icon == null) SizedBox.shrink() else Gap(ScreenUtils.width25),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     text,
-                    style: bohibaTheme.textTheme.titleLarge,
+                    style: bohibaTheme.textTheme.bodyLarge,
                   ),
                   if (subtitle != null)
                     Text(

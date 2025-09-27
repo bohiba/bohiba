@@ -1,8 +1,8 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
-import 'package:bohiba/model/trip_model.dart';
-import 'package:bohiba/services/global_service.dart';
-import 'package:bohiba/services/trip_service.dart';
+import '/dist/app_enums.dart';
+import '/extensions/bohiba_extension.dart';
+import '/model/trip_model.dart';
+import '/services/global_service.dart';
+import '/services/trip_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';

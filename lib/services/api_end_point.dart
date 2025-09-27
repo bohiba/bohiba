@@ -6,6 +6,9 @@ class ApiEndPoint {
   static const String apiResendOtp = '$baseUrl/resend-otp';
   static const String apiCreateUser = '$baseUrl/create-user';
   static const String apiAddAddress = '$baseUrl/add-address';
+  static String apiSetRole = '$baseUrl/set-role';
+  static String apiEditDoc = '$baseUrl/add-document';
+
   static const String apiLogin = '$baseUrl/login';
   static const String apiLogout = '$baseUrl/logout';
   static const String apiRefreshToken = '$baseUrl/refresh-token';
@@ -51,4 +54,9 @@ class ApiEndPoint {
   static const String apiEditTripReassign = '$baseUrl/trip/update-reassignment';
   static const String apiDeleteTripReassign =
       '$baseUrl/trip/delete-reassignment';
+
+  static const String apiAllJobs = '$baseUrl/owner/job-posted';
+  static const String apiCreateJobs = '$baseUrl/owner/job-create';
+  static const String apiGetJob = '$baseUrl/owner/job-detail';
+  static const String apiExpressIntreset = '$baseUrl/owner/express-interest';
 }

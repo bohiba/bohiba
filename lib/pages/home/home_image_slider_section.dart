@@ -67,7 +67,7 @@ class _HomeImageSliderSectionState extends State<HomeImageSliderSection> {
                           width: ScreenUtils.width * 0.9,
                           height: 140,
                           decoration: BoxDecoration(
-                            color: bohibaTheme.primaryColor,
+                            color: bohibaTheme.cardColor,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(10),
                             ),

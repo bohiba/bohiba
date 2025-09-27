@@ -43,13 +43,15 @@ class DriverAddPage extends GetView<DriverAddController> {
                       children: [
                         Row(
                           children: [
-                            Radio<AddAssetUsing>(
-                              value: AddAssetUsing.uuid,
+                            RadioGroup(
                               groupValue: controller.addAsset.value,
                               onChanged: (AddAssetUsing? change) {
                                 controller.addAsset.value =
                                     change ?? AddAssetUsing.uuid;
                               },
+                              child: Radio<AddAssetUsing>(
+                                value: AddAssetUsing.uuid,
+                              ),
                             ),
                             Text("UUID",
                                 style: bohibaTheme.textTheme.titleLarge),
@@ -57,13 +59,15 @@ class DriverAddPage extends GetView<DriverAddController> {
                         ),
                         Row(
                           children: [
-                            Radio<AddAssetUsing>(
-                              value: AddAssetUsing.doc,
+                            RadioGroup(
                               groupValue: controller.addAsset.value,
                               onChanged: (AddAssetUsing? change) {
                                 controller.addAsset.value =
                                     change ?? AddAssetUsing.doc;
                               },
+                              child: Radio<AddAssetUsing>(
+                                value: AddAssetUsing.doc,
+                              ),
                             ),
                             Text("Manual",
                                 style: bohibaTheme.textTheme.titleLarge),

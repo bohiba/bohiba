@@ -1,12 +1,9 @@
 import 'dart:async';
-
-import 'package:bohiba/services/device_info_service.dart';
-
-import '/services/pref_utils.dart';
-import '/theme/theme_changer.dart';
-
-import 'services/global_service.dart';
+import '/controllers/role_controller.dart';
+import '/controllers/theme_controller.dart';
 import '/services/db_service.dart';
+import '/services/pref_utils.dart';
+import 'services/global_service.dart';
 import 'package:get/get.dart';
 import '/component/screen_utils.dart';
 import 'routes/app_route.dart';
@@ -22,13 +19,10 @@ Future<void> main() async {
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]).then((value) async {
-      final DBService dbService = DBService();
-      final PrefUtils prefUtils = PrefUtils();
-      await prefUtils.init();
-      await dbService.initDB();
-      await DeviceInfoService.getDeviceInfo();
-      Get.put(ThemeController());
       try {
+        await PrefUtils().init();
+        await DBService().initDB();
+        Get.put<ThemeController>(ThemeController());
         runApp(MyApp());
       } catch (e) {
         GlobalService.printHandler(e.toString());
@@ -48,11 +42,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  DBService dbService = DBService();
-  final ThemeController themeController = Get.find();
+  final themeController = Get.find<ThemeController>();
+
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () async {
+      await RoleService.initRole();
+    });
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -80,7 +77,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         data: themeController.isDarkMode
             ? BohibaTheme.lightTheme
             : BohibaTheme.darkTheme,
-        duration: const Duration(milliseconds: 700),
+        duration: const Duration(seconds: 1),
         curve: Curves.easeIn,
         child: ScreenUtilInit(
           child: GetMaterialApp(
@@ -100,7 +97,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    dbService.disposeDB();
     super.dispose();
   }
 }

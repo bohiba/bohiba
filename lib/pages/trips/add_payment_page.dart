@@ -1,5 +1,5 @@
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/controllers/trip_payment_add_controller.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
+import '/controllers/trip_payment_add_controller.dart';
 import 'package:get/get.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_dropdown/primary_dropdown_menu.dart';

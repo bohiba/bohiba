@@ -1,6 +1,5 @@
 import '/theme/bohiba_theme.dart';
 
-import '/component/bohiba_colors.dart';
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 import '/component/screen_utils.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +92,7 @@ class CompanyNameLogo extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 15,
-          backgroundColor: BohibaColors.black,
+          backgroundColor: bohibaTheme.dividerColor,
           backgroundImage: imageProvider,
         ),
         Gap(ScreenUtils.width20),

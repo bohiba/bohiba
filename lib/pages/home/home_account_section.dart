@@ -33,7 +33,9 @@ class _HomeAccountSectionState extends State<HomeAccountSection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 PrimaryTextIconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    navigate.pushNamed(AppRoute.analytics);
+                  },
                   label: 'Analytic',
                   widget: const Icon(
                     EvaIcons.pieChart,

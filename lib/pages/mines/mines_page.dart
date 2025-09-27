@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '/component/screen_utils.dart';
-import '/dist/controller_exports.dart';
+import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import '/component/bohiba_appbar/company_appbar.dart';
 
@@ -37,6 +37,7 @@ class MinesPage extends GetView<MinesController> {
                     children: [
                       CircleAvatar(
                         radius: ScreenUtils.width25,
+                        backgroundColor: bohibaTheme.dividerColor,
                         backgroundImage: NetworkImage(
                           GlobalService.getAvatarUrl(
                               controller.minesModel.value.mineName ?? 'UN'),

@@ -1,4 +1,17 @@
-import 'package:bohiba/bindings/security_binding.dart';
+import 'package:bohiba/bindings/analytic_binding.dart';
+import 'package:bohiba/pages/analytic/analytic_page.dart';
+
+import '/bindings/update_contact_binding.dart';
+import '/pages/user/user_profile/update_contact_info_page.dart';
+
+import '/pages/jobs/add_jobs_page.dart';
+import '/pages/jobs/my_job_detail_page.dart';
+import '/pages/jobs/all_job_page.dart';
+
+import '/bindings/all_job_binding.dart';
+import '/bindings/add_job_binding.dart';
+import '/bindings/my_job_detail_binding.dart';
+import '/bindings/security_binding.dart';
 
 import '/bindings/setting_binding.dart';
 import '/pages/security/security_page.dart';
@@ -64,7 +77,7 @@ import '/pages/truck/truck_page.dart';
 import '/pages/manager/all_manager.dart';
 import '/pages/user_authentication/screens/set_role_page.dart';
 import '/pages/authentication/password_screen/set_password.dart';
-import '/pages/authentication/signup_screen/create_user.dart';
+import '/pages/authentication/signup_screen/create_user_page.dart';
 import '/pages/user_authentication/screens/set_image_page.dart';
 import '/pages/driver/driver_all_page.dart';
 import '/pages/driver/driver_add_page.dart';
@@ -106,11 +119,12 @@ class AppRoute {
   // User Auth Screen
   static const String userAddressAuthScreen = "/user-address-auth";
   static const String userAuthScreen = "/user-auth-screen";
-  static const String userBankAuthScreen = "/user-bank-auth";
+  // static const String userBankAuthScreen = "/user-bank-auth";
   // static const String userDocAuthScreen = "/user-doc-auth";
   static const String imageAuth = "/image-auth";
-
+  static const String updateContact = "/update-contact";
   static const String roleType = "/role-type";
+
   // NavBar
   static const String navBar = "/nav-bar";
   static const String favList = '/favList';
@@ -147,9 +161,10 @@ class AppRoute {
   static const String expense = '/expense';
 
   // Main pages String
-  static const String homeScreen = "/home";
+  // static const String homeScreen = "/home";
   static const String dashboardScreen = "/dashboard";
   static const String loadHistoryScreen = "/load-history";
+  static const String analytics = "/analytics";
   static const String setting = "/setting";
   static const String security = "/security";
   static const String shareEarn = "/shareEarn";
@@ -181,6 +196,10 @@ class AppRoute {
   static const String editProfile = '/edit-profile';
   static const String kyc = '/kyc';
 
+  static const String allJobs = '/all-jobs';
+  static const String addJobs = '/add-jobs';
+  static const String myJobDetail = '/my-job-details';
+
   static final List<GetPage> routes = [
     GetPage(
       name: splashScreen,
@@ -200,16 +219,19 @@ class AppRoute {
       ],
       page: () => const SignInScreen(),
     ),
+
     GetPage(
       name: signUp,
       binding: SignupBinding(),
       page: () => const SignupScreen(),
     ),
+
     GetPage(
       name: otpScreen,
       binding: AuthBinding(),
       page: () => const OtpScreen(),
     ),
+
     GetPage(
       name: createUser,
       binding: AuthBinding(),
@@ -221,6 +243,13 @@ class AppRoute {
       binding: AuthBinding(),
       page: () => const ForgotPasswordScreen(),
     ),
+
+    GetPage(
+      binding: UpdateContactBinding(),
+      name: updateContact,
+      page: () => const UpdateContactInfoPage(),
+    ),
+
     GetPage(
       name: setPwd,
       binding: AuthBinding(),
@@ -232,16 +261,19 @@ class AppRoute {
       binding: UserProfileConfigBinding(),
       page: () => const UserDocAuthPage(),
     ),
+
     GetPage(
       name: imageAuth,
       binding: UserProfileConfigBinding(),
       page: () => const SetImagePage(),
     ),
+
     GetPage(
       name: roleType,
       binding: UserProfileConfigBinding(),
       page: () => const SetRolePage(),
     ),
+
     GetPage(
       name: userAddressAuthScreen,
       binding: UserProfileConfigBinding(),
@@ -254,6 +286,7 @@ class AppRoute {
       binding: NavBarBinding(),
       page: () => const BohibaNavBar(),
     ),
+
     GetPage(
       name: dashboardScreen,
       bindings: [
@@ -261,6 +294,12 @@ class AppRoute {
         DasboardBinding(),
       ],
       page: () => const DashboardPage(),
+    ),
+
+    GetPage(
+      binding: AnalyticBinding(),
+      name: analytics,
+      page: () => AnalyticPage(),
     ),
 
     GetPage(name: loadHistoryScreen, page: () => const AllTripPage()),
@@ -471,6 +510,24 @@ class AppRoute {
     GetPage(
       name: reportIssue,
       page: () => ReportIssuePage(),
+    ),
+
+    GetPage(
+      binding: AllJobBinding(),
+      name: allJobs,
+      page: () => AllJobPage(),
+    ),
+
+    GetPage(
+      binding: AddJobBinding(),
+      name: addJobs,
+      page: () => AddJobsPage(),
+    ),
+
+    GetPage(
+      binding: MyJobDetailBinding(),
+      name: myJobDetail,
+      page: () => MyJobDetailPage(),
     ),
   ];
 }

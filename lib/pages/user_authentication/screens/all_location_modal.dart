@@ -8,30 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class AllLocationModal extends StatefulWidget {
+class AllLocationModal extends StatelessWidget {
   const AllLocationModal({super.key});
 
   @override
-  State<AllLocationModal> createState() => _AllLocationModalState();
-}
-
-class _AllLocationModalState extends State<AllLocationModal> {
-  final LocationController controller = Get.put(LocationController());
-
-  @override
-  void initState() {
-    super.initState();
-    controller.init();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final LocationController controller = Get.put(LocationController());
     return SafeArea(
       child: Container(
         width: ScreenUtils.width,
         constraints: BoxConstraints(minHeight: 75.h),
         decoration: BoxDecoration(
-          color: BohibaColors.lightGreyColor,
+          color: bohibaTheme.scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(12.0.r),
             topLeft: Radius.circular(12.0.r),
@@ -54,7 +42,7 @@ class _AllLocationModalState extends State<AllLocationModal> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Select which match exactly',
+                        'Select matched location',
                         style: bohibaTheme.textTheme.headlineLarge,
                       ),
                       Text(
@@ -85,7 +73,7 @@ class _AllLocationModalState extends State<AllLocationModal> {
                             bohibaTheme.textTheme.headlineMedium!.fontSize,
                         fontWeight:
                             bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                        color: BohibaColors.warningColor,
+                        color: bohibaTheme.colorScheme.error,
                       ),
                     ),
                   )
@@ -94,48 +82,73 @@ class _AllLocationModalState extends State<AllLocationModal> {
             ),
             Expanded(
               child: Obx(() {
-                return ListView.builder(
-                  itemCount: controller.arrLocation.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    Map<String, dynamic> locObj = controller.arrLocation[index];
-                    return Padding(
-                      padding: EdgeInsets.only(
-                          top: ScreenUtils.height10, left: 15.w, right: 15.w),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: BohibaColors.white,
-                          borderRadius: BorderRadius.circular(12.r),
+                if (controller.arrLocation.isEmpty) {
+                  return SizedBox(
+                    width: ScreenUtils.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          controller.userTitleMsg.value,
+                          style: bohibaTheme.textTheme.headlineLarge,
                         ),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.h, horizontal: 15.w),
-                        height: 75,
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                  '${locObj['name']}, ${locObj['locality']}, ${locObj['street']}, ${locObj['city']}, ${locObj['district']}, ${locObj['state']}, ${locObj['pincode']}, ${locObj['country']}'),
-                            ),
-                            Radio.adaptive(
-                              value: index,
-                              groupValue: controller.selectedIndex.value,
-                              toggleable: true,
-                              onChanged: (v) {
-                                if (v == null) {
-                                  controller.selectedIndex.value = -1;
-                                  setState(() {});
-                                  return;
-                                }
-                                controller.selectAddress(v);
-                                setState(() {});
-                              },
-                            )
-                          ],
+                        SizedBox(
+                          width: ScreenUtils.width * 0.6,
+                          child: Text(
+                            controller.userSubTitle.value,
+                            textAlign: TextAlign.center,
+                            style: bohibaTheme.textTheme.titleMedium,
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: controller.arrLocation.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> locObj =
+                          controller.arrLocation[index];
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            top: ScreenUtils.height10, left: 15.w, right: 15.w),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: BohibaColors.white,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.h, horizontal: 15.w),
+                          height: 75,
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                    '${locObj['name']}, ${locObj['locality']}, ${locObj['street']}, ${locObj['city']}, ${locObj['district']}, ${locObj['state']}, ${locObj['pincode']}, ${locObj['country']}'),
+                              ),
+                              RadioGroup(
+                                groupValue: controller.selectedIndex.value,
+                                onChanged: (v) {
+                                  if (v == null) {
+                                    controller.selectedIndex.value = -1;
+                                    return;
+                                  }
+                                  controller.selectAddress(v);
+                                },
+                                child: Radio.adaptive(
+                                  value: index,
+                                  toggleable: true,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
+                      );
+                    },
+                  );
+                }
               }),
             ),
             Padding(
@@ -151,12 +164,15 @@ class _AllLocationModalState extends State<AllLocationModal> {
                     onPressed: () async {
                       controller.selectedIndex.value = -1;
                       await controller.getCurrentAddress();
-                      setState(() {});
                     },
                     label: 'Refresh',
                   ),
                   PrimaryButton(
                     onPressed: () {
+                      if (controller.arrLocation.isEmpty) {
+                        Get.back();
+                        return;
+                      }
                       Get.back(
                         result: controller.selectedIndex.value == -1
                             ? null
@@ -165,7 +181,10 @@ class _AllLocationModalState extends State<AllLocationModal> {
                       );
                       controller.selectedIndex.value = -1;
                     },
-                    label: 'Save',
+                    label: controller.arrLocation.isEmpty ? 'Close' : 'Save',
+                    color: controller.arrLocation.isEmpty
+                        ? bohibaTheme.colorScheme.error
+                        : bohibaTheme.primaryColor,
                     width: ScreenUtils.width / 2.3,
                   ),
                 ],

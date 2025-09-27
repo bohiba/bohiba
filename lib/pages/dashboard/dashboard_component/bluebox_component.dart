@@ -1,22 +1,23 @@
-import '/component/bohiba_colors.dart';
+import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
 import 'package:flutter/material.dart';
 
 class BlueBoxComponent extends StatelessWidget {
   final String label1;
   final String? label2;
+  final String? label3;
   final Widget child;
 
   const BlueBoxComponent({
     super.key,
     this.label1 = "Header",
     this.label2,
+    this.label3,
     required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    ThemeData bohibaTheme = Theme.of(context);
     return Container(
       width: ScreenUtils.width,
       height: ScreenUtils.height * 0.233,
@@ -38,7 +39,7 @@ class BlueBoxComponent extends StatelessWidget {
               style: TextStyle(
                 fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
                 fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
-                color: BohibaColors.white,
+                color: bohibaTheme.textTheme.displayLarge!.color,
               ),
             ),
           ),
@@ -48,13 +49,22 @@ class BlueBoxComponent extends StatelessWidget {
               label2 ?? 'NA',
               style: TextStyle(
                 fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
-                color: BohibaColors.white,
+                color: bohibaTheme.textTheme.displayLarge!.color,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: ScreenUtils.width10),
+            child: Text(
+              label3 ?? 'NA',
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                color: bohibaTheme.textTheme.displayLarge!.color,
               ),
             ),
           ),
           Spacer(),
           Divider(
-            color: BohibaColors.white,
             // height: 45,
             thickness: 1,
             indent: 0,

@@ -1,4 +1,4 @@
-import '/controllers/open_driver_controller.dart';
+import '../controllers/open_driver_list_controller.dart';
 
 import '/controllers/driver_all_controller.dart';
 import '/controllers/home_controller.dart';
@@ -11,6 +11,6 @@ class HomeBinding extends Bindings {
     Get.put<HomeController>(HomeController());
     Get.lazyPut<TruckAllController>(() => TruckAllController());
     Get.lazyPut<DriverAllController>(() => DriverAllController());
-    Get.lazyPut<OpenDriverController>(() => OpenDriverController());
+    Get.lazyPut<OpenDriverListController>(() => OpenDriverListController());
   }
 }

@@ -47,7 +47,7 @@ class HomeNewsSection extends GetView<HomeController> {
                       style: TextStyle(
                           fontSize:
                               bohibaTheme.textTheme.headlineMedium!.fontSize,
-                          color: Theme.of(context).primaryColor),
+                          color: bohibaTheme.primaryColor),
                     ),
                   ))
             ],

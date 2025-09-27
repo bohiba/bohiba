@@ -1,16 +1,15 @@
-import '/dist/app_enums.dart';
 import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 
 class BohibaTheme {
-  final _appTheme = PrefUtils().getAppThemeMode();
+  final _appTheme = PrefUtils.getAppThemeMode();
 
   ThemeData themeData() {
-    if (_appTheme == AppThemeMode.dark) {
+    if (_appTheme == ThemeMode.dark) {
       return darkTheme;
-    } else if (_appTheme == AppThemeMode.light) {
+    } else if (_appTheme == ThemeMode.light) {
       return lightTheme;
     } else {
       return lightTheme;
@@ -23,270 +22,277 @@ class BohibaTheme {
   /// Light Theme
   static ThemeData _lightTheme() {
     return ThemeData(
-        useMaterial3: false,
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: BohibaColors.bgColor,
-        splashColor: BohibaColors.primaryVariantColor,
-        highlightColor: BohibaColors.primaryVariantColor,
-        disabledColor: BohibaColors.primaryVariantColor,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: BohibaColors.bgColor,
-          elevation: 10,
+      useMaterial3: false,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: BohibaColors.bgColor,
+      splashColor: BohibaColors.primaryVariantColor,
+      highlightColor: BohibaColors.primaryVariantColor,
+      disabledColor: BohibaColors.primaryVariantColor,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: BohibaColors.bgColor,
+        elevation: 10,
+      ),
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: BohibaColors.white,
+        headerBackgroundColor: BohibaColors.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        datePickerTheme: DatePickerThemeData(
-          backgroundColor: BohibaColors.white,
-          headerBackgroundColor: BohibaColors.primaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          headerHelpStyle: TextStyle(
+        headerHelpStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BohibaColors.primaryColor;
+          }
+          return BohibaColors.white;
+        }),
+        todayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BohibaColors.primaryColor;
+          }
+          return BohibaColors.white;
+        }),
+        todayBorder: BorderSide(
+          width: 0,
+          color: BohibaColors.transparent,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
+            color: BohibaColors.primaryColor,
           ),
-          dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return BohibaColors.primaryColor;
-            }
-            return BohibaColors.white;
-          }),
-          todayBackgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return BohibaColors.primaryColor;
-            }
-            return BohibaColors.white;
-          }),
-          todayBorder: BorderSide(
-            width: 0,
-            color: BohibaColors.transparent,
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            labelStyle: TextStyle(
-              fontSize: 16,
-              color: BohibaColors.primaryColor,
-            ),
-            hintStyle: TextStyle(
-              fontSize: 12.adaptSize,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-              color: BohibaColors.black,
-            ),
-          ),
-        ),
-        colorScheme: ColorScheme.light(
-          primary: BohibaColors.primaryColor,
-          secondary: BohibaColors.secoundaryColor,
-          surface: BohibaColors.errorColor,
-          onSurface: BohibaColors.successColor,
-          error: BohibaColors.warningColor,
-        ),
-        primaryColor: BohibaColors.primaryColor,
-        cardColor: BohibaColors.lightGreyColor,
-        dividerColor: BohibaColors.lightGreyColor,
-        fontFamily: 'Poppins',
-        tabBarTheme: TabBarThemeData(
-          labelColor: BohibaColors.primaryColor,
-          unselectedLabelColor: BohibaColors.secoundaryColor,
-          indicatorColor: BohibaColors.primaryColor,
-        ),
-        popupMenuTheme: PopupMenuThemeData(
-          elevation: 5,
-          color: BohibaColors.white,
-          iconColor: BohibaColors.primaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-        ),
-        menuTheme: MenuThemeData(
-          style: MenuStyle(
-            elevation: WidgetStatePropertyAll(0.4),
-            backgroundColor: WidgetStatePropertyAll(BohibaColors.bgColor),
-          ),
-        ),
-        primaryIconTheme: IconThemeData(
-          color: BohibaColors.primaryColor,
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: ButtonStyle(
-            textStyle: WidgetStateProperty.resolveWith((state) {
-              if (state.contains(WidgetState.selected)) {
-                return TextStyle(color: BohibaColors.primaryColor);
-              }
-              return TextStyle(color: BohibaColors.primaryColor);
-            }),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            elevation: 0,
-            iconColor: BohibaColors.white,
-            backgroundColor: BohibaColors.primaryColor,
-            disabledBackgroundColor: BohibaColors.primaryVariantColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: BohibaColors.bgColor,
-          foregroundColor: BohibaColors.bgColor,
-          elevation: 0.25,
-          centerTitle: false,
-          titleTextStyle: TextStyle(
+          hintStyle: TextStyle(
+            fontSize: 12.adaptSize,
             fontFamily: 'Poppins',
-            color: BohibaColors.primaryColor,
             fontWeight: FontWeight.w600,
-            letterSpacing: 1.2,
-            fontSize: 24.adaptSize,
-            // fontStyle: FontStyle.italic
+            color: BohibaColors.black,
           ),
-          iconTheme: IconThemeData(
-            color: BohibaColors.primaryColor,
+        ),
+      ),
+      colorScheme: ColorScheme.light(
+        primary: BohibaColors.primaryColor,
+        secondary: BohibaColors.secoundaryColor,
+        surface: BohibaColors.errorColor,
+        onSurface: BohibaColors.successColor,
+        error: BohibaColors.warningColor,
+      ),
+      primaryColor: BohibaColors.primaryColor,
+      cardColor: BohibaColors.lightGreyColor,
+      dividerColor: BohibaColors.borderColor,
+      fontFamily: 'Poppins',
+      tabBarTheme: TabBarThemeData(
+        labelColor: BohibaColors.primaryColor,
+        unselectedLabelColor: BohibaColors.secoundaryColor,
+        indicatorColor: BohibaColors.primaryColor,
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        elevation: 5,
+        color: BohibaColors.white,
+        iconColor: BohibaColors.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+      ),
+      menuTheme: MenuThemeData(
+        style: MenuStyle(
+          elevation: WidgetStatePropertyAll(0.4),
+          backgroundColor: WidgetStatePropertyAll(BohibaColors.bgColor),
+        ),
+      ),
+      primaryIconTheme: IconThemeData(
+        color: BohibaColors.primaryColor,
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          textStyle: WidgetStateProperty.resolveWith((state) {
+            if (state.contains(WidgetState.selected)) {
+              return TextStyle(color: BohibaColors.primaryColor);
+            }
+            return TextStyle(color: BohibaColors.primaryColor);
+          }),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          iconColor: BohibaColors.white,
+          backgroundColor: BohibaColors.primaryColor,
+          disabledBackgroundColor: BohibaColors.primaryVariantColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
           ),
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: BohibaColors.bgColor,
+        foregroundColor: BohibaColors.bgColor,
+        elevation: 0.25,
+        centerTitle: false,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Poppins',
+          color: BohibaColors.primaryColor,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 1.2,
+          fontSize: 24.adaptSize,
+          // fontStyle: FontStyle.italic
         ),
         iconTheme: IconThemeData(
           color: BohibaColors.primaryColor,
         ),
-        listTileTheme: ListTileThemeData(
-          titleTextStyle: TextStyle(
-            fontFamily: 'Poppins',
+      ),
+      iconTheme: IconThemeData(
+        color: BohibaColors.primaryColor,
+      ),
+      listTileTheme: ListTileThemeData(
+        titleTextStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14.adaptSize,
+          fontWeight: FontWeight.w700,
+          color: BohibaColors.black,
+        ),
+        subtitleTextStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 12.adaptSize,
+          letterSpacing: 1.5,
+          color: BohibaColors.secoundaryColor,
+          fontWeight: FontWeight.w500,
+        ),
+        leadingAndTrailingTextStyle: TextStyle(
+          color: BohibaColors.white,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w500,
+          fontSize: 12.adaptSize,
+        ),
+        iconColor: BohibaColors.primaryColor,
+        tileColor: BohibaColors.lightGreyColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide.none,
+        ),
+      ),
+      cardTheme: CardThemeData(
+          elevation: 1.5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          color: Colors.grey.shade50),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(
+          color: Colors.grey,
+          fontWeight: FontWeight.w400,
+          fontSize: 13.0.adaptSize,
+        ),
+        prefixIconColor: BohibaColors.primaryColor,
+        suffixIconColor: BohibaColors.primaryColor,
+        contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: BohibaColors.borderColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: BohibaColors.borderColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: BohibaColors.warningColor),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: BohibaColors.primaryColor),
+        ),
+      ),
+      checkboxTheme: CheckboxThemeData(
+        checkColor: WidgetStatePropertyAll(BohibaColors.white),
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BohibaColors.primaryColor;
+          }
+          return BohibaColors.white;
+        }),
+        // overlayColor: WidgetStatePropertyAll(BohibaColors.warningColor)
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (state) {
+            if (state.contains(WidgetState.selected)) {
+              return BohibaColors.primaryColor;
+            }
+            if (state.contains(WidgetState.disabled)) {
+              return BohibaColors.lightGreyColor;
+            }
+
+            return BohibaColors.white;
+          },
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (state) {
+            if (state.contains(WidgetState.selected)) {
+              return BohibaColors.borderColor;
+            }
+            if (state.contains(WidgetState.focused)) {
+              return BohibaColors.white;
+            }
+            return BohibaColors.borderColor;
+          },
+        ),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: BohibaColors.primaryColor,
+        selectionColor: BohibaColors.primaryVariantColor,
+        selectionHandleColor: BohibaColors.primaryVariantColor,
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: BohibaColors.primaryColor,
+          iconColor: BohibaColors.primaryColor,
+          textStyle: TextStyle(
             fontSize: 14.adaptSize,
-            fontWeight: FontWeight.w700,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
             color: BohibaColors.black,
           ),
-          subtitleTextStyle: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12.adaptSize,
-            letterSpacing: 1.5,
-            color: BohibaColors.secoundaryColor,
-            fontWeight: FontWeight.w500,
-          ),
-          leadingAndTrailingTextStyle: TextStyle(
-            color: BohibaColors.white,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w500,
-            fontSize: 12.adaptSize,
-          ),
-          iconColor: BohibaColors.primaryColor,
-          tileColor: BohibaColors.lightGreyColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide.none,
-          ),
         ),
-        cardTheme: CardThemeData(
-            elevation: 1.5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            color: Colors.grey.shade50),
-        inputDecorationTheme: InputDecorationTheme(
-          hintStyle: TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.w400,
-            fontSize: 13.0.adaptSize,
-          ),
-          prefixIconColor: BohibaColors.primaryColor,
-          suffixIconColor: BohibaColors.primaryColor,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: BohibaColors.borderColor),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: BohibaColors.borderColor),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: BohibaColors.warningColor),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: BohibaColors.primaryColor),
-          ),
-        ),
-        checkboxTheme: CheckboxThemeData(
-          checkColor: WidgetStatePropertyAll(BohibaColors.white),
-          fillColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return BohibaColors.primaryColor;
-            }
+      ),
+      dropdownMenuTheme: DropdownMenuThemeData(),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        linearTrackColor: BohibaColors.borderColor,
+        color: BohibaColors.borderColor,
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BohibaColors.primaryColor;
+          }
+          return BohibaColors.primaryColor;
+        }),
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return BohibaColors.white;
-          }),
-          // overlayColor: WidgetStatePropertyAll(BohibaColors.warningColor)
-        ),
-        switchTheme: SwitchThemeData(
-          thumbColor: WidgetStateProperty.resolveWith(
-            (state) {
-              if (state.contains(WidgetState.selected)) {
-                return BohibaColors.primaryColor;
-              }
-              if (state.contains(WidgetState.disabled)) {
-                return BohibaColors.lightGreyColor;
-              }
-
-              return BohibaColors.white;
-            },
-          ),
-          trackColor: WidgetStateProperty.resolveWith(
-            (state) {
-              if (state.contains(WidgetState.selected)) {
-                return BohibaColors.borderColor;
-              }
-              if (state.contains(WidgetState.focused)) {
-                return BohibaColors.white;
-              }
-              return BohibaColors.borderColor;
-            },
-          ),
-        ),
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: BohibaColors.primaryColor,
-          selectionColor: BohibaColors.primaryVariantColor,
-          selectionHandleColor: BohibaColors.primaryVariantColor,
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: BohibaColors.primaryColor,
-          ),
-        ),
-        dropdownMenuTheme: DropdownMenuThemeData(),
-        progressIndicatorTheme: ProgressIndicatorThemeData(
-          linearTrackColor: BohibaColors.borderColor,
-          color: BohibaColors.borderColor,
-        ),
-        radioTheme: RadioThemeData(
-          fillColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return BohibaColors.primaryColor;
-            }
-            return BohibaColors.primaryColor;
-          }),
-          overlayColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return BohibaColors.white;
-            }
-            return BohibaColors.primaryColor;
-          }),
-        ),
-        textTheme: lightTextTheme(),
-        bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: BohibaColors.bgColor,
-        ),
-        dividerTheme:
-            DividerThemeData(thickness: 0.12, color: BohibaColors.greyColor),
-        searchBarTheme: SearchBarThemeData(
-          elevation: WidgetStatePropertyAll(0),
-          backgroundColor: WidgetStatePropertyAll(BohibaColors.primaryColor),
-        ),
-        searchViewTheme: SearchViewThemeData());
+          }
+          return BohibaColors.primaryColor;
+        }),
+      ),
+      textTheme: lightTextTheme(),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: BohibaColors.bgColor,
+      ),
+      dividerTheme:
+          DividerThemeData(thickness: 0.12, color: BohibaColors.greyColor),
+      searchBarTheme: SearchBarThemeData(
+        elevation: WidgetStatePropertyAll(0),
+        backgroundColor: WidgetStatePropertyAll(BohibaColors.primaryColor),
+      ),
+      searchViewTheme: SearchViewThemeData(),
+    );
   }
 
   static ThemeData _darkTheme() {
@@ -310,17 +316,17 @@ class BohibaTheme {
         centerTitle: false,
         titleTextStyle: TextStyle(
           fontFamily: 'Poppins',
-          color: DarkColors.white,
+          color: DarkColors.secoundaryColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
           fontSize: 24.adaptSize,
         ),
         iconTheme: IconThemeData(
-          color: DarkColors.primaryColor,
+          color: DarkColors.secoundaryColor,
         ),
       ),
       iconTheme: IconThemeData(
-        color: DarkColors.primaryColor,
+        color: DarkColors.secoundaryColor,
       ),
       listTileTheme: ListTileThemeData(
         titleTextStyle: TextStyle(
@@ -342,7 +348,7 @@ class BohibaTheme {
           fontWeight: FontWeight.w500,
           fontSize: 12.adaptSize,
         ),
-        iconColor: DarkColors.primaryColor,
+        iconColor: DarkColors.white,
         tileColor: DarkColors.tileColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -392,9 +398,30 @@ class BohibaTheme {
             fontWeight: FontWeight.w600,
             color: DarkColors.greyColor,
           ),
+          prefixIconColor: DarkColors.secoundaryColor,
+          suffixIconColor: DarkColors.primaryColor,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+          outlineBorder: BorderSide(color: DarkColors.secoundaryColor),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.secoundaryColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.secoundaryColor),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.warningColor),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: DarkColors.secoundaryColor),
+          ),
         ),
       ),
-      dividerColor: DarkColors.lightGreyColor,
+      dividerColor: DarkColors.borderColor,
       colorScheme: const ColorScheme.dark(
         primary: DarkColors.primaryColor,
         secondary: DarkColors.secoundaryColor,
@@ -512,15 +539,27 @@ class BohibaTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: DarkColors.primaryVariantColor,
+          foregroundColor: DarkColors.primaryColor,
+          iconColor: DarkColors.primaryColor,
+          textStyle: TextStyle(
+            fontSize: 14.adaptSize,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            color: DarkColors.primaryColor,
+          ),
         ),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
-        linearTrackColor: DarkColors.borderColor,
-        color: DarkColors.primaryVariantColor,
+        linearTrackColor: DarkColors.white,
+        color: DarkColors.white,
       ),
       radioTheme: RadioThemeData(
-        fillColor: WidgetStatePropertyAll(DarkColors.primaryVariantColor),
+        fillColor: WidgetStateColor.resolveWith((state) {
+          if (state.contains(WidgetState.selected)) {
+            return DarkColors.primaryColor;
+          }
+          return DarkColors.white;
+        }),
         overlayColor:
             WidgetStatePropertyAll(DarkColors.white.withValues(alpha: 0.1)),
       ),
@@ -542,7 +581,7 @@ TextTheme lightTextTheme() {
       fontFamily: 'Poppins',
       fontSize: 32.adaptSize,
       fontWeight: FontWeight.w700,
-      color: BohibaColors.black,
+      color: BohibaColors.white,
     ),
     displayMedium: TextStyle(
       fontFamily: 'Poppins',

@@ -1,10 +1,12 @@
-import '../../../component/bohiba_dropdown/app_dropdown_button.dart';
+import '/routes/app_route.dart';
+import 'package:gap/gap.dart';
+
+import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
-import '/component/bohiba_buttons/bottom_button.dart';
 
 class EditUserProfilePage extends StatefulWidget {
   const EditUserProfilePage({super.key});
@@ -25,18 +27,11 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
+    final navigatorState = Navigator.of(context);
     return Scaffold(
-      appBar: const TitleAppbar(
-        title: "Edit Profile",
-      ),
-      body: Container(
-        width: width,
-        height: height,
+      appBar: const TitleAppbar(title: "Edit Profile"),
+      body: Padding(
         padding: EdgeInsets.only(
-          // top: BohibaResponsiveScreen.height20,
           left: ScreenUtils.width15,
           right: ScreenUtils.width15,
           bottom: ScreenUtils.height30,
@@ -53,7 +48,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                 'Please set your profile to get started',
                 style: bohibaTheme.textTheme.titleMedium,
               ),
-              const SizedBox(height: 10),
+              Gap(ScreenUtils.height10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,7 +59,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                   Padding(
                     padding: EdgeInsets.only(bottom: ScreenUtils.height5),
                     child: TextInputField(
-                      hintText: "Mangal Kishore Mahanta",
+                      hintText: "Name",
                       controller: nameController,
                     ),
                   ),
@@ -75,7 +70,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                   Padding(
                     padding: EdgeInsets.only(bottom: ScreenUtils.height5),
                     child: TextInputField(
-                      hintText: "000 000 0000",
+                      hintText: "Mobile Number",
                       controller: mobileController,
                       keyboardType: TextInputType.phone,
                     ),
@@ -129,33 +124,39 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                 padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
                 child: Row(
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: 'Agreed to ',
-                            style: TextStyle(color: Colors.grey, fontSize: 11),
-                          ),
-                          TextSpan(
-                            text: 'Term & Conditions',
-                            style: TextStyle(
-                              color: BohibaColors.primaryColor,
-                              // decoration: TextDecoration.underline,
-                              fontSize: 11,
+                    GestureDetector(
+                      onTap: () {
+                        navigatorState.pushNamed(AppRoute.setting);
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Agreed to ',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 11),
                             ),
-                          ),
-                          const TextSpan(
-                            text: ' & ',
-                            style: TextStyle(color: Colors.grey, fontSize: 11),
-                          ),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: TextStyle(
-                                color: BohibaColors.primaryColor,
-                                // decoration: TextDecoration.underline,
-                                fontSize: 11),
-                          )
-                        ],
+                            TextSpan(
+                              text: 'Term & Conditions',
+                              style: TextStyle(
+                                color: bohibaTheme.primaryColor,
+                                fontSize: 11,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: ' & ',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 11),
+                            ),
+                            TextSpan(
+                              text: 'Privacy Policy',
+                              style: TextStyle(
+                                  color: BohibaColors.primaryColor,
+                                  // decoration: TextDecoration.underline,
+                                  fontSize: 11),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     Spacer(),
@@ -173,14 +174,6 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomButton(
-        width: width,
-        onTap: () {
-          debugPrint(
-              "\n-------------\n| is_checked: $isChecked |\n-------------\n");
-        },
-        labelPrice: "SUBMIT",
       ),
     );
   }

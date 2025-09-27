@@ -15,10 +15,8 @@ class AppBarIconBox extends StatelessWidget {
       onTap: onTap,
       onTapDown: onTapDown,
       child: Container(
+        margin: EdgeInsets.only(right: ScreenUtils.width10),
         alignment: Alignment.center,
-        margin: EdgeInsets.only(
-          right: ScreenUtils.width10,
-        ),
         width: ScreenUtils.width40,
         child: icon,
       ),

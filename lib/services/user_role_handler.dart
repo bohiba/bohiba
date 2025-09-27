@@ -1,6 +1,6 @@
 import '../dist/app_enums.dart';
 
-String getUserRoleName(int value) {
+String getUserRoleName(int? value) {
   switch (value) {
     case 1:
       return "Truck Owner";
@@ -13,7 +13,7 @@ String getUserRoleName(int value) {
   }
 }
 
-UserRoleType getUserRoleType(int value) {
+UserRoleType getUserRoleType(int? value) {
   switch (value) {
     case 1:
       return UserRoleType.truckowner;

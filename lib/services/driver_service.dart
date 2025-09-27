@@ -29,7 +29,7 @@ class DriverService {
           '${driver.id}',
           driver,
         );
-        ProfileModel? profile = await ProfileService.retrieveProfile();
+        ProfileModel? profile = await ProfileService.getProfile();
         if (profile != null) {
           profile.drivers =
               profile.drivers == null ? 1 : (profile.drivers! + 1);
@@ -134,7 +134,7 @@ class DriverService {
         int dbDeleted = await dBService.deleteData<DriverModel>(
             tblDriver, driverId.toString());
 
-        ProfileModel? profile = await ProfileService.retrieveProfile();
+        ProfileModel? profile = await ProfileService.getProfile();
         if (profile != null &&
             profile.drivers != null &&
             profile.drivers! > 0) {
