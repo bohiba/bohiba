@@ -15,14 +15,14 @@ class OpenDriverService {
     return await _dbService.getAllData<OpenDriverModel>(tblOpenDriver);
   }
 
-  static Future<int> expressInternet(
+  static Future<int> connectDriver(
       {required Map<String, dynamic> bodyMap}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
     GlobalService.showProgress();
     ApiResponse response = await _dioService.post(
-      ApiEndPoint.apiExpressIntreset,
+      ApiEndPoint.apiSendConnectReq,
       body: bodyMap,
     );
     switch (response.statusCode) {

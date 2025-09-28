@@ -43,7 +43,7 @@ class ExplorePage extends GetView<OpenDriverListController> {
             return OpenDriverTile(
               openDriver: openDriver,
               onPressConnect: () async =>
-                  await controller.expressIntrest(driverUuid: openDriver.uuid!),
+                  await controller.connect(driverUuid: openDriver.uuid!),
             );
           },
         );

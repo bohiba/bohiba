@@ -45,8 +45,9 @@ class OpenDriverTile extends StatelessWidget {
                 ),
                 BohibaMarqueeText(
                   width: ScreenUtils.width * 0.3,
-                  text: openDriver.jobStatus!.toCapitalizedLabel(),
-                  overflowText: openDriver.jobStatus!.toCapitalizedLabel(),
+                  text: openDriver.jobStatus?.toCapitalizedLabel() ?? '',
+                  overflowText:
+                      openDriver.jobStatus?.toCapitalizedLabel() ?? '',
                   style: TextStyle(
                     fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                     fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,

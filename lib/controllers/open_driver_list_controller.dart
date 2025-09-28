@@ -14,9 +14,9 @@ class OpenDriverListController extends GetxController {
     });
   }
 
-  Future<void> expressIntrest({required String driverUuid}) async {
+  Future<void> connect({required String driverUuid}) async {
     Map<String, dynamic> bodyObj = {"driver_uuid": driverUuid};
-    int expressed = await OpenDriverService.expressInternet(bodyMap: bodyObj);
+    int expressed = await OpenDriverService.connectDriver(bodyMap: bodyObj);
     if (expressed > 0) {
       // Action
     }

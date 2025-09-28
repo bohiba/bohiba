@@ -46,7 +46,6 @@ class MasterController extends GetxController {
       return;
     }
     GlobalService.showProgress();
-    // await _dbService.resetAndReInitDB();
     ApiResponse serviceResponse =
         await _dio.handleApiWithRetry(() => _dio.get(ApiEndPoint.apiMain));
     GlobalService.dismissProgress();
@@ -128,9 +127,9 @@ class MasterController extends GetxController {
         }
 
         // List lookingJob = [];
-        if (mainObj.containsKey('looking_job')) {
+        if (mainObj.containsKey('looking_jobs')) {
           final List<OpenDriverModel> openToDriverList =
-              OpenDriverModel.listFromJson(mainObj['looking_job']);
+              OpenDriverModel.listFromJson(mainObj['looking_jobs']);
           Map<String, OpenDriverModel> openDriverObj = {
             for (OpenDriverModel odj in openToDriverList) "${odj.id}": odj
           };
