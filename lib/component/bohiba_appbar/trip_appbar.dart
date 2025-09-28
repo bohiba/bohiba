@@ -64,7 +64,7 @@ class TripAppBar extends GetView<TripController>
               TripActionType.edit: (edit) async {
                 if (edit != null && edit != false) {
                   controller.tripInfo.value = (await controller.getTripInfo(
-                    methodType: MethodType.server,
+                    methodType: MethodType.api,
                     tripInfo: controller.tripInfo.value,
                   ))!;
                 }
@@ -72,7 +72,7 @@ class TripAppBar extends GetView<TripController>
               TripActionType.expense: (expense) async {
                 if (expense != null && expense != false) {
                   controller.tripInfo.value = (await controller.getTripInfo(
-                    methodType: MethodType.server,
+                    methodType: MethodType.api,
                     tripInfo: controller.tripInfo.value,
                   ))!;
                 }
@@ -80,7 +80,7 @@ class TripAppBar extends GetView<TripController>
               TripActionType.payment: (payment) async {
                 if (payment != null && payment != false) {
                   controller.tripInfo.value = (await controller.getTripInfo(
-                    methodType: MethodType.server,
+                    methodType: MethodType.api,
                     tripInfo: controller.tripInfo.value,
                   ))!;
                 }

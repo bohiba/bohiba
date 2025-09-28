@@ -22,7 +22,7 @@ class OpenDriverModelAdapter extends TypeAdapter<OpenDriverModel> {
       name: fields[2] as String?,
       profileImage: fields[3] as String?,
       mobileNumber: fields[4] as String?,
-      jobStatus: fields[5] as String?,
+      connect: fields[5] as String?,
     );
   }
 
@@ -41,7 +41,7 @@ class OpenDriverModelAdapter extends TypeAdapter<OpenDriverModel> {
       ..writeByte(4)
       ..write(obj.mobileNumber)
       ..writeByte(5)
-      ..write(obj.jobStatus);
+      ..write(obj.connect);
   }
 
   @override

@@ -281,7 +281,7 @@ class TripPage extends GetView<TripController> {
                                   if (onValue != null && onValue != false) {
                                     controller.tripInfo.value =
                                         (await controller.getTripInfo(
-                                      methodType: MethodType.server,
+                                      methodType: MethodType.api,
                                       tripInfo: controller.tripInfo.value,
                                     ))!;
                                   }
@@ -411,7 +411,7 @@ class TripPage extends GetView<TripController> {
                                   if (onValue != null && onValue != false) {
                                     controller.tripInfo.value =
                                         (await controller.getTripInfo(
-                                      methodType: MethodType.server,
+                                      methodType: MethodType.api,
                                       tripInfo: controller.tripInfo.value,
                                     ))!;
                                   }

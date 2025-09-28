@@ -18,7 +18,7 @@ class ReassignmentController extends GetxController {
 
   Future<void> getReassign() async {
     tripController.tripInfo.value = (await tripController.getTripInfo(
-      methodType: MethodType.server,
+      methodType: MethodType.api,
       tripInfo: tripController.tripInfo.value,
     ))!;
 

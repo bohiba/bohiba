@@ -16,7 +16,7 @@ class TripExpenseController extends GetxController {
 
   Future<void> getExpense() async {
     tripController.tripInfo.value = (await tripController.getTripInfo(
-      methodType: MethodType.server,
+      methodType: MethodType.api,
       tripInfo: tripController.tripInfo.value,
     ))!;
 

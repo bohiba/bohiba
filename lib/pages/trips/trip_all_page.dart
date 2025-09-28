@@ -44,7 +44,7 @@ class AllTripPage extends GetView<AllTripController> {
                         Get.toNamed(AppRoute.trips, arguments: item)!
                             .then((onValue) async {
                           if (onValue) {
-                            await controller.getTripList();
+                            await controller.fetchTrips();
                           }
                         });
                       },
@@ -80,7 +80,7 @@ class AllTripPage extends GetView<AllTripController> {
               onTap: () {
                 navigator.pushNamed(AppRoute.addTrip).then((value) async {
                   if (value != null) {
-                    await controller.getTripList();
+                    await controller.fetchTrips(refresh: true);
                   }
                 });
               },
@@ -88,87 +88,89 @@ class AllTripPage extends GetView<AllTripController> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TabBar(
-            controller: controller.tabController,
-            isScrollable: true,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: List.generate(
-              controller.tabs.length,
-              (index) {
-                return Tab(text: controller.tabs[index]);
-              },
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TabBar(
+              controller: controller.tabController,
+              isScrollable: true,
+              indicatorSize: TabBarIndicatorSize.label,
+              tabs: List.generate(
+                controller.tabs.length,
+                (index) {
+                  return Tab(text: controller.tabs[index]);
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: Obx(() {
-              return TabBarView(
-                controller: controller.tabController,
-                children: controller
-                    .convertToSnakeCase(controller.tabs)
-                    .map((status) {
-                  final filteredTrips = controller.getTripsByStatus(status);
-                  return filteredTrips.isEmpty
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'No Trip Found, Press below to add trip.',
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                navigator
-                                    .pushNamed(AppRoute.addTrip)
-                                    .then((value) async {
-                                  if (value != null) {
-                                    await controller.getTripList();
-                                  }
-                                });
-                              },
-                              child: Text('Add Trip'),
-                            )
-                          ],
-                        )
-                      : ListView.builder(
-                          controller: controller.scrollController,
-                          itemCount: filteredTrips.length +
-                              (controller.hasMore.value ? 1 : 0),
-                          padding: EdgeInsets.only(
-                            top: ScreenUtils.height20,
-                            left: ScreenUtils.width15,
-                            right: ScreenUtils.width15,
-                          ),
-                          itemBuilder: (context, index) {
-                            if (index < filteredTrips.length) {
-                              return TripTile(
-                                tripInfo: filteredTrips[index],
-                                onClick: () {
-                                  Get.toNamed(AppRoute.trips,
-                                          arguments: filteredTrips[index])!
-                                      .then((onValue) async {
-                                    if (onValue) {
-                                      await controller.getTripList();
+            Expanded(
+              child: Obx(() {
+                return TabBarView(
+                  controller: controller.tabController,
+                  children: controller
+                      .convertToSnakeCase(controller.tabs)
+                      .map((status) {
+                    final filteredTrips = controller.getTripsByStatus(status);
+                    return filteredTrips.isEmpty
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'No Trip Found, Press below to add trip.',
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  navigator
+                                      .pushNamed(AppRoute.addTrip)
+                                      .then((value) async {
+                                    if (value != null) {
+                                      await controller.fetchTrips();
                                     }
                                   });
                                 },
-                              );
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                }).toList(),
-              );
-            }),
-          ),
-        ],
+                                child: Text('Add Trip'),
+                              )
+                            ],
+                          )
+                        : ListView.builder(
+                            controller: controller.scrollController,
+                            itemCount: filteredTrips.length +
+                                (controller.hasMore.value ? 1 : 0),
+                            padding: EdgeInsets.only(
+                              top: ScreenUtils.height20,
+                              left: ScreenUtils.width15,
+                              right: ScreenUtils.width15,
+                            ),
+                            itemBuilder: (context, index) {
+                              if (index < filteredTrips.length) {
+                                return TripTile(
+                                  tripInfo: filteredTrips[index],
+                                  onClick: () {
+                                    Get.toNamed(AppRoute.trips,
+                                            arguments: filteredTrips[index])!
+                                        .then((onValue) async {
+                                      if (onValue) {
+                                        await controller.fetchTrips();
+                                      }
+                                    });
+                                  },
+                                );
+                              } else {
+                                return Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                  }).toList(),
+                );
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }

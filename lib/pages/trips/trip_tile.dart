@@ -1,7 +1,6 @@
 import '/controllers/trip_controller.dart';
 import 'package:get/get.dart';
 
-import '/component/bohiba_colors.dart';
 import '/model/trip_model.dart';
 
 import '/component/screen_utils.dart';
@@ -37,8 +36,7 @@ class TripTile extends GetView<TripController> {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: BohibaColors.greyColor,
-                // backgroundImage: NetworkImage(GlobalService.getAvatarUrl('')),
+                backgroundColor: bohibaTheme.dividerColor,
               ),
               Gap(ScreenUtils.height15),
               Column(
@@ -48,14 +46,28 @@ class TripTile extends GetView<TripController> {
                   Text(
                     tripInfo.tripCode ?? 'NA',
                     maxLines: 1,
-                    style: bohibaTheme.textTheme.bodyMedium,
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                      letterSpacing:
+                          bohibaTheme.textTheme.labelMedium!.letterSpacing,
+                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                      color: colors,
+                    ),
                   ),
                   Text(
                     tripInfo.truck?.regdNumber ?? '',
-                    // '${tripInfo.origin} - ${tripInfo.destination}',
                     maxLines: 1,
                     style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                      fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                      color: bohibaTheme.textTheme.labelLarge!.color,
+                    ),
+                  ),
+                  Text(
+                    tripInfo.startDate ?? '',
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
+                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
                       color: colors,
                     ),
                   ),

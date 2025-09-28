@@ -40,7 +40,7 @@ class SettingController extends GetxController {
     };
     int updateRole = await ProfileService.setRole(bodyMap: bodyObj);
     if (updateRole > 0) {
-      await dashboardController.getProfileModel(methodType: MethodType.server);
+      await dashboardController.getProfileModel(methodType: MethodType.api);
       await masterController.mainApi();
       Get.offAllNamed(AppRoute.navBar);
       GlobalService.showAppToast(message: 'Role Updated Successfully');

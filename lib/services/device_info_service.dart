@@ -9,9 +9,8 @@ class DeviceInfoService {
   /// Check internet connectivity
   static Future<bool> hasInternet() async {
     final connectivityResult = await Connectivity().checkConnectivity();
-    bool internet = (connectivityResult.contains(ConnectivityResult.mobile) ||
-        connectivityResult.contains(ConnectivityResult.wifi));
-    if (!internet) {
+    bool internet = (connectivityResult.contains(ConnectivityResult.none));
+    if (internet) {
       GlobalService.showAppToast(message: 'No Internet');
     }
     return internet;

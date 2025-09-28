@@ -8,6 +8,7 @@ class MyJobController extends GetxController {
   late Map jobBrief;
   RxMap<dynamic, dynamic> jobObj = <dynamic, dynamic>{}.obs;
   RxList arrIntDriver = [].obs;
+  RxString jobStatus = ''.obs;
 
   @override
   void onInit() {
@@ -25,6 +26,7 @@ class MyJobController extends GetxController {
     if (jobInfo != null) {
       jobObj.clear();
       jobObj.assignAll(jobInfo);
+      jobStatus.value = jobObj['status'];
       if (jobObj['interested_drivers'] != null &&
           jobObj['interested_drivers'] is List) {
         arrIntDriver.addAll(jobObj['interested_drivers']);

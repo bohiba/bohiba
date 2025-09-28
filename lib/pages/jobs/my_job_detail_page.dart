@@ -125,12 +125,33 @@ class MyJobDetailPage extends GetView<MyJobController> {
                         ),
                       ],
                     ),
-                    // Divider(),
+                    Gap(15.h),
                     LinearBoxWidget(
                       header: 'Status',
-                      title: controller.jobObj['status']
-                          .toString()
-                          .toCapitalizedLabel(),
+                      widget: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: controller.jobObj['status'].toString(),
+                          isDense: true,
+                          borderRadius: BorderRadius.circular(8.0),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'open',
+                              child: Text("Open"),
+                            ),
+                            DropdownMenuItem(
+                              value: 'close',
+                              child: Text("Close"),
+                            ),
+                            DropdownMenuItem(
+                              value: 'drafted',
+                              child: Text("Drafted"),
+                            ),
+                          ],
+                          onChanged: (status) async {
+                            controller.jobObj['status'] = status;
+                          },
+                        ),
+                      ),
                     ),
                     LinearBoxWidget(
                       header: 'Truck Number',
@@ -146,7 +167,6 @@ class MyJobDetailPage extends GetView<MyJobController> {
                       header: 'Created At',
                       title: controller.jobObj['created_at'].toString(),
                     ),
-
                     Padding(
                       padding: EdgeInsets.only(top: 15.h),
                       child: Text(
@@ -162,7 +182,6 @@ class MyJobDetailPage extends GetView<MyJobController> {
                       moreStyle: TextStyle(color: bohibaTheme.primaryColor),
                       lessStyle: TextStyle(color: bohibaTheme.primaryColor),
                     ),
-
                     Padding(
                       padding: EdgeInsets.only(top: 15.h),
                       child: Row(

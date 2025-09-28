@@ -29,4 +29,4 @@ enum TripActionType {
   more
 }
 
-enum MethodType { server, local, other }
+enum MethodType { api, local, other }

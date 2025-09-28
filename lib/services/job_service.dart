@@ -6,6 +6,11 @@ import '/services/dio_serivce.dart';
 class JobService {
   static final DioService _dioService = DioService();
 
+  static Future<void> updateJob(
+      {required Map<dynamic, dynamic> jobInfo}) async {
+    return;
+  }
+
   static Future<Map<dynamic, dynamic>?> getJob({required int jobId}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return null;

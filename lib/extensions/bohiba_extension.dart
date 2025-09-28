@@ -3,23 +3,11 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
-extension StringToDouble on String {
+extension StringFormatExt on String {
   double toDouble({double defaultValue = 0.0}) {
     return double.tryParse(this) ?? defaultValue;
   }
-}
 
-extension MinutesFormatter on int {
-  String toHHMM() {
-    final hours = this ~/ 60;
-    final minutes = this % 60;
-    final hourStr = hours.toString().padLeft(2, '0');
-    final minuteStr = minutes.toString().padLeft(2, '0');
-    return '$hourStr:$minuteStr';
-  }
-}
-
-extension DisplayStringExtension on String {
   /// Converts "not_looking" → "NOT LOOKING"
   String toDisplayLabel() {
     return split('_').map((e) => e.toUpperCase()).join(' ');
@@ -31,10 +19,33 @@ extension DisplayStringExtension on String {
         .map((e) => e.isEmpty ? '' : e[0].toUpperCase() + e.substring(1))
         .join(' ');
   }
+
+  String toAcronym() {
+    return split(' ') // Split by spaces
+        .where((word) => word.isNotEmpty) // Remove empty strings
+        .map((word) => word[0].toUpperCase()) // Take first letter & capitalize
+        .join(' '); // Join with dots
+  }
+
+  DateTime toDateTime() {
+    return DateFormat('dd-MM-yyyy').parse(this);
+  }
+
+  bool get isValidDL {
+    final regex = RegExp(r'^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$');
+    return regex.hasMatch(this);
+  }
 }
 
-/// Convert Int to String role_id
-extension UserRoleExtension on int {
+extension IntFormatExt on int {
+  String toHHMM() {
+    final hours = this ~/ 60;
+    final minutes = this % 60;
+    final hourStr = hours.toString().padLeft(2, '0');
+    final minuteStr = minutes.toString().padLeft(2, '0');
+    return '$hourStr:$minuteStr';
+  }
+
   String roleName() {
     switch (this) {
       case 0:
@@ -62,26 +73,9 @@ extension UserRoleExtension on int {
   bool get isGuest => this == 9;
 }
 
-extension FormatExtension on double {
+extension DoubleFormatExt on double {
   double toDoubleValue({int fractionDigits = 2}) {
     return double.parse(toStringAsFixed(fractionDigits));
-  }
-}
-
-// Stirng
-extension AcronymExtension on String {
-  String toAcronym() {
-    return split(' ') // Split by spaces
-        .where((word) => word.isNotEmpty) // Remove empty strings
-        .map((word) => word[0].toUpperCase()) // Take first letter & capitalize
-        .join(' '); // Join with dots
-  }
-}
-
-extension DLValidator on String {
-  bool get isValidDL {
-    final regex = RegExp(r'^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$');
-    return regex.hasMatch(this);
   }
 }
 

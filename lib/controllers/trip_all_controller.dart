@@ -1,3 +1,7 @@
+import '/dist/app_enums.dart';
+import '/extensions/bohiba_extension.dart';
+import '/services/device_info_service.dart';
+
 import '/services/trip_service.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -30,9 +34,10 @@ class AllTripController extends GetxController
   ];
 
   List<String> get statuses => convertToSnakeCase(tabs);
+  bool noInternet = false;
 
   RxBool isLoading = false.obs;
-  RxBool hasMore = false.obs;
+  RxBool hasMore = true.obs;
   int page = 1;
 
   final int pageSize = 10;
@@ -43,12 +48,16 @@ class AllTripController extends GetxController
     tabController = TabController(length: tabs.length, vsync: this);
     TruckModel? vehicle = Get.arguments;
     Future.delayed(Duration.zero, () async {
-      await getTripList(truckNo: vehicle?.regdNumber);
+      if (vehicle != null) {
+        await filteredTrips(truckNo: vehicle.regdNumber);
+      } else {
+        await fetchTrips();
+      }
     });
 
     scrollController.addListener(() async {
       if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent - 250 &&
+              scrollController.position.maxScrollExtent &&
           !isLoading.value &&
           hasMore.value) {
         await fetchTrips();
@@ -57,7 +66,6 @@ class AllTripController extends GetxController
   }
 
   Future<void> refreshPage() async {
-    // await Future.delayed(Duration(seconds: 4));
     await fetchTrips(refresh: true);
     refreshController.refreshCompleted();
     return;
@@ -68,22 +76,42 @@ class AllTripController extends GetxController
       return;
     }
 
-    if (refresh) {
+    if (!hasMore.value) {
+      return;
+    }
+
+    if (refresh == true) {
       page = 1;
       hasMore.value = true;
       arrTrip.clear();
     }
 
-    if (!hasMore.value) {
-      return;
-    }
-
     try {
       isLoading.value = true;
-      final List<TripModel> newTrips =
-          await TripService.retriveAllTrip(pageNo: page);
+      MethodType methodType;
+      if (page == 1) {
+        methodType = MethodType.local;
+      } else if (page == 2) {
+        noInternet = await DeviceInfoService.hasInternet();
+        if (noInternet) {
+          methodType = MethodType.local;
+          arrTrip.clear();
+        } else {
+          methodType = MethodType.api;
+        }
+      } else {
+        methodType = MethodType.api;
+      }
+
+      final List<TripModel> newTrips = await TripService.getAllTrip(
+        methodType: methodType,
+        reset: refresh,
+      );
+
       if (newTrips.isNotEmpty) {
         arrTrip.addAll(newTrips);
+        arrTrip.sort((a, b) =>
+            (b.startDate!.toDateTime()).compareTo((a.startDate!.toDateTime())));
         page++;
       } else {
         hasMore.value = false;
@@ -93,8 +121,8 @@ class AllTripController extends GetxController
     }
   }
 
-  Future<List<TripModel>> getTripList({String? truckNo}) async {
-    arrTrip.value = await TripService.localAllTrip(truckNo: truckNo);
+  Future<List<TripModel>> filteredTrips({String? truckNo}) async {
+    arrTrip.value = await TripService.filterTripWithTruckNo(truckNo: truckNo);
     return arrTrip;
   }
 

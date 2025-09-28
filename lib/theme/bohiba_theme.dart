@@ -262,7 +262,12 @@ class BohibaTheme {
           ),
         ),
       ),
-      dropdownMenuTheme: DropdownMenuThemeData(),
+      dropdownMenuTheme: DropdownMenuThemeData(
+          inputDecorationTheme: InputDecorationThemeData(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(width: 1.0),
+        ),
+      )),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         linearTrackColor: BohibaColors.borderColor,
         color: BohibaColors.borderColor,

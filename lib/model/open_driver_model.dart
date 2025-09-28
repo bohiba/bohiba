@@ -15,21 +15,33 @@ class OpenDriverModel extends HiveObject {
   String? name;
 
   @HiveField(3)
-  String? profileImage;
-
-  @HiveField(4)
   String? mobileNumber;
 
   @HiveField(5)
-  String? jobStatus;
+  String? profileImage;
+
+  @HiveField(6)
+  String? verified;
+
+  @HiveField(7)
+  String? district;
+
+  @HiveField(8)
+  String? state;
+
+  @HiveField(9)
+  String? connect;
 
   OpenDriverModel({
     this.id,
     this.uuid,
-    this.name,
     this.profileImage,
+    this.name,
     this.mobileNumber,
-    this.jobStatus,
+    this.verified,
+    this.district,
+    this.state,
+    this.connect,
   });
 
   factory OpenDriverModel.fromJson(Map<String, dynamic> json) {
@@ -39,7 +51,10 @@ class OpenDriverModel extends HiveObject {
       name: json['name'],
       profileImage: json['profile_image'],
       mobileNumber: json['mobile_number'],
-      jobStatus: json['job_status'],
+      verified: json['verified'],
+      district: json['district'],
+      state: json['state'],
+      connect: json['connect'],
     );
   }
 
@@ -49,7 +64,10 @@ class OpenDriverModel extends HiveObject {
         'name': name,
         'profile_image': profileImage,
         'mobile_number': mobileNumber,
-        'job_status': jobStatus,
+        'verified': verified,
+        'district': district,
+        'state': state,
+        'connect': connect,
       };
 
   static List<OpenDriverModel> listFromJson(List<dynamic> jsonList) {

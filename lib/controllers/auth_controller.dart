@@ -192,7 +192,7 @@ class AuthController extends GetxController {
         await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.printHandler("App Token: $token");
         await _dbService.clearAllBox();
-        await _masterController.profileApi(methodType: MethodType.server);
+        await _masterController.profileApi(methodType: MethodType.api);
         await _masterController.mainApi();
 
         Get.offAllNamed(AppRoute.navBar);

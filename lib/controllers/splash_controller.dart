@@ -35,7 +35,7 @@ class SplashController extends GetxController {
       } else if (strToken.isNotEmpty) {
         _dio.setToken(strToken);
         final ProfileModel? profileModel =
-            await _master.profileApi(methodType: MethodType.server);
+            await _master.profileApi(methodType: MethodType.api);
         if (profileModel == null) {
           Get.offAllNamed(AppRoute.signIn);
           return;

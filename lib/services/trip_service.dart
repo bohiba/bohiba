@@ -12,6 +12,9 @@ class TripService {
   static final DBService _dBService = DBService();
   static final DioService _dioService = DioService();
 
+  static int _currentPage = 1;
+  static int _lastPage = 1;
+
   static Future<int> addTrip(
       {required Map<String, dynamic> bodyMap,
       required TruckModel truckModel}) async {
@@ -55,33 +58,61 @@ class TripService {
     }
   }
 
-  static Future<List<TripModel>> retriveAllTrip(
-      {int? pageNo, bool showProgress = false}) async {
-    if (!await DeviceInfoService.hasInternet()) {
+  static Future<List<TripModel>> getAllTrip({
+    bool reset = false,
+    bool showProgress = false,
+    MethodType methodType = MethodType.local,
+  }) async {
+    if (methodType == MethodType.local) {
+      List<TripModel> tripList =
+          await _dBService.getAllData<TripModel>(tblTrips);
+      return tripList;
+    } else {
+      if (!await DeviceInfoService.hasInternet()) {
+        return [];
+      }
+
+      if (reset) {
+        _currentPage = 1;
+        _lastPage = 1;
+      }
+
+      if (_currentPage > _lastPage) {
+        // No More Data
+        return [];
+      }
+
+      if (showProgress) GlobalService.showProgress();
+      ApiResponse apiResponse =
+          await _dioService.get('${ApiEndPoint.apiAllTrip}?page=$_currentPage');
+      if (showProgress) GlobalService.dismissProgress();
+
+      switch (apiResponse.statusCode) {
+        case 200:
+          if (apiResponse.pagination != null) {
+            Map<dynamic, dynamic> paginate = apiResponse.pagination!;
+            _currentPage = paginate['current_page'] + 1;
+            _lastPage = paginate['last_page'];
+          }
+          List<TripModel> tripList = TripModel.listFromJson(apiResponse.data);
+
+          Map<String, TripModel> tripMap = {
+            for (TripModel trip in tripList) '${trip.id}': trip,
+          };
+          int tripInsert = await _dBService.putAllData<TripModel>(
+            tblTrips,
+            tripMap,
+          );
+          GlobalService.printHandler("Trip Added in DB: $tripInsert");
+          return tripList;
+        case 401:
+          return [];
+        default:
+          GlobalService.printHandler('Failed to fetch trip');
+          break;
+      }
       return [];
     }
-
-    if (showProgress) {
-      GlobalService.showProgress();
-    }
-
-    ApiResponse apiResponse =
-        await _dioService.get('${ApiEndPoint.apiAllTrip}?page=$pageNo');
-
-    if (showProgress) {
-      GlobalService.dismissProgress();
-    }
-
-    switch (apiResponse.statusCode) {
-      case 200:
-        return TripModel.listFromJson(apiResponse.data);
-      case 401:
-        return [];
-      default:
-        GlobalService.printHandler('Failed to fetch trip');
-        break;
-    }
-    return [];
   }
 
   static Future<int> updateTrip({
@@ -204,8 +235,9 @@ class TripService {
     }
   }
 
-  static Future<List<TripModel>> localAllTrip({String? truckNo}) async {
-    List<TripModel> tripList = await _dBService.getAllData<TripModel>(tblTrips);
+  static Future<List<TripModel>> filterTripWithTruckNo(
+      {String? truckNo}) async {
+    List<TripModel> tripList = await getAllTrip(methodType: MethodType.local);
     List<TripModel> filterTrip = [];
     if (truckNo != null && truckNo.isNotEmpty) {
       filterTrip.addAll(
@@ -219,10 +251,11 @@ class TripService {
   static Future<TripModel?> getTrip(
       {required MethodType method, required TripModel trip}) async {
     if (method == MethodType.local) {
-      return await _dBService.getData<TripModel>(
-              tblTrips, trip.id.toString()) ??
-          TripModel();
-    } else if (method == MethodType.server) {
+      TripModel tripInfo =
+          await _dBService.getData<TripModel>(tblTrips, trip.id.toString()) ??
+              TripModel();
+      return tripInfo;
+    } else if (method == MethodType.api) {
       if (!await DeviceInfoService.hasInternet()) {
         return null;
       }
