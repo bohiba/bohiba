@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/app_enums.dart';
+
 import '/model/profile_model.dart';
 
 import '/model/driver_model.dart';
@@ -52,43 +54,46 @@ class DriverService {
     }
   }
 
-  static Future<List<DriverModel>?> retriveAllDriver(
-      {String? pageNo, bool isInitial = false}) async {
-    if (!await DeviceInfoService.hasInternet()) return null;
-    GlobalService.showProgress();
-    ApiResponse response =
-        await dioService.get('${ApiEndPoint.apiAllDriver}?pageNo=$pageNo');
+  static Future<List<DriverModel>?> getAllDriver({
+    int pageNo = 1,
+    MethodType methodType = MethodType.local,
+  }) async {
+    if (methodType == MethodType.local) {
+      List<DriverModel> driverList = await dBService.getAllData(tblDriver);
+      return driverList;
+    } else {
+      if (!await DeviceInfoService.hasInternet()) return null;
+      GlobalService.showProgress();
+      ApiResponse response =
+          await dioService.get('${ApiEndPoint.apiAllDriver}?pageNo=$pageNo');
 
-    if (isInitial) {
-      await localDeleteAll();
-    }
-
-    switch (response.statusCode) {
-      case 200:
-        List<UserFavouriteModel> arrFavList =
-            await dBService.getAllData(tblUserFav);
-        List<DriverModel> arrDriverModel =
-            DriverModel.listFromJson(response.data, favList: arrFavList);
-        Map<String, DriverModel> driverMap = {
-          for (DriverModel dm in arrDriverModel) "${dm.id}": dm
-        };
-        int insertDriver = await dBService.putAllData(tblDriver, driverMap);
-        GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: response.message);
-        GlobalService.printHandler('Driver insert $insertDriver');
-        return arrDriverModel;
-      case 401:
-        GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: response.message);
-        return null;
-      default:
-        GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: 'Failed to get trucks.');
-        return null;
+      switch (response.statusCode) {
+        case 200:
+          List<UserFavouriteModel> arrFavList =
+              await dBService.getAllData(tblUserFav);
+          List<DriverModel> arrDriverModel =
+              DriverModel.listFromJson(response.data, favList: arrFavList);
+          Map<String, DriverModel> driverMap = {
+            for (DriverModel dm in arrDriverModel) "${dm.id}": dm
+          };
+          int insertDriver = await dBService.putAllData(tblDriver, driverMap);
+          GlobalService.dismissProgress();
+          GlobalService.showAppToast(message: response.message);
+          GlobalService.printHandler('Driver insert $insertDriver');
+          return arrDriverModel;
+        case 401:
+          GlobalService.dismissProgress();
+          GlobalService.showAppToast(message: response.message);
+          return null;
+        default:
+          GlobalService.dismissProgress();
+          GlobalService.showAppToast(message: 'Failed to get trucks.');
+          return null;
+      }
     }
   }
 
-  static Future<DriverModel?> retriveDriver({required String id}) async {
+  static Future<DriverModel?> getDriver({required String id}) async {
     if (!await DeviceInfoService.hasInternet()) return null;
     GlobalService.showProgress();
     ApiResponse response =
@@ -114,8 +119,6 @@ class DriverService {
         return null;
     }
   }
-
-  // Future<void> updateDriver() async {}
 
   static Future<bool> deleteDriver(
       {required int driverId, required bool isMarkedFav}) async {

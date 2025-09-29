@@ -1,5 +1,8 @@
-import 'package:bohiba/bindings/analytic_binding.dart';
-import 'package:bohiba/pages/analytic/analytic_page.dart';
+import 'package:bohiba/bindings/all_sent_connection_binding.dart';
+import 'package:bohiba/pages/driver/all_sent_request_page.dart';
+
+import '/bindings/analytic_binding.dart';
+import '/pages/analytic/analytic_page.dart';
 
 import '/bindings/update_contact_binding.dart';
 import '/pages/user/user_profile/update_contact_info_page.dart';
@@ -142,6 +145,7 @@ class AppRoute {
   static const String workCalender = "/work-calender";
   static const String allRating = '/all-rating';
   static const String rating = '/rating';
+  static const String allSentReq = '/all-sent-req';
 
   //Manager
   static const String manager = "/manger";
@@ -322,20 +326,29 @@ class AppRoute {
       binding: DriverAllBinding(),
       page: () => const DriverAllPage(),
     ),
+
     GetPage(
       name: addDriver,
       binding: DriverAddBinding(),
       page: () => DriverAddPage(),
     ),
+
     GetPage(
       name: workCalender,
       // binding: DriverBinding(),
       page: () => WorkCalendarPage(),
     ),
+
     GetPage(
       name: allRating,
       binding: DriverBinding(),
       page: () => RatingAllPage(),
+    ),
+
+    GetPage(
+      name: allSentReq,
+      binding: AllSentRequestBinding(),
+      page: () => AllSentRequestPage(),
     ),
 
     GetPage(

@@ -1,3 +1,4 @@
+import '/routes/app_route.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/theme/bohiba_theme.dart';
@@ -17,17 +18,13 @@ class ExplorePage extends GetView<OpenDriverListController> {
 
   @override
   Widget build(BuildContext context) {
+    final navigateState = Navigator.of(context);
     return Scaffold(
       appBar: ExploreAppBar(
         title: 'Explore',
         actions: [
           AppBarIconBox(
-            onTap: () {
-              // showSearch(
-              //   context: context,
-              //   delegate: BohibaSearchDelegate(),
-              // );
-            },
+            onTap: () {},
             icon: Icon(EvaIcons.searchOutline),
           ),
         ],
@@ -42,27 +39,33 @@ class ExplorePage extends GetView<OpenDriverListController> {
                 right: ScreenUtils.height15,
                 bottom: ScreenUtils.height10,
               ),
-              child: Container(
-                padding: EdgeInsets.only(
-                  top: ScreenUtils.height10,
-                  bottom: ScreenUtils.height10,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Sent Connect Request',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                        fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyLarge!.color,
+              child: GestureDetector(
+                onTap: () {
+                  navigateState.pushNamed(AppRoute.allSentReq);
+                },
+                child: Container(
+                  padding: EdgeInsets.only(
+                    top: ScreenUtils.height10,
+                    bottom: ScreenUtils.height10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Sent Connect Request',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                          color: bohibaTheme.textTheme.bodyLarge!.color,
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16.w,
-                    )
-                  ],
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16.w,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

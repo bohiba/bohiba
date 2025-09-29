@@ -37,6 +37,7 @@ class TripTile extends GetView<TripController> {
               CircleAvatar(
                 radius: 20,
                 backgroundColor: bohibaTheme.dividerColor,
+                child: Text(tripInfo.id.toString()),
               ),
               Gap(ScreenUtils.height15),
               Column(

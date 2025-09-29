@@ -1,3 +1,5 @@
+import 'package:bohiba/component/bohiba_buttons/primary_button.dart';
+
 import '/pages/widget/role_widget.dart';
 
 import '/component/bohiba_appbar/truck_appbar.dart';
@@ -55,57 +57,71 @@ class TruckPage extends GetView<TruckController> {
                           ),
                         ),
                         Gap(ScreenUtils.width5),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              RoleWidget(
-                                truckOwnerWidget: DetailsBox(
-                                  headline: 'Driver',
-                                  title:
-                                      controller.truckModel.value.owner?.name ??
-                                          'Assign Driver',
-                                  titleColor: bohibaTheme.primaryColor,
-                                  onClick: controller
-                                              .truckModel.value.driver?.name !=
-                                          null
-                                      ? null
-                                      : () {
-                                          navigateState
-                                              .pushNamed(AppRoute.editTruck,
-                                                  arguments: controller
-                                                      .truckModel.value)
-                                              .then(
-                                            (onValue) async {
-                                              if (onValue != null) {
-                                                await controller.getTruckInfo(
-                                                  id: controller
-                                                      .truckModel.value.id!
-                                                      .toString(),
-                                                );
-                                              }
-                                            },
+                        RoleWidget(
+                          truckOwnerWidget: controller.isDriverAssigned.isFalse
+                              ? Center(
+                                  child: PrimaryButton(
+                                    height: 35,
+                                    width: ScreenUtils.width,
+                                    label: 'Assign Driver',
+                                    onPressed: () {
+                                      navigateState
+                                          .pushNamed(AppRoute.editTruck,
+                                              arguments:
+                                                  controller.truckModel.value)
+                                          .then(
+                                        (onValue) async {
+                                          await controller.getTruckInfo(
+                                            id: controller.truckModel.value.id!
+                                                .toString(),
                                           );
                                         },
+                                      );
+                                    },
+                                  ),
+                                )
+                              : SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      DetailsBox(
+                                        headline: 'Driver',
+                                        title: controller.truckModel.value
+                                                .driver?.name ??
+                                            '',
+                                        titleColor: bohibaTheme.primaryColor,
+                                      ),
+                                      DetailsBox(
+                                        headline: 'Mobile no',
+                                        title: controller.truckModel.value
+                                                .driver?.mobileNumber ??
+                                            '',
+                                        titleColor: bohibaTheme.listTileTheme
+                                            .titleTextStyle!.color,
+                                      ),
+                                      DetailsBox(
+                                        headline: 'UUID',
+                                        title: controller.truckModel.value
+                                                .driver?.uuid ??
+                                            '',
+                                        titleColor: bohibaTheme.listTileTheme
+                                            .titleTextStyle!.color,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                driverWidget: DetailsBox(
+                          driverWidget: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                DetailsBox(
                                   headline: 'Owner',
                                   title:
                                       controller.truckModel.value.owner?.name ??
                                           '',
                                   titleColor: bohibaTheme.primaryColor,
                                 ),
-                              ),
-                              RoleWidget(
-                                truckOwnerWidget: DetailsBox(
-                                  headline: 'Mobile no',
-                                  title: controller.truckModel.value.driver
-                                          ?.mobileNumber ??
-                                      '',
-                                  titleColor: bohibaTheme
-                                      .listTileTheme.titleTextStyle!.color,
-                                ),
-                                driverWidget: DetailsBox(
+                                DetailsBox(
                                   headline: 'Mobile no',
                                   title: controller.truckModel.value.owner
                                           ?.mobileNumber ??
@@ -113,17 +129,7 @@ class TruckPage extends GetView<TruckController> {
                                   titleColor: bohibaTheme
                                       .listTileTheme.titleTextStyle!.color,
                                 ),
-                              ),
-                              RoleWidget(
-                                truckOwnerWidget: DetailsBox(
-                                  headline: 'UUID',
-                                  title: controller
-                                          .truckModel.value.driver?.uuid ??
-                                      '',
-                                  titleColor: bohibaTheme
-                                      .listTileTheme.titleTextStyle!.color,
-                                ),
-                                driverWidget: DetailsBox(
+                                DetailsBox(
                                   headline: 'UUID',
                                   title:
                                       controller.truckModel.value.owner?.uuid ??
@@ -131,8 +137,8 @@ class TruckPage extends GetView<TruckController> {
                                   titleColor: bohibaTheme
                                       .listTileTheme.titleTextStyle!.color,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Padding(

@@ -47,7 +47,7 @@ class DriverAppbar extends GetView<DriverController>
           },
         ),
         actions: [
-          Obx(
+          /*Obx(
             () {
               return AppBarIconBox(
                 onTap: () async => await controller
@@ -73,7 +73,7 @@ class DriverAppbar extends GetView<DriverController>
                     : Icon(Remix.heart_3_line),
               );
             },
-          ),
+          ),*/
           DriverMenu(
             driver: controller.driverModel.value,
             allowedActions: [

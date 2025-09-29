@@ -3,11 +3,12 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
 }
 
 android {
     namespace "com.example.bohiba"
-    compileSdk = 35
+    compileSdk = 36
     // ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -28,10 +29,10 @@ android {
         applicationId = "com.app.bohiba"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = 21
-        targetSdk = 34
-        versionCode 3
-        versionName "1.0.3 BETA"
+        minSdk = 24
+        targetSdk = 36
+        versionCode 5
+        versionName "1.0.5 BETA"
         multiDexEnabled true
     }
 
@@ -40,8 +41,8 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
         }
     }
 }
@@ -52,4 +53,6 @@ flutter {
 
 dependencies {
     implementation "com.google.android.material:material:1.13.0"
+    implementation platform('com.google.firebase:firebase-bom:34.3.0')
+    implementation 'com.google.firebase:firebase-analytics'
 }

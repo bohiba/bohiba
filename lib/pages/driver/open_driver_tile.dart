@@ -1,4 +1,4 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:remixicon/remixicon.dart';
 import '/model/open_driver_model.dart';
 
 import '/component/bohiba_text/bohiba_marquee_text.dart';
@@ -18,7 +18,9 @@ class OpenDriverTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
         margin: EdgeInsets.only(bottom: ScreenUtils.width5),
@@ -41,37 +43,37 @@ class OpenDriverTile extends StatelessWidget {
                   text: openDriver.name ?? '',
                   overflowText: openDriver.name ?? '',
                   style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                    fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
                     fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                    color: bohibaTheme.textTheme.bodyLarge!.color,
+                    color: bohibaTheme.textTheme.titleLarge!.color,
                   ),
                   marqueeTextStyle: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                    fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
                     fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                    color: bohibaTheme.textTheme.bodyLarge!.color,
+                    color: bohibaTheme.textTheme.titleLarge!.color,
                   ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(EvaIcons.pin, size: 14.w),
+                    Icon(Remix.map_pin_user_line, size: 14.w),
                     Text(
                       " ${openDriver.district}",
                       style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                         fontWeight:
                             bohibaTheme.textTheme.labelMedium!.fontWeight,
-                        color: bohibaTheme.textTheme.titleLarge!.color,
+                        color: bohibaTheme.textTheme.bodyLarge!.color,
                       ),
                     ),
                     Gap(5.w),
                     Text(
                       '${openDriver.state}',
                       style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                        fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
                         fontWeight:
                             bohibaTheme.textTheme.labelMedium!.fontWeight,
-                        color: bohibaTheme.textTheme.titleLarge!.color,
+                        color: bohibaTheme.textTheme.bodyLarge!.color,
                       ),
                     ),
                   ],
@@ -79,21 +81,22 @@ class OpenDriverTile extends StatelessWidget {
               ],
             ),
             Spacer(),
-            GestureDetector(
-              onTap: openDriver.connect == null ? onPressConnect : null,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
-                child: Text(
-                  openDriver.connect == null ? 'Connect' : 'Sent',
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
-                    color: openDriver.connect == null
-                        ? bohibaTheme.textTheme.bodySmall!.color
-                        : bohibaTheme.textTheme.titleSmall!.color,
-                  ),
-                ),
-              ),
-            )
+            Icon(Icons.arrow_forward_ios)
+            // GestureDetector(
+            //   onTap: openDriver.connect == null ? onPressConnect : null,
+            //   child: Padding(
+            //     padding: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
+            //     child: Text(
+            //       openDriver.connect == null ? 'Connect' : 'Sent',
+            //       style: TextStyle(
+            //         fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
+            //         color: openDriver.connect == null
+            //             ? bohibaTheme.textTheme.bodySmall!.color
+            //             : bohibaTheme.textTheme.titleSmall!.color,
+            //       ),
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),

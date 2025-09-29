@@ -183,9 +183,11 @@ class TruckService {
     }
   }
 
-  static Future<void> assignDriver(
-      {required TruckModel oldTruck, required DriverModel driver}) async {
-    if (!await DeviceInfoService.hasInternet()) return;
+  static Future<int> assignDriver({
+    required TruckModel oldTruck,
+    required DriverModel driver,
+  }) async {
+    if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();
     Map<String, dynamic> bodyObj = {
       'driver_uuid': driver.profile?.driverUuid,
@@ -194,7 +196,6 @@ class TruckService {
       '${ApiEndPoint.apiAssignDriver}/${oldTruck.regdNumber}',
       body: bodyObj,
     );
-    GlobalService.dismissProgress();
 
     switch (apiResponse.statusCode) {
       case 200:
@@ -205,41 +206,45 @@ class TruckService {
           name: driver.profile?.name,
           mobileNumber: driver.profile?.mobileNumber,
         );
-        int updateTruck = await dBService.putData<TruckModel>(
-            tblTrucks, '${truckModel.id}', truckModel);
-        if (updateTruck <= 0) return;
+        int update = await updateTruck(newTruckInfo: truckModel);
+        GlobalService.dismissProgress();
         GlobalService.showAppToast(message: apiResponse.message);
-        break;
+        return update;
       case 401:
+        GlobalService.dismissProgress();
         GlobalService.showAppToast(message: apiResponse.message);
-        return;
+        return 0;
       default:
+        GlobalService.dismissProgress();
         GlobalService.showAppToast(message: 'Failed to assign driver.');
-        return;
+        return 0;
     }
   }
 
-  static Future<void> removeDriver({required TruckModel oldTruck}) async {
-    if (!await DeviceInfoService.hasInternet()) return;
+  static Future<int> removeDriver({required TruckModel oldTruck}) async {
+    if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
     ApiResponse serviceResponse = await dioService
-        .delete("${ApiEndPoint.apiDeleteTruck}/${oldTruck.regdNumber}");
-    GlobalService.dismissProgress();
+        .post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.regdNumber}');
+
     switch (serviceResponse.statusCode) {
       case 200:
         oldTruck.driver = null;
-        int updateTruck = await dBService.putData<TruckModel>(
-            tblTrucks, '${oldTruck.id}', oldTruck);
-        if (updateTruck <= 0) return;
-        GlobalService.showAppToast(message: serviceResponse.message);
-        return;
+        int update = await updateTruck(newTruckInfo: oldTruck);
+        GlobalService.dismissProgress();
+        if (update > 0) {
+          GlobalService.showAppToast(message: serviceResponse.message);
+        }
+        return update;
       case 401:
+        GlobalService.dismissProgress();
         GlobalService.showAppToast(message: serviceResponse.message);
-        return;
+        return 0;
       default:
+        GlobalService.dismissProgress();
         GlobalService.showAppToast(message: 'Failed to remove driver.');
-        return;
+        return 0;
     }
   }
 
@@ -282,6 +287,12 @@ class TruckService {
 
   static Future<int> localDeleteTruck(int id) async {
     return await dBService.deleteData(tblTrucks, "$id");
+  }
+
+  static Future<int> updateTruck({required TruckModel newTruckInfo}) async {
+    int success = await dBService.putData<TruckModel>(
+        tblTrucks, '${newTruckInfo.id}', newTruckInfo);
+    return success;
   }
 
   static Future<void> localDeleteAll() async {

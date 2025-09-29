@@ -64,7 +64,14 @@ class MyJobDetailPage extends GetView<MyJobController> {
                         description: 'Do you want to delete the job post?',
                         discardBtnTxt: 'Delete',
                         saveBtnTxt: 'Cancel',
-                        onSave: () {},
+                        onSave: () {
+                          navigatorState.pop();
+                        },
+                        onDiscard: () {
+                          navigatorState.pop();
+                          GlobalService.showAppToast(
+                              message: 'Under Development');
+                        },
                       );
                       break;
                     default:

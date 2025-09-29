@@ -1,3 +1,5 @@
+import 'package:bohiba/services/driver_service.dart';
+import 'package:bohiba/services/truck_service.dart';
 import '/services/api_end_point.dart';
 
 import '/model/driver_model.dart';
@@ -22,7 +24,7 @@ class EditTruckController extends GetxController
   RxBool isDriverAssigned = false.obs;
   RxBool isRotating = false.obs;
 
-  RxString strDriverUuid = ''.obs;
+  Rx<DriverModel> driverModel = DriverModel().obs;
   Rx<TruckModel> truck = TruckModel().obs;
 
   @override
@@ -51,58 +53,43 @@ class EditTruckController extends GetxController
     super.onClose();
   }
 
-  Future<List<DriverModel>> _getDriverList() async {
-    List<DriverModel> driverList = await dBService.getAllData(tblDriver);
-    arrDriver.clear();
-    arrDriver.addAll(driverList);
-    return driverList;
+  Future<void> _getDriverList() async {
+    List<DriverModel>? driverList = await DriverService.getAllDriver();
+    if (driverList != null) {
+      arrDriver.clear();
+      arrDriver.addAll(driverList);
+    }
   }
 
-  Future<void> assignDriver({
-    required String driverUuid,
-    required String regdNumber,
-  }) async {
-    GlobalService.closeKeyboard();
-    if (!await DeviceInfoService.hasInternet()) {
+  Future<void> assignDriver({required DriverModel driverInfo}) async {
+    if (driverInfo.profile?.driverUuid == null) {
+      GlobalService.showAppToast(message: 'Please select driver');
       return;
     }
-    GlobalService.showProgress();
-    Map<String, dynamic> bodyObj = {
-      'driver_uuid': driverUuid,
-    };
-    ApiResponse serviceResponse = await dioService
-        .post("${ApiEndPoint.apiAssignDriver}/$regdNumber", body: bodyObj);
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 200:
-        truck.value = await getTruckInfo(regdNumber: regdNumber);
+    int assigned = await TruckService.assignDriver(
+      oldTruck: truck.value,
+      driver: driverInfo,
+    );
+
+    if (assigned > 0) {
+      TruckModel? updatedTruck =
+          await TruckService.getTruck(truckId: truck.value.id!);
+      if (updatedTruck != null) {
+        truck.value = updatedTruck;
         isDriverAssigned.value = true;
-        break;
-      case 401:
-        break;
-
-      default:
+      }
     }
   }
 
-  Future<void> removeDriver(
-      {required String regdNumber, required String id}) async {
-    if (!await DeviceInfoService.hasInternet()) {
-      return;
-    }
-    GlobalService.showProgress();
-    ApiResponse serviceResponse =
-        await dioService.post('${ApiEndPoint.apiRemoveDriver}/$regdNumber');
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 200:
+  Future<void> removeDriver({required TruckModel truckInfo}) async {
+    int success = await TruckService.removeDriver(oldTruck: truckInfo);
+    if (success > 0) {
+      TruckModel? updatedTruck =
+          await TruckService.getTruck(truckId: truck.value.id!);
+      if (updatedTruck != null) {
+        truck.value = updatedTruck;
         isDriverAssigned.value = false;
-        truck.value = await getTruckInfo(regdNumber: regdNumber);
-      case 401:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        break;
-
-      default:
+      }
     }
   }
 
@@ -112,8 +99,8 @@ class EditTruckController extends GetxController
     }
     GlobalService.closeKeyboard();
     GlobalService.showProgress();
-    ApiResponse response =
-        await dioService.get('${ApiEndPoint.apiGetTruck}/$regdNumber');
+    ApiResponse response = await dioService
+        .get('${ApiEndPoint.apiGetTruck}?value=$regdNumber&type=0');
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:

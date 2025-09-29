@@ -38,9 +38,9 @@ class TruckEditPage extends GetView<EditTruckController> {
                   items: controller.arrDriver.value,
                   labelBuilder: (driver) => driver.profile!.name!,
                   onChanged: (p0) {
-                    controller.strDriverUuid.value = p0!.profile!.driverUuid!;
+                    controller.driverModel.value.profile = p0!.profile!;
                     GlobalService.printHandler(
-                        'ID: ${controller.strDriverUuid.value}');
+                        'ID: ${controller.driverModel.value.profile!.driverUuid}');
                   },
                   menuController: controller.assignDriverCtlr,
                 ),
@@ -67,9 +67,7 @@ class TruckEditPage extends GetView<EditTruckController> {
                 Spacer(),
                 PrimaryButton(
                   onPressed: () async => await controller.assignDriver(
-                    driverUuid: controller.strDriverUuid.value,
-                    regdNumber: controller.truck.value.regdNumber!,
-                  ),
+                      driverInfo: controller.driverModel.value),
                   label: 'Assign Driver',
                 ),
                 PrimaryButton(
@@ -80,11 +78,10 @@ class TruckEditPage extends GetView<EditTruckController> {
                       : () async {
                           if (controller.truck.value.registration == null) {
                             return;
+                          } else {
+                            await controller.removeDriver(
+                                truckInfo: controller.truck.value);
                           }
-                          await controller.removeDriver(
-                            regdNumber: controller.truck.value.regdNumber!,
-                            id: controller.truck.value.id.toString(),
-                          );
                         },
                 ),
               ],

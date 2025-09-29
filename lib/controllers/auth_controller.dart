@@ -201,6 +201,8 @@ class AuthController extends GetxController {
         GlobalService.dismissProgress();
         break;
       default:
+        GlobalService.showAppToast(message: 'Something went wrong');
+        break;
     }
   }
 

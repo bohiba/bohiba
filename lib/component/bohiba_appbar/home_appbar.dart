@@ -148,12 +148,12 @@ class HomeAppBar extends GetView<HomeController>
             ),
           ),
 
-          AppBarIconBox(
+          /*AppBarIconBox(
             onTap: () {
               Navigator.of(context).pushNamed(AppRoute.favList);
             },
             icon: Icon(Remix.heart_3_line),
-          )
+          )*/
         ],
       ),
     );

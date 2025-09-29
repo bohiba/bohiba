@@ -34,7 +34,7 @@ class AllTripController extends GetxController
   ];
 
   List<String> get statuses => convertToSnakeCase(tabs);
-  bool noInternet = false;
+  bool hasInternet = false;
 
   RxBool isLoading = false.obs;
   RxBool hasMore = true.obs;
@@ -57,7 +57,7 @@ class AllTripController extends GetxController
 
     scrollController.addListener(() async {
       if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent &&
+              scrollController.position.maxScrollExtent - 250 &&
           !isLoading.value &&
           hasMore.value) {
         await fetchTrips();
@@ -92,12 +92,13 @@ class AllTripController extends GetxController
       if (page == 1) {
         methodType = MethodType.local;
       } else if (page == 2) {
-        noInternet = await DeviceInfoService.hasInternet();
-        if (noInternet) {
+        hasMore.value = true;
+        hasInternet = await DeviceInfoService.hasInternet();
+        if (hasInternet) {
+          methodType = MethodType.api;
+        } else {
           methodType = MethodType.local;
           arrTrip.clear();
-        } else {
-          methodType = MethodType.api;
         }
       } else {
         methodType = MethodType.api;
@@ -109,7 +110,11 @@ class AllTripController extends GetxController
       );
 
       if (newTrips.isNotEmpty) {
-        arrTrip.addAll(newTrips);
+        for (TripModel trip in newTrips) {
+          if (!arrTrip.any((t) => t.id == trip.id)) {
+            arrTrip.add(trip);
+          }
+        }
         arrTrip.sort((a, b) =>
             (b.startDate!.toDateTime()).compareTo((a.startDate!.toDateTime())));
         page++;

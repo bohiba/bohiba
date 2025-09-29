@@ -52,7 +52,7 @@ class TruckAppbar extends GetView<TruckController>
           },
         ),
         actions: [
-          Obx(
+          /*Obx(
             () {
               return AppBarIconBox(
                 onTap: () async => await controller
@@ -78,7 +78,7 @@ class TruckAppbar extends GetView<TruckController>
                     : Icon(Remix.heart_3_line),
               );
             },
-          ),
+          ),*/
           TruckMenu(
             truck: truck,
             // icon: const Icon(EvaIcons.plus),

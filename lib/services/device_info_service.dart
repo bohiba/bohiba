@@ -13,7 +13,7 @@ class DeviceInfoService {
     if (internet) {
       GlobalService.showAppToast(message: 'No Internet');
     }
-    return internet;
+    return !internet;
   }
 
   /// Get basic device info as a Map
