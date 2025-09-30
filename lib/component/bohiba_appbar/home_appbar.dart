@@ -3,7 +3,6 @@ import '/services/role_permission_service.dart';
 
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
-import 'package:remixicon/remixicon.dart';
 
 import '../../dist/app_enums.dart';
 import '/theme/bohiba_theme.dart';

@@ -49,6 +49,10 @@
 	<dict>
 	<key>NSAllowsArbitraryLoads</key><true/>
 	</dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>tel</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Bohiba needs camera permission for uploading images.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

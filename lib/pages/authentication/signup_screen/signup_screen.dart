@@ -14,91 +14,93 @@ class SignupScreen extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
-      body: Container(
-        height: ScreenUtils.height,
-        width: ScreenUtils.width,
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtils.width20,
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Hello!',
-                    style: bohibaTheme.textTheme.displayMedium,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Let\'s begin the journey',
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                      color: bohibaTheme.textTheme.titleLarge!.color,
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    EmailInputField(
-                      hintText: 'Email',
-                      controller: controller.emailController,
-                    ),
-                    SizedBox(height: ScreenUtils.height10),
-                    PrimaryButton(
-                      label: 'Verify',
-                      onPressed: () async {
-                        await controller.verifyEmail(
-                          email: controller.emailController.text
-                              .trim()
-                              .toLowerCase(),
-                        );
-                      },
-                    )
-                  ],
-                )
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: ScreenUtils.height47),
-              alignment: Alignment.bottomCenter,
-              child: Row(
+      body: SafeArea(
+        child: Container(
+          height: ScreenUtils.height,
+          width: ScreenUtils.width,
+          padding: EdgeInsets.symmetric(
+            horizontal: ScreenUtils.width20,
+          ),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    'Already have account? ',
-                    style: bohibaTheme.textTheme.titleSmall,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Hello!',
+                      style: bohibaTheme.textTheme.displayMedium,
+                    ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.popAndPushNamed(context, AppRoute.signIn);
-                    },
-                    child: SizedBox(
-                      // height: BohibaResponsiveScreen.height30,
-                      width: ScreenUtils.width50,
-                      // alignment: Alignment.center,
-                      child: Text(
-                        'Signin',
-                        style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                          color: bohibaTheme.textTheme.bodySmall!.color,
-                        ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Let\'s begin the journey',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                        fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                        color: bohibaTheme.textTheme.titleLarge!.color,
                       ),
                     ),
                   ),
+                  Column(
+                    children: [
+                      EmailInputField(
+                        hintText: 'Email',
+                        controller: controller.emailController,
+                      ),
+                      SizedBox(height: ScreenUtils.height10),
+                      PrimaryButton(
+                        label: 'Verify',
+                        onPressed: () async {
+                          await controller.verifyEmail(
+                            email: controller.emailController.text
+                                .trim()
+                                .toLowerCase(),
+                          );
+                        },
+                      )
+                    ],
+                  )
                 ],
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.only(bottom: ScreenUtils.height47),
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Already have account? ',
+                      style: bohibaTheme.textTheme.titleSmall,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.popAndPushNamed(context, AppRoute.signIn);
+                      },
+                      child: SizedBox(
+                        // height: BohibaResponsiveScreen.height30,
+                        width: ScreenUtils.width50,
+                        // alignment: Alignment.center,
+                        child: Text(
+                          'Signin',
+                          style: TextStyle(
+                            fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                            fontWeight: bohibaTheme
+                                .textTheme.headlineMedium!.fontWeight,
+                            color: bohibaTheme.textTheme.bodySmall!.color,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

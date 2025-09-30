@@ -199,7 +199,7 @@ class BohibaTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: BohibaColors.borderColor),
+          borderSide: BorderSide(color: BohibaColors.secoundaryColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -305,9 +305,9 @@ class BohibaTheme {
       useMaterial3: false,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: DarkColors.black,
-      splashColor: BohibaColors.primaryVariantColor,
-      highlightColor: BohibaColors.primaryVariantColor,
-      disabledColor: BohibaColors.primaryVariantColor,
+      splashColor: DarkColors.primaryColor,
+      highlightColor: DarkColors.primaryVariantColor,
+      disabledColor: DarkColors.primaryVariantColor,
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -404,7 +404,7 @@ class BohibaTheme {
             color: DarkColors.greyColor,
           ),
           prefixIconColor: DarkColors.secoundaryColor,
-          suffixIconColor: DarkColors.primaryColor,
+          suffixIconColor: DarkColors.secoundaryColor,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
           outlineBorder: BorderSide(color: DarkColors.secoundaryColor),
@@ -490,8 +490,8 @@ class BohibaTheme {
           fontWeight: FontWeight.w400,
           fontSize: 13.0.adaptSize,
         ),
-        prefixIconColor: DarkColors.primaryVariantColor,
-        suffixIconColor: DarkColors.primaryVariantColor,
+        prefixIconColor: DarkColors.secoundaryColor,
+        suffixIconColor: DarkColors.secoundaryColor,
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -499,7 +499,7 @@ class BohibaTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: DarkColors.primaryVariantColor),
+          borderSide: BorderSide(color: DarkColors.borderColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

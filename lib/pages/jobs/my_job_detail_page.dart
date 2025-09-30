@@ -1,3 +1,5 @@
+import 'package:bohiba/services/launcher_service.dart';
+
 import '/dist/app_enums.dart';
 import '/services/global_service.dart';
 import 'package:readmore/readmore.dart';
@@ -264,7 +266,7 @@ class MyJobDetailPage extends GetView<MyJobController> {
                               Spacer(),
                               GestureDetector(
                                 onTap: () async =>
-                                    await controller.makePhoneCall(
+                                    await LauncherService.makePhoneCall(
                                         intDriver['mobile_number'].toString()),
                                 child: Container(
                                   height: 28.w,

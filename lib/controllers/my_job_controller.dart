@@ -1,6 +1,3 @@
-import 'package:bohiba/services/global_service.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '/services/job_service.dart';
 import 'package:get/get.dart';
 
@@ -33,18 +30,6 @@ class MyJobController extends GetxController {
       }
     } else {
       jobObj.clear();
-    }
-  }
-
-  Future<void> makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    if (await canLaunchUrl(launchUri)) {
-      await launchUrl(launchUri);
-    } else {
-      GlobalService.showAppToast(message: 'Could not launch $phoneNumber');
     }
   }
 }

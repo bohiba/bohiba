@@ -156,10 +156,8 @@ class GlobalService {
     final result = await showModalBottomSheet(
       context: context,
       shape: BottomModalShape(),
-      backgroundColor: bohibaTheme.bottomSheetTheme.backgroundColor,
-      // isDismissible: false,
+      useSafeArea: true,
       isScrollControlled: false,
-      // enableDrag: false,
       builder: (context) {
         return AppDatePicker(
           title: title,
@@ -249,11 +247,11 @@ class GlobalService {
     return Fluttertoast.showToast(
       msg: message,
       fontAsset: ImagePath.companyLogo,
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
       gravity: gravity ?? ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 3,
-      backgroundColor: BohibaColors.greyColor,
-      textColor: BohibaColors.white,
+      timeInSecForIosWeb: 5,
+      backgroundColor: bohibaTheme.secondaryHeaderColor,
+      textColor: bohibaTheme.textTheme.displayLarge!.color,
       fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
     );
   }

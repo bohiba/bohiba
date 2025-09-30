@@ -10,6 +10,7 @@ class AppDropdown<T> extends StatelessWidget {
   final void Function(T?)? onChanged;
   final String Function(T) labelBuilder;
   final double? width;
+  final double? height;
   final double? menuHeight;
   final EdgeInsets? padding;
   final String? hint;
@@ -24,6 +25,7 @@ class AppDropdown<T> extends StatelessWidget {
     this.dropDownValue,
     this.onChanged,
     this.width,
+    this.height,
     this.menuHeight,
     this.padding,
     this.hint,
@@ -35,7 +37,7 @@ class AppDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 47,
+      height: height ?? 47,
       width: width ?? ScreenUtils.width * 0.95,
       margin: EdgeInsets.only(
         top: ScreenUtils.height5,

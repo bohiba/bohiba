@@ -63,6 +63,8 @@ class SignInScreen extends GetView<AuthController> {
                         nextActionType: TextInputAction.next,
                         prefixIcon: Icon(
                           Icons.person_rounded,
+                          color:
+                              bohibaTheme.inputDecorationTheme.prefixIconColor,
                         ),
                       ),
                       PasswordInputField(

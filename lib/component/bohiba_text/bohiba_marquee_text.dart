@@ -4,8 +4,8 @@ import 'package:marquee_text/marquee_text.dart';
 
 class BohibaMarqueeText extends StatelessWidget {
   final double width;
-  final String text;
-  final String overflowText;
+  final String? text;
+  final String? overflowText;
   final bool alwaysScroll;
   final TextStyle? style;
   final TextStyle? marqueeTextStyle;
@@ -28,7 +28,7 @@ class BohibaMarqueeText extends StatelessWidget {
       alignment: alignment ?? Alignment.centerLeft,
       width: width,
       child: AutoSizeText(
-        text,
+        text ?? '',
         maxLines: 1,
         style: style,
         overflowReplacement: MarqueeText(
@@ -36,7 +36,7 @@ class BohibaMarqueeText extends StatelessWidget {
           alwaysScroll: alwaysScroll,
           style: marqueeTextStyle,
           text: TextSpan(
-            text: overflowText,
+            text: overflowText ?? '',
           ),
         ),
       ),

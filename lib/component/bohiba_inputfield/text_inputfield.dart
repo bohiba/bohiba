@@ -79,7 +79,13 @@ class TextInputField extends StatelessWidget {
           hintText: hintText,
           counterText: counterText ?? "",
           prefixIcon: prefixIcon,
-          // iconColor: BohibaColors.borderColor,
+          border: bohibaTheme.inputDecorationTheme.border,
+          prefixIconColor: bohibaTheme.inputDecorationTheme.prefixIconColor,
+          enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
+          focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
+          focusedErrorBorder:
+              bohibaTheme.inputDecorationTheme.focusedErrorBorder,
+          errorBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
         ),
       ),
     );

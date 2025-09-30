@@ -28,13 +28,13 @@ class AllTruckPage extends GetView<TruckAllController> {
             child: AppBarIconBox(
               icon: const Icon(EvaIcons.plus),
               onTap: () {
-                Navigator.of(context)
-                    .pushNamed(AppRoute.addTruck)
-                    .then((value) async {
-                  if (value != null) {
-                    await controller.getTruckList();
-                  }
-                });
+                navState.pushNamed(AppRoute.addTruck).then(
+                  (value) async {
+                    if (value != null) {
+                      await controller.getTruckList();
+                    }
+                  },
+                );
               },
             ),
           )

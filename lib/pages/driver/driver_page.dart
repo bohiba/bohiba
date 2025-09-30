@@ -1,3 +1,5 @@
+import 'package:bohiba/services/launcher_service.dart';
+
 import '/model/rating_model.dart';
 
 import '/component/bohiba_appbar/driver_appbar.dart';
@@ -10,7 +12,6 @@ import 'package:readmore/readmore.dart';
 
 import '/controllers/driver_controller.dart';
 import '/extensions/bohiba_extension.dart';
-import '/pages/widget/detail_box_widget.dart';
 import '/pages/widget/linear_box_widget.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -58,58 +59,95 @@ class DriverPage extends GetView<DriverController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Personal Details",
-                        style: bohibaTheme.textTheme.headlineMedium,
-                      ),
-                      Gap(ScreenUtils.width5),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            DetailsBox(
-                              headline: 'UUID',
-                              title: controller
-                                      .driverModel.value.profile?.driverUuid ??
-                                  'NA',
+                      Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BohibaMarqueeText(
+                                width: ScreenUtils.width * 0.35,
+                                text: controller
+                                        .driverModel.value.profile?.name ??
+                                    '',
+                                overflowText: controller
+                                        .driverModel.value.profile?.name ??
+                                    '',
+                                style: bohibaTheme.textTheme.labelLarge,
+                              ),
+                              Text(
+                                controller.driverModel.value.profile
+                                        ?.driverUuid ??
+                                    'NA',
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: bohibaTheme
+                                      .textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleMedium!.color,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Visibility(
+                            visible:
+                                controller.driverModel.value.profile != null,
+                            child: GestureDetector(
+                              onTap: () async =>
+                                  await LauncherService.makePhoneCall(
+                                controller
+                                    .driverModel.value.profile!.mobileNumber!,
+                              ),
+                              child: Container(
+                                height: 32.w,
+                                width: 32.w,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: bohibaTheme.colorScheme.onSurface
+                                      .withValues(alpha: 0.25),
+                                ),
+                                child: Icon(
+                                  Icons.phone_sharp,
+                                  size: 16.w,
+                                  color: bohibaTheme.colorScheme.onSurface,
+                                ),
+                              ),
                             ),
-                            DetailsBox(
-                              headline: 'Role',
-                              title: (controller
-                                      .driverModel.value.profile?.roleId
-                                      ?.roleName()) ??
-                                  'NA',
-                            ),
-                            DetailsBox(
-                              headline: 'Status',
-                              title: controller
-                                      .driverModel.value.profile?.isActive
-                                      .toString()
-                                      .toUpperCase() ??
-                                  'NA',
-                            ),
-                            DetailsBox(
-                              headline: 'Last Sync',
-                              title: controller.driverModel.value.updatedAt ??
-                                  'NA',
-                            ),
-                            DetailsBox(
-                              headline: 'D.O.B',
-                              title:
-                                  controller.driverModel.value.profile?.dob ??
-                                      'NA',
-                            ),
-                            DetailsBox(
-                              headline: 'Phone',
-                              title: controller.driverModel.value.profile
-                                      ?.mobileNumber ??
-                                  'NA',
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: ScreenUtils.height20),
+                        padding: EdgeInsets.only(top: ScreenUtils.height25),
+                        child: Text(
+                          'Basic Info',
+                          style: bohibaTheme.textTheme.headlineMedium,
+                        ),
+                      ),
+                      LinearBoxWidget(
+                        header: 'Role',
+                        title: controller.driverModel.value.profile?.roleId
+                                ?.roleName() ??
+                            'NA',
+                      ),
+                      LinearBoxWidget(
+                        header: 'D.O.B',
+                        title: controller.driverModel.value.profile?.dob,
+                      ),
+                      LinearBoxWidget(
+                        header: 'Status',
+                        title: controller.driverModel.value.profile?.isActive
+                            ?.toCapitalizedLabel(),
+                      ),
+                      LinearBoxWidget(
+                        header: 'Last Sync',
+                        title: controller.driverModel.value.updatedAt,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: ScreenUtils.height30),
                         child: Text(
                           'License & Vehicle Details',
                           style: bohibaTheme.textTheme.headlineMedium,
@@ -117,33 +155,28 @@ class DriverPage extends GetView<DriverController> {
                       ),
                       LinearBoxWidget(
                         header: 'Driving License',
-                        title: controller.driverModel.value.licenseDetail
-                                ?.licenseNumber ??
-                            'NA',
+                        title: controller
+                            .driverModel.value.licenseDetail?.licenseNumber,
                       ),
                       LinearBoxWidget(
                         header: 'License Status',
                         title: controller
-                                .driverModel.value.licenseDetail?.status
-                                .toString()
-                                .toUpperCase() ??
-                            'NA',
+                            .driverModel.value.licenseDetail?.status
+                            ?.toCapitalizedLabel(),
                       ),
                       LinearBoxWidget(
                         header: 'COV',
-                        title: 'NA',
+                        title: '',
                       ),
                       LinearBoxWidget(
                         header: 'Issued',
-                        title: controller.driverModel.value.licenseDetail
-                                ?.validityFrom ??
-                            'NA',
+                        title: controller
+                            .driverModel.value.licenseDetail?.validityFrom,
                       ),
                       LinearBoxWidget(
                         header: 'Expiry',
-                        title: controller.driverModel.value.licenseDetail
-                                ?.validityTill ??
-                            'NA',
+                        title: controller
+                            .driverModel.value.licenseDetail?.validityTill,
                       ),
                     ],
                   ),
@@ -155,7 +188,7 @@ class DriverPage extends GetView<DriverController> {
                       : true,
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: ScreenUtils.height20,
+                      top: ScreenUtils.height25,
                       left: ScreenUtils.width15,
                       right: ScreenUtils.width15,
                       bottom: ScreenUtils.height10,
@@ -226,7 +259,7 @@ class DriverPage extends GetView<DriverController> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          ratingModel.reviewer?.name ?? 'NA',
+                                          ratingModel.reviewer?.name ?? '',
                                           style:
                                               bohibaTheme.textTheme.labelLarge,
                                         ),

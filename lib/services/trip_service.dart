@@ -53,7 +53,7 @@ class TripService {
       default:
         GlobalService.dismissProgress();
         GlobalService.printHandler(apiResponse.message);
-        GlobalService.printHandler('Failed to add trip');
+        GlobalService.showAppToast(message: 'Failed to add trip');
         return 0;
     }
   }

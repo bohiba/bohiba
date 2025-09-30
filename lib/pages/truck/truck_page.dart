@@ -1,6 +1,7 @@
-import 'package:bohiba/component/bohiba_buttons/primary_button.dart';
+import 'package:bohiba/services/launcher_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '/pages/widget/role_widget.dart';
+import '/component/bohiba_buttons/primary_button.dart';
 
 import '/component/bohiba_appbar/truck_appbar.dart';
 import '/controllers/truck_controller.dart';
@@ -8,7 +9,7 @@ import '/routes/app_route.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-import '/pages/widget/detail_box_widget.dart';
+import '/pages/widget/role_widget.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:gap/gap.dart';
@@ -80,65 +81,144 @@ class TruckPage extends GetView<TruckController> {
                                     },
                                   ),
                                 )
-                              : SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      DetailsBox(
-                                        headline: 'Driver',
-                                        title: controller.truckModel.value
-                                                .driver?.name ??
-                                            '',
-                                        titleColor: bohibaTheme.primaryColor,
+                              : Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: bohibaTheme.dividerColor,
+                                    ),
+                                    Gap(ScreenUtils.height15),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        BohibaMarqueeText(
+                                          width: ScreenUtils.width * 0.35,
+                                          text: controller.truckModel.value
+                                                  .driver?.name ??
+                                              '',
+                                          overflowText: controller.truckModel
+                                                  .value.driver?.name ??
+                                              '',
+                                        ),
+                                        Text(
+                                          controller.truckModel.value.driver
+                                                  ?.uuid ??
+                                              'NA',
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: bohibaTheme.textTheme
+                                                .titleMedium!.fontSize,
+                                            fontWeight: bohibaTheme.textTheme
+                                                .bodySmall!.fontWeight,
+                                            color: bohibaTheme
+                                                .textTheme.titleMedium!.color,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Visibility(
+                                      visible: controller.truckModel.value
+                                                  .driver?.mobileNumber !=
+                                              null ||
+                                          controller.truckModel.value.driver
+                                                  ?.mobileNumber !=
+                                              '',
+                                      child: GestureDetector(
+                                        onTap: () async =>
+                                            await LauncherService.makePhoneCall(
+                                          controller.truckModel.value.driver!
+                                              .mobileNumber!,
+                                        ),
+                                        child: Container(
+                                          height: 32.w,
+                                          width: 32.w,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: bohibaTheme
+                                                .colorScheme.onSurface
+                                                .withValues(alpha: 0.25),
+                                          ),
+                                          child: Icon(
+                                            Icons.phone_sharp,
+                                            size: 16.w,
+                                            color: bohibaTheme
+                                                .colorScheme.onSurface,
+                                          ),
+                                        ),
                                       ),
-                                      DetailsBox(
-                                        headline: 'Mobile no',
-                                        title: controller.truckModel.value
-                                                .driver?.mobileNumber ??
-                                            '',
-                                        titleColor: bohibaTheme.listTileTheme
-                                            .titleTextStyle!.color,
-                                      ),
-                                      DetailsBox(
-                                        headline: 'UUID',
-                                        title: controller.truckModel.value
-                                                .driver?.uuid ??
-                                            '',
-                                        titleColor: bohibaTheme.listTileTheme
-                                            .titleTextStyle!.color,
-                                      ),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                          driverWidget: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: bohibaTheme.dividerColor,
+                              ),
+                              Gap(ScreenUtils.height15),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  BohibaMarqueeText(
+                                    width: ScreenUtils.width * 0.35,
+                                    text:
+                                        controller.truckModel.value.owner?.name,
+                                    overflowText: controller
+                                        .truckModel.value.driver?.name,
+                                  ),
+                                  Text(
+                                    controller.truckModel.value.owner?.uuid ??
+                                        '',
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: bohibaTheme
+                                          .textTheme.titleMedium!.fontSize,
+                                      fontWeight: bohibaTheme
+                                          .textTheme.bodySmall!.fontWeight,
+                                      color: bohibaTheme
+                                          .textTheme.titleMedium!.color,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Visibility(
+                                visible: controller.truckModel.value.owner
+                                            ?.mobileNumber !=
+                                        null ||
+                                    controller.truckModel.value.owner
+                                            ?.mobileNumber !=
+                                        '',
+                                child: GestureDetector(
+                                  onTap: () async =>
+                                      LauncherService.makePhoneCall(
+                                    controller
+                                        .truckModel.value.owner!.mobileNumber!,
+                                  ),
+                                  child: Container(
+                                    height: 36.w,
+                                    width: 36.w,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: bohibaTheme.colorScheme.onSurface
+                                          .withValues(alpha: 0.25),
+                                    ),
+                                    child: Icon(
+                                      Icons.phone_sharp,
+                                      size: 16.w,
+                                      color: bohibaTheme.colorScheme.onSurface,
+                                    ),
                                   ),
                                 ),
-                          driverWidget: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                DetailsBox(
-                                  headline: 'Owner',
-                                  title:
-                                      controller.truckModel.value.owner?.name ??
-                                          '',
-                                  titleColor: bohibaTheme.primaryColor,
-                                ),
-                                DetailsBox(
-                                  headline: 'Mobile no',
-                                  title: controller.truckModel.value.owner
-                                          ?.mobileNumber ??
-                                      '',
-                                  titleColor: bohibaTheme
-                                      .listTileTheme.titleTextStyle!.color,
-                                ),
-                                DetailsBox(
-                                  headline: 'UUID',
-                                  title:
-                                      controller.truckModel.value.owner?.uuid ??
-                                          '',
-                                  titleColor: bohibaTheme
-                                      .listTileTheme.titleTextStyle!.color,
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         Padding(

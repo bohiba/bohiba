@@ -301,12 +301,12 @@ class SpecsModel {
   factory SpecsModel.fromJson(Map<String, dynamic> json) => SpecsModel(
         brand: json['brand'],
         model: json['model'],
-        engineNo: json['engine_no'],
-        chassisNo: json['chassis_no'],
+        engineNo: json['engine_number'],
+        chassisNo: json['chassis_number'],
         fuelType: json['fuel_type'],
         unladenWeight: json['unladen_weight'] == null
             ? null
-            : json['unloaden_weight'].toString().toDouble(),
+            : (json['unloaden_weight'].toString()).toDouble(),
         financer: json['financer'],
         insurancePolicyNo: json['insurance_policy_no'],
         insuranceCompany: json['insurance_company'],

@@ -3,15 +3,10 @@ import '/component/screen_utils.dart';
 import '/pages/driver/driver_modals/driver_menu.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:marquee_text/marquee_text.dart';
-
-import '/component/bohiba_appbar/appbar_icon.dart';
-import '/component/bohiba_colors.dart';
 import '/controllers/driver_controller.dart';
 import '/dist/app_enums.dart';
-import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:remixicon/remixicon.dart';
 
 class DriverAppbar extends GetView<DriverController>
     implements PreferredSizeWidget {

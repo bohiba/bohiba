@@ -1,4 +1,6 @@
-import '/component/bohiba_colors.dart';
+import 'package:bohiba/component/bohiba_dropdown/app_dropdown_button.dart';
+import 'package:bohiba/dist/component_exports.dart';
+
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -16,105 +18,102 @@ class AppDatePicker extends StatefulWidget {
 class _AppDatePickerState extends State<AppDatePicker> {
   DateTime dTFocusedDate = DateTime.now();
   DateTime pickedDate = DateTime.now();
+  int selectedYear = DateTime.now().year;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: ScreenUtils.height15,
-            right: ScreenUtils.height15,
-            top: ScreenUtils.height20,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: bohibaTheme.textTheme.headlineLarge,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context, pickedDate);
-                },
-                child: Text(
-                  'Close',
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                    fontWeight:
-                        bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                    color: BohibaColors.warningColor,
-                  ),
-                ),
-              )
-            ],
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(12.r),
+          topLeft: Radius.circular(12.r),
         ),
-        Container(
-          padding: EdgeInsets.only(
-            left: ScreenUtils.height15,
-            right: ScreenUtils.height15,
-            bottom: ScreenUtils.height20,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12.r),
-              topRight: Radius.circular(12.r),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              left: ScreenUtils.height15,
+              right: ScreenUtils.height15,
+              top: ScreenUtils.height20,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppDropdown<int>(
+                  width: ScreenUtils.width * 0.24,
+                  menuHeight: ScreenUtils.height * 0.3,
+                  dropDownValue: selectedYear,
+                  padding: EdgeInsets.zero,
+                  items:
+                      List.generate((DateTime.now().year - 2000 + 1), (index) {
+                    int year = 2000 + index;
+                    return year;
+                  }),
+                  labelBuilder: (y) {
+                    return y.toString();
+                  },
+                  onChanged: (y) {
+                    if (y == null) return;
+                    setState(() {
+                      selectedYear = y;
+                      dTFocusedDate = DateTime(
+                        selectedYear,
+                        pickedDate.month,
+                        pickedDate.day,
+                      );
+                    });
+                  },
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, pickedDate);
+                  },
+                  icon: Icon(Icons.close),
+                )
+              ],
             ),
           ),
-          alignment: Alignment.center,
-          child: TableCalendar(
+          TableCalendar(
+            currentDay: DateTime.now(),
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
                 pickedDate = selectedDay;
                 dTFocusedDate = focusedDay;
               });
             },
-            onFormatChanged: (format) {
-
+            onFormatChanged: (format) {},
+            selectedDayPredicate: (day) {
+              return isSameDay(pickedDate, day);
             },
-            
-            onHeaderTapped: (focusedDay) async {
-              int? year = await showDialog<int>(
-                context: context,
-                builder: (ctx) {
-                  return AlertDialog(
-                    title: Text('Select Year'),
-                    content: SizedBox(
-                      width: 300,
-                      height: 300,
-                      child: YearPicker(
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
-                        selectedDate: DateTime(pickedDate.year),
-                        onChanged: (DateTime dateTime) {
-                          Navigator.pop(ctx, dateTime.year);
-                        },
-                      ),
-                    ),
-                  );
-                },
-              );
-
-              if (year == null) return;
+            onPageChanged: (focusedDay) {
               setState(() {
-                dTFocusedDate =
-                    DateTime(year, pickedDate.month, pickedDate.day);
+                dTFocusedDate = focusedDay;
+                selectedYear = focusedDay.year;
               });
             },
+            headerStyle: HeaderStyle(
+              titleCentered: true,
+              leftChevronVisible: false,
+              rightChevronVisible: false,
+              formatButtonVisible: false,
+              headerPadding:
+                  EdgeInsets.symmetric(vertical: ScreenUtils.height10),
+              titleTextStyle: TextStyle(
+                fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
+                color: bohibaTheme.textTheme.bodySmall!.color,
+              ),
+            ),
             focusedDay: dTFocusedDate,
             firstDay: DateTime(1800),
             lastDay: DateTime.now(),
-            currentDay: pickedDate,
+            // currentDay: pickedDate,
             calendarFormat: CalendarFormat.month,
             calendarStyle: CalendarStyle(
+              outsideDaysVisible: false,
               selectedTextStyle: TextStyle(
                 fontFamily: bohibaTheme.textTheme.titleSmall!.fontFamily,
-                color: bohibaTheme.textTheme.titleLarge!.color,
-                
+                color: bohibaTheme.textTheme.displayLarge!.color,
               ),
               selectedDecoration: BoxDecoration(
                 color: bohibaTheme.primaryColor,
@@ -125,13 +124,13 @@ class _AppDatePickerState extends State<AppDatePicker> {
                 color: bohibaTheme.textTheme.labelSmall!.color,
               ),
               todayDecoration: BoxDecoration(
-                color: BohibaColors.primaryColor,
+                color: bohibaTheme.disabledColor,
                 shape: BoxShape.circle,
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

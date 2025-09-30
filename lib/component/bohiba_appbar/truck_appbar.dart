@@ -1,15 +1,8 @@
-import '/component/bohiba_appbar/appbar_icon.dart';
-import '/component/bohiba_colors.dart';
 import '/model/truck_model.dart';
 import '/pages/truck/add_truck_component/truck_menu.dart';
-import '/services/global_service.dart';
-import 'package:remixicon/remixicon.dart';
-
 import '/component/screen_utils.dart';
-
 import '/dist/app_enums.dart';
 import '/theme/bohiba_theme.dart';
-
 import '/controllers/truck_controller.dart';
 import 'package:marquee_text/marquee_text.dart';
 import 'package:auto_size_text/auto_size_text.dart';

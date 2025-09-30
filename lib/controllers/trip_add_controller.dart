@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import '/services/global_service.dart';
-
 import '/extensions/bohiba_extension.dart';
 import '/services/trip_service.dart';
 
@@ -82,7 +80,25 @@ class TripAddController extends ImageUploadController {
 
   Future<void> addUpdateTrip() async {
     if (truckController.text.isEmpty) {
-      GlobalService.showAppToast(message: 'Please select a truck');
+      // GlobalService.showAppToast(message: 'Please select a truck');
+      Get.showSnackbar(
+        GetSnackBar(
+          title: "Truck",
+          message: 'Please select truck for trip.',
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
+
+    if (truckModel.value.driver == null) {
+      Get.showSnackbar(
+        GetSnackBar(
+          title: "Driver",
+          message: 'Please assign driver to your truck.',
+          duration: const Duration(seconds: 5),
+        ),
+      );
       return;
     }
 

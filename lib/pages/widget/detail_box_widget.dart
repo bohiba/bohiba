@@ -3,8 +3,8 @@ import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 class DetailsBox extends StatelessWidget {
-  final String headline;
-  final String title;
+  final String? headline;
+  final String? title;
   final Color? titleColor;
   final VoidCallback? onClick;
   const DetailsBox({
@@ -36,14 +36,14 @@ class DetailsBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                headline,
+                headline ?? '',
                 style: TextStyle(
                   fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                   color: bohibaTheme.textTheme.bodyLarge!.color,
                 ),
               ),
               Text(
-                title,
+                title ?? '',
                 style: TextStyle(
                   fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                   fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
