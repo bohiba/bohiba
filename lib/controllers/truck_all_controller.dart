@@ -9,17 +9,12 @@ import '/services/db_service.dart';
 import '/services/dio_serivce.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '/services/global_service.dart';
 
 class TruckAllController extends GetxController {
   final MasterController masterController = Get.find<MasterController>();
   DioService dioService = DioService();
   DBService dBService = DBService();
-
-  final RefreshController refreshList =
-      RefreshController(initialRefresh: false);
-
   final TextEditingController vehicleNumberController = TextEditingController();
 
   Rx<AddAssetUsing> addAsset = AddAssetUsing.scan.obs;
@@ -35,11 +30,6 @@ class TruckAllController extends GetxController {
     Future.delayed(Duration.zero, () async {
       await getTruckList();
     });
-  }
-
-  Future<void> onRefreshTruckList() async {
-    await getTruckList();
-    refreshList.refreshCompleted();
   }
 
   Future<void> deleteTruck({required int truckId}) async {

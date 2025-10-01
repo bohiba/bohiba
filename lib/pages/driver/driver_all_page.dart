@@ -32,11 +32,14 @@ class DriverAllPage extends GetView<DriverAllController> {
       ),
       body: Obx(
         () {
+          final RefreshController refreshList =
+              RefreshController(initialRefresh: false);
           return SmartRefresher(
             onRefresh: () async {
-              await controller.refreshPage();
+              await controller.getDriverList();
+              refreshList.refreshCompleted();
             },
-            controller: controller.refreshList,
+            controller: refreshList,
             child: controller.arrDriver.isEmpty
                 ? Center(
                     child: SizedBox(

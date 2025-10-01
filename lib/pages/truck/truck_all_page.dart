@@ -14,7 +14,8 @@ import '/routes/app_route.dart';
 import '/dist/component_exports.dart';
 
 class AllTruckPage extends GetView<TruckAllController> {
-  const AllTruckPage({super.key});
+  final bool showLeading;
+  const AllTruckPage({super.key, this.showLeading = true});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class AllTruckPage extends GetView<TruckAllController> {
     return Scaffold(
       appBar: TitleAppbar(
         title: "Trucks",
+        showLeading: showLeading,
         actions: [
           PermissionWidget(
             permission: RolePermissionService.addTrucks,
@@ -42,9 +44,14 @@ class AllTruckPage extends GetView<TruckAllController> {
       ),
       body: SafeArea(
         child: Obx(() {
+          final RefreshController refreshTruckList =
+              RefreshController(initialRefresh: false);
           return SmartRefresher(
-            controller: controller.refreshList,
-            onRefresh: () async => await controller.onRefreshTruckList(),
+            controller: refreshTruckList,
+            onRefresh: () async => {
+              await controller.getTruckList(),
+              refreshTruckList.refreshCompleted(),
+            },
             child: controller.arrTruck.isEmpty
                 ? Center(
                     child: SizedBox(

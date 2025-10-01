@@ -1,6 +1,4 @@
 import '/services/api_end_point.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
 import '/dist/app_enums.dart';
 import '/model/driver_model.dart';
 import '/services/db_service.dart';
@@ -14,9 +12,6 @@ class DriverAllController extends GetxController {
   DioService dioService = DioService();
   AddAssetUsing addUserBy = AddAssetUsing.doc;
 
-  final RefreshController refreshList =
-      RefreshController(initialRefresh: false);
-
   RxList<DriverModel> arrDriver = <DriverModel>[].obs;
 
   @override
@@ -25,11 +20,6 @@ class DriverAllController extends GetxController {
     Future.delayed(Duration.zero, () async {
       await getDriverList();
     });
-  }
-
-  Future<void> refreshPage() async {
-    await getDriverList();
-    refreshList.refreshCompleted();
   }
 
   Future<void> deleteDriver({required String id}) async {

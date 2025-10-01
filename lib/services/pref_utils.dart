@@ -24,6 +24,14 @@ class PrefUtils {
     }
   }
 
+  Future<void> toggleBiometric(bool value) async {
+    await saveBool(biometricKey, value);
+  }
+
+  bool loadBiometricSetting() {
+    return getBool(biometricKey);
+  }
+
   static ThemeMode getAppThemeMode() {
     final stored = _preferences?.getString(themeKey);
     return ThemeMode.values.firstWhere(
@@ -106,4 +114,5 @@ class PrefUtils {
 
   static const String token = 'app_token';
   static const String themeKey = 'theme_mode';
+  static const String biometricKey = 'biometric_enabled';
 }

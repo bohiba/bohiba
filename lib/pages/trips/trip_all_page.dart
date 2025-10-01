@@ -12,14 +12,16 @@ import '/dist/component_exports.dart';
 import '/routes/app_route.dart';
 
 class AllTripPage extends GetView<AllTripController> {
-  const AllTripPage({super.key});
+  final bool showLeading;
+  const AllTripPage({super.key, this.showLeading = true});
 
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(
-        title: 'All Trip',
+        title: 'Trips',
+        showLeading: showLeading,
         actions: [
           AppBarIconBox(
             onTap: () {

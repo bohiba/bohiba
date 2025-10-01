@@ -94,13 +94,20 @@ class DriverPage extends GetView<DriverController> {
                           Spacer(),
                           Visibility(
                             visible:
-                                controller.driverModel.value.profile != null,
+                                controller.driverModel.value.profile == null
+                                    ? false
+                                    : true,
                             child: GestureDetector(
-                              onTap: () async =>
+                              onTap: () async {
+                                if (controller.driverModel.value.profile!
+                                        .mobileNumber !=
+                                    null) {
                                   await LauncherService.makePhoneCall(
-                                controller
-                                    .driverModel.value.profile!.mobileNumber!,
-                              ),
+                                    controller.driverModel.value.profile!
+                                        .mobileNumber!,
+                                  );
+                                }
+                              },
                               child: Container(
                                 height: 32.w,
                                 width: 32.w,

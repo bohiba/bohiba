@@ -8,11 +8,13 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final bool popResult;
+  final bool showLeading;
   const TitleAppbar({
     super.key,
     this.title = "Title",
     this.actions,
     this.popResult = false,
+    this.showLeading = true,
   });
 
   @override
@@ -22,7 +24,7 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
       preferredSize: preferredSize,
       child: AppBar(
         automaticallyImplyLeading: true,
-        titleSpacing: 0,
+        titleSpacing: showLeading ? 0 : null,
         title: SizedBox(
           width: ScreenUtils.width * 0.45,
           child: AutoSizeText(
@@ -39,12 +41,14 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-        leading: InkWell(
-          child: const Icon(Icons.arrow_back_ios_new_rounded),
-          onTap: () {
-            navigate.pop(popResult);
-          },
-        ),
+        leading: showLeading
+            ? InkWell(
+                child: const Icon(Icons.arrow_back_ios_new_rounded),
+                onTap: () {
+                  navigate.pop(popResult);
+                },
+              )
+            : null,
         actions: actions,
       ),
     );

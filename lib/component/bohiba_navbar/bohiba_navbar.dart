@@ -1,13 +1,13 @@
 import '/dist/app_enums.dart';
-import '/pages/mines/all_mines_page.dart';
 import '/services/global_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:remixicon/remixicon.dart';
 import '/pages/home/home_screen.dart';
-import '../../pages/dashboard/dash_page/dashboard_page.dart';
-import '/pages/explore/explore_page.dart';
+import '/pages/trips/trip_all_page.dart';
+import '/pages/truck/truck_all_page.dart';
+import '/pages/dashboard/dash_page/dashboard_page.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 
@@ -38,9 +38,15 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         const BottomNavigationBarItem(
           icon: Icon(EvaIcons.activityOutline),
           activeIcon: Icon(EvaIcons.activityOutline),
+          label: "Trucks",
+          tooltip: "Trucks",
+        ),
+        /*const BottomNavigationBarItem(
+          icon: Icon(EvaIcons.activityOutline),
+          activeIcon: Icon(EvaIcons.activityOutline),
           label: "Market",
           tooltip: "Market",
-        ),
+        ),*/
         /*const BottomNavigationBarItem(
             icon: Icon(EvaIcons.barChart2Outline),
             activeIcon: Icon(EvaIcons.barChart),
@@ -50,8 +56,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         const BottomNavigationBarItem(
           icon: Icon(EvaIcons.compassOutline),
           activeIcon: Icon(EvaIcons.compass),
-          label: "Explore",
-          tooltip: "Explore",
+          label: "Trips",
+          tooltip: "Trips",
         ),
         BottomNavigationBarItem(
           icon: Icon(EvaIcons.gridOutline),
@@ -105,9 +111,11 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
           children: [
             const HomePage(),
             // FavouritePage(),
-            AllMinesPage(),
+            // AllMinesPage(),
+            AllTruckPage(showLeading: false),
             // StatusPage(moveToTab: statusScreenIndex),
-            ExplorePage(),
+            AllTripPage(showLeading: false),
+            // ExplorePage(),
             const DashboardPage(),
           ],
         ),
@@ -118,8 +126,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
           selectedFontSize: 12,
           unselectedFontSize: 12,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          // showSelectedLabels: false,
+          // showUnselectedLabels: false,
           selectedItemColor: bohibaTheme.primaryColor,
           unselectedItemColor: BohibaColors.secoundaryColor,
           onTap: _onTap,

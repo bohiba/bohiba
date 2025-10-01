@@ -234,6 +234,16 @@ class GlobalService {
     Get.focusScope?.requestFocus();
   }
 
+  static SnackbarController appSnackBar() {
+    return  Get.showSnackbar(
+        GetSnackBar(
+          title: "Truck",
+          message: 'Please select truck for trip.',
+          duration: const Duration(seconds: 5),
+        ),
+      );
+  }
+
   static Future<bool?> showAppToast({
     required String message,
     Color? backgroundColor,

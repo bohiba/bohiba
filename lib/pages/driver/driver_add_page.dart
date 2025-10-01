@@ -1,10 +1,8 @@
 import 'package:widgets_easier/widgets_easier.dart';
-
 import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:intl/intl.dart';
-
 import '/controllers/driver_add_controller.dart';
 import 'package:get/get.dart';
 import '/dist/app_enums.dart';
