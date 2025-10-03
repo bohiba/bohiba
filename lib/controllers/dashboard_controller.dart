@@ -1,3 +1,5 @@
+import 'package:bohiba/model/user_list_model.dart';
+
 import '/dist/app_enums.dart';
 import '/services/profile_service.dart';
 
@@ -14,6 +16,7 @@ class DashboardController extends GetxController {
   RefreshController refreshProfile = RefreshController();
 
   Rxn<ProfileModel> profileModel = Rxn<ProfileModel>();
+  RxList<UserListModel> arrLoggedInUser = <UserListModel>[].obs;
 
   Map<String, dynamic> deviceInfo = {};
 
@@ -29,6 +32,12 @@ class DashboardController extends GetxController {
     await getProfileModel();
     deviceInfo = await DeviceInfoService.getDeviceInfo();
     refreshProfile.refreshCompleted();
+  }
+
+  Future<void> getLoggedUserAccount() async {
+    List<UserListModel> arrList = await ProfileService.getLoggedAccount();
+    arrLoggedInUser.clear();
+    arrLoggedInUser.addAll(arrList);
   }
 
   Future<ProfileModel?> getProfileModel({

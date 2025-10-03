@@ -1,3 +1,5 @@
+import 'package:bohiba/model/user_list_model.dart';
+
 import '../controllers/role_controller.dart';
 import '/dist/app_enums.dart';
 import '/services/api_end_point.dart';
@@ -198,5 +200,17 @@ class ProfileService {
 
   static Future<int> updateProfile({required ProfileModel profile}) async {
     return await _dBService.putData(tblProfile, profileKey, profile);
+  }
+
+  static Future<List<UserListModel>> getLoggedAccount() async {
+    return await _dBService.getAllData<UserListModel>(tblUserList);
+  }
+
+  static Future<int> loggedInUser({required UserListModel loggedInUser}) async {
+    return await _dBService.putData<UserListModel>(
+      tblUserList,
+      "${loggedInUser.uuid}",
+      loggedInUser,
+    );
   }
 }

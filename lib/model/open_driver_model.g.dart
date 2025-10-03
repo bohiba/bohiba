@@ -19,17 +19,20 @@ class OpenDriverModelAdapter extends TypeAdapter<OpenDriverModel> {
     return OpenDriverModel(
       id: fields[0] as int?,
       uuid: fields[1] as String?,
+      profileImage: fields[5] as String?,
       name: fields[2] as String?,
-      profileImage: fields[3] as String?,
-      mobileNumber: fields[4] as String?,
-      connect: fields[5] as String?,
+      mobileNumber: fields[3] as String?,
+      verified: fields[6] as String?,
+      district: fields[7] as String?,
+      state: fields[8] as String?,
+      connect: fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, OpenDriverModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -37,10 +40,16 @@ class OpenDriverModelAdapter extends TypeAdapter<OpenDriverModel> {
       ..writeByte(2)
       ..write(obj.name)
       ..writeByte(3)
-      ..write(obj.profileImage)
-      ..writeByte(4)
       ..write(obj.mobileNumber)
       ..writeByte(5)
+      ..write(obj.profileImage)
+      ..writeByte(6)
+      ..write(obj.verified)
+      ..writeByte(7)
+      ..write(obj.district)
+      ..writeByte(8)
+      ..write(obj.state)
+      ..writeByte(9)
       ..write(obj.connect);
   }
 

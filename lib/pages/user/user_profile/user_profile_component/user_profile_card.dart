@@ -1,12 +1,11 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
+import '/pages/user/user_profile/switch_account_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class UserProfileCard extends StatelessWidget {
-  final VoidCallback editProfile;
   final String userImage;
   final String? userName;
   final String? userID;
@@ -14,18 +13,16 @@ class UserProfileCard extends StatelessWidget {
 
   const UserProfileCard({
     super.key,
-    required this.editProfile,
     this.userImage = '',
     this.dob,
-    this.userName = "User Name",
-    this.userID = "AB000TY0",
+    this.userName = "",
+    this.userID = "",
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      width: double.maxFinite,
       padding: EdgeInsets.only(
         left: ScreenUtils.width15,
         right: ScreenUtils.width15,
@@ -51,14 +48,14 @@ class UserProfileCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   BohibaMarqueeText(
-                    width: ScreenUtils.width * 0.45,
-                    text: userName ?? 'NA',
+                    width: ScreenUtils.width * 0.3,
+                    text: userName ?? '',
                     style: bohibaTheme.textTheme.headlineSmall,
-                    overflowText: userName ?? 'NA',
+                    overflowText: userName ?? '',
                     marqueeTextStyle: bohibaTheme.textTheme.headlineSmall,
                   ),
                   Text(
-                    userID ?? 'NA',
+                    userID ?? '',
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                       color: bohibaTheme.textTheme.bodySmall!.color,
@@ -66,27 +63,37 @@ class UserProfileCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const Spacer(),
+              /*const Spacer(),
               GestureDetector(
-                onTap: editProfile,
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: BottomModalShape(),
+                    useSafeArea: true,
+                    isScrollControlled: false,
+                    builder: (context) {
+                      return SwitchAccountDialog();
+                    },
+                  );
+                },
                 child: Container(
                   height: ScreenUtils.height30,
-                  width: ScreenUtils.width * 0.18,
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
                   decoration: BoxDecoration(
-                    color: BohibaColors.primaryColor,
-                    borderRadius: BorderRadius.circular(12.0.r),
+                    color: bohibaTheme.primaryColor,
+                    borderRadius: BorderRadius.circular(20.r),
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    'Edit Profile',
+                    'Switch Account',
                     style: TextStyle(
-                        color: BohibaColors.white,
-                        fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.labelMedium!.fontWeight),
+                      color: bohibaTheme.textTheme.displayLarge!.color,
+                      fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
+                      fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
+                    ),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ],

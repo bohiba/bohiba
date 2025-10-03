@@ -68,7 +68,7 @@ import '/bindings/user_profile_congif_binding.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
 import '/pages/mines/all_mines_page.dart';
 import '/pages/truck/truck_edit_page.dart';
-import '/pages/user/user_profile/user_profile_screen/user_profile.dart';
+import '../pages/user/user_profile/user_profile_screen/user_profile_page.dart';
 import '/pages/user/user_kyc/kyc_screen.dart';
 import '/pages/user/user_profile/edit_user_profile_screen.dart';
 import 'package:get/get.dart';

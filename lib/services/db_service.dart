@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '/model/user_list_model.dart';
 import 'global_service.dart';
 import '/model/open_driver_model.dart';
 import '/model/rating_model.dart';
@@ -19,34 +20,35 @@ class DBService {
 
   Future<void> initDB() async {
     await Hive.initFlutter();
-    await register(ProfileModelAdapter());
-    await register(VerificationModelAdapter());
-    await register(NewsModelAdapter());
-    await register(MinesModelAdapter());
-    await register(TripModelAdapter());
-    await register(LoadDetailAdapter());
-    await register(TripFinanceAdapter());
-    await register(TripTruckAdapter());
-    await register(TripDriverAdapter());
-    await register(TripOwnerAdapter());
-    await register(TruckOwnerModelAdapter());
-    await register(ReassignmentAdapter());
-    await register(TripExpenseAdapter());
-    await register(TripPaymentAdapter());
-    await register(TripDocumentAdapter());
-    await register(TruckModelAdapter());
-    await register(TruckDriverModelAdapter());
-    await register(RegistrationModelAdapter());
-    await register(SpecsModelAdapter());
-    await register(ValidityModelAdapter());
-    await register(UserFavouriteModelAdapter());
-    await register(DriverModelAdapter());
-    await register(DriverProfileAdapter());
-    await register(DriverAddressAdapter());
-    await register(LicenseDetailAdapter());
-    await register(RatingModelAdapter());
-    await register(ReviewerModelAdapter());
-    await register(OpenDriverModelAdapter());
+    await register<ProfileModel>(ProfileModelAdapter());
+    await register<UserListModel>(UserListModelAdapter());
+    await register<VerificationModel>(VerificationModelAdapter());
+    await register<NewsModel>(NewsModelAdapter());
+    await register<MinesModel>(MinesModelAdapter());
+    await register<TripModel>(TripModelAdapter());
+    await register<LoadDetail>(LoadDetailAdapter());
+    await register<TripFinance>(TripFinanceAdapter());
+    await register<TripTruck>(TripTruckAdapter());
+    await register<TripDriver>(TripDriverAdapter());
+    await register<TripOwner>(TripOwnerAdapter());
+    await register<TruckOwnerModel>(TruckOwnerModelAdapter());
+    await register<Reassignment>(ReassignmentAdapter());
+    await register<TripExpense>(TripExpenseAdapter());
+    await register<TripPayment>(TripPaymentAdapter());
+    await register<TripDocument>(TripDocumentAdapter());
+    await register<TruckModel>(TruckModelAdapter());
+    await register<TruckDriverModel>(TruckDriverModelAdapter());
+    await register<RegistrationModel>(RegistrationModelAdapter());
+    await register<SpecsModel>(SpecsModelAdapter());
+    await register<ValidityModel>(ValidityModelAdapter());
+    await register<UserFavouriteModel>(UserFavouriteModelAdapter());
+    await register<DriverModel>(DriverModelAdapter());
+    await register<DriverProfile>(DriverProfileAdapter());
+    await register<DriverAddress>(DriverAddressAdapter());
+    await register<LicenseDetail>(LicenseDetailAdapter());
+    await register<RatingModel>(RatingModelAdapter());
+    await register<ReviewerModel>(ReviewerModelAdapter());
+    await register<OpenDriverModel>(OpenDriverModelAdapter());
   }
 
   static Future<void> register<T>(TypeAdapter<T> adapter) async {
@@ -307,6 +309,7 @@ final String tblTrucks = 'tbltruck';
 final String tblDriver = 'tbldriver';
 final String tblUserFav = 'tblUserFav';
 final String tblOpenDriver = 'tblOpenDriver';
+final String tblUserList = 'tblUserList';
 
 final String profileKey = 'me';
 const int profileTypeID = 0;
@@ -337,3 +340,4 @@ const int licenseDetailTypeID = 24;
 const int ratingTypeID = 25;
 const int reviewerTypeID = 26;
 const int openDriverTypeID = 27;
+const int userListTypeId = 28;

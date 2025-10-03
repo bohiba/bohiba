@@ -134,14 +134,14 @@ class TruckPage extends GetView<TruckController> {
                                               .mobileNumber!,
                                         ),
                                         child: Container(
-                                          height: 32.w,
-                                          width: 32.w,
+                                          height: ScreenUtils.height30.w,
+                                          width: ScreenUtils.height30.w,
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             color: bohibaTheme
                                                 .colorScheme.onSurface
-                                                .withValues(alpha: 0.25),
+                                                .withValues(alpha: 0.15),
                                           ),
                                           child: Icon(
                                             Icons.phone_sharp,

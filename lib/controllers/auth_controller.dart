@@ -1,3 +1,6 @@
+import 'package:bohiba/model/profile_model.dart';
+import 'package:bohiba/model/user_list_model.dart';
+
 import '/dist/app_enums.dart';
 import '/services/profile_service.dart';
 
@@ -192,8 +195,21 @@ class AuthController extends GetxController {
         await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.printHandler("App Token: $token");
         await _dbService.clearAllBox();
-        await _masterController.profileApi(methodType: MethodType.api);
+        ProfileModel? loggedInUser =
+            await _masterController.profileApi(methodType: MethodType.api);
         await _masterController.mainApi();
+        if (loggedInUser != null) {
+          // logged In User
+          await ProfileService.loggedInUser(
+            loggedInUser: UserListModel(
+              uuid: loggedInUser.uuid,
+              name: loggedInUser.name,
+              email: loggedInUser.email,
+              password: password,
+              isLoggedIn: true,
+            ),
+          );
+        }
 
         Get.offAllNamed(AppRoute.navBar);
         idController.clear();
