@@ -12,6 +12,7 @@ class SignupScreen extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    final navState = Navigator.of(context);
     return Scaffold(
       appBar: null,
       body: SafeArea(
@@ -55,12 +56,21 @@ class SignupScreen extends GetView<AuthController> {
                       PrimaryButton(
                         label: 'Verify',
                         onPressed: () async {
-                          await controller.verifyEmail(
-                            email: controller.emailController.text
-                                .trim()
-                                .toLowerCase(),
+                          navState.pushNamed(
+                            AppRoute.otpScreen,
+                            arguments: {
+                              "email": controller.emailController.text
+                                  .trim()
+                                  .toLowerCase(),
+                              "nxtRoute": AppRoute.createUser
+                            },
                           );
                         },
+                        /*onPressed: () async => await controller.verifyEmail(
+                          email: controller.emailController.text
+                              .trim()
+                              .toLowerCase(),
+                        ),*/
                       )
                     ],
                   )

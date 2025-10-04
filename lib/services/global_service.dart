@@ -151,16 +151,21 @@ class GlobalService {
     );
   }
 
-  static Future<DateTime> datePickerModal(
-      {required BuildContext context, String title = 'Select date'}) async {
+  static Future<DateTime> datePickerModal({
+    required BuildContext context,
+    String title = 'Select date',
+    DateTime? endYear,
+  }) async {
     final result = await showModalBottomSheet(
       context: context,
       shape: BottomModalShape(),
-      useSafeArea: true,
-      isScrollControlled: false,
+      useSafeArea: false,
+      isScrollControlled: true,
+      enableDrag: true,
       builder: (context) {
         return AppDatePicker(
           title: title,
+          lastDateTime: endYear,
         );
       },
     );
@@ -234,14 +239,37 @@ class GlobalService {
     Get.focusScope?.requestFocus();
   }
 
-  static SnackbarController appSnackBar() {
-    return  Get.showSnackbar(
-        GetSnackBar(
-          title: "Truck",
-          message: 'Please select truck for trip.',
-          duration: const Duration(seconds: 5),
-        ),
-      );
+  static SnackbarController appSnackBar({
+    required AlertStatus status,
+    String title = 'Bohiba',
+    String desc = 'Something went wrong',
+  }) {
+    Color color = bohibaTheme.primaryColor;
+    switch (status) {
+      case AlertStatus.success:
+        color = bohibaTheme.colorScheme.onSurface;
+        break;
+      case AlertStatus.info:
+        color = bohibaTheme.colorScheme.secondaryContainer;
+        break;
+      case AlertStatus.warning:
+        color = bohibaTheme.colorScheme.surface;
+        break;
+      case AlertStatus.failure:
+        color = bohibaTheme.colorScheme.error;
+        break;
+    }
+    return Get.showSnackbar(
+      GetSnackBar(
+        title: title,
+        message: desc,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: color,
+        icon: Icon(Icons.abc),
+        padding: EdgeInsets.zero,
+        duration: const Duration(seconds: 5),
+      ),
+    );
   }
 
   static Future<bool?> showAppToast({
@@ -260,7 +288,7 @@ class GlobalService {
       toastLength: Toast.LENGTH_LONG,
       gravity: gravity ?? ToastGravity.BOTTOM,
       timeInSecForIosWeb: 5,
-      backgroundColor: bohibaTheme.secondaryHeaderColor,
+      backgroundColor: bohibaTheme.primaryColor,
       textColor: bohibaTheme.textTheme.displayLarge!.color,
       fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
     );

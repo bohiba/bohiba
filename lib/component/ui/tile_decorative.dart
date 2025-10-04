@@ -24,8 +24,8 @@ class BottomModalShape extends RoundedRectangleBorder {
   BottomModalShape()
       : super(
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(12.0.r),
-            topLeft: Radius.circular(12.0.r),
+            topRight: Radius.circular(20.r),
+            topLeft: Radius.circular(20.r),
           ),
         );
 }

@@ -1,13 +1,10 @@
-import 'package:bohiba/model/profile_model.dart';
-import 'package:bohiba/model/user_list_model.dart';
-
+import '/model/profile_model.dart';
+import '/model/user_list_model.dart';
 import '/dist/app_enums.dart';
 import '/services/profile_service.dart';
-
 import '/services/api_end_point.dart';
-
-import '../services/device_info_service.dart';
-import '../services/global_service.dart';
+import '/services/device_info_service.dart';
+import '/services/global_service.dart';
 import '/controllers/master_controller.dart';
 import '/routes/app_route.dart';
 import '/services/db_service.dart';
@@ -25,8 +22,8 @@ class AuthController extends GetxController {
 
   final TextEditingController idController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController otpController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  // TextEditingController? otpController;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
@@ -46,6 +43,10 @@ class AuthController extends GetxController {
 
   Future<void> verifyEmail({required String email}) async {
     GlobalService.closeKeyboard();
+    if (email.isEmpty) {
+      GlobalService.showAppToast(message: 'Email is required');
+      return;
+    }
 
     int verfiedEmail = await ProfileService.verifyEmail(txtEmail: email);
     if (verfiedEmail > 0) {
@@ -60,6 +61,11 @@ class AuthController extends GetxController {
     required String txtEmail,
     required String txtOtp,
   }) async {
+    if (txtOtp.isEmpty) {
+      GlobalService.showAppToast(message: 'OTP is required');
+      return;
+    }
+
     if (!await DeviceInfoService.hasInternet()) {
       return;
     }
@@ -122,6 +128,7 @@ class AuthController extends GetxController {
     GlobalService.closeKeyboard();
     String? valid = formValidation();
     if (valid != null) {
+      GlobalService.appSnackBar(status: AlertStatus.info, desc: valid);
       return;
     }
     Map<String, dynamic> bodyObj = {
@@ -143,20 +150,24 @@ class AuthController extends GetxController {
 
   String? formValidation() {
     String? errTxt;
-    if (nameController.text.isEmpty) errTxt = 'Name is required';
-    if (mobileController.text.isEmpty) errTxt = 'Mobile no. is required';
-    if (dateController.text.isEmpty) errTxt = 'DOB is required';
+    if (nameController.text.isEmpty) {
+      return errTxt = 'Name is required';
+    }
+
+    if (mobileController.text.isEmpty) {
+      return errTxt = 'Mobile no. is required';
+    }
+    if (dateController.text.isEmpty) {
+      return errTxt = 'DOB is required';
+    }
     if (vPwdController.text.isEmpty || vCnfrmController.text.isEmpty) {
-      errTxt = 'Password is required';
+      return errTxt = 'Password is required';
     }
     if (vPwdController.text != vCnfrmController.text) {
-      errTxt = 'Password doesn`t match';
+      return errTxt = 'Password doesn`t match';
     }
     if (vPwdController.text.length < 6 || vCnfrmController.text.length < 6) {
-      errTxt = 'Password is too short';
-    }
-    if (errTxt != null) {
-      GlobalService.showAppToast(message: errTxt);
+      return errTxt = 'Password is too short';
     }
     return errTxt;
   }
@@ -274,7 +285,6 @@ class AuthController extends GetxController {
     idController.dispose();
     pwdController.dispose();
     emailController.dispose();
-    otpController.dispose();
     nameController.dispose();
     mobileController.dispose();
     dateController.dispose();

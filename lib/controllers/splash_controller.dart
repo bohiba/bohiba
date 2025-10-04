@@ -38,7 +38,7 @@ class SplashController extends GetxController {
           Get.offAllNamed(AppRoute.signIn);
           return;
         } else if (profileModel.mobileNumber == null) {
-          Get.offAllNamed(AppRoute.createUser);
+          Get.offAllNamed(AppRoute.signIn);
           return;
         } else if (profileModel.verification?.pinCode == null) {
           Get.offAllNamed(AppRoute.userAddressAuthScreen);

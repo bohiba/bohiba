@@ -1,11 +1,15 @@
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+
 import '/services/job_service.dart';
 import 'package:get/get.dart';
 
 class MyJobController extends GetxController {
+  final refreshController = RefreshController();
   late Map jobBrief;
   RxMap<dynamic, dynamic> jobObj = <dynamic, dynamic>{}.obs;
   RxList arrIntDriver = [].obs;
   RxString jobStatus = ''.obs;
+  Rx<int> anyUpdate = 0.obs;
 
   @override
   void onInit() {
@@ -17,6 +21,14 @@ class MyJobController extends GetxController {
     });
   }
 
+  Future<void> updateJob(Map jobMap) async {
+    int success = await JobService.updateJobPost(jobInfo: jobMap);
+    if (success > 0) {
+      anyUpdate.value++;
+      await jobDetail();
+    }
+  }
+
   Future<void> jobDetail() async {
     Map<dynamic, dynamic>? jobInfo =
         await JobService.getJob(jobId: jobBrief['id']);
@@ -26,6 +38,7 @@ class MyJobController extends GetxController {
       jobStatus.value = jobObj['status'];
       if (jobObj['interested_drivers'] != null &&
           jobObj['interested_drivers'] is List) {
+        arrIntDriver.clear();
         arrIntDriver.addAll(jobObj['interested_drivers']);
       }
     } else {

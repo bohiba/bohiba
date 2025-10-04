@@ -51,12 +51,14 @@ class AppDropdown<T> extends StatelessWidget {
         enableFilter: enableFilter,
         hintText: hint,
         menuHeight: menuHeight ?? ScreenUtils.height * 0.4,
-        inputDecorationTheme:
-            InputDecorationTheme(isDense: true, isCollapsed: true),
         trailingIcon: Icon(
           Icons.keyboard_arrow_down,
           size: 24,
           color: bohibaTheme.textTheme.titleSmall!.color,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          isDense: true,
+          isCollapsed: false,
         ),
         expandedInsets: padding,
         textStyle: TextStyle(
@@ -64,7 +66,6 @@ class AppDropdown<T> extends StatelessWidget {
           color: bohibaTheme.textTheme.bodyLarge?.color,
           letterSpacing: 1.2,
         ),
-        // textInputAction: TextInputAction.done,
         searchCallback: (entries, query) {
           if (query.isEmpty) return null;
           final index = entries.indexWhere(

@@ -42,7 +42,7 @@ class AllJobController extends GetxController {
       case 'open':
         return bohibaTheme.colorScheme.onSurface;
       case 'drafted':
-        return bohibaTheme.colorScheme.surface;
+        return bohibaTheme.colorScheme.secondary;
       case 'closed':
         return bohibaTheme.colorScheme.error;
       default:

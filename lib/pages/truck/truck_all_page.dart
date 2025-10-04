@@ -132,6 +132,8 @@ class AllTruckPage extends GetView<TruckAllController> {
                             (onValue) async {
                               if (onValue != null) {
                                 await controller.getTruckList();
+                                controller.homeController.getTruckList();
+                                controller.homeController.getUserFavList();
                                 controller.arrTruck.refresh();
                               }
                             },

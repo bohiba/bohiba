@@ -121,8 +121,8 @@ class HomeAppBar extends GetView<HomeController>
                     return Get.toNamed(AppRoute.allTruck)!.then(
                       (onValue) async {
                         if (onValue != null) {
-                          await controller.getTruckList();
-                          await controller.getUserFavList();
+                          // await controller.getTruckList();
+                          // await controller.getUserFavList();
                           controller.arrTrucks.refresh();
                         }
                       },

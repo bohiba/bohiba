@@ -12,14 +12,23 @@ import '/component/bohiba_buttons/primary_button.dart';
 import '/dist/component_exports.dart';
 
 /// It takes credential as arguments
-class OtpScreen extends GetView<AuthController> {
+class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final navigate = Navigator.of(context);
-    String email = "";
-    String nxtRoute = AppRoute.signIn;
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  final controller = Get.find<AuthController>();
+  TextEditingController otpController = TextEditingController();
+  late NavigatorState navigate;
+  String email = "";
+  String nxtRoute = AppRoute.signIn;
+  @override
+  void initState() {
+    super.initState();
+
     var route = Get.arguments;
     if (route == null) {
     } else {
@@ -27,7 +36,11 @@ class OtpScreen extends GetView<AuthController> {
       email = argsObj['email'] ?? "";
       nxtRoute = argsObj["nxtRoute"] ?? "";
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    navigate = Navigator.of(context);
     return Scaffold(
       appBar: null,
       body: Padding(
@@ -51,58 +64,58 @@ class OtpScreen extends GetView<AuthController> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: RichText(
-                        textAlign: TextAlign.left,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Enter 6 digit code you have received in ',
-                              style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodySmall!.fontSize,
-                                fontWeight:
-                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                color: bohibaTheme.textTheme.titleLarge!.color,
-                              ),
-                            ),
-                            TextSpan(
-                              text: "$email ",
-                              style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodySmall!.fontSize,
-                                fontWeight: bohibaTheme
-                                    .textTheme.bodyMedium!.fontWeight,
-                                color: bohibaTheme.textTheme.titleLarge!.color,
-                              ),
-                            ),
-                          ],
+                RichText(
+                  textAlign: TextAlign.left,
+                  text: TextSpan(
+                    children: [
+                      WidgetSpan(
+                        child: Text(
+                          'Enter 6 digit code you have received in ',
+                          style: TextStyle(
+                            fontSize:
+                                bohibaTheme.textTheme.bodyMedium!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            color: bohibaTheme.textTheme.titleLarge!.color,
+                          ),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        navigate.pop();
-                      },
-                      child: Text(
-                        'Edit',
-                        style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                          color: bohibaTheme.textTheme.bodySmall!.color,
+                      WidgetSpan(
+                        child: Text(
+                          "$email ",
+                          style: TextStyle(
+                            fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            color: bohibaTheme.textTheme.bodySmall!.color,
+                          ),
                         ),
                       ),
-                    )
-                  ],
+                      WidgetSpan(child: SizedBox(width: 10)),
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: () {
+                            navigate.pop(true);
+                          },
+                          child: Text(
+                            'Edit',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.bodyMedium!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                              color: bohibaTheme.textTheme.bodySmall!.color,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Gap(ScreenUtils.height30),
                 PinCodeTextField(
-                  controller: controller.otpController,
+                  controller: otpController,
+                  autoDisposeControllers: false,
                   appContext: context,
                   length: 6,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,18 +128,22 @@ class OtpScreen extends GetView<AuthController> {
                     borderRadius: BorderRadius.circular(8.0),
                     shape: PinCodeFieldShape.box,
                     fieldWidth: 50,
-                    activeColor: BohibaColors.borderColor,
-                    disabledColor: BohibaColors.borderColor,
-                    selectedFillColor: BohibaColors.borderColor,
-                    inactiveColor: BohibaColors.borderColor,
-                    activeFillColor: BohibaColors.primaryColor,
+                    activeColor: bohibaTheme.primaryColor,
+                    disabledColor: bohibaTheme.disabledColor,
+                    selectedFillColor: bohibaTheme.primaryColor,
+                    inactiveColor: bohibaTheme.dividerColor,
+                    activeFillColor: bohibaTheme.primaryColor,
                   ),
                 ),
                 SizedBox(height: ScreenUtils.height20),
                 PrimaryButton(
                   label: 'Verify Code',
                   onPressed: () {
-                    switch (nxtRoute) {
+                    Get.offAllNamed(
+                      AppRoute.createUser,
+                      arguments: {'email': email},
+                    );
+                    /*switch (nxtRoute) {
                       case AppRoute.navBar:
                         navigate.popAndPushNamed(AppRoute.navBar);
                         break;
@@ -135,13 +152,13 @@ class OtpScreen extends GetView<AuthController> {
                       case AppRoute.createUser:
                         controller.verifyOtp(
                           txtEmail: email,
-                          txtOtp: controller.otpController.text.trim(),
+                          txtOtp: otpController.text.trim(),
                         );
                       // navigate.popAndPushNamed(AppRoute.createUser);
                       case AppRoute.setPwd:
                         navigate.popAndPushNamed(AppRoute.setPwd);
                       default:
-                    }
+                    }*/
                   },
                 )
               ],
@@ -184,5 +201,11 @@ class OtpScreen extends GetView<AuthController> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    otpController.dispose();
+    super.dispose();
   }
 }

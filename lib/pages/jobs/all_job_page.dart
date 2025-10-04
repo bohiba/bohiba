@@ -67,8 +67,13 @@ class AllJobPage extends GetView<AllJobController> {
                         Map job = controller.arrJobs[index];
                         return GestureDetector(
                           onTap: () {
-                            navigatorState.pushNamed(AppRoute.myJobDetail,
-                                arguments: job);
+                            navigatorState
+                                .pushNamed(AppRoute.myJobDetail, arguments: job)
+                                .then((onValue) async {
+                              if (onValue != null || onValue != false) {
+                                await controller.getAllJobs();
+                              }
+                            });
                           },
                           child: Container(
                             width: ScreenUtils.width,

@@ -1,4 +1,5 @@
 import 'package:bohiba/services/launcher_service.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '/dist/app_enums.dart';
 import '/services/global_service.dart';
@@ -27,297 +28,317 @@ class MyJobDetailPage extends GetView<MyJobController> {
   @override
   Widget build(BuildContext context) {
     final navigatorState = Navigator.of(context);
-    return Scaffold(
-      appBar: TitleAppbar(
-        title: 'Manage Job',
-        actions: [
-          RoleWidget(
-            truckOwnerWidget: AppBarIconBox(
-              onTapDown: (p0) {
-                showMenu(
-                    context: context,
-                    position: RelativeRect.fromLTRB(
-                        p0.globalPosition.dx, p0.globalPosition.dy + 20, 0, 0),
-                    items: [
-                      PopupMenuItem(
-                        value: ActionType.edit,
-                        child: Text('Edit'),
-                      ),
-                      PopupMenuItem(
-                        value: ActionType.delete,
-                        textStyle: TextStyle(
-                          color: bohibaTheme.colorScheme.error,
-                          fontStyle:
-                              bohibaTheme.textTheme.titleMedium!.fontStyle,
-                          fontWeight:
-                              bohibaTheme.textTheme.titleMedium!.fontWeight,
+    return Obx(() {
+      return Scaffold(
+        appBar: TitleAppbar(
+          title: 'Manage Job',
+          popResult: controller.anyUpdate > 0 ? true : false,
+          actions: [
+            RoleWidget(
+              truckOwnerWidget: AppBarIconBox(
+                onTapDown: (p0) {
+                  showMenu(
+                      context: context,
+                      position: RelativeRect.fromLTRB(p0.globalPosition.dx,
+                          p0.globalPosition.dy + 20, 0, 0),
+                      items: [
+                        PopupMenuItem(
+                          value: ActionType.edit,
+                          child: Text('Edit'),
                         ),
-                        child: Text('Delete'),
-                      ),
-                    ]).then((onValue) {
-                  switch (onValue) {
-                    case ActionType.edit:
-                      navigatorState.pushNamed(AppRoute.addJobs);
-                      break;
-                    case ActionType.delete:
-                      GlobalService.showAlertDialog(
-                        status: AlertStatus.warning,
-                        title: 'Delete',
-                        description: 'Do you want to delete the job post?',
-                        discardBtnTxt: 'Delete',
-                        saveBtnTxt: 'Cancel',
-                        onSave: () {
-                          navigatorState.pop();
-                        },
-                        onDiscard: () {
-                          navigatorState.pop();
-                          GlobalService.showAppToast(
-                              message: 'Under Development');
-                        },
-                      );
-                      break;
-                    default:
-                      break;
-                  }
-                });
-              },
-              icon: const Icon(EvaIcons.moreVertical),
-            ),
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
+                        PopupMenuItem(
+                          value: ActionType.delete,
+                          textStyle: TextStyle(
+                            color: bohibaTheme.colorScheme.error,
+                            fontStyle:
+                                bohibaTheme.textTheme.titleMedium!.fontStyle,
+                            fontWeight:
+                                bohibaTheme.textTheme.titleMedium!.fontWeight,
+                          ),
+                          child: Text('Delete'),
+                        ),
+                      ]).then((onValue) {
+                    switch (onValue) {
+                      case ActionType.edit:
+                        navigatorState.pushNamed(AppRoute.addJobs);
+                        break;
+                      case ActionType.delete:
+                        GlobalService.showAlertDialog(
+                          status: AlertStatus.warning,
+                          title: 'Delete',
+                          description: 'Do you want to delete the job post?',
+                          discardBtnTxt: 'Delete',
+                          saveBtnTxt: 'Cancel',
+                          onSave: () {
+                            navigatorState.pop();
+                          },
+                          onDiscard: () {
+                            navigatorState.pop();
+                            GlobalService.showAppToast(
+                                message: 'Under Development');
+                          },
+                        );
+                        break;
+                      default:
+                        break;
+                    }
+                  });
+                },
+                icon: const Icon(EvaIcons.moreVertical),
+              ),
+            )
+          ],
+        ),
+        body: SafeArea(
           child: Padding(
             padding: EdgeInsets.only(
               left: ScreenUtils.height15,
               right: ScreenUtils.height15,
               top: ScreenUtils.height10,
             ),
-            child: Obx(() {
-              if (controller.jobObj.isEmpty) {
-                return SizedBox.shrink();
-              } else {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.jobObj['job_title'] ?? '',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: bohibaTheme.textTheme.headlineMedium,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+            child: SmartRefresher(
+              controller: controller.refreshController,
+              onRefresh: () async {
+                controller.jobDetail();
+                controller.refreshController.refreshCompleted();
+              },
+              child: (controller.jobObj.isEmpty)
+                  ? SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(EvaIcons.pin, size: 14.w),
                         Text(
-                          " ${(controller.jobObj['location'] ?? '').toString().toUpperCase()}",
-                          style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.labelMedium!.fontWeight,
-                            color: bohibaTheme.textTheme.titleLarge!.color,
-                          ),
+                          controller.jobObj['job_title'] ?? '',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: bohibaTheme.textTheme.headlineMedium,
                         ),
-                        Gap(10.w),
-                        Icon(EvaIcons.briefcase, size: 14.w),
-                        Text(
-                          ' ${(controller.jobObj['job_type'] ?? '').toString().toUpperCase()}',
-                          style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.labelMedium!.fontWeight,
-                            color: bohibaTheme.textTheme.titleLarge!.color,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Gap(15.h),
-                    LinearBoxWidget(
-                      header: 'Status',
-                      widget: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: controller.jobObj['status'].toString(),
-                          isDense: true,
-                          borderRadius: BorderRadius.circular(8.0),
-                          items: const [
-                            DropdownMenuItem(
-                              value: 'open',
-                              child: Text("Open"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(EvaIcons.pin, size: 14.w),
+                            Text(
+                              " ${(controller.jobObj['location'] ?? '').toString().toUpperCase()}",
+                              style: TextStyle(
+                                fontSize:
+                                    bohibaTheme.textTheme.bodyLarge!.fontSize,
+                                fontWeight: bohibaTheme
+                                    .textTheme.labelMedium!.fontWeight,
+                                color: bohibaTheme.textTheme.titleLarge!.color,
+                              ),
                             ),
-                            DropdownMenuItem(
-                              value: 'close',
-                              child: Text("Close"),
-                            ),
-                            DropdownMenuItem(
-                              value: 'drafted',
-                              child: Text("Drafted"),
+                            Gap(10.w),
+                            Icon(EvaIcons.briefcase, size: 14.w),
+                            Text(
+                              ' ${(controller.jobObj['job_type'] ?? '').toString().toUpperCase()}',
+                              style: TextStyle(
+                                fontSize:
+                                    bohibaTheme.textTheme.bodyLarge!.fontSize,
+                                fontWeight: bohibaTheme
+                                    .textTheme.labelMedium!.fontWeight,
+                                color: bohibaTheme.textTheme.titleLarge!.color,
+                              ),
                             ),
                           ],
-                          onChanged: (status) async {
-                            controller.jobObj['status'] = status;
-                          },
                         ),
-                      ),
-                    ),
-                    LinearBoxWidget(
-                      header: 'Truck Number',
-                      title: controller.jobObj['regd_number']
-                          .toString()
-                          .toCapitalizedLabel(),
-                    ),
-                    LinearBoxWidget(
-                      header: 'Last Updated',
-                      title: controller.jobObj['updated_at'].toString(),
-                    ),
-                    LinearBoxWidget(
-                      header: 'Created At',
-                      title: controller.jobObj['created_at'].toString(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 15.h),
-                      child: Text(
-                        'Description',
-                        style: bohibaTheme.textTheme.headlineMedium,
-                      ),
-                    ),
-                    ReadMoreText(
-                      controller.jobObj['description'].toString(),
-                      trimLines: 5,
-                      trimMode: TrimMode.Line,
-                      style: bohibaTheme.textTheme.titleMedium,
-                      moreStyle: TextStyle(color: bohibaTheme.primaryColor),
-                      lessStyle: TextStyle(color: bohibaTheme.primaryColor),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 15.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Intreseted Drivers',
-                            style: bohibaTheme.textTheme.headlineMedium,
-                          ),
-                          Text(
-                            "See All",
-                            style: TextStyle(
-                              fontSize: bohibaTheme
-                                  .textTheme.headlineMedium!.fontSize,
-                              color: bohibaTheme.primaryColor,
+                        Gap(15.h),
+                        LinearBoxWidget(
+                          header: 'Status',
+                          widget: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: controller.jobObj['status'].toString(),
+                              isDense: true,
+                              borderRadius: BorderRadius.circular(8.0),
+                              items: const [
+                                DropdownMenuItem(
+                                  value: 'open',
+                                  child: Text("Open"),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'close',
+                                  child: Text("Close"),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'drafted',
+                                  child: Text("Drafted"),
+                                ),
+                              ],
+                              onChanged: (status) async {
+                                controller.jobObj['status'] = status;
+                                await controller.updateJob(controller.jobObj);
+                              },
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(EvaIcons.people),
-                        Gap(10.w),
-                        Text(
-                            '${controller.arrIntDriver.length.toString()} Applicants')
-                      ],
-                    ),
-                    Column(
-                      children: List.generate(controller.arrIntDriver.length,
-                          (index) {
-                        Map intDriver = controller.arrIntDriver[index];
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtils.height10),
-                          margin: EdgeInsets.only(bottom: ScreenUtils.width5),
+                        ),
+                        LinearBoxWidget(
+                          header: 'Truck Number',
+                          title: controller.jobObj['regd_number']
+                              .toString()
+                              .toCapitalizedLabel(),
+                        ),
+                        LinearBoxWidget(
+                          header: 'Last Updated',
+                          title: controller.jobObj['updated_at'].toString(),
+                        ),
+                        LinearBoxWidget(
+                          header: 'Created At',
+                          title: controller.jobObj['created_at'].toString(),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.h),
+                          child: Text(
+                            'Description',
+                            style: bohibaTheme.textTheme.headlineMedium,
+                          ),
+                        ),
+                        ReadMoreText(
+                          controller.jobObj['description'].toString(),
+                          trimLines: 5,
+                          trimMode: TrimMode.Line,
+                          style: bohibaTheme.textTheme.titleMedium,
+                          moreStyle: TextStyle(color: bohibaTheme.primaryColor),
+                          lessStyle: TextStyle(color: bohibaTheme.primaryColor),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.h),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              CircleAvatar(
-                                backgroundColor: bohibaTheme.dividerColor,
+                              Text(
+                                'Intreseted Drivers',
+                                style: bohibaTheme.textTheme.headlineMedium,
                               ),
-                              Gap(10.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    intDriver['name'].toString(),
-                                    style: TextStyle(
-                                      fontSize: bohibaTheme
-                                          .textTheme.bodyMedium!.fontSize,
-                                      fontWeight: bohibaTheme
-                                          .textTheme.bodySmall!.fontWeight,
-                                      color: bohibaTheme
-                                          .textTheme.titleMedium!.color,
-                                    ),
-                                  ),
-                                  Text(
-                                    intDriver['job_status']
-                                        .toString()
-                                        .toCapitalizedLabel(),
-                                    style: TextStyle(
-                                      fontSize: bohibaTheme
-                                          .textTheme.titleMedium!.fontSize,
-                                      fontWeight: bohibaTheme
-                                          .textTheme.bodyMedium!.fontWeight,
-                                      color: bohibaTheme
-                                          .textTheme.bodyMedium!.color,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: () async =>
-                                    await LauncherService.makePhoneCall(
-                                        intDriver['mobile_number'].toString()),
-                                child: Container(
-                                  height: 28.w,
-                                  width: 28.w,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: bohibaTheme.colorScheme.onSurface
-                                        .withValues(alpha: 0.25),
-                                  ),
-                                  child: Icon(
-                                    Icons.phone_sharp,
-                                    size: 16.w,
-                                    color: bohibaTheme.colorScheme.onSurface,
-                                  ),
-                                ),
-                              ),
-                              Gap(10.w),
-                              GestureDetector(
-                                onTap: () {
-                                  GlobalService.showAppToast(
-                                      message: 'Mark as not interested');
-                                },
-                                child: Container(
-                                  height: 28.w,
-                                  width: 28.w,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: bohibaTheme.colorScheme.error
-                                        .withValues(alpha: 0.25),
-                                  ),
-                                  child: Icon(
-                                    Icons.close,
-                                    size: 16.w,
-                                    color: bohibaTheme.colorScheme.error,
-                                  ),
+                              Text(
+                                "See All",
+                                style: TextStyle(
+                                  fontSize: bohibaTheme
+                                      .textTheme.headlineMedium!.fontSize,
+                                  color: bohibaTheme.primaryColor,
                                 ),
                               ),
                             ],
                           ),
-                        );
-                      }),
+                        ),
+                        Row(
+                          children: [
+                            Icon(EvaIcons.people),
+                            Gap(10.w),
+                            Text(
+                                '${controller.arrIntDriver.length.toString()} Applicants')
+                          ],
+                        ),
+                        if (controller.arrIntDriver.isEmpty)
+                          SizedBox.shrink()
+                        else
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: controller.arrIntDriver.length,
+                              itemBuilder: (context, index) {
+                                Map intDriver = controller.arrIntDriver[index];
+                                return Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: ScreenUtils.height10),
+                                  margin: EdgeInsets.only(
+                                      bottom: ScreenUtils.width5),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor:
+                                            bohibaTheme.dividerColor,
+                                      ),
+                                      Gap(10.w),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            intDriver['name'].toString(),
+                                            style: TextStyle(
+                                              fontSize: bohibaTheme.textTheme
+                                                  .bodyMedium!.fontSize,
+                                              fontWeight: bohibaTheme.textTheme
+                                                  .bodySmall!.fontWeight,
+                                              color: bohibaTheme
+                                                  .textTheme.titleMedium!.color,
+                                            ),
+                                          ),
+                                          Text(
+                                            intDriver['job_status']
+                                                .toString()
+                                                .toCapitalizedLabel(),
+                                            style: TextStyle(
+                                              fontSize: bohibaTheme.textTheme
+                                                  .titleMedium!.fontSize,
+                                              fontWeight: bohibaTheme.textTheme
+                                                  .bodyMedium!.fontWeight,
+                                              color: bohibaTheme
+                                                  .textTheme.bodyMedium!.color,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Spacer(),
+                                      GestureDetector(
+                                        onTap: () async =>
+                                            await LauncherService.makePhoneCall(
+                                                intDriver['mobile_number']
+                                                    .toString()),
+                                        child: Container(
+                                          height: 28.w,
+                                          width: 28.w,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: bohibaTheme
+                                                .colorScheme.onSurface
+                                                .withValues(alpha: 0.25),
+                                          ),
+                                          child: Icon(
+                                            Icons.phone_sharp,
+                                            size: 16.w,
+                                            color: bohibaTheme
+                                                .colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                      Gap(10.w),
+                                      GestureDetector(
+                                        onTap: () {
+                                          GlobalService.showAppToast(
+                                              message:
+                                                  'Mark as not interested');
+                                        },
+                                        child: Container(
+                                          height: 28.w,
+                                          width: 28.w,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: bohibaTheme.colorScheme.error
+                                                .withValues(alpha: 0.25),
+                                          ),
+                                          child: Icon(
+                                            Icons.close,
+                                            size: 16.w,
+                                            color:
+                                                bohibaTheme.colorScheme.error,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                      ],
                     ),
-                  ],
-                );
-              }
-            }),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -77,4 +77,37 @@ class JobService {
         return [];
     }
   }
+
+  static Future<int> updateJobPost({required Map jobInfo}) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return 0;
+    }
+    Map<String, dynamic> bodyMap = {
+      "start_from": jobInfo['start_from'],
+      "status": jobInfo['status'],
+      "job_title": jobInfo['job_title'],
+      "location": jobInfo['location'],
+      "regd_number": jobInfo['regd_number'],
+      "license_type": jobInfo['license_type'],
+      "job_type": jobInfo['job_type'],
+      "description": jobInfo['description'],
+    };
+
+    GlobalService.showProgress();
+    ApiResponse response = await _dioService
+        .post("${ApiEndPoint.apiEditJob}/${jobInfo['id']}", body: bodyMap);
+    GlobalService.dismissProgress();
+
+    switch (response.statusCode) {
+      case 200:
+        GlobalService.showAppToast(message: response.message);
+        return 1;
+      case 401:
+        GlobalService.showAppToast(message: response.message);
+        return 0;
+      default:
+        GlobalService.showAppToast(message: 'Something went wrong');
+        return 0;
+    }
+  }
 }

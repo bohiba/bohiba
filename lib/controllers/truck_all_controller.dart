@@ -1,3 +1,5 @@
+import 'package:bohiba/controllers/home_controller.dart';
+
 import '/services/api_end_point.dart';
 
 import '/dist/app_enums.dart';
@@ -13,6 +15,7 @@ import '/services/global_service.dart';
 
 class TruckAllController extends GetxController {
   final MasterController masterController = Get.find<MasterController>();
+  final HomeController homeController = Get.find<HomeController>();
   DioService dioService = DioService();
   DBService dBService = DBService();
   final TextEditingController vehicleNumberController = TextEditingController();
