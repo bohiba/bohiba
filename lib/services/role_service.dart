@@ -17,14 +17,15 @@ class RolePermissionManager {
           RolePermissionService.editTrucks,
           RolePermissionService.deleteTrucks,
           RolePermissionService.viewDriver,
+          RolePermissionService.viewExpenses,
           RolePermissionService.addDrivers,
           RolePermissionService.editTrips,
           RolePermissionService.viewMaintainance,
         ],
         UserRoles.manager: [
-          RolePermissionService.manageTrucks,
-          RolePermissionService.manageDrivers,
-          RolePermissionService.manageTrips,
+          RolePermissionService.viewTrucks,
+          RolePermissionService.viewDriver,
+          RolePermissionService.viewTrips,
         ],
         UserRoles.driver: [
           RolePermissionService.viewTrips,

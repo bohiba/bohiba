@@ -14,7 +14,7 @@ enum InformationType { started, success, failed }
 
 enum StatusMessage { failure, warning, success }
 
-enum ServiceType { driver, trip, truck, manager }
+enum ServiceType { driver, trip, truck, expenses, manager }
 
 enum AddAssetUsing { uuid, doc, scan }
 

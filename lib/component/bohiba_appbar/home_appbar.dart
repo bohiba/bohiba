@@ -73,12 +73,32 @@ class HomeAppBar extends GetView<HomeController>
                   ),
                 );
               }
+
               if (RoleService.hasPermission(RolePermissionService.viewTrips)) {
                 items.add(
                   PopupMenuItem(
                     value: ServiceType.trip,
                     child: Text(
                       'Trips',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              //Expenses Menu
+              if (RoleService.hasPermission(
+                  RolePermissionService.viewExpenses)) {
+                items.add(
+                  PopupMenuItem(
+                    value: ServiceType.expenses,
+                    textStyle: TextStyle(),
+                    child: Text(
+                      'Expenses',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                         fontWeight:
@@ -127,8 +147,11 @@ class HomeAppBar extends GetView<HomeController>
                         }
                       },
                     );
+                  case ServiceType.expenses:
+                    return Get.toNamed(AppRoute.addOwnerExpense);
                   case ServiceType.manager:
                     break;
+
                   default:
                   // Manager
                 }

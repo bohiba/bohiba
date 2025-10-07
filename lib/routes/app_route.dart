@@ -1,5 +1,6 @@
 import 'package:bohiba/bindings/all_sent_connection_binding.dart';
 import 'package:bohiba/pages/driver/all_sent_request_page.dart';
+import 'package:bohiba/pages/expenses/add_owner_expenses_screen.dart';
 
 import '/bindings/analytic_binding.dart';
 import '/pages/analytic/analytic_page.dart';
@@ -176,6 +177,7 @@ class AppRoute {
   static const String contact = "/contact";
   static const String reportIssue = "/reportIssue";
   static const String about = "/about";
+  static const String addOwnerExpense = "/add-owner-expense";
 
   static const String newsScreen = "/news";
   static const String notifyScreen = "/notify";
@@ -240,6 +242,12 @@ class AppRoute {
       name: createUser,
       binding: AuthBinding(),
       page: () => const CreateUserPage(),
+    ),
+
+    GetPage(
+      name: addOwnerExpense,
+      binding: AuthBinding(),
+      page: () => const AddOwnerExpensesScreen(),
     ),
 
     GetPage(
