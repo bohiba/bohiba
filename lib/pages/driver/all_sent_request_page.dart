@@ -1,4 +1,4 @@
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/theme/bohiba_theme.dart';
 
 import '/controllers/all_sent_connection_controller.dart';
 import '/model/open_driver_model.dart';

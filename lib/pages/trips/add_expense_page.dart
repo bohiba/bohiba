@@ -35,10 +35,12 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                 DateInputField(
                   width: ScreenUtils.width,
                   onTap: () async {
-                    DateTime expenseDate =
+                    DateTime? expenseDate =
                         await GlobalService.datePickerModal(context: context);
-                    controller.expensedateController.text =
-                        DateFormat('dd-MM-yyyy').format(expenseDate);
+                    if (expenseDate != null) {
+                      controller.expensedateController.text =
+                          DateFormat('dd-MM-yyyy').format(expenseDate);
+                    }
                   },
                   controller: controller.expensedateController,
                   hintText: 'Expense Date',

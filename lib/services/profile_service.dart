@@ -1,12 +1,12 @@
-import 'package:bohiba/model/user_list_model.dart';
+import 'dart:io';
 
-import '../controllers/role_controller.dart';
+import '/model/user_list_model.dart';
+import '/controllers/role_controller.dart';
 import '/dist/app_enums.dart';
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/global_service.dart';
-
 import '/services/db_service.dart';
 
 import '/model/profile_model.dart';
@@ -69,6 +69,41 @@ class ProfileService {
     }
   }
 
+  static Future<int> setImage(
+      {required String imagePath, required List<File> imageFile}) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return 0;
+    }
+    GlobalService.showProgress();
+    Map<String, dynamic> bodyObj = {
+      "profile_image": imagePath,
+    };
+    ApiResponse response = await _dioService.upload(
+      ApiEndPoint.apiSetProfileImage,
+      bodyObj,
+      imageFile,
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        ProfileModel? oldProfile = await getProfile();
+        oldProfile!.profileImg = response.data.toString();
+        int success = await updateProfile(profile: oldProfile);
+        GlobalService.dismissProgress();
+        return success;
+      case 401:
+        GlobalService.dismissProgress();
+        GlobalService.appSnackBar(
+            status: AlertStatus.info, desc: response.message);
+        return 0;
+      default:
+        GlobalService.dismissProgress();
+        GlobalService.appSnackBar(
+            status: AlertStatus.warning, desc: 'Something went wrong');
+        return 0;
+    }
+  }
+
   static Future<int> addAddress({required Map<String, dynamic> bodyMap}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
@@ -92,36 +127,6 @@ class ProfileService {
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: 'Something went wrong');
-        return 0;
-    }
-  }
-
-  static Future<int> verifyEmail({required String txtEmail}) async {
-    if (!GlobalService.isEmail(txtEmail)) {
-      GlobalService.showAppToast(message: 'Please Enter Vaild Email.');
-      return 0;
-    }
-
-    if (!await DeviceInfoService.hasInternet()) {
-      return 0;
-    }
-    Map<String, dynamic> bodyObj = {'email': txtEmail};
-    GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService.post(
-      ApiEndPoint.apiVerifyEmail,
-      body: bodyObj,
-      withToken: false,
-    );
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        return 0;
-      case 200:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        return 1;
-      default:
         GlobalService.showAppToast(message: 'Something went wrong');
         return 0;
     }

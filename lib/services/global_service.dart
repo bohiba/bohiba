@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:remixicon/remixicon.dart';
+
 import '/dist/app_enums.dart';
 import '/pages/widget/app_date_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -151,12 +153,12 @@ class GlobalService {
     );
   }
 
-  static Future<DateTime> datePickerModal({
+  static Future<DateTime?> datePickerModal({
     required BuildContext context,
     String title = 'Select date',
     DateTime? endYear,
   }) async {
-    final result = await showModalBottomSheet(
+    return await showModalBottomSheet(
       context: context,
       shape: BottomModalShape(),
       useSafeArea: false,
@@ -169,7 +171,6 @@ class GlobalService {
         );
       },
     );
-    return result ?? DateTime.now();
   }
 
   static Future<String> pickDate({
@@ -239,35 +240,74 @@ class GlobalService {
     Get.focusScope?.requestFocus();
   }
 
+  // ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
   static SnackbarController appSnackBar({
     required AlertStatus status,
     String title = 'Bohiba',
     String desc = 'Something went wrong',
+    Widget? actionButton,
   }) {
     Color color = bohibaTheme.primaryColor;
+    IconData iconData = Icons.error;
     switch (status) {
       case AlertStatus.success:
         color = bohibaTheme.colorScheme.onSurface;
+        iconData = Remix.checkbox_circle_fill;
         break;
       case AlertStatus.info:
-        color = bohibaTheme.colorScheme.secondaryContainer;
+        color = bohibaTheme.colorScheme.primary;
+        iconData = Icons.info;
         break;
       case AlertStatus.warning:
         color = bohibaTheme.colorScheme.surface;
+        iconData = Icons.warning;
         break;
       case AlertStatus.failure:
         color = bohibaTheme.colorScheme.error;
+        iconData = Icons.error;
+        break;
+      case AlertStatus.noInternet:
+        color = bohibaTheme.colorScheme.surface;
+        iconData = Icons.wifi_off_rounded;
         break;
     }
     return Get.showSnackbar(
       GetSnackBar(
-        title: title,
-        message: desc,
-        snackPosition: SnackPosition.BOTTOM,
+        messageText: Text(
+          desc,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+            fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+            color: bohibaTheme.textTheme.displayLarge!.color,
+          ),
+        ),
+        isDismissible: false,
         backgroundColor: color,
-        icon: Icon(Icons.abc),
-        padding: EdgeInsets.zero,
-        duration: const Duration(seconds: 5),
+        shouldIconPulse: false,
+        icon: Icon(iconData, color: bohibaTheme.colorScheme.tertiary),
+        borderRadius: 8.0,
+        borderWidth: 0.0,
+        margin: EdgeInsets.symmetric(horizontal: 15.w),
+        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+        duration: const Duration(seconds: 10),
+        mainButton: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
+          child: actionButton ??
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(
+                  'DISMISS',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                    color: bohibaTheme.textTheme.displayLarge!.color,
+                  ),
+                ),
+              ),
+        ),
       ),
     );
   }
@@ -288,7 +328,7 @@ class GlobalService {
       toastLength: Toast.LENGTH_LONG,
       gravity: gravity ?? ToastGravity.BOTTOM,
       timeInSecForIosWeb: 5,
-      backgroundColor: bohibaTheme.primaryColor,
+      backgroundColor: bohibaTheme.colorScheme.secondary,
       textColor: bohibaTheme.textTheme.displayLarge!.color,
       fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
     );
@@ -363,12 +403,17 @@ class GlobalService {
                     strokeCap: StrokeCap.round,
                   ),
                 ),
-                (msg != null)
-                    ? SizedBox(
-                        width: ScreenUtil.defaultSize.width / 2,
-                        child: Text(msg, textAlign: TextAlign.center),
-                      )
-                    : Container(height: 0),
+                if (msg != null)
+                  Container(
+                    padding: EdgeInsets.only(top: 20.h),
+                    width: ScreenUtil.defaultSize.width / 2,
+                    child: Text(
+                      msg,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                else
+                  SizedBox.shrink(),
               ],
             ),
           ),

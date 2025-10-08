@@ -1,4 +1,4 @@
-import 'package:bohiba/services/launcher_service.dart';
+import '/services/launcher_service.dart';
 
 import '/model/rating_model.dart';
 

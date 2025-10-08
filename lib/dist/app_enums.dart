@@ -6,7 +6,7 @@ enum UserRoleType { driver, manager, truckowner, unknown }
 
 enum UploadStatus { initial, uploading, success, verified, failure }
 
-enum AlertStatus { info, warning, failure, success }
+enum AlertStatus { info, warning, failure, success, noInternet }
 
 enum PickerType { camera, gallery }
 
@@ -30,3 +30,12 @@ enum TripActionType {
 }
 
 enum MethodType { api, local, other }
+
+enum TransitionType {
+  fade,
+  slideFromRight,
+  slideFromLeft,
+  slideFromBottom,
+  scale,
+  rotation
+}

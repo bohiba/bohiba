@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/component/bohiba_colors.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -25,7 +27,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: EdgeInsets.symmetric(vertical: 5.h),
       child: TextFormField(
         controller: widget.controller,
         style: TextStyle(
@@ -35,12 +37,12 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please Enter Password';
+            return 'Please enter your password';
           } else {
             return null;
           }
         },
-        cursorColor: BohibaColors.primaryColor,
+        cursorColor: bohibaTheme.primaryColor,
         cursorRadius: const Radius.circular(10.0),
         obscureText: showPassword,
         enableInteractiveSelection: false,
@@ -48,9 +50,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
         keyboardType: TextInputType.visiblePassword,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          prefixIcon: Icon(
-            EvaIcons.lock,
-          ),
+          prefixIcon: Icon(EvaIcons.lock),
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -66,6 +66,13 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
               ),
             ),
           ),
+          border: bohibaTheme.inputDecorationTheme.border,
+          prefixIconColor: bohibaTheme.inputDecorationTheme.prefixIconColor,
+          enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
+          focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
+          focusedErrorBorder:
+              bohibaTheme.inputDecorationTheme.focusedErrorBorder,
+          errorBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
         ),
       ),
     );

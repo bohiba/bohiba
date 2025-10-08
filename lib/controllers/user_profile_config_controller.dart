@@ -1,98 +1,55 @@
 import 'dart:async';
 import 'dart:io';
 
+import '/services/permission_service.dart';
+import '/services/global_service.dart';
 import '/services/profile_service.dart';
 import '/controllers/image_upload_controller.dart';
 import '/dist/app_enums.dart';
-import '/routes/app_route.dart';
-import '/services/db_service.dart';
-import '/services/device_info_service.dart';
-import '/services/dio_serivce.dart';
-import '/services/global_service.dart';
-import '/services/pref_utils.dart';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserProfileConfigController extends ImageUploadController {
-  final DBService dbService = DBService();
-  final PrefUtils prefUtils = PrefUtils();
-  final DioService dioService = DioService();
-
-  final TextEditingController aHouseCtrl = TextEditingController();
-  final TextEditingController aLocalityCtrl = TextEditingController();
-  final TextEditingController aCityCtrl = TextEditingController();
-  final TextEditingController aStreetCtrl = TextEditingController();
-  final TextEditingController aDistrictCtrl = TextEditingController();
-  final TextEditingController aStateCtrl = TextEditingController();
-  final TextEditingController aCountryCtrl = TextEditingController();
-  final TextEditingController aPincodeCtrl = TextEditingController();
-
   DateTime pickedDate = DateTime.now();
-
-  // File? selectedImg;
   final ImagePicker _picker = ImagePicker();
-
-  RxInt selectedIndex = (-1).obs;
-
-  // Rx<double> uploadPrgs = 0.0.obs;
+  XFile? pickedImg;
 
   Rx<UploadStatus> status = UploadStatus.initial.obs;
 
-  // Rx<String> imgName = ''.obs;
+  Future<void> verifyDocument() async {}
 
-  Map<String, dynamic> roleObj = {};
-
-  final List<Map<String, dynamic>> userRoleList = [
-    {
-      "role_id": 6,
-      "label": "Truck Owner",
-      "subTitle":
-          "Truck Owner will able to manage truck, driver, manager, trip with powerful analytics",
-    },
-    {
-      "role_id": 8,
-      "label": "Driver",
-      "subTitle":
-          "Driver will able to manage their profile with find jobs opportunity.",
-    },
-  ];
-
-  Future<void> verifyDocument() async {
-    
-  }
-
-  Future<void> setRole() async {
-    Map<String, dynamic> bodyObj = {
-      'role_id': roleObj['role_id'],
-    };
-    int updateRole = await ProfileService.setRole(bodyMap: bodyObj);
-    if (updateRole > 0) {
-      Get.toNamed(
-        AppRoute.userAuthScreen,
-        arguments: {"role_id": roleObj['role_id']},
-      );
+  Future<int> uploadImage() async {
+    if (pickedImg != null) {
+      int status = await ProfileService.setImage(
+          imagePath: pickedImg!.path, imageFile: [File(pickedImg!.path)]);
+      return status;
+    } else {
+      GlobalService.appSnackBar(
+          status: AlertStatus.warning, desc: 'Please select an image.');
+      return 0;
     }
   }
 
-  Map<String, dynamic> selectAddress(int index) {
-    selectedIndex.value = index;
-    return userRoleList[index];
-  }
-
-  /*
-   ========================================
-   ||             IMAGE UPLOAD           ||
-   ========================================
-   */
-  Future<void> uploadImage() async {}
-
   @override
   Future<void> pickImage({required PickerType pickertype}) async {
-    // _status = UploadStatus.initial;
     try {
-      XFile? pickedImg;
+      bool isGranted = await PermissionService.requestCamPermission();
+      if (!isGranted) {
+        GlobalService.showAlertDialog(
+          status: AlertStatus.info,
+          title: 'Permission',
+          description:
+              'Bohiba need file permission to select image by you! Please `Allow access` to access',
+          discardBtnTxt: 'Deny',
+          saveBtnTxt: 'Allow',
+          onSave: () async {
+            Get.back();
+            await PermissionService.requestOpenAppSetting();
+          },
+        );
+        return;
+      }
       if (PickerType.gallery == pickertype) {
         pickedImg = await _picker.pickImage(
           source: ImageSource.gallery,
@@ -111,16 +68,20 @@ class UserProfileConfigController extends ImageUploadController {
 
       if (pickedImg == null) {
         status.value = UploadStatus.failure;
-        GlobalService.printHandler("Error while picking");
+        GlobalService.printHandler('Please select an image to upload');
+        return;
       }
-      selectedImg = File(pickedImg!.path);
+      selectedImg.value = File(pickedImg!.path);
       status.value = UploadStatus.uploading;
       uploadPrgs.value = 0.0;
-      imgName.value = pickedImg.name;
+      imgName.value = pickedImg!.name;
       simulateUpload();
     } catch (e) {
       status.value = UploadStatus.failure;
-      GlobalService.printHandler('Failure: $e');
+      GlobalService.appSnackBar(
+        status: AlertStatus.failure,
+        desc: 'Something went wrong while uploading image',
+      );
     }
   }
 
@@ -129,7 +90,7 @@ class UserProfileConfigController extends ImageUploadController {
     try {
       if (await file.exists()) {
         await file.delete();
-        selectedImg = null;
+        selectedImg;
         status.value = UploadStatus.initial;
         GlobalService.printHandler('File deleted successfully.');
       } else {
@@ -155,35 +116,8 @@ class UserProfileConfigController extends ImageUploadController {
   }
 
   void reset() {
-    selectedImg = null;
+    selectedImg;
     uploadPrgs.value = 0.0;
     status.value = UploadStatus.initial;
-  }
-
-  /*
-   ========================================
-   ||           ADDRESS UPLOAD           ||
-   ========================================
-   */
-  Future<void> addAddress() async {
-    GlobalService.closeKeyboard();
-    if (!await DeviceInfoService.hasInternet()) {
-      return;
-    }
-    Map<String, dynamic> bodyObj = {
-      'house_no': aHouseCtrl.text.trim(),
-      'locality': aLocalityCtrl.text.trim(),
-      'city': aCityCtrl.text.trim(),
-      'street': aStreetCtrl.text.trim(),
-      'district': aDistrictCtrl.text.trim(),
-      'state': aStateCtrl.text.trim(),
-      'pin_code': aPincodeCtrl.text.trim(),
-      'country': aCountryCtrl.text.trim(),
-    };
-
-    int verifyAddress = await ProfileService.addAddress(bodyMap: bodyObj);
-    if (verifyAddress > 0) {
-      Get.offAndToNamed(AppRoute.imageAuth);
-    }
   }
 }

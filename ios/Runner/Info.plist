@@ -57,6 +57,8 @@
 	<string>Bohiba needs camera permission for uploading images.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Bohiba needs location access to provide better exprience.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Bohiba needs access to your location always and when in use</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Bohiba needs location permission to provide better data from our cloud.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

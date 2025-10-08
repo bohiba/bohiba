@@ -1,4 +1,4 @@
-import 'package:bohiba/model/user_list_model.dart';
+import '/model/user_list_model.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import '/component/screen_utils.dart';

@@ -1,8 +1,8 @@
 import '/services/api_end_point.dart';
-
 import '/services/device_info_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/global_service.dart';
+
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
@@ -49,7 +49,7 @@ class LocationController extends GetxController {
     }
 
     GlobalService.showProgress();
-
+    arrLocation.clear();
     Position position = await Geolocator.getCurrentPosition(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.high));
     List<Placemark> arrPlacemarks = await placemarkFromCoordinates(
@@ -59,20 +59,32 @@ class LocationController extends GetxController {
 
     List locList = [];
     String? pinResObj;
+
     for (Placemark placemark in arrPlacemarks) {
-      if (placemark.postalCode == null || placemark.postalCode!.isEmpty) {
+      if (placemark.postalCode == null) {
+        userTitleMsg.value = 'No Location Found';
+        userSubTitle.value =
+            'Failed while fetching location. Refresh to try again.';
+        GlobalService.dismissProgress();
+        return null;
       } else {
-        if (pinResObj == null) {
+        if (placemark.isoCountryCode == 'IN') {
           var response = await Dio()
               .get('${ApiEndPoint.apiPostalCode}/${placemark.postalCode}');
           if (response.data[0]['PostOffice'] == null) {
-            GlobalService.dismissProgress();
             userTitleMsg.value = 'No Location Found';
             userSubTitle.value =
                 'Failed while fetching location. Refresh to try again.';
+            GlobalService.dismissProgress();
             return null;
           }
           pinResObj = response.data[0]['PostOffice'][0]['District'];
+        } else {
+          userTitleMsg.value = 'No Service';
+          userSubTitle.value =
+              'Ooop`s currently we are not available on this region.';
+          GlobalService.dismissProgress();
+          return null;
         }
         Map<String, dynamic> placemarkObj = {
           'name': placemark.name ?? '',
@@ -95,7 +107,7 @@ class LocationController extends GetxController {
         "longitude": position.longitude,
       },
     };
-    GlobalService.dismissProgress();
+
     if (arrPlacemarks.isEmpty) {
       throw Exception('No address found for location');
     }
@@ -105,7 +117,7 @@ class LocationController extends GetxController {
     arrLocation.value = (latLang['address'] as List)
         .map((toElement) => Map<String, dynamic>.from(toElement))
         .toList();
-
+    GlobalService.dismissProgress();
     return locationObj;
   }
 

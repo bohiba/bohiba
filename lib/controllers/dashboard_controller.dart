@@ -1,18 +1,12 @@
-import 'package:bohiba/model/user_list_model.dart';
-
 import '/dist/app_enums.dart';
-import '/services/profile_service.dart';
-
-import '/controllers/auth_controller.dart';
 import '/model/profile_model.dart';
+import '/model/user_list_model.dart';
+import '/services/profile_service.dart';
 import '/services/device_info_service.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DashboardController extends GetxController {
-  final AuthController _authController =
-      Get.put<AuthController>(AuthController());
-
   RefreshController refreshProfile = RefreshController();
 
   Rxn<ProfileModel> profileModel = Rxn<ProfileModel>();
@@ -48,9 +42,5 @@ class DashboardController extends GetxController {
       profileModel.value = profile;
     }
     return profile;
-  }
-
-  Future<void> logout() async {
-    return _authController.logout();
   }
 }

@@ -74,6 +74,8 @@ class BohibaTheme {
       colorScheme: ColorScheme.light(
         primary: BohibaColors.primaryColor,
         secondary: BohibaColors.secoundaryColor,
+        tertiary: BohibaColors.white,
+        onTertiary: BohibaColors.black,
         surface: BohibaColors.errorColor,
         onSurface: BohibaColors.successColor,
         error: BohibaColors.warningColor,
@@ -308,6 +310,15 @@ class BohibaTheme {
       splashColor: DarkColors.primaryColor,
       highlightColor: DarkColors.primaryVariantColor,
       disabledColor: DarkColors.primaryVariantColor,
+      colorScheme: const ColorScheme.dark(
+        primary: DarkColors.primaryColor,
+        secondary: DarkColors.secoundaryColor,
+        tertiary: DarkColors.white,
+        onTertiary: DarkColors.black,
+        surface: DarkColors.errorColor,
+        onSurface: DarkColors.successColor,
+        error: DarkColors.warningColor,
+      ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -427,13 +438,6 @@ class BohibaTheme {
         ),
       ),
       dividerColor: DarkColors.borderColor,
-      colorScheme: const ColorScheme.dark(
-        primary: DarkColors.primaryColor,
-        secondary: DarkColors.secoundaryColor,
-        surface: DarkColors.black,
-        onSurface: DarkColors.successColor,
-        error: DarkColors.warningColor,
-      ),
       primaryColor: DarkColors.primaryColor,
       cardColor: DarkColors.tileColor,
       fontFamily: 'Poppins',

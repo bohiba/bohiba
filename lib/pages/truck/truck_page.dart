@@ -1,4 +1,4 @@
-import 'package:bohiba/services/launcher_service.dart';
+import '/services/launcher_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/component/bohiba_buttons/primary_button.dart';

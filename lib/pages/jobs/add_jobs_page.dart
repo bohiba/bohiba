@@ -39,10 +39,12 @@ class AddJobsPage extends GetView<AddJobController> {
                         hintText: 'Select Date',
                         controller: controller.startFromEditingController,
                         onTap: () async {
-                          DateTime date = await GlobalService.datePickerModal(
+                          DateTime? date = await GlobalService.datePickerModal(
                               context: context);
-                          controller.startFromEditingController.text =
-                              DateFormat('dd-MM-yyyy').format(date);
+                          if (date != null) {
+                            controller.startFromEditingController.text =
+                                DateFormat('dd-MM-yyyy').format(date);
+                          }
                         },
                       ),
                       RequiredLabel(

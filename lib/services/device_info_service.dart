@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '/dist/app_enums.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -38,7 +39,10 @@ class DeviceInfoService {
     final connectivityResult = await Connectivity().checkConnectivity();
     bool internet = (connectivityResult.contains(ConnectivityResult.none));
     if (internet) {
-      GlobalService.showAppToast(message: 'No Internet');
+      GlobalService.appSnackBar(
+        status: AlertStatus.noInternet,
+        desc: 'No Internet connectivity. Please check and retry',
+      );
     }
     return !internet;
   }

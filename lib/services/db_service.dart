@@ -18,7 +18,7 @@ class DBService {
   static final DBService _instance = DBService._private();
   factory DBService() => _instance;
 
-  Future<void> initDB() async {
+  static Future<void> initDB() async {
     await Hive.initFlutter();
     await register<ProfileModel>(ProfileModelAdapter());
     await register<UserListModel>(UserListModelAdapter());

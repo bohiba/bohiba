@@ -44,11 +44,13 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                       DateInputField(
                         width: ScreenUtils.width,
                         onTap: () async {
-                          DateTime paymentDate =
+                          DateTime? paymentDate =
                               await GlobalService.datePickerModal(
                                   context: context);
-                          controller.paymentDateController.text =
-                              DateFormat('dd-MM-yyyy').format(paymentDate);
+                          if (paymentDate != null) {
+                            controller.paymentDateController.text =
+                                DateFormat('dd-MM-yyyy').format(paymentDate);
+                          }
                         },
                         controller: controller.paymentDateController,
                         hintText: 'Payment Date',

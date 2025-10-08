@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/analytic_conroller.dart';
+import '/controllers/analytic_conroller.dart';
 import 'package:get/get.dart';
 
 class AnalyticBinding extends Bindings {

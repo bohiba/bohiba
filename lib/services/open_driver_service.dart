@@ -1,6 +1,6 @@
-import 'package:bohiba/services/api_end_point.dart';
-import 'package:bohiba/services/device_info_service.dart';
-import 'package:bohiba/services/global_service.dart';
+import '/services/api_end_point.dart';
+import '/services/device_info_service.dart';
+import '/services/global_service.dart';
 
 import 'db_service.dart';
 import 'dio_serivce.dart';

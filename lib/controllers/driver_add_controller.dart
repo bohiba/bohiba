@@ -136,7 +136,7 @@ class DriverAddController extends ImageUploadController {
         GlobalService.printHandler("Error while picking");
         return;
       }
-      selectedImg = File(pickedImg.path);
+      selectedImg.value = File(pickedImg.path);
       status.value = UploadStatus.uploading;
       uploadPrgs.value = 0.0;
       imagePath.value = pickedImg.path;
@@ -164,7 +164,7 @@ class DriverAddController extends ImageUploadController {
     try {
       if (await file.exists()) {
         await file.delete();
-        selectedImg = null;
+        selectedImg;
         status.value = UploadStatus.initial;
         GlobalService.printHandler('File deleted successfully.');
       } else {

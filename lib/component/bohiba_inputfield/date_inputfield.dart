@@ -7,17 +7,17 @@ class DateInputField extends StatefulWidget {
   final double? width;
   final double? height;
   final VoidCallback? onTap;
-  // final String? restorationId;
   final TextEditingController? controller;
+  final String? Function(String? inputValue)? validateField;
   final String? hintText;
   const DateInputField({
     super.key,
     this.width,
     this.height,
     this.onTap,
-    // this.restorationId,
     this.controller,
     this.hintText,
+    this.validateField,
   });
 
   @override
@@ -28,16 +28,17 @@ class _DateInputFieldState extends State<DateInputField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width ?? ScreenUtils.width * 0.95,
-      height: widget.height ?? 47,
+      width: widget.width ?? ScreenUtils.width,
+      // height: widget.height ?? 47,
       margin: EdgeInsets.only(
-        bottom: ScreenUtils.height10,
+        bottom: ScreenUtils.height5,
       ),
       child: TextFormField(
         readOnly: true,
         controller: widget.controller,
         onTap: widget.onTap,
         onChanged: (value) {},
+        validator: widget.validateField,
         style: TextStyle(
           fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
           color: bohibaTheme.textTheme.bodyLarge!.color,
@@ -51,6 +52,14 @@ class _DateInputFieldState extends State<DateInputField> {
             EvaIcons.calendarOutline,
             // color: BohibaColors.borderColor,
           ),
+
+          border: bohibaTheme.inputDecorationTheme.border,
+          prefixIconColor: bohibaTheme.inputDecorationTheme.prefixIconColor,
+          enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
+          focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
+          focusedErrorBorder:
+              bohibaTheme.inputDecorationTheme.focusedErrorBorder,
+          errorBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
         ),
       ),
     );

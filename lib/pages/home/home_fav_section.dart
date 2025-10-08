@@ -23,7 +23,7 @@ class HomeFavListSection extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return Visibility(
-        visible: controller.arrFav.isNotEmpty,
+        visible: controller.arrFavList.isNotEmpty,
         child: Column(
           children: [
             // Home WishList Header
@@ -42,7 +42,7 @@ class HomeFavListSection extends GetView<HomeController> {
                     borderRadius: BorderRadius.circular(ScreenUtils.width5),
                     onTap: () => Navigator.of(context).pushNamed(
                       AppRoute.favList,
-                      arguments: {'fav': controller.arrFav},
+                      arguments: {'fav': controller.arrFavList},
                     ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -74,10 +74,11 @@ class HomeFavListSection extends GetView<HomeController> {
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount:
-                    controller.arrFav.length > 3 ? 3 : controller.arrFav.length,
+                itemCount: controller.arrFavList.length > 3
+                    ? 3
+                    : controller.arrFavList.length,
                 itemBuilder: (context, index) {
-                  Map<String, dynamic> favObj = controller.arrFav[index];
+                  Map<String, dynamic> favObj = controller.arrFavList[index];
 
                   if (favObj.containsKey('license_detail')) {
                     return DriverTile(
@@ -109,7 +110,7 @@ class HomeFavListSection extends GetView<HomeController> {
                             if (onValue != null) {
                               await controller.getTruckList();
                               await controller.getUserFavList();
-                              controller.arrTrucks.refresh();
+                              controller.arrTruck.refresh();
                             }
                           },
                         );

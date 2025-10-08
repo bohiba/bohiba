@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:widgets_easier/widgets_easier.dart';
+
 import '/dist/component_exports.dart';
 import '/controllers/image_upload_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,80 +22,97 @@ class InitialImageUploadWidget<T extends ImageUploadController>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        InkWell(
-          onTap: () async {
-            await controller.pickImage(pickertype: PickerType.gallery);
-          },
-          borderRadius: BorderRadius.circular(12.r),
-          child: AspectRatio(
-            aspectRatio: 16.h / 9.w,
-            child: Container(
-              decoration: TileDecorative(),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: bohibaTheme.dividerColor,
-                    child: const Icon(EvaIcons.cloudUploadOutline),
-                  ),
-                  Gap(ScreenUtils.height10),
-                  Text(
-                    'Tap to upload photo',
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                      color: bohibaTheme.textTheme.bodySmall!.color,
+    return Container(
+      width: double.maxFinite,
+      margin: EdgeInsets.symmetric(vertical: ScreenUtils.height30),
+      constraints: BoxConstraints(
+        minHeight: ScreenUtils.height * 0.35,
+      ),
+      decoration: ShapeDecoration(
+        shape: DashedBorder(
+          radius: 12.0,
+          width: 1.5,
+          color: bohibaTheme.dividerColor,
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: () async {
+              await controller.pickImage(pickertype: PickerType.gallery);
+            },
+            borderRadius: BorderRadius.circular(12.r),
+            child: AspectRatio(
+              aspectRatio: 16.h / 9.w,
+              child: Container(
+                decoration: TileDecorative(),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: bohibaTheme.dividerColor,
+                      child: const Icon(EvaIcons.cloudUploadOutline),
                     ),
-                  ),
-                  Text(
-                    'PNG or JPG (max. 400*400px)',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                      color: bohibaTheme.textTheme.titleLarge!.color,
+                    Gap(ScreenUtils.height10),
+                    Text(
+                      'Tap to upload photo',
+                      style: TextStyle(
+                        fontSize:
+                            bohibaTheme.textTheme.headlineMedium!.fontSize,
+                        fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                        color: bohibaTheme.textTheme.bodySmall!.color,
+                      ),
                     ),
-                  ),
-                ],
+                    Text(
+                      'PNG or JPG (max. 400*400px)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                        fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                        color: bohibaTheme.textTheme.titleLarge!.color,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: ScreenUtils.height20,
-            horizontal: ScreenUtils.width15,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppDivider(width: ScreenUtils.width * 0.27),
-              Text(
-                'OR',
-                style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                  color: bohibaTheme.textTheme.bodyLarge!.color,
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: ScreenUtils.height20,
+              horizontal: ScreenUtils.width15,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppDivider(width: ScreenUtils.width * 0.27),
+                Text(
+                  'OR',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                    color: bohibaTheme.textTheme.bodyLarge!.color,
+                  ),
                 ),
-              ),
-              AppDivider(width: ScreenUtils.width * 0.27),
-            ],
+                AppDivider(width: ScreenUtils.width * 0.27),
+              ],
+            ),
           ),
-        ),
-        PrimaryButton(
-          onPressed: () async {
-            await controller.pickImage(pickertype: PickerType.camera);
-          },
-          width: ScreenUtils.width * 0.4,
-          label: 'Open Camera',
-        )
-      ],
+          PrimaryButton(
+            onPressed: () async {
+              await controller.pickImage(pickertype: PickerType.camera);
+            },
+            width: ScreenUtils.width * 0.4,
+            label: 'Open Camera',
+          )
+        ],
+      ),
     );
   }
 }
@@ -106,62 +125,78 @@ class OnUploadingImageWidget<T extends ImageUploadController>
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            height: ScreenUtils.height * 0.1,
-            width: 75,
-            padding: EdgeInsets.only(bottom: ScreenUtils.height10),
-            decoration: BoxDecoration(
-              color: BohibaColors.lightGreyColor,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            alignment: Alignment.bottomCenter,
-            child: const Icon(Icons.image_rounded, size: 36),
+      () => Container(
+        width: double.maxFinite,
+        margin: EdgeInsets.symmetric(vertical: ScreenUtils.height30),
+        constraints: BoxConstraints(
+          minHeight: ScreenUtils.height * 0.35,
+        ),
+        decoration: ShapeDecoration(
+          shape: DashedBorder(
+            radius: 12.0,
+            width: 1.5,
+            color: bohibaTheme.dividerColor,
+            borderRadius: BorderRadius.circular(15),
           ),
-          Gap(ScreenUtils.height10),
-          Text(
-            "${(controller.uploadPrgs.value * 100).toInt()} %",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-              color: bohibaTheme.textTheme.titleLarge!.color,
+        ),
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: ScreenUtils.height * 0.1,
+              width: 75,
+              padding: EdgeInsets.only(bottom: ScreenUtils.height10),
+              decoration: BoxDecoration(
+                color: BohibaColors.lightGreyColor,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              alignment: Alignment.bottomCenter,
+              child: const Icon(Icons.image_rounded, size: 36),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: ScreenUtils.height20,
-              horizontal: ScreenUtils.width25,
+            Gap(ScreenUtils.height10),
+            Text(
+              "${(controller.uploadPrgs.value * 100).toInt()} %",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                color: bohibaTheme.textTheme.titleLarge!.color,
+              ),
             ),
-            child: LinearProgressIndicator(
-              value: controller.uploadPrgs.value,
-              minHeight: 6,
-              borderRadius: BorderRadius.circular(15.0),
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(BohibaColors.primaryColor),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: ScreenUtils.height20,
+                horizontal: ScreenUtils.width25,
+              ),
+              child: LinearProgressIndicator(
+                value: controller.uploadPrgs.value,
+                minHeight: 6,
+                borderRadius: BorderRadius.circular(15.0),
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(BohibaColors.primaryColor),
+              ),
             ),
-          ),
-          Text(
-            'Uploading Document...',
-            style: TextStyle(
-              fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-              fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-              color: bohibaTheme.textTheme.labelMedium!.color,
+            Text(
+              'Uploading Document...',
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                color: bohibaTheme.textTheme.labelMedium!.color,
+              ),
             ),
-          ),
-          Text(
-            controller.imgName.value,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-              color: bohibaTheme.textTheme.titleLarge!.color,
+            Text(
+              controller.imgName.value,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                color: bohibaTheme.textTheme.titleLarge!.color,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -174,58 +209,84 @@ class OnFetchingImageSuccessWidget<T extends ImageUploadController>
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: BohibaColors.successColor,
-            child: Icon(
-              Remix.checkbox_circle_fill,
-              color: BohibaColors.white,
-            ),
-          ),
-          Gap(ScreenUtils.height10),
-          Text(
-            'Upload Complete',
-            style: TextStyle(
-              fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-              fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-              color: BohibaColors.successColor,
-            ),
-          ),
-          Text(
-            controller.imgName.value,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-              color: bohibaTheme.textTheme.titleLarge!.color,
-            ),
-          ),
-          Gap(ScreenUtils.height20),
-          TextButton.icon(
-            onPressed: () {
-              if (controller.selectedImg != null) {
-                controller.deleteImageFile(controller.selectedImg!);
-              }
-            },
-            icon: Icon(
-              EvaIcons.trash2Outline,
-              color: BohibaColors.warningColor,
-            ),
-            label: Text(
-              'Clear Upload',
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                color: BohibaColors.warningColor,
+    return Container(
+      width: double.maxFinite,
+      margin: EdgeInsets.symmetric(vertical: ScreenUtils.height30),
+      constraints: BoxConstraints(
+        minHeight: ScreenUtils.height * 0.35,
+      ),
+      decoration: ShapeDecoration(
+        image: controller.selectedImg.value == null
+            ? null
+            : DecorationImage(
+                image: FileImage(
+                  File.fromUri(
+                    Uri.file(controller.selectedImg.value!.path),
+                  ),
+                ),
+                fit: BoxFit.cover,
+              ),
+        shape: DashedBorder(
+          radius: 12.0,
+          width: 1.5,
+          color: bohibaTheme.dividerColor,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+      ),
+      // alignment: Alignment.center,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.r),
+          color: bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 25,
+              backgroundColor: BohibaColors.successColor,
+              child: Icon(
+                Remix.checkbox_circle_fill,
+                color: BohibaColors.white,
               ),
             ),
-          )
-        ],
+            Gap(ScreenUtils.height10),
+            Text(
+              'Upload Complete',
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                color: BohibaColors.successColor,
+              ),
+            ),
+            Gap(ScreenUtils.height25),
+            GestureDetector(
+                onTap: () {
+                  controller.deleteImageFile(controller.selectedImg.value!);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      EvaIcons.trash2Outline,
+                      color: bohibaTheme.colorScheme.error,
+                    ),
+                    Gap(10.w),
+                    Text(
+                      'Clear Upload',
+                      style: TextStyle(
+                        fontSize:
+                            bohibaTheme.textTheme.headlineMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelMedium!.fontWeight,
+                        color: bohibaTheme.colorScheme.error,
+                      ),
+                    ),
+                  ],
+                ))
+          ],
+        ),
       ),
     );
   }
@@ -238,86 +299,102 @@ class OnFetchingImageErrorWidget<T extends ImageUploadController>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        InkWell(
-          borderRadius: BorderRadius.circular(12.r),
-          onTap: () async {
-            await controller.pickImage(pickertype: PickerType.gallery);
-          },
-          child: AspectRatio(
-            aspectRatio: 16.h / 9.w,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.r),
-                color: BohibaColors.tileColor,
-              ),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: BohibaColors.warningColor,
-                    child: Icon(
-                      Icons.error_outlined,
-                      color: BohibaColors.white,
+    return Container(
+      width: double.maxFinite,
+      margin: EdgeInsets.symmetric(vertical: ScreenUtils.height30),
+      constraints: BoxConstraints(
+        minHeight: ScreenUtils.height * 0.35,
+      ),
+      decoration: ShapeDecoration(
+        shape: DashedBorder(
+          radius: 12.0,
+          width: 1.5,
+          color: bohibaTheme.dividerColor,
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.circular(12.r),
+            onTap: () async {
+              await controller.pickImage(pickertype: PickerType.gallery);
+            },
+            child: AspectRatio(
+              aspectRatio: 16.h / 9.w,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.r),
+                  color: BohibaColors.tileColor,
+                ),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: BohibaColors.warningColor,
+                      child: Icon(
+                        Icons.error_outlined,
+                        color: BohibaColors.white,
+                      ),
                     ),
-                  ),
-                  Gap(ScreenUtils.height10),
-                  Text(
-                    'Retry Again, Tap to re-upload',
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                      color: BohibaColors.warningColor,
+                    Gap(ScreenUtils.height10),
+                    Text(
+                      'Retry Again, Tap to re-upload',
+                      style: TextStyle(
+                        fontSize:
+                            bohibaTheme.textTheme.headlineMedium!.fontSize,
+                        fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                        color: BohibaColors.warningColor,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'PNG or JPG (max. 400*400px)',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                      color: bohibaTheme.textTheme.titleLarge!.color,
+                    Text(
+                      'PNG or JPG (max. 400*400px)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                        fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                        color: bohibaTheme.textTheme.titleLarge!.color,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: ScreenUtils.height20,
-            horizontal: ScreenUtils.width15,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppDivider(width: ScreenUtils.width * 0.27),
-              Text(
-                'OR',
-                style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                  color: bohibaTheme.textTheme.bodyLarge!.color,
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: ScreenUtils.height20,
+              horizontal: ScreenUtils.width15,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppDivider(width: ScreenUtils.width * 0.27),
+                Text(
+                  'OR',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                    color: bohibaTheme.textTheme.bodyLarge!.color,
+                  ),
                 ),
-              ),
-              AppDivider(width: ScreenUtils.width * 0.27),
-            ],
+                AppDivider(width: ScreenUtils.width * 0.27),
+              ],
+            ),
           ),
-        ),
-        PrimaryButton(
-          onPressed: () async {
-            await controller.pickImage(pickertype: PickerType.camera);
-          },
-          width: ScreenUtils.width * 0.4,
-          label: 'Open Camera',
-        )
-      ],
+          PrimaryButton(
+            onPressed: () async {
+              await controller.pickImage(pickertype: PickerType.camera);
+            },
+            width: ScreenUtils.width * 0.4,
+            label: 'Open Camera',
+          )
+        ],
+      ),
     );
   }
 }

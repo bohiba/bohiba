@@ -26,8 +26,8 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          fixedSize: Size(
-              width ?? ScreenUtils.width * 0.9, height ?? ScreenUtils.height47),
+          fixedSize:
+              Size(width ?? ScreenUtils.width, height ?? ScreenUtils.height47),
           backgroundColor: color ?? BohibaColors.primaryColor,
         ),
         child: Text(

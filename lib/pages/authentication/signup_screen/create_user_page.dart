@@ -1,5 +1,7 @@
+import '/controllers/create_user_controller.dart';
+import '/routes/app_route.dart';
+
 import '/component/bohiba_inputfield/date_inputfield.dart';
-import '/controllers/auth_controller.dart';
 import '/services/global_service.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +13,7 @@ import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 
-class CreateUserPage extends GetView<AuthController> {
+class CreateUserPage extends GetView<CreateUserController> {
   const CreateUserPage({super.key});
 
   @override
@@ -23,6 +25,7 @@ class CreateUserPage extends GetView<AuthController> {
       final Map<String, dynamic> argsObj = route as Map<String, dynamic>;
       email = argsObj['email'];
     }
+    final NavigatorState navigateState = Navigator.of(context);
     return Scaffold(
       appBar: null,
       body: PopScope(
@@ -59,18 +62,24 @@ class CreateUserPage extends GetView<AuthController> {
                 ),
               ),
               Form(
-                // key: signupKey,
+                key: controller.createUserFormKey,
                 child: Column(
                   children: [
                     TextInputField(
                       controller: controller.nameController,
                       hintText: "Full Name",
-                      keyboardType: TextInputType.name,
-                      textCapitalization: TextCapitalization.sentences,
+                      textCapitalization: TextCapitalization.characters,
                       nextActionType: TextInputAction.next,
                       prefixIcon: Icon(
                         Icons.person_rounded,
                       ),
+                      validateField: (inputValue) {
+                        if (inputValue == null || inputValue.isEmpty) {
+                          return 'Please enter your name';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                     TextInputField(
                       hintText: "Mobile Numnber",
@@ -79,21 +88,48 @@ class CreateUserPage extends GetView<AuthController> {
                       keyboardType: TextInputType.phone,
                       nextActionType: TextInputAction.done,
                       controller: controller.mobileController,
+                      validateField: (inputValue) {
+                        if (inputValue == null || inputValue.isEmpty) {
+                          return 'Please enter your mobile number';
+                        } else if (!(inputValue.isPhoneNumber)) {
+                          return 'Please enter valid mobile number';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                     DateInputField(
                       width: ScreenUtils.width,
                       hintText: 'Choose your DOB',
                       controller: controller.dateController,
                       onTap: () async {
+                        DateTime endDateTime = DateTime(
+                          DateTime.now().year - 18,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                        );
+
                         controller.pickedDate =
                             await GlobalService.datePickerModal(
                           context: context,
-                          endYear: DateTime(DateTime.now().year - 18,
-                              DateTime.now().month, DateTime.now().day),
+                          endYear: endDateTime,
+                          title: 'Choose your Date of Birth',
                         );
-                        controller.dateController.text =
-                            DateFormat('dd-MM-yyyy')
-                                .format(controller.pickedDate);
+
+                        if (controller.pickedDate != null) {
+                          controller.dateController.text =
+                              DateFormat('dd-MM-yyyy')
+                                  .format(controller.pickedDate!);
+                        }
+                      },
+                      validateField: (inputValue) {
+                        if (inputValue == null || inputValue.isEmpty) {
+                          return 'Please enter your Date of Birth';
+                        } else if (!(inputValue.isPhoneNumber)) {
+                          return 'Please enter valid mobile number';
+                        } else {
+                          return null;
+                        }
                       },
                     ),
                     PasswordInputField(
@@ -114,7 +150,15 @@ class CreateUserPage extends GetView<AuthController> {
                 label: 'Submit',
                 onPressed: () async {
                   if (email != null) {
-                    await controller.registerUser(txtEmail: email);
+                    // int registered =
+                    //     await controller.registerUser(txtEmail: email);
+                    int registered = 1;
+                    if (registered > 0) {
+                      navigateState.popAndPushNamed(
+                        AppRoute.userAddressAuthScreen,
+                        arguments: {'email': email, 'showLeading': false},
+                      );
+                    }
                     return;
                   }
                 },

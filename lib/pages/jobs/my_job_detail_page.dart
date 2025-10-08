@@ -1,4 +1,4 @@
-import 'package:bohiba/services/launcher_service.dart';
+import '/services/launcher_service.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '/dist/app_enums.dart';

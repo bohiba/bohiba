@@ -1,13 +1,14 @@
-import '/controllers/auth_controller.dart';
-import 'package:get/get.dart';
-import '/component/bohiba_inputfield/email_inputfield.dart';
-import 'package:flutter/material.dart';
+import '/controllers/signup_controller.dart';
 import '/dist/component_exports.dart';
-import '/routes/app_route.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/theme/bohiba_theme.dart';
+import '/component/bohiba_inputfield/email_inputfield.dart';
+import '/routes/app_route.dart';
 
-class SignupScreen extends GetView<AuthController> {
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class SignupScreen extends GetView<SignupController> {
   const SignupScreen({super.key});
 
   @override
@@ -22,63 +23,82 @@ class SignupScreen extends GetView<AuthController> {
           padding: EdgeInsets.symmetric(
             horizontal: ScreenUtils.width20,
           ),
-          child: Stack(
+          child: Column(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Hello!',
-                      style: bohibaTheme.textTheme.displayMedium,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Let\'s begin the journey',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                        fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                        color: bohibaTheme.textTheme.titleLarge!.color,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Hello!',
+                        style: bohibaTheme.textTheme.displayMedium,
                       ),
                     ),
-                  ),
-                  Column(
-                    children: [
-                      EmailInputField(
-                        hintText: 'Email',
-                        controller: controller.emailController,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Let\'s begin the journey',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          color: bohibaTheme.textTheme.titleLarge!.color,
+                        ),
                       ),
-                      SizedBox(height: ScreenUtils.height10),
-                      PrimaryButton(
-                        label: 'Verify',
-                        onPressed: () async {
-                          navState.pushNamed(
-                            AppRoute.otpScreen,
-                            arguments: {
-                              "email": controller.emailController.text
-                                  .trim()
-                                  .toLowerCase(),
-                              "nxtRoute": AppRoute.createUser
-                            },
-                          );
-                        },
-                        /*onPressed: () async => await controller.verifyEmail(
-                          email: controller.emailController.text
-                              .trim()
-                              .toLowerCase(),
-                        ),*/
-                      )
-                    ],
-                  )
-                ],
+                    ),
+                    Column(
+                      children: [
+                        Form(
+                          key: controller.signUpFormKey,
+                          child: EmailInputField(
+                            hintText: 'Email',
+                            controller: controller.emailController,
+                          ),
+                        ),
+                        SizedBox(height: ScreenUtils.height10),
+                        PrimaryButton(
+                          label: 'Verify',
+                          onPressed: () async {
+                            navState.pushNamed(
+                              AppRoute.otpScreen,
+                              arguments: {
+                                "email": controller.emailController.text
+                                    .trim()
+                                    .toLowerCase(),
+                                "nxtRoute": AppRoute.createUser
+                              },
+                            );
+                          },
+                          // onPressed: () async {
+                          //   String strEmail = controller.emailController.text
+                          //       .trim()
+                          //       .toLowerCase();
+                          //   int verified = await controller.verifyEmail(
+                          //     email: strEmail,
+                          //   );
+                          //   if (verified > 0) {
+                          //     navState.pushNamed(
+                          //       AppRoute.otpScreen,
+                          //       arguments: {
+                          //         "email": strEmail,
+                          //         "nxtRoute": AppRoute.createUser
+                          //       },
+                          //     );
+                          //   }
+                          // },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
               Container(
-                margin: EdgeInsets.only(bottom: ScreenUtils.height47),
-                alignment: Alignment.bottomCenter,
+                height: ScreenUtils.height30,
+                margin: EdgeInsets.symmetric(vertical: ScreenUtils.height20),
+                alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -87,22 +107,17 @@ class SignupScreen extends GetView<AuthController> {
                       'Already have account? ',
                       style: bohibaTheme.textTheme.titleSmall,
                     ),
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
-                        Navigator.popAndPushNamed(context, AppRoute.signIn);
+                        navState.popAndPushNamed(AppRoute.signIn);
                       },
-                      child: SizedBox(
-                        // height: BohibaResponsiveScreen.height30,
-                        width: ScreenUtils.width50,
-                        // alignment: Alignment.center,
-                        child: Text(
-                          'Signin',
-                          style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight: bohibaTheme
-                                .textTheme.headlineMedium!.fontWeight,
-                            color: bohibaTheme.textTheme.bodySmall!.color,
-                          ),
+                      child: Text(
+                        'Signin',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                          color: bohibaTheme.textTheme.bodySmall!.color,
                         ),
                       ),
                     ),

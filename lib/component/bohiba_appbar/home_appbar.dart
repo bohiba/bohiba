@@ -1,17 +1,17 @@
-import '/controllers/role_controller.dart';
+import '/component/image_path.dart';
 import '/services/role_permission_service.dart';
-
+import '/controllers/role_controller.dart';
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
-import '../../dist/app_enums.dart';
+import '/dist/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 import '/dist/component_exports.dart';
-import '../image_path.dart';
+// import '../image_path.dart';
 
 class HomeAppBar extends GetView<HomeController>
     implements PreferredSizeWidget {
@@ -143,7 +143,7 @@ class HomeAppBar extends GetView<HomeController>
                         if (onValue != null) {
                           // await controller.getTruckList();
                           // await controller.getUserFavList();
-                          controller.arrTrucks.refresh();
+                          controller.arrTruck.refresh();
                         }
                       },
                     );

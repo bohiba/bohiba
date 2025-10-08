@@ -20,8 +20,8 @@ Future<void> main() async {
       DeviceOrientation.portraitUp,
     ]).then((value) async {
       try {
-        await PrefUtils().init();
-        await DBService().initDB();
+        await PrefUtils.init();
+        await DBService.initDB();
         Get.put<ThemeController>(ThemeController());
         runApp(MyApp());
       } catch (e) {

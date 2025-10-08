@@ -38,13 +38,13 @@ class AppDropdown<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height ?? 47,
-      width: width ?? ScreenUtils.width * 0.95,
+      width: width ?? ScreenUtils.width,
       margin: EdgeInsets.only(
         top: ScreenUtils.height5,
         bottom: ScreenUtils.height15,
       ),
       child: DropdownMenu<T>(
-        width: width ?? ScreenUtils.width * 0.95,
+        width: width ?? ScreenUtils.width,
         initialSelection: dropDownValue,
         controller: menuController,
         requestFocusOnTap: requestFocusOnTap,

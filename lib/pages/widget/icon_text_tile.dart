@@ -9,6 +9,7 @@ class IconTextTile extends StatelessWidget {
   final String? subtitle;
   final VoidCallback? onTap;
   final Widget? widget;
+  final EdgeInsetsGeometry? padding;
   const IconTextTile({
     super.key,
     this.icon,
@@ -16,6 +17,7 @@ class IconTextTile extends StatelessWidget {
     this.subtitle,
     this.widget,
     this.onTap,
+    this.padding,
   });
 
   @override
@@ -24,7 +26,8 @@ class IconTextTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: ScreenUtils.width,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
+        padding:
+            padding ?? EdgeInsets.symmetric(vertical: ScreenUtils.height10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(

@@ -1,5 +1,5 @@
-import 'package:bohiba/services/driver_service.dart';
-import 'package:bohiba/services/truck_service.dart';
+import '/services/driver_service.dart';
+import '/services/truck_service.dart';
 import '/services/api_end_point.dart';
 
 import '/model/driver_model.dart';

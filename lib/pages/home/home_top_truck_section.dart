@@ -16,7 +16,7 @@ class HomeTopTruck extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return Visibility(
-        visible: controller.arrTrucks.isNotEmpty,
+        visible: controller.arrTruck.isNotEmpty,
         child: Column(
           children: [
             Padding(
@@ -67,9 +67,9 @@ class HomeTopTruck extends GetView<HomeController> {
                       ),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: controller.arrTrucks.length,
+                      itemCount: controller.arrTruck.length,
                       itemBuilder: (context, index) {
-                        TruckModel topVehicleObj = controller.arrTrucks[index];
+                        TruckModel topVehicleObj = controller.arrTruck[index];
                         return TruckTile(
                           truckInfo: topVehicleObj,
                           allowedActions: [
@@ -86,7 +86,7 @@ class HomeTopTruck extends GetView<HomeController> {
                                 if (onValue != null) {
                                   await controller.getTruckList();
                                   await controller.getUserFavList();
-                                  controller.arrTrucks.refresh();
+                                  controller.arrTruck.refresh();
                                 }
                               },
                             );

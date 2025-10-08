@@ -1,15 +1,13 @@
 import '/dist/component_exports.dart';
-import 'package:get/get.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-
-import '/routes/app_route.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_inputfield/input_formatters/aadhar_number_formatter.dart';
 import '/component/bohiba_inputfield/input_formatters/dl_formatter.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/controllers/user_profile_config_controller.dart';
 import '/theme/bohiba_theme.dart';
+import 'package:get/get.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 
 class UserDocAuthPage extends GetView<UserProfileConfigController> {
   const UserDocAuthPage({super.key});
@@ -21,6 +19,7 @@ class UserDocAuthPage extends GetView<UserProfileConfigController> {
     role = argument['role_id'];
 
     bool isTruckOwner = role == 6;
+    final navigateState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(
         title: '',
@@ -53,41 +52,38 @@ class UserDocAuthPage extends GetView<UserProfileConfigController> {
                     ),
                     TextInputField(
                       hintText: 'Aadhar Number',
-                      maxLength: 19,
+                      maxLength: 15,
                       inputFormatters: [
                         AadhaarNumberFormatter(),
                       ],
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.number,
                       nextActionType: TextInputAction.next,
                     ),
                     TextInputField(
                       hintText: 'PAN Number',
-                      maxLength: 19,
+                      maxLength: 10,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.characters,
                     ),
-                    isTruckOwner
-                        ? Container()
-                        : TextInputField(
-                            hintText: 'DL Number',
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[a-zA-Z0-9]'),
-                              ),
-                              DrivingLicenseInputFormatter(),
-                            ],
-                            textCapitalization: TextCapitalization.characters,
+                    if (isTruckOwner)
+                      Container()
+                    else
+                      TextInputField(
+                        hintText: 'DL Number',
+                        maxLength: 15,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-zA-Z0-9]'),
                           ),
+                          DrivingLicenseInputFormatter(),
+                        ],
+                        textCapitalization: TextCapitalization.characters,
+                      ),
                   ],
                 ),
               ),
               PrimaryButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.navBar,
-                      (val) {
-                    return false;
-                  });
-                },
+                onPressed: () {},
                 label: 'Verify',
               )
             ],

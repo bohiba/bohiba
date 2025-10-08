@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TripAddReassignController extends GetxController {
-  DateTime assignDate = DateTime.now();
+  DateTime? assignDate;
 
   final TripController tripController = Get.find<TripController>();
   TextEditingController dateController = TextEditingController();

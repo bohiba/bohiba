@@ -29,120 +29,128 @@ class AddTripPage extends GetView<TripAddController> {
         body: Obx(() {
           return SafeArea(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                top: ScreenUtils.height20,
-                left: ScreenUtils.height15,
-                right: ScreenUtils.height15,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      DateInputField(
-                        width: ScreenUtils.width * 0.45,
-                        hintText: 'Start Date',
-                        controller: controller.startAtController,
-                        onTap: () async {
-                          DateTime pickedDate =
-                              await GlobalService.datePickerModal(
-                                  context: context);
-                          controller.startAtController.text =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
-                        },
-                      ),
-                      DateInputField(
-                        width: ScreenUtils.width * 0.45,
-                        hintText: 'Ended Date',
-                        controller: controller.endedAtController,
-                        onTap: () async {
-                          DateTime pickedDate =
-                              await GlobalService.datePickerModal(
-                                  context: context);
-                          controller.endedAtController.text =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
-                        },
-                      ),
-                    ],
-                  ),
-                  AppDropdown(
-                    hint: 'Select Truck',
-                    items: controller.arrTruck.value,
-                    labelBuilder: (truck) => truck.regdNumber!,
-                    menuController: controller.truckController,
-                    onChanged: (t1) {
-                      controller.truckModel.value = t1!;
-                    },
-                  ),
-                  Text('Origin'),
-                  TextInputField(
-                    hintText: 'Company Name',
-                    controller: controller.originController,
-                    textCapitalization: TextCapitalization.characters,
-                    nextActionType: TextInputAction.next,
-                  ),
-                  Text('Destination'),
-                  TextInputField(
-                    hintText: 'Company Name',
-                    controller: controller.destinationController,
-                    textCapitalization: TextCapitalization.characters,
-                    nextActionType: TextInputAction.next,
-                  ),
-                  PrimaryDropDownMenu(
-                    width: ScreenUtils.width,
-                    hint: 'Material Type',
-                    items: controller.ironOreTypes,
-                    menuController: controller.materialController,
-                  ),
-                  PrimaryDropDownMenu(
-                    width: ScreenUtils.width,
-                    hint: 'Trip Status',
-                    items: controller.tripStatus,
-                    enableSearch: false,
-                    menuController: controller.statusController,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Total Weight'),
-                          TextInputField(
-                            width: ScreenUtils.width * 0.44,
-                            hintText: 'in Tonne',
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
-                            nextActionType: TextInputAction.next,
-                            controller: controller.totalWeightController,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Short Weight'),
-                          TextInputField(
-                            width: ScreenUtils.width * 0.44,
-                            hintText: 'in Tonne',
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
-                            nextActionType: TextInputAction.next,
-                            controller: controller.shortWeightController,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Text('Trip Price'),
-                  TextInputField(
-                    hintText: 'Rate/Tonne',
-                    keyboardType: TextInputType.number,
-                    nextActionType: TextInputAction.next,
-                    controller: controller.rateController,
-                  ),
-                ],
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: ScreenUtils.height15,
+                  right: ScreenUtils.height15,
+                  top: ScreenUtils.height10,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        DateInputField(
+                          width: ScreenUtils.width * 0.45,
+                          hintText: 'Start Date',
+                          controller: controller.startAtController,
+                          onTap: () async {
+                            DateTime? pickedDate =
+                                await GlobalService.datePickerModal(
+                                    context: context);
+
+                            if (pickedDate != null) {
+                              controller.startAtController.text =
+                                  DateFormat('dd-MM-yyyy').format(pickedDate);
+                            }
+                          },
+                        ),
+                        DateInputField(
+                          width: ScreenUtils.width * 0.45,
+                          hintText: 'Ended Date',
+                          controller: controller.endedAtController,
+                          onTap: () async {
+                            DateTime? pickedDate =
+                                await GlobalService.datePickerModal(
+                              context: context,
+                            );
+                            if (pickedDate != null) {
+                              controller.endedAtController.text =
+                                  DateFormat('dd-MM-yyyy').format(pickedDate);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    AppDropdown(
+                      hint: 'Select Truck',
+                      items: controller.arrTruck.value,
+                      labelBuilder: (truck) => truck.regdNumber!,
+                      menuController: controller.truckController,
+                      onChanged: (t1) {
+                        controller.truckModel.value = t1!;
+                      },
+                    ),
+                    Text('Origin'),
+                    TextInputField(
+                      hintText: 'Company Name',
+                      controller: controller.originController,
+                      textCapitalization: TextCapitalization.characters,
+                      nextActionType: TextInputAction.next,
+                    ),
+                    Text('Destination'),
+                    TextInputField(
+                      hintText: 'Company Name',
+                      controller: controller.destinationController,
+                      textCapitalization: TextCapitalization.characters,
+                      nextActionType: TextInputAction.next,
+                    ),
+                    PrimaryDropDownMenu(
+                      width: ScreenUtils.width,
+                      hint: 'Material Type',
+                      items: controller.ironOreTypes,
+                      menuController: controller.materialController,
+                    ),
+                    PrimaryDropDownMenu(
+                      width: ScreenUtils.width,
+                      hint: 'Trip Status',
+                      items: controller.tripStatus,
+                      enableSearch: false,
+                      menuController: controller.statusController,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Total Weight'),
+                            TextInputField(
+                              width: ScreenUtils.width * 0.44,
+                              hintText: 'in Tonne',
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              nextActionType: TextInputAction.next,
+                              controller: controller.totalWeightController,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Short Weight'),
+                            TextInputField(
+                              width: ScreenUtils.width * 0.44,
+                              hintText: 'in Tonne',
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              nextActionType: TextInputAction.next,
+                              controller: controller.shortWeightController,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Text('Trip Price'),
+                    TextInputField(
+                      hintText: 'Rate/Tonne',
+                      keyboardType: TextInputType.number,
+                      nextActionType: TextInputAction.next,
+                      controller: controller.rateController,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

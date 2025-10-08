@@ -1,13 +1,12 @@
-import 'package:bohiba/component/bohiba_appbar/appbar_icon.dart';
-
 import '/controllers/security_controller.dart';
 import 'package:get/get.dart';
-
+import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/screen_utils.dart';
 import '/pages/widget/icon_text_tile.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
+import '/routes/app_route.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -153,7 +152,12 @@ class SecurityPage extends GetView<SecurityController> {
                               ),
                               Divider(),
                               InkWell(
-                                onTap: () async => await controller.logOut(),
+                                onTap: () async {
+                                  int loggedOut = await controller.logOut();
+                                  if (loggedOut > 0) {
+                                    Get.offAllNamed(AppRoute.signIn);
+                                  }
+                                },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: ScreenUtils.height5),

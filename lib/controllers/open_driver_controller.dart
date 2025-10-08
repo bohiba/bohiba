@@ -1,4 +1,4 @@
-import 'package:bohiba/model/open_driver_model.dart';
+import '/model/open_driver_model.dart';
 import 'package:get/get.dart';
 
 class OpenDriverController extends GetxController {

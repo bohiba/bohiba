@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee_text/marquee_text.dart';
@@ -11,7 +10,7 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLeading;
   const TitleAppbar({
     super.key,
-    this.title = "Title",
+    this.title = "",
     this.actions,
     this.popResult = false,
     this.showLeading = true,
@@ -23,21 +22,19 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         titleSpacing: showLeading ? 0 : null,
-        title: SizedBox(
-          width: ScreenUtils.width * 0.45,
-          child: AutoSizeText(
-            title,
-            maxLines: 1,
+        leadingWidth: showLeading ? null : 0,
+        title: AutoSizeText(
+          title,
+          maxLines: 1,
+          style: bohibaTheme.appBarTheme.titleTextStyle,
+          overflowReplacement: MarqueeText(
+            speed: 10,
+            alwaysScroll: true,
             style: bohibaTheme.appBarTheme.titleTextStyle,
-            overflowReplacement: MarqueeText(
-              speed: 10,
-              alwaysScroll: true,
-              style: bohibaTheme.appBarTheme.titleTextStyle,
-              text: TextSpan(
-                text: title,
-              ),
+            text: TextSpan(
+              text: title,
             ),
           ),
         ),
@@ -48,7 +45,7 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
                   navigate.pop(popResult);
                 },
               )
-            : null,
+            : SizedBox.shrink(),
         actions: actions,
       ),
     );

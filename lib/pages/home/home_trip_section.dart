@@ -11,58 +11,59 @@ class HomeTripSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: controller.arrOngoingTrip.isNotEmpty,
-      child: Column(
-        children: [
-          // Home WishList Header
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
-            child: Row(
-              children: [
-                Text(
-                  "Ongoing Trips",
-                  style: bohibaTheme.textTheme.headlineLarge,
-                ),
-                const Spacer(),
-                InkWell(
-                  borderRadius: BorderRadius.circular(ScreenUtils.width5),
-                  onTap: () {},
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtils.height5,
-                    ),
-                    child: Text(
-                      "See All",
-                      style: TextStyle(
-                        fontSize:
-                            bohibaTheme.textTheme.headlineMedium!.fontSize,
-                        color: bohibaTheme.primaryColor,
+    return Obx(() {
+      return Visibility(
+        visible: controller.arrTrip.isNotEmpty,
+        child: Column(
+          children: [
+            // Home WishList Header
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+              child: Row(
+                children: [
+                  Text(
+                    "Ongoing Trips",
+                    style: bohibaTheme.textTheme.headlineLarge,
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(ScreenUtils.width5),
+                    onTap: () {},
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtils.height5,
+                      ),
+                      child: Text(
+                        "See All",
+                        style: TextStyle(
+                          fontSize:
+                              bohibaTheme.textTheme.headlineMedium!.fontSize,
+                          color: bohibaTheme.primaryColor,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          // Home WishList Section
-          Container(
-            padding: EdgeInsets.only(bottom: ScreenUtils.height25),
-            alignment: Alignment.center,
-            child: Obx(() {
-              return ListView.builder(
+            // Home WishList Section
+            Container(
+              padding: EdgeInsets.only(bottom: ScreenUtils.height25),
+              alignment: Alignment.center,
+              child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtils.height15),
                 shrinkWrap: true,
-                itemCount: controller.arrOngoingTrip.length,
+                itemCount: 1,
                 itemBuilder: (context, index) {
-                  return TripTile(tripInfo: controller.arrOngoingTrip[index]);
+                  return TripTile(tripInfo: controller.arrTrip[index]);
                 },
-              );
-            }),
-          ),
-        ],
-      ),
-    );
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

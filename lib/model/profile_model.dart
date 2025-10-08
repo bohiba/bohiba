@@ -28,16 +28,19 @@ class ProfileModel extends HiveObject {
   String? jobStatus;
 
   @HiveField(7)
-  VerificationModel? verification;
+  String? profileImg;
 
   @HiveField(8)
-  int? trucks;
+  VerificationModel? verification;
 
   @HiveField(9)
+  int? trucks;
+
+  @HiveField(10)
   int? drivers;
 
   /// Only for Driver role (roleId == 8)
-  @HiveField(10)
+  @HiveField(11)
   List<RatingModel>? ratings;
 
   ProfileModel({
@@ -48,6 +51,7 @@ class ProfileModel extends HiveObject {
     this.dob,
     this.roleId,
     this.jobStatus,
+    this.profileImg,
     this.verification,
     this.trucks,
     this.drivers,
@@ -63,6 +67,7 @@ class ProfileModel extends HiveObject {
       dob: json['dob'],
       roleId: json['role_id'],
       jobStatus: json['job_status'],
+      profileImg: json['profile_image'],
       verification: json['verification'] == null
           ? null
           : VerificationModel.fromJson(json['verification']),

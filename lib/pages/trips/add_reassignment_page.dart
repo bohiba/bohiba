@@ -35,8 +35,11 @@ class AddReassignementPage extends GetView<TripAddReassignController> {
                 onTap: () async {
                   controller.assignDate =
                       await GlobalService.datePickerModal(context: context);
-                  controller.dateController.text =
-                      DateFormat('dd-MM-yyyy').format(controller.assignDate);
+
+                  if (controller.assignDate != null) {
+                    controller.dateController.text =
+                        DateFormat('dd-MM-yyyy').format(controller.assignDate!);
+                  }
                 },
                 controller: controller.dateController,
                 hintText: 'Payment Date',

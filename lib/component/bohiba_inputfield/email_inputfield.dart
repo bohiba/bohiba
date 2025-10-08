@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
@@ -25,15 +27,12 @@ class EmailInputField extends StatelessWidget {
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter email';
+            return 'Please enter your email';
+          } else if (!value.isEmail) {
+            return 'Enter valid email address';
+          } else {
+            return null;
           }
-          final emailRegex = RegExp(
-            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-          );
-          if (!emailRegex.hasMatch(value.trim())) {
-            return 'Enter a valid email address';
-          }
-          return null;
         },
         cursorColor: BohibaColors.primaryColor,
         decoration: InputDecoration(

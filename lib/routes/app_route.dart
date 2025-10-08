@@ -1,6 +1,14 @@
-import 'package:bohiba/bindings/all_sent_connection_binding.dart';
-import 'package:bohiba/pages/driver/all_sent_request_page.dart';
-import 'package:bohiba/pages/expenses/add_owner_expenses_screen.dart';
+import '/bindings/address_auth_binding.dart';
+import '/bindings/create_user_binding.dart';
+import '/bindings/set_role_binding.dart';
+
+import '/bindings/all_sent_connection_binding.dart';
+import '/bindings/forgot_password_binding.dart';
+import '/bindings/otp_binding.dart';
+
+import '/pages/authentication/password_screen/forgot_uuid_page.dart';
+import '/pages/driver/all_sent_request_page.dart';
+import '/pages/expenses/add_owner_expenses_screen.dart';
 
 import '/bindings/analytic_binding.dart';
 import '/pages/analytic/analytic_page.dart';
@@ -69,7 +77,7 @@ import '/bindings/user_profile_congif_binding.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
 import '/pages/mines/all_mines_page.dart';
 import '/pages/truck/truck_edit_page.dart';
-import '../pages/user/user_profile/user_profile_screen/user_profile_page.dart';
+import '/pages/user/user_profile/user_profile_screen/user_profile_page.dart';
 import '/pages/user/user_kyc/kyc_screen.dart';
 import '/pages/user/user_profile/edit_user_profile_screen.dart';
 import 'package:get/get.dart';
@@ -116,6 +124,7 @@ class AppRoute {
   static const String otpScreen = "/otp";
   static const String setPwd = "/set-pwd";
   static const String forgotScreen = "/forgot-password";
+  static const String forgotUuid = "/forgot-uuid";
 
   // Status-sub Screen
   static const String viewChallan = "/view-challan";
@@ -209,10 +218,7 @@ class AppRoute {
   static final List<GetPage> routes = [
     GetPage(
       name: splashScreen,
-      bindings: [
-        SplashBinding(),
-        MasterBinding(),
-      ],
+      bindings: [SplashBinding(), MasterBinding()],
       page: () => const SplashScreen(),
     ),
 
@@ -220,9 +226,7 @@ class AppRoute {
     GetPage(
       name: signIn,
       binding: AuthBinding(),
-      bindings: [
-        MasterBinding(),
-      ],
+      bindings: [MasterBinding()],
       page: () => const SignInScreen(),
     ),
 
@@ -234,26 +238,31 @@ class AppRoute {
 
     GetPage(
       name: otpScreen,
-      binding: AuthBinding(),
+      binding: OtpBinding(),
       page: () => const OtpScreen(),
     ),
 
     GetPage(
       name: createUser,
-      binding: AuthBinding(),
+      binding: CreateUserBinding(),
       page: () => const CreateUserPage(),
     ),
 
     GetPage(
       name: addOwnerExpense,
-      binding: AuthBinding(),
       page: () => const AddOwnerExpensesScreen(),
     ),
 
     GetPage(
       name: forgotScreen,
-      binding: AuthBinding(),
-      page: () => const ForgotPasswordScreen(),
+      binding: ForgotPasswordBinding(),
+      page: () => const ForgotPasswordPage(),
+    ),
+
+    GetPage(
+      name: forgotUuid,
+      // binding: ForgotPasswordBinding(),
+      page: () => const ForgotUuidPage(),
     ),
 
     GetPage(
@@ -282,13 +291,13 @@ class AppRoute {
 
     GetPage(
       name: roleType,
-      binding: UserProfileConfigBinding(),
+      binding: SetRoleBinding(),
       page: () => const SetRolePage(),
     ),
 
     GetPage(
       name: userAddressAuthScreen,
-      binding: UserProfileConfigBinding(),
+      binding: AddressAuthBinding(),
       page: () => const AddressAuthPage(),
     ),
 
@@ -301,10 +310,7 @@ class AppRoute {
 
     GetPage(
       name: dashboardScreen,
-      bindings: [
-        AuthBinding(),
-        DasboardBinding(),
-      ],
+      bindings: [AuthBinding(), DasboardBinding()],
       page: () => const DashboardPage(),
     ),
 
@@ -324,11 +330,7 @@ class AppRoute {
      ||             Driver             ||
      ====================================
      */
-    GetPage(
-      name: driver,
-      binding: DriverBinding(),
-      page: () => DriverPage(),
-    ),
+    GetPage(name: driver, binding: DriverBinding(), page: () => DriverPage()),
     GetPage(
       name: allDriver,
       binding: DriverAllBinding(),
@@ -366,18 +368,9 @@ class AppRoute {
     ),
 
     // Manager
-    GetPage(
-      name: manager,
-      page: () => const ManagerPage(),
-    ),
-    GetPage(
-      name: allManager,
-      page: () => const AllManagerPage(),
-    ),
-    GetPage(
-      name: addManager,
-      page: () => const AddManagerPage(),
-    ),
+    GetPage(name: manager, page: () => const ManagerPage()),
+    GetPage(name: allManager, page: () => const AllManagerPage()),
+    GetPage(name: addManager, page: () => const AddManagerPage()),
 
     // Truck
     GetPage(
@@ -441,11 +434,7 @@ class AppRoute {
       page: () => TripPaymentPage(),
     ),
 
-    GetPage(
-      name: trips,
-      binding: TripBinding(),
-      page: () => const TripPage(),
-    ),
+    GetPage(name: trips, binding: TripBinding(), page: () => const TripPage()),
 
     GetPage(
       binding: TripAddReassignBinding(),
@@ -461,33 +450,17 @@ class AppRoute {
     ),
 
     // Mines
-    GetPage(
-      name: mines,
-      binding: MinesBinding(),
-      page: () => MinesPage(),
-    ),
-    GetPage(
-      name: viewChallan,
-      page: () => const ChallanScreen(),
-    ),
-    GetPage(
-      name: orderScreen,
-      page: () => const OrderScreen(),
-    ),
+    GetPage(name: mines, binding: MinesBinding(), page: () => MinesPage()),
+    GetPage(name: viewChallan, page: () => const ChallanScreen()),
+    GetPage(name: orderScreen, page: () => const OrderScreen()),
 
     // Wallet
     GetPage(name: walletScreen, page: () => const WalletScreen()),
     GetPage(name: walletDepositScreen, page: () => const WalletDepositScreen()),
 
     // Others
-    GetPage(
-      name: kyc,
-      page: () => KYCScreen(),
-    ),
-    GetPage(
-      name: infoScreen,
-      page: () => const InfoScreen(),
-    ),
+    GetPage(name: kyc, page: () => KYCScreen()),
+    GetPage(name: infoScreen, page: () => const InfoScreen()),
     GetPage(
       name: favList,
       binding: FavBinding(),
@@ -495,10 +468,7 @@ class AppRoute {
     ),
 
     // DASHBOARD
-    GetPage(
-      name: userProfile,
-      page: () => UserProfilePage(),
-    ),
+    GetPage(name: userProfile, page: () => UserProfilePage()),
 
     GetPage(
       name: editProfile,
@@ -515,35 +485,15 @@ class AppRoute {
       binding: SecurityBinding(),
       page: () => SecurityPage(),
     ),
-    GetPage(
-      name: shareEarn,
-      page: () => ShareEarnPage(),
-    ),
+    GetPage(name: shareEarn, page: () => ShareEarnPage()),
 
-    GetPage(
-      name: policy,
-      page: () => PolicyPage(),
-    ),
-    GetPage(
-      name: contact,
-      page: () => ContactSupportPage(),
-    ),
-    GetPage(
-      name: reportIssue,
-      page: () => ReportIssuePage(),
-    ),
+    GetPage(name: policy, page: () => PolicyPage()),
+    GetPage(name: contact, page: () => ContactSupportPage()),
+    GetPage(name: reportIssue, page: () => ReportIssuePage()),
 
-    GetPage(
-      binding: AllJobBinding(),
-      name: allJobs,
-      page: () => AllJobPage(),
-    ),
+    GetPage(binding: AllJobBinding(), name: allJobs, page: () => AllJobPage()),
 
-    GetPage(
-      binding: AddJobBinding(),
-      name: addJobs,
-      page: () => AddJobsPage(),
-    ),
+    GetPage(binding: AddJobBinding(), name: addJobs, page: () => AddJobsPage()),
 
     GetPage(
       binding: MyJobDetailBinding(),

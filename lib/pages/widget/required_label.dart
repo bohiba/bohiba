@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -13,20 +15,23 @@ class RequiredLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        text: label,
-        style: bohibaTheme.textTheme.labelLarge,
-        children: required
-            ? const [
-                TextSpan(
-                  text: ' *',
-                  style: TextStyle(
-                    color: Colors.red,
+    return Padding(
+      padding: EdgeInsets.only(top: 5.0.h),
+      child: RichText(
+        text: TextSpan(
+          text: label,
+          style: bohibaTheme.textTheme.labelLarge,
+          children: required
+              ? const [
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
                   ),
-                ),
-              ]
-            : [],
+                ]
+              : [],
+        ),
       ),
     );
   }

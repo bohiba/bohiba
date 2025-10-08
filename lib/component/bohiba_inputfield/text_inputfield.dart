@@ -1,5 +1,5 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '/component/screen_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +20,7 @@ class TextInputField extends StatelessWidget {
   final TextInputAction? nextActionType;
   final Widget? prefixIcon;
   final String? counterText;
+  final String? Function(String? inputValue)? validateField;
 
   const TextInputField({
     super.key,
@@ -38,17 +39,15 @@ class TextInputField extends StatelessWidget {
     this.nextActionType,
     this.prefixIcon,
     this.counterText,
+    this.validateField,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width ?? ScreenUtils.width,
-      height: height ?? 47,
-      margin: EdgeInsets.only(
-        top: ScreenUtils.height5,
-        bottom: ScreenUtils.height15,
-      ),
+      // height: height ?? 47,
+      padding: EdgeInsets.symmetric(vertical: 5.h),
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
@@ -66,13 +65,7 @@ class TextInputField extends StatelessWidget {
           color: bohibaTheme.textTheme.bodyLarge!.color,
           letterSpacing: 1.2,
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please Enter Details';
-          } else {
-            return null;
-          }
-        },
+        validator: validateField,
         cursorColor: bohibaTheme.primaryColor,
         cursorRadius: Radius.circular(12.0.r),
         decoration: InputDecoration(

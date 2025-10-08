@@ -285,10 +285,12 @@ class ManualModeDriverVerification extends GetView<DriverAddController> {
           width: ScreenUtils.width,
           controller: controller.dateController,
           onTap: () async {
-            DateTime pickedDate =
+            DateTime? pickedDate =
                 await GlobalService.datePickerModal(context: context);
-            controller.dateController.text =
-                DateFormat('dd-MM-yyyy').format(pickedDate);
+            if (pickedDate != null) {
+              controller.dateController.text =
+                  DateFormat('dd-MM-yyyy').format(pickedDate);
+            }
           },
           hintText: "D.O.B",
         ),

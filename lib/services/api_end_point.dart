@@ -6,8 +6,12 @@ class ApiEndPoint {
   static const String apiResendOtp = '$baseUrl/resend-otp';
   static const String apiCreateUser = '$baseUrl/create-user';
   static const String apiAddAddress = '$baseUrl/add-address';
-  static String apiSetRole = '$baseUrl/set-role';
-  static String apiEditDoc = '$baseUrl/add-document';
+  static const String apiSetProfileImage = '$baseUrl/set-profile-image';
+  static const String apiSetRole = '$baseUrl/set-role';
+  static const String apiEditDoc = '$baseUrl/add-document';
+
+  static const String apiForgotPassword = '$baseUrl/forgot-password';
+  static const String apiResetPassword = '$baseUrl/reset-password';
 
   static const String apiLogin = '$baseUrl/login';
   static const String apiLogout = '$baseUrl/logout';

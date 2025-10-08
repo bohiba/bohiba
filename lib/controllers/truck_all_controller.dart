@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/home_controller.dart';
+import '/controllers/home_controller.dart';
 
 import '/services/api_end_point.dart';
 

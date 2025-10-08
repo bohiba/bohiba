@@ -1,4 +1,6 @@
+import '/controllers/forgot_password_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '/services/global_service.dart';
 import '/component/bohiba_inputfield/password_inputfield.dart';
 import '/component/bohiba_buttons/primary_button.dart';
@@ -6,13 +8,12 @@ import '/dist/component_exports.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 
-class ResetSetPasswordPage extends StatelessWidget {
+class ResetSetPasswordPage extends GetView<ForgotPasswordController> {
   const ResetSetPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController cnfrmPwdController = TextEditingController();
-    TextEditingController pwdController = TextEditingController();
+    final navigateState = Navigator.of(context);
     return Scaffold(
       appBar: null,
       body: Container(
@@ -44,16 +45,16 @@ class ResetSetPasswordPage extends StatelessWidget {
               ),
             ),
             Form(
-              // key: signupKey,
+              key: controller.setPwdState,
               child: Column(
                 children: [
                   PasswordInputField(
                     hintText: 'Password',
-                    controller: pwdController,
+                    controller: controller.pwdController,
                   ),
                   PasswordInputField(
                     hintText: 'Confirm Password',
-                    controller: cnfrmPwdController,
+                    controller: controller.cnfrmPwdController,
                   ),
                 ],
               ),
@@ -62,9 +63,8 @@ class ResetSetPasswordPage extends StatelessWidget {
             PrimaryButton(
               label: 'Submit',
               onPressed: () {
-                if (pwdController.text != cnfrmPwdController.text) return;
                 GlobalService.closeKeyboard();
-                Navigator.of(context).popAndPushNamed(AppRoute.imageAuth);
+                navigateState.popAndPushNamed(AppRoute.imageAuth);
               },
             )
           ],
