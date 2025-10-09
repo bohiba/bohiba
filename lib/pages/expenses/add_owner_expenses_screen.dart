@@ -1,109 +1,91 @@
+
+import 'package:bohiba/component/bohiba_dropdown/app_dropdown_button.dart';
+import 'package:bohiba/component/bohiba_dropdown/primary_dropdown_menu.dart';
+import 'package:bohiba/controllers/add_owner_expense_controller.dart';
+import 'package:bohiba/services/global_service.dart';
+import 'package:intl/intl.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
-import '/controllers/auth_controller.dart';
 import '/dist/component_exports.dart';
-import '/theme/bohiba_theme.dart';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:remixicon/remixicon.dart';
 
-class AddOwnerExpensesScreen extends GetView<AuthController> {
+
+ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
   const AddOwnerExpensesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitleAppbar(title: "Add Expenses"),
-      body: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop == true) {
-            return;
-          }
-        },
+      appBar: TitleAppbar(
+        title: 'Owner Expense',
+        popResult: true,
+      ),
+      body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtils.width20,
+          padding: EdgeInsets.only(
+            top: ScreenUtils.height20,
+            left: ScreenUtils.height15,
+            right: ScreenUtils.height15,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DateInputField(
+                  width: ScreenUtils.width,
+                  onTap: () async {
+                    DateTime? expenseDate =
+                        await GlobalService.datePickerModal(context: context);
+                    if (expenseDate != null) {
+                      controller.expensedateController.text =
+                          DateFormat('dd-MM-yyyy').format(expenseDate);
+                    }
+                  },
+                  controller: controller.expensedateController,
+                  hintText: 'Expense Date',
+                ),
+                AppDropdown(
+                   items: controller.arrTruck.value,
+                      labelBuilder: (truck) => truck.regdNumber!,
+                      menuController: controller.vehicleController,
+                      onChanged: (t1) {
+                        controller.truckModel.value = t1!;
+                      },
+                  hint: 'Select Your Vehicle',
+                  
+                ),
+                PrimaryDropDownMenu(
+                  width: ScreenUtils.width,
+                  hint: 'Select Service Type',
+                  items: controller.arrServiceType,
+                  menuController: controller.serviceTypeController,
+                ),
+                Text('Amount'),
+                TextInputField(
+                  hintText: 'Amount',
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controller.amountController,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: ScreenUtils.height15,
+            right: ScreenUtils.height15,
+          ),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Add your expense details here!',
-                  style: bohibaTheme.textTheme.displayMedium,
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Monitor your spending to optimize vehicle performance and savings.',
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                    color: bohibaTheme.textTheme.titleLarge!.color,
-                  ),
-                ),
-              ),
-              Form(
-                // key: signupKey,
-                child: Column(
-                  children: [
-                    //Vehicle number input
-                    TextInputField(
-                      // controller: controller.nameController,
-                      hintText: "Vehicle Number",
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.characters,
-                      nextActionType: TextInputAction.next,
-                      prefixIcon: Icon(
-                        Remix.truck_fill,
-                      ),
-                    ),
-
-                    //Service type input
-                    TextInputField(
-                      hintText: "Service type",
-                      prefixIcon: Icon(Remix.settings_fill),
-                      maxLength: 13,
-                      keyboardType: TextInputType.text,
-                      nextActionType: TextInputAction.done,
-                      // controller: controller.mobileController,
-                    ),
-
-                    //Expense Date Input
-                    DateInputField(
-                      width: ScreenUtils.width,
-                      hintText: 'Expense Date',
-                      // controller: controller.dateController,
-                      onTap: () async {},
-                    ),
-
-                    TextInputField(
-                      hintText: "Amount",
-                      prefixIcon: Icon(Remix.money_rupee_circle_fill),
-                      maxLength: 13,
-                      keyboardType: TextInputType.text,
-                      nextActionType: TextInputAction.done,
-                      // controller: controller.mobileController,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: ScreenUtils.height10),
               PrimaryButton(
-                label: 'Submit',
-                onPressed: () async {
-                  // if (email != null) {
-                  //   await controller.registerUser(txtEmail: email);
-                  //   return;
-                  // }
-                },
-              )
+                onPressed: () async =>{},
+                label: 'Add Expense',
+              ),
             ],
           ),
         ),

@@ -1,3 +1,5 @@
+import 'package:bohiba/bindings/owner_expense_binding.dart';
+
 import '/bindings/address_auth_binding.dart';
 import '/bindings/create_user_binding.dart';
 import '/bindings/set_role_binding.dart';
@@ -250,6 +252,7 @@ class AppRoute {
 
     GetPage(
       name: addOwnerExpense,
+      binding: OwnerExpenseBinding(),
       page: () => const AddOwnerExpensesScreen(),
     ),
 

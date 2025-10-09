@@ -45,7 +45,7 @@ class AddTripExpenseController extends GetxController {
     if (Get.arguments is TripModel) {
       tripModel = Get.arguments as TripModel;
     } else {
-      tripExpense = Get.arguments as TripExpense;
+      tripExpense = Get.arguments as TripExpense?;
       editTextController();
     }
     super.onInit();
