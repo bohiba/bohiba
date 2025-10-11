@@ -18,6 +18,7 @@ class AppBarIconBox extends StatelessWidget {
         margin: EdgeInsets.only(right: ScreenUtils.width10),
         alignment: Alignment.center,
         width: ScreenUtils.width40,
+        color: Colors.transparent,
         child: icon,
       ),
     );

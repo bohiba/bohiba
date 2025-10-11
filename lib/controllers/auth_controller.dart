@@ -1,3 +1,5 @@
+import '/dist/app_enums.dart';
+import '/services/main_service.dart';
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
@@ -17,12 +19,6 @@ class AuthController extends GetxController {
   final TextEditingController idController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
 
-  @override
-  void onInit() {
-    super.onInit();
-    Future.delayed(Duration.zero, () async {});
-  }
-
   Future<int> signin({required String uuid, required String password}) async {
     GlobalService.closeKeyboard();
     if (!signInFormKey.currentState!.validate()) {
@@ -32,11 +28,13 @@ class AuthController extends GetxController {
       return 0;
     }
     int successLogin = await AuthService.signin(uuid: uuid, password: password);
+    final Map<String, dynamic>? mainInfo =
+        await MainService.mainApi(type: MethodType.api);
     if (successLogin > 0) {
       idController.clear();
       pwdController.clear();
     }
-    return successLogin;
+    return (successLogin == 1 && mainInfo != null) ? 1 : 0;
   }
 
   Future<bool> refreshToken() async {

@@ -21,11 +21,7 @@ class UserProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.only(
-        left: ScreenUtils.width15,
-        right: ScreenUtils.width15,
-        bottom: ScreenUtils.height10,
-      ),
+      padding: EdgeInsets.only(bottom: ScreenUtils.height10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -61,14 +57,14 @@ class UserProfileCard extends StatelessWidget {
                   ),
                 ],
               ),
-              /*const Spacer(),
-              GestureDetector(
+              const Spacer(),
+              /*GestureDetector(
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
                     shape: BottomModalShape(),
                     useSafeArea: true,
-                    isScrollControlled: false,
+                    isScrollControlled: true,
                     builder: (context) {
                       return SwitchAccountDialog();
                     },
@@ -82,13 +78,23 @@ class UserProfileCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   alignment: Alignment.center,
-                  child: Text(
-                    'Switch Account',
-                    style: TextStyle(
-                      color: bohibaTheme.textTheme.displayLarge!.color,
-                      fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Switch Account',
+                        style: TextStyle(
+                          color: bohibaTheme.textTheme.displayLarge!.color,
+                          fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        ),
+                      ),
+                      Gap(5.w),
+                      Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: bohibaTheme.colorScheme.tertiary,
+                      )
+                    ],
                   ),
                 ),
               ),*/

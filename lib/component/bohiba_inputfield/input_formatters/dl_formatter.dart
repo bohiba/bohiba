@@ -18,11 +18,9 @@ class DrivingLicenseInputFormatter extends TextInputFormatter {
       buffer.write(rawText[i]);
 
       // Insert hyphen at position 2, 4, and 8
-      if ((i == 1 || i == 3 || i == 7) && i != rawText.length - 1) {
+      if (i == 1 && rawText.length > 2) {
         buffer.write('-');
-        if (i < selectionIndex) {
-          usedHyphens++;
-        }
+        if (i < selectionIndex) usedHyphens++;
       }
     }
 

@@ -10,19 +10,20 @@ class PrimaryButton extends StatelessWidget {
   final double? width;
   final double? height;
   final Color? color;
-  const PrimaryButton({
-    super.key,
-    this.label = "Label",
-    this.onPressed,
-    this.width,
-    this.height,
-    this.color,
-  });
+  final EdgeInsetsGeometry? padding;
+  const PrimaryButton(
+      {super.key,
+      this.label = "Label",
+      this.onPressed,
+      this.width,
+      this.height,
+      this.color,
+      this.padding});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
+      padding: padding ?? EdgeInsets.symmetric(vertical: ScreenUtils.height5),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

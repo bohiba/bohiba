@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'user_list_model.g.dart';
 
 @HiveType(typeId: userListTypeId)
-class UserListModel {
+class LoggedInAccountModel {
   @HiveField(0)
   final String? uuid;
 
@@ -14,15 +14,22 @@ class UserListModel {
   final String? email;
 
   @HiveField(3)
-  final String? password;
+  final String? token;
 
   @HiveField(4)
   final bool? isLoggedIn;
-  UserListModel({
+  LoggedInAccountModel({
     this.uuid,
     this.name,
     this.email,
-    this.password,
+    this.token,
     this.isLoggedIn,
   });
+
+  Map<String, dynamic> toJson() => {
+        'uuid': uuid,
+        'name': name,
+        'email': email,
+        'token': token,
+      };
 }

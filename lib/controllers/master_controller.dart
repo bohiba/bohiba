@@ -23,17 +23,9 @@ class MasterController extends GetxController {
   final RxList arrPromotion = [].obs;
   final RxList<NewsModel> arrNews = <NewsModel>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-
-    Future.delayed(Duration.zero, () async {
-      await mainApi();
-    });
-  }
-
-  Future<void> mainApi() async {
-    Map<String, dynamic>? mainObj = await MainService.mainApi();
+  Future<Map<String, dynamic>?> mainApi(
+      {MethodType type = MethodType.local}) async {
+    Map<String, dynamic>? mainObj = await MainService.mainApi(type: type);
 
     if (mainObj != null) {
       if (mainObj.containsKey('trips')) {
@@ -72,6 +64,7 @@ class MasterController extends GetxController {
         arrNews.addAll(mainObj['news']);
       }
     }
+    return mainObj;
   }
 
   Future<ProfileModel?> profileApi({required MethodType methodType}) async {

@@ -10,7 +10,7 @@ class OpenDriverListController extends GetxController {
     super.onInit();
 
     Future.delayed(Duration.zero, () async {
-      arrOpenDriver.value = await OpenDriverService.getOpenDriver();
+      arrOpenDriver.value = await OpenDriverService.getAllOpenDriver();
     });
   }
 

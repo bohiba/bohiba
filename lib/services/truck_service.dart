@@ -35,14 +35,13 @@ class TruckService {
 
     switch (serviceResponse.statusCode) {
       case 201:
-        List<UserFavouriteModel> arrFav = await FavService.localFavList();
+        List<UserFavouriteModel> arrFav =
+            await FavService.retriveAllFav() ?? [];
         TruckModel truckModel =
             TruckModel.fromJson(serviceResponse.data, favList: arrFav);
-        int insertSucess = await dBService.putData<TruckModel>(
-          tblTrucks,
-          "${truckModel.id}",
-          truckModel,
-        );
+
+        int insertSucess = await addOrUpdateTruck(newTruckInfo: truckModel);
+
         ProfileModel? profile = await ProfileService.getProfile();
         if (profile != null) {
           profile.trucks = profile.trucks == null ? 1 : (profile.trucks! + 1);
@@ -63,7 +62,7 @@ class TruckService {
     }
   }
 
-  static Future<List<TruckModel>?> retriveAllTruck({
+  static Future<List<TruckModel>> retriveAllTruck({
     String? pageNo,
     bool isInitial = false,
     MethodType method = MethodType.local,
@@ -72,7 +71,7 @@ class TruckService {
       List<TruckModel> truckList = await dBService.getAllData(tblTrucks);
       return truckList;
     } else {
-      if (!await DeviceInfoService.hasInternet()) return null;
+      if (!await DeviceInfoService.hasInternet()) return [];
       GlobalService.showProgress();
 
       if (isInitial) {
@@ -97,17 +96,17 @@ class TruckService {
           int profileUpdated =
               await ProfileService.updateProfile(profile: profile!);
           GlobalService.dismissProgress();
-          if (profileUpdated <= 0) return null;
+          if (profileUpdated <= 0) return [];
           GlobalService.showAppToast(message: apiRes.message);
           return arrTruckModel;
         case 401:
           GlobalService.dismissProgress();
           GlobalService.showAppToast(message: apiRes.message);
-          return null;
+          return [];
         default:
           GlobalService.dismissProgress();
           GlobalService.showAppToast(message: 'Failed to get trucks.');
-          return null;
+          return [];
       }
     }
   }
@@ -132,7 +131,8 @@ class TruckService {
       switch (apiRes.statusCode) {
         case 200:
           Map<String, dynamic> truckObj = apiRes.data as Map<String, dynamic>;
-          List<UserFavouriteModel> arrFav = await FavService.localFavList();
+          List<UserFavouriteModel> arrFav =
+              await FavService.retriveAllFav() ?? [];
           TruckModel truckModel =
               TruckModel.fromJson(truckObj, favList: arrFav);
           int insertTruck = await dBService.putData<TruckModel>(
@@ -206,7 +206,7 @@ class TruckService {
           name: driver.profile?.name,
           mobileNumber: driver.profile?.mobileNumber,
         );
-        int update = await updateTruck(newTruckInfo: truckModel);
+        int update = await addOrUpdateTruck(newTruckInfo: truckModel);
         GlobalService.dismissProgress();
         GlobalService.showAppToast(message: apiResponse.message);
         return update;
@@ -231,7 +231,7 @@ class TruckService {
     switch (serviceResponse.statusCode) {
       case 200:
         oldTruck.driver = null;
-        int update = await updateTruck(newTruckInfo: oldTruck);
+        int update = await addOrUpdateTruck(newTruckInfo: oldTruck);
         GlobalService.dismissProgress();
         if (update > 0) {
           GlobalService.showAppToast(message: serviceResponse.message);
@@ -289,7 +289,8 @@ class TruckService {
     return await dBService.deleteData(tblTrucks, "$id");
   }
 
-  static Future<int> updateTruck({required TruckModel newTruckInfo}) async {
+  static Future<int> addOrUpdateTruck(
+      {required TruckModel newTruckInfo}) async {
     int success = await dBService.putData<TruckModel>(
         tblTrucks, '${newTruckInfo.id}', newTruckInfo);
     return success;

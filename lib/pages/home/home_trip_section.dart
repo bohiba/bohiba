@@ -1,3 +1,5 @@
+import '/routes/app_route.dart';
+
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +13,7 @@ class HomeTripSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
         visible: controller.arrTrip.isNotEmpty,
@@ -26,9 +29,10 @@ class HomeTripSection extends GetView<HomeController> {
                     style: bohibaTheme.textTheme.headlineLarge,
                   ),
                   const Spacer(),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(ScreenUtils.width5),
-                    onTap: () {},
+                  GestureDetector(
+                    onTap: () {
+                      navigatorState.pushNamed(AppRoute.allTrip);
+                    },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: ScreenUtils.height5,

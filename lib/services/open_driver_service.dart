@@ -58,7 +58,7 @@ class OpenDriverService {
     }
   }
 
-  static Future<List<OpenDriverModel>> getOpenDriver() async {
+  static Future<List<OpenDriverModel>> getAllOpenDriver() async {
     return await _dbService.getAllData<OpenDriverModel>(tblOpenDriver);
   }
 

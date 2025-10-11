@@ -1,3 +1,6 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '/dist/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
@@ -59,8 +62,21 @@ class AddressAuthPage extends GetView<AddressAuthController> {
         body: PopScope(
           canPop: controller.enableLeading.value,
           onPopInvokedWithResult: (didPop, result) {
-            if (didPop) {
+            if (didPop == true) {
               return;
+            } else {
+              GlobalService.showAlertDialog(
+                status: AlertStatus.failure,
+                title: 'Verification',
+                description:
+                    'Are your sure? You want to discontinue you verification process',
+                discardBtnTxt: 'No',
+                saveBtnTxt: 'Yes',
+                onSave: () {
+                  navigateState.pop();
+                  navigateState.pop(true);
+                },
+              );
             }
           },
           child: SafeArea(
@@ -105,7 +121,7 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                               nextActionType: TextInputAction.next,
                               validateField: (inputValue) {
                                 if (inputValue == null || inputValue.isEmpty) {
-                                  return 'Locality is required';
+                                  return 'Locality cannot be empty';
                                 } else {
                                   return null;
                                 }
@@ -116,10 +132,17 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                               controller: controller.aStreetCtrl,
                               nextActionType: TextInputAction.next,
                             ),
-                            RequiredLabel(label: 'City/Town/Village'),
+                            RequiredLabel(label: 'City/Village'),
                             TextInputField(
                               controller: controller.aCityCtrl,
                               nextActionType: TextInputAction.next,
+                              validateField: (inputValue) {
+                                if (inputValue == null || inputValue.isEmpty) {
+                                  return 'City/Village cannot be empty';
+                                } else {
+                                  return null;
+                                }
+                              },
                             ),
                             RequiredLabel(label: 'Pin Code', required: true),
                             TextInputField(
@@ -129,7 +152,9 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                               nextActionType: TextInputAction.next,
                               validateField: (inputValue) {
                                 if (inputValue == null || inputValue.isEmpty) {
-                                  return 'Pin Code is required';
+                                  return 'Pin Code cannot be empty';
+                                } else if (inputValue.length != 6) {
+                                  return 'Please enter valid PIN code';
                                 } else {
                                   return null;
                                 }
@@ -177,13 +202,11 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                     ),
                   ),
                   PrimaryButton(
+                    padding: EdgeInsets.only(bottom: 15.h),
                     onPressed: () async {
                       int success = await controller.addAddress();
                       if (success > 0) {
-                        navigateState.pushNamedAndRemoveUntil(
-                          AppRoute.imageAuth,
-                          ModalRoute.withName(AppRoute.imageAuth),
-                        );
+                        navigateState.popAndPushNamed(AppRoute.imageAuth);
                       }
                     },
                     label: "Submit",

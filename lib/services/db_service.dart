@@ -21,7 +21,7 @@ class DBService {
   static Future<void> initDB() async {
     await Hive.initFlutter();
     await register<ProfileModel>(ProfileModelAdapter());
-    await register<UserListModel>(UserListModelAdapter());
+    await register<LoggedInAccountModel>(UserListModelAdapter());
     await register<VerificationModel>(VerificationModelAdapter());
     await register<NewsModel>(NewsModelAdapter());
     await register<MinesModel>(MinesModelAdapter());
@@ -261,6 +261,7 @@ class DBService {
     await clearBox<TruckModel>(tblTrucks);
     await clearBox<UserFavouriteModel>(tblUserFav);
     await clearBox<OpenDriverModel>(tblOpenDriver);
+    await clearBox<LoggedInAccountModel>(tblLoggedInUserList);
   }
 
   /// Check if a key exists
@@ -291,7 +292,6 @@ class DBService {
       GlobalService.printHandler("Hive DB fully cleared from disk.");
 
       // Step 3: Reinitialize Hive
-      await Hive.initFlutter();
       await initDB();
 
       GlobalService.printHandler("Hive DB re-initialized with all adapters.");
@@ -307,9 +307,10 @@ final String tblMines = 'tblmines';
 final String tblTrips = 'tbltrips';
 final String tblTrucks = 'tbltruck';
 final String tblDriver = 'tbldriver';
+final String tblRating = 'tblrating';
 final String tblUserFav = 'tblUserFav';
 final String tblOpenDriver = 'tblOpenDriver';
-final String tblUserList = 'tblUserList';
+final String tblLoggedInUserList = 'tblUserList';
 
 final String profileKey = 'me';
 const int profileTypeID = 0;

@@ -8,9 +8,11 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DashboardController extends GetxController {
   RefreshController refreshProfile = RefreshController();
+  RefreshController refreshDashboard = RefreshController();
 
   Rxn<ProfileModel> profileModel = Rxn<ProfileModel>();
-  RxList<UserListModel> arrLoggedInUser = <UserListModel>[].obs;
+  RxList<LoggedInAccountModel> arrLoggedInUser = <LoggedInAccountModel>[].obs;
+  Rx<LoggedInAccountModel> selectUser = LoggedInAccountModel().obs;
 
   Map<String, dynamic> deviceInfo = {};
 
@@ -22,16 +24,31 @@ class DashboardController extends GetxController {
     });
   }
 
+  Future<void> onRefreshDashPage() async {
+    await getProfileModel();
+    deviceInfo = await DeviceInfoService.getDeviceInfo();
+    refreshDashboard.refreshCompleted();
+  }
+
   Future<void> onRefreshProfilePage() async {
     await getProfileModel();
     deviceInfo = await DeviceInfoService.getDeviceInfo();
     refreshProfile.refreshCompleted();
   }
 
+  Future<int> switchAccount() async {
+    return await ProfileService.switchAccount(user: selectUser.value);
+  }
+
   Future<void> getLoggedUserAccount() async {
-    List<UserListModel> arrList = await ProfileService.getLoggedAccount();
+    List<LoggedInAccountModel> arrList =
+        await ProfileService.getLoggedAccount();
     arrLoggedInUser.clear();
     arrLoggedInUser.addAll(arrList);
+    selectUser.value = arrLoggedInUser
+        .where((user) => (user.uuid == profileModel.value!.uuid!))
+        .toList()
+        .first;
   }
 
   Future<ProfileModel?> getProfileModel({

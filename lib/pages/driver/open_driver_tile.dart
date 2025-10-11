@@ -1,4 +1,3 @@
-import 'package:remixicon/remixicon.dart';
 import '/model/open_driver_model.dart';
 
 import '/component/bohiba_text/bohiba_marquee_text.dart';
@@ -18,9 +17,7 @@ class OpenDriverTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        
-      },
+      onTap: () {},
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
         margin: EdgeInsets.only(bottom: ScreenUtils.width5),
@@ -56,9 +53,8 @@ class OpenDriverTile extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Remix.map_pin_user_line, size: 14.w),
                     Text(
-                      " ${openDriver.district}",
+                      "${openDriver.district}",
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                         fontWeight:
@@ -80,8 +76,8 @@ class OpenDriverTile extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(),
-            Icon(Icons.arrow_forward_ios)
+            // Spacer(),
+            // Icon(Icons.arrow_forward_ios)
             // GestureDetector(
             //   onTap: openDriver.connect == null ? onPressConnect : null,
             //   child: Padding(

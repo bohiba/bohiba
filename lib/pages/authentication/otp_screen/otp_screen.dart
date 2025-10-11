@@ -2,11 +2,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
 import '/controllers/otp_controller.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
-
 import '/component/bohiba_buttons/primary_button.dart';
 import '/dist/component_exports.dart';
 
@@ -135,18 +133,14 @@ class OtpScreen extends GetView<OtpController> {
                         // case AppRoute.signIn:
                         //   navigateState.popAndPushNamed(AppRoute.signIn);
                         case AppRoute.createUser:
-                          // int succesValidate = await controller.verifyOtp();
-                          // if (succesValidate > 0) {
-                          //   navigateState.pushNamed(
-                          //     AppRoute.createUser,
-                          //     arguments: {'email': controller.email.value},
-                          //   );
-                          // }
+                          int succesValidate = await controller.verifyOtp();
+                          if (succesValidate > 0) {
+                            navigateState.pushNamed(
+                              AppRoute.createUser,
+                              arguments: {'email': controller.email.value},
+                            );
+                          }
 
-                          navigateState.pushNamed(
-                            AppRoute.createUser,
-                            arguments: {'email': controller.email.value},
-                          );
                           break;
                         case AppRoute.setPwd:
                           int succesValidate = await controller.verifyOtp();

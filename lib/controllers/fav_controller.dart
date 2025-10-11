@@ -3,14 +3,11 @@ import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/model/user_fav_model.dart';
 import '/services/fav_service.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FavController extends GetxController
     with GetSingleTickerProviderStateMixin {
   RxList<UserFavouriteModel> arrFavList = <UserFavouriteModel>[].obs;
-
-  late TabController marketTabController;
 
   final List<String> tabs = [
     'All',
@@ -29,7 +26,7 @@ class FavController extends GetxController
   }
 
   Future<void> getFavList() async {
-    arrFavList.value = await FavService.localFavList();
+    arrFavList.value = await FavService.retriveAllFav() ?? [];
   }
 
   List<dynamic> getFavListDetail({
@@ -75,11 +72,5 @@ class FavController extends GetxController
     }
 
     return result;
-  }
-
-  @override
-  void onClose() {
-    marketTabController.dispose();
-    super.onClose();
   }
 }

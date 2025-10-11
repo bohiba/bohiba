@@ -1,3 +1,7 @@
+import '/dist/app_enums.dart';
+import '/services/global_service.dart';
+import '/services/user_role_type.dart';
+
 import '/services/profile_service.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +31,12 @@ class SetRoleController extends GetxController {
   }
 
   Future<int> setRole() async {
+    if (selectedIndex.value == -1 || roleObj['role_id'] == UserRoles.guest) {
+      GlobalService.appSnackBar(
+        status: AlertStatus.info,
+        desc: 'Please select role type.',
+      );
+    }
     Map<String, dynamic> bodyObj = {
       'role_id': roleObj['role_id'],
     };

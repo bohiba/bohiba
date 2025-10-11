@@ -1,6 +1,6 @@
 import '/dist/component_exports.dart';
-import 'package:flutter/material.dart';
 import '/theme/bohiba_theme.dart';
+import 'package:flutter/material.dart';
 
 class PrimaryDropDownMenu extends StatefulWidget {
   final double? width;
@@ -19,7 +19,7 @@ class PrimaryDropDownMenu extends StatefulWidget {
   const PrimaryDropDownMenu({
     super.key,
     this.width,
-    this.height = 40,
+    this.height = 47,
     this.padding = const EdgeInsets.symmetric(vertical: 5.0),
     this.hint,
     this.items = const [],
@@ -43,10 +43,7 @@ class _PrimaryDropDownMenuState extends State<PrimaryDropDownMenu> {
     return Container(
       height: 47,
       width: widget.width ?? ScreenUtils.width,
-      margin: EdgeInsets.only(
-        top: ScreenUtils.height5,
-        bottom: ScreenUtils.height15,
-      ),
+      margin: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
       child: DropdownMenu<String?>(
         width: widget.width,
         initialSelection: widget.dropDownValue,

@@ -6,27 +6,27 @@ part of 'user_list_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserListModelAdapter extends TypeAdapter<UserListModel> {
+class UserListModelAdapter extends TypeAdapter<LoggedInAccountModel> {
   @override
   final int typeId = 28;
 
   @override
-  UserListModel read(BinaryReader reader) {
+  LoggedInAccountModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return UserListModel(
+    return LoggedInAccountModel(
       uuid: fields[0] as String?,
       name: fields[1] as String?,
       email: fields[2] as String?,
-      password: fields[3] as String?,
+      token: fields[3] as String?,
       isLoggedIn: fields[4] as bool?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, UserListModel obj) {
+  void write(BinaryWriter writer, LoggedInAccountModel obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
@@ -36,7 +36,7 @@ class UserListModelAdapter extends TypeAdapter<UserListModel> {
       ..writeByte(2)
       ..write(obj.email)
       ..writeByte(3)
-      ..write(obj.password)
+      ..write(obj.token)
       ..writeByte(4)
       ..write(obj.isLoggedIn);
   }

@@ -1,15 +1,15 @@
-import '/dist/app_enums.dart';
-import '/services/global_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:remixicon/remixicon.dart';
 import '/pages/home/home_screen.dart';
 import '/pages/trips/trip_all_page.dart';
-import '/pages/truck/truck_all_page.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
+import '/pages/explore/explore_page.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
+import '/dist/app_enums.dart';
+import '/services/global_service.dart';
 
 class BohibaNavBar extends StatefulWidget {
   const BohibaNavBar({super.key});
@@ -38,8 +38,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         const BottomNavigationBarItem(
           icon: Icon(EvaIcons.activityOutline),
           activeIcon: Icon(EvaIcons.activityOutline),
-          label: "Trucks",
-          tooltip: "Trucks",
+          label: "Trips",
+          tooltip: "Trips",
         ),
         /*const BottomNavigationBarItem(
           icon: Icon(EvaIcons.activityOutline),
@@ -56,8 +56,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         const BottomNavigationBarItem(
           icon: Icon(EvaIcons.compassOutline),
           activeIcon: Icon(EvaIcons.compass),
-          label: "Trips",
-          tooltip: "Trips",
+          label: "Explore",
+          tooltip: "Explore",
         ),
         BottomNavigationBarItem(
           icon: Icon(EvaIcons.gridOutline),
@@ -112,10 +112,10 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             const HomePage(),
             // FavouritePage(),
             // AllMinesPage(),
-            AllTruckPage(showLeading: false),
+            // AllTruckPage(showLeading: false),
             // StatusPage(moveToTab: statusScreenIndex),
             AllTripPage(showLeading: false),
-            // ExplorePage(),
+            ExplorePage(),
             const DashboardPage(),
           ],
         ),

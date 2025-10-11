@@ -89,20 +89,20 @@ class AuthService {
         return 0;
 
       case 200:
+        await _dbService.clearAllBox();
         String token = serviceResponse.data['token'];
         _dioService.setToken(token);
         await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.printHandler("App Token: $token");
-        await _dbService.clearAllBox();
         ProfileModel? loggedInUser =
             await ProfileService.getProfile(type: MethodType.api);
         if (loggedInUser != null) {
           await ProfileService.loggedInUser(
-            loggedInUser: UserListModel(
+            loggedInUser: LoggedInAccountModel(
               uuid: loggedInUser.uuid,
               name: loggedInUser.name,
               email: loggedInUser.email,
-              password: password,
+              token: token,
               isLoggedIn: true,
             ),
           );

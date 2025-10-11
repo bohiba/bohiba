@@ -22,7 +22,7 @@ class CreateUserController extends GetxController {
       return 0;
     } else if (vPwdController.text != vCnfrmController.text) {
       GlobalService.appSnackBar(
-          status: AlertStatus.info,
+          status: AlertStatus.warning,
           desc: 'Password does`nt match. Please retry again.');
       return 0;
     }

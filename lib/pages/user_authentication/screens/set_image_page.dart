@@ -1,3 +1,6 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '/services/global_service.dart';
 import '/controllers/user_profile_config_controller.dart';
 import 'package:get/get.dart';
 import '/component/image_upload_widget.dart';
@@ -17,8 +20,21 @@ class SetImagePage extends GetView<UserProfileConfigController> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
+        if (didPop == true) {
           return;
+        } else {
+          GlobalService.showAlertDialog(
+            status: AlertStatus.failure,
+            title: 'Verification',
+            description:
+                'Are your sure? You want to discontinue you verification process',
+            discardBtnTxt: 'No',
+            saveBtnTxt: 'Yes',
+            onSave: () {
+              navigateState.pop();
+              navigateState.pop(true);
+            },
+          );
         }
       },
       child: Scaffold(
@@ -46,54 +62,59 @@ class SetImagePage extends GetView<UserProfileConfigController> {
               ),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Upload your photo',
-                              style: bohibaTheme.textTheme.headlineLarge,
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Enhance your visibility with your image',
-                              style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodySmall!.fontSize,
-                                fontWeight:
-                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                color: bohibaTheme.textTheme.titleLarge!.color,
+                  Padding(
+                    padding: EdgeInsets.only(top: ScreenUtils.height15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Upload your photo',
+                                style: bohibaTheme.textTheme.headlineLarge,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          navigateState.popAndPushNamed(AppRoute.roleType);
-                        },
-                        child: Text(
-                          'Skip for now',
-                          style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.titleLarge!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
-                            color: bohibaTheme.textTheme.bodySmall!.color,
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Enhance your visibility with your image',
+                                style: TextStyle(
+                                  fontSize:
+                                      bohibaTheme.textTheme.bodySmall!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleLarge!.color,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            navigateState.popAndPushNamed(AppRoute.roleType);
+                          },
+                          child: Text(
+                            'Skip for now',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.titleLarge!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
+                              color: bohibaTheme.textTheme.bodySmall!.color,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   content,
                   Spacer(),
                   PrimaryButton(
+                    padding: EdgeInsets.only(bottom: 15.h),
                     onPressed: ((controller.uploadPrgs * 100).toInt() != 100)
                         ? null
                         : () async {
@@ -102,7 +123,7 @@ class SetImagePage extends GetView<UserProfileConfigController> {
                               navigateState.popAndPushNamed(AppRoute.roleType);
                             }
                           },
-                    label: 'Submit',
+                    label: 'Upload',
                   )
                 ],
               ),

@@ -13,7 +13,6 @@ import '/theme/bohiba_theme.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:remixicon/remixicon.dart';
 
 /// ------------------- Initial Upload State -------------------
 class InitialImageUploadWidget<T extends ImageUploadController>
@@ -209,85 +208,57 @@ class OnFetchingImageSuccessWidget<T extends ImageUploadController>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      margin: EdgeInsets.symmetric(vertical: ScreenUtils.height30),
-      constraints: BoxConstraints(
-        minHeight: ScreenUtils.height * 0.35,
-      ),
-      decoration: ShapeDecoration(
-        image: controller.selectedImg.value == null
-            ? null
-            : DecorationImage(
-                image: FileImage(
-                  File.fromUri(
-                    Uri.file(controller.selectedImg.value!.path),
-                  ),
-                ),
-                fit: BoxFit.cover,
-              ),
-        shape: DashedBorder(
-          radius: 12.0,
-          width: 1.5,
-          color: bohibaTheme.dividerColor,
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-      ),
-      // alignment: Alignment.center,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r),
-          color: bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.5),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundColor: BohibaColors.successColor,
-              child: Icon(
-                Remix.checkbox_circle_fill,
-                color: BohibaColors.white,
-              ),
-            ),
-            Gap(ScreenUtils.height10),
-            Text(
-              'Upload Complete',
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                color: BohibaColors.successColor,
-              ),
-            ),
-            Gap(ScreenUtils.height25),
-            GestureDetector(
-                onTap: () {
-                  controller.deleteImageFile(controller.selectedImg.value!);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      EvaIcons.trash2Outline,
-                      color: bohibaTheme.colorScheme.error,
-                    ),
-                    Gap(10.w),
-                    Text(
-                      'Clear Upload',
-                      style: TextStyle(
-                        fontSize:
-                            bohibaTheme.textTheme.headlineMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.labelMedium!.fontWeight,
-                        color: bohibaTheme.colorScheme.error,
+    return Column(
+      children: [
+        Container(
+          width: double.maxFinite,
+          margin: EdgeInsets.symmetric(vertical: ScreenUtils.height30),
+          constraints: BoxConstraints(
+            minHeight: ScreenUtils.height * 0.35,
+          ),
+          decoration: ShapeDecoration(
+            image: controller.selectedImg.value == null
+                ? null
+                : DecorationImage(
+                    image: FileImage(
+                      File.fromUri(
+                        Uri.file(controller.selectedImg.value!.path),
                       ),
                     ),
-                  ],
-                ))
-          ],
+                    fit: BoxFit.cover,
+                  ),
+            shape: DashedBorder(
+              radius: 12.0,
+              width: 1.5,
+              color: bohibaTheme.dividerColor,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+          ),
         ),
-      ),
+        GestureDetector(
+          onTap: () {
+            controller.deleteImageFile(controller.selectedImg.value!);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                EvaIcons.trash2Outline,
+                color: bohibaTheme.colorScheme.error,
+              ),
+              Gap(10.w),
+              Text(
+                'Discard Upload',
+                style: TextStyle(
+                  fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                  fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                  color: bohibaTheme.colorScheme.error,
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

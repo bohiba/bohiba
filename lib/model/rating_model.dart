@@ -53,6 +53,13 @@ class RatingModel extends HiveObject {
         'feedback': feedback,
         'created_at': createdAt,
       };
+
+  static List<RatingModel> listFromJson(List<dynamic> jsonList) {
+    return jsonList.map((json) {
+      final map = json as Map<String, dynamic>;
+      return RatingModel.fromJson(map);
+    }).toList();
+  }
 }
 
 @HiveType(typeId: reviewerTypeID)

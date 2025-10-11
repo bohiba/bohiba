@@ -38,12 +38,13 @@ class HomeController extends GetxController {
   }
 
   Future<void> onRefreshPage() async {
-    await getTruckList();
+    // await getTruckList();
     // await _getOngoingTripList();
-    await _getNewsList();
-    await _getMinesList();
-    await getDriverList();
-    await getUserFavList();
+    // await _getNewsList();
+    // await _getMinesList();
+    // await getDriverList();
+    // await getUserFavList();
+    await mainApi();
     refreshController.refreshCompleted();
   }
 
@@ -105,7 +106,7 @@ class HomeController extends GetxController {
     arrOngoingTrip.clear();
     arrOngoingTrip.addAll(filterTrips);
     return allTripList;
-  }*/
+  }
 
   Future<List<MinesModel>> _getMinesList() async {
     List<MinesModel> minesList =
@@ -121,35 +122,42 @@ class HomeController extends GetxController {
     arrNews.addAll(newsList);
     return newsList;
   }
-
+*/
   Future<void> mainApi() async {
     Map<String, dynamic>? mainObj = await MainService.mainApi();
     if (mainObj != null) {
       if (mainObj.containsKey('trips')) {
+        arrTrip.clear();
         arrTrip.addAll(mainObj['trips']);
       }
 
       if (mainObj.containsKey('trucks')) {
+        arrTruck.clear();
         arrTruck.addAll(mainObj['trucks']);
       }
 
       if (mainObj.containsKey('drivers')) {
+        arrDriver.clear();
         arrDriver.addAll(mainObj['drivers']);
       }
 
       if (mainObj.containsKey('mines')) {
+        arrMines.clear();
         arrMines.addAll(mainObj['mines']);
       }
 
       if (mainObj.containsKey('owner_expense')) {
+        arrOwnerExpense.clear();
         arrOwnerExpense.addAll(mainObj['owner_expense']);
       }
 
       if (mainObj.containsKey('looking_jobs')) {
+        arrLookingJob.clear();
         arrLookingJob.addAll(mainObj['looking_jobs']);
       }
 
       if (mainObj.containsKey('favList')) {
+        arrFavList.clear();
         arrFavList.value = List.from(
           _getFavListDetail(
             favList: mainObj['favList'],
@@ -161,10 +169,12 @@ class HomeController extends GetxController {
       }
 
       if (mainObj.containsKey('promotion')) {
+        arrPromotion.clear();
         arrPromotion.addAll(mainObj['promotion']);
       }
 
       if (mainObj.containsKey('news')) {
+        arrNews.clear();
         arrNews.addAll(mainObj['news']);
       }
     }

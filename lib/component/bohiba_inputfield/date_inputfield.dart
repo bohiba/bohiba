@@ -59,7 +59,7 @@ class _DateInputFieldState extends State<DateInputField> {
           focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
           focusedErrorBorder:
               bohibaTheme.inputDecorationTheme.focusedErrorBorder,
-          errorBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
+          errorBorder: bohibaTheme.inputDecorationTheme.focusedErrorBorder,
         ),
       ),
     );

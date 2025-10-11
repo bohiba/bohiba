@@ -1,15 +1,12 @@
 import '/dist/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
-import '/services/device_info_service.dart';
-
-import '/services/trip_service.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/services/db_service.dart';
+import '/services/trip_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class AllTripController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -34,13 +31,10 @@ class AllTripController extends GetxController
   ];
 
   List<String> get statuses => convertToSnakeCase(tabs);
-  bool hasInternet = false;
-
   RxBool isLoading = false.obs;
   RxBool hasMore = true.obs;
-  int page = 1;
 
-  final int pageSize = 10;
+  int currentPage = 1;
 
   @override
   void onInit() {
@@ -72,43 +66,33 @@ class AllTripController extends GetxController
   }
 
   Future<void> fetchTrips({bool refresh = false}) async {
-    if (isLoading.value) {
-      return;
-    }
-
-    if (!hasMore.value) {
-      return;
-    }
+    if (isLoading.isTrue) return;
+    if (!hasMore.value && !refresh) return;
 
     if (refresh == true) {
-      page = 1;
+      currentPage = 1;
       hasMore.value = true;
       arrTrip.clear();
     }
 
     try {
-      isLoading.value = true;
-      MethodType methodType;
-      if (page == 1) {
-        methodType = MethodType.local;
-      } else if (page == 2) {
-        hasMore.value = true;
-        hasInternet = await DeviceInfoService.hasInternet();
-        if (hasInternet) {
-          methodType = MethodType.api;
-        } else {
-          methodType = MethodType.local;
-          arrTrip.clear();
-        }
-      } else {
-        methodType = MethodType.api;
+      if (currentPage == 1) {
+        hasMore.value = false;
+        arrTrip.clear();
+        List<TripModel> localTrips =
+            await TripService.getAllTrip(methodType: MethodType.local);
+        arrTrip.assignAll(localTrips);
+        arrTrip.sort((a, b) =>
+            b.startDate!.toDateTime().compareTo(a.startDate!.toDateTime()));
+        isLoading.value = false;
+        currentPage++;
+        return;
       }
-
-      final List<TripModel> newTrips = await TripService.getAllTrip(
-        methodType: methodType,
+      isLoading.value = true;
+      List<TripModel> newTrips = await TripService.getAllTrip(
+        methodType: MethodType.api,
         reset: refresh,
       );
-
       if (newTrips.isNotEmpty) {
         for (TripModel trip in newTrips) {
           if (!arrTrip.any((t) => t.id == trip.id)) {
@@ -117,7 +101,8 @@ class AllTripController extends GetxController
         }
         arrTrip.sort((a, b) =>
             (b.startDate!.toDateTime()).compareTo((a.startDate!.toDateTime())));
-        page++;
+        currentPage++;
+        return;
       } else {
         hasMore.value = false;
       }

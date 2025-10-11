@@ -23,7 +23,8 @@ class DriverService {
     ApiResponse response = await dioService.post(ApiEndPoint.apiAddDriver);
     switch (response.statusCode) {
       case 201:
-        List<UserFavouriteModel> arrFav = await FavService.localFavList();
+        List<UserFavouriteModel> arrFav =
+            await FavService.retriveAllFav() ?? [];
         DriverModel driver =
             DriverModel.fromJson(response.data, favList: arrFav);
         int dBSuccess = await dBService.putData<DriverModel>(

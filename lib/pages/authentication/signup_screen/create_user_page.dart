@@ -1,3 +1,6 @@
+import '/dist/app_enums.dart';
+import '/extensions/bohiba_extension.dart';
+
 import '/controllers/create_user_controller.dart';
 import '/routes/app_route.dart';
 
@@ -33,6 +36,19 @@ class CreateUserPage extends GetView<CreateUserController> {
         onPopInvokedWithResult: (didPop, result) {
           if (didPop == true) {
             return;
+          } else {
+            GlobalService.showAlertDialog(
+              status: AlertStatus.failure,
+              title: 'Verification',
+              description:
+                  'Are your sure? You want to discontinue you verification process',
+              discardBtnTxt: 'No',
+              saveBtnTxt: 'Yes',
+              onSave: () {
+                navigateState.pop();
+                navigateState.pop(true);
+              },
+            );
           }
         },
         child: Padding(
@@ -84,15 +100,17 @@ class CreateUserPage extends GetView<CreateUserController> {
                     TextInputField(
                       hintText: "Mobile Numnber",
                       prefixIcon: Icon(Remix.phone_fill),
-                      maxLength: 13,
+                      maxLength: 14,
                       keyboardType: TextInputType.phone,
                       nextActionType: TextInputAction.done,
                       controller: controller.mobileController,
                       validateField: (inputValue) {
                         if (inputValue == null || inputValue.isEmpty) {
                           return 'Please enter your mobile number';
-                        } else if (!(inputValue.isPhoneNumber)) {
+                        } else if (!inputValue.isValidPhone) {
                           return 'Please enter valid mobile number';
+                        } else if (inputValue.length != 10) {
+                          return 'Invalid length of mobile number';
                         } else {
                           return null;
                         }
@@ -150,9 +168,8 @@ class CreateUserPage extends GetView<CreateUserController> {
                 label: 'Submit',
                 onPressed: () async {
                   if (email != null) {
-                    // int registered =
-                    //     await controller.registerUser(txtEmail: email);
-                    int registered = 1;
+                    int registered =
+                        await controller.registerUser(txtEmail: email);
                     if (registered > 0) {
                       navigateState.popAndPushNamed(
                         AppRoute.userAddressAuthScreen,

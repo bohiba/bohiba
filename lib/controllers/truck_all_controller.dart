@@ -1,5 +1,5 @@
-import '/controllers/home_controller.dart';
-
+import '/services/profile_service.dart';
+import '/services/truck_service.dart';
 import '/services/api_end_point.dart';
 
 import '/dist/app_enums.dart';
@@ -14,8 +14,8 @@ import 'package:get/get.dart';
 import '/services/global_service.dart';
 
 class TruckAllController extends GetxController {
-  final MasterController masterController = Get.find<MasterController>();
-  final HomeController homeController = Get.find<HomeController>();
+  // final MasterController masterController = Get.find<MasterController>();
+  // final HomeController homeController = Get.find<HomeController>();
   DioService dioService = DioService();
   DBService dBService = DBService();
   final TextEditingController vehicleNumberController = TextEditingController();
@@ -26,9 +26,15 @@ class TruckAllController extends GetxController {
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;
 
   RxBool isFav = false.obs;
+  bool showLeading = true;
 
   @override
   void onInit() {
+    Map? routeInfo = Get.arguments;
+    if (routeInfo != null) {
+      showLeading = routeInfo['showLeading'];
+    }
+
     super.onInit();
     Future.delayed(Duration.zero, () async {
       await getTruckList();
@@ -45,7 +51,7 @@ class TruckAllController extends GetxController {
     GlobalService.dismissProgress();
     switch (serviceResponse.statusCode) {
       case 200:
-        await masterController.profileApi(methodType: MethodType.local);
+        await ProfileService.getProfile(type: MethodType.local);
         int dBSuccess =
             await dBService.deleteData<TruckModel>(tblTrucks, '$truckId');
         if (dBSuccess > 0) {
@@ -61,14 +67,16 @@ class TruckAllController extends GetxController {
   }
 
   Future<List<TruckModel>> getTruckList() async {
+    List<TruckModel> truckList = await TruckService.retriveAllTruck();
     arrTruck.clear();
-    List<TruckModel> truckList = await dBService.getAllData(tblTrucks);
     arrTruck.addAll(truckList);
     return truckList;
   }
 
   Future<void> createVehicle({required String vehicleNumber}) async {
-    if (!await DeviceInfoService.hasInternet()) {
+    TruckModel? model =
+        await TruckService.createTruck(vehicleNumber: vehicleNumber);
+    /*if (!await DeviceInfoService.hasInternet()) {
       return;
     }
     GlobalService.showProgress();
@@ -93,7 +101,7 @@ class TruckAllController extends GetxController {
           Get.back(result: true);
         }
       default:
-    }
+    }*/
   }
 
   bool notifyFavouriteListner({bool markedFav = false}) {

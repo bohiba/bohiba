@@ -15,7 +15,7 @@ class AllSentRequestPage extends GetView<AllSentRequestController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitleAppbar(title: 'Sent Connection'),
+      appBar: TitleAppbar(title: 'Sent Request'),
       body: Obx(() {
         if (controller.arrSentReq.isEmpty) {
           return SizedBox(

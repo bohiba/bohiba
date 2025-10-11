@@ -4,9 +4,6 @@ import 'package:get/get.dart';
 class UserProfileConfigBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<UserProfileConfigController>(
-      UserProfileConfigController(),
-      permanent: true,
-    );
+    Get.put<UserProfileConfigController>(UserProfileConfigController());
   }
 }

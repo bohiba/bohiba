@@ -17,9 +17,7 @@ class AllLocationModal extends StatelessWidget {
       return SafeArea(
         child: Container(
           width: ScreenUtils.width,
-          padding: EdgeInsets.only(
-              // bottom: MediaQuery.paddingOf(context).bottom,
-              ),
+          padding: EdgeInsets.only(bottom: 15.h),
           decoration: BoxDecoration(
             color: bohibaTheme.scaffoldBackgroundColor,
             borderRadius: BorderRadius.only(

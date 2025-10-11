@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee_text/marquee_text.dart';
@@ -46,6 +47,7 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
                 },
               )
             : SizedBox.shrink(),
+        actionsPadding: EdgeInsets.only(right: ScreenUtils.width15),
         actions: actions,
       ),
     );

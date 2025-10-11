@@ -14,6 +14,7 @@ class HomeTopTruck extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
         visible: controller.arrTruck.isNotEmpty,
@@ -30,9 +31,10 @@ class HomeTopTruck extends GetView<HomeController> {
                     style: bohibaTheme.textTheme.headlineLarge,
                   ),
                   const Spacer(),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(ScreenUtils.width5),
-                    onTap: () {},
+                  GestureDetector(
+                    onTap: () {
+                      navigatorState.pushNamed(AppRoute.allTruck);
+                    },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: ScreenUtils.height5,

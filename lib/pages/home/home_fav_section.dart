@@ -2,7 +2,6 @@ import '/pages/mines/mines_tile.dart';
 import '/pages/truck/truck_tile.dart';
 
 import '/controllers/home_controller.dart';
-import '/controllers/truck_all_controller.dart';
 import '/dist/app_enums.dart';
 import '/model/driver_model.dart';
 import '/model/trip_model.dart';
@@ -21,6 +20,7 @@ class HomeFavListSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
         visible: controller.arrFavList.isNotEmpty,
@@ -38,9 +38,8 @@ class HomeFavListSection extends GetView<HomeController> {
                     style: bohibaTheme.textTheme.headlineLarge,
                   ),
                   const Spacer(),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(ScreenUtils.width5),
-                    onTap: () => Navigator.of(context).pushNamed(
+                  GestureDetector(
+                    onTap: () => navigatorState.pushNamed(
                       AppRoute.favList,
                       arguments: {'fav': controller.arrFavList},
                     ),
@@ -93,7 +92,6 @@ class HomeFavListSection extends GetView<HomeController> {
                   }
 
                   if (favObj.containsKey('registration')) {
-                    Get.put(TruckAllController());
                     return TruckTile(
                       truckInfo: TruckModel.fromJson(favObj),
                       allowedActions: [

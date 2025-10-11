@@ -1,3 +1,5 @@
+import '/dist/app_enums.dart';
+
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/dio_serivce.dart';
@@ -51,7 +53,7 @@ class LocationController extends GetxController {
     GlobalService.showProgress();
     arrLocation.clear();
     Position position = await Geolocator.getCurrentPosition(
-        locationSettings: LocationSettings(accuracy: LocationAccuracy.high));
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.low));
     List<Placemark> arrPlacemarks = await placemarkFromCoordinates(
       position.latitude,
       position.longitude,
@@ -69,16 +71,27 @@ class LocationController extends GetxController {
         return null;
       } else {
         if (placemark.isoCountryCode == 'IN') {
-          var response = await Dio()
-              .get('${ApiEndPoint.apiPostalCode}/${placemark.postalCode}');
-          if (response.data[0]['PostOffice'] == null) {
-            userTitleMsg.value = 'No Location Found';
-            userSubTitle.value =
-                'Failed while fetching location. Refresh to try again.';
+          try {
+            var response = await Dio()
+                .get('${ApiEndPoint.apiPostalCode}/${placemark.postalCode}');
+            if (response.data[0]['PostOffice'] == null) {
+              userTitleMsg.value = 'No Location Found';
+              userSubTitle.value =
+                  'Failed while fetching location. Refresh to try again.';
+              GlobalService.dismissProgress();
+              return null;
+            }
+            pinResObj = response.data[0]['PostOffice'][0]['District'];
+          } catch (e) {
             GlobalService.dismissProgress();
+            userTitleMsg.value = 'Failed';
+            userSubTitle.value =
+                'Unstable network connection! Refresh to try again';
+            GlobalService.appSnackBar(
+                status: AlertStatus.failure,
+                desc: 'Please retry something went wrong.');
             return null;
           }
-          pinResObj = response.data[0]['PostOffice'][0]['District'];
         } else {
           userTitleMsg.value = 'No Service';
           userSubTitle.value =

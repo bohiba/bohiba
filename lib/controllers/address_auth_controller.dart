@@ -36,7 +36,7 @@ class AddressAuthController extends GetxController {
     GlobalService.closeKeyboard();
 
     if (!(addressAuthKey.currentState!.validate())) {
-      return 1;
+      return 0;
     }
 
     if (!await DeviceInfoService.hasInternet()) {

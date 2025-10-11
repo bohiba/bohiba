@@ -72,7 +72,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
           focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
           focusedErrorBorder:
               bohibaTheme.inputDecorationTheme.focusedErrorBorder,
-          errorBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
+          errorBorder: bohibaTheme.inputDecorationTheme.focusedErrorBorder,
         ),
       ),
     );

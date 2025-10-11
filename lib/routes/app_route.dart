@@ -1,4 +1,12 @@
-import 'package:bohiba/bindings/owner_expense_binding.dart';
+import '/bindings/news_binding.dart';
+import '/bindings/owner_expense_binding.dart';
+import '/pages/news/news_screen.dart';
+
+import '/bindings/all_news_binding.dart';
+import '/bindings/forgot_uuid_binding.dart';
+import '/bindings/home_binding.dart';
+import '/bindings/master_binding.dart';
+import '/pages/news/all_news_screen.dart';
 
 import '/bindings/address_auth_binding.dart';
 import '/bindings/create_user_binding.dart';
@@ -69,10 +77,8 @@ import '/bindings/trip_all_binding.dart';
 import '/bindings/mines_binding.dart';
 import '/bindings/auth_binding.dart';
 import '/bindings/driver_binding.dart';
-import '/bindings/navbar_binding.dart';
 import '/bindings/truck_all_binding.dart';
 import '/bindings/dasboard_binding.dart';
-import '/bindings/master_binding.dart';
 import '/bindings/splash_binding.dart';
 import '/bindings/user_profile_congif_binding.dart';
 
@@ -96,6 +102,7 @@ import '/pages/user_authentication/screens/set_image_page.dart';
 import '/pages/driver/driver_all_page.dart';
 import '/pages/driver/driver_add_page.dart';
 import '/pages/driver/driver_page.dart';
+import '/bindings/doc_auth_binding.dart';
 import '/pages/user_authentication/screens/user_doc_auth_page.dart';
 import '/pages/user_authentication/screens/address_auth_page.dart';
 import '/component/bohiba_navbar/bohiba_navbar.dart';
@@ -107,7 +114,7 @@ import '/pages/challan/page/challan_screen.dart';
 import '/pages/trips/trip_add_page.dart';
 import '/pages/trips/trip_all_page.dart';
 import '/pages/trips/trip_page.dart';
-import '/pages/news/news_screen.dart';
+
 import '/pages/notification/notify_screen/notification_screen.dart';
 import '/pages/order/screens/order_screen/order_screen.dart';
 import '/pages/splashscreen.dart';
@@ -190,7 +197,8 @@ class AppRoute {
   static const String about = "/about";
   static const String addOwnerExpense = "/add-owner-expense";
 
-  static const String newsScreen = "/news";
+  static const String allNewsScreen = "/all-news";
+  static const String newsScreen = "/snews";
   static const String notifyScreen = "/notify";
   static const String orderScreen = "/order";
   static const String statusScreen = "/status";
@@ -220,7 +228,7 @@ class AppRoute {
   static final List<GetPage> routes = [
     GetPage(
       name: splashScreen,
-      bindings: [SplashBinding(), MasterBinding()],
+      binding: SplashBinding(),
       page: () => const SplashScreen(),
     ),
 
@@ -228,7 +236,6 @@ class AppRoute {
     GetPage(
       name: signIn,
       binding: AuthBinding(),
-      bindings: [MasterBinding()],
       page: () => const SignInScreen(),
     ),
 
@@ -264,7 +271,7 @@ class AppRoute {
 
     GetPage(
       name: forgotUuid,
-      // binding: ForgotPasswordBinding(),
+      binding: ForgotUuidBinding(),
       page: () => const ForgotUuidPage(),
     ),
 
@@ -282,7 +289,7 @@ class AppRoute {
 
     GetPage(
       name: userAuthScreen,
-      binding: UserProfileConfigBinding(),
+      binding: DocAuthBinding(),
       page: () => const UserDocAuthPage(),
     ),
 
@@ -307,7 +314,13 @@ class AppRoute {
     // Main
     GetPage(
       name: navBar,
-      binding: NavBarBinding(),
+      binding: MasterBinding(),
+      bindings: [
+        HomeBinding(),
+        TruckAllBinding(),
+        AllTripBinding(),
+        DasboardBinding(),
+      ],
       page: () => const BohibaNavBar(),
     ),
 
@@ -323,10 +336,29 @@ class AppRoute {
       page: () => AnalyticPage(),
     ),
 
-    GetPage(name: loadHistoryScreen, page: () => const AllTripPage()),
-    GetPage(name: allMines, page: () => const AllMinesPage()),
-    GetPage(name: newsScreen, page: () => const NewsScreen()),
-    GetPage(name: notifyScreen, page: () => const NotificationScreen()),
+    GetPage(
+      name: loadHistoryScreen,
+      page: () => const AllTripPage(),
+    ),
+    GetPage(
+      name: allMines,
+      binding: MinesBinding(),
+      page: () => const AllMinesPage(),
+    ),
+    GetPage(
+      name: allNewsScreen,
+      binding: AllNewsBinding(),
+      page: () => const AllNewsScreen(),
+    ),
+    GetPage(
+      name: newsScreen,
+      binding: NewsBinding(),
+      page: () => const NewsScreen(),
+    ),
+    GetPage(
+      name: notifyScreen,
+      page: () => const NotificationScreen(),
+    ),
 
     /*
      ====================================

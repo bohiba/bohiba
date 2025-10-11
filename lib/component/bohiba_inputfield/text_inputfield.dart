@@ -78,7 +78,7 @@ class TextInputField extends StatelessWidget {
           focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
           focusedErrorBorder:
               bohibaTheme.inputDecorationTheme.focusedErrorBorder,
-          errorBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
+          errorBorder: bohibaTheme.inputDecorationTheme.errorBorder,
         ),
       ),
     );

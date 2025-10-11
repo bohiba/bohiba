@@ -73,6 +73,7 @@ class BohibaTheme {
       ),
       colorScheme: ColorScheme.light(
         primary: BohibaColors.primaryColor,
+        onPrimary: BohibaColors.primaryVariantColor,
         secondary: BohibaColors.secoundaryColor,
         tertiary: BohibaColors.white,
         onTertiary: BohibaColors.black,
@@ -209,7 +210,7 @@ class BohibaTheme {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: BohibaColors.primaryColor),
+          borderSide: BorderSide(color: BohibaColors.warningColor),
         ),
       ),
       checkboxTheme: CheckboxThemeData(
@@ -312,6 +313,7 @@ class BohibaTheme {
       disabledColor: DarkColors.primaryVariantColor,
       colorScheme: const ColorScheme.dark(
         primary: DarkColors.primaryColor,
+        onPrimary: DarkColors.primaryVariantColor,
         secondary: DarkColors.secoundaryColor,
         tertiary: DarkColors.white,
         onTertiary: DarkColors.black,
@@ -433,7 +435,7 @@ class BohibaTheme {
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: DarkColors.secoundaryColor),
+            borderSide: BorderSide(color: DarkColors.warningColor),
           ),
         ),
       ),
@@ -511,7 +513,7 @@ class BohibaTheme {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: DarkColors.primaryVariantColor),
+          borderSide: BorderSide(color: DarkColors.warningColor),
         ),
       ),
       checkboxTheme: CheckboxThemeData(

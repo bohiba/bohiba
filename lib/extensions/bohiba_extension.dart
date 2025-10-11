@@ -32,8 +32,28 @@ extension StringFormatExt on String {
   }
 
   bool get isValidDL {
-    final regex = RegExp(r'^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$');
+    final regex = RegExp(r'^[A-Z]{2}[0-9]{13}$');
     return regex.hasMatch(this);
+  }
+
+  bool get isValidPan {
+    final regex = RegExp(r'^[A-Z]{3}[PCHFTA]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}$');
+    return regex.hasMatch(toUpperCase());
+  }
+
+  bool get isValidAadhaar {
+    final regex =
+        RegExp(r'^(?:[2-9][0-9]{11}|[2-9][0-9]{3}-[0-9]{4}-[0-9]{4})$');
+    return regex.hasMatch(trim());
+  }
+
+  /// Validates if the string is a valid phone number.
+  /// - Only digits allowed (no +, -, spaces, or symbols)
+  /// - Length between 10 to 12 (for flexibility)
+  /// - Must start with 6, 7, 8, or 9 (for Indian numbers)
+  bool get isValidPhone {
+    final regex = RegExp(r'^[6-9]\d{9}$');
+    return regex.hasMatch(trim());
   }
 }
 

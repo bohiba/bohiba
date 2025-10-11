@@ -81,12 +81,7 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              PrimaryButton(
-                onPressed: () async => await controller.addExpense(),
-                label: controller.tripModel == null ? 'UPDATE' : 'SAVE',
-              ),
-            ],
+            children: [],
           ),
         ),
       ),

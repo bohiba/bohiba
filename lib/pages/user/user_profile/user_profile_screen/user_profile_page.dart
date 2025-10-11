@@ -108,95 +108,134 @@ class UserProfilePage extends GetView<DashboardController> {
                 RoleWidget(
                   driverWidget: Column(
                     children: [
-                      Text(
-                        "Ratings",
-                        style: bohibaTheme.textTheme.headlineMedium,
+                      Align(
+                        alignment: AlignmentGeometry.centerLeft,
+                        child: Text(
+                          "Ratings",
+                          style: bohibaTheme.textTheme.headlineMedium,
+                        ),
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: 2,
-                          padding: EdgeInsets.only(top: ScreenUtils.height10),
-                          itemBuilder: (context, index) {
+                      Obx(
+                        () {
+                          final ratings =
+                              controller.profileModel.value?.ratings ?? [];
+                          if (ratings.isEmpty) {
                             return Container(
-                              margin:
-                                  EdgeInsets.only(bottom: ScreenUtils.height10),
+                              width: ScreenUtils.width * 0.75,
                               padding: EdgeInsets.symmetric(
-                                horizontal: ScreenUtils.width15,
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                  vertical: ScreenUtils.height20),
+                              constraints: BoxConstraints(
+                                  minHeight: ScreenUtils.height * 0.25),
+                              alignment: Alignment.center,
+                              child: Column(
                                 children: [
-                                  CircleAvatar(
-                                    radius: 15.w,
-                                    backgroundColor: bohibaTheme.dividerColor,
+                                  Text(
+                                    'No Rating',
+                                    textAlign: TextAlign.center,
+                                    style: bohibaTheme.textTheme.headlineLarge,
                                   ),
-                                  Gap(8.w),
-                                  SizedBox(
-                                    width: ScreenUtils.width * 0.55.w,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'User Name',
-                                          style:
-                                              bohibaTheme.textTheme.labelLarge,
-                                        ),
-                                        ReadMoreText(
-                                          'Desc',
-                                          trimLines: 2,
-                                          trimMode: TrimMode.Line,
-                                          trimCollapsedText: ' Read more',
-                                          trimExpandedText: ' Show less',
-                                          style: TextStyle(
-                                            fontSize: bohibaTheme.textTheme
-                                                .labelMedium!.fontSize,
-                                            color: bohibaTheme
-                                                .textTheme.titleMedium!.color,
-                                          ),
-                                          moreStyle: TextStyle(
-                                            fontSize: bohibaTheme.textTheme
-                                                .labelMedium!.fontSize,
-                                            fontWeight: FontWeight.bold,
-                                            color: bohibaTheme.primaryColor,
-                                          ),
-                                          lessStyle: TextStyle(
-                                            fontSize: bohibaTheme.textTheme
-                                                .labelMedium!.fontSize,
-                                            fontWeight: FontWeight.bold,
-                                            color: bohibaTheme.primaryColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    height: 35.h,
-                                    alignment: Alignment.center,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '0',
-                                          style:
-                                              bohibaTheme.textTheme.labelLarge,
-                                        ),
-                                        const Icon(
-                                          Icons.star_rounded,
-                                          color: Colors.amber,
-                                        ),
-                                      ],
-                                    ),
+                                  Text(
+                                    'You haven\'t received any rating from truck owners. Your truck owner can help you to get first rating.',
+                                    textAlign: TextAlign.center,
+                                    style: bohibaTheme.textTheme.titleMedium,
                                   ),
                                 ],
                               ),
                             );
-                          },
-                        ),
+                          } else {
+                            return ListView.builder(
+                              itemCount: controller
+                                      .profileModel.value?.ratings?.length ??
+                                  0,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              padding:
+                                  EdgeInsets.only(top: ScreenUtils.height10),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(
+                                      bottom: ScreenUtils.height10),
+                                  // padding: EdgeInsets.symmetric(
+                                  //   horizontal: ScreenUtils.width15,
+                                  // ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 15.w,
+                                        backgroundColor:
+                                            bohibaTheme.dividerColor,
+                                      ),
+                                      Gap(8.w),
+                                      SizedBox(
+                                        width: ScreenUtils.width * 0.55.w,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'User Name',
+                                              style: bohibaTheme
+                                                  .textTheme.labelLarge,
+                                            ),
+                                            ReadMoreText(
+                                              'Desc',
+                                              trimLines: 2,
+                                              trimMode: TrimMode.Line,
+                                              trimCollapsedText: ' Read more',
+                                              trimExpandedText: ' Show less',
+                                              style: TextStyle(
+                                                fontSize: bohibaTheme.textTheme
+                                                    .labelMedium!.fontSize,
+                                                color: bohibaTheme.textTheme
+                                                    .titleMedium!.color,
+                                              ),
+                                              moreStyle: TextStyle(
+                                                fontSize: bohibaTheme.textTheme
+                                                    .labelMedium!.fontSize,
+                                                fontWeight: FontWeight.bold,
+                                                color: bohibaTheme.primaryColor,
+                                              ),
+                                              lessStyle: TextStyle(
+                                                fontSize: bohibaTheme.textTheme
+                                                    .labelMedium!.fontSize,
+                                                fontWeight: FontWeight.bold,
+                                                color: bohibaTheme.primaryColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Container(
+                                        height: 35.h,
+                                        alignment: Alignment.center,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '0',
+                                              style: bohibaTheme
+                                                  .textTheme.labelLarge,
+                                            ),
+                                            const Icon(
+                                              Icons.star_rounded,
+                                              color: Colors.amber,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),

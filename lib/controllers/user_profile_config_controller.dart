@@ -53,15 +53,11 @@ class UserProfileConfigController extends ImageUploadController {
       if (PickerType.gallery == pickertype) {
         pickedImg = await _picker.pickImage(
           source: ImageSource.gallery,
-          maxHeight: 200,
-          maxWidth: 200,
           // imageQuality: 60,
         );
       } else if (PickerType.camera == pickertype) {
         pickedImg = await _picker.pickImage(
           source: ImageSource.camera,
-          maxHeight: 200,
-          maxWidth: 200,
           // imageQuality: 60,
         );
       }
@@ -90,7 +86,7 @@ class UserProfileConfigController extends ImageUploadController {
     try {
       if (await file.exists()) {
         await file.delete();
-        selectedImg;
+        selectedImg.value = null;
         status.value = UploadStatus.initial;
         GlobalService.printHandler('File deleted successfully.');
       } else {
@@ -115,9 +111,23 @@ class UserProfileConfigController extends ImageUploadController {
     });
   }
 
-  void reset() {
-    selectedImg;
+  void reset() async {
+    selectedImg.value = null;
     uploadPrgs.value = 0.0;
     status.value = UploadStatus.initial;
+    if (selectedImg.value != null) {
+      if (await selectedImg.value!.exists()) {
+        await selectedImg.value!.delete();
+        selectedImg.value = null;
+        status.value = UploadStatus.initial;
+        GlobalService.printHandler('File deleted successfully.');
+      }
+    }
+  }
+
+  @override
+  void onClose() {
+    reset();
+    super.onClose();
   }
 }

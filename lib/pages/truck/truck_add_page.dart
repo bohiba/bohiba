@@ -1,3 +1,5 @@
+import '/dist/app_enums.dart';
+import '/services/global_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/controllers/truck_all_controller.dart';
@@ -14,49 +16,87 @@ class AddTruckPage extends GetView<TruckAllController> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigateState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(
         title: "Add Truck",
+        showLeading: controller.showLeading,
+        actions: [
+          Visibility(
+            visible: !controller.showLeading,
+            child: Row(
+              children: [
+                Text(
+                  'Skip for now',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                    color: bohibaTheme.textTheme.bodySmall!.color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: ScreenUtils.height20,
-            left: ScreenUtils.width15,
-            right: ScreenUtils.width15,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Enter your RC number",
-                style: bohibaTheme.textTheme.titleLarge,
-              ),
-              TextInputField(
-                prefixIcon: const Icon(Remix.truck_line),
-                maxLength: 10,
-                readOnly: false,
-                hintText: "RC Number",
-                textCapitalization: TextCapitalization.characters,
-                keyboardType: TextInputType.text,
-                controller: controller.vehicleNumberController,
-                onChanged: (v) {},
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: ScreenUtils.height20,
-            left: ScreenUtils.width15,
-            right: ScreenUtils.width15,
-          ),
-          child: PrimaryButton(
-            label: "VERIFY",
-            onPressed: () => controller.createVehicle(
-              vehicleNumber: controller.vehicleNumberController.text.trim(),
+      body: PopScope(
+        canPop: controller.showLeading,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return;
+          } else {
+            GlobalService.showAlertDialog(
+              status: AlertStatus.failure,
+              title: 'Verification',
+              description:
+                  'Are your sure? You want to discontinue you verification process',
+              discardBtnTxt: 'No',
+              saveBtnTxt: 'Yes',
+              onSave: () {
+                navigateState.pop();
+                navigateState.pop(true);
+              },
+            );
+          }
+        },
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: ScreenUtils.height20,
+              left: ScreenUtils.width15,
+              right: ScreenUtils.width15,
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Enter your RC number",
+                        style: bohibaTheme.textTheme.titleLarge,
+                      ),
+                      TextInputField(
+                        prefixIcon: const Icon(Remix.truck_line),
+                        maxLength: 10,
+                        readOnly: false,
+                        hintText: "RC Number",
+                        textCapitalization: TextCapitalization.characters,
+                        keyboardType: TextInputType.text,
+                        controller: controller.vehicleNumberController,
+                        onChanged: (v) {},
+                      ),
+                    ],
+                  ),
+                ),
+                PrimaryButton(
+                  label: "VERIFY",
+                  onPressed: () => controller.createVehicle(
+                    vehicleNumber:
+                        controller.vehicleNumberController.text.trim(),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

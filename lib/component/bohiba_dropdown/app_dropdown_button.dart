@@ -37,7 +37,7 @@ class AppDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 47,
+      height: 47,
       width: width ?? ScreenUtils.width,
       margin: EdgeInsets.only(
         top: ScreenUtils.height5,
@@ -54,7 +54,7 @@ class AppDropdown<T> extends StatelessWidget {
         trailingIcon: Icon(
           Icons.keyboard_arrow_down,
           size: 24,
-          color: bohibaTheme.textTheme.titleSmall!.color,
+          color: BohibaColors.greyColor,
         ),
         inputDecorationTheme: InputDecorationTheme(
           isDense: true,
