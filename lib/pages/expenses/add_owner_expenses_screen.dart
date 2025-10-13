@@ -80,7 +80,10 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
                 ),
                 PrimaryButton(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  onPressed: () async => {},
+                  onPressed: () async => 
+                    
+                                   controller.addOwnerExpense(),
+            
                   label: 'Add Expense',
                 ),
               ],
