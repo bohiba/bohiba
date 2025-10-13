@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/theme/bohiba_theme.dart';
 import '/pages/driver/open_driver_tile.dart';
-import '/model/open_driver_model.dart';
+import '/model/driver_model.dart';
 import '/controllers/open_driver_list_controller.dart';
 import 'package:get/get.dart';
 
@@ -78,11 +78,9 @@ class ExplorePage extends GetView<OpenDriverListController> {
                 ),
                 itemCount: controller.arrOpenDriver.length,
                 itemBuilder: (context, index) {
-                  OpenDriverModel openDriver = controller.arrOpenDriver[index];
+                  DriverModel openDriver = controller.arrOpenDriver[index];
                   return OpenDriverTile(
                     openDriver: openDriver,
-                    onPressConnect: () async =>
-                        await controller.connect(driverUuid: openDriver.uuid!),
                   );
                 },
               ),

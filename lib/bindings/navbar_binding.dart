@@ -1,6 +1,5 @@
 import '/controllers/driver_all_controller.dart';
 import '/controllers/trip_all_controller.dart';
-import '/controllers/truck_all_controller.dart';
 import '/controllers/home_controller.dart';
 import '/controllers/dashboard_controller.dart';
 import '/controllers/master_controller.dart';
@@ -14,6 +13,6 @@ class NavBarBinding extends Bindings {
     Get.put<DashboardController>(DashboardController());
     Get.put<AllTripController>(AllTripController());
     Get.put<DriverAllController>(DriverAllController());
-    Get.put<TruckAllController>(TruckAllController());
+    // Get.put<TruckAllController>(TruckAllController());
   }
 }

@@ -1,4 +1,6 @@
-import '/model/open_driver_model.dart';
+import 'package:bohiba/routes/app_route.dart';
+
+import '/model/driver_model.dart';
 
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 import '/component/screen_utils.dart';
@@ -9,15 +11,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class OpenDriverTile extends StatelessWidget {
-  final OpenDriverModel openDriver;
-  final Function()? onPressConnect;
-  const OpenDriverTile(
-      {super.key, required this.openDriver, this.onPressConnect});
+  final DriverModel openDriver;
+
+  const OpenDriverTile({super.key, required this.openDriver});
 
   @override
   Widget build(BuildContext context) {
+    final navigateState = Navigator.of(context);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        navigateState.pushNamed(AppRoute.openDriver, arguments: openDriver);
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
         margin: EdgeInsets.only(bottom: ScreenUtils.width5),
@@ -37,8 +41,8 @@ class OpenDriverTile extends StatelessWidget {
               children: [
                 BohibaMarqueeText(
                   width: ScreenUtils.width * 0.5,
-                  text: openDriver.name ?? '',
-                  overflowText: openDriver.name ?? '',
+                  text: openDriver.profile?.name ?? '',
+                  overflowText: openDriver.profile?.name ?? '',
                   style: TextStyle(
                     fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
                     fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
@@ -54,7 +58,7 @@ class OpenDriverTile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "${openDriver.district}",
+                      "${openDriver.address?.district ?? ''} ",
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                         fontWeight:
@@ -64,7 +68,7 @@ class OpenDriverTile extends StatelessWidget {
                     ),
                     Gap(5.w),
                     Text(
-                      '${openDriver.state}',
+                      openDriver.address?.state ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
                         fontWeight:

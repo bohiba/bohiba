@@ -4,7 +4,7 @@ import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/services/global_service.dart';
 
 import '/component/bohiba_buttons/primary_button.dart';
-import '/model/user_list_model.dart';
+import '../../../model/logged_in_user_model.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import '/component/screen_utils.dart';

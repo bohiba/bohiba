@@ -1,4 +1,4 @@
-import '../controllers/open_driver_controller.dart';
+import '/controllers/open_driver_controller.dart';
 import 'package:get/get.dart';
 
 class OpenDriverBinding extends Bindings {

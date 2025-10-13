@@ -1,6 +1,6 @@
 import '/services/db_service.dart';
 import 'package:hive/hive.dart';
-part 'user_list_model.g.dart';
+part 'logged_in_user_model.g.dart';
 
 @HiveType(typeId: userListTypeId)
 class LoggedInAccountModel {

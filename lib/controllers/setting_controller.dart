@@ -1,10 +1,9 @@
 import '/routes/app_route.dart';
-import '/services/global_service.dart';
 
-import '/controllers/dashboard_controller.dart';
-import '/controllers/master_controller.dart';
 import '/dist/app_enums.dart';
 import '/services/profile_service.dart';
+import '/services/global_service.dart';
+import '/services/main_service.dart';
 
 import '/controllers/role_controller.dart';
 import '/controllers/theme_controller.dart';
@@ -15,9 +14,6 @@ import 'package:get/get.dart';
 class SettingController extends GetxController {
   // Controller
   final ThemeController themeController = Get.find<ThemeController>();
-  final DashboardController dashboardController =
-      Get.find<DashboardController>();
-  final MasterController masterController = Get.find<MasterController>();
   Rx<int> roleId = 9.obs;
 
   Rx<ThemeMode> themeMode = ThemeMode.light.obs;
@@ -40,8 +36,8 @@ class SettingController extends GetxController {
     };
     int updateRole = await ProfileService.setRole(bodyMap: bodyObj);
     if (updateRole > 0) {
-      await dashboardController.getProfileModel(methodType: MethodType.api);
-      await masterController.mainApi(type: MethodType.api);
+      await ProfileService.getProfile(type: MethodType.api);
+      await MainService.mainApi(type: MethodType.api);
       Get.offAllNamed(AppRoute.navBar);
       GlobalService.showAppToast(message: 'Role Updated Successfully');
     }

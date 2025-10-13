@@ -2,7 +2,6 @@ import '/controllers/trip_expense_add_controller.dart';
 import 'package:get/get.dart';
 import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/component/bohiba_dropdown/primary_dropdown_menu.dart';
-import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/services/global_service.dart';

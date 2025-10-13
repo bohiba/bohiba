@@ -57,16 +57,20 @@ class UserProfilePage extends GetView<DashboardController> {
                   header: 'Role',
                   title: controller.profileModel.value?.roleId?.roleName(),
                 ),
-                LinearBoxWidget(
-                  header: 'D.O.B',
-                  title: controller.profileModel.value?.dob,
-                ),
                 RoleWidget(
+                  truckOwnerWidget: LinearBoxWidget(
+                    header: 'Hiring Status',
+                    title: 'Hiring',
+                  ),
                   driverWidget: LinearBoxWidget(
                     header: 'Job Status',
                     title: controller.profileModel.value?.jobStatus
-                        ?.toDisplayLabel(),
+                        ?.toCapitalizedLabel(),
                   ),
+                ),
+                LinearBoxWidget(
+                  header: 'D.O.B',
+                  title: controller.profileModel.value?.dob,
                 ),
                 LinearBoxWidget(
                   onClick: () {

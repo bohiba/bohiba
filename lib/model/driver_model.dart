@@ -35,17 +35,20 @@ class DriverModel extends HiveObject {
   @HiveField(8)
   DriverAddress? address;
 
-  DriverModel({
-    this.id,
-    this.isSynced,
-    this.profile,
-    this.licenseDetail,
-    this.rating,
-    this.isFav = false,
-    this.createdAt,
-    this.updatedAt,
-    this.address,
-  });
+  @HiveField(9)
+  int? trips;
+
+  DriverModel(
+      {this.id,
+      this.isSynced,
+      this.profile,
+      this.licenseDetail,
+      this.rating,
+      this.isFav = false,
+      this.createdAt,
+      this.updatedAt,
+      this.address,
+      this.trips});
 
   factory DriverModel.fromJson(
     Map<String, dynamic> json, {
@@ -72,6 +75,7 @@ class DriverModel extends HiveObject {
           ? List<RatingModel>.from(
               json['rating'].map((x) => RatingModel.fromJson(x)))
           : [],
+      trips: json['trips'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );
@@ -84,6 +88,7 @@ class DriverModel extends HiveObject {
         'license_detail': licenseDetail?.toJson(),
         'address': address?.toJson(),
         'rating': rating?.map((x) => x.toJson()).toList(),
+        'trips': trips,
         'created_at': createdAt,
         'updated_at': updatedAt,
       };
@@ -130,6 +135,9 @@ class DriverProfile extends HiveObject {
   @HiveField(7)
   String? isActive;
 
+  @HiveField(8)
+  String? connect;
+
   DriverProfile({
     this.driverUuid,
     this.name,
@@ -139,6 +147,7 @@ class DriverProfile extends HiveObject {
     this.dob,
     this.roleId,
     this.isActive,
+    this.connect,
   });
 
   factory DriverProfile.fromJson(Map<String, dynamic> json) => DriverProfile(
@@ -150,6 +159,7 @@ class DriverProfile extends HiveObject {
         dob: json['dob'],
         roleId: json['role_id'],
         isActive: json['is_active'],
+        connect: json['connect'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -161,36 +171,45 @@ class DriverProfile extends HiveObject {
         'dob': dob,
         'role_id': roleId,
         'is_active': isActive,
+        'connect': connect,
       };
 }
 
 @HiveType(typeId: driverAddressTypeID)
 class DriverAddress extends HiveObject {
   @HiveField(0)
-  String? houseNo;
+  int? id;
 
   @HiveField(1)
-  String? locality;
+  String? verified;
 
   @HiveField(2)
-  String? street;
+  String? houseNo;
 
   @HiveField(3)
-  String? city;
+  String? locality;
 
   @HiveField(4)
-  String? district;
+  String? street;
 
   @HiveField(5)
-  String? state;
+  String? city;
 
   @HiveField(6)
-  String? country;
+  String? district;
 
   @HiveField(7)
+  String? state;
+
+  @HiveField(8)
+  String? country;
+
+  @HiveField(9)
   String? pinCode;
 
   DriverAddress({
+    this.id,
+    this.verified,
     this.houseNo,
     this.locality,
     this.street,
@@ -202,6 +221,8 @@ class DriverAddress extends HiveObject {
   });
 
   factory DriverAddress.fromJson(Map<String, dynamic> json) => DriverAddress(
+        id: json['id'],
+        verified: json['verified'],
         houseNo: json['house_no'],
         locality: json['locality'],
         street: json['street'],
@@ -213,6 +234,8 @@ class DriverAddress extends HiveObject {
       );
 
   Map<String, dynamic> toJson() => {
+        'id': id,
+        'verified': verified,
         'house_no': houseNo,
         'locality': locality,
         'street': street,

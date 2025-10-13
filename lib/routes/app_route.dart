@@ -1,3 +1,6 @@
+import '/bindings/open_driver_binding.dart';
+import '/pages/driver/open_driver_page.dart';
+
 import '/bindings/news_binding.dart';
 import '/bindings/owner_expense_binding.dart';
 import '/pages/news/news_screen.dart';
@@ -161,6 +164,9 @@ class AppRoute {
   static const String allDriver = "/all-driver";
   static const String addDriver = "/add-driver";
   static const String driver = "/driver";
+
+  static const String openDriver = "/open-driver";
+
   static const String workCalender = "/work-calender";
   static const String allRating = '/all-rating';
   static const String rating = '/rating';
@@ -365,7 +371,11 @@ class AppRoute {
      ||             Driver             ||
      ====================================
      */
-    GetPage(name: driver, binding: DriverBinding(), page: () => DriverPage()),
+    GetPage(
+      name: driver,
+      binding: DriverBinding(),
+      page: () => DriverPage(),
+    ),
     GetPage(
       name: allDriver,
       binding: DriverAllBinding(),
@@ -376,6 +386,12 @@ class AppRoute {
       name: addDriver,
       binding: DriverAddBinding(),
       page: () => DriverAddPage(),
+    ),
+
+    GetPage(
+      name: openDriver,
+      binding: OpenDriverBinding(),
+      page: () => OpenDriverPage(),
     ),
 
     GetPage(

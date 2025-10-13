@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/app_enums.dart';
+
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
@@ -5,13 +7,13 @@ import '/services/global_service.dart';
 import 'db_service.dart';
 import 'dio_serivce.dart';
 
-import '/model/open_driver_model.dart';
+import '/model/driver_model.dart';
 
 class OpenDriverService {
   static final DBService _dbService = DBService();
   static final DioService _dioService = DioService();
 
-  static Future<List<OpenDriverModel>> getSentReqList() async {
+  static Future<List<DriverModel>> getSentReqList() async {
     if (!await DeviceInfoService.hasInternet()) {
       return [];
     }
@@ -20,9 +22,9 @@ class OpenDriverService {
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
-        List<OpenDriverModel> arrOpenDriver = [];
+        List<DriverModel> arrOpenDriver = [];
         if (response.data is List<dynamic>) {
-          arrOpenDriver = OpenDriverModel.listFromJson(response.data);
+          arrOpenDriver = DriverModel.listFromJson(response.data);
         }
         return arrOpenDriver;
       case 401:
@@ -36,19 +38,33 @@ class OpenDriverService {
     }
   }
 
-  static Future<Map<dynamic, dynamic>?> getOpenDriverPrfl() async {
+  static Future<DriverModel?> getOpenDriverPrfl({
+    required int driverId,
+    MethodType type = MethodType.local,
+  }) async {
+    if (type == MethodType.local) {
+      return await _dbService.getData<DriverModel>(tblOpenDriver, '$driverId');
+    }
+
     if (!await DeviceInfoService.hasInternet()) {
       return null;
     }
     GlobalService.showProgress();
-    ApiResponse response = await _dioService.post(
-      ApiEndPoint.apiSendConnectReq,
+    ApiResponse response = await _dioService.get(
+      '${ApiEndPoint.apiViewDriver}/$driverId',
     );
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
-        Map<dynamic, dynamic> result = response.data;
-        return result;
+        DriverModel openDriver = DriverModel.fromJson(response.data);
+        int success = await _dbService.putData<DriverModel>(
+            tblOpenDriver, "${openDriver.id}", openDriver);
+        if (success > 0) {
+          return openDriver;
+        } else {
+          return null;
+        }
+
       case 401:
         GlobalService.showAppToast(message: response.message);
         return null;
@@ -58,8 +74,8 @@ class OpenDriverService {
     }
   }
 
-  static Future<List<OpenDriverModel>> getAllOpenDriver() async {
-    return await _dbService.getAllData<OpenDriverModel>(tblOpenDriver);
+  static Future<List<DriverModel>> getAllOpenDriver() async {
+    return await _dbService.getAllData<DriverModel>(tblOpenDriver);
   }
 
   static Future<int> connectDriver(

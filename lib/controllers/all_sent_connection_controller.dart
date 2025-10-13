@@ -1,9 +1,12 @@
-import '/model/open_driver_model.dart';
+import 'package:bohiba/model/driver_model.dart';
 import '/services/open_driver_service.dart';
 import 'package:get/get.dart';
 
 class AllSentRequestController extends GetxController {
-  RxList<OpenDriverModel> arrSentReq = <OpenDriverModel>[].obs;
+  RxList<DriverModel> arrSentReq = <DriverModel>[].obs;
+  RxString strHeaderMsg = ''.obs;
+  RxString strDescription = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -14,8 +17,12 @@ class AllSentRequestController extends GetxController {
   }
 
   Future<void> _getSentReq() async {
-    List<OpenDriverModel> sentReqList =
-        await OpenDriverService.getSentReqList();
+    List<DriverModel> sentReqList = await OpenDriverService.getSentReqList();
     arrSentReq.addAll(sentReqList);
+    if (arrSentReq.isEmpty) {
+      strHeaderMsg.value = 'No Request Found';
+      strDescription.value =
+          'Start sending connection request and connect with driver to boost you business';
+    }
   }
 }

@@ -1,3 +1,5 @@
+import '/pages/user/user_profile/switch_account_dialog.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +60,7 @@ class UserProfileCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              /*GestureDetector(
+              GestureDetector(
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
@@ -97,7 +99,7 @@ class UserProfileCard extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),*/
+              ),
             ],
           ),
         ],

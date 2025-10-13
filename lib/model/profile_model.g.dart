@@ -24,17 +24,18 @@ class ProfileModelAdapter extends TypeAdapter<ProfileModel> {
       dob: fields[4] as String?,
       roleId: fields[5] as int?,
       jobStatus: fields[6] as String?,
-      verification: fields[7] as VerificationModel?,
-      trucks: fields[8] as int?,
-      drivers: fields[9] as int?,
-      ratings: (fields[10] as List?)?.cast<RatingModel>(),
+      profileImg: fields[7] as String?,
+      verification: fields[8] as VerificationModel?,
+      trucks: fields[9] as int?,
+      drivers: fields[10] as int?,
+      ratings: (fields[11] as List?)?.cast<RatingModel>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ProfileModel obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
@@ -50,12 +51,14 @@ class ProfileModelAdapter extends TypeAdapter<ProfileModel> {
       ..writeByte(6)
       ..write(obj.jobStatus)
       ..writeByte(7)
-      ..write(obj.verification)
+      ..write(obj.profileImg)
       ..writeByte(8)
-      ..write(obj.trucks)
+      ..write(obj.verification)
       ..writeByte(9)
-      ..write(obj.drivers)
+      ..write(obj.trucks)
       ..writeByte(10)
+      ..write(obj.drivers)
+      ..writeByte(11)
       ..write(obj.ratings);
   }
 

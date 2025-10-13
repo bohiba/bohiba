@@ -26,16 +26,19 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
         automaticallyImplyLeading: false,
         titleSpacing: showLeading ? 0 : null,
         leadingWidth: showLeading ? null : 0,
-        title: AutoSizeText(
-          title,
-          maxLines: 1,
-          style: bohibaTheme.appBarTheme.titleTextStyle,
-          overflowReplacement: MarqueeText(
-            speed: 10,
-            alwaysScroll: true,
+        title: SizedBox(
+          width: ScreenUtils.width * 0.45,
+          child: AutoSizeText(
+            title,
+            maxLines: 1,
             style: bohibaTheme.appBarTheme.titleTextStyle,
-            text: TextSpan(
-              text: title,
+            overflowReplacement: MarqueeText(
+              speed: 10,
+              alwaysScroll: true,
+              style: bohibaTheme.appBarTheme.titleTextStyle,
+              text: TextSpan(
+                text: title,
+              ),
             ),
           ),
         ),

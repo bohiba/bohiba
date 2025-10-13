@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_list_model.dart';
+part of 'logged_in_user_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserListModelAdapter extends TypeAdapter<LoggedInAccountModel> {
+class LoggedInAccountModelAdapter extends TypeAdapter<LoggedInAccountModel> {
   @override
   final int typeId = 28;
 
@@ -47,7 +47,7 @@ class UserListModelAdapter extends TypeAdapter<LoggedInAccountModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserListModelAdapter &&
+      other is LoggedInAccountModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

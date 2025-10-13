@@ -73,9 +73,10 @@ class TruckAllController extends GetxController {
     return truckList;
   }
 
-  Future<void> createVehicle({required String vehicleNumber}) async {
+  Future<TruckModel?> createVehicle({required String vehicleNumber}) async {
     TruckModel? model =
         await TruckService.createTruck(vehicleNumber: vehicleNumber);
+    return model;
     /*if (!await DeviceInfoService.hasInternet()) {
       return;
     }

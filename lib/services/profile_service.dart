@@ -9,7 +9,7 @@ import 'global_service.dart';
 import 'db_service.dart';
 import 'main_service.dart';
 import '/model/profile_model.dart';
-import '/model/user_list_model.dart';
+import '../model/logged_in_user_model.dart';
 import '/controllers/role_controller.dart';
 
 class ProfileService {

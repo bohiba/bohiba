@@ -1,7 +1,7 @@
 import '/theme/bohiba_theme.dart';
 
 import '/controllers/all_sent_connection_controller.dart';
-import '/model/open_driver_model.dart';
+import '/model/driver_model.dart';
 import 'package:get/get.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
@@ -19,17 +19,17 @@ class AllSentRequestPage extends GetView<AllSentRequestController> {
       body: Obx(() {
         if (controller.arrSentReq.isEmpty) {
           return SizedBox(
-            width: ScreenUtils.width,
+            width: ScreenUtils.width * 0.65,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'No Request Found',
+                  controller.strHeaderMsg.value,
                   style: bohibaTheme.textTheme.headlineLarge,
                 ),
                 Text(
-                  'Start sending connection request and connect with driver to boost you business',
+                  controller.strDescription.value,
                   textAlign: TextAlign.center,
                   style: bohibaTheme.textTheme.titleMedium,
                 ),
@@ -45,7 +45,7 @@ class AllSentRequestPage extends GetView<AllSentRequestController> {
             ),
             itemCount: controller.arrSentReq.length,
             itemBuilder: (context, index) {
-              OpenDriverModel openDriver = controller.arrSentReq[index];
+              DriverModel openDriver = controller.arrSentReq[index];
               return OpenDriverTile(
                 openDriver: openDriver,
               );

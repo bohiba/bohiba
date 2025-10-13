@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import '/model/user_list_model.dart';
+import '../model/logged_in_user_model.dart';
 import 'global_service.dart';
-import '/model/open_driver_model.dart';
-import '/model/rating_model.dart';
 import '/model/driver_model.dart';
+import '/model/rating_model.dart';
 import '/model/mines_model.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
@@ -21,7 +20,7 @@ class DBService {
   static Future<void> initDB() async {
     await Hive.initFlutter();
     await register<ProfileModel>(ProfileModelAdapter());
-    await register<LoggedInAccountModel>(UserListModelAdapter());
+    await register<LoggedInAccountModel>(LoggedInAccountModelAdapter());
     await register<VerificationModel>(VerificationModelAdapter());
     await register<NewsModel>(NewsModelAdapter());
     await register<MinesModel>(MinesModelAdapter());
@@ -48,7 +47,6 @@ class DBService {
     await register<LicenseDetail>(LicenseDetailAdapter());
     await register<RatingModel>(RatingModelAdapter());
     await register<ReviewerModel>(ReviewerModelAdapter());
-    await register<OpenDriverModel>(OpenDriverModelAdapter());
   }
 
   static Future<void> register<T>(TypeAdapter<T> adapter) async {
@@ -260,7 +258,7 @@ class DBService {
     await clearBox<DriverModel>(tblDriver);
     await clearBox<TruckModel>(tblTrucks);
     await clearBox<UserFavouriteModel>(tblUserFav);
-    await clearBox<OpenDriverModel>(tblOpenDriver);
+    await clearBox<DriverModel>(tblOpenDriver);
     await clearBox<LoggedInAccountModel>(tblLoggedInUserList);
   }
 

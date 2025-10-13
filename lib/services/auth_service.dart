@@ -1,6 +1,6 @@
 import '/dist/app_enums.dart';
 import '/model/profile_model.dart';
-import '/model/user_list_model.dart';
+import '../model/logged_in_user_model.dart';
 
 import 'db_service.dart';
 import 'profile_service.dart';

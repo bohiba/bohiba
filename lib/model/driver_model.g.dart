@@ -26,13 +26,14 @@ class DriverModelAdapter extends TypeAdapter<DriverModel> {
       createdAt: fields[5] as String?,
       updatedAt: fields[6] as String?,
       address: fields[8] as DriverAddress?,
+      trips: fields[9] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, DriverModel obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class DriverModelAdapter extends TypeAdapter<DriverModel> {
       ..writeByte(7)
       ..write(obj.isFav)
       ..writeByte(8)
-      ..write(obj.address);
+      ..write(obj.address)
+      ..writeByte(9)
+      ..write(obj.trips);
   }
 
   @override
@@ -83,13 +86,14 @@ class DriverProfileAdapter extends TypeAdapter<DriverProfile> {
       dob: fields[5] as String?,
       roleId: fields[6] as int?,
       isActive: fields[7] as String?,
+      connect: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, DriverProfile obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.driverUuid)
       ..writeByte(1)
@@ -105,7 +109,9 @@ class DriverProfileAdapter extends TypeAdapter<DriverProfile> {
       ..writeByte(6)
       ..write(obj.roleId)
       ..writeByte(7)
-      ..write(obj.isActive);
+      ..write(obj.isActive)
+      ..writeByte(8)
+      ..write(obj.connect);
   }
 
   @override
@@ -130,36 +136,42 @@ class DriverAddressAdapter extends TypeAdapter<DriverAddress> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DriverAddress(
-      houseNo: fields[0] as String?,
-      locality: fields[1] as String?,
-      street: fields[2] as String?,
-      city: fields[3] as String?,
-      district: fields[4] as String?,
-      state: fields[5] as String?,
-      country: fields[6] as String?,
-      pinCode: fields[7] as String?,
+      id: fields[0] as int?,
+      verified: fields[1] as String?,
+      houseNo: fields[2] as String?,
+      locality: fields[3] as String?,
+      street: fields[4] as String?,
+      city: fields[5] as String?,
+      district: fields[6] as String?,
+      state: fields[7] as String?,
+      country: fields[8] as String?,
+      pinCode: fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, DriverAddress obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(10)
       ..writeByte(0)
-      ..write(obj.houseNo)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.locality)
+      ..write(obj.verified)
       ..writeByte(2)
-      ..write(obj.street)
+      ..write(obj.houseNo)
       ..writeByte(3)
-      ..write(obj.city)
+      ..write(obj.locality)
       ..writeByte(4)
-      ..write(obj.district)
+      ..write(obj.street)
       ..writeByte(5)
-      ..write(obj.state)
+      ..write(obj.city)
       ..writeByte(6)
-      ..write(obj.country)
+      ..write(obj.district)
       ..writeByte(7)
+      ..write(obj.state)
+      ..writeByte(8)
+      ..write(obj.country)
+      ..writeByte(9)
       ..write(obj.pinCode);
   }
 

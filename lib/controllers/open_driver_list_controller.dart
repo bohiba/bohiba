@@ -1,9 +1,9 @@
-import '/model/open_driver_model.dart';
+import '/model/driver_model.dart';
 import '/services/open_driver_service.dart';
 import 'package:get/get.dart';
 
 class OpenDriverListController extends GetxController {
-  RxList<OpenDriverModel> arrOpenDriver = <OpenDriverModel>[].obs;
+  RxList<DriverModel> arrOpenDriver = <DriverModel>[].obs;
 
   @override
   void onInit() {
@@ -12,13 +12,5 @@ class OpenDriverListController extends GetxController {
     Future.delayed(Duration.zero, () async {
       arrOpenDriver.value = await OpenDriverService.getAllOpenDriver();
     });
-  }
-
-  Future<void> connect({required String driverUuid}) async {
-    Map<String, dynamic> bodyObj = {"driver_uuid": driverUuid};
-    int expressed = await OpenDriverService.connectDriver(bodyMap: bodyObj);
-    if (expressed > 0) {
-      // Action
-    }
   }
 }

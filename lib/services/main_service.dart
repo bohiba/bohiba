@@ -10,7 +10,6 @@ import '/services/truck_service.dart';
 import '/model/driver_model.dart';
 import '/model/mines_model.dart';
 import '/model/news_model.dart';
-import '/model/open_driver_model.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/model/user_fav_model.dart';
@@ -32,7 +31,7 @@ class MainService {
       List<TruckModel> mainTrucks = await TruckService.retriveAllTruck();
       List<MinesModel> mainMines = await MinesService.getMinesList();
       List<DriverModel> mainDrivers = await DriverService.getAllDriver() ?? [];
-      List<OpenDriverModel> openToDriverList =
+      List<DriverModel> openToDriverList =
           await OpenDriverService.getAllOpenDriver();
       List<UserFavouriteModel> mainFavList =
           await FavService.retriveAllFav() ?? [];
@@ -127,15 +126,15 @@ class MainService {
             mainOwnerExpense.addAll(mainObj['owner_expense']);
           }
 
-          List<OpenDriverModel> openToDriverList = [];
+          List<DriverModel> openToDriverList = [];
           if (mainObj.containsKey('looking_jobs')) {
             openToDriverList =
-                OpenDriverModel.listFromJson(mainObj['looking_jobs']);
-            Map<String, OpenDriverModel> openDriverObj = {
-              for (OpenDriverModel odj in openToDriverList) "${odj.id}": odj
+                DriverModel.listFromJson(mainObj['looking_jobs']);
+            Map<String, DriverModel> openDriverObj = {
+              for (DriverModel odj in openToDriverList) "${odj.id}": odj
             };
-            int dBJob =
-                await _dbService.putAllData(tblOpenDriver, openDriverObj);
+            int dBJob = await _dbService.putAllData<DriverModel>(
+                tblOpenDriver, openDriverObj);
             GlobalService.printHandler(
                 "Open to Job Driver Added in DB: $dBJob");
           }
