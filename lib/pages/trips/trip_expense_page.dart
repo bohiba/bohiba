@@ -1,7 +1,6 @@
 import '/routes/app_route.dart';
 
 import '/component/screen_utils.dart';
-import '/extensions/bohiba_extension.dart';
 import '/pages/widget/linear_box_widget.dart';
 
 import '/component/bohiba_appbar/appbar_icon.dart';
@@ -124,12 +123,12 @@ class TripExpensePage extends GetView<TripExpenseController> {
               ),
               LinearBoxWidget(
                 header: 'Payment Type',
-                title: controller.tripExpense.value.expenseType!
-                    .toCapitalizedLabel(),
+                title:
+                    controller.tripExpense.value.expenseType!.capitalizeFirst,
               ),
               // LinearBoxWidget(
               //   header: 'Paid To',
-              //   title: controller.tripExpense.value.paidTo?.toCapitalizedLabel(),
+              //   title: controller.tripExpense.value.paidTo?.capitalizeFirst,
               // ),
               LinearBoxWidget(
                 header: 'Amount',

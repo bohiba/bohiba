@@ -1,17 +1,16 @@
 import 'package:bohiba/model/truck_model.dart';
 import 'package:bohiba/services/api_end_point.dart';
-import 'package:bohiba/services/db_service.dart';
 import 'package:bohiba/services/device_info_service.dart';
 import 'package:bohiba/services/dio_serivce.dart';
 import 'package:bohiba/services/global_service.dart';
 import 'package:flutter/material.dart';
 
 class OwnerExpenseService {
-  static final DBService _dBService = DBService();
+  // static final DBService _dBService = DBService();
   static final DioService _dioService = DioService();
 
-  static int _currentPage = 1;
-  static int _lastPage = 1;
+  // static int _currentPage = 1;
+  // static int _lastPage = 1;
 
   static Future<int> addOwnerExpense(
       {required Map<String, dynamic> bodyMap,

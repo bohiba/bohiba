@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import '/dist/app_enums.dart';
 import 'pref_utils.dart';
 import 'rating_service.dart';
@@ -65,6 +66,60 @@ class ProfileService {
     }
   }
 
+  static Future<ProfileModel?> updateUserProfile(
+      {required Map<String, dynamic> bodyMap}) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return null;
+    }
+    Map<String, dynamic> bodyParam = {};
+    if (bodyMap.containsKey('name')) {
+      bodyParam['name'] = bodyMap['name'];
+    }
+    if (bodyMap.containsKey('email')) {
+      bodyParam['email'] = bodyMap['email'];
+    }
+    if (bodyMap.containsKey('mobile_number')) {
+      bodyParam['mobile_number'] = bodyMap['mobile_number'];
+    }
+    if (bodyMap.containsKey('role_id')) {
+      bodyParam['role_id'] = bodyMap['role_id'];
+    }
+    if (bodyMap.containsKey('is_active')) {
+      bodyParam['is_active'] = bodyMap['is_active'];
+    }
+    if (bodyMap.containsKey('job_status')) {
+      bodyParam['job_status'] = bodyMap['job_status'];
+    }
+
+    GlobalService.showProgress();
+    ApiResponse response =
+        await _dioService.post(ApiEndPoint.apiEditUser, body: bodyParam);
+    GlobalService.dismissProgress();
+    switch (response.statusCode) {
+      case 200:
+        ProfileModel? profile = await getProfile(type: MethodType.api);
+        if (profile != null) {
+          return profile;
+        } else {
+          return null;
+        }
+      case 400:
+        GlobalService.appSnackBar(
+          status: AlertStatus.warning,
+          title: 'Profile',
+          desc: response.message,
+        );
+        return null;
+      default:
+        GlobalService.appSnackBar(
+          status: AlertStatus.failure,
+          title: 'Profile',
+          desc: 'Something went wrong',
+        );
+        return null;
+    }
+  }
+
   static Future<int> setRole({required Map<String, dynamic> bodyMap}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
@@ -77,7 +132,7 @@ class ProfileService {
         Map<dynamic, dynamic> resMap = response.data as Map<dynamic, dynamic>;
         ProfileModel? profileModel = await getProfile();
         profileModel!.roleId = resMap['role_id'];
-        int updateSucess = await updateProfile(profile: profileModel);
+        int updateSucess = await updatelocalProfile(profile: profileModel);
         GlobalService.dismissProgress();
         return updateSucess;
       case 401:
@@ -88,7 +143,10 @@ class ProfileService {
       default:
         GlobalService.dismissProgress();
         GlobalService.appSnackBar(
-            status: AlertStatus.failure, desc: 'Something went wrong');
+          status: AlertStatus.failure,
+          title: 'Profile',
+          desc: 'Something went wrong',
+        );
         return 0;
     }
   }
@@ -112,7 +170,7 @@ class ProfileService {
       case 200:
         ProfileModel? oldProfile = await getProfile();
         oldProfile!.profileImg = response.data.toString();
-        int success = await updateProfile(profile: oldProfile);
+        int success = await updatelocalProfile(profile: oldProfile);
         GlobalService.dismissProgress();
         return success;
       case 401:
@@ -142,7 +200,7 @@ class ProfileService {
             VerificationModel.fromJson(response.data);
         ProfileModel? profileModel = await getProfile();
         profileModel!.verification = verificationModel;
-        int updateSucess = await updateProfile(profile: profileModel);
+        int updateSucess = await updatelocalProfile(profile: profileModel);
         GlobalService.dismissProgress();
         return updateSucess;
       case 401:
@@ -236,8 +294,9 @@ class ProfileService {
     );
   }
 
-  static Future<int> updateProfile({required ProfileModel profile}) async {
-    return await _dBService.putData(tblProfile, profileKey, profile);
+  static Future<int> updatelocalProfile({required ProfileModel profile}) async {
+    return await _dBService.putData<ProfileModel>(
+        tblProfile, profileKey, profile);
   }
 
   static Future<List<LoggedInAccountModel>> getLoggedAccount() async {

@@ -1,11 +1,11 @@
-import '/services/api_end_point.dart';
-
 import '/model/profile_model.dart';
 import '/model/user_fav_model.dart';
 import '/services/db_service.dart';
 import '/services/device_info_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/global_service.dart';
+import '/services/api_end_point.dart';
+import '/services/driver_service.dart';
 import 'package:flutter/material.dart';
 
 import '/dist/app_enums.dart';
@@ -19,11 +19,11 @@ class DriverController extends GetxController {
 
   bool addByDoc = false;
   RxBool didReviewed = false.obs;
+  RxBool isSelected = false.obs;
 
-  Rx<int> selectedRateMsgIndex = (-1).obs;
+  Rx<String> selectedRateMsgIndex = ('').obs;
 
   Rx<double> rateStar = 0.0.obs;
-
   TextEditingController feedbackCtrl = TextEditingController();
 
   Rx<DriverModel> driverModel = DriverModel().obs;
@@ -31,6 +31,8 @@ class DriverController extends GetxController {
 
   RxList<DriverModel> arrDriver = <DriverModel>[].obs;
   final List suggestion = [
+    'Safe Driver',
+    'Need improvement in Driving',
     'Great service',
     'Hard working',
     'Highly recommend',
@@ -40,9 +42,9 @@ class DriverController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    DriverModel driver = Get.arguments;
+    driverModel.value = Get.arguments;
     Future.delayed(Duration.zero, () async {
-      await getDriverInfo(id: driver.id!.toString());
+      await getDriverInfo();
       await _getProfile();
       isRated();
     });
@@ -143,11 +145,12 @@ class DriverController extends GetxController {
     }
   }
 
-  Future<DriverModel> getDriverInfo({required String id}) async {
-    DriverModel driver =
-        await dBService.getData<DriverModel>(tblDriver, id) ?? DriverModel();
-    driverModel.value = driver;
-    return driver;
+  Future<void> getDriverInfo({MethodType methodType = MethodType.local}) async {
+    DriverModel? driver = await DriverService.getDriver(
+        id: driverModel.value.id!.toString(), type: methodType);
+    if (driver != null) {
+      driverModel.value = driver;
+    }
   }
 
   Future<void> updateDriverInfo({required String id}) async {
@@ -179,22 +182,22 @@ class DriverController extends GetxController {
     return profile;
   }
 
-  Future<void> rateDriver({
+  Future<int> rateDriver({
     required String txtUuid,
     required double rating,
     required String txtFeedback,
   }) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return;
+      return 0;
     }
     if (rating == 0.0) {
       GlobalService.showAppToast(message: 'Please rate the user');
-      return;
+      return 0;
     }
 
     if (txtFeedback.isEmpty) {
       GlobalService.showAppToast(message: 'Please share your feedback');
-      return;
+      return 0;
     }
     GlobalService.closeKeyboard();
     GlobalService.showProgress();
@@ -208,17 +211,30 @@ class DriverController extends GetxController {
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 201:
-        Get.back(result: true);
+        Get.back();
         GlobalService.getAlertDialog(
           status: AlertStatus.success,
           title: 'SUCCESS',
-          description: response.message,
+          description: 'Thank you for sharing your experience with us.',
+          buttonTxt: 'CLOSE',
+          onExit: () {
+            Get.back(result: true);
+          },
         );
-        break;
+        return 1;
       case 401:
-        GlobalService.showAppToast(message: response.message);
-        break;
+        GlobalService.appSnackBar(
+            status: AlertStatus.warning,
+            title: 'Rate Driver',
+            desc: response.message);
+        return 0;
+
       default:
+        GlobalService.appSnackBar(
+            status: AlertStatus.failure,
+            title: 'Rate Driver',
+            desc: 'Something went wrong');
+        return 0;
     }
   }
 
@@ -259,14 +275,14 @@ class DriverController extends GetxController {
     return isReviewed;
   }
 
-  void onSelectMsg(int index) {
+  void onSelectMsg(String strSuggestion) {
     feedbackCtrl.clear();
-    feedbackCtrl.text = suggestion[index];
-    if (selectedRateMsgIndex.value == index) {
+    feedbackCtrl.text = strSuggestion;
+    if (selectedRateMsgIndex.value == strSuggestion) {
       feedbackCtrl.clear();
-      selectedRateMsgIndex.value = -1;
+      selectedRateMsgIndex.value = '';
       return;
     }
-    selectedRateMsgIndex.value = index;
+    selectedRateMsgIndex.value = strSuggestion;
   }
 }

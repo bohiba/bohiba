@@ -42,37 +42,10 @@ class DriverAppbar extends GetView<DriverController>
           },
         ),
         actions: [
-          /*Obx(
-            () {
-              return AppBarIconBox(
-                onTap: () async => await controller
-                    .toggleFav(
-                  assetId: controller.driverModel.value.id!.toString(),
-                  driver: controller.driverModel.value,
-                )
-                    .then(
-                  (onValue) async {
-                    await controller.getDriverInfo(
-                      id: controller.driverModel.value.id!.toString(),
-                    );
-                    controller.driverModel.refresh();
-                    GlobalService.printHandler(
-                        'Is marked fav: ${controller.driverModel.value.isFav}');
-                  },
-                ),
-                icon: controller.driverModel.value.isFav == true
-                    ? Icon(
-                        Icons.favorite_rounded,
-                        color: BohibaColors.warningColor,
-                      )
-                    : Icon(Remix.heart_3_line),
-              );
-            },
-          ),*/
           DriverMenu(
             driver: controller.driverModel.value,
             allowedActions: [
-              // ActionType.route,
+              ActionType.share,
               ActionType.other,
               ActionType.delete,
             ],

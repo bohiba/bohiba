@@ -1,5 +1,3 @@
-import '/extensions/bohiba_extension.dart';
-
 import '/controllers/all_job_controller.dart';
 import '/dist/component_exports.dart';
 import '/pages/widget/role_widget.dart';
@@ -142,8 +140,9 @@ class AllJobPage extends GetView<AllJobController> {
                                     Spacer(),
                                     Text(
                                       job['status']
-                                          .toString()
-                                          .toCapitalizedLabel(),
+                                              .toString()
+                                              .capitalizeFirst ??
+                                          '',
                                       style: TextStyle(
                                         fontFamily: bohibaTheme
                                             .textTheme.labelLarge!.fontFamily,

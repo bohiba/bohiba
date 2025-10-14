@@ -1,12 +1,12 @@
+import '/model/rating_model.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/dist/component_exports.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
+import '/controllers/open_driver_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:readmore/readmore.dart';
-
-import '/controllers/open_driver_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +19,7 @@ class OpenDriverPage extends GetView<OpenDriverController> {
       return Scaffold(
         appBar: TitleAppbar(
           title: controller.openDriver.value.profile?.name ?? '',
+          popResult: controller.popResult.value,
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -123,11 +124,8 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                         Row(
                                           children: [
                                             Text(
-                                              (controller.openDriver.value
-                                                          .rating?.isEmpty ??
-                                                      false)
-                                                  ? '0.0'
-                                                  : '',
+                                              controller.avgRating.value
+                                                  .toString(),
                                               style: bohibaTheme
                                                   .textTheme.headlineSmall,
                                             ),
@@ -153,8 +151,8 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                   ),
                   PrimaryButton(
                     padding: EdgeInsets.only(
-                      top: ScreenUtils.height25,
-                      bottom: ScreenUtils.height10,
+                      top: ScreenUtils.height20,
+                      bottom: ScreenUtils.height15,
                     ),
                     height: 35,
                     width: ScreenUtils.width,
@@ -171,10 +169,15 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                     'accept'
                                 ? 'Call Driver'
                                 : 'Null',
-                    color: controller.openDriver.value.profile?.connect != null
-                        ? bohibaTheme.colorScheme.onSurface
-                        : bohibaTheme.primaryColor,
-                    onPressed: () {},
+                    color: controller.openDriver.value.profile?.connect == null
+                        ? bohibaTheme.colorScheme.primary
+                        : controller.openDriver.value.profile?.connect
+                                    ?.toString()
+                                    .toLowerCase() ==
+                                'pending'
+                            ? bohibaTheme.colorScheme.onPrimary
+                            : bohibaTheme.colorScheme.onSurface,
+                    onPressed: () async => await controller.connect(),
                   ),
                   Text(
                     'Basic Info',
@@ -268,7 +271,8 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                         style: bohibaTheme.textTheme.headlineMedium,
                       ),
                     ),
-                  if (controller.openDriver.value.rating?.isEmpty ?? true)
+                  if ((controller.openDriver.value.rating?.isEmpty ?? true) ||
+                      controller.openDriver.value.rating == null)
                     SizedBox.shrink()
                   else
                     ListView.builder(
@@ -278,6 +282,8 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                           controller.openDriver.value.rating?.length ?? 0,
                       padding: EdgeInsets.only(top: ScreenUtils.height15),
                       itemBuilder: (context, index) {
+                        RatingModel ratings =
+                            controller.openDriver.value.rating![index];
                         return Container(
                           margin: EdgeInsets.only(bottom: ScreenUtils.height10),
                           child: Row(
@@ -295,11 +301,11 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Name',
+                                      ratings.reviewer?.name ?? '',
                                       style: bohibaTheme.textTheme.labelLarge,
                                     ),
                                     ReadMoreText(
-                                      'Desc',
+                                      ratings.feedback ?? '',
                                       trimLines: 2,
                                       trimMode: TrimMode.Line,
                                       trimCollapsedText: ' Read more',
@@ -334,7 +340,7 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '0',
+                                      ratings.rating?.toString() ?? '',
                                       style: bohibaTheme.textTheme.labelLarge,
                                     ),
                                     const Icon(

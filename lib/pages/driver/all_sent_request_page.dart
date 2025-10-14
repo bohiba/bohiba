@@ -1,3 +1,4 @@
+import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 
 import '/controllers/all_sent_connection_controller.dart';
@@ -14,6 +15,7 @@ class AllSentRequestPage extends GetView<AllSentRequestController> {
 
   @override
   Widget build(BuildContext context) {
+    final navigateState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(title: 'Sent Request'),
       body: Obx(() {
@@ -48,6 +50,15 @@ class AllSentRequestPage extends GetView<AllSentRequestController> {
               DriverModel openDriver = controller.arrSentReq[index];
               return OpenDriverTile(
                 openDriver: openDriver,
+                onTap: () {
+                  navigateState
+                      .pushNamed(AppRoute.openDriver, arguments: openDriver)
+                      .then((onValue) async {
+                    if (onValue != null && onValue != false) {
+                      await controller.getAllOpenDriver();
+                    }
+                  });
+                },
               );
             },
           );

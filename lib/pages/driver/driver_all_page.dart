@@ -1,16 +1,15 @@
 import '/theme/bohiba_theme.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-import '/dist/app_enums.dart';
-
 import '/model/driver_model.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '/pages/driver/driver_tile.dart';
 import '/routes/app_route.dart';
+import '/dist/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/controllers/driver_all_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class DriverAllPage extends GetView<DriverAllController> {
   const DriverAllPage({super.key});
@@ -25,7 +24,13 @@ class DriverAllPage extends GetView<DriverAllController> {
           AppBarIconBox(
             icon: const Icon(EvaIcons.plus),
             onTap: () {
-              Get.toNamed(AppRoute.addDriver);
+              navState.pushNamed(AppRoute.addDriver).then((onValue) async {
+                if (onValue != null && onValue != false) {
+                  await controller.getDriverList(
+                    type: MethodType.api,
+                  );
+                }
+              });
             },
           )
         ],
@@ -64,7 +69,15 @@ class DriverAllPage extends GetView<DriverAllController> {
                           ),
                           TextButton(
                             onPressed: () {
-                              navState.pushNamed(AppRoute.addDriver);
+                              navState
+                                  .pushNamed(AppRoute.addDriver)
+                                  .then((onValue) async {
+                                if (onValue != null) {
+                                  await controller.getDriverList(
+                                    type: MethodType.api,
+                                  );
+                                }
+                              });
                             },
                             child: Text('Add New Driver'),
                           )
@@ -88,14 +101,17 @@ class DriverAllPage extends GetView<DriverAllController> {
                         driver: driverObj,
                         allowedActions: [
                           ActionType.view,
-                          ActionType.other,
-                          ActionType.route,
-                          ActionType.delete,
+                          ActionType.share,
+                          ActionType.other
                         ],
-                        onActionComplete: {
-                          ActionType.delete: (value) async {
-                            await controller.getDriverList();
-                          },
+                        onPressed: () {
+                          navState
+                              .pushNamed(AppRoute.driver, arguments: driverObj)
+                              .then((onValue) async {
+                            if (onValue != null) {
+                              await controller.getDriverList();
+                            }
+                          });
                         },
                       );
                     },

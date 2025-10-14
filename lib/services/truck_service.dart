@@ -47,7 +47,7 @@ class TruckService {
           profile.trucks = profile.trucks == null ? 1 : (profile.trucks! + 1);
         }
         int profileUpdated =
-            await ProfileService.updateProfile(profile: profile!);
+            await ProfileService.updatelocalProfile(profile: profile!);
         if (profileUpdated <= 0) return null;
         if (insertSucess <= 0) false;
         GlobalService.showAppToast(message: serviceResponse.message);
@@ -94,7 +94,7 @@ class TruckService {
             profile.drivers = arrTruckModel.length;
           }
           int profileUpdated =
-              await ProfileService.updateProfile(profile: profile!);
+              await ProfileService.updatelocalProfile(profile: profile!);
           GlobalService.dismissProgress();
           if (profileUpdated <= 0) return [];
           GlobalService.showAppToast(message: apiRes.message);
@@ -269,7 +269,7 @@ class TruckService {
           profile.trucks = profile.trucks! - 1;
         }
         int profileUpdated =
-            await ProfileService.updateProfile(profile: profile!);
+            await ProfileService.updatelocalProfile(profile: profile!);
         GlobalService.dismissProgress();
         if (profileUpdated <= 0) return false;
         GlobalService.showAppToast(message: serviceResponse.message);

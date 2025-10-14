@@ -60,12 +60,53 @@ class UserProfilePage extends GetView<DashboardController> {
                 RoleWidget(
                   truckOwnerWidget: LinearBoxWidget(
                     header: 'Hiring Status',
-                    title: 'Hiring',
+                    widget: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: controller.opted.value,
+                        isDense: true,
+                        borderRadius: BorderRadius.circular(8.0),
+                        items: controller.truckOwnerStatus
+                            .map(
+                              (status) => DropdownMenuItem<String>(
+                                value: status,
+                                child: Text(status),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (status) async {
+                          if (status != null &&
+                              controller.opted.value != status) {
+                            controller.opted.value = status;
+                            await controller.updateUserHiringStatus();
+                          }
+                        },
+                      ),
+                    ),
                   ),
                   driverWidget: LinearBoxWidget(
                     header: 'Job Status',
-                    title: controller.profileModel.value?.jobStatus
-                        ?.toCapitalizedLabel(),
+                    widget: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: controller.opted.value,
+                        isDense: true,
+                        borderRadius: BorderRadius.circular(8.0),
+                        items: controller.truckOwnerStatus
+                            .map(
+                              (status) => DropdownMenuItem<String>(
+                                value: status,
+                                child: Text(status),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (status) async {
+                          if (status != null &&
+                              controller.opted.value != status) {
+                            controller.opted.value = status;
+                            // await controller.updateUserHiringStatus();
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 ),
                 LinearBoxWidget(

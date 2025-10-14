@@ -1,3 +1,5 @@
+import 'package:bohiba/services/driver_service.dart';
+
 import '/services/api_end_point.dart';
 import '/dist/app_enums.dart';
 import '/model/driver_model.dart';
@@ -44,8 +46,11 @@ class DriverAllController extends GetxController {
     }
   }
 
-  Future<List<DriverModel>> getDriverList() async {
-    List<DriverModel> driverList = await dBService.getAllData(tblDriver);
+  Future<List<DriverModel>> getDriverList({
+    MethodType type = MethodType.local,
+  }) async {
+    List<DriverModel> driverList =
+        await DriverService.getAllDriver(methodType: type) ?? [];
     arrDriver.clear();
     arrDriver.addAll(driverList);
     return driverList;

@@ -25,4 +25,11 @@ class AllSentRequestController extends GetxController {
           'Start sending connection request and connect with driver to boost you business';
     }
   }
+
+  Future<void> getAllOpenDriver() async {
+    List<DriverModel> openDriverList =
+        await OpenDriverService.getAllOpenDriver();
+    arrSentReq.clear();
+    arrSentReq.addAll(openDriverList);
+  }
 }

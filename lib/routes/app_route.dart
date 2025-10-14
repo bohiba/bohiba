@@ -1,3 +1,5 @@
+import 'package:bohiba/pages/driver/driver_modals/driver_rating_page.dart';
+
 import '/bindings/open_driver_binding.dart';
 import '/pages/driver/open_driver_page.dart';
 
@@ -73,7 +75,6 @@ import '/bindings/signup_binding.dart';
 import '/bindings/truck_binding.dart';
 import '/bindings/truck_edit_binding.dart';
 import '/pages/driver/rating_all_page.dart';
-import '/pages/driver/rating_page.dart';
 import '/pages/driver/work_calender_detail.dart';
 
 import '/bindings/trip_all_binding.dart';
@@ -169,8 +170,9 @@ class AppRoute {
 
   static const String workCalender = "/work-calender";
   static const String allRating = '/all-rating';
-  static const String rating = '/rating';
   static const String allSentReq = '/all-sent-req';
+
+  static const String ratingDriver = '/rate-driver';
 
   //Manager
   static const String manager = "/manger";
@@ -413,9 +415,9 @@ class AppRoute {
     ),
 
     GetPage(
-      name: rating,
+      name: ratingDriver,
       // binding: DriverBinding(),
-      page: () => RatingPage(),
+      page: () => DriverRatingPage(),
     ),
 
     // Manager

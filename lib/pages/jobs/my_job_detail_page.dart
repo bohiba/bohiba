@@ -5,7 +5,6 @@ import '/dist/app_enums.dart';
 import '/services/global_service.dart';
 import 'package:readmore/readmore.dart';
 
-import '/extensions/bohiba_extension.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -175,7 +174,7 @@ class MyJobDetailPage extends GetView<MyJobController> {
                           header: 'Truck Number',
                           title: controller.jobObj['regd_number']
                               .toString()
-                              .toCapitalizedLabel(),
+                              .capitalizeFirst,
                         ),
                         LinearBoxWidget(
                           header: 'Last Updated',
@@ -266,8 +265,9 @@ class MyJobDetailPage extends GetView<MyJobController> {
                                           ),
                                           Text(
                                             intDriver['job_status']
-                                                .toString()
-                                                .toCapitalizedLabel(),
+                                                    .toString()
+                                                    .capitalizeFirst ??
+                                                '',
                                             style: TextStyle(
                                               fontSize: bohibaTheme.textTheme
                                                   .titleMedium!.fontSize,

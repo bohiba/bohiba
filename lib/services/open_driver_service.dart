@@ -78,29 +78,38 @@ class OpenDriverService {
     return await _dbService.getAllData<DriverModel>(tblOpenDriver);
   }
 
-  static Future<int> connectDriver(
-      {required Map<String, dynamic> bodyMap}) async {
+  static Future<DriverModel?> connectDriver(
+      {required DriverModel driverInfo}) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return 0;
+      return null;
     }
     GlobalService.showProgress();
+    String? driverUUID = driverInfo.profile!.driverUuid ?? '';
     ApiResponse response = await _dioService.post(
-      ApiEndPoint.apiSendConnectReq,
-      body: bodyMap,
+      "${ApiEndPoint.apiSendConnectReq}/$driverUUID",
     );
     switch (response.statusCode) {
       case 200:
+        driverInfo.profile!.connect = 'pending';
+        int success = await _dbService.putData<DriverModel>(
+            tblOpenDriver, "${driverInfo.id}", driverInfo);
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: 'Request sent successfully');
-        return 1;
+        if (success > 0) {
+          GlobalService.showAppToast(message: 'Request sent successfully');
+          return await getOpenDriverPrfl(driverId: driverInfo.id!);
+        } else {
+          GlobalService.showAppToast(message: 'Something went wrong');
+          return null;
+        }
+
       case 401:
         GlobalService.dismissProgress();
         GlobalService.showAppToast(message: response.message);
-        return 0;
+        return null;
       default:
         GlobalService.dismissProgress();
         GlobalService.showAppToast(message: 'Something went wrong');
-        return 0;
+        return null;
     }
   }
 }

@@ -72,11 +72,20 @@ class DriverMenu extends GetView<DriverAllController> {
           );
         }*/
 
+        if (allowedActions.contains(ActionType.share)) {
+          menuItems.add(
+            const PopupMenuItem(
+              value: ActionType.share,
+              child: Text('Share'),
+            ),
+          );
+        }
+
         if (allowedActions.contains(ActionType.other)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.other,
-              child: Text('Share'),
+              child: Text('Sync'),
             ),
           );
         }
@@ -143,7 +152,7 @@ class DriverMenu extends GetView<DriverAllController> {
                 },
               );
               break;
-            case ActionType.other:
+            case ActionType.share:
               ShareDriverDetails(
                 id: driver.id ?? 0,
                 name: driver.profile?.name ?? '',

@@ -8,7 +8,6 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:readmore/readmore.dart';
 
 import '/component/bohiba_appbar/trip_appbar.dart';
-import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/routes/app_route.dart';
@@ -145,8 +144,8 @@ class TripPage extends GetView<TripController> {
                                 controller.tripInfo.value.driver?.name ?? ''),
                         StatusBoxWidget(
                           header: 'Status',
-                          title: controller.tripInfo.value.tripStatus
-                                  ?.toCapitalizedLabel() ??
+                          title: controller
+                                  .tripInfo.value.tripStatus?.capitalizeFirst ??
                               '',
                           titleColor: controller.statusColor(),
                         ),

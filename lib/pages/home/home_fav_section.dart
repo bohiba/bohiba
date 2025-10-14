@@ -82,6 +82,13 @@ class HomeFavListSection extends GetView<HomeController> {
                   if (favObj.containsKey('license_detail')) {
                     return DriverTile(
                       driver: DriverModel.fromJson(favObj),
+                      onPressed: () {
+                        navigatorState
+                            .pushNamed(AppRoute.driver, arguments: favObj)
+                            .then((onValue) async {
+                          await controller.getDriverList();
+                        });
+                      },
                       allowedActions: [
                         ActionType.view,
                         ActionType.add,

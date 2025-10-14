@@ -1,5 +1,6 @@
+import 'package:bohiba/component/bohiba_dropdown/primary_dropdown_menu.dart';
+import 'package:bohiba/pages/widget/required_label.dart';
 import 'package:widgets_easier/widgets_easier.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:intl/intl.dart';
@@ -78,17 +79,21 @@ class DriverAddPage extends GetView<DriverAddController> {
                     UUIDDriverVerification()
                   else
                     ManualModeDriverVerification(),
-                  Text('Assign Truck', style: bohibaTheme.textTheme.titleLarge),
-                  AppDropdown(
+                  RequiredLabel(label: 'Assign Truck'),
+                  // Text('Assign Truck', style: bohibaTheme.textTheme.titleLarge),
+                  PrimaryDropDownMenu(
                     padding: EdgeInsets.symmetric(
                       vertical: ScreenUtils.height10,
                     ),
                     hint: controller.truck.value.driver?.name ??
                         'Registration Number',
-                    items: controller.arrTruck.value,
-                    labelBuilder: (truck) => truck.regdNumber!,
+                    items: controller.arrTruck
+                        .map((f) => f.regdNumber.toString())
+                        .toList(),
+                    enableSearch: true,
+                    focusOnTap: true,
                     onChanged: (p0) {
-                      controller.strTruckRegdNo.value = p0?.regdNumber ?? '';
+                      controller.strTruckRegdNo.value = p0 ?? '';
                       GlobalService.printHandler(
                           'ID: ${controller.strTruckRegdNo.value}');
                       GlobalService.closeKeyboard();
@@ -229,10 +234,7 @@ class UUIDDriverVerification extends GetView<DriverAddController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Driver UUID',
-          style: bohibaTheme.textTheme.titleLarge,
-        ),
+        RequiredLabel(label: 'UUID', required: true),
         TextInputField(
           prefixIcon: const Icon(
             Remix.user_3_fill,
@@ -256,10 +258,7 @@ class ManualModeDriverVerification extends GetView<DriverAddController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Driving License',
-          style: bohibaTheme.textTheme.titleLarge,
-        ),
+        RequiredLabel(label: 'Driving License', required: true),
         Text(
           'Enter 10-digit unique number.',
           style: TextStyle(
@@ -277,10 +276,7 @@ class ManualModeDriverVerification extends GetView<DriverAddController> {
           textCapitalization: TextCapitalization.characters,
           maxLength: 16,
         ),
-        Text(
-          'D.O.B',
-          style: bohibaTheme.textTheme.titleLarge,
-        ),
+        RequiredLabel(label: 'D.O.B', required: true),
         DateInputField(
           width: ScreenUtils.width,
           controller: controller.dateController,

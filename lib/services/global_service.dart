@@ -440,6 +440,6 @@ class GlobalService {
   }
 
   static printHandler(String log) {
-    debugPrint("\n=================\n$log\n================\n");
+    // debugPrint("\n=================\n$log\n================\n");
   }
 }

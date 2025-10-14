@@ -36,6 +36,7 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
     bool isLoggedIn = false;
     return SafeArea(
       child: Container(
+        height: ScreenUtils.height * 0.83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(12.r),

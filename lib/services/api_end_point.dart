@@ -9,7 +9,8 @@ class ApiEndPoint {
   static const String apiSetProfileImage = '$baseUrl/set-profile-image';
   static const String apiSetRole = '$baseUrl/set-role';
   static const String apiEditDoc = '$baseUrl/add-document';
- static const String addOwnerExpense = '$baseUrl/add-expense';
+  static const String addOwnerExpense = '$baseUrl/add-expense';
+  static const String apiEditUser = '$baseUrl/user-update';
 
   static const String apiForgotPassword = '$baseUrl/forgot-password';
   static const String apiResetPassword = '$baseUrl/reset-password';

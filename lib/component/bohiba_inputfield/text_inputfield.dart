@@ -13,7 +13,7 @@ class TextInputField extends StatelessWidget {
   final int? maxLines;
   final int? maxLength;
   final TextCapitalization textCapitalization;
-  final Function(String)? onChanged;
+  final Function(String value)? onChanged;
   final Function()? onEditingComplete;
   final List<TextInputFormatter>? inputFormatters;
   final bool readOnly;

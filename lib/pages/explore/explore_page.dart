@@ -81,6 +81,15 @@ class ExplorePage extends GetView<OpenDriverListController> {
                   DriverModel openDriver = controller.arrOpenDriver[index];
                   return OpenDriverTile(
                     openDriver: openDriver,
+                    onTap: () {
+                      navigateState
+                          .pushNamed(AppRoute.openDriver, arguments: openDriver)
+                          .then((onValue) async {
+                        if (onValue != null && onValue != false) {
+                          await controller.getAllOpenDriver();
+                        }
+                      });
+                    },
                   );
                 },
               ),

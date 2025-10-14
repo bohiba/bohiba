@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import '/extensions/bohiba_extension.dart';
 import '/services/trip_service.dart';
 
 import '/controllers/image_upload_controller.dart';
@@ -180,8 +179,8 @@ class TripAddController extends ImageUploadController {
     originController.text = tripModel?.origin ?? '';
     destinationController.text = tripModel?.destination ?? '';
     materialController.text =
-        tripModel?.loadDetail?.materialType?.toCapitalizedLabel() ?? '';
-    statusController.text = tripModel?.tripStatus?.toCapitalizedLabel() ?? '';
+        tripModel?.loadDetail?.materialType?.capitalizeFirst ?? '';
+    statusController.text = tripModel?.tripStatus?.capitalizeFirst ?? '';
     totalWeightController.text =
         tripModel?.loadDetail?.loadWeight.toString() ?? '';
     shortWeightController.text =

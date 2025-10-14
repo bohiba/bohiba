@@ -1,7 +1,4 @@
-import 'package:bohiba/routes/app_route.dart';
-
 import '/model/driver_model.dart';
-
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
@@ -9,19 +6,24 @@ import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class OpenDriverTile extends StatelessWidget {
   final DriverModel openDriver;
+  final Function()? onTap;
+  final bool? showStatus;
 
-  const OpenDriverTile({super.key, required this.openDriver});
+  const OpenDriverTile({
+    super.key,
+    required this.openDriver,
+    this.onTap,
+    this.showStatus = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final navigateState = Navigator.of(context);
     return GestureDetector(
-      onTap: () {
-        navigateState.pushNamed(AppRoute.openDriver, arguments: openDriver);
-      },
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
         margin: EdgeInsets.only(bottom: ScreenUtils.width5),
@@ -70,7 +72,7 @@ class OpenDriverTile extends StatelessWidget {
                     Text(
                       openDriver.address?.state ?? '',
                       style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                         fontWeight:
                             bohibaTheme.textTheme.labelMedium!.fontWeight,
                         color: bohibaTheme.textTheme.bodyLarge!.color,
@@ -80,23 +82,11 @@ class OpenDriverTile extends StatelessWidget {
                 ),
               ],
             ),
-            // Spacer(),
-            // Icon(Icons.arrow_forward_ios)
-            // GestureDetector(
-            //   onTap: openDriver.connect == null ? onPressConnect : null,
-            //   child: Padding(
-            //     padding: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
-            //     child: Text(
-            //       openDriver.connect == null ? 'Connect' : 'Sent',
-            //       style: TextStyle(
-            //         fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
-            //         color: openDriver.connect == null
-            //             ? bohibaTheme.textTheme.bodySmall!.color
-            //             : bohibaTheme.textTheme.titleSmall!.color,
-            //       ),
-            //     ),
-            //   ),
-            // )
+            Spacer(),
+            if (showStatus == true)
+              Text(openDriver.profile?.connect?.capitalizeFirst ?? '')
+            else
+              SizedBox.shrink(),
           ],
         ),
       ),

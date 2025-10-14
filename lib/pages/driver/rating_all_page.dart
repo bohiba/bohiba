@@ -1,12 +1,12 @@
+import 'package:bohiba/routes/app_route.dart';
+
 import '/model/rating_model.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/screen_utils.dart';
-import '/component/ui/tile_decorative.dart';
 import '/controllers/driver_controller.dart';
 import '/model/driver_model.dart';
-import '/pages/driver/driver_modals/driver_rating_modal.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +19,7 @@ class RatingAllPage extends GetView<DriverController> {
 
   @override
   Widget build(context) {
+    final navigateState = Navigator.of(context);
     return Obx(() {
       DriverModel driver = controller.driverModel.value;
       return Scaffold(
@@ -125,33 +126,21 @@ class RatingAllPage extends GetView<DriverController> {
                         )
                       : SizedBox.shrink(),
                 ),
-                controller.didReviewed.isFalse
-                    ? SizedBox.shrink()
-                    : Padding(
-                        padding: EdgeInsets.only(
-                          left: ScreenUtils.width15,
-                          right: ScreenUtils.width15,
-                        ),
-                        child: PrimaryButton(
-                          label: 'Rate Driver',
-                          onPressed: () => showModalBottomSheet(
-                            isScrollControlled: true,
-                            isDismissible: false,
-                            enableDrag: false,
-                            shape: BottomModalShape(),
-                            context: context,
-                            builder: (context) {
-                              return DriverRatingModal();
-                            },
-                          ).then((onValue) async {
-                            if (onValue != null) {
-                              await controller.updateDriverInfo(
-                                id: controller.driverModel.value.id!.toString(),
-                              );
-                            }
-                          }),
-                        ),
-                      ),
+                if (controller.didReviewed.isTrue)
+                  SizedBox.shrink()
+                else
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: ScreenUtils.width15,
+                      right: ScreenUtils.width15,
+                    ),
+                    child: PrimaryButton(
+                      label: 'Rate Driver',
+                      onPressed: () {
+                        navigateState.pushNamed(AppRoute.ratingDriver);
+                      },
+                    ),
+                  ),
               ],
             ),
           ));

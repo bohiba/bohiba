@@ -29,7 +29,7 @@ class UpdateContactInfoController extends GetxController {
       profileModel.value.mobileNumber = parameter['mobile_number'];
     }
     int updateSuccess =
-        await ProfileService.updateProfile(profile: profileModel.value);
+        await ProfileService.updatelocalProfile(profile: profileModel.value);
     if (updateSuccess > 0) {
       Get.back();
     }
