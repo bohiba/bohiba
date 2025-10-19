@@ -1,4 +1,4 @@
-import 'db_service.dart';
+/*import 'db_service.dart';
 import 'global_service.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -503,4 +503,4 @@ class DatabaseService {
   , image TEXT
   , updatedAt TEXT
   )''';
-}
+}*/

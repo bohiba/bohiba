@@ -171,8 +171,8 @@ class SignInScreen extends GetView<AuthController> {
 
                           if (successLogin > 0) {
                             navigateState.pushNamedAndRemoveUntil(
-                              AppRoute.navBar,
-                              ModalRoute.withName(AppRoute.navBar),
+                              AppRoute.welcome,
+                              ModalRoute.withName(AppRoute.welcome),
                             );
                           }
                         },
@@ -194,7 +194,7 @@ class SignInScreen extends GetView<AuthController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          navigateState.popAndPushNamed(AppRoute.signUp);
+                         // navigateState.popAndPushNamed(AppRoute.signUp);
                         },
                         child: Text(
                           'Signup',

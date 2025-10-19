@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
   const AddOwnerExpensesScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +22,7 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(
+            
             top: ScreenUtils.height20,
             left: ScreenUtils.height15,
             right: ScreenUtils.height15,

@@ -1,4 +1,5 @@
-import 'package:bohiba/pages/driver/driver_modals/driver_rating_page.dart';
+import '/pages/driver/driver_modals/driver_rating_page.dart';
+import '/pages/welcome.dart';
 
 import '/bindings/open_driver_binding.dart';
 import '/pages/driver/open_driver_page.dart';
@@ -233,6 +234,9 @@ class AppRoute {
   static const String addJobs = '/add-jobs';
   static const String myJobDetail = '/my-job-details';
 
+  //TODO - It should be removed
+  static const String welcome = '/welcome';
+
   static final List<GetPage> routes = [
     GetPage(
       name: splashScreen,
@@ -240,6 +244,10 @@ class AppRoute {
       page: () => const SplashScreen(),
     ),
 
+    GetPage(
+      name: welcome,
+      page: () => const WelcomeSceen(),
+    ),
     // Auth
     GetPage(
       name: signIn,

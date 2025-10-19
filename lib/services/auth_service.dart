@@ -94,19 +94,19 @@ class AuthService {
         _dioService.setToken(token);
         await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.printHandler("App Token: $token");
-        ProfileModel? loggedInUser =
-            await ProfileService.getProfile(type: MethodType.api);
-        if (loggedInUser != null) {
-          await ProfileService.loggedInUser(
-            loggedInUser: LoggedInAccountModel(
-              uuid: loggedInUser.uuid,
-              name: loggedInUser.name,
-              email: loggedInUser.email,
-              token: token,
-              isLoggedIn: true,
-            ),
-          );
-        }
+        // ProfileModel? loggedInUser =
+        //     await ProfileService.getProfile(type: MethodType.api);
+        // if (loggedInUser != null) {
+        //   await ProfileService.loggedInUser(
+        //     loggedInUser: LoggedInAccountModel(
+        //       uuid: loggedInUser.uuid,
+        //       name: loggedInUser.name,
+        //       email: loggedInUser.email,
+        //       token: token,
+        //       isLoggedIn: true,
+        //     ),
+        //   );
+        // }
         GlobalService.dismissProgress();
         return 1;
       default:

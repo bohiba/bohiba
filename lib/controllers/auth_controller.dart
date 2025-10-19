@@ -28,13 +28,14 @@ class AuthController extends GetxController {
       return 0;
     }
     int successLogin = await AuthService.signin(uuid: uuid, password: password);
-    final Map<String, dynamic>? mainInfo =
-        await MainService.mainApi(type: MethodType.api);
+    // final Map<String, dynamic>? mainInfo =
+    //     await MainService.mainApi(type: MethodType.api);
     if (successLogin > 0) {
       idController.clear();
       pwdController.clear();
     }
-    return (successLogin == 1 && mainInfo != null) ? 1 : 0;
+    return successLogin;
+   // return (successLogin == 1 && mainInfo != null) ? 1 : 0;
   }
 
   Future<bool> refreshToken() async {
