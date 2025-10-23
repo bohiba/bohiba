@@ -12,13 +12,19 @@ class AllSentRequestController extends GetxController {
     super.onInit();
 
     Future.delayed(Duration.zero, () async {
-      await _getSentReq();
+      await getSentReq();
     });
   }
 
-  Future<void> _getSentReq() async {
-    List<DriverModel> sentReqList = await OpenDriverService.getSentReqList();
-    arrSentReq.addAll(sentReqList);
+  Future<void> getSentReq({bool showLoading = true, bool reset = false}) async {
+    List<DriverModel>? sentReqList = await OpenDriverService.getSentReqList(
+      showProgress: showLoading,
+    );
+
+    if (sentReqList != null) {
+      if (reset) arrSentReq.clear();
+      arrSentReq.addAll(sentReqList);
+    }
     if (arrSentReq.isEmpty) {
       strHeaderMsg.value = 'No Request Found';
       strDescription.value =
@@ -27,9 +33,12 @@ class AllSentRequestController extends GetxController {
   }
 
   Future<void> getAllOpenDriver() async {
-    List<DriverModel> openDriverList =
+    List<DriverModel>? openDriverList =
         await OpenDriverService.getAllOpenDriver();
-    arrSentReq.clear();
-    arrSentReq.addAll(openDriverList);
+
+    if (openDriverList != null) {
+      arrSentReq.clear();
+      arrSentReq.addAll(openDriverList);
+    }
   }
 }

@@ -30,6 +30,8 @@ class PrimaryButton extends StatelessWidget {
           fixedSize:
               Size(width ?? ScreenUtils.width, height ?? ScreenUtils.height47),
           backgroundColor: color ?? BohibaColors.primaryColor,
+          disabledBackgroundColor: color?.withValues(alpha: 0.25) ??
+              bohibaTheme.colorScheme.onPrimary,
         ),
         child: Text(
           label.toUpperCase(),

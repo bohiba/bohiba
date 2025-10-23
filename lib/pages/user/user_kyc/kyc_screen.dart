@@ -28,25 +28,19 @@ class KYCScreen extends GetView<DashboardController> {
             ),
             LinearBoxWidget(
               header: 'Aadhar Number',
-              title:
-                  controller.profileModel.value?.verification?.aadhaarNumber ??
-                      'NA',
+              title: controller.profileModel.value?.aadharNumber ?? 'NA',
             ),
             LinearBoxWidget(
               header: 'Pan Number',
-              title: controller.profileModel.value?.verification?.panNumber ??
-                  'NA',
+              title: controller.profileModel.value?.panNumber ?? 'NA',
             ),
             LinearBoxWidget(
               header: 'DL Number',
-              title:
-                  controller.profileModel.value?.verification?.dlNumber ?? 'NA',
+              title: controller.profileModel.value?.dlNumber ?? 'NA',
             ),
             LinearBoxWidget(
               header: 'Verification Status',
-              title: controller
-                      .profileModel.value?.verification?.verificationStatus!
-                      .toUpperCase() ??
+              title: controller.profileModel.value?.verified!.toUpperCase() ??
                   'NA',
             ),
           ],

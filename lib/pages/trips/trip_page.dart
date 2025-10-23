@@ -1,23 +1,26 @@
+import 'package:bohiba/extensions/bohiba_extension.dart';
+
 import '/dist/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/pages/widget/status_box_widget.dart';
 import '/pages/widget/vertical_box.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:gap/gap.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:readmore/readmore.dart';
-
-import '/component/bohiba_appbar/trip_appbar.dart';
-import '/model/trip_model.dart';
-import '/pages/widget/linear_box_widget.dart';
 import '/routes/app_route.dart';
+import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:remixicon/remixicon.dart';
+import '/pages/widget/role_widget.dart';
+import '/pages/widget/linear_box_widget.dart';
+import '/component/bohiba_appbar/trip_appbar.dart';
 
 import '/controllers/trip_controller.dart';
+
+import 'package:get/get.dart';
+import 'package:gap/gap.dart';
+import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
+import 'package:remixicon/remixicon.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class TripPage extends GetView<TripController> {
   const TripPage({super.key});
@@ -41,7 +44,7 @@ class TripPage extends GetView<TripController> {
                   // From -> To Section
                   Padding(
                     padding: EdgeInsets.only(
-                      top: ScreenUtils.height10,
+                      top: ScreenUtils.height15,
                       left: ScreenUtils.height15,
                       right: ScreenUtils.height15,
                       bottom: ScreenUtils.height10,
@@ -75,10 +78,10 @@ class TripPage extends GetView<TripController> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: null,
-                          icon: Icon(RemixIcons.arrow_right_long_line),
-                          iconSize: 24.w,
+                        Icon(
+                          RemixIcons.arrow_right_double_line,
+                          color: bohibaTheme.primaryColor,
+                          size: 32.w,
                         ),
                         Expanded(
                           child: Column(
@@ -128,24 +131,30 @@ class TripPage extends GetView<TripController> {
                           ),
                         ),
                         LinearBoxWidget(
-                            onClick: () {
-                              Get.toNamed(
-                                AppRoute.truck,
-                                arguments: controller.tripInfo.value.truck!.id,
-                              );
-                            },
-                            header: 'Truck',
-                            title:
-                                controller.tripInfo.value.truck?.regdNumber ??
-                                    ''),
-                        LinearBoxWidget(
+                          onClick: () {
+                            Get.toNamed(
+                              AppRoute.truck,
+                              arguments: controller.tripInfo.value.truck!.id,
+                            );
+                          },
+                          header: 'Truck',
+                          title: controller.tripInfo.value.truck?.regdNumber,
+                        ),
+                        RoleWidget(
+                          truckOwnerWidget: LinearBoxWidget(
                             header: 'Driver',
-                            title:
-                                controller.tripInfo.value.driver?.name ?? ''),
+                            title: controller.tripInfo.value.driver?.name,
+                          ),
+                          driverWidget: LinearBoxWidget(
+                            header: 'Owner',
+                            title: controller.tripInfo.value.owner?.name,
+                          ),
+                        ),
                         StatusBoxWidget(
                           header: 'Status',
                           title: controller
-                                  .tripInfo.value.tripStatus?.capitalizeFirst ??
+                                  .tripInfo.value.tripStatus?.capitalizeFirst
+                                  ?.replaceAll('_', ' ') ??
                               '',
                           titleColor: controller.statusColor(),
                         ),
@@ -155,9 +164,11 @@ class TripPage extends GetView<TripController> {
 
                   // Load Info and Finance Info
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtils.height30,
-                      horizontal: ScreenUtils.height15,
+                    padding: EdgeInsets.only(
+                      top: ScreenUtils.height30,
+                      left: ScreenUtils.height15,
+                      right: ScreenUtils.height15,
+                      bottom: ScreenUtils.height10,
                     ),
                     child: Row(
                       children: [
@@ -168,6 +179,7 @@ class TripPage extends GetView<TripController> {
                               vertical: ScreenUtils.height10,
                               horizontal: ScreenUtils.width15,
                             ),
+                            margin: EdgeInsets.only(right: ScreenUtils.width10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -184,59 +196,63 @@ class TripPage extends GetView<TripController> {
                                 TripInfoItem(
                                   label: 'Load Weight',
                                   value:
-                                      '${controller.tripInfo.value.loadDetail?.loadWeight ?? ''} Ton',
+                                      '${controller.tripInfo.value.loadDetail?.loadWeight ?? '0.0'} Ton',
                                 ),
                                 TripInfoItem(
                                   label: 'Short Weight',
                                   value:
-                                      '${controller.tripInfo.value.loadDetail?.shortWeight ?? ''} Ton',
+                                      '${controller.tripInfo.value.loadDetail?.shortWeight ?? '0.0'} Ton',
                                 ),
                                 TripInfoItem(
                                   label: 'Rate per Ton',
                                   value:
-                                      '${controller.tripInfo.value.loadDetail?.rate ?? ''} Ton',
+                                      '${controller.tripInfo.value.loadDetail?.rate ?? '0.0'} Ton',
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        Gap(10.w),
-                        Expanded(
-                          child: Container(
-                            decoration: TileDecorative(),
-                            padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtils.height10,
-                              horizontal: ScreenUtils.width15,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Finance Info',
-                                  style: bohibaTheme.textTheme.headlineMedium,
-                                ),
-                                TripInfoItem(
-                                  label: 'Amount',
-                                  value:
-                                      '₹ ${controller.tripInfo.value.finance?.amount ?? '0.00'}',
-                                ),
-                                TripInfoItem(
-                                  label: 'Total Expense',
-                                  value:
-                                      '₹ ${controller.tripInfo.value.finance?.tripExpense ?? ''}',
-                                ),
-                                TripInfoItem(
-                                  label: 'Total Payment',
-                                  value:
-                                      '₹ ${controller.tripInfo.value.finance?.tripPayment ?? ''}',
-                                ),
-                                TripInfoItem(
-                                  label: 'Total Profit',
-                                  value:
-                                      '₹ ${controller.tripInfo.value.finance?.tripProfit ?? ''}',
-                                ),
-                              ],
+                        RoleWidget(
+                          truckOwnerWidget: Expanded(
+                            child: Container(
+                              decoration: TileDecorative(),
+                              padding: EdgeInsets.symmetric(
+                                vertical: ScreenUtils.height10,
+                                horizontal: ScreenUtils.width15,
+                              ),
+                              margin:
+                                  EdgeInsets.only(left: ScreenUtils.width10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Finance Info',
+                                    style: bohibaTheme.textTheme.headlineMedium,
+                                  ),
+                                  TripInfoItem(
+                                    label: 'Amount',
+                                    value:
+                                        '₹ ${controller.tripInfo.value.finance?.amount ?? '0.00'}',
+                                  ),
+                                  TripInfoItem(
+                                    label: 'Total Expense',
+                                    value:
+                                        '₹ ${controller.tripInfo.value.finance?.tripExpense ?? ''}',
+                                  ),
+                                  TripInfoItem(
+                                    label: 'Total Payment',
+                                    value:
+                                        '₹ ${controller.tripInfo.value.finance?.tripPayment ?? ''}',
+                                  ),
+                                  TripInfoItem(
+                                    label: 'Total Profit',
+                                    value:
+                                        '₹ ${controller.tripInfo.value.finance?.tripProfit ?? ''}',
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -253,7 +269,6 @@ class TripPage extends GetView<TripController> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            // top: ScreenUtils.height10,
                             left: ScreenUtils.height15,
                             right: ScreenUtils.height15,
                           ),
@@ -283,11 +298,10 @@ class TripPage extends GetView<TripController> {
                                     .then(
                                   (onValue) async {
                                     if (onValue != null && onValue != false) {
-                                      controller.tripInfo.value =
-                                          (await controller.getTripInfo(
+                                      await controller.getTripInfo(
                                         methodType: MethodType.api,
-                                        tripInfo: controller.tripInfo.value,
-                                      ))!;
+                                        id: controller.tripInfo.value.id!,
+                                      );
                                     }
                                   },
                                 );
@@ -312,7 +326,6 @@ class TripPage extends GetView<TripController> {
                                       radius: 20,
                                       backgroundColor:
                                           bohibaTheme.highlightColor,
-                                      // backgroundImage: NetworkImage(GlobalService.getAvatarUrl('')),
                                       child:
                                           Icon(EvaIcons.diagonalArrowLeftDown),
                                     ),
@@ -324,7 +337,7 @@ class TripPage extends GetView<TripController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          payment.paidBy ?? 'NA',
+                                          payment.paidBy ?? '',
                                           maxLines: 1,
                                           style:
                                               bohibaTheme.textTheme.bodyMedium,
@@ -351,14 +364,16 @@ class TripPage extends GetView<TripController> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '₹ ${payment.amount}',
+                                          payment.amount == null
+                                              ? ''
+                                              : '₹ ${payment.amount ?? ''}',
                                           style: TextStyle(
                                             color: bohibaTheme
                                                 .colorScheme.onSurface,
                                           ),
                                         ),
                                         Text(
-                                          '${payment.payerType}',
+                                          payment.payerType ?? '',
                                           style: TextStyle(
                                             fontSize: bohibaTheme
                                                 .textTheme.bodySmall!.fontSize,
@@ -394,18 +409,20 @@ class TripPage extends GetView<TripController> {
                             right: ScreenUtils.height15,
                           ),
                           child: Text(
-                            'Trip Expense',
+                            'Expense',
                             style: bohibaTheme.textTheme.headlineMedium,
                           ),
                         ),
-                        ListView.builder(
+                        ListView.separated(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           padding: EdgeInsets.only(
-                            top: ScreenUtils.height10,
                             left: ScreenUtils.width15,
                             right: ScreenUtils.width15,
                           ),
+                          separatorBuilder: (context, index) {
+                            return Divider(thickness: 2.0);
+                          },
                           itemCount:
                               controller.tripInfo.value.expenses?.length ?? 0,
                           itemBuilder: (context, index) {
@@ -419,11 +436,10 @@ class TripPage extends GetView<TripController> {
                                     .then(
                                   (onValue) async {
                                     if (onValue != null && onValue != false) {
-                                      controller.tripInfo.value =
-                                          (await controller.getTripInfo(
+                                      await controller.getTripInfo(
                                         methodType: MethodType.api,
-                                        tripInfo: controller.tripInfo.value,
-                                      ))!;
+                                        id: controller.tripInfo.value.id!,
+                                      );
                                     }
                                   },
                                 );
@@ -433,14 +449,6 @@ class TripPage extends GetView<TripController> {
                                   vertical: ScreenUtils.height15,
                                 ),
                                 width: ScreenUtils.width,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      width: 1.0,
-                                      color: bohibaTheme.dividerColor,
-                                    ),
-                                  ),
-                                ),
                                 child: Row(
                                   children: [
                                     CircleAvatar(
@@ -458,7 +466,9 @@ class TripPage extends GetView<TripController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          expenses.expenseType ?? 'NA',
+                                          expenses.expenseType
+                                                  ?.toCapitalizedLabel() ??
+                                              '',
                                           maxLines: 1,
                                           style:
                                               bohibaTheme.textTheme.bodyMedium,
@@ -537,17 +547,21 @@ class TripPage extends GetView<TripController> {
                             style: bohibaTheme.textTheme.headlineMedium,
                           ),
                         ),
-                        ListView.builder(
+                        ListView.separated(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           padding: EdgeInsets.only(
-                            top: ScreenUtils.height10,
                             left: ScreenUtils.width15,
                             right: ScreenUtils.width15,
-                            bottom: ScreenUtils.height20,
                           ),
                           itemCount:
-                              controller.tripInfo.value.reassignment?.length,
+                              controller.tripInfo.value.reassignment?.length ??
+                                  0,
+                          separatorBuilder: (context, index) {
+                            return Divider(
+                              thickness: 2.0,
+                            );
+                          },
                           itemBuilder: (context, index) {
                             final Reassignment reassignment =
                                 controller.tripInfo.value.reassignment![index];
@@ -560,19 +574,11 @@ class TripPage extends GetView<TripController> {
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                  vertical: ScreenUtils.height15,
+                                  vertical: ScreenUtils.height10,
                                 ),
                                 width: ScreenUtils.width,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      width: 1.0,
-                                      color: bohibaTheme.dividerColor,
-                                    ),
-                                  ),
-                                ),
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CircleAvatar(
                                       radius: 20,
@@ -590,13 +596,15 @@ class TripPage extends GetView<TripController> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            reassignment.regdNumber ?? 'NA',
+                                            reassignment.regdNumber ?? '',
                                             maxLines: 1,
                                             style: bohibaTheme
                                                 .textTheme.bodyMedium,
                                           ),
                                           ReadMoreText(
-                                            reassignment.reason ?? '',
+                                            reassignment
+                                                    .reason?.capitalizeFirst ??
+                                                '',
                                             trimLines: 2,
                                             trimMode: TrimMode.Line,
                                             trimCollapsedText: ' Read more',
@@ -620,25 +628,117 @@ class TripPage extends GetView<TripController> {
                                               color: Colors.blue,
                                             ),
                                           ),
-                                          Text(
-                                            reassignment.date ?? 'Not Assigned',
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontSize: bohibaTheme.textTheme
-                                                  .labelSmall!.fontSize,
-                                              color: bohibaTheme
-                                                  .textTheme.titleSmall!.color,
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),
                                     Spacer(),
+                                    Icon(Icons.arrow_forward_ios_rounded)
                                   ],
                                 ),
                               ),
                             );
                           },
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Visibility(
+                    visible: controller.tripInfo.value.documents?.isNotEmpty ??
+                        false,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: ScreenUtils.height20,
+                            left: ScreenUtils.height15,
+                            right: ScreenUtils.height15,
+                          ),
+                          child: Text(
+                            'Trip Document',
+                            style: bohibaTheme.textTheme.headlineMedium,
+                          ),
+                        ),
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(
+                            top: ScreenUtils.height10,
+                            left: ScreenUtils.width15,
+                            right: ScreenUtils.width15,
+                            bottom: ScreenUtils.height20,
+                          ),
+                          itemCount:
+                              controller.tripInfo.value.documents?.length,
+                          itemBuilder: (context, index) {
+                            TripDocument document =
+                                controller.tripInfo.value.documents![index];
+                            return InkWell(
+                              onTap: () {},
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: bohibaTheme.canvasColor,
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: ScreenUtils.height * 0.185,
+                                      decoration: BoxDecoration(
+                                        color: bohibaTheme.cardColor,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(8.r),
+                                          topRight: Radius.circular(8.r),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: ScreenUtils.width10,
+                                        vertical: ScreenUtils.width5,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          BohibaMarqueeText(
+                                            width: ScreenUtils.width,
+                                            text: document.docType ?? '',
+                                            overflowText:
+                                                document.docType ?? '',
+                                            style: bohibaTheme
+                                                .textTheme.titleMedium,
+                                            marqueeTextStyle: bohibaTheme
+                                                .textTheme.titleMedium,
+                                          ),
+                                          BohibaMarqueeText(
+                                            width: ScreenUtils.width,
+                                            text: document.updatedAt ?? '',
+                                            overflowText:
+                                                document.updatedAt ?? '',
+                                            style: bohibaTheme
+                                                .textTheme.titleMedium,
+                                            marqueeTextStyle: bohibaTheme
+                                                .textTheme.titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.85,
+                            mainAxisSpacing: ScreenUtils.height10,
+                            crossAxisSpacing: ScreenUtils.width10,
+                          ),
                         ),
                       ],
                     ),

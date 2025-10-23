@@ -1,8 +1,10 @@
 import '/model/driver_model.dart';
 import '/services/open_driver_service.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class OpenDriverListController extends GetxController {
+  RefreshController refreshController = RefreshController();
   RxList<DriverModel> arrOpenDriver = <DriverModel>[].obs;
 
   @override
@@ -14,10 +16,18 @@ class OpenDriverListController extends GetxController {
     });
   }
 
-  Future<void> getAllOpenDriver() async {
-    List<DriverModel> openDriverList =
-        await OpenDriverService.getAllOpenDriver();
-    arrOpenDriver.clear();
-    arrOpenDriver.addAll(openDriverList);
+  Future<void> getAllOpenDriver({
+    bool refresh = false,
+    bool showLoading = true,
+  }) async {
+    List<DriverModel>? openDriverList =
+        await OpenDriverService.getAllOpenDriver(
+      reset: refresh,
+      showProgress: showLoading,
+    );
+    if (openDriverList != null) {
+      if (refresh) arrOpenDriver.clear();
+      arrOpenDriver.addAll(openDriverList);
+    }
   }
 }

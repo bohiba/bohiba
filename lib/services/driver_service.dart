@@ -1,48 +1,48 @@
+import 'package:bohiba/services/truck_service.dart';
+
 import '/dist/app_enums.dart';
-
-import '/model/profile_model.dart';
-
 import '/model/driver_model.dart';
-import '/model/user_fav_model.dart';
-
 import 'api_end_point.dart';
 import 'device_info_service.dart';
 import 'dio_serivce.dart';
-import 'db_service.dart';
-import 'fav_service.dart';
+import 'db2_service.dart';
 import 'global_service.dart';
 import 'profile_service.dart';
 
 class DriverService {
   static final DioService _dioService = DioService();
-  static final DBService _dbService = DBService();
+  static final DatabaseService _databaseService = DatabaseService();
+  static int _currentPage = 1;
+  static int _lastPage = 1;
 
-  static Future<DriverModel?> createDriver() async {
-    if (await DeviceInfoService.hasInternet()) return null;
+  static Future<DriverModel?> createDriver(
+      {required Map<String, dynamic> bodyObj, String? vehcileNumber}) async {
+    if (!await DeviceInfoService.hasInternet()) return null;
+    if (bodyObj['type'] == 0) {
+      GlobalService.getAlertDialog(
+        status: AlertStatus.info,
+        title: 'Feature Not Yet Supported',
+        description:
+            'Currently this feature is not support. We are working on it. Please try using `UUID`.',
+      );
+      return null;
+    }
     GlobalService.showProgress();
-    ApiResponse response = await _dioService.post(ApiEndPoint.apiAddDriver);
+    ApiResponse response =
+        await _dioService.post(ApiEndPoint.apiAddDriver, body: bodyObj);
     switch (response.statusCode) {
-      case 201:
-        List<UserFavouriteModel> arrFav =
-            await FavService.retriveAllFav() ?? [];
-        DriverModel driver =
-            DriverModel.fromJson(response.data, favList: arrFav);
-        int dBSuccess = await _dbService.putData<DriverModel>(
-          tblDriver,
-          '${driver.id}',
-          driver,
-        );
-        ProfileModel? profile = await ProfileService.getProfile();
-        if (profile != null) {
-          profile.drivers =
-              profile.drivers == null ? 1 : (profile.drivers! + 1);
+      case 201 || 200:
+        DriverModel driver = DriverModel.fromJson(response.data);
+        int insertSuccess = await insertDriver(driver: driver);
+        if (insertSuccess > 0) {
+          await ProfileService.updateDriverNo(deleteDriver: false);
         }
-        int profileUpdated =
-            await ProfileService.updatelocalProfile(profile: profile!);
-        if (profileUpdated <= 0) return null;
+        if (vehcileNumber != null) {
+          await TruckService.assignDriver(
+              vhNumber: vehcileNumber, driver: driver);
+        }
         GlobalService.dismissProgress();
-        if (dBSuccess <= 0) return null;
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
           status: AlertStatus.success,
           title: 'Driver',
           desc: response.message,
@@ -50,7 +50,7 @@ class DriverService {
         return driver;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
           status: AlertStatus.warning,
           title: 'Driver',
           desc: response.message,
@@ -58,56 +58,101 @@ class DriverService {
         return null;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: "Failed to create truck");
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          title: 'Driver',
+          desc: 'Failed to add driver',
+        );
         return null;
     }
   }
 
   static Future<List<DriverModel>?> getAllDriver({
-    int pageNo = 1,
+    bool reset = false,
+    bool showProgress = false,
     MethodType methodType = MethodType.local,
   }) async {
     if (methodType == MethodType.local) {
-      List<DriverModel> driverList = await _dbService.getAllData(tblDriver);
-      return driverList;
+      String strGetQuery =
+          ''' SELECT * FROM $tblDriver ORDER BY updatedAt DESC ''';
+      List<Map<String, dynamic>> arrDriver =
+          await _databaseService.getAllData(strGetQuery) ?? [];
+      List<DriverModel> driverModelList = arrDriver.map((e) {
+        return DriverModel.fromDB(e);
+      }).toList();
+
+      return driverModelList;
     } else {
       if (!await DeviceInfoService.hasInternet()) return null;
-      GlobalService.showProgress();
-      ApiResponse response =
-          await _dioService.get('${ApiEndPoint.apiAllDriver}?pageNo=$pageNo');
+
+      if (reset) {
+        await DriverService.clearAllDriver();
+        _currentPage = 1;
+        _lastPage = 1;
+      }
+      if (_currentPage > _lastPage) {
+        return null;
+      }
+      if (showProgress) GlobalService.showProgress();
+
+      ApiResponse response = await _dioService
+          .get('${ApiEndPoint.apiAllDriver}?pageNo=$_currentPage');
 
       switch (response.statusCode) {
         case 200:
-          List<UserFavouriteModel> arrFavList =
-              await _dbService.getAllData(tblUserFav);
-          List<DriverModel> arrDriverModel =
-              DriverModel.listFromJson(response.data, favList: arrFavList);
-          Map<String, DriverModel> driverMap = {
-            for (DriverModel dm in arrDriverModel) "${dm.id}": dm
-          };
-          int insertDriver = await _dbService.putAllData(tblDriver, driverMap);
-          GlobalService.dismissProgress();
-          GlobalService.showAppToast(message: response.message);
-          GlobalService.printHandler('Driver insert $insertDriver');
-          return arrDriverModel;
+          if (response.pagination != null) {
+            Map<dynamic, dynamic> paginate = response.pagination!;
+            _currentPage = paginate['current_page'] + 1;
+            _lastPage = paginate['last_page'];
+          }
+
+          List<dynamic> driverList = response.data as List;
+          List<Map<String, dynamic>> dbDriverList = driverList.map((json) {
+            return DriverModel.toDB(json);
+          }).toList();
+          int success = await insertAllDriver(dbDriverList);
+          if (success > 0) {
+            GlobalService.printHandler('Insert Success $success');
+          }
+          if (showProgress) GlobalService.dismissProgress();
+          List<DriverModel> model = dbDriverList.map((json) {
+            return DriverModel.fromDB(json);
+          }).toList();
+          return model;
         case 401:
-          GlobalService.dismissProgress();
-          GlobalService.showAppToast(message: response.message);
+          if (showProgress) GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Driver',
+            desc: response.message,
+          );
           return null;
         default:
-          GlobalService.dismissProgress();
-          GlobalService.showAppToast(message: 'Failed to get trucks.');
+          if (showProgress) GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.failure,
+            title: 'Driver',
+            desc: 'Failed to get trucks',
+          );
           return null;
       }
     }
   }
 
   static Future<DriverModel?> getDriver(
-      {required String id, MethodType type = MethodType.local}) async {
+      {required int id, MethodType type = MethodType.local}) async {
     if (type == MethodType.local) {
-      DriverModel? driver =
-          await _dbService.getData<DriverModel>(tblDriver, id);
-      return driver;
+      String strGetDriver =
+          ''' SELECT * FROM $tblDriver WHERE id = $id LIMIT 1 ''';
+      List<Map<String, dynamic>> driverList =
+          await _databaseService.getAllData(strGetDriver) ?? [];
+
+      if (driverList.isNotEmpty) {
+        DriverModel driver = DriverModel.fromDB(driverList.first);
+        return driver;
+      } else {
+        return null;
+      }
     } else {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
@@ -116,80 +161,191 @@ class DriverService {
 
       switch (response.statusCode) {
         case 200:
-          DriverModel updatedriver = DriverModel.fromJson(response.data);
-          int dbSuccess = await _dbService.putData<DriverModel>(
-              tblDriver, id, updatedriver);
+          DriverModel driver = DriverModel.fromJson(response.data);
+          String strUpdateQuery = '''
+            UPDATE $tblDriver SET
+              isFav = ${driver.isFav ?? 0},
+              isSynced = ${driver.isSynced ?? 0},
+              image = ${driver.profile?.image != null ? "'${driver.profile?.image}'" : 'NULL'},
+              uuid = ${driver.profile?.driverUuid != null ? "'${driver.profile?.driverUuid}'" : 'NULL'},
+              name = ${driver.profile?.name != null ? "'${driver.profile?.name}'" : 'NULL'},
+              email = ${driver.profile?.email != null ? "'${driver.profile?.email}'" : 'NULL'},
+              mobileNumber = ${driver.profile?.mobileNumber != null ? "'${driver.profile?.mobileNumber}'" : 'NULL'},
+              dob = ${driver.profile?.dob != null ? "'${driver.profile?.dob}'" : 'NULL'},
+              roleId = ${driver.profile?.roleId ?? 8},
+              isActive = ${driver.profile?.isActive != null ? "'${driver.profile?.isActive}'" : 'NULL'},
+              connect = ${driver.profile?.connect != null ? "'${driver.profile?.connect}'" : 'NULL'},
+              verified = ${driver.address?.verified != null ? "'${driver.address?.verified}'" : "'unverified'"},
+              houseNo = ${driver.address?.houseNo != null ? "'${driver.address?.houseNo}'" : 'NULL'},
+              locality = ${driver.address?.locality != null ? "'${driver.address?.locality}'" : 'NULL'},
+              street = ${driver.address?.street != null ? "'${driver.address?.street}'" : 'NULL'},
+              city = ${driver.address?.city != null ? "'${driver.address?.city}'" : 'NULL'},
+              district = ${driver.address?.district != null ? "'${driver.address?.district}'" : 'NULL'},
+              state = ${driver.address?.state != null ? "'${driver.address?.state}'" : 'NULL'},
+              country = ${driver.address?.country != null ? "'${driver.address?.country}'" : 'NULL'},
+              pinCode = ${driver.address?.pinCode != null ? "'${driver.address?.pinCode}'" : 'NULL'},
+              licenseNumber = ${driver.licenseDetail?.licenseNumber != null ? "'${driver.licenseDetail?.licenseNumber}'" : 'NULL'},
+              dlStatus = ${driver.licenseDetail?.status != null ? "'${driver.licenseDetail?.status}'" : 'NULL'},
+              cov = ${driver.licenseDetail?.cov != null ? "'${driver.licenseDetail?.cov}'" : 'NULL'},
+              rto = ${driver.licenseDetail?.rto != null ? "'${driver.licenseDetail?.rto}'" : 'NULL'},
+              validFrom = ${driver.licenseDetail?.validityFrom != null ? "'${driver.licenseDetail?.validityFrom}'" : 'NULL'},
+              validTill = ${driver.licenseDetail?.validityTill != null ? "'${driver.licenseDetail?.validityTill}'" : 'NULL'},
+              updatedAt = ${driver.updatedAt != null ? "'${driver.updatedAt}'" : 'NULL'}
+            WHERE uuid = '${driver.profile?.driverUuid}'
+          ''';
+
+          int updateSuccess = await _databaseService.updateData(strUpdateQuery);
           GlobalService.dismissProgress();
-          if (dbSuccess <= 0) return null;
-          GlobalService.showAppToast(message: response.message);
-          return updatedriver;
+          if (updateSuccess > 0) {
+            return driver;
+          }
+          return null;
         case 401:
           GlobalService.dismissProgress();
-          GlobalService.showAppToast(message: response.message);
+          GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Driver',
+            desc: response.message,
+          );
           return null;
         default:
           GlobalService.dismissProgress();
-          GlobalService.showAppToast(
-              message: 'Failed to retrive driver information');
+          GlobalService.showSnackBar(
+            status: AlertStatus.failure,
+            title: 'Driver',
+            desc: 'Failed to update driver',
+          );
           return null;
       }
     }
   }
 
-  static Future<bool> deleteDriver(
-      {required int driverId, required bool isMarkedFav}) async {
-    if (await DeviceInfoService.hasInternet()) return false;
-
+  static Future<int> deleteDriver({required int driverId}) async {
+    if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();
-    ApiResponse serviceResponse =
-        await _dioService.delete("${ApiEndPoint.apiDeleteDriver}/$driverId");
-    switch (serviceResponse.statusCode) {
-      case 200:
-        if (isMarkedFav) {
-          bool isFavDeleted =
-              await FavService.findDeleteFav(driverId, "drivers");
-          GlobalService.printHandler('DB Delete Fav: $isFavDeleted');
-        }
-        int dbDeleted = await _dbService.deleteData<DriverModel>(
-            tblDriver, driverId.toString());
+    String strDelQuery = ''' DELETE FROM $tblDriver WHERE id = $driverId ''';
+    int successDel = await _databaseService.delete(strDelQuery);
 
-        ProfileModel? profile = await ProfileService.getProfile();
-        if (profile != null &&
-            profile.drivers != null &&
-            profile.drivers! > 0) {
-          profile.drivers = profile.drivers! - 1;
-        }
-        int profileUpdated =
-            await ProfileService.updatelocalProfile(profile: profile!);
-        GlobalService.dismissProgress();
-        if (dbDeleted <= 0) return false;
-        if (profileUpdated <= 0) return false;
-        GlobalService.appSnackBar(
-          status: AlertStatus.success,
-          title: 'Driver',
-          desc: serviceResponse.message,
-        );
-        return true;
-      case 401:
-        GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
-          status: AlertStatus.warning,
-          title: 'Driver',
-          desc: serviceResponse.message,
-        );
-        return false;
-      default:
-        GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
-          status: AlertStatus.failure,
-          title: 'Driver',
-          desc: 'Failed driverete driver.',
-        );
-        return false;
+    if (successDel > 0) {
+      ApiResponse serviceResponse =
+          await _dioService.delete("${ApiEndPoint.apiDeleteDriver}/$driverId");
+      switch (serviceResponse.statusCode) {
+        case 200:
+          await ProfileService.updateDriverNo(deleteDriver: true);
+          GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.success,
+            title: 'Driver',
+            desc: serviceResponse.message,
+          );
+          return successDel;
+        case 401:
+          GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Driver',
+            desc: serviceResponse.message,
+          );
+          return 0;
+        default:
+          GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.failure,
+            title: 'Driver',
+            desc: 'Failed driverete driver.',
+          );
+          return 0;
+      }
+    } else {
+      GlobalService.dismissProgress();
+      GlobalService.showSnackBar(
+        status: AlertStatus.failure,
+        title: 'Driver',
+        desc: 'Failed to delete driver.',
+      );
+      return 0;
     }
   }
 
-  static Future<void> localDeleteAll() async {
-    await _dbService.clearBox<DriverModel>(tblDriver);
+  static Future<int> insertDriver({required DriverModel driver}) async {
+    String strInsertQuery = '''
+          INSERT INTO $tblDriver (
+            id,
+            isFav,
+            isSynced,
+            image,
+            uuid,
+            name,
+            email,
+            mobileNumber,
+            dob,
+            roleId,
+            isActive,
+            connect,
+            verified,
+            houseNo,
+            locality,
+            street,
+            city,
+            district,
+            state,
+            country,
+            pinCode,
+            licenseNumber,
+            dlStatus,
+            cov,
+            rto,
+            validFrom,
+            validTill,
+            updatedAt
+          ) VALUES (
+            ${driver.id ?? 'NULL'},
+            ${driver.isFav ?? 0},
+            ${driver.isSynced ?? 0},
+            ${driver.profile?.image != null ? "'${driver.profile!.image}'" : 'NULL'},
+            ${driver.profile?.driverUuid != null ? "'${driver.profile!.driverUuid}'" : 'NULL'},
+            ${driver.profile?.name != null ? "'${driver.profile!.name}'" : 'NULL'},
+            ${driver.profile?.email != null ? "'${driver.profile!.email}'" : 'NULL'},
+            ${driver.profile?.mobileNumber != null ? "'${driver.profile!.mobileNumber}'" : 'NULL'},
+            ${driver.profile?.dob != null ? "'${driver.profile!.dob}'" : 'NULL'},
+            ${driver.profile?.roleId ?? 8},
+            ${driver.profile?.isActive != null ? "'${driver.profile!.isActive}'" : 'NULL'},
+            ${driver.profile?.connect != null ? "'${driver.profile!.connect}'" : 'NULL'},
+            ${driver.address?.verified != null ? "'${driver.address!.verified}'" : "'unverified'"},
+            ${driver.address?.houseNo != null ? "'${driver.address!.houseNo}'" : 'NULL'},
+            ${driver.address?.locality != null ? "'${driver.address!.locality}'" : 'NULL'},
+            ${driver.address?.street != null ? "'${driver.address!.street}'" : 'NULL'},
+            ${driver.address?.city != null ? "'${driver.address!.city}'" : 'NULL'},
+            ${driver.address?.district != null ? "'${driver.address!.district}'" : 'NULL'},
+            ${driver.address?.state != null ? "'${driver.address!.state}'" : 'NULL'},
+            ${driver.address?.country != null ? "'${driver.address!.country}'" : 'NULL'},
+            ${driver.address?.pinCode != null ? "'${driver.address!.pinCode}'" : 'NULL'},
+            ${driver.licenseDetail?.licenseNumber != null ? "'${driver.licenseDetail!.licenseNumber}'" : 'NULL'},
+            ${driver.licenseDetail?.status != null ? "'${driver.licenseDetail!.status}'" : 'NULL'},
+            ${driver.licenseDetail?.cov != null ? "'${driver.licenseDetail!.cov}'" : 'NULL'},
+            ${driver.licenseDetail?.rto != null ? "'${driver.licenseDetail!.rto}'" : 'NULL'},
+            ${driver.licenseDetail?.validityFrom != null ? "'${driver.licenseDetail!.validityFrom}'" : 'NULL'},
+            ${driver.licenseDetail?.validityTill != null ? "'${driver.licenseDetail!.validityTill}'" : 'NULL'},
+            ${driver.updatedAt != null ? "'${driver.updatedAt}'" : 'NULL'}
+          )
+          ''';
+    int insertSuccess = await _databaseService.insertData(strInsertQuery);
+    return insertSuccess;
+  }
+
+  static Future<int> insertAllDriver(
+      List<Map<String, dynamic>> listDriver) async {
+    int insert = await _databaseService.insertAllData(tblDriver, listDriver);
+    return insert;
+  }
+
+  static Future<int> clearAllDriver() async {
+    String strDeleteQuery = ''' DELETE FROM $tblDriver ''';
+    int deleteSuccess = await _databaseService.delete(strDeleteQuery);
+
+    if (deleteSuccess > 0) {
+      GlobalService.printHandler('DELETED ALL DRIVER');
+    }
+    return deleteSuccess;
   }
 }

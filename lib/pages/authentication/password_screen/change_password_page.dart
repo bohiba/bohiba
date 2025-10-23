@@ -1,4 +1,4 @@
-import '/controllers/forgot_password_controller.dart';
+import '/controllers/change_password_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/services/global_service.dart';
@@ -8,14 +8,16 @@ import '/dist/component_exports.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 
-class ResetSetPasswordPage extends GetView<ForgotPasswordController> {
-  const ResetSetPasswordPage({super.key});
+class ChangePasswordPage extends GetView<ChangePasswordController> {
+  const ChangePasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final navigateState = Navigator.of(context);
     return Scaffold(
-      appBar: null,
+      appBar: TitleAppbar(
+        title: 'Change Password',
+      ),
       body: Container(
         height: ScreenUtils.height,
         width: ScreenUtils.width,
@@ -51,10 +53,12 @@ class ResetSetPasswordPage extends GetView<ForgotPasswordController> {
                   PasswordInputField(
                     hintText: 'Password',
                     controller: controller.pwdController,
+                    nextActionType: TextInputAction.next,
                   ),
                   PasswordInputField(
                     hintText: 'Confirm Password',
                     controller: controller.cnfrmPwdController,
+                    nextActionType: TextInputAction.done,
                   ),
                 ],
               ),
@@ -62,9 +66,14 @@ class ResetSetPasswordPage extends GetView<ForgotPasswordController> {
             // Gap(ScreenUtils.height10),
             PrimaryButton(
               label: 'Submit',
-              onPressed: () {
+              onPressed: () async {
                 GlobalService.closeKeyboard();
-                navigateState.popAndPushNamed(AppRoute.imageAuth);
+                int success = await controller.changePassword();
+                if (success > 0) {
+                  GlobalService.printHandler('Successfully Password changed');
+                  navigateState.pushNamedAndRemoveUntil(
+                      AppRoute.signIn, (Route<dynamic> route) => false);
+                }
               },
             )
           ],

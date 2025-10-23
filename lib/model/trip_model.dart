@@ -1,70 +1,27 @@
-import '/model/user_fav_model.dart';
-import '/services/db_service.dart';
-import 'package:hive/hive.dart';
-
-part 'trip_model.g.dart';
-
-@HiveType(typeId: tripTypeID)
-class TripModel extends HiveObject {
-  @HiveField(0)
+class TripModel {
   int? id;
-
-  @HiveField(1)
+  int? isFav;
   String? tripCode;
-
-  @HiveField(2)
   String? tripStatus;
-
-  @HiveField(3)
   String? origin;
-
-  @HiveField(4)
   String? destination;
-
-  @HiveField(5)
   String? startDate;
-
-  @HiveField(6)
   String? endedDate;
-
-  @HiveField(7)
   LoadDetail? loadDetail;
-
-  @HiveField(8)
   TripFinance? finance;
-
-  @HiveField(9)
   TripTruck? truck;
-
-  @HiveField(10)
   TripDriver? driver;
-
-  @HiveField(11)
   TripOwner? owner;
-
-  @HiveField(12)
   List<Reassignment>? reassignment;
-
-  @HiveField(13)
   List<TripExpense>? expenses;
-
-  @HiveField(14)
   List<TripPayment>? payments;
-
-  @HiveField(15)
   List<TripDocument>? documents;
-
-  @HiveField(16)
   String? createdAt;
-
-  @HiveField(17)
   String? updatedAt;
-
-  @HiveField(18)
-  bool? isFav;
 
   TripModel({
     this.id,
+    this.isFav,
     this.tripCode,
     this.tripStatus,
     this.origin,
@@ -80,111 +37,121 @@ class TripModel extends HiveObject {
     this.expenses,
     this.payments,
     this.documents,
-    this.isFav = false,
     this.createdAt,
     this.updatedAt,
   });
 
-  factory TripModel.fromJson(Map<String, dynamic> json,
-      {List<UserFavouriteModel>? favList}) {
-    bool fav = favList?.any(
-          (fav) => fav.assetType == "trips" && fav.assetId == json["id"],
-        ) ??
-        false;
+  factory TripModel.fromJson(Map<String, dynamic> jsonTrip) {
+    Map<String, dynamic> loadInfo = jsonTrip["load_detail"] ?? {};
+    Map<String, dynamic> financeInfo = jsonTrip["finance"] ?? {};
+    Map<String, dynamic> truckInfo = jsonTrip["truck"] ?? {};
+    Map<String, dynamic> driverInfo = jsonTrip['driver'] ?? {};
+    Map<String, dynamic> ownerInfo = jsonTrip['owner'] ?? {};
     return TripModel(
-      id: json["id"],
-      isFav: fav,
-      tripCode: json["trip_code"],
-      tripStatus: json["trip_status"],
-      origin: json["origin"],
-      destination: json["destination"],
-      startDate: json["started_at"],
-      endedDate: json["ended_at"],
-      loadDetail: json["load_detail"] == null
+      id: jsonTrip['id'],
+      isFav: 0,
+      tripCode: jsonTrip["trip_code"],
+      tripStatus: jsonTrip["trip_status"],
+      origin: jsonTrip["origin"],
+      destination: jsonTrip["destination"],
+      startDate: jsonTrip["started_at"],
+      endedDate: jsonTrip["ended_at"],
+      loadDetail: jsonTrip["load_detail"] == null
           ? null
-          : LoadDetail.fromJson(json["load_detail"]),
-      finance: json["finance"] == null
+          : LoadDetail.fromJson(loadInfo),
+      finance: jsonTrip["finance"] == null
           ? null
-          : TripFinance.fromJson(json["finance"]),
-      truck: json["truck"] == null ? null : TripTruck.fromJson(json["truck"]),
+          : TripFinance.fromJson(financeInfo),
+      truck: jsonTrip['truck'] == null ? null : TripTruck.fromJson(truckInfo),
       driver:
-          json["driver"] == null ? null : TripDriver.fromJson(json["driver"]),
-      owner: json["owner"] == null ? null : TripOwner.fromJson(json["owner"]),
-      reassignment: json["reassignment"] == null
-          ? []
-          : List<Reassignment>.from(
-              json["reassignment"].map((x) => Reassignment.fromJson(x))),
-      expenses: json["expenses"] == null
-          ? []
-          : List<TripExpense>.from(
-              json["expenses"].map((x) => TripExpense.fromJson(x))),
-      payments: json["payments"] == null
-          ? []
-          : (List<TripPayment>.from(
-              json["payments"].map((x) => TripPayment.fromJson(x)),
-            )..sort((a, b) {
-              final dateA =
-                  DateTime.tryParse(a.paymentTime ?? '') ?? DateTime(0);
-              final dateB =
-                  DateTime.tryParse(b.paymentTime ?? '') ?? DateTime(0);
-              return dateB.compareTo(dateA);
-            })),
-      // payments: json["payments"] == null
-      //     ? []
-      //     : List<TripPayment>.from(
-      //         json["payments"].map((x) => TripPayment.fromJson(x))),
-      documents: json["documents"] == null
-          ? []
-          : List<TripDocument>.from(
-              json["documents"].map((x) => TripDocument.fromJson(x))),
-      createdAt: json["created_at"],
-      updatedAt: json["updated_at"],
+          jsonTrip['driver'] == null ? null : TripDriver.fromJson(driverInfo),
+      owner: jsonTrip['owner'] == null ? null : TripOwner.fromJson(ownerInfo),
+      reassignment: jsonTrip['reassignment'] == null
+          ? null
+          : (jsonTrip['reassignment'] as List).map((e) {
+              return Reassignment.fromJson(e);
+            }).toList(),
+      expenses: jsonTrip['expenses'] == null
+          ? null
+          : (jsonTrip['expenses'] as List).map((e) {
+              return TripExpense.fromJson(e);
+            }).toList(),
+      payments: jsonTrip['payments'] == null
+          ? null
+          : (jsonTrip['payments'] as List).map((p) {
+              return TripPayment.fromJson(p);
+            }).toList(),
+      documents: (jsonTrip['documents'] as List).map((d) {
+        return TripDocument.fromJson(d);
+      }).toList(),
+      createdAt: jsonTrip['created_at'],
+      updatedAt: jsonTrip['updated_at'],
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "trip_code": tripCode,
-        "trip_status": tripStatus,
-        "origin": origin,
-        "destination": destination,
-        "started_at": startDate,
-        "ended_at": endedDate,
-        "load_detail": loadDetail?.toJson(),
-        "finance": finance?.toJson(),
-        "truck": truck?.toJson(),
-        "driver": driver?.toJson(),
-        "owner": owner?.toJson(),
-        "reassignment":
-            List<dynamic>.from(reassignment?.map((x) => x.toJson()) ?? []),
-        "expenses": List<dynamic>.from(expenses?.map((x) => x.toJson()) ?? []),
-        "payments": List<dynamic>.from(payments?.map((x) => x.toJson()) ?? []),
-        "documents":
-            List<dynamic>.from(documents?.map((x) => x.toJson()) ?? []),
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-      };
+  factory TripModel.fromDb(Map<String, dynamic> mapObj) {
+    return TripModel(
+      id: mapObj["id"],
+      isFav: mapObj["isFav"],
+      tripCode: mapObj["tripCode"],
+      tripStatus: mapObj["tripStatus"],
+      origin: mapObj["origin"],
+      destination: mapObj["destination"],
+      startDate: mapObj["startedAt"],
+      endedDate: mapObj["endedAt"],
+      loadDetail: LoadDetail.fromDb(mapObj),
+      finance: TripFinance.fromDb(mapObj),
+      truck: TripTruck.fromDb(mapObj),
+      driver: TripDriver.fromDb(mapObj),
+      owner: TripOwner.fromDb(mapObj),
+    );
+  }
 
-  static List<TripModel> listFromJson(List<dynamic> jsonList) {
-    return jsonList.map((json) {
-      final map = json as Map<String, dynamic>;
-      return TripModel.fromJson(map);
-    }).toList();
+  static Map<String, dynamic> toDB(dynamic json) {
+    Map<String, dynamic> loadInfo = json["load_detail"] ?? {};
+    Map<String, dynamic> financeInfo = json["finance"] ?? {};
+    Map<String, dynamic> truckInfo = json["truck"] ?? {};
+    Map<String, dynamic> driverInfo = json['driver'] ?? {};
+    Map<String, dynamic> ownerInfo = json['owner'] ?? {};
+    return {
+      'id': json['id'],
+      'isFav': json['is_fav'] ?? 0,
+      'tripCode': json['trip_code'],
+      'tripStatus': json['trip_status'],
+      'origin': json['origin'],
+      'destination': json['destination'],
+      'startedAt': json['started_at'],
+      'endedAt': json['ended_at'],
+      'materialType': loadInfo['material_type'],
+      'loadWeight': loadInfo['load_weight'],
+      'shortWeight': loadInfo['short_weight'],
+      'rate': loadInfo['rate'],
+      'fnId': financeInfo['id'],
+      'fnAmount': financeInfo['amount'],
+      'fnPayment': financeInfo['trip_payment'],
+      'fnExpense': financeInfo['trip_profit'],
+      'fnProfit': financeInfo['trip_expense'],
+      'vhId': truckInfo['id'],
+      'vhNumber': truckInfo['regd_number'],
+      'vhModel': truckInfo['model'],
+      'vhDesc': truckInfo['rc_vh_class_desc'],
+      'dvId': driverInfo['id'],
+      'dvUuid': driverInfo['uuid'],
+      'dvName': driverInfo['name'],
+      'dvMobile': driverInfo['mobile'],
+      'ownerId': ownerInfo['id'],
+      'ownerImage': ownerInfo['image'],
+      'ownerUuid': ownerInfo['uuid'],
+      'ownerName': ownerInfo['name'],
+      'ownerMobileNumber': ownerInfo['mobile'],
+    };
   }
 }
 
-@HiveType(typeId: tripLoadDetailTypeID)
 class LoadDetail {
-  @HiveField(0)
   String? materialType;
-
-  @HiveField(1)
   double? loadWeight;
-
-  @HiveField(2)
   double? shortWeight;
-
-  @HiveField(3)
   double? rate;
 
   LoadDetail({
@@ -196,10 +163,19 @@ class LoadDetail {
 
   factory LoadDetail.fromJson(Map<String, dynamic> json) => LoadDetail(
         materialType: json["material_type"],
-        loadWeight: json["load_weight"]?.toDouble(),
-        shortWeight: json["short_weight"]?.toDouble(),
-        rate: json["rate"]?.toDouble(),
+        loadWeight: json["load_weight"]?.toDouble() ?? 0.0,
+        shortWeight: json["short_weight"]?.toDouble() ?? 0.0,
+        rate: json["rate"]?.toDouble() ?? 0.0,
       );
+
+  factory LoadDetail.fromDb(Map<String, dynamic> map) {
+    return LoadDetail(
+      materialType: map["materialType"],
+      loadWeight: map["loadWeight"]?.toDouble() ?? 0.0,
+      shortWeight: map["shortWeight"]?.toDouble() ?? 0.0,
+      rate: map["rate"]?.toDouble() ?? 0.0,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "material_type": materialType,
@@ -209,21 +185,11 @@ class LoadDetail {
       };
 }
 
-@HiveType(typeId: tripFinanceTypeID)
 class TripFinance {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
   double? amount;
-
-  @HiveField(2)
   double? tripPayment;
-
-  @HiveField(3)
   double? tripExpense;
-
-  @HiveField(4)
   double? tripProfit;
 
   TripFinance({
@@ -242,6 +208,16 @@ class TripFinance {
         tripProfit: json["trip_profit"]?.toDouble(),
       );
 
+  factory TripFinance.fromDb(Map<String, dynamic> map) {
+    return TripFinance(
+      id: map["fnId"],
+      amount: map["fnAmount"]?.toDouble() ?? 0.0,
+      tripPayment: map["fnPayment"]?.toDouble() ?? 0.0,
+      tripExpense: map["fnExpense"]?.toDouble() ?? 0.0,
+      tripProfit: map["fnProfit"]?.toDouble() ?? 0.0,
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         "id": id,
         "amount": amount?.toDouble(),
@@ -251,18 +227,10 @@ class TripFinance {
       };
 }
 
-@HiveType(typeId: tripTruckTypeID)
 class TripTruck {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
   String? regdNumber;
-
-  @HiveField(2)
   String? model;
-
-  @HiveField(3)
   String? rcVhClassDesc;
 
   TripTruck({
@@ -279,6 +247,15 @@ class TripTruck {
         rcVhClassDesc: json["rc_vh_class_desc"],
       );
 
+  factory TripTruck.fromDb(Map<String, dynamic> map) {
+    return TripTruck(
+      id: map["vhId"],
+      regdNumber: map["vhNumber"],
+      model: map["vhModel"],
+      rcVhClassDesc: map["vhDesc"],
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         "id": id,
         "regd_number": regdNumber,
@@ -287,29 +264,17 @@ class TripTruck {
       };
 }
 
-@HiveType(typeId: tripDriverTypeID)
 class TripDriver {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
   String? uuid;
-
-  @HiveField(2)
   String? name;
-
-  @HiveField(3)
   String? mobile;
-
-  @HiveField(4)
-  String? email;
 
   TripDriver({
     this.id,
     this.uuid,
     this.name,
     this.mobile,
-    this.email,
   });
 
   factory TripDriver.fromJson(Map<String, dynamic> json) => TripDriver(
@@ -317,7 +282,13 @@ class TripDriver {
         uuid: json["uuid"],
         name: json["name"],
         mobile: json["mobile"],
-        email: json["email"],
+      );
+
+  factory TripDriver.fromDb(Map<String, dynamic> map) => TripDriver(
+        id: map['dvId'],
+        uuid: map["dvUuid"],
+        name: map["dvName"],
+        mobile: map["dvMobile"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -325,33 +296,20 @@ class TripDriver {
         "uuid": uuid,
         "name": name,
         "mobile": mobile,
-        "email": email,
       };
 }
 
-@HiveType(typeId: tripOwnerTypeID)
 class TripOwner {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
   String? uuid;
-
-  @HiveField(2)
   String? name;
-
-  @HiveField(3)
   String? mobile;
-
-  @HiveField(4)
-  String? email;
 
   TripOwner({
     this.id,
     this.uuid,
     this.name,
     this.mobile,
-    this.email,
   });
 
   factory TripOwner.fromJson(Map<String, dynamic> json) => TripOwner(
@@ -359,82 +317,95 @@ class TripOwner {
         uuid: json["uuid"],
         name: json["name"],
         mobile: json["mobile"],
-        email: json["email"],
       );
+
+  factory TripOwner.fromDb(Map<String, dynamic> map) {
+    return TripOwner(
+      id: map["ownerId"],
+      uuid: map["ownerUuid"],
+      name: map["ownerName"],
+      mobile: map["ownerMobileNumber"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "uuid": uuid,
         "name": name,
         "mobile": mobile,
-        "email": email,
       };
 }
 
-@HiveType(typeId: reassignmentTypeID)
 class Reassignment {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
+  int? tripId;
   String? regdNumber;
-
-  @HiveField(2)
   String? reason;
-
-  @HiveField(3)
   String? date;
-
+  String? reassignVehicle;
   Reassignment({
     this.id,
+    this.tripId,
     this.regdNumber,
     this.reason,
     this.date,
+    this.reassignVehicle,
   });
 
   factory Reassignment.fromJson(Map<String, dynamic> json) => Reassignment(
         id: json['id'],
+        tripId: json['trip_id'],
         regdNumber: json["regd_number"],
         reason: json["reason"],
         date: json["reassigned_at"],
+        reassignVehicle: json['truck_regd_number'],
       );
+
+  factory Reassignment.fromDb(Map<String, dynamic> map) {
+    return Reassignment(
+      id: map['id'],
+      tripId: map['tripId'],
+      regdNumber: map["vhNumber"],
+      reason: map["reason"],
+      date: map["reassignmentAt"],
+      reassignVehicle: map['reAssignVhNumber'],
+    );
+  }
+
+  static Map<String, dynamic> toDB(dynamic json) {
+    return {
+      'id': json['id'],
+      'tripId': json['trip_id'],
+      'vhNumber': json["regd_number"],
+      'reassignmentAt': json["reassigned_at"],
+      'reAssignVhNumber': json['truck_regd_number'],
+      'reason': json["reason"],
+    };
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "regd_number": regdNumber,
-        "reason": reason,
         "reassigned_at": date,
+        "truck_regd_number": reassignVehicle,
+        "reason": reason,
       };
 }
 
-@HiveType(typeId: tripExpenseTypeID)
 class TripExpense {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
+  int? tripId;
   String? expenseType;
-
-  @HiveField(2)
   String? addedByUuid;
-
-  @HiveField(3)
   String? paymentMode;
-
-  @HiveField(4)
   double? paid;
-
-  @HiveField(5)
   String? paidTo;
-
-  @HiveField(6)
   String? expenseDate;
-
-  @HiveField(7)
   String? remarks;
 
   TripExpense({
     this.id,
+    this.tripId,
     this.expenseType,
     this.addedByUuid,
     this.paymentMode,
@@ -446,17 +417,33 @@ class TripExpense {
 
   factory TripExpense.fromJson(Map<String, dynamic> json) => TripExpense(
         id: json["id"],
+        tripId: json["trip_id"],
         expenseType: json["expense_type"],
         addedByUuid: json["added_by_uuid"],
         paymentMode: json["payment_mode"],
-        paid: json["paid"].toDouble(),
+        paid: json["paid"]?.toDouble() ?? 0.0,
         paidTo: json["paid_to"],
         expenseDate: json["expense_date"],
         remarks: json["remarks"],
       );
 
+  factory TripExpense.fromDb(Map<String, dynamic> map) {
+    return TripExpense(
+      id: map["id"],
+      tripId: map["tripId"],
+      expenseType: map["expenseType"],
+      addedByUuid: map["added_by_uuid"],
+      paymentMode: map["paymentMode"],
+      paid: map["paid"].toDouble() ?? 0.0,
+      paidTo: map["paidTo"],
+      expenseDate: map["expenseDate"],
+      remarks: map["remarks"],
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         "id": id,
+        "trip_id": tripId,
         "expense_type": expenseType,
         "added_by_uuid": addedByUuid,
         "payment_mode": paymentMode,
@@ -465,33 +452,34 @@ class TripExpense {
         "expense_date": expenseDate,
         "remarks": remarks,
       };
+
+  static Map<String, dynamic> toDB(Map json) {
+    return {
+      'id': json['id'],
+      'tripId': json['trip_id'],
+      'expenseType': json['expense_type'],
+      'paymentMode': json['payment_mode'],
+      'paid': json['paid']?.toDouble() ?? 0.0,
+      'paidTo': json['paid_to'],
+      'expenseDate': json['expense_date'],
+      'remarks': json['remarks'],
+    };
+  }
 }
 
-@HiveType(typeId: tripPaymentTypeID)
 class TripPayment {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
+  int? tripId;
   String? payerType;
-
-  @HiveField(2)
   String? paymentMode;
-
-  @HiveField(3)
   double? amount;
-
-  @HiveField(4)
   String? paidBy;
-
-  @HiveField(5)
   String? receivedBy;
-
-  @HiveField(6)
   String? paymentTime;
 
   TripPayment({
     this.id,
+    this.tripId,
     this.payerType,
     this.paymentMode,
     this.amount,
@@ -502,6 +490,7 @@ class TripPayment {
 
   factory TripPayment.fromJson(Map<String, dynamic> json) => TripPayment(
         id: json["id"],
+        tripId: json["trip_id"],
         payerType: json["payer_type"],
         paymentMode: json["payment_mode"],
         amount: json["amount"].toDouble(),
@@ -510,55 +499,80 @@ class TripPayment {
         paymentTime: json["payment_time"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "payer_type": payerType,
-        "payment_mode": paymentMode,
-        "amount": amount,
-        "paid_by": paidBy,
-        "received_by": receivedBy,
-        "payment_time": paymentTime,
-      };
+  factory TripPayment.fromDb(Map<String, dynamic> map) {
+    return TripPayment(
+      id: map["id"],
+      tripId: map["tripId"],
+      payerType: map["payerType"],
+      paymentMode: map["payementMode"],
+      amount: map["amount"],
+      paidBy: map["paidBy"],
+      receivedBy: map["receivedBy"],
+      paymentTime: map["paymentTime"],
+    );
+  }
+
+  static Map<String, dynamic> toDB(dynamic db) {
+    return {
+      "id": db['id'],
+      "tripId": db["trip_id"],
+      "payerType": db["payer_type"],
+      "payementMode": db["payment_mode"],
+      "amount": db["amount"],
+      "paidBy": db["paid_by"],
+      "receivedBy": db["received_by"],
+      "paymentTime": db["received_by"],
+    };
+  }
 }
 
-@HiveType(typeId: tripDocumentTypeID)
 class TripDocument {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
+  int? tripId;
   String? docType;
-
-  @HiveField(2)
   String? image;
-
-  @HiveField(3)
-  String? uploadedByUuid;
-
-  @HiveField(4)
-  String? remarks;
+  String? uploadedBy;
+  String? updatedAt;
 
   TripDocument({
     this.id,
+    this.tripId,
     this.docType,
     this.image,
-    this.uploadedByUuid,
-    this.remarks,
+    this.uploadedBy,
+    this.updatedAt,
   });
 
+  /// FROM API to TRIP MODEL
   factory TripDocument.fromJson(Map<String, dynamic> json) => TripDocument(
         id: json["id"],
+        tripId: json["trip_id"],
         docType: json["doc_type"],
         image: json["image"],
-        uploadedByUuid: json["uploaded_by_uuid"],
-        remarks: json["remarks"],
+        uploadedBy: json['uploaded_by_uuid'],
+        updatedAt: json["updated_at"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "doc_type": docType,
-        "image": image,
-        "uploaded_by_uuid": uploadedByUuid,
-        "remarks": remarks,
-      };
+  // FROM DB to TRIP MODEL
+  factory TripDocument.fromDb(Map<String, dynamic> map) {
+    return TripDocument(
+      id: map["id"],
+      tripId: map["tripId"],
+      docType: map["docType"],
+      image: map["image"],
+      uploadedBy: map["uploadedBy"],
+      updatedAt: map["uploadedAt"],
+    );
+  }
+
+  static Map<String, dynamic> toDB(dynamic json) {
+    return {
+      "id": json["id"],
+      "tripId": json["trip_id"],
+      "docType": json["doc_type"],
+      "image": json["image"],
+      "uploadedBy": json["uploaded_by_uuid"],
+      "uploadedAt": json["updated_at"]
+    };
+  }
 }

@@ -1,23 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 
-import '/controllers/image_upload_controller.dart';
-import '/model/driver_model.dart';
-import '/services/api_end_point.dart';
-import '/services/device_info_service.dart';
-
 import '/dist/app_enums.dart';
 import '/model/truck_model.dart';
-import '/services/db_service.dart';
+import '/model/driver_model.dart';
 import '/services/dio_serivce.dart';
+import '/services/truck_service.dart';
+import '/services/driver_service.dart';
 import '/services/global_service.dart';
 import '/services/ocr_services.dart';
-import 'package:flutter/material.dart';
+import '/controllers/image_upload_controller.dart';
+
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class DriverAddController extends ImageUploadController {
-  DBService dBService = DBService();
+  // DBService dBService = DBService();
+
   DioService dioService = DioService();
   OcrService ocrService = OcrService();
 
@@ -32,6 +32,7 @@ class DriverAddController extends ImageUploadController {
   Rx<UploadStatus> status = UploadStatus.initial.obs;
 
   Rx<bool> isAnalysing = false.obs;
+  Rx<bool> popResult = false.obs;
 
   Rx<String> strTruckRegdNo = ''.obs;
   Rx<String> scannedDL = ''.obs;
@@ -50,72 +51,82 @@ class DriverAddController extends ImageUploadController {
     });
   }
 
-  Future<void> addDriver(
-      {required Map<String, dynamic> bodyMap, String truckNo = ''}) async {
-    if (!await DeviceInfoService.hasInternet()) {
-      return;
-    }
-    GlobalService.closeKeyboard();
-    if (bodyMap['type'] == 0) {
-      GlobalService.getAlertDialog(
-        status: AlertStatus.info,
-        title: 'Feature Not Yet Supported',
-        description:
-            'Currently this feature is not support. We are working on it. Please try using `UUID`.',
-      );
-      return;
-    }
-    GlobalService.showProgress();
-    ApiResponse response =
-        await dioService.post(ApiEndPoint.apiAddDriver, body: bodyMap);
-    GlobalService.dismissProgress();
-    switch (response.statusCode) {
-      case 200:
-        Map<String, dynamic> dataObj = Map.from(response.data);
-        int addDriverSucess = await getDriver(id: "${dataObj['id']}");
-        if (addDriverSucess > 0) {
-          GlobalService.showAppToast(message: response.message);
-          Get.back(result: true);
-        } else {
-          GlobalService.showAppToast(message: 'Failed to add driver');
-        }
-        break;
-      case 401:
-        GlobalService.getAlertDialog(
-          status: AlertStatus.warning,
-          title: 'Failed',
-          description: response.message,
-        );
-        break;
-      default:
-    }
-  }
+  Future<DriverModel?> addDriver({String? truckNo}) async {
+    final isUuidFlow = addAsset.value == AddAssetUsing.uuid;
+    final isDocFlow = addAsset.value == AddAssetUsing.doc;
 
-  Future<int> getDriver({required String id}) async {
-    if (!await DeviceInfoService.hasInternet()) {
-      return 0;
+    Map<String, dynamic> bodyObj = {};
+    if (isUuidFlow) {
+      final uuid = uuidCtlr.text.trim();
+
+      if (uuid.isEmpty) {
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Driver',
+          desc: 'Please provide driver UUID',
+        );
+        return null;
+      }
+
+      if (uuid.length != 6) {
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Driver',
+          desc: 'Please provide valid UUID',
+        );
+        return null;
+      }
+
+      bodyObj = {
+        'driver_uuid': uuid,
+        'type': 1,
+      };
     }
-    GlobalService.showProgress();
-    ApiResponse response =
-        await dioService.get('${ApiEndPoint.apiGetDriver}/$id');
-    GlobalService.dismissProgress();
-    switch (response.statusCode) {
-      case 200:
-        DriverModel updatedriver = DriverModel.fromJson(response.data);
-        int dbSucess =
-            await dBService.putData<DriverModel>(tblDriver, id, updatedriver);
-        return dbSucess;
-      case 401:
-        GlobalService.showAppToast(message: response.message);
-        return 0;
-      default:
-        return 0;
+
+    if (isDocFlow) {
+      final dl = licenseCtrl.text.trim();
+      final dob = dateController.text.trim();
+
+      if (dl.isEmpty) {
+        GlobalService.showAppToast(message: 'Please provide driver DL Number');
+        return null;
+      }
+      if (dl.length != 16) {
+        GlobalService.showAppToast(message: 'Please provide valid DL Number');
+        return null;
+      }
+      if (dob.isEmpty) {
+        GlobalService.showAppToast(message: 'Please provide D.O.B');
+        return null;
+      }
+
+      bodyObj = {
+        'license_number': dl,
+        'dob': dob,
+        'type': 0,
+      };
     }
+
+    if (bodyObj.isNotEmpty) {
+      DriverModel? driver = await DriverService.createDriver(
+          bodyObj: bodyObj, vehcileNumber: truckNo);
+      if (driver != null) {
+        truckNo = null;
+        licenseCtrl.clear();
+        dateController.clear();
+        uuidCtlr.clear();
+        popResult.value = true;
+        strTruckRegdNo.value = '';
+        truck.value = TruckModel();
+      }
+      return driver;
+    }
+    return null;
   }
 
   Future<List<TruckModel>> getTruckList() async {
     arrTruck.clear();
-    List<TruckModel> truckList = await dBService.getAllData(tblTrucks);
+    List<TruckModel> truckList = await TruckService.getTruckList();
     arrTruck.addAll(truckList);
     arrTruck.refresh();
     return truckList;

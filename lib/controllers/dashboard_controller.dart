@@ -19,8 +19,8 @@ class DashboardController extends GetxController {
 
   Map<String, dynamic> deviceInfo = {};
 
-  RxList<String> truckOwnerStatus = <String>['HIRING', 'NOT HIRING'].obs;
-  RxList<String> truckDriverStatus = <String>['LOOKING', 'NOT LOOKING'].obs;
+  RxList<String> statusOption = <String>[].obs;
+
   RxString opted = ''.obs;
 
   @override
@@ -32,13 +32,13 @@ class DashboardController extends GetxController {
   }
 
   Future<void> onRefreshDashPage() async {
-    await getProfileModel(methodType: MethodType.api);
+    await getProfileModel(methodType: MethodType.local);
     deviceInfo = await DeviceInfoService.getDeviceInfo();
     refreshDashboard.refreshCompleted();
   }
 
   Future<void> onRefreshProfilePage() async {
-    await getProfileModel();
+    await getProfileModel(methodType: MethodType.api, showLoading: false);
     deviceInfo = await DeviceInfoService.getDeviceInfo();
     refreshProfile.refreshCompleted();
   }
@@ -52,10 +52,12 @@ class DashboardController extends GetxController {
         await ProfileService.getLoggedAccount();
     arrLoggedInUser.clear();
     arrLoggedInUser.addAll(arrList);
-    selectUser.value = arrLoggedInUser
+    List<LoggedInAccountModel> arrUserList = arrList
         .where((user) => (user.uuid == profileModel.value!.uuid!))
-        .toList()
-        .first;
+        .toList();
+    if (arrUserList.isNotEmpty) {
+      selectUser.value = arrUserList.first;
+    }
   }
 
   Future<void> updateUserHiringStatus() async {
@@ -72,19 +74,24 @@ class DashboardController extends GetxController {
 
   Future<ProfileModel?> getProfileModel({
     MethodType methodType = MethodType.local,
+    bool showLoading = false,
   }) async {
-    ProfileModel? profile = await ProfileService.getProfile(type: methodType);
+    ProfileModel? profile = await ProfileService.getProfile(
+        type: methodType, showProgress: showLoading);
     if (profile != null) {
       profileModel.value = profile;
+      if (profile.roleId == UserRoles.truckOwner) {
+        statusOption.value = ['HIRING', 'NOT HIRING'];
+        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ??
+            'Not Hiring';
+      } else {
+        statusOption.value = ['LOOKING', 'NOT LOOKING'];
+        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ??
+            'Not Looking';
+      }
+      return profile;
     }
 
-    if (profile!.roleId == UserRoles.truckOwner) {
-      opted.value =
-          profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ?? 'Not Hiring';
-    } else {
-      opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ??
-          'Not Looking';
-    }
-    return profile;
+    return null;
   }
 }

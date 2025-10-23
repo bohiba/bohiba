@@ -142,11 +142,11 @@ class OtpScreen extends GetView<OtpController> {
                           }
 
                           break;
-                        case AppRoute.setPwd:
+                        case AppRoute.changePwd:
                           int succesValidate = await controller.verifyOtp();
                           if (succesValidate > 0) {
                             navigateState.pop();
-                            navigateState.popAndPushNamed(AppRoute.setPwd);
+                            navigateState.popAndPushNamed(AppRoute.changePwd);
                           }
                         default:
                           break;

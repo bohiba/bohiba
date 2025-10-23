@@ -1,29 +1,10 @@
-import '/services/db_service.dart';
-import 'package:hive/hive.dart';
-
-part 'news_model.g.dart';
-
-@HiveType(typeId: newsTypeID)
-class NewsModel extends HiveObject {
-  @HiveField(0)
+class NewsModel {
   int? id;
-
-  @HiveField(1)
   String? title;
-
-  @HiveField(2)
   String? description;
-
-  @HiveField(3)
   String? image;
-
-  @HiveField(4)
   String? authorUuid;
-
-  @HiveField(5)
   String? createdAt;
-
-  @HiveField(6)
   String? updatedAt;
 
   NewsModel({
@@ -58,10 +39,37 @@ class NewsModel extends HiveObject {
         'updated_at': updatedAt,
       };
 
-  static List<NewsModel> listFromJson(List<dynamic> jsonList) {
-    return jsonList.map((json) {
-      final map = json as Map<String, dynamic>;
-      return NewsModel.fromJson(map);
+  static List<Map<String, dynamic>> mapJsonNewsToDbList(
+      List<dynamic> jsonNews) {
+    return jsonNews.map((json) {
+      Map<String, dynamic> news = json as Map<String, dynamic>;
+      return {
+        'id': news['id'],
+        'title': news['title'],
+        'description': news['description'],
+        'image': news['image'],
+        'updatedAt': news['updated_at']
+      };
     }).toList();
+  }
+
+  static NewsModel fromDB(Map mapObj) {
+    return NewsModel(
+      id: mapObj['id'],
+      title: mapObj['title'],
+      description: mapObj['description'],
+      image: mapObj['image'],
+      updatedAt: mapObj['updatedAt'],
+    );
+  }
+
+  static Map<String, dynamic> toDB(Map json) {
+    return {
+      'id': json['id'],
+      'title': json['title'],
+      'description': json['description'],
+      'image': json['image'],
+      'updatedAt': json['updated_at']
+    };
   }
 }

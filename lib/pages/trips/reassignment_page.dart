@@ -82,7 +82,6 @@ class ReassignmentPage extends GetView<ReassignmentController> {
                           'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
                       onDiscard: () async => controller.deleteReassign(
-                        tripInfo: controller.tripController.tripInfo.value,
                         expenseId: controller.reassignment.value.id!,
                       ),
                       saveBtnTxt: 'CLOSE',

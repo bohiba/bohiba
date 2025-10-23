@@ -1,8 +1,3 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:remixicon/remixicon.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/services/global_service.dart';
@@ -10,11 +5,16 @@ import '/controllers/truck_edit_controller.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+
 class TruckEditPage extends GetView<EditTruckController> {
   const TruckEditPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Scaffold(
         appBar: TitleAppbar(title: 'Edit Truck'),
@@ -34,17 +34,17 @@ class TruckEditPage extends GetView<EditTruckController> {
                 ),
                 Gap(ScreenUtils.width5),
                 AppDropdown(
-                  hint: controller.truck.value.driver?.name ?? 'Select driver',
+                  hint: controller.truck.value.driverName ?? 'Select driver',
                   items: controller.arrDriver.value,
                   labelBuilder: (driver) => driver.profile!.name!,
                   onChanged: (p0) {
-                    controller.driverModel.value.profile = p0!.profile!;
+                    controller.driverModel.value = p0!;
                     GlobalService.printHandler(
-                        'ID: ${controller.driverModel.value.profile!.driverUuid}');
+                        'Name: ${controller.driverModel.value.profile?.name.toString()}');
                   },
                   menuController: controller.assignDriverCtlr,
                 ),
-                Padding(
+                /*Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: ScreenUtils.height20.h),
                   child: Row(
@@ -63,11 +63,17 @@ class TruckEditPage extends GetView<EditTruckController> {
                       )
                     ],
                   ),
-                ),
+                ),*/
                 Spacer(),
                 PrimaryButton(
-                  onPressed: () async => await controller.assignDriver(
-                      driverInfo: controller.driverModel.value),
+                  onPressed: () async {
+                    int updated = await controller.assignDriver(
+                      driverInfo: controller.driverModel.value,
+                    );
+                    if (updated > 0) {
+                      navigatorState.pop(true);
+                    }
+                  },
                   label: 'Assign Driver',
                 ),
                 PrimaryButton(
@@ -76,11 +82,15 @@ class TruckEditPage extends GetView<EditTruckController> {
                   onPressed: controller.isDriverAssigned.isFalse
                       ? null
                       : () async {
-                          if (controller.truck.value.registration == null) {
+                          if (controller.truck.value.regdNumber == null) {
                             return;
                           } else {
-                            await controller.removeDriver(
-                                truckInfo: controller.truck.value);
+                            int removed = await controller.removeDriver(
+                              truckInfo: controller.truck.value,
+                            );
+                            if (removed > 0) {
+                              navigatorState.pop(true);
+                            }
                           }
                         },
                 ),

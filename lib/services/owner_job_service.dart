@@ -1,9 +1,11 @@
+import 'package:bohiba/model/job_detail_model.dart';
+
 import '/services/global_service.dart';
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/dio_serivce.dart';
 
-class JobService {
+class OwnerJobService {
   static final DioService _dioService = DioService();
 
   static Future<void> updateJob(
@@ -11,7 +13,7 @@ class JobService {
     return;
   }
 
-  static Future<Map<dynamic, dynamic>?> getJob({required int jobId}) async {
+  static Future<JobDetailModel?> getJob({required int jobId}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return null;
     }
@@ -22,7 +24,8 @@ class JobService {
     switch (response.statusCode) {
       case 200:
         if (response.data is Map) {
-          return response.data as Map;
+          JobDetailModel jobDetailModel = JobDetailModel.fromMap(response.data);
+          return jobDetailModel;
         } else {
           return null;
         }
@@ -70,7 +73,7 @@ class JobService {
           return [];
         }
       case 401:
-        GlobalService.showAppToast(message: response.message);
+        // GlobalService.showAppToast(message: response.message);
         return [];
       default:
         GlobalService.showAppToast(message: 'Something went wrong');
@@ -78,24 +81,25 @@ class JobService {
     }
   }
 
-  static Future<int> updateJobPost({required Map jobInfo}) async {
+  static Future<int> updateJobPost(
+      {required JobDetailModel jobInfo, required String status}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
     Map<String, dynamic> bodyMap = {
-      "start_from": jobInfo['start_from'],
-      "status": jobInfo['status'],
-      "job_title": jobInfo['job_title'],
-      "location": jobInfo['location'],
-      "regd_number": jobInfo['regd_number'],
-      "license_type": jobInfo['license_type'],
-      "job_type": jobInfo['job_type'],
-      "description": jobInfo['description'],
+      "start_from": jobInfo.startFrom,
+      "status": status,
+      "job_title": jobInfo.jobTitle,
+      "location": jobInfo.location,
+      "regd_number": jobInfo.regdNumber,
+      "license_type": jobInfo.licenseType,
+      "job_type": jobInfo.jobType,
+      "description": jobInfo.description,
     };
 
     GlobalService.showProgress();
     ApiResponse response = await _dioService
-        .post("${ApiEndPoint.apiEditJob}/${jobInfo['id']}", body: bodyMap);
+        .post("${ApiEndPoint.apiEditJob}/${jobInfo.id}", body: bodyMap);
     GlobalService.dismissProgress();
 
     switch (response.statusCode) {

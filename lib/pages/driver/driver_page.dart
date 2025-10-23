@@ -1,17 +1,17 @@
-import '/services/launcher_service.dart';
-import '/model/rating_model.dart';
 import '/dist/app_enums.dart';
-import '/component/bohiba_appbar/driver_appbar.dart';
-import '/component/bohiba_buttons/primary_button.dart';
-import '/routes/app_route.dart';
-import '/services/global_service.dart';
-
-import '/controllers/driver_controller.dart';
-import '/extensions/bohiba_extension.dart';
-import '/pages/widget/linear_box_widget.dart';
-
 import '/theme/bohiba_theme.dart';
 import '/dist/component_exports.dart';
+import '/routes/app_route.dart';
+import '/model/rating_model.dart';
+import '/services/global_service.dart';
+import '/services/launcher_service.dart';
+import '/extensions/bohiba_extension.dart';
+import '/component/bohiba_appbar/driver_appbar.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+
+import '/controllers/driver_controller.dart';
+import '/pages/widget/linear_box_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -292,7 +292,7 @@ class DriverPage extends GetView<DriverController> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  ratingModel.reviewer?.name ??
+                                                  ratingModel.reviewerName ??
                                                       '',
                                                   style: bohibaTheme
                                                       .textTheme.labelLarge,

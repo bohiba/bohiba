@@ -1,4 +1,5 @@
-import '/component/bohiba_colors.dart';
+import 'package:bohiba/extensions/bohiba_extension.dart';
+
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -47,16 +48,16 @@ class StatusBoxWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
               decoration: BoxDecoration(
-                color:
+                color: titleColor ??
                     bohibaTheme.colorScheme.onSurface.withValues(alpha: 0.25),
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(
-                title ?? '',
+                title?.toCapitalizedLabel() ?? '',
                 style: TextStyle(
                   fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                   fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                  color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
+                  color: bohibaTheme.textTheme.bodyLarge!.color,
                 ),
               ),
             ),
@@ -67,7 +68,7 @@ class StatusBoxWidget extends StatelessWidget {
                 child: Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: ScreenUtils.height20.h,
-                  color: BohibaColors.tileColor,
+                  color: bohibaTheme.cardColor,
                 ),
               ),
             )

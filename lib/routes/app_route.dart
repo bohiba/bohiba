@@ -1,3 +1,10 @@
+import '/bindings/all_applied_job_binding.dart';
+import 'package:bohiba/bindings/change_password_binding.dart';
+import 'package:bohiba/pages/jobs/driver/all_applied_job.dart';
+
+import '/bindings/all_driver_job_binding.dart';
+import '/pages/jobs/driver/all_driver_job.dart';
+
 import '/pages/driver/driver_modals/driver_rating_page.dart';
 import '/pages/welcome.dart';
 
@@ -11,7 +18,6 @@ import '/pages/news/news_screen.dart';
 import '/bindings/all_news_binding.dart';
 import '/bindings/forgot_uuid_binding.dart';
 import '/bindings/home_binding.dart';
-import '/bindings/master_binding.dart';
 import '/pages/news/all_news_screen.dart';
 
 import '/bindings/address_auth_binding.dart';
@@ -32,13 +38,13 @@ import '/pages/analytic/analytic_page.dart';
 import '/bindings/update_contact_binding.dart';
 import '/pages/user/user_profile/update_contact_info_page.dart';
 
-import '/pages/jobs/add_jobs_page.dart';
-import '/pages/jobs/my_job_detail_page.dart';
-import '/pages/jobs/all_job_page.dart';
+import '../pages/jobs/owner/add_jobs_page.dart';
+import '../pages/jobs/job_detail_page.dart';
+import '../pages/jobs/owner/all_job_page.dart';
 
 import '/bindings/all_job_binding.dart';
 import '/bindings/add_job_binding.dart';
-import '/bindings/my_job_detail_binding.dart';
+import '../bindings/job_detail_binding.dart';
 import '/bindings/security_binding.dart';
 
 import '/bindings/setting_binding.dart';
@@ -56,7 +62,6 @@ import '/bindings/trip_add_reassign_binding.dart';
 import '/bindings/trip_expense_binding.dart';
 import '/pages/trips/trip_expense_page.dart';
 
-import '/bindings/fav_binding.dart';
 import '/bindings/trip_payment_binding.dart';
 import '/pages/trips/add_reassignment_page.dart';
 import '/pages/trips/trip_payment_page.dart';
@@ -101,7 +106,7 @@ import '/pages/manager/manager.dart';
 import '/pages/truck/truck_page.dart';
 import '/pages/manager/all_manager.dart';
 import '/pages/user_authentication/screens/set_role_page.dart';
-import '/pages/authentication/password_screen/set_password.dart';
+import '../pages/authentication/password_screen/change_password_page.dart';
 import '/pages/authentication/signup_screen/create_user_page.dart';
 import '/pages/user_authentication/screens/set_image_page.dart';
 import '/pages/driver/driver_all_page.dart';
@@ -136,8 +141,8 @@ class AppRoute {
   static const String createUser = "/email-verify";
   static const String signIn = "/signin";
   static const String otpScreen = "/otp";
-  static const String setPwd = "/set-pwd";
-  static const String forgotScreen = "/forgot-password";
+  static const String changePwd = "/change-pwd";
+  static const String forgotPwd = "/forgot-password";
   static const String forgotUuid = "/forgot-uuid";
 
   // Status-sub Screen
@@ -232,7 +237,10 @@ class AppRoute {
 
   static const String allJobs = '/all-jobs';
   static const String addJobs = '/add-jobs';
-  static const String myJobDetail = '/my-job-details';
+  static const String jobDetail = '/my-job-details';
+
+  static const String allDriverJob = '/all-driver-job';
+  static const String allAppliedJob = '/driver/applied-job';
 
   //TODO - It should be removed
   static const String welcome = '/welcome';
@@ -280,7 +288,7 @@ class AppRoute {
     ),
 
     GetPage(
-      name: forgotScreen,
+      name: forgotPwd,
       binding: ForgotPasswordBinding(),
       page: () => const ForgotPasswordPage(),
     ),
@@ -298,9 +306,9 @@ class AppRoute {
     ),
 
     GetPage(
-      name: setPwd,
-      binding: AuthBinding(),
-      page: () => const ResetSetPasswordPage(),
+      name: changePwd,
+      binding: ChangePasswordBinding(),
+      page: () => const ChangePasswordPage(),
     ),
 
     GetPage(
@@ -330,11 +338,11 @@ class AppRoute {
     // Main
     GetPage(
       name: navBar,
-      binding: MasterBinding(),
+      // binding: MasterBinding(),
       bindings: [
         HomeBinding(),
-        TruckAllBinding(),
         AllTripBinding(),
+        AllDriverJobBinding(),
         DasboardBinding(),
       ],
       page: () => const BohibaNavBar(),
@@ -516,15 +524,26 @@ class AppRoute {
     GetPage(name: orderScreen, page: () => const OrderScreen()),
 
     // Wallet
-    GetPage(name: walletScreen, page: () => const WalletScreen()),
-    GetPage(name: walletDepositScreen, page: () => const WalletDepositScreen()),
+    GetPage(
+      name: walletScreen,
+      page: () => const WalletScreen(),
+    ),
+    GetPage(
+      name: walletDepositScreen,
+      page: () => const WalletDepositScreen(),
+    ),
 
     // Others
-    GetPage(name: kyc, page: () => KYCScreen()),
-    GetPage(name: infoScreen, page: () => const InfoScreen()),
+    GetPage(
+      name: kyc,
+      page: () => KYCScreen(),
+    ),
+    GetPage(
+      name: infoScreen,
+      page: () => const InfoScreen(),
+    ),
     GetPage(
       name: favList,
-      binding: FavBinding(),
       page: () => const FavouritePage(),
     ),
 
@@ -557,9 +576,21 @@ class AppRoute {
     GetPage(binding: AddJobBinding(), name: addJobs, page: () => AddJobsPage()),
 
     GetPage(
-      binding: MyJobDetailBinding(),
-      name: myJobDetail,
-      page: () => MyJobDetailPage(),
+      binding: JobDetailBinding(),
+      name: jobDetail,
+      page: () => JobDetailPage(),
     ),
+
+    GetPage(
+      name: allDriverJob,
+      binding: AllDriverJobBinding(),
+      page: () => AllDriverJobPage(),
+    ),
+
+    GetPage(
+      name: allAppliedJob,
+      binding: AllAppliedJobBinding(),
+      page: () => AllAppliedJobPage(),
+    )
   ];
 }

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class TruckAllBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<TruckAllController>(TruckAllController());
+    Get.lazyPut<TruckAllController>(() => TruckAllController(), fenix: true);
     // Get.put<TripController>(TripController());
   }
 }

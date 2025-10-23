@@ -17,108 +17,105 @@ class DriverAllPage extends GetView<DriverAllController> {
   @override
   Widget build(BuildContext context) {
     final NavigatorState navState = Navigator.of(context);
-    return Scaffold(
-      appBar: TitleAppbar(
-        title: 'Drivers',
-        actions: [
-          AppBarIconBox(
-            icon: const Icon(EvaIcons.plus),
-            onTap: () {
-              navState.pushNamed(AppRoute.addDriver).then((onValue) async {
-                if (onValue != null && onValue != false) {
-                  await controller.getDriverList(
-                    type: MethodType.api,
-                  );
-                }
-              });
-            },
-          )
-        ],
-      ),
-      body: Obx(
-        () {
-          final RefreshController refreshList =
-              RefreshController(initialRefresh: false);
-          return SmartRefresher(
-            onRefresh: () async {
-              await controller.getDriverList();
-              refreshList.refreshCompleted();
-            },
-            controller: refreshList,
-            child: controller.arrDriver.isEmpty
-                ? Center(
-                    child: SizedBox(
-                      width: ScreenUtils.width * 0.65,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'No Driver Found',
-                            style: bohibaTheme.textTheme.displaySmall,
+
+    return Obx(() {
+      return Scaffold(
+        appBar: TitleAppbar(
+          title: 'Drivers',
+          actions: [
+            AppBarIconBox(
+              icon: const Icon(EvaIcons.plus),
+              onTap: () {
+                navState.pushNamed(AppRoute.addDriver).then((onValue) async {
+                  if (onValue != null && onValue != false) {
+                    await controller.getDriverList();
+                  }
+                });
+              },
+            )
+          ],
+        ),
+        body: SmartRefresher(
+          onRefresh: () async {
+            await controller.getDriverList(
+              type: MethodType.api,
+              resetList: true,
+            );
+            controller.refreshList.refreshCompleted();
+          },
+          controller: controller.refreshList,
+          child: controller.arrDriver.isEmpty
+              ? Center(
+                  child: SizedBox(
+                    width: ScreenUtils.width * 0.65,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'No Driver Found',
+                          style: bohibaTheme.textTheme.displaySmall,
+                        ),
+                        Text(
+                          'Add a driver to assign them to a truck and start trips quickly.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            color: bohibaTheme.textTheme.titleSmall!.color,
                           ),
-                          Text(
-                            'Add a driver to assign them to a truck and start trips quickly.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize:
-                                  bohibaTheme.textTheme.bodySmall!.fontSize,
-                              fontWeight:
-                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
-                              color: bohibaTheme.textTheme.titleSmall!.color,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              navState
-                                  .pushNamed(AppRoute.addDriver)
-                                  .then((onValue) async {
-                                if (onValue != null) {
-                                  await controller.getDriverList(
-                                    type: MethodType.api,
-                                  );
-                                }
-                              });
-                            },
-                            child: Text('Add New Driver'),
-                          )
-                        ],
-                      ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            navState
+                                .pushNamed(AppRoute.addDriver)
+                                .then((onValue) async {
+                              if (onValue != null) {
+                                await controller.getDriverList(
+                                  type: MethodType.api,
+                                );
+                              }
+                            });
+                          },
+                          child: Text('Add New Driver'),
+                        )
+                      ],
                     ),
-                  )
-                : ListView.builder(
-                    itemCount: controller.arrDriver.length > 3
-                        ? 3
-                        : controller.arrDriver.length,
-                    padding: EdgeInsets.only(
-                      top: ScreenUtils.height10,
-                      bottom: ScreenUtils.height5,
-                      left: ScreenUtils.width15,
-                      right: ScreenUtils.width15,
-                    ),
-                    itemBuilder: (context, index) {
-                      DriverModel driverObj = controller.arrDriver[index];
-                      return DriverTile(
-                        driver: driverObj,
-                        allowedActions: [
-                          ActionType.view,
-                          ActionType.share,
-                          ActionType.other
-                        ],
-                        onPressed: () {
-                          navState
-                              .pushNamed(AppRoute.driver, arguments: driverObj)
-                              .then((onValue) async {
-                            if (onValue != null) {
-                              await controller.getDriverList();
-                            }
-                          });
-                        },
-                      );
-                    },
                   ),
-          );
-        },
-      ),
-    );
+                )
+              : ListView.builder(
+                  itemCount: controller.arrDriver.length > 3
+                      ? 3
+                      : controller.arrDriver.length,
+                  padding: EdgeInsets.only(
+                    top: ScreenUtils.height10,
+                    bottom: ScreenUtils.height5,
+                    left: ScreenUtils.width15,
+                    right: ScreenUtils.width15,
+                  ),
+                  itemBuilder: (context, index) {
+                    DriverModel driverObj = controller.arrDriver[index];
+                    return DriverTile(
+                      driver: driverObj,
+                      allowedActions: [
+                        ActionType.view,
+                        ActionType.share,
+                        ActionType.other
+                      ],
+                      onPressed: () {
+                        navState
+                            .pushNamed(AppRoute.driver, arguments: driverObj)
+                            .then((onValue) async {
+                          if (onValue != null) {
+                            await controller.getDriverList();
+                          }
+                        });
+                      },
+                    );
+                  },
+                ),
+        ),
+      );
+    });
   }
 }

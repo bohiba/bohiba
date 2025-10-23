@@ -1,24 +1,19 @@
-import '/services/profile_service.dart';
-import '/services/truck_service.dart';
-import '/services/api_end_point.dart';
-
-import '/dist/app_enums.dart';
-
-import '/controllers/master_controller.dart';
-import '/services/device_info_service.dart';
-import '/model/truck_model.dart';
-import '/services/db_service.dart';
-import '/services/dio_serivce.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '/services/global_service.dart';
+import '/services/dio_serivce.dart';
+import '/services/truck_service.dart';
+import '/dist/app_enums.dart';
+import '/model/truck_model.dart';
+import '/controllers/master_controller.dart';
+
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class TruckAllController extends GetxController {
-  // final MasterController masterController = Get.find<MasterController>();
-  // final HomeController homeController = Get.find<HomeController>();
-  DioService dioService = DioService();
-  DBService dBService = DBService();
+  final RefreshController refreshTruckList = RefreshController();
   final TextEditingController vehicleNumberController = TextEditingController();
+
+  DioService dioService = DioService();
 
   Rx<AddAssetUsing> addAsset = AddAssetUsing.scan.obs;
 
@@ -41,68 +36,38 @@ class TruckAllController extends GetxController {
     });
   }
 
-  Future<void> deleteTruck({required int truckId}) async {
-    if (!await DeviceInfoService.hasInternet()) {
-      return;
-    }
-    GlobalService.showProgress();
-    ApiResponse serviceResponse =
-        await dioService.delete("${ApiEndPoint.apiDeleteTruck}/$truckId");
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 200:
-        await ProfileService.getProfile(type: MethodType.local);
-        int dBSuccess =
-            await dBService.deleteData<TruckModel>(tblTrucks, '$truckId');
-        if (dBSuccess > 0) {
-          GlobalService.showAppToast(message: serviceResponse.message);
-          Get.back(result: true);
-        }
-        break;
-      case 401:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        break;
-      default:
-    }
+  Future<int> deleteTruck({required int truckId}) async {
+    int success = await TruckService.deleteTruck(truckId: truckId);
+    return success;
   }
 
-  Future<List<TruckModel>> getTruckList() async {
-    List<TruckModel> truckList = await TruckService.retriveAllTruck();
+  Future<List<TruckModel>> getTruckList({
+    MethodType methodType = MethodType.local,
+    bool resetList = false,
+  }) async {
+    List<TruckModel> truckList =
+        await TruckService.getTruckList(type: methodType, reset: resetList);
     arrTruck.clear();
     arrTruck.addAll(truckList);
-    return truckList;
+    return arrTruck;
   }
 
-  Future<TruckModel?> createVehicle({required String vehicleNumber}) async {
-    TruckModel? model =
-        await TruckService.createTruck(vehicleNumber: vehicleNumber);
-    return model;
-    /*if (!await DeviceInfoService.hasInternet()) {
-      return;
+  Future<int> addVehicle() async {
+    if (vehicleNumberController.text.isEmpty) {
+      GlobalService.showSnackBar(
+        status: AlertStatus.warning,
+        title: 'Truck',
+        desc: 'Please enter truck number',
+      );
+      return 0;
     }
-    GlobalService.showProgress();
-    Map<String, dynamic> bodyObj = {'registration_number': vehicleNumber};
-    ApiResponse serviceResponse = await dioService.post(
-      ApiEndPoint.apiAddTruck,
-      body: bodyObj,
+    int model = await TruckService.createTruck(
+      vehicleNumber: vehicleNumberController.text.trim().toUpperCase(),
     );
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.showAppToast(message: serviceResponse.message);
-        break;
-
-      case 201:
-        // await masterController.profileApi();
-        TruckModel truckModel = TruckModel.fromJson(serviceResponse.data);
-        int dBSucess = await dBService.putData<TruckModel>(
-            tblTrucks, "${truckModel.id}", truckModel);
-        vehicleNumberController.clear();
-        if (dBSucess > 0) {
-          Get.back(result: true);
-        }
-      default:
-    }*/
+    if (model > 0) {
+      vehicleNumberController.clear();
+    }
+    return model;
   }
 
   bool notifyFavouriteListner({bool markedFav = false}) {

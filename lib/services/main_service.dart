@@ -1,41 +1,36 @@
 import '/dist/app_enums.dart';
-import '/services/driver_service.dart';
-import '/services/fav_service.dart';
-import '/services/mines_service.dart';
-import '/services/news_service.dart';
-import '/services/open_driver_service.dart';
-import '/services/trip_service.dart';
-import '/services/truck_service.dart';
-
+import '/model/news_model.dart';
+import '/model/truck_model.dart';
 import '/model/driver_model.dart';
 import '/model/mines_model.dart';
-import '/model/news_model.dart';
 import '/model/trip_model.dart';
-import '/model/truck_model.dart';
-import '/model/user_fav_model.dart';
 
-import '/services/api_end_point.dart';
-import '/services/db_service.dart';
-import '/services/device_info_service.dart';
-import '/services/dio_serivce.dart';
-import '/services/global_service.dart';
+import 'db2_service.dart';
+import 'driver_service.dart';
+import 'mines_service.dart';
+import 'news_service.dart';
+import 'open_driver_service.dart';
+import 'trip_service.dart';
+import 'truck_service.dart';
+import 'api_end_point.dart';
+import 'device_info_service.dart';
+import 'dio_serivce.dart';
+import 'global_service.dart';
 
 class MainService {
   static final DioService _dioService = DioService();
-  static final DBService _dbService = DBService();
-
-  static Future<Map<String, dynamic>?> mainApi(
-      {MethodType type = MethodType.local}) async {
+  static Future<Map<String, dynamic>?> mainApi({
+    MethodType type = MethodType.local,
+    bool showProgress = true,
+  }) async {
     if (type == MethodType.local) {
-      List<TripModel> mainTrips = await TripService.getAllTrip();
-      List<TruckModel> mainTrucks = await TruckService.retriveAllTruck();
-      List<MinesModel> mainMines = await MinesService.getMinesList();
+      List<TripModel> mainTrips = await TripService.getAllTrip() ?? [];
+      List<TruckModel> mainTrucks = await TruckService.getTruckList();
+      List<MinesModel> mainMines = await MinesService.getMinesList() ?? [];
       List<DriverModel> mainDrivers = await DriverService.getAllDriver() ?? [];
       List<DriverModel> openToDriverList =
-          await OpenDriverService.getAllOpenDriver();
-      List<UserFavouriteModel> mainFavList =
-          await FavService.retriveAllFav() ?? [];
-      List<NewsModel> mainNews = await NewsService.getAllNews();
+          await OpenDriverService.getAllOpenDriver() ?? [];
+      List<NewsModel> mainNews = await NewsService.getAllNews() ?? [];
       return {
         "trips": mainTrips,
         "trucks": mainTrucks,
@@ -43,7 +38,7 @@ class MainService {
         "mines": mainMines,
         "owner_expense": [],
         "looking_jobs": openToDriverList,
-        "favList": mainFavList,
+        "favList": [],
         "promotion": [],
         "news": mainNews,
       };
@@ -51,10 +46,10 @@ class MainService {
       if (!await DeviceInfoService.hasInternet()) {
         return null;
       }
-      GlobalService.showProgress();
+      if (showProgress) GlobalService.showProgress();
       ApiResponse serviceResponse = await _dioService
           .handleApiWithRetry(() => _dioService.get(ApiEndPoint.apiMain));
-      GlobalService.dismissProgress();
+      if (showProgress) GlobalService.dismissProgress();
       switch (serviceResponse.statusCode) {
         case 401:
           GlobalService.showAppToast(message: serviceResponse.message);
@@ -62,129 +57,243 @@ class MainService {
         case 200:
           if (serviceResponse.data == null) return null;
           Map<String, dynamic> mainObj = serviceResponse.data ?? {};
-          List<UserFavouriteModel> mainFavList = [];
 
-          if (mainObj.containsKey('favList')) {
-            List userFavModel = [];
-            userFavModel.addAll(mainObj['favList']);
-            // arrFavList.value = ;
-            mainFavList = userFavModel
-                .map((toElement) => UserFavouriteModel.fromJson(toElement))
-                .toList();
-
-            Map<String, UserFavouriteModel> favMap = {
-              for (UserFavouriteModel fv in mainFavList) '${fv.id}': fv
-            };
-
-            int dbSuccess = await _dbService.putAllData<UserFavouriteModel>(
-                tblUserFav, favMap);
-            GlobalService.printHandler("Favourite Added in DB: $dbSuccess");
-          }
-
-          List<TruckModel> mainTrucks = [];
+          List<TruckModel> arrTruckModel = [];
           if (mainObj.containsKey('trucks')) {
-            mainTrucks = TruckModel.listFromJson(mainObj['trucks'],
-                favList: mainFavList);
-            final Map<String, TruckModel> truckMap = {
-              for (var tm in mainTrucks) '${tm.id}': tm,
-            };
+            await TruckService.clearAllTrucks();
+            List<dynamic> truckList = mainObj['trucks'] as List;
+            List<Map<String, dynamic>> arrMapTruck = truckList.map((json) {
+              return TruckModel.toDB(json);
+            }).toList();
 
-            int insertSucess =
-                await _dbService.putAllData<TruckModel>(tblTrucks, truckMap);
-            GlobalService.printHandler('Truck insert $insertSucess');
+            int insertTruck = await TruckService.insertAll(arrMapTruck);
+            if (insertTruck > 0) {
+              arrTruckModel = arrMapTruck.map((json) {
+                return TruckModel.fromDB(json);
+              }).toList();
+            }
+            GlobalService.printHandler("Truck Added in DB: $insertTruck");
           }
 
-          List<DriverModel> mainDrivers = [];
+          List<DriverModel> arrDriverModel = [];
           if (mainObj.containsKey('drivers')) {
-            mainDrivers = DriverModel.listFromJson(mainObj['drivers'],
-                favList: mainFavList);
-            final Map<String, DriverModel> driverMap = {
-              for (DriverModel dm in mainDrivers) '${dm.id}': dm,
-            };
+            await DriverService.clearAllDriver();
+            List<dynamic> driverList = mainObj['drivers'] as List;
+            List<Map<String, dynamic>> arrMapDriver = driverList.map((json) {
+              return DriverModel.toDB(json);
+            }).toList();
+            int insertDriver =
+                await DriverService.insertAllDriver(arrMapDriver);
 
-            int dBSuccess =
-                await _dbService.putAllData<DriverModel>(tblDriver, driverMap);
-            GlobalService.printHandler("Driver Added in DB: $dBSuccess");
+            if (insertDriver > 0) {
+              arrDriverModel = arrMapDriver.map((json) {
+                return DriverModel.fromDB(json);
+              }).toList();
+            }
+            GlobalService.printHandler("Driver Added in DB: $insertDriver");
           }
 
-          List<TripModel> mainTrips = <TripModel>[];
+          List<TripModel> arrTripModel = [];
           if (mainObj.containsKey('trips')) {
-            mainTrips = TripModel.listFromJson(mainObj['trips']);
-            Map<String, TripModel> tripMap = {
-              for (TripModel trip in mainTrips) '${trip.id}': trip,
-            };
-            int tripInsert = await _dbService.putAllData<TripModel>(
-              tblTrips,
-              tripMap,
-            );
-            GlobalService.printHandler("Trip Added in DB: $tripInsert");
+            await TripService.clearAll();
+            List<dynamic> tripList = mainObj['trips'] as List;
+            for (Map trip in tripList) {
+              Map<String, dynamic> mapTrip = TripModel.toDB(trip);
+
+              TripModel tripModel = TripModel.fromDb(mapTrip);
+              int successTripInsert =
+                  await TripService.insertTrip(trip: tripModel);
+              GlobalService.printHandler(
+                  "Trip Added in DB: $successTripInsert");
+
+              // Expense Insert
+              if (trip.containsKey('expenses') &&
+                  trip['expenses'] != null &&
+                  (trip['expenses'] as List).isNotEmpty) {
+                List tripExpense = trip['expenses'];
+                List<Map<String, dynamic>> arrMapExpense =
+                    tripExpense.map((expense) {
+                  return TripExpense.toDB(expense);
+                }).toList();
+
+                int successExpense = await TripService.insertTripInfo(
+                  tblTripExpense,
+                  arrMapExpense,
+                );
+                if (successExpense > 0) {
+                  List<TripExpense> tripExpenseList = arrMapExpense.map((map) {
+                    return TripExpense.fromDb(map);
+                  }).toList();
+
+                  tripModel.expenses?.addAll(tripExpenseList);
+                  GlobalService.printHandler(
+                      "Trip Expense in DB: $successExpense");
+                }
+              }
+
+              if (trip.containsKey('payments') &&
+                  trip['payments'] != null &&
+                  (trip['payments'] as List).isNotEmpty) {
+                List tripPayments = trip['payments'];
+                List<Map<String, dynamic>> arrMapPayment =
+                    tripPayments.map((payment) {
+                  return TripPayment.toDB(payment);
+                }).toList();
+
+                int successPayment = await TripService.insertTripInfo(
+                  tblTripPayment,
+                  arrMapPayment,
+                );
+
+                if (successPayment > 0) {
+                  List<TripPayment> tripPaymentList =
+                      arrMapPayment.map((payment) {
+                    return TripPayment.fromDb(payment);
+                  }).toList();
+
+                  tripModel.payments?.addAll(tripPaymentList);
+                  GlobalService.printHandler(
+                      "Trip Payment in DB: $successPayment");
+                }
+              }
+
+              if (trip.containsKey('documents') &&
+                  trip['documents'] != null &&
+                  (trip['documents'] as List).isNotEmpty) {
+                List tripDocuments = trip['documents'];
+                List<Map<String, dynamic>> arrMapDoc = tripDocuments.map((doc) {
+                  return TripDocument.toDB(doc);
+                }).toList();
+
+                int successDoc = await TripService.insertTripInfo(
+                  tblDocument,
+                  arrMapDoc,
+                );
+
+                if (successDoc > 0) {
+                  List<TripDocument> tripDocList = arrMapDoc.map((doc) {
+                    return TripDocument.fromDb(doc);
+                  }).toList();
+
+                  tripModel.documents?.addAll(tripDocList);
+                  GlobalService.printHandler("Trip Doc in DB: $successDoc");
+                }
+              }
+
+              if (trip.containsKey('reassignment') &&
+                  trip['reassignment'] != null &&
+                  (trip['reassignment'] as List).isNotEmpty) {
+                List tripReassignment = trip['reassignment'];
+                List<Map<String, dynamic>> arrMapReassign =
+                    tripReassignment.map((assign) {
+                  return Reassignment.toDB(assign);
+                }).toList();
+
+                int successReassign = await TripService.insertTripInfo(
+                  tblReassignment,
+                  arrMapReassign,
+                );
+
+                if (successReassign > 0) {
+                  List<Reassignment> tripReassignList =
+                      arrMapReassign.map((assign) {
+                    return Reassignment.fromDb(assign);
+                  }).toList();
+
+                  tripModel.reassignment?.addAll(tripReassignList);
+                  GlobalService.printHandler(
+                      "Trip Reassign in DB: $successReassign");
+                }
+              }
+
+              arrTripModel.add(tripModel);
+            }
           }
 
-          List mainOwnerExpense = [];
+          /*List<Map<String, dynamic>> arrOwnerExpenseDB = [];
           if (mainObj.containsKey('owner_expense')) {
-            mainOwnerExpense.clear();
-            mainOwnerExpense.addAll(mainObj['owner_expense']);
-          }
+            arrOwnerExpenseDB = OwnerExpense.mapOwnerExpenseJsonDbList(
+                mainObj['owner_expense']);
 
-          List<DriverModel> openToDriverList = [];
-          if (mainObj.containsKey('looking_jobs')) {
-            openToDriverList =
-                DriverModel.listFromJson(mainObj['looking_jobs']);
-            Map<String, DriverModel> openDriverObj = {
-              for (DriverModel odj in openToDriverList) "${odj.id}": odj
-            };
-            int dBJob = await _dbService.putAllData<DriverModel>(
-                tblOpenDriver, openDriverObj);
+            int insertOwnerExpense = await _service.insertAllData(
+                tblOwnerExpense, arrOwnerExpenseDB);
             GlobalService.printHandler(
-                "Open to Job Driver Added in DB: $dBJob");
+                "Onwer Expense Added in DB: $insertOwnerExpense");
+          }*/
+
+          List<DriverModel> arrOpenDriverModel = [];
+          if (mainObj.containsKey('looking_jobs')) {
+            await OpenDriverService.clearAll();
+            List<dynamic> arrOpenDriver = mainObj['looking_jobs'];
+            List<Map<String, dynamic>> arrMapOpenDriver =
+                arrOpenDriver.map((json) {
+              return DriverModel.toDB(json, isOpenDriver: true);
+            }).toList();
+            // int successInsert =
+            //     await OpenDriverService.insertAll(arrMapOpenDriver);
+            //   if (successInsert > 0) {}
+            //   GlobalService.printHandler(
+            //       "Open to Job Driver Added in DB: $successInsert");
+            arrOpenDriverModel = arrMapOpenDriver.map((json) {
+              return DriverModel.fromDB(json);
+            }).toList();
           }
 
-          List<MinesModel> mainMines = [];
+          List<MinesModel> arrMinesModel = [];
           if (mainObj.containsKey('mines')) {
-            mainMines =
-                MinesModel.listFromJson(mainObj['mines'], favList: mainFavList);
+            MinesService.clearAll();
+            List<dynamic> arrMines = mainObj['mines'];
+            List<Map<String, dynamic>> arrMapMines = arrMines.map((mines) {
+              return MinesModel.toDB(mines);
+            }).toList();
 
-            Map<String, MinesModel> mineListObj = {
-              for (MinesModel m in mainMines) "${m.id}": m
-            };
-            int dBFav =
-                await _dbService.putAllData<MinesModel>(tblMines, mineListObj);
-            GlobalService.printHandler("Mines Added in DB: $dBFav");
+            int successMinesInsert = await MinesService.insertAll(arrMapMines);
+            if (successMinesInsert > 0) {
+              arrMinesModel = arrMapMines.map((mines) {
+                return MinesModel.fromDB(mines);
+              }).toList();
+            }
+            // arrMinesDB = MinesModel.mapMinesJsonToDbList(mainObj['mines']);
+            // int insertMines =
+            //     await _service.insertAllData(tblMines, arrMinesDB);
+            // GlobalService.printHandler("Mines Added in DB: $insertMines");
           }
 
-          List<dynamic> mainPromotion = [];
+          /*List<Map<String, dynamic>> arrPromotionDB = [];
           if (mainObj.containsKey('promotion')) {
-            mainPromotion.clear();
-            mainPromotion.addAll(mainObj['promotion']);
-          }
+            // arrPromotionDB = mainObj['promotion'];
+            ///TODO: Insert promotion into Local DB
+          }*/
 
-          List<NewsModel> mainNews = [];
+          List<NewsModel> arrNewsModel = [];
           if (mainObj.containsKey('news')) {
-            mainNews = NewsModel.listFromJson(mainObj['news']);
-            Map<String, NewsModel> newsMap = {
-              for (NewsModel news in mainNews) "${news.id}": news
-            };
-            int dbSuccess =
-                await _dbService.putAllData<NewsModel>(tblNews, newsMap);
-            GlobalService.printHandler("News Added in DB: $dbSuccess");
+            await NewsService.clearAllNews();
+            List newsList = mainObj['news'];
+            List<Map<String, dynamic>> dbNewsList = newsList.map((n) {
+              return NewsModel.toDB(n);
+            }).toList();
+            int successNewsInsert = await NewsService.insertAll(dbNewsList);
+            if (successNewsInsert > 0) {
+              arrNewsModel = dbNewsList.map((news) {
+                return NewsModel.fromDB(news);
+              }).toList();
+              GlobalService.printHandler(
+                  "News Added in DB: $successNewsInsert");
+            }
           }
+          GlobalService.dismissProgress();
 
-          // Show Truck
-          // arrTopTruck.addAll(mainTrucks);
-
-          // Show Company
-          // arrMines.addAll(mainMines);
           GlobalService.dismissProgress();
           return {
-            "trips": mainTrips,
-            "trucks": mainTrucks,
-            "drivers": mainDrivers,
-            "mines": mainMines,
-            "owner_expense": mainOwnerExpense,
-            "looking_jobs": openToDriverList,
-            "favList": mainFavList,
-            "promotion": mainPromotion,
-            "news": mainNews,
+            "trips": arrTripModel,
+            "trucks": arrTruckModel,
+            "drivers": arrDriverModel,
+            "mines": arrMinesModel,
+            "owner_expense": [],
+            "looking_jobs": arrOpenDriverModel,
+            "favList": [],
+            "promotion": [],
+            "news": arrNewsModel,
           };
         default:
           GlobalService.dismissProgress();

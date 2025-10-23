@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/app_enums.dart';
+
 import '/model/news_model.dart';
 import '/services/news_service.dart';
 import 'package:get/get.dart';
@@ -15,10 +17,18 @@ class AllNewsController extends GetxController {
     });
   }
 
-  Future<List<NewsModel>> getAllNews() async {
-    List<NewsModel> newsList = await NewsService.getAllNews();
-    arrNews.clear();
-    arrNews.addAll(newsList);
+  Future<List<NewsModel>?> getAllNews({
+    MethodType methodType = MethodType.local,
+    bool showLoading = true,
+  }) async {
+    List<NewsModel>? newsList = await NewsService.getAllNews(
+      type: MethodType.api,
+      showProgress: showLoading,
+    );
+    if (newsList != null) {
+      arrNews.clear();
+      arrNews.addAll(newsList);
+    }
     return newsList;
   }
 }

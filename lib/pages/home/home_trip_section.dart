@@ -61,7 +61,15 @@ class HomeTripSection extends GetView<HomeController> {
                 shrinkWrap: true,
                 itemCount: 1,
                 itemBuilder: (context, index) {
-                  return TripTile(tripInfo: controller.arrTrip[index]);
+                  return TripTile(
+                    tripInfo: controller.arrTrip[index],
+                    onClick: () {
+                      navigatorState.pushNamed(
+                        AppRoute.trips,
+                        arguments: controller.arrTrip[index],
+                      );
+                    },
+                  );
                 },
               ),
             ),

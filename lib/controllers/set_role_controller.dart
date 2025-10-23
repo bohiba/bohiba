@@ -32,7 +32,7 @@ class SetRoleController extends GetxController {
 
   Future<int> setRole() async {
     if (selectedIndex.value == -1 || roleObj['role_id'] == UserRoles.guest) {
-      GlobalService.appSnackBar(
+      GlobalService.showSnackBar(
         status: AlertStatus.info,
         desc: 'Please select role type.',
       );

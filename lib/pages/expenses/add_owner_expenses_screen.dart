@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
   const AddOwnerExpensesScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +21,6 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(
-            
             top: ScreenUtils.height20,
             left: ScreenUtils.height15,
             right: ScreenUtils.height15,
@@ -39,8 +37,8 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
                         onTap: () async {
                           DateTime? expenseDate =
                               await GlobalService.datePickerModal(
-                                context: context,
-                              );
+                            context: context,
+                          );
                           if (expenseDate != null) {
                             controller.expensedateController.text = DateFormat(
                               'dd-MM-yyyy',
@@ -82,10 +80,7 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
                 ),
                 PrimaryButton(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  onPressed: () async => 
-                    
-                                   controller.addOwnerExpense(),
-            
+                  onPressed: () async => controller.addOwnerExpense(),
                   label: 'Add Expense',
                 ),
               ],

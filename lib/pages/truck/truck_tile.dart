@@ -60,13 +60,13 @@ class TruckTile extends GetView<TruckAllController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        truckInfo.regdNumber ?? 'NA',
+                        truckInfo.regdNumber ?? '',
                         maxLines: 1,
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
                       RoleWidget(
                         truckOwnerWidget: Text(
-                          truckInfo.driver?.name ?? 'Not Assigned',
+                          truckInfo.driverName ?? 'Not Assigned',
                           maxLines: 1,
                           style: TextStyle(
                             fontSize:
@@ -76,17 +76,20 @@ class TruckTile extends GetView<TruckAllController> {
                             color: bohibaTheme.textTheme.titleMedium!.color,
                           ),
                         ),
-                        driverWidget: Text(
-                          truckInfo.owner?.name ?? 'Not Assigned',
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.titleMedium!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
-                            color: bohibaTheme.textTheme.titleMedium!.color,
-                          ),
-                        ),
+                        driverWidget: truckInfo.ownerName != null
+                            ? Text(
+                                truckInfo.ownerName ?? '',
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: bohibaTheme
+                                      .textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleMedium!.color,
+                                ),
+                              )
+                            : SizedBox.shrink(),
                       ),
                     ],
                   ),

@@ -15,8 +15,11 @@ extension StringFormatExt on String {
 
   /// Optional: Capitalized format → "Not Looking"
   String toCapitalizedLabel() {
-    return split('_')
-        .map((e) => e.isEmpty ? '' : e[0].toUpperCase() + e.substring(1))
+    return replaceAll('_', ' ')
+        .split(' ')
+        .map((word) => word.isEmpty
+            ? ''
+            : word[0].toUpperCase() + word.substring(1).toLowerCase())
         .join(' ');
   }
 

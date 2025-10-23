@@ -1,7 +1,6 @@
 import '/services/global_service.dart';
 
 import '/model/profile_model.dart';
-import '/services/profile_service.dart';
 import '/services/role_service.dart';
 
 class RoleService {
@@ -15,12 +14,14 @@ class RoleService {
   static ProfileModel? get profile => _profile;
 
   /// Initialize role by loading profile
-  static Future<void> initRole() async {
-    await _loadProfile();
+  static int initRole(ProfileModel? profileModel) {
+    _profile = profileModel;
+    _loadProfile(profileModel);
+
+    return _profile?.roleId ?? 9;
   }
 
-  static Future<void> _loadProfile() async {
-    _profile = await ProfileService.getProfile();
+  static void _loadProfile(ProfileModel? userInfo) {
     if (_profile != null) {
       _rolePermissionManager = RolePermissionManager(_profile!);
 

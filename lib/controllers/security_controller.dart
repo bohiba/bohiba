@@ -1,9 +1,15 @@
+import 'package:flutter/material.dart';
+
 import '/services/auth_service.dart';
 import '/services/device_info_service.dart';
 import 'package:get/get.dart';
 
 class SecurityController extends GetxController {
+  TextEditingController pwdController = TextEditingController();
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
+
   RxMap<String, dynamic> appInfo = <String, dynamic>{}.obs;
+
   RxBool isBioMetricEnabled = false.obs;
 
   @override
@@ -32,5 +38,11 @@ class SecurityController extends GetxController {
   Future<int> logOut() async {
     int success = await AuthService.logOut();
     return success;
+  }
+
+  @override
+  void dispose() {
+    pwdController.dispose();
+    super.dispose();
   }
 }

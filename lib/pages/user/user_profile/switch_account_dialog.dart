@@ -1,18 +1,19 @@
-import '/component/bohiba_buttons/secoundary_button.dart';
-import '/component/bohiba_inputfield/password_inputfield.dart';
-import '/component/bohiba_inputfield/text_inputfield.dart';
-import '/services/global_service.dart';
-
-import '/component/bohiba_buttons/primary_button.dart';
-import '../../../model/logged_in_user_model.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
+import '/model/logged_in_user_model.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
+import '/component/bohiba_buttons/secoundary_button.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/bohiba_inputfield/password_inputfield.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+
 import '/theme/bohiba_theme.dart';
+import '/services/global_service.dart';
+import '/controllers/dashboard_controller.dart';
+
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '/controllers/dashboard_controller.dart';
 
 class SwitchAccountDialog extends StatefulWidget {
   const SwitchAccountDialog({super.key});

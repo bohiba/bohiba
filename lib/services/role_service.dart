@@ -40,7 +40,7 @@ class RolePermissionManager {
     // Start with base role permissions
     final basePermissions = rolePermissions[user.roleId!] ?? [];
 
-    // TODO: in future — merge with truckOwner custom permissions stored in Hive
+    // TODO: in future — merge with truckOwner custom permissions stored in SQL
     // Example: basePermissions.addAll(user.customPermissions ?? []);
 
     return basePermissions.contains(permission);

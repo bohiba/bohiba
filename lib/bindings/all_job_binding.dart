@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class AllJobBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(AllJobController());
+    Get.put<AllJobController>(AllJobController());
   }
 }

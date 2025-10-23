@@ -21,7 +21,7 @@ class CreateUserController extends GetxController {
     if (!(createUserFormKey.currentState!.validate())) {
       return 0;
     } else if (vPwdController.text != vCnfrmController.text) {
-      GlobalService.appSnackBar(
+      GlobalService.showSnackBar(
           status: AlertStatus.warning,
           desc: 'Password does`nt match. Please retry again.');
       return 0;

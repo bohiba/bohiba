@@ -1,6 +1,6 @@
 enum AppThemeMode { system, light, dark }
 
-enum ActionType { view, add, edit, delete, route, share, other }
+enum ActionType { view, add, edit, delete, route, share, sync, other }
 
 enum UserRoleType { driver, manager, truckowner, unknown }
 

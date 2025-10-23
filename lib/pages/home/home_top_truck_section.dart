@@ -27,7 +27,7 @@ class HomeTopTruck extends GetView<HomeController> {
               child: Row(
                 children: [
                   Text(
-                    'Your Top Truck\'s',
+                    'Truck',
                     style: bohibaTheme.textTheme.headlineLarge,
                   ),
                   const Spacer(),
@@ -87,7 +87,6 @@ class HomeTopTruck extends GetView<HomeController> {
                               (onValue) async {
                                 if (onValue != null) {
                                   await controller.getTruckList();
-                                  await controller.getUserFavList();
                                   controller.arrTruck.refresh();
                                 }
                               },

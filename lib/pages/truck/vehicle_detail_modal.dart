@@ -1,3 +1,5 @@
+import 'package:bohiba/pages/widget/role_widget.dart';
+
 import '../../controllers/truck_all_controller.dart';
 import '/routes/app_route.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +20,7 @@ class VehicleDetailModal extends GetView<TruckAllController> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return SafeArea(
       child: Padding(
         padding:
@@ -50,30 +53,35 @@ class VehicleDetailModal extends GetView<TruckAllController> {
               child: Form(
                 child: Column(
                   children: [
-                    SubInfoTile(
-                      title: "Driver:",
-                      data: vehicleDetails.driver?.name ?? 'NA',
+                    RoleWidget(
+                      truckOwnerWidget: SubInfoTile(
+                        title: "Driver:",
+                        data: vehicleDetails.driverName ?? '',
+                      ),
+                      driverWidget: SubInfoTile(
+                        title: "Owner:",
+                        data: vehicleDetails.ownerName ?? '',
+                      ),
                     ),
                     SubInfoTile(
                       title: "Unladen Weight:",
-                      data: vehicleDetails.specs?.unladenWeight.toString() ??
-                          'NA',
+                      data: '${vehicleDetails.vhUnladenWeight}',
                     ),
                     SubInfoTile(
                       title: "Insurance Upto:",
-                      data: vehicleDetails.validity?.insuranceUpto ?? 'NA',
+                      data: vehicleDetails.insuranceUpto,
                     ),
                     SubInfoTile(
                       title: "Fitness Upto:",
-                      data: vehicleDetails.validity?.fitnessUpto ?? 'NA',
+                      data: vehicleDetails.fitnessUpto,
                     ),
                     SubInfoTile(
                       title: "Tax Upto:",
-                      data: vehicleDetails.validity?.taxUpto ?? 'NA',
+                      data: vehicleDetails.taxUpto,
                     ),
                     SubInfoTile(
                       title: "PUCC Upto:",
-                      data: vehicleDetails.validity?.puccUpto ?? 'NA',
+                      data: vehicleDetails.puccUpto,
                       enableBorder: false,
                     ),
                     Padding(
@@ -85,9 +93,9 @@ class VehicleDetailModal extends GetView<TruckAllController> {
                         width: ScreenUtils.width,
                         label: 'Detail View',
                         onPressed: () {
-                          Get.close(1);
-                          Get.toNamed(AppRoute.truck,
-                                  arguments: vehicleDetails)!
+                          navigatorState
+                              .popAndPushNamed(AppRoute.truck,
+                                  arguments: vehicleDetails.id)
                               .then((onValue) async {
                             if (onValue != null) {
                               await controller.getTruckList();

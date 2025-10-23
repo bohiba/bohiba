@@ -1,20 +1,18 @@
 import 'dart:io';
-
-import '/services/trip_service.dart';
+import 'package:bohiba/services/truck_service.dart';
 
 import '/controllers/image_upload_controller.dart';
 import '/dist/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
-import '/services/db_service.dart';
 import '/services/dio_serivce.dart';
+import '/services/trip_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 
 class TripAddController extends ImageUploadController {
   DioService dioService = DioService();
-  DBService dBService = DBService();
 
   TripModel? tripModel;
   Rx<TruckModel> truckModel = TruckModel().obs;
@@ -79,7 +77,6 @@ class TripAddController extends ImageUploadController {
 
   Future<void> addUpdateTrip() async {
     if (truckController.text.isEmpty) {
-      // GlobalService.showAppToast(message: 'Please select a truck');
       Get.showSnackbar(
         GetSnackBar(
           title: "Truck",
@@ -90,7 +87,7 @@ class TripAddController extends ImageUploadController {
       return;
     }
 
-    if (truckModel.value.driver == null) {
+    if (truckModel.value.driverUuid == null) {
       Get.showSnackbar(
         GetSnackBar(
           title: "Driver",
@@ -116,7 +113,7 @@ class TripAddController extends ImageUploadController {
       'started_at': startAtController.text.trim(),
       'ended_at': endedAtController.text.trim(),
       'regd_number': truckController.text.trim(),
-      'driver_uuid': truckModel.value.driver?.uuid,
+      'driver_uuid': truckModel.value.driverUuid,
       'origin': originController.text.trim(),
       'destination': destinationController.text.trim(),
       'material_type': materialController.text.trim(),
@@ -134,7 +131,7 @@ class TripAddController extends ImageUploadController {
     } else {
       int addSucess = await TripService.updateTrip(
         bodyMap: bodyObj,
-        tripId: tripModel!.id!,
+        trip: tripModel!,
       );
       if (addSucess > 0) {
         Get.back(result: true);
@@ -144,7 +141,7 @@ class TripAddController extends ImageUploadController {
 
   Future<List<TruckModel>> getTruckList() async {
     arrTruck.clear();
-    List<TruckModel> truckList = await dBService.getAllData(tblTrucks);
+    List<TruckModel> truckList = await TruckService.getTruckList();
     arrTruck.addAll(truckList);
     return truckList;
   }

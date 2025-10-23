@@ -90,12 +90,13 @@ class AddTruckPage extends GetView<TruckAllController> {
                   ),
                 ),
                 PrimaryButton(
-                  label: "VERIFY",
-                  onPressed: () => controller.createVehicle(
-                    vehicleNumber:
-                        controller.vehicleNumberController.text.trim(),
-                  ),
-                ),
+                    label: "VERIFY",
+                    onPressed: () async {
+                      int success = await controller.addVehicle();
+                      if (success > 0) {
+                        navigateState.pop(true);
+                      }
+                    }),
               ],
             ),
           ),

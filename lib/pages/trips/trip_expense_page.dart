@@ -82,7 +82,6 @@ class TripExpensePage extends GetView<TripExpenseController> {
                           'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
                       onDiscard: () async => controller.deleteExpense(
-                        tripInfo: controller.tripController.tripInfo.value,
                         expenseId: controller.tripExpense.value.id!,
                       ),
                       saveBtnTxt: 'CLOSE',

@@ -1,6 +1,4 @@
-import 'package:bohiba/model/rating_model.dart';
-
-import '/dist/app_enums.dart';
+import '/model/rating_model.dart';
 import '/model/driver_model.dart';
 import '/services/open_driver_service.dart';
 import 'package:get/get.dart';
@@ -17,15 +15,7 @@ class OpenDriverController extends GetxController {
     super.onInit();
 
     Future.delayed(Duration.zero, () async {
-      if (openDriver.value.licenseDetail == null) {
-        await getOpenDriver(
-            id: openDriver.value.id!, methodType: MethodType.api);
-      } else {
-        await getOpenDriver(
-          id: openDriver.value.id!,
-          methodType: MethodType.local,
-        );
-      }
+      await getOpenDriver(id: openDriver.value.id!);
     });
   }
 
@@ -40,10 +30,9 @@ class OpenDriverController extends GetxController {
     }
   }
 
-  Future<void> getOpenDriver(
-      {required int id, required MethodType methodType}) async {
-    DriverModel? driverInfo = await OpenDriverService.getOpenDriverPrfl(
-        driverId: id, type: methodType);
+  Future<void> getOpenDriver({required int id}) async {
+    DriverModel? driverInfo =
+        await OpenDriverService.getOpenDriverPrfl(driverId: id);
     if (driverInfo != null) {
       openDriver.value = driverInfo;
       avgRating.value = _getAverageRating(driverInfo.rating);

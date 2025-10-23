@@ -1,9 +1,8 @@
-import '/model/mines_model.dart';
-import '/services/db_service.dart';
 import 'package:get/get.dart';
+import '/model/mines_model.dart';
+import '/services/mines_service.dart';
 
 class MinesController extends GetxController {
-  DBService dBService = DBService();
   Rx<MinesModel> minesModel = MinesModel().obs;
   RxList<MinesModel> arrMines = <MinesModel>[].obs;
 
@@ -15,10 +14,14 @@ class MinesController extends GetxController {
     });
   }
 
-  Future<List<MinesModel>> _getMinesList() async {
-    List<MinesModel> minesList = await dBService.getAllData(tblMines);
-    arrMines.clear();
-    arrMines.addAll(minesList);
-    return minesList;
+  Future<List<MinesModel>?> _getMinesList() async {
+    List<MinesModel>? minesList = await MinesService.getMinesList();
+    if (minesList != null) {
+      arrMines.clear();
+      arrMines.addAll(minesList);
+      return minesList;
+    }
+
+    return null;
   }
 }

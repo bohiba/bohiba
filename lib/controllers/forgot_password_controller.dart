@@ -10,7 +10,6 @@ class ForgotPasswordController extends GetxController {
   TextEditingController emailController = TextEditingController();
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
-  GlobalKey<FormState> setPwdState = GlobalKey<FormState>();
 
   Future<int> sendOtp() async {
     GlobalService.closeKeyboard();

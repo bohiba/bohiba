@@ -1,29 +1,15 @@
-import '/services/db_service.dart';
-import 'package:hive/hive.dart';
-part 'logged_in_user_model.g.dart';
-
-@HiveType(typeId: userListTypeId)
 class LoggedInAccountModel {
-  @HiveField(0)
   final String? uuid;
-
-  @HiveField(1)
   final String? name;
-
-  @HiveField(2)
   final String? email;
-
-  @HiveField(3)
+  final int? roleId;
   final String? token;
-
-  @HiveField(4)
-  final bool? isLoggedIn;
   LoggedInAccountModel({
     this.uuid,
     this.name,
     this.email,
     this.token,
-    this.isLoggedIn,
+    this.roleId = 9,
   });
 
   Map<String, dynamic> toJson() => {
@@ -31,5 +17,15 @@ class LoggedInAccountModel {
         'name': name,
         'email': email,
         'token': token,
+        'roleId': roleId,
       };
+
+  LoggedInAccountModel toMap(Map<String, dynamic> dbMap) =>
+      LoggedInAccountModel(
+        uuid: dbMap['uuid'],
+        name: dbMap['name'],
+        email: dbMap['email'],
+        token: dbMap['token'],
+        roleId: dbMap['roleId'],
+      );
 }

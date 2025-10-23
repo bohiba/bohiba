@@ -1,25 +1,24 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:readmore/readmore.dart';
+import 'package:bohiba/model/rating_model.dart';
 
-import '/pages/widget/permission_widget.dart';
-import '/services/role_permission_service.dart';
-
+import '/routes/app_route.dart';
+import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
 import '/controllers/dashboard_controller.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
 import '/services/global_service.dart';
+import '/services/role_permission_service.dart';
 import '/extensions/bohiba_extension.dart';
 import '/pages/widget/role_widget.dart';
 import '/pages/widget/linear_box_widget.dart';
-import '/routes/app_route.dart';
-import '/theme/bohiba_theme.dart';
+import '/pages/widget/permission_widget.dart';
+import '/pages/user/user_profile/user_profile_component/user_profile_card.dart';
+
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:readmore/readmore.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
-// import '/pages/user/user_profile/edit_user_profile_screen.dart';
-import '/pages/user/user_profile/user_profile_component/user_profile_card.dart';
 import 'package:flutter/material.dart';
-import '/component/bohiba_appbar/title_appbar.dart';
 
 class UserProfilePage extends GetView<DashboardController> {
   const UserProfilePage({super.key});
@@ -62,10 +61,14 @@ class UserProfilePage extends GetView<DashboardController> {
                     header: 'Hiring Status',
                     widget: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: controller.opted.value,
+                        value: controller.statusOption
+                                .contains(controller.opted.value)
+                            ? controller.opted.value
+                            : null,
                         isDense: true,
+                        hint: Text('Select status'),
                         borderRadius: BorderRadius.circular(8.0),
-                        items: controller.truckOwnerStatus
+                        items: controller.statusOption
                             .map(
                               (status) => DropdownMenuItem<String>(
                                 value: status,
@@ -87,10 +90,14 @@ class UserProfilePage extends GetView<DashboardController> {
                     header: 'Job Status',
                     widget: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: controller.opted.value,
+                        value: controller.statusOption
+                                .contains(controller.opted.value)
+                            ? controller.opted.value
+                            : null,
                         isDense: true,
                         borderRadius: BorderRadius.circular(8.0),
-                        items: controller.truckOwnerStatus
+                        hint: Text('Select status'),
+                        items: controller.statusOption
                             .map(
                               (status) => DropdownMenuItem<String>(
                                 value: status,
@@ -103,6 +110,7 @@ class UserProfilePage extends GetView<DashboardController> {
                               controller.opted.value != status) {
                             controller.opted.value = status;
                             // await controller.updateUserHiringStatus();
+                            //TODO: UPDATE USER JOB SEARCH STATUS
                           }
                         },
                       ),
@@ -132,7 +140,7 @@ class UserProfilePage extends GetView<DashboardController> {
                       navigator.pushNamed(AppRoute.allDriver);
                     },
                     header: 'Total Driver',
-                    title: controller.profileModel.value?.drivers.toString(),
+                    title: controller.profileModel.value?.driver.toString(),
                     showArrow: true,
                   ),
                 ),
@@ -163,31 +171,9 @@ class UserProfilePage extends GetView<DashboardController> {
                       Obx(
                         () {
                           final ratings =
-                              controller.profileModel.value?.ratings ?? [];
-                          if (ratings.isEmpty) {
-                            return Container(
-                              width: ScreenUtils.width * 0.75,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: ScreenUtils.height20),
-                              constraints: BoxConstraints(
-                                  minHeight: ScreenUtils.height * 0.25),
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'No Rating',
-                                    textAlign: TextAlign.center,
-                                    style: bohibaTheme.textTheme.headlineLarge,
-                                  ),
-                                  Text(
-                                    'You haven\'t received any rating from truck owners. Your truck owner can help you to get first rating.',
-                                    textAlign: TextAlign.center,
-                                    style: bohibaTheme.textTheme.titleMedium,
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
+                              controller.profileModel.value?.ratings;
+
+                          if (ratings != null && ratings.isNotEmpty) {
                             return ListView.builder(
                               itemCount: controller
                                       .profileModel.value?.ratings?.length ??
@@ -197,6 +183,7 @@ class UserProfilePage extends GetView<DashboardController> {
                               padding:
                                   EdgeInsets.only(top: ScreenUtils.height10),
                               itemBuilder: (context, index) {
+                                RatingModel rating = ratings[index];
                                 return Container(
                                   margin: EdgeInsets.only(
                                       bottom: ScreenUtils.height10),
@@ -222,12 +209,12 @@ class UserProfilePage extends GetView<DashboardController> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'User Name',
+                                              rating.reviewerName ?? '',
                                               style: bohibaTheme
                                                   .textTheme.labelLarge,
                                             ),
                                             ReadMoreText(
-                                              'Desc',
+                                              rating.feedback ?? '',
                                               trimLines: 2,
                                               trimMode: TrimMode.Line,
                                               trimCollapsedText: ' Read more',
@@ -263,7 +250,9 @@ class UserProfilePage extends GetView<DashboardController> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              '0',
+                                              rating.rating
+                                                      ?.toStringAsFixed(1) ??
+                                                  '',
                                               style: bohibaTheme
                                                   .textTheme.labelLarge,
                                             ),
@@ -278,6 +267,31 @@ class UserProfilePage extends GetView<DashboardController> {
                                   ),
                                 );
                               },
+                            );
+                          }
+
+                          {
+                            return Container(
+                              width: ScreenUtils.width * 0.75,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: ScreenUtils.height20),
+                              constraints: BoxConstraints(
+                                  minHeight: ScreenUtils.height * 0.25),
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'No Rating',
+                                    textAlign: TextAlign.center,
+                                    style: bohibaTheme.textTheme.headlineLarge,
+                                  ),
+                                  Text(
+                                    'You haven\'t received any rating from truck owners. Your truck owner can help you to get first rating.',
+                                    textAlign: TextAlign.center,
+                                    style: bohibaTheme.textTheme.titleMedium,
+                                  ),
+                                ],
+                              ),
                             );
                           }
                         },

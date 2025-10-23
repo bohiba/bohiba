@@ -1,4 +1,3 @@
-import '/component/bohiba_colors.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +68,7 @@ class BohibaCompanySearchDelegate extends SearchDelegate<String> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        color: BohibaColors.primaryColor,
+        color: bohibaTheme.primaryColor,
         icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
@@ -81,7 +80,7 @@ class BohibaCompanySearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      color: BohibaColors.primaryColor,
+      color: bohibaTheme.primaryColor,
       icon: const Icon(Icons.arrow_back_ios_new_rounded),
       onPressed: () {
         close(context, '');
@@ -114,7 +113,7 @@ class BohibaCompanySearchDelegate extends SearchDelegate<String> {
   ThemeData appBarTheme(BuildContext context) {
     return bohibaTheme.copyWith(
       appBarTheme: const AppBarTheme(
-        elevation: 0.5,
+        elevation: 0,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,

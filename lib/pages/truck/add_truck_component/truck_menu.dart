@@ -74,6 +74,16 @@ class TruckMenu extends GetView<TruckAllController> {
           );
         }
 
+        if (allowedActions.contains(ActionType.sync) &&
+            RoleService.hasPermission(RolePermissionService.viewTrucks)) {
+          menuItems.add(
+            const PopupMenuItem(
+              value: ActionType.sync,
+              child: Text('Sync'),
+            ),
+          );
+        }
+
         if (allowedActions.contains(ActionType.delete) &&
             RoleService.hasPermission(RolePermissionService.deleteTrucks)) {
           menuItems.add(PopupMenuItem(
@@ -150,20 +160,31 @@ class TruckMenu extends GetView<TruckAllController> {
                 status: AlertStatus.warning,
                 title: 'DELETE',
                 description:
-                    'Driver will be unlinked, but data will remain. Are you sure you want to delete this truck?',
+                    'Driver will be removed, but data will remain. Are you sure you want to delete this truck?',
                 saveBtnTxt: 'Close',
                 onSave: () {
                   navigate.pop();
                 },
                 discardBtnTxt: 'Delete',
                 onDiscard: () async {
-                  await controller.deleteTruck(truckId: truck.id!);
+                  navigate.pop();
+                  int success =
+                      await controller.deleteTruck(truckId: truck.id!);
+                  if (success > 0) {
+                    navigate.pop(true);
+                  }
                 },
               ).then((result) async {
                 if (onActionComplete?[ActionType.delete] != null) {
                   onActionComplete![ActionType.delete]!(result);
                 }
               });
+              break;
+            case ActionType.sync:
+              GlobalService.showAppToast(message: '#Sync');
+              if (onActionComplete?[ActionType.sync] != null) {
+                onActionComplete![ActionType.sync]!(null);
+              }
               break;
             case ActionType.other:
               GlobalService.showAppToast(message: '#Maintainance');

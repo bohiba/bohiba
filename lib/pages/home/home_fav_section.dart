@@ -100,7 +100,7 @@ class HomeFavListSection extends GetView<HomeController> {
 
                   if (favObj.containsKey('registration')) {
                     return TruckTile(
-                      truckInfo: TruckModel.fromJson(favObj),
+                      truckInfo: TruckModel.fromDB(favObj),
                       allowedActions: [
                         ActionType.view,
                         ActionType.add,
@@ -109,12 +109,11 @@ class HomeFavListSection extends GetView<HomeController> {
                       ],
                       onClick: () {
                         Get.toNamed(AppRoute.truck,
-                                arguments: TruckModel.fromJson(favObj).id)
+                                arguments: TruckModel.fromDB(favObj).id)
                             ?.then(
                           (onValue) async {
                             if (onValue != null) {
                               await controller.getTruckList();
-                              await controller.getUserFavList();
                               controller.arrTruck.refresh();
                             }
                           },

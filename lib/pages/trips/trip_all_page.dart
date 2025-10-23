@@ -1,15 +1,15 @@
-import '/pages/widget/permission_widget.dart';
-import '/services/role_permission_service.dart';
-
+import 'trip_tile.dart';
+import '/routes/app_route.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:get/get.dart';
-import '/pages/trips/trip_tile.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
-import '/controllers/trip_all_controller.dart';
 import '/dist/component_exports.dart';
-import '/routes/app_route.dart';
+import '/pages/widget/permission_widget.dart';
+import '/controllers/trip_all_controller.dart';
+import '/services/role_permission_service.dart';
+
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class AllTripPage extends GetView<AllTripController> {
   final bool showLeading;
@@ -17,7 +17,7 @@ class AllTripPage extends GetView<AllTripController> {
 
   @override
   Widget build(BuildContext context) {
-    final navigator = Navigator.of(context);
+    final navigatorState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(
         title: 'Trips',
@@ -28,7 +28,7 @@ class AllTripPage extends GetView<AllTripController> {
               showSearch(
                 context: context,
                 delegate: BohibaSearchDelegate<TripModel>(
-                  items: controller.arrTrip.value,
+                  items: controller.arrTrip,
                   hintText: 'Search by trip name',
                   searchPredicate: (TripModel item, String query) {
                     final q = query.toLowerCase();
@@ -42,7 +42,7 @@ class AllTripPage extends GetView<AllTripController> {
                   itemBuilder: (BuildContext context, TripModel item) {
                     return GestureDetector(
                       onTap: () {
-                        navigator.pop();
+                        navigatorState.pop();
                         Get.toNamed(AppRoute.trips, arguments: item)!
                             .then((onValue) async {
                           if (onValue) {
@@ -63,8 +63,14 @@ class AllTripPage extends GetView<AllTripController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item.tripCode ?? ''),
-                            Text(item.truck?.regdNumber ?? ''),
+                            Text(
+                              item.tripCode ?? '',
+                              style: bohibaTheme.textTheme.labelLarge,
+                            ),
+                            Text(
+                              item.truck?.regdNumber ?? '',
+                              style: bohibaTheme.textTheme.titleMedium,
+                            ),
                           ],
                         ),
                       ),
@@ -80,7 +86,7 @@ class AllTripPage extends GetView<AllTripController> {
             child: AppBarIconBox(
               icon: const Icon(EvaIcons.plus),
               onTap: () {
-                navigator.pushNamed(AppRoute.addTrip).then((value) async {
+                navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
                   if (value != null) {
                     await controller.fetchTrips(refresh: true);
                   }
@@ -91,24 +97,24 @@ class AllTripPage extends GetView<AllTripController> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TabBar(
-              controller: controller.tabController,
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.label,
-              tabs: List.generate(
-                controller.tabs.length,
-                (index) {
-                  return Tab(text: controller.tabs[index]);
-                },
+        child: Obx(() {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TabBar(
+                controller: controller.tabController.value,
+                isScrollable: true,
+                indicatorSize: TabBarIndicatorSize.label,
+                tabs: List.generate(
+                  controller.tabs.length,
+                  (index) {
+                    return Tab(text: controller.tabs[index]);
+                  },
+                ),
               ),
-            ),
-            Expanded(
-              child: Obx(() {
-                return TabBarView(
-                  controller: controller.tabController,
+              Expanded(
+                child: TabBarView(
+                  controller: controller.tabController.value,
                   children: controller.convertToSnakeCase(controller.tabs).map(
                     (status) {
                       final filteredTrips = controller.getTripsByStatus(status);
@@ -121,7 +127,7 @@ class AllTripPage extends GetView<AllTripController> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    navigator
+                                    navigatorState
                                         .pushNamed(AppRoute.addTrip)
                                         .then((value) async {
                                       if (value != null) {
@@ -168,11 +174,11 @@ class AllTripPage extends GetView<AllTripController> {
                             );
                     },
                   ).toList(),
-                );
-              }),
-            ),
-          ],
-        ),
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

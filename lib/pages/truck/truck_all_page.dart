@@ -1,17 +1,16 @@
+import 'truck_tile.dart';
+import '/dist/app_enums.dart';
+import '/routes/app_route.dart';
+import '/theme/bohiba_theme.dart';
+import '/dist/component_exports.dart';
 import '/pages/widget/permission_widget.dart';
+import '/controllers/truck_all_controller.dart';
 import '/services/role_permission_service.dart';
 
-import '/theme/bohiba_theme.dart';
-
-import '/dist/app_enums.dart';
-import '/controllers/truck_all_controller.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'truck_tile.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import '/routes/app_route.dart';
-import '/dist/component_exports.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class AllTruckPage extends GetView<TruckAllController> {
   final bool showLeading;
@@ -21,8 +20,6 @@ class AllTruckPage extends GetView<TruckAllController> {
   Widget build(BuildContext context) {
     final NavigatorState navState = Navigator.of(context);
 
-    final RefreshController refreshTruckList =
-        RefreshController(initialRefresh: false);
     return Scaffold(
       appBar: TitleAppbar(
         title: "Trucks",
@@ -49,10 +46,11 @@ class AllTruckPage extends GetView<TruckAllController> {
         child: Obx(
           () {
             return SmartRefresher(
-              controller: refreshTruckList,
+              controller: controller.refreshTruckList,
               onRefresh: () async => {
-                await controller.getTruckList(),
-                refreshTruckList.refreshCompleted(),
+                await controller.getTruckList(
+                    methodType: MethodType.api, resetList: true),
+                controller.refreshTruckList.refreshCompleted(),
               },
               child: controller.arrTruck.isEmpty
                   ? Center(
@@ -108,7 +106,7 @@ class AllTruckPage extends GetView<TruckAllController> {
                             ActionType.add,
                             ActionType.edit,
                             ActionType.other,
-                            ActionType.delete,
+                            ActionType.sync,
                           ],
                           onActionComplete: {
                             ActionType.view: (onValue) {},
@@ -121,11 +119,6 @@ class AllTruckPage extends GetView<TruckAllController> {
                             ActionType.other: (onValue) {
                               // Maintainance
                             },
-                            ActionType.delete: (onValue) async {
-                              if (onValue != null) {
-                                await controller.getTruckList();
-                              }
-                            },
                           },
                           onClick: () {
                             Get.toNamed(AppRoute.truck,
@@ -134,8 +127,6 @@ class AllTruckPage extends GetView<TruckAllController> {
                               (onValue) async {
                                 if (onValue != null) {
                                   await controller.getTruckList();
-                                  // controller.homeController.getTruckList();
-                                  // controller.homeController.getUserFavList();
                                   controller.arrTruck.refresh();
                                 }
                               },

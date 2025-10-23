@@ -1,11 +1,9 @@
-import '/controllers/trip_controller.dart';
 import '/dist/app_enums.dart';
 import '/model/trip_model.dart';
 import '/services/trip_service.dart';
 import 'package:get/get.dart';
 
 class TripPaymentController extends GetxController {
-  final TripController tripController = Get.find<TripController>();
   Rx<TripPayment> tripPayment = TripPayment().obs;
 
   @override
@@ -15,22 +13,18 @@ class TripPaymentController extends GetxController {
   }
 
   Future<void> getPayment() async {
-    tripController.tripInfo.value = (await tripController.getTripInfo(
-      methodType: MethodType.api,
-      tripInfo: tripController.tripInfo.value,
-    ))!;
-
-    tripPayment.value =
-        tripController.tripInfo.value.payments!.firstWhere((payment) {
-      return payment.id == tripPayment.value.id;
-    });
+    TripModel? trip = await TripService.getTrip(
+        method: MethodType.local, tripId: tripPayment.value.tripId!);
+    if (trip != null) {
+      tripPayment.value = trip.payments!.firstWhere((payment) {
+        return payment.id == tripPayment.value.id;
+      });
+    }
   }
 
-  Future<void> deletePayment(
-      {required TripModel tripInfo, required int paymentId}) async {
+  Future<void> deletePayment({required int paymentId}) async {
     Get.back();
-    int deleteSucess =
-        await TripService.deletePayment(trip: tripInfo, paymentId: paymentId);
+    int deleteSucess = await TripService.deletePayment(paymentId: paymentId);
     if (deleteSucess > 0) {
       Get.back(result: true);
     } else {

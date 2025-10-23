@@ -21,16 +21,17 @@ class UpdateContactInfoController extends GetxController {
     });
   }
 
-  Future<void> updateContact({required Map parameter}) async {
+  Future<void> updateContact({required Map<String, dynamic> parameter}) async {
     if (parameter.containsKey('email')) {
       profileModel.value.email = parameter['email'];
     }
     if (parameter.containsKey('mobile_number')) {
       profileModel.value.mobileNumber = parameter['mobile_number'];
     }
-    int updateSuccess =
-        await ProfileService.updatelocalProfile(profile: profileModel.value);
-    if (updateSuccess > 0) {
+    ProfileModel? profile =
+        await ProfileService.updateUserProfile(bodyMap: parameter);
+    if (profile != null) {
+      profileModel.value = profile;
       Get.back();
     }
   }

@@ -25,7 +25,7 @@ class UserProfileConfigController extends ImageUploadController {
           imagePath: pickedImg!.path, imageFile: [File(pickedImg!.path)]);
       return status;
     } else {
-      GlobalService.appSnackBar(
+      GlobalService.showSnackBar(
           status: AlertStatus.warning, desc: 'Please select an image.');
       return 0;
     }
@@ -74,7 +74,7 @@ class UserProfileConfigController extends ImageUploadController {
       simulateUpload();
     } catch (e) {
       status.value = UploadStatus.failure;
-      GlobalService.appSnackBar(
+      GlobalService.showSnackBar(
         status: AlertStatus.failure,
         desc: 'Something went wrong while uploading image',
       );

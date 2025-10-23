@@ -1,4 +1,4 @@
-import '/services/job_service.dart';
+import '../services/owner_job_service.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -26,7 +26,7 @@ class AllJobController extends GetxController {
   }
 
   Future<void> getAllJobs() async {
-    List<dynamic> fetchList = await JobService.allJobs();
+    List<dynamic> fetchList = await OwnerJobService.allJobs();
     if (fetchList.isNotEmpty) {
       arrJobs.clear();
       arrJobs.addAll(fetchList);

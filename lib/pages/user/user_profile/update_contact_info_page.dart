@@ -84,7 +84,7 @@ class UpdateContactInfoPage extends GetView<UpdateContactInfoController> {
                 ),
                 PrimaryButton(
                   onPressed: () async {
-                    Map bodyObj = {};
+                    Map<String, dynamic> bodyObj = {};
                     if (controller.addAsset.value == AddAssetUsing.uuid) {
                       bodyObj = {
                         'mobile_number': controller.phoneController.text.trim(),

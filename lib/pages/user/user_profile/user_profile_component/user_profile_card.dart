@@ -44,7 +44,7 @@ class UserProfileCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   BohibaMarqueeText(
-                    width: ScreenUtils.width * 0.3,
+                    width: ScreenUtils.width * 0.37,
                     text: userName ?? '',
                     style: bohibaTheme.textTheme.headlineSmall,
                     overflowText: userName ?? '',

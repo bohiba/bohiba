@@ -1,23 +1,25 @@
 import 'dart:io';
+import '/model/rating_model.dart';
+import '/services/rating_service.dart';
 
-import '/dist/app_enums.dart';
 import 'pref_utils.dart';
-import 'rating_service.dart';
 import 'api_end_point.dart';
 import 'device_info_service.dart';
 import 'dio_serivce.dart';
 import 'global_service.dart';
-import 'db_service.dart';
 import 'main_service.dart';
+import 'db2_service.dart';
+
+import '/dist/app_enums.dart';
 import '/model/profile_model.dart';
-import '../model/logged_in_user_model.dart';
-import '/controllers/role_controller.dart';
+import '/model/logged_in_user_model.dart';
 
 class ProfileService {
-  static final DBService _dBService = DBService();
   static final DioService _dioService = DioService();
+  static final DatabaseService _databaseService = DatabaseService();
   static final PrefUtils _prefUtils = PrefUtils();
 
+  /// TODO: On 2nd version
   static Future<int> switchAccount({required LoggedInAccountModel user}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
@@ -27,7 +29,8 @@ class ProfileService {
       _prefUtils.clearPreferencesData();
       await _prefUtils.saveString(PrefUtils.token, token);
       _dioService.setToken(token);
-      _dBService.resetAndReInitDB();
+      // _dBService.resetAndReInitDB();
+      // Clear DB while switching account
       GlobalService.printHandler("Reset Token: $token");
     }
     ProfileModel? profileModel = await getProfile(type: MethodType.api);
@@ -36,7 +39,9 @@ class ProfileService {
     return (mainObj != null && profileModel != null) ? 1 : 0;
   }
 
-  static Future<int> verifyDoc({required Map<String, dynamic> bodyMap}) async {
+  static Future<int> addDocument({
+    required Map<String, dynamic> bodyMap,
+  }) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
@@ -46,21 +51,27 @@ class ProfileService {
 
     switch (response.statusCode) {
       case 200:
-        VerificationModel verificationModel =
-            VerificationModel.fromJson(response.data);
-        ProfileModel? profileModel = await getProfile();
-        profileModel!.verification = verificationModel;
-
+        Map<String, dynamic> resObj = response.data;
+        if (resObj.containsKey('user_uuid')) {
+          resObj['uuid'] = resObj['user_uuid'];
+          resObj.remove('user_uuid');
+        }
+        ProfileModel? profileModel = ProfileModel.fromJson(resObj);
+        String strQueryUpdate = ''' UPDATE $tblProfile SET
+          aadharNumber = '${profileModel.aadharNumber}'
+        , dlNumber = '${profileModel.dlNumber}'
+        , panNumber = '${profileModel.panNumber}' WHERE uuid = '${profileModel.uuid}'; ''';
+        int update = await _databaseService.updateData(strQueryUpdate);
         GlobalService.dismissProgress();
-        return 1;
+        return update;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
             status: AlertStatus.warning, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
             status: AlertStatus.failure, desc: 'Something went wrong');
         return 0;
     }
@@ -97,21 +108,17 @@ class ProfileService {
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
-        ProfileModel? profile = await getProfile(type: MethodType.api);
-        if (profile != null) {
-          return profile;
-        } else {
-          return null;
-        }
+        ProfileModel? profileModel = await getProfile(type: MethodType.api);
+        return profileModel;
       case 400:
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
           status: AlertStatus.warning,
           title: 'Profile',
           desc: response.message,
         );
         return null;
       default:
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
           status: AlertStatus.failure,
           title: 'Profile',
           desc: 'Something went wrong',
@@ -125,24 +132,26 @@ class ProfileService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse response =
-        await _dioService.post(ApiEndPoint.apiSetRole, body: bodyMap);
+    ApiResponse response = await _dioService.post(
+      ApiEndPoint.apiSetRole,
+      body: bodyMap,
+    );
     switch (response.statusCode) {
       case 200:
         Map<dynamic, dynamic> resMap = response.data as Map<dynamic, dynamic>;
-        ProfileModel? profileModel = await getProfile();
-        profileModel!.roleId = resMap['role_id'];
-        int updateSucess = await updatelocalProfile(profile: profileModel);
+        String updateImgQuery =
+            '''UPDATE $tblProfile SET roleId = ${resMap['role_id']}''';
+        int success = await _databaseService.updateData(updateImgQuery);
         GlobalService.dismissProgress();
-        return updateSucess;
+        return success;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
             status: AlertStatus.info, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
           status: AlertStatus.failure,
           title: 'Profile',
           desc: 'Something went wrong',
@@ -151,15 +160,15 @@ class ProfileService {
     }
   }
 
-  static Future<int> setImage(
-      {required String imagePath, required List<File> imageFile}) async {
+  static Future<int> setImage({
+    required String imagePath,
+    required List<File> imageFile,
+  }) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
     GlobalService.showProgress();
-    Map<String, dynamic> bodyObj = {
-      "profile_image": imagePath,
-    };
+    Map<String, dynamic> bodyObj = {"profile_image": imagePath};
     ApiResponse response = await _dioService.upload(
       ApiEndPoint.apiSetProfileImage,
       bodyObj,
@@ -168,25 +177,27 @@ class ProfileService {
 
     switch (response.statusCode) {
       case 200:
-        ProfileModel? oldProfile = await getProfile();
-        oldProfile!.profileImg = response.data.toString();
-        int success = await updatelocalProfile(profile: oldProfile);
+        String updateImgQuery =
+            '''UPDATE SET image = '${response.data.toString()}'; ''';
+        int success = await _databaseService.updateData(updateImgQuery);
         GlobalService.dismissProgress();
         return success;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
             status: AlertStatus.info, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
             status: AlertStatus.warning, desc: 'Something went wrong');
         return 0;
     }
   }
 
-  static Future<int> addAddress({required Map<String, dynamic> bodyMap}) async {
+  static Future<int> addOrUpdateAddress({
+    required Map<String, dynamic> bodyMap,
+  }) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
@@ -196,56 +207,116 @@ class ProfileService {
 
     switch (response.statusCode) {
       case 201:
-        VerificationModel verificationModel =
-            VerificationModel.fromJson(response.data);
-        ProfileModel? profileModel = await getProfile();
-        profileModel!.verification = verificationModel;
-        int updateSucess = await updatelocalProfile(profile: profileModel);
+        ProfileModel profile = ProfileModel.fromJson(response.data);
+        String strQueryUpdate = '''UPDATE $tblProfile SET
+          houseNo = '${profile.houseNo}'
+        , locality = '${profile.locality}'
+        , street = '${profile.street}'
+        , city = '${profile.city}'
+        , district = '${profile.district}'
+        , state = '${profile.state}'
+        , country = '${profile.country}'
+        , pinCode = '${profile.pinCode}';
+        ''';
+        int updateProfile = await _databaseService.updateData(strQueryUpdate);
         GlobalService.dismissProgress();
-        return updateSucess;
+        return updateProfile;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
             status: AlertStatus.info, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
+        GlobalService.showSnackBar(
             status: AlertStatus.warning, desc: 'Something went wrong');
         return 0;
     }
   }
 
-  static Future<ProfileModel?> getProfile(
-      {MethodType type = MethodType.local}) async {
+  static Future<ProfileModel?> getProfile({
+    MethodType type = MethodType.local,
+    bool showProgress = true,
+  }) async {
     if (type == MethodType.local) {
-      return await _dBService.getData<ProfileModel>(tblProfile, profileKey);
+      String strProfileQuery = ''' SELECT * FROM $tblProfile LIMIT 1''';
+      List<Map<String, dynamic>> arrProfileList =
+          await _databaseService.getAllData(strProfileQuery) ?? [];
+      if (arrProfileList.isNotEmpty) {
+        Map<String, dynamic> profileRow = arrProfileList.first;
+        ProfileModel profile = ProfileModel.fromDb(profileRow);
+
+        String strRatingQuery =
+            ''' SELECT * FROM $tblRating WHERE driverUuid = '${profileRow['uuid']}' ''';
+        List<Map<String, dynamic>> arrRatingList =
+            await _databaseService.getAllData(strRatingQuery) ?? [];
+
+        List<RatingModel> arrRatingModel = arrRatingList.map((e) {
+          return RatingModel.fromDB(e);
+        }).toList();
+
+        profile.ratings = [];
+        profile.ratings?.addAll(arrRatingModel);
+        return profile;
+      }
+      return null;
     } else {
       if (!await DeviceInfoService.hasInternet()) {
         return null;
       }
-      GlobalService.showProgress();
-      ApiResponse serviceResponse =
-          await _dioService.get(ApiEndPoint.apiProfile);
+      if (showProgress) GlobalService.showProgress();
+      ApiResponse res = await _dioService.get(ApiEndPoint.apiProfile);
 
-      switch (serviceResponse.statusCode) {
+      switch (res.statusCode) {
         case 401:
-          GlobalService.dismissProgress();
-          GlobalService.appSnackBar(
-              status: AlertStatus.info, desc: serviceResponse.message);
+          if (showProgress) GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+              status: AlertStatus.info, desc: res.message);
           return null;
         case 200:
-          if (serviceResponse.data == null) return null;
-          ProfileModel profileModel =
-              ProfileModel.fromJson(serviceResponse.data);
-          int dbSuccess = await addProfile(profileModel: profileModel);
-          GlobalService.dismissProgress();
-          await RoleService.initRole();
-          GlobalService.printHandler("Profile Added in DB: $dbSuccess");
-          return profileModel;
+          if (res.data == null) return null;
+          Map resObj = res.data;
+          Map<String, dynamic> resMap = ProfileModel.toDB(res.data);
+          List<Map>? arrProfile = await getAllProfile();
+          int dbSuccess = 0;
+          if (arrProfile == null || arrProfile.isEmpty) {
+            dbSuccess = await addLocalProfile(profile: resMap);
+          } else {
+            dbSuccess = await updateLocalProfile(profile: resMap);
+          }
+          if (showProgress) GlobalService.dismissProgress();
+          if (dbSuccess > 0) {
+            ProfileModel profileModel = ProfileModel.fromDb(resMap);
+            await _prefUtils.saveInt(PrefUtils.roleKey, resMap['roleId']);
+            if (resObj.containsKey('ratings') &&
+                resObj['ratings'] != null &&
+                resObj['ratings'] is List &&
+                (resObj['ratings'] as List).isNotEmpty) {
+              List arrRating = resObj['ratings'];
+              List<Map<String, dynamic>> arrMapRating = arrRating.map((e) {
+                return RatingModel.toDB(e);
+              }).toList();
+
+              int successInsert =
+                  await RatingService.insertAll(ratingList: arrMapRating);
+              if (successInsert > 0) {
+                List<RatingModel> arrRatingModel = arrMapRating.map((e) {
+                  return RatingModel.fromDB(e);
+                }).toList();
+                GlobalService.printHandler(
+                    'Insert Rating into DB: $successInsert');
+                profileModel.ratings = [];
+                profileModel.ratings?.addAll(arrRatingModel);
+              }
+            }
+
+            GlobalService.printHandler('Insert Profile into DB: $dbSuccess');
+            return profileModel;
+          }
+          return null;
         default:
-          GlobalService.dismissProgress();
-          GlobalService.appSnackBar(
+          if (showProgress) GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
               status: AlertStatus.warning, desc: 'Something went wrong');
           return null;
       }
@@ -257,59 +328,166 @@ class ProfileService {
       return 0;
     }
     GlobalService.showProgress();
-
-    ApiResponse serviceResponse = await _dioService.post(
-      ApiEndPoint.apiCreateUser,
-      body: bodyMap,
-    );
-
-    switch (serviceResponse.statusCode) {
+    ApiResponse res =
+        await _dioService.post(ApiEndPoint.apiCreateUser, body: bodyMap);
+    switch (res.statusCode) {
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
-            status: AlertStatus.info, desc: serviceResponse.message);
+        GlobalService.showSnackBar(status: AlertStatus.info, desc: res.message);
         return 0;
       case 200 || 201:
-        ProfileModel profile = ProfileModel.fromJson(serviceResponse.data);
-        int insertSuccess = await addProfile(profileModel: profile);
+        Map<String, dynamic> resObj = ProfileModel.toDB(res.data);
+        int insertSuccess = await addLocalProfile(profile: resObj);
+        if (insertSuccess > 0) {
+          GlobalService.showSnackBar(
+              status: AlertStatus.success,
+              title: 'Bohiba',
+              desc: 'Account created succesfully');
+        }
         GlobalService.dismissProgress();
         return insertSuccess;
       default:
         GlobalService.dismissProgress();
-        GlobalService.appSnackBar(
-            status: AlertStatus.warning, desc: 'Something went wrong');
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Bohiba',
+          desc: 'Something went wrong',
+        );
         return 0;
     }
   }
 
-  static Future<int> addProfile({required ProfileModel profileModel}) async {
-    int success = await RatingService.addAllRating(
-      ratingList: profileModel.ratings ?? [],
-    );
-    GlobalService.printHandler("Rating Added in DB: $success");
-    return await _dBService.putData<ProfileModel>(
-      tblProfile,
-      profileKey,
-      profileModel,
-    );
+  static Future<int> addLocalProfile(
+      {required Map<String, dynamic> profile}) async {
+    final String insertQuery = '''
+    INSERT INTO $tblProfile (
+      uuid, image, name, email, mobileNumber, dob, roleId, jobStatus,
+      trucks, driver, panNumber, aadharNumber, dlNumber, verified,
+      houseNo, locality, street, city, district, state, country, pinCode
+    ) VALUES (
+      '${profile['uuid'] ?? 'NULL'}', '${profile['image'] ?? 'NULL'}', '${profile['name'] ?? 'NULL'}', '${profile['email'] ?? 'NULL'}',
+      '${profile['mobileNumber'] ?? ''}', '${profile['dob'] ?? ''}', ${profile['roleId'] ?? 9}, '${profile['jobStatus'] ?? ''}',
+      ${profile['trucks'] ?? 0}, ${profile['driver'] ?? 0}, '${profile['panNumber'] ?? 'NULL'}', '${profile['aadharNumber'] ?? 'NULL'}',
+      '${profile['dlNumber'] ?? 'NULL'}', '${profile['verified'] ?? 'unverified'}', '${profile['houseNo'] ?? 'NULL'}',
+      '${profile['locality'] ?? 'NULL'}', '${profile['street'] ?? 'NULL'}', '${profile['city'] ?? 'NULL'}', '${profile['district'] ?? 'NULL'}',
+      '${profile['state'] ?? 'NULL'}', '${profile['country'] ?? 'NULL'}', '${profile['pinCode'] ?? 'NULL'}'
+    )
+  ''';
+    int insertProfile = await _databaseService.insertData(insertQuery);
+    return insertProfile;
   }
 
-  static Future<int> updatelocalProfile({required ProfileModel profile}) async {
-    return await _dBService.putData<ProfileModel>(
-        tblProfile, profileKey, profile);
+  static Future<int> updateLocalProfile(
+      {required Map<String, dynamic> profile}) async {
+    final String updateQuery = '''
+      UPDATE $tblProfile SET
+        uuid = '${profile['uuid'] ?? 'NULL'}',
+        image = '${profile['image'] ?? 'NULL'}',
+        name = '${profile['name'] ?? 'NULL'}',
+        email = '${profile['email'] ?? 'NULL'}',
+        mobileNumber = '${profile['mobileNumber'] ?? 'NULL'}',
+        dob = '${profile['dob'] ?? 'NULL'}',
+        roleId = ${profile['roleId'] ?? 9},
+        jobStatus = '${profile['jobStatus'] ?? 'NULL'}',
+        trucks = ${profile['trucks'] ?? 0},
+        driver = ${profile['driver'] ?? 0},
+        panNumber = '${profile['panNumber'] ?? 'NULL'}',
+        aadharNumber = '${profile['aadharNumber'] ?? 'NULL'}',
+        dlNumber = '${profile['dlNumber'] ?? 'NULL'}',
+        verified = '${profile['verified'] ?? 'unverified'}',
+        houseNo = '${profile['houseNo'] ?? 'NULL'}',
+        locality = '${profile['locality'] ?? 'NULL'}',
+        street = '${profile['street'] ?? 'NULL'}',
+        city = '${profile['city'] ?? 'NULL'}',
+        district = '${profile['district'] ?? 'NULL'}',
+        state = '${profile['state'] ?? 'NULL'}',
+        country = '${profile['country'] ?? 'NULL'}',
+        pinCode = '${profile['pinCode'] ?? 'NULL'}'
+      WHERE uuid = '${profile['uuid']}'
+    ''';
+    int updateSucess = await _databaseService.updateData(updateQuery);
+    return updateSucess;
+  }
+
+  static Future<int> updateTruckNo({required bool deleteTruck}) async {
+    ProfileModel? profile = await getProfile();
+
+    if (profile == null) {
+      return 0;
+    }
+
+    if (deleteTruck) {
+      profile.trucks = (profile.trucks != null && profile.trucks! > 0)
+          ? profile.trucks! - 1
+          : 0;
+    } else {
+      profile.trucks = (profile.trucks == null) ? 1 : (profile.trucks! + 1);
+    }
+
+    final String strUpdateQuery =
+        ''' UPDATE $tblProfile SET trucks = ${profile.trucks ?? 0} WHERE uuid = '${profile.uuid}' ''';
+    int updateSuccess = await _databaseService.updateData(strUpdateQuery);
+    return updateSuccess;
+  }
+
+  static Future<int> updateDriverNo({required bool deleteDriver}) async {
+    ProfileModel? profile = await getProfile();
+    if (profile == null) {
+      return 0;
+    }
+    if (deleteDriver) {
+      profile.driver = (profile.driver != null && profile.driver! > 0)
+          ? profile.driver! - 1
+          : 0;
+    } else {
+      profile.driver = (profile.driver == null) ? 1 : (profile.driver! + 1);
+    }
+    final String strUpdateQuery =
+        ''' UPDATE $tblProfile SET driver = ${profile.driver ?? 0} WHERE uuid = '${profile.uuid}' ''';
+    int updateSuccess = await _databaseService.updateData(strUpdateQuery);
+    return updateSuccess;
   }
 
   static Future<List<LoggedInAccountModel>> getLoggedAccount() async {
-    return await _dBService
-        .getAllData<LoggedInAccountModel>(tblLoggedInUserList);
+    String strQueryList = ''' SELECT * FROM $tblLoggedInUserList ''';
+    List<Map<String, dynamic>> arrLoggedInUser =
+        await _databaseService.getAllData(strQueryList) ?? [];
+
+    List<LoggedInAccountModel> arrLoggedList = arrLoggedInUser
+        .map((user) => LoggedInAccountModel(
+              uuid: user['userUuid'],
+              name: user['name'],
+              email: user['email'],
+              token: user['token'],
+            ))
+        .toList();
+    return arrLoggedList;
   }
 
-  static Future<int> loggedInUser(
-      {required LoggedInAccountModel loggedInUser}) async {
-    return await _dBService.putData<LoggedInAccountModel>(
-      tblLoggedInUserList,
-      "${loggedInUser.uuid}",
-      loggedInUser,
-    );
+  static Future<int> loggedInUser({
+    required LoggedInAccountModel loggedInUser,
+  }) async {
+    String strInsertLoggedUser = '''
+    INSERT OR IGNORE INTO $tblLoggedInUserList (
+    userUuid
+    , name
+    , email
+    , roleId
+    , token
+    ) VALUES (
+     '${loggedInUser.uuid}'
+    , '${loggedInUser.name}'
+    , '${loggedInUser.email}'
+    , '${loggedInUser.roleId}'
+    , '${loggedInUser.token}'
+    );''';
+    int insertUser = await _databaseService.insertData(strInsertLoggedUser);
+    return insertUser;
+  }
+
+  static Future<List<Map>?> getAllProfile() async {
+    String strGetQuery = ''' SELECT * FROM $tblProfile ''';
+    List<Map>? arrProfile = await _databaseService.getAllData(strGetQuery);
+    return arrProfile;
   }
 }

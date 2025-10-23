@@ -57,7 +57,7 @@ class ForgotPasswordPage extends GetView<ForgotPasswordController> {
                               AppRoute.otpScreen,
                               arguments: {
                                 "email": controller.emailController.text.trim(),
-                                "nxtRoute": AppRoute.setPwd,
+                                "nxtRoute": AppRoute.changePwd,
                               },
                             );
                           }

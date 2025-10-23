@@ -1,15 +1,19 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import '/dist/app_enums.dart';
+import '/theme/bohiba_theme.dart';
+import '/dist/component_exports.dart';
+import '/services/pref_utils.dart';
+import '/services/global_service.dart';
+import '/services/user_role_type.dart';
+import '/pages/home/home_screen.dart';
+import '/pages/trips/trip_all_page.dart';
+import '/pages/explore/explore_page.dart';
+import '/pages/jobs/driver/all_driver_job.dart';
+import '/pages/dashboard/dash_page/dashboard_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:remixicon/remixicon.dart';
-import '/pages/home/home_screen.dart';
-import '/pages/trips/trip_all_page.dart';
-import '/pages/dashboard/dash_page/dashboard_page.dart';
-import '/pages/explore/explore_page.dart';
-import '/dist/component_exports.dart';
-import '/theme/bohiba_theme.dart';
-import '/dist/app_enums.dart';
-import '/services/global_service.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class BohibaNavBar extends StatefulWidget {
   const BohibaNavBar({super.key});
@@ -21,51 +25,21 @@ class BohibaNavBar extends StatefulWidget {
 class _BohibaNavBarState extends State<BohibaNavBar> {
   int currentIndex = 0;
   int marketScreenIndex = 0;
+  int userRole = UserRoles.guest;
 
-  get items => [
-        const BottomNavigationBarItem(
-          icon: Icon(Remix.home_line),
-          activeIcon: Icon(Remix.home_fill),
-          label: "Home",
-          tooltip: "Home",
-        ),
-        /*const BottomNavigationBarItem(
-          icon: Icon(Remix.heart_3_line),
-          activeIcon: Icon(Remix.heart_3_fill),
-          label: "Favourite",
-          tooltip: "Favourite",
-        ),*/
-        const BottomNavigationBarItem(
-          icon: Icon(EvaIcons.activityOutline),
-          activeIcon: Icon(EvaIcons.activityOutline),
-          label: "Trips",
-          tooltip: "Trips",
-        ),
-        /*const BottomNavigationBarItem(
-          icon: Icon(EvaIcons.activityOutline),
-          activeIcon: Icon(EvaIcons.activityOutline),
-          label: "Market",
-          tooltip: "Market",
-        ),*/
-        /*const BottomNavigationBarItem(
-            icon: Icon(EvaIcons.barChart2Outline),
-            activeIcon: Icon(EvaIcons.barChart),
-            label: "Status",
-            tooltip: "Status",
-        ),*/
-        const BottomNavigationBarItem(
-          icon: Icon(EvaIcons.compassOutline),
-          activeIcon: Icon(EvaIcons.compass),
-          label: "Explore",
-          tooltip: "Explore",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(EvaIcons.gridOutline),
-          activeIcon: Icon(EvaIcons.grid),
-          label: "Dashboard",
-          tooltip: "Dashboard",
-        )
-      ];
+  final PrefUtils _prefUtils = PrefUtils();
+
+  List<BottomNavigationBarItem> navItem = [];
+
+  List<Widget> navWidgets = [];
+
+  @override
+  void initState() {
+    userRole = _prefUtils.getInt(PrefUtils.roleKey);
+    super.initState();
+
+    _getNavItem(userRole);
+  }
 
   @override
   void didChangeDependencies() {
@@ -108,32 +82,95 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
       child: Scaffold(
         body: IndexedStack(
           index: currentIndex,
-          children: [
-            const HomePage(),
-            // FavouritePage(),
-            // AllMinesPage(),
-            // AllTruckPage(showLeading: false),
-            // StatusPage(moveToTab: statusScreenIndex),
-            AllTripPage(showLeading: false),
-            ExplorePage(),
-            const DashboardPage(),
-          ],
+          children: navWidgets,
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: items,
+          items: navItem,
           currentIndex: currentIndex,
           type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
+          selectedLabelStyle: bohibaTheme.textTheme.titleSmall,
           selectedFontSize: 12,
           unselectedFontSize: 12,
-          // showSelectedLabels: false,
-          // showUnselectedLabels: false,
           selectedItemColor: bohibaTheme.primaryColor,
           unselectedItemColor: BohibaColors.secoundaryColor,
           onTap: _onTap,
         ),
       ),
     );
+  }
+
+  void _getNavItem(int roleId) {
+    switch (roleId) {
+      case UserRoles.truckOwner:
+        navItem = [
+          const BottomNavigationBarItem(
+            icon: Icon(Remix.home_line),
+            activeIcon: Icon(Remix.home_fill),
+            label: "Home",
+            tooltip: "Home",
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(EvaIcons.activityOutline),
+            activeIcon: Icon(EvaIcons.activityOutline),
+            label: "Trips",
+            tooltip: "Trips",
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(EvaIcons.compassOutline),
+            activeIcon: Icon(EvaIcons.compass),
+            label: "Explore",
+            tooltip: "Explore",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(EvaIcons.gridOutline),
+            activeIcon: Icon(EvaIcons.grid),
+            label: "Dashboard",
+            tooltip: "Dashboard",
+          )
+        ];
+
+        navWidgets = [
+          const HomePage(),
+          AllTripPage(showLeading: false),
+          ExplorePage(),
+          const DashboardPage(),
+        ];
+      case UserRoles.driver:
+        navItem = [
+          const BottomNavigationBarItem(
+            icon: Icon(Remix.home_line),
+            activeIcon: Icon(Remix.home_fill),
+            label: "Home",
+            tooltip: "Home",
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(EvaIcons.activityOutline),
+            activeIcon: Icon(EvaIcons.activityOutline),
+            label: "Trips",
+            tooltip: "Trips",
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(EvaIcons.briefcaseOutline),
+            activeIcon: Icon(EvaIcons.briefcase),
+            label: "Jobs",
+            tooltip: "Jobs",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(EvaIcons.gridOutline),
+            activeIcon: Icon(EvaIcons.grid),
+            label: "Dashboard",
+            tooltip: "Dashboard",
+          )
+        ];
+
+        navWidgets = [
+          const HomePage(),
+          AllTripPage(showLeading: false),
+          AllDriverJobPage(),
+          const DashboardPage(),
+        ];
+      default:
+    }
   }
 
   void _onTap(int index) {

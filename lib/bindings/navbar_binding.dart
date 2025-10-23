@@ -1,3 +1,5 @@
+import 'package:bohiba/controllers/all_job_controller.dart';
+
 import '/controllers/driver_all_controller.dart';
 import '/controllers/trip_all_controller.dart';
 import '/controllers/home_controller.dart';
@@ -13,6 +15,7 @@ class NavBarBinding extends Bindings {
     Get.put<DashboardController>(DashboardController());
     Get.put<AllTripController>(AllTripController());
     Get.put<DriverAllController>(DriverAllController());
+    Get.put<AllJobController>(AllJobController());
     // Get.put<TruckAllController>(TruckAllController());
   }
 }

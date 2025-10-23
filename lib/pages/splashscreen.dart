@@ -1,9 +1,10 @@
-import '/controllers/splash_controller.dart';
-import 'package:get/get.dart';
 import '/component/image_path.dart';
-import 'package:flutter/material.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
+import 'package:get/get.dart';
+import '/controllers/splash_controller.dart';
+
+import 'package:flutter/material.dart';
 
 class SplashScreen extends GetView<SplashController> {
   const SplashScreen({super.key});

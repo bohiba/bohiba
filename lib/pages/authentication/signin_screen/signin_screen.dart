@@ -133,7 +133,7 @@ class SignInScreen extends GetView<AuthController> {
                           ),
                           InkWell(
                             onTap: () {
-                              navigateState.pushNamed(AppRoute.forgotScreen);
+                              navigateState.pushNamed(AppRoute.forgotPwd);
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -194,7 +194,7 @@ class SignInScreen extends GetView<AuthController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                         // navigateState.popAndPushNamed(AppRoute.signUp);
+                          navigateState.popAndPushNamed(AppRoute.signUp);
                         },
                         child: Text(
                           'Signup',

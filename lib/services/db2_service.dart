@@ -1,4 +1,3 @@
-/*import 'db_service.dart';
 import 'global_service.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,7 +7,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 4;
+  static int dbversion = 3;
 
   /*================  DB CONFIG  =================== */
 
@@ -145,6 +144,20 @@ class DatabaseService {
             '''DELETE FROM sqlite_sequence WHERE name = '$tblNews' ''');
         await trxcn.execute(
             '''DELETE FROM sqlite_sequence WHERE name = '$tblRating' ''');
+        await trxcn.execute(strTableProfile);
+        await trxcn.execute(strLoggedInUser);
+        await trxcn.execute(strTruck);
+        await trxcn.execute(strDriver);
+        await trxcn.execute(strTrip);
+        await trxcn.execute(strReassignment);
+        await trxcn.execute(strExpense);
+        await trxcn.execute(strPayment);
+        await trxcn.execute(strDocument);
+        await trxcn.execute(strOwnerExpense);
+        await trxcn.execute(strOpenDriver);
+        await trxcn.execute(strMines);
+        await trxcn.execute(strNews);
+        await trxcn.execute(strRating);
       });
     } catch (e) {
       GlobalService.printHandler('CLEAR DB ERROR ${e.toString()}');
@@ -172,6 +185,25 @@ class DatabaseService {
     }
   }
 
+  Future<int> upsertData({
+    required String tableName,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      if (_database == null || !(_database!.isOpen)) {
+        await initDB();
+      }
+      return await _database!.insert(
+        tableName,
+        data,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      GlobalService.printHandler('DB PUT ERROR: $e');
+      return 0;
+    }
+  }
+
   Future<int> insertAllData(
       String tableName, List<Map<String, dynamic>> dataList) async {
     try {
@@ -184,7 +216,7 @@ class DatabaseService {
         batch.insert(
           tableName,
           data,
-          conflictAlgorithm: ConflictAlgorithm.replace, // optional
+          conflictAlgorithm: ConflictAlgorithm.replace,
         );
       }
       final bulkInsert = await batch.commit(
@@ -218,28 +250,22 @@ class DatabaseService {
       }
       return await _database!.rawUpdate(query, argument);
     } catch (e) {
-      GlobalService.printHandler('DB PUT ERROR: $e');
+      GlobalService.printHandler('DB UPDATE ERROR: $e');
       return 0;
     }
   }
 
-  Future<int> delete(String query, {List<Object>? argument}) async {
+  Future<int> delete(String query) async {
     try {
       if (_database == null || !(_database!.isOpen)) {
         await initDB();
       }
-      return await _database!.rawDelete(query, argument);
+      return await _database!.rawDelete(query);
     } catch (e) {
-      GlobalService.printHandler('DB PUT ERROR: $e');
+      GlobalService.printHandler('DB DELETE ERROR: $e');
       return 0;
     }
   }
-
-  /*================  TABLE NAME  =================== */
-  static final String tblReassignment = 'tblReassignment';
-  static final String tblTripExpense = 'tblTripExpense';
-  static final String tblTripPayment = 'tblTripPayment';
-  static final String tblDocument = 'tblDocument';
 
   /*================  CREATE TABLE COMMAND  =================== */
   String strTableProfile = '''
@@ -253,8 +279,8 @@ class DatabaseService {
   , roleId INTEGER NOT NULL DEFAULT 9
   , dob TEXT
   , jobStatus TEXT NOT NULL DEFAULT ''
-  , trucks INTEGER
-  , driver INTEGER
+  , trucks INTEGER NOT NULL DEFAULT 0
+  , driver INTEGER NOT NULL DEFAULT 0
   , panNumber TEXT
   , aadharNumber TEXT
   , dlNumber TEXT
@@ -290,7 +316,7 @@ class DatabaseService {
   , driverUuid TEXT
   , driverName TEXT
   , driverMobileNumber TEXT
-  , ownerId TEXT
+  , ownerId INTEGER
   , ownerImage TEXT
   , ownerUuid TEXT
   , ownerName TEXT
@@ -314,6 +340,38 @@ class DatabaseService {
   , taxUpto TEXT
   , puccUpto TEXT
   , fitnessUpto TEXT
+  , updatedAt TEXT
+  )''';
+
+  String strDriver = '''
+  CREATE TABLE IF NOT EXISTS $tblDriver (
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+  , isFav INTEGER NOT NULL DEFAULT O
+  , isSynced INTEGER
+  , image TEXT
+  , uuid TEXT
+  , name TEXT
+  , email TEXT
+  , mobileNumber TEXT
+  , dob TEXT
+  , roleId INTEGER NOT NULL DEFAULT 8
+  , isActive TEXT
+  , connect TEXT
+  , verified TEXT NOT NULL DEFAULT 'unverified'
+  , houseNo TEXT
+  , locality TEXT
+  , street TEXT
+  , city TEXT
+  , district TEXT
+  , state TEXT
+  , country TEXT
+  , pinCode TEXT
+  , licenseNumber TEXT
+  , dlStatus TEXT
+  , cov TEXT
+  , rto TEXT
+  , validFrom TEXT
+  , validTill TEXT
   , updatedAt TEXT
   )''';
 
@@ -344,79 +402,64 @@ class DatabaseService {
   , dvUuid TEXT
   , dvName TEXT
   , dvMobile TEXT
+  , ownerId INTEGER
   , ownerUuid TEXT
   , ownerName TEXT
   , ownerMobileNumber TEXT
-  )''';
-
-  String strDriver = '''
-  CREATE TABLE IF NOT EXISTS $tblDriver (
-    id INTEGER PRIMARY KEY AUTOINCREMENT
-  , isFav INTEGER NOT NULL DEFAULT O
-  , isSynced INT
-  , image TEXT
-  , uuid TEXT
-  , name TEXT
-  , email TEXT
-  , mobileNumber TEXT
-  , dob TEXT
-  , roleId TEXT NOT NULL DEFAULT 8
-  , isActive TEXT
-  , verified TEXT NOT NULL DEFAULT 'unverified'
-  , houseNo TEXT
-  , locality TEXT
-  , street TEXT
-  , city TEXT
-  , district TEXT
-  , state TEXT
-  , country TEXT
-  , pinCode TEXT
-  , licenseNumber TEXT
-  , dlStatus TEXT
-  , cov TEXT
-  , rto TEXT
-  , validFrom TEXT
-  , validTill TEXT
-  , updatedAt TEXT
+  , updatedAt TEXT 
+  , UNIQUE(id)
   )''';
 
   String strReassignment = '''
   CREATE TABLE IF NOT EXISTS $tblReassignment (
     id INTEGER PRIMARY KEY AUTOINCREMENT
+  , tripId INTEGER NOT NULL DEFAULT 0
   , vhNumber TEXT
   , reassignmentAt TEXT
   , reAssignVhNumber TEXT
   , reason TEXT
+  , UNIQUE(id)
+  , FOREIGN KEY (tripId) REFERENCES $tblTrips(id) ON DELETE CASCADE
   )''';
 
   String strExpense = '''
   CREATE TABLE IF NOT EXISTS $tblTripExpense (
     id INTEGER PRIMARY KEY AUTOINCREMENT
+  , tripId INTEGER NOT NULL DEFAULT 0 
   , expenseType TEXT
   , paymentMode TEXT
-  , paid TEXT
+  , paid DOUBLE NOT NULL DEFAULT 0.0
   , paidTo TEXT
   , expenseDate TEXT
   , remarks TEXT
+  , UNIQUE(id)
+  , FOREIGN KEY (tripId) REFERENCES $tblTrips(id) ON DELETE CASCADE
   )''';
 
   String strPayment = '''
     CREATE TABLE IF NOT EXISTS $tblTripPayment (
       id INTEGER PRIMARY KEY AUTOINCREMENT
+    , tripId INTEGER NOT NULL DEFAULT 0
     , payerType TEXT
     , payementMode TEXT
-    , amount TEXT
+    , amount DOUBLE NOT NULL DEFAULT 0.0
     , paidBy TEXT
     , receivedBy TEXT
     , paymentTime TEXT
+    , UNIQUE(id)
+    , FOREIGN KEY (tripId) REFERENCES $tblTrips(id) ON DELETE CASCADE
   )''';
 
   String strDocument = '''
-  CREATE TABLE IF NOT EXISTS $tblTripPayment (
+  CREATE TABLE IF NOT EXISTS $tblDocument (
     id INTEGER PRIMARY KEY AUTOINCREMENT
+  , tripId INTEGER NOT NULL DEFAULT 0
   , docType TEXT
   , image TEXT
   , uploadedBy TEXT
+  , uploadedAt TEXT
+  , UNIQUE(id)
+  , FOREIGN KEY (tripId) REFERENCES $tblTrips(id) ON DELETE CASCADE
   )''';
 
   String strOwnerExpense = '''
@@ -441,7 +484,7 @@ class DatabaseService {
   , email TEXT
   , mobileNumber TEXT
   , dob TEXT
-  , roleId TEXT NOT NULL DEFAULT 8
+  , roleId INTEGER NOT NULL DEFAULT 8
   , isActive TEXT
   , connect TEXT
   , panNumber TEXT
@@ -468,6 +511,7 @@ class DatabaseService {
   String strRating = '''
   CREATE TABLE IF NOT EXISTS $tblRating (
     id INTEGER PRIMARY KEY AUTOINCREMENT
+    , driverUuid INTEGER
     , reviewerId INTEGER
     , reviewerUuid TEXT
     , reviewerImage TEXT
@@ -476,6 +520,7 @@ class DatabaseService {
     , rating DOUBLE NOT NULL DEFAULT 0.0
     , feedback TEXT
     , createdAt TEXT
+    , UNIQUE(id)
   )''';
 
   String strMines = '''
@@ -493,6 +538,7 @@ class DatabaseService {
   , shiftTiming TEXT
   , waitingPeriod INT
   , roadConditions TEXT
+  , UNIQUE(id)
   )''';
 
   String strNews = '''
@@ -502,5 +548,22 @@ class DatabaseService {
   , description TEXT
   , image TEXT
   , updatedAt TEXT
+  , UNIQUE(id)
   )''';
-}*/
+}
+
+final String tblProfile = 'tblprofile';
+final String tblNews = 'tblnews';
+final String tblMines = 'tblmines';
+final String tblTrips = 'tbltrips';
+final String tblTrucks = 'tbltruck';
+final String tblDriver = 'tbldriver';
+final String tblRating = 'tblrating';
+final String tblUserFav = 'tblUserFav';
+final String tblOpenDriver = 'tblOpenDriver';
+final String tblLoggedInUserList = 'tblUserList';
+final String tblOwnerExpense = 'tblOwnerExpense';
+final String tblReassignment = 'tblReassignment';
+final String tblTripExpense = 'tblTripExpense';
+final String tblTripPayment = 'tblTripPayment';
+final String tblDocument = 'tblDocument';

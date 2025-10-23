@@ -1,16 +1,12 @@
-import 'package:bohiba/services/driver_service.dart';
-
-import '/services/api_end_point.dart';
 import '/dist/app_enums.dart';
 import '/model/driver_model.dart';
-import '/services/db_service.dart';
-import '/services/device_info_service.dart';
+import '/services/driver_service.dart';
 import '/services/dio_serivce.dart';
-import '/services/global_service.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DriverAllController extends GetxController {
-  DBService dBService = DBService();
+  final RefreshController refreshList = RefreshController();
   DioService dioService = DioService();
   AddAssetUsing addUserBy = AddAssetUsing.doc;
 
@@ -24,35 +20,25 @@ class DriverAllController extends GetxController {
     });
   }
 
-  Future<void> deleteDriver({required String id}) async {
-    if (!await DeviceInfoService.hasInternet()) return;
-    GlobalService.showProgress();
-    ApiResponse response =
-        await dioService.delete("${ApiEndPoint.apiDeleteDriver}/$id");
-    GlobalService.dismissProgress();
-    switch (response.statusCode) {
-      case 200:
-        int dBSuccess = await dBService.deleteData<DriverModel>(tblDriver, id);
-        if (dBSuccess > 0) {
-          GlobalService.showAppToast(message: response.message);
-          Get.back();
-          Get.back(result: true);
-        }
-        break;
-      case 401:
-        GlobalService.showAppToast(message: response.message);
-        break;
-      default:
+  Future<int> deleteDriver({required int id}) async {
+    int success = await DriverService.deleteDriver(driverId: id);
+    if (success > 0) {
+      // Success
     }
+    return success;
   }
 
-  Future<List<DriverModel>> getDriverList({
+  Future<List<DriverModel>?> getDriverList({
     MethodType type = MethodType.local,
+    bool resetList = false,
   }) async {
-    List<DriverModel> driverList =
-        await DriverService.getAllDriver(methodType: type) ?? [];
-    arrDriver.clear();
-    arrDriver.addAll(driverList);
-    return driverList;
+    List<DriverModel>? driverList =
+        await DriverService.getAllDriver(methodType: type, reset: resetList);
+    if (driverList != null) {
+      arrDriver.clear();
+      arrDriver.addAll(driverList);
+      return driverList;
+    }
+    return null;
   }
 }

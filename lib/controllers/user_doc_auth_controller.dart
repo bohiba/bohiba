@@ -28,7 +28,7 @@ class UserDocAuthController extends GetxController {
       "pan_number": panNumberController.text.trim(),
       if (!isTruckOwner) "dl_number": dlNumberController.text.trim(),
     };
-    int success = await ProfileService.verifyDoc(bodyMap: bodyObj);
+    int success = await ProfileService.addDocument(bodyMap: bodyObj);
     return success;
   }
 

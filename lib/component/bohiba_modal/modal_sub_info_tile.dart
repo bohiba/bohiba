@@ -26,7 +26,7 @@ class SubInfoTile extends StatelessWidget {
       child: Container(
         padding: padding ??
             EdgeInsets.symmetric(
-              horizontal: ScreenUtils.height15,
+              // horizontal: ScreenUtils.height15,
               vertical: ScreenUtils.width10,
             ),
         decoration: enableBorder

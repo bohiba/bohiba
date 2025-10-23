@@ -1,9 +1,7 @@
-import 'package:bohiba/services/owner_expense_service.dart';
-
-import '/services/truck_service.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 import '/model/truck_model.dart';
+import '/services/owner_expense_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -61,7 +59,7 @@ class AddOwnerExpenseController extends GetxController {
       return;
     }
 
-debugPrint("Truck Model ID: ${truckModel.value.id}");
+    debugPrint("Truck Model ID: ${truckModel.value.id}");
     Map<String, dynamic> expenseData = {
       'expense_date': expensedateController.text,
       'truck_regd': truckModel.value.regdNumber,
@@ -70,21 +68,19 @@ debugPrint("Truck Model ID: ${truckModel.value.id}");
     };
 
     try {
-      
-        int addSucess = await OwnerExpenseService.addOwnerExpense(
-            bodyMap: expenseData, truckModel: truckModel.value);
-            debugPrint('Add Owner Expense Success: $addSucess');
-        if (addSucess > 0) {
-            // On success
-      Get.snackbar(
-        'Success',
-        'Owner expense added successfully',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-          Get.back(result: true);
-        
+      int addSucess = await OwnerExpenseService.addOwnerExpense(
+          bodyMap: expenseData, truckModel: truckModel.value);
+      debugPrint('Add Owner Expense Success: $addSucess');
+      if (addSucess > 0) {
+        // On success
+        Get.snackbar(
+          'Success',
+          'Owner expense added successfully',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        Get.back(result: true);
       }
 
       // // On success
@@ -114,8 +110,9 @@ debugPrint("Truck Model ID: ${truckModel.value.id}");
   }
 
   Future<void> getAllTruck() async {
-    List<TruckModel> truckList = await TruckService.retriveAllTruck();
-    arrTruck.clear();
-    arrTruck.addAll(truckList);
+    // List<Map<String, dynamic>> truckList = await TruckService.getTruckList();
+    // List<TruckModel> modelList = TruckModel.listModelFromDB(truckList);
+    // arrTruck.clear();
+    // arrTruck.addAll(modelList);
   }
 }

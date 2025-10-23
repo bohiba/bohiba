@@ -26,7 +26,7 @@ class ApiEndPoint {
   static const String apiDeleteFav = '$baseUrl//delete-favourite';
 
   static const String apiAddTruck = '$baseUrl/truck-add';
-  static const String apiAllTruck = '$baseUrl/all-truck';
+  static const String apiAllTruck = '$baseUrl/truck-all';
   static const String apiGetTruck = '$baseUrl/truck-get';
   static const String apiSetTruckImage = '$baseUrl/set-truck-image';
   static const String apiDeleteTruck = '$baseUrl/truck-delete';
@@ -40,7 +40,8 @@ class ApiEndPoint {
   static const String apiRemoveDriver = '$baseUrl/driver-remove';
 
   static const String apiRateDriver = '$baseUrl/rate-user';
-  static const String apiGetRating = '$baseUrl/rating-get';
+  static const String apiGetRating = '$baseUrl/all-rating';
+  static const String apiDeleteRating = '$baseUrl/delete-rating';
 
   static const String apiAddTrip = '$baseUrl/trip-add';
   static const String apiAllTrip = '$baseUrl/trip-all';
@@ -73,4 +74,11 @@ class ApiEndPoint {
   static const String apiViewDriver = '$baseUrl/owner/view-driver';
   static const String apiSendConnectReq = '$baseUrl/owner/send';
   static const String apiAllReq = '$baseUrl/owner/all-requests';
+
+  static const String apiDriverJob = '$baseUrl/driver/get-jobs';
+  static const String apiAppliedJob = '$baseUrl/driver/applied-job';
+  static const String apiApplyToJob = '$baseUrl/driver/apply-to-job';
+
+  static const String apiNewsAll = '$baseUrl/news-all';
+  static const String apiNews = '$baseUrl/news';
 }

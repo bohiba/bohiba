@@ -1,8 +1,8 @@
 import 'dart:async';
-import '/controllers/role_controller.dart';
+
 import '/controllers/theme_controller.dart';
-import '/services/db_service.dart';
 import '/services/pref_utils.dart';
+import '/services/db2_service.dart';
 import 'services/global_service.dart';
 import 'package:get/get.dart';
 import '/component/screen_utils.dart';
@@ -21,7 +21,7 @@ Future<void> main() async {
     ]).then((value) async {
       try {
         await PrefUtils.init();
-        await DBService.initDB();
+        await DatabaseService().initDB();
         Get.put<ThemeController>(ThemeController());
         runApp(MyApp());
       } catch (e) {
@@ -29,6 +29,7 @@ Future<void> main() async {
       }
     });
   }, (error, errorstack) {
+    GlobalService.dismissProgress();
     GlobalService.printHandler(
         '\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
   });
@@ -47,9 +48,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      await RoleService.initRole();
-    });
     WidgetsBinding.instance.addObserver(this);
   }
 

@@ -19,27 +19,30 @@ class TripController extends GetxController {
     TripModel? t = Get.arguments;
     Future.delayed(Duration.zero, () async {
       if (t != null) {
-        TripModel? initModel = await getTripInfo(tripInfo: t);
-        if (initModel != null) {
-          tripInfo.value = initModel;
-        }
+        await getTripInfo(id: t.id!);
       }
     });
   }
 
   Future<void> refreshTripPage() async {
-    TripModel? initModel = await getTripInfo(tripInfo: tripInfo.value);
-    if (initModel != null) {
-      tripInfo.value = initModel;
-    }
+    await getTripInfo(
+      id: tripInfo.value.id!,
+      methodType: MethodType.api,
+      showLoading: false,
+    );
     refreshController.refreshCompleted();
   }
 
-  Future<TripModel?> getTripInfo({
+  Future<void> getTripInfo({
     MethodType methodType = MethodType.local,
-    required TripModel tripInfo,
+    bool showLoading = true,
+    required int id,
   }) async {
-    return await TripService.getTrip(method: methodType, trip: tripInfo);
+    TripModel? tripModel = await TripService.getTrip(
+        method: methodType, tripId: id, showProgress: showLoading);
+    if (tripModel != null) {
+      tripInfo.value = tripModel;
+    }
   }
 
   Future<void> deleteTrip({required int tripId}) async {

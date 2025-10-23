@@ -64,7 +64,7 @@ class RatingAllPage extends GetView<DriverController> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          driverModelRating.reviewer?.name ??
+                                          driverModelRating.reviewerName ??
                                               'NA',
                                           style:
                                               bohibaTheme.textTheme.labelLarge,

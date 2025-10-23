@@ -298,10 +298,9 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                 width: ScreenUtils.width * 0.55.w,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      ratings.reviewer?.name ?? '',
+                                      ratings.reviewerName ?? '',
                                       style: bohibaTheme.textTheme.labelLarge,
                                     ),
                                     ReadMoreText(
@@ -337,7 +336,7 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                 height: 35.h,
                                 alignment: Alignment.center,
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       ratings.rating?.toString() ?? '',

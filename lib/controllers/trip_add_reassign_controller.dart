@@ -41,8 +41,7 @@ class TripAddReassignController extends GetxController {
       }
     } else if (reassign == null && tripModel != null) {
       bodyObj['trip_id'] = tripModel!.id!;
-      int addSucess =
-          await TripService.addReassignment(bodyObj: bodyObj, trip: tripModel!);
+      int addSucess = await TripService.addReassignment(bodyObj: bodyObj);
       if (addSucess > 0) {
         //
       }

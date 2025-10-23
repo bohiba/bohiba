@@ -1,3 +1,4 @@
+import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,14 +12,11 @@ class PrefUtils {
 
   static Future<void> init() async {
     _preferences ??= await SharedPreferences.getInstance();
-    debugPrint(
-        "\n================\n    SharedPrefernces Initialized     \n================\n");
+    GlobalService.printHandler("SharedPrefernces Initialized");
   }
 
   Future<void> clearPreferencesData() async {
-    final keyPrefItems = [
-      token,
-    ];
+    final keyPrefItems = [token];
     for (var key in keyPrefItems) {
       await _preferences!.remove(key);
     }
@@ -115,4 +113,5 @@ class PrefUtils {
   static const String token = 'app_token';
   static const String themeKey = 'theme_mode';
   static const String biometricKey = 'biometric_enabled';
+  static const String roleKey = 'user_role';
 }

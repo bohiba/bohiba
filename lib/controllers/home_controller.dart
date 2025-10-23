@@ -1,19 +1,19 @@
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
 import '/controllers/role_controller.dart';
 import '/model/driver_model.dart';
 import '/model/mines_model.dart';
 import '/model/news_model.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
-import '/model/user_fav_model.dart';
-import '/services/db_service.dart';
+import '/services/news_service.dart';
 import '/services/main_service.dart';
+import '/services/driver_service.dart';
+import '/services/truck_service.dart';
 import 'package:get/get.dart';
+
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class HomeController extends GetxController {
   RoleService initContorller = RoleService();
-  final DBService _dbService = DBService();
 
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -38,17 +38,16 @@ class HomeController extends GetxController {
   }
 
   Future<void> onRefreshPage() async {
-    // await getTruckList();
+    await getTruckList();
     // await _getOngoingTripList();
-    // await _getNewsList();
+    await _getNewsList();
     // await _getMinesList();
-    // await getDriverList();
+    await getDriverList();
     // await getUserFavList();
-    await mainApi();
     refreshController.refreshCompleted();
   }
 
-  Future<List<dynamic>> getUserFavList() async {
+  /*Future<List<dynamic>> getUserFavList() async {
     List<UserFavouriteModel> favList =
         await _dbService.getAllData<UserFavouriteModel>(tblUserFav);
     List<dynamic> favourite = _getFavListDetail(
@@ -60,19 +59,17 @@ class HomeController extends GetxController {
     arrFavList.clear();
     arrFavList.addAll(favourite);
     return favourite;
-  }
+  }*/
 
   Future<List<DriverModel>> getDriverList() async {
-    List<DriverModel> arrTucks =
-        await _dbService.getAllData<DriverModel>(tblDriver);
+    List<DriverModel> arrTucks = await DriverService.getAllDriver() ?? [];
     arrDriver.clear();
     arrDriver.addAll(arrTucks);
     return arrTucks;
   }
 
   Future<List<TruckModel>> getTruckList() async {
-    List<TruckModel> truckList =
-        await _dbService.getAllData<TruckModel>(tblTrucks);
+    List<TruckModel> truckList = await TruckService.getTruckList();
     arrTruck.clear();
     arrTruck.addAll(truckList);
     return truckList;
@@ -114,15 +111,17 @@ class HomeController extends GetxController {
     arrMines.clear();
     arrMines.addAll(minesList);
     return minesList;
-  }
+  }*/
 
-  Future<List<NewsModel>> _getNewsList() async {
-    List<NewsModel> newsList = await _dbService.getAllData<NewsModel>(tblNews);
-    arrNews.clear();
-    arrNews.addAll(newsList);
+  Future<List<NewsModel>?> _getNewsList() async {
+    List<NewsModel>? newsList = await NewsService.getAllNews();
+    if (newsList != null) {
+      arrNews.clear();
+      arrNews.addAll(newsList);
+    }
     return newsList;
   }
-*/
+
   Future<void> mainApi() async {
     Map<String, dynamic>? mainObj = await MainService.mainApi();
     if (mainObj != null) {
@@ -156,18 +155,6 @@ class HomeController extends GetxController {
         arrLookingJob.addAll(mainObj['looking_jobs']);
       }
 
-      if (mainObj.containsKey('favList')) {
-        arrFavList.clear();
-        arrFavList.value = List.from(
-          _getFavListDetail(
-            favList: mainObj['favList'],
-            trucks: mainObj['trucks'],
-            drivers: mainObj['drivers'],
-            trips: mainObj['trips'],
-          ),
-        );
-      }
-
       if (mainObj.containsKey('promotion')) {
         arrPromotion.clear();
         arrPromotion.addAll(mainObj['promotion']);
@@ -178,50 +165,5 @@ class HomeController extends GetxController {
         arrNews.addAll(mainObj['news']);
       }
     }
-  }
-
-  List<dynamic> _getFavListDetail({
-    required List<UserFavouriteModel> favList,
-    required List<TruckModel> trucks,
-    required List<DriverModel> drivers,
-    required List<TripModel> trips,
-  }) {
-    List<Map<String, dynamic>> result = [];
-
-    for (var fav in favList) {
-      final assetType = fav.assetType;
-      final assetId = fav.assetId;
-
-      if (assetType == 'trucks') {
-        final TruckModel truck = trucks.firstWhere(
-          (truck) => truck.id!.toString() == assetId.toString(),
-          orElse: () => TruckModel(),
-        );
-        if (truck.id != null) {
-          result.add(truck.toJson());
-        }
-      }
-
-      if (assetType == 'drivers') {
-        final DriverModel driver = drivers.firstWhere(
-          (driver) => driver.id!.toString() == assetId.toString(),
-          orElse: () => DriverModel(),
-        );
-        if (driver.id != null) {
-          result.add(driver.toJson());
-        }
-      }
-
-      if (assetType == 'trips') {
-        final TripModel trip = trips.firstWhere(
-            (trip) => trip.id!.toString() == assetId.toString(),
-            orElse: () => TripModel());
-        if (trip.id != null) {
-          result.add(trip.toJson());
-        }
-      }
-    }
-
-    return result;
   }
 }

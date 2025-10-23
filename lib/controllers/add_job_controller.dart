@@ -1,4 +1,4 @@
-import '/services/job_service.dart';
+import '../services/owner_job_service.dart';
 
 import '/dist/app_enums.dart';
 import '/services/global_service.dart';
@@ -66,7 +66,7 @@ class AddJobController extends GetxController {
       'status': 'open',
       'start_from': startFromEditingController.text.trim(),
     };
-    int createJob = await JobService.createJob(bodyMap: bodyObj);
+    int createJob = await OwnerJobService.createJob(bodyMap: bodyObj);
     if (createJob > 0) {
       GlobalService.showAlertDialog(
         status: AlertStatus.success,

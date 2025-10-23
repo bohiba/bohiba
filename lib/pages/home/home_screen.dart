@@ -1,17 +1,18 @@
-import '/controllers/home_controller.dart';
-import 'package:get/get.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
-import '/pages/home/home_trip_section.dart';
-import 'package:flutter/material.dart';
-import 'home_top_truck_section.dart';
-import '/component/bohiba_appbar/home_appbar.dart';
 import 'home_image_slider_section.dart';
 import 'home_news_section.dart';
 import 'home_fav_section.dart';
 import 'home_account_section.dart';
 import 'home_mines_section.dart';
+
+import '/pages/home/home_trip_section.dart';
+import 'package:flutter/material.dart';
+import 'home_top_truck_section.dart';
+import '/controllers/home_controller.dart';
+import '/component/bohiba_appbar/home_appbar.dart';
 import '/dist/component_exports.dart';
+
+import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});

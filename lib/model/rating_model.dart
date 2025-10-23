@@ -1,31 +1,22 @@
-import '/services/db_service.dart';
-import 'package:hive/hive.dart';
-
-part 'rating_model.g.dart';
-
-@HiveType(typeId: ratingTypeID)
-class RatingModel extends HiveObject {
-  @HiveField(0)
+class RatingModel {
   int? id;
-
-  @HiveField(1)
-  ReviewerModel? reviewer;
-
-  @HiveField(2)
+  int? driverUuid;
+  int? reviewerId;
+  String? reviewerUuid;
+  String? reviewerImage;
+  String? reviewerName;
   int? role;
-
-  @HiveField(3)
   double? rating;
-
-  @HiveField(4)
   String? feedback;
-
-  @HiveField(5)
   String? createdAt;
 
   RatingModel({
     this.id,
-    this.reviewer,
+    this.driverUuid,
+    this.reviewerId,
+    this.reviewerUuid,
+    this.reviewerImage,
+    this.reviewerName,
     this.role,
     this.rating,
     this.feedback,
@@ -33,11 +24,14 @@ class RatingModel extends HiveObject {
   });
 
   factory RatingModel.fromJson(Map<dynamic, dynamic> json) {
+    Map<String, dynamic> reviewer = json['reviewer'];
     return RatingModel(
       id: json['id'],
-      reviewer: json['reviewer'] == null
-          ? null
-          : ReviewerModel.fromJson(json['reviewer']),
+      driverUuid: json['uuid'],
+      reviewerId: reviewer['id'],
+      reviewerUuid: reviewer['uuid'],
+      reviewerImage: reviewer['profile_image'],
+      reviewerName: reviewer['name'],
       role: json['role'],
       rating: (json['rating'] as num?)?.toDouble(),
       feedback: json['feedback'],
@@ -45,57 +39,34 @@ class RatingModel extends HiveObject {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'reviewer': reviewer?.toJson(),
-        'role': role,
-        'rating': rating,
-        'feedback': feedback,
-        'created_at': createdAt,
-      };
-
-  static List<RatingModel> listFromJson(List<dynamic> jsonList) {
-    return jsonList.map((json) {
-      final map = json as Map<String, dynamic>;
-      return RatingModel.fromJson(map);
-    }).toList();
+  static Map<String, dynamic> toDB(dynamic json) {
+    Map<String, dynamic> reviewer = json['reviewer'];
+    return {
+      'id': json['id'],
+      'driverUuid': json['uuid'],
+      'reviewerId': reviewer['id'],
+      'reviewerUuid': reviewer['uuid'],
+      'reviewerImage': reviewer['profile_image'],
+      'reviewerName': reviewer['name'],
+      'role': json['role'],
+      'rating': (json['rating'] as num?)?.toDouble(),
+      'feedback': json['feedback'],
+      'createdAt': json['created_at'],
+    };
   }
-}
 
-@HiveType(typeId: reviewerTypeID)
-class ReviewerModel extends HiveObject {
-  @HiveField(0)
-  int? id;
-
-  @HiveField(1)
-  String? uuid;
-
-  @HiveField(2)
-  String? profileImage;
-
-  @HiveField(3)
-  String? name;
-
-  ReviewerModel({
-    this.id,
-    this.uuid,
-    this.profileImage,
-    this.name,
-  });
-
-  factory ReviewerModel.fromJson(Map<dynamic, dynamic> json) {
-    return ReviewerModel(
-      id: json['id'],
-      uuid: json['uuid'],
-      profileImage: json['profile_image'],
-      name: json['name'],
+  factory RatingModel.fromDB(Map dbMap) {
+    return RatingModel(
+      id: dbMap['id'],
+      driverUuid: dbMap['driverUuid'],
+      reviewerId: dbMap['id'],
+      reviewerUuid: dbMap['reviewerUuid'],
+      reviewerImage: dbMap['reviewerImage'],
+      reviewerName: dbMap['reviewerName'],
+      role: dbMap['role'],
+      rating: (dbMap['rating'] as num?)?.toDouble(),
+      feedback: dbMap['feedback'],
+      createdAt: dbMap['createdAt'],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'uuid': uuid,
-        'profile_image': profileImage,
-        'name': name,
-      };
 }

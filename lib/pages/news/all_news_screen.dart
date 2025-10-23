@@ -1,15 +1,17 @@
+import 'package:bohiba/dist/app_enums.dart';
+
 import '/model/news_model.dart';
 import '/routes/app_route.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
+import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
-import '/theme/bohiba_theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/controllers/all_news_controller.dart';
+
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AllNewsScreen extends GetView<AllNewsController> {
   const AllNewsScreen({super.key});
@@ -25,7 +27,10 @@ class AllNewsScreen extends GetView<AllNewsController> {
         return SmartRefresher(
           controller: controller.refreshNewsController,
           onRefresh: () async {
-            await controller.getAllNews();
+            await controller.getAllNews(
+              methodType: MethodType.api,
+              showLoading: false,
+            );
             controller.refreshNewsController.refreshCompleted();
           },
           child: ListView.builder(

@@ -1,14 +1,12 @@
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
 import '/services/profile_service.dart';
-import '/services/db_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddressAuthController extends GetxController {
-  final DBService dbService = DBService();
   final PrefUtils prefUtils = PrefUtils();
   final DioService dioService = DioService();
 
@@ -53,7 +51,8 @@ class AddressAuthController extends GetxController {
       'country': aCountryCtrl.text.trim(),
     };
 
-    int verifyAddress = await ProfileService.addAddress(bodyMap: bodyObj);
+    int verifyAddress =
+        await ProfileService.addOrUpdateAddress(bodyMap: bodyObj);
     return verifyAddress;
   }
 }

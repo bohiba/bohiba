@@ -1,22 +1,32 @@
-import '/controllers/security_controller.dart';
-import 'package:get/get.dart';
-import '/component/bohiba_appbar/appbar_icon.dart';
-import '/component/bohiba_appbar/title_appbar.dart';
-import '/component/screen_utils.dart';
+import '/dist/app_enums.dart';
+import '/services/global_service.dart';
+
 import '/pages/widget/icon_text_tile.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '/controllers/security_controller.dart';
+
+import '/component/screen_utils.dart';
+import '/component/ui/tile_decorative.dart';
+import '/component/bohiba_appbar/appbar_icon.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_inputfield/password_inputfield.dart';
+
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SecurityPage extends GetView<SecurityController> {
   const SecurityPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigateState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(title: 'Security'),
       body: Obx(() {
@@ -57,10 +67,87 @@ class SecurityPage extends GetView<SecurityController> {
                         LinearBoxWidget(
                           header: 'Change Password',
                           showArrow: true,
+                          onClick: () {
+                            Get.bottomSheet(
+                              isScrollControlled: false,
+                              useRootNavigator: true,
+                              shape: BottomModalShape(),
+                              backgroundColor:
+                                  bohibaTheme.scaffoldBackgroundColor,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: ScreenUtils.height15,
+                                  right: ScreenUtils.height15,
+                                  top: ScreenUtils.height20,
+                                  bottom: MediaQuery.paddingOf(context).bottom,
+                                ),
+                                child: Form(
+                                  key: controller.formState,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'Current Password',
+                                          style: bohibaTheme
+                                              .textTheme.displaySmall,
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "Please enter your current password to access this feature",
+                                          style:
+                                              bohibaTheme.textTheme.titleMedium,
+                                        ),
+                                      ),
+                                      PasswordInputField(
+                                        hintText: 'Password',
+                                        nextActionType: TextInputAction.done,
+                                        controller: controller.pwdController,
+                                      ),
+                                      PrimaryButton(
+                                        padding: EdgeInsets.only(top: 15.h),
+                                        label: 'Verify',
+                                        onPressed: () {
+                                          if (controller
+                                                  .pwdController.text.isEmpty ||
+                                              controller.pwdController.text
+                                                      .length <=
+                                                  6) {
+                                            GlobalService.showSnackBar(
+                                              status: AlertStatus.info,
+                                              title: 'Security',
+                                              desc:
+                                                  'Please enter valid password',
+                                            );
+                                            return;
+                                          }
+                                          navigateState.popAndPushNamed(
+                                            AppRoute.changePwd,
+                                            arguments:
+                                                controller.pwdController.text,
+                                          );
+
+                                          controller.pwdController.clear();
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         LinearBoxWidget(
                           header: 'Forgot Password',
                           showArrow: true,
+                          onClick: () {
+                            navigateState.pushNamed(AppRoute.forgotPwd);
+                          },
                         ),
                         Gap(ScreenUtils.height30),
                         Text('App Information',
@@ -153,10 +240,26 @@ class SecurityPage extends GetView<SecurityController> {
                               Divider(),
                               InkWell(
                                 onTap: () async {
-                                  int loggedOut = await controller.logOut();
-                                  if (loggedOut > 0) {
-                                    Get.offAllNamed(AppRoute.signIn);
-                                  }
+                                  GlobalService.showAlertDialog(
+                                    status: AlertStatus.warning,
+                                    title: 'Logout',
+                                    description:
+                                        'Are you sure? You want to log out from this account. Press `Log out` to proceed',
+                                    onSave: () {
+                                      navigateState.pop();
+                                    },
+                                    discardBtnTxt: 'LOG OUT',
+                                    saveBtnTxt: 'NO',
+                                    onDiscard: () async {
+                                      navigateState.pop();
+                                      int loggedOut = await controller.logOut();
+                                      if (loggedOut > 0) {
+                                        navigateState.pushNamedAndRemoveUntil(
+                                            AppRoute.signIn,
+                                            (Route<dynamic> route) => false);
+                                      }
+                                    },
+                                  );
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -175,12 +278,10 @@ class SecurityPage extends GetView<SecurityController> {
                                           color: bohibaTheme.colorScheme.error,
                                         ),
                                       ),
-                                      AppBarIconBox(
-                                        icon: Icon(
-                                          EvaIcons.logOutOutline,
-                                          size: ScreenUtils.height15.h,
-                                          color: bohibaTheme.colorScheme.error,
-                                        ),
+                                      Icon(
+                                        EvaIcons.logOutOutline,
+                                        size: ScreenUtils.height15.h,
+                                        color: bohibaTheme.colorScheme.error,
                                       ),
                                     ],
                                   ),

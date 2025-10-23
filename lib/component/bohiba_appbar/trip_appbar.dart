@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bohiba/pages/widget/role_widget.dart';
 import '/component/screen_utils.dart';
 import '/controllers/trip_controller.dart';
 import '/dist/app_enums.dart';
@@ -49,44 +50,60 @@ class TripAppBar extends GetView<TripController>
           },
         ),
         actions: [
-          TripMenu(
-            allowedActions: [
-              TripActionType.document,
-              TripActionType.expense,
-              TripActionType.payment,
-              TripActionType.reassignment,
-              TripActionType.more,
-              TripActionType.edit,
-              TripActionType.share,
-              TripActionType.delete
-            ],
-            onActionComplete: {
-              TripActionType.edit: (edit) async {
-                if (edit != null && edit != false) {
-                  controller.tripInfo.value = (await controller.getTripInfo(
+          RoleWidget(
+            truckOwnerWidget: TripMenu(
+              allowedActions: [
+                TripActionType.document,
+                TripActionType.expense,
+                TripActionType.payment,
+                TripActionType.reassignment,
+                TripActionType.edit,
+                TripActionType.share,
+                TripActionType.delete
+              ],
+              onActionComplete: {
+                TripActionType.edit: (edit) async {
+                  if (edit != null && edit != false) {
+                    await controller.getTripInfo(
+                      methodType: MethodType.api,
+                      id: controller.tripInfo.value.id!,
+                    );
+                  }
+                },
+                TripActionType.expense: (expense) async {
+                  if (expense != null && expense != false) {
+                    await controller.getTripInfo(
+                      methodType: MethodType.api,
+                      id: controller.tripInfo.value.id!,
+                    );
+                  }
+                },
+                TripActionType.payment: (payment) async {
+                  if (payment != null && payment != false) {
+                    await controller.getTripInfo(
+                      methodType: MethodType.api,
+                      id: controller.tripInfo.value.id!,
+                    );
+                  }
+                },
+              },
+              trip: controller.tripInfo.value,
+            ),
+            driverWidget: TripMenu(
+              trip: controller.tripInfo.value,
+              allowedActions: [
+                TripActionType.document,
+                TripActionType.share,
+              ],
+              onActionComplete: {
+                TripActionType.document: (document) async {
+                  await controller.getTripInfo(
                     methodType: MethodType.api,
-                    tripInfo: controller.tripInfo.value,
-                  ))!;
+                    id: controller.tripInfo.value.id!,
+                  );
                 }
               },
-              TripActionType.expense: (expense) async {
-                if (expense != null && expense != false) {
-                  controller.tripInfo.value = (await controller.getTripInfo(
-                    methodType: MethodType.api,
-                    tripInfo: controller.tripInfo.value,
-                  ))!;
-                }
-              },
-              TripActionType.payment: (payment) async {
-                if (payment != null && payment != false) {
-                  controller.tripInfo.value = (await controller.getTripInfo(
-                    methodType: MethodType.api,
-                    tripInfo: controller.tripInfo.value,
-                  ))!;
-                }
-              },
-            },
-            trip: controller.tripInfo.value,
+            ),
           )
         ],
       ),

@@ -12,7 +12,6 @@ class ThemeController extends GetxController {
   void onInit() {
     super.onInit();
     Future.delayed(Duration.zero, () async {
-      await PrefUtils.init();
       themeMode.value = PrefUtils.getAppThemeMode();
     });
   }

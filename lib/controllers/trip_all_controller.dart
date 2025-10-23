@@ -2,7 +2,6 @@ import '/dist/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
-import '/services/db_service.dart';
 import '/services/trip_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,10 +10,9 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 class AllTripController extends GetxController
     with GetSingleTickerProviderStateMixin {
   RefreshController refreshController = RefreshController();
-  late TabController tabController;
+  Rxn<TabController> tabController = Rxn();
   final ScrollController scrollController = ScrollController();
 
-  DBService dBService = DBService();
   Rx<TripModel> tripModel = TripModel().obs;
   RxList<TripModel> arrTrip = <TripModel>[].obs;
 
@@ -27,7 +25,6 @@ class AllTripController extends GetxController
     'Cancelled',
     'On Hold',
     'Reassigned',
-    'Other',
   ];
 
   List<String> get statuses => convertToSnakeCase(tabs);
@@ -39,7 +36,7 @@ class AllTripController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: tabs.length, vsync: this);
+    tabController.value = TabController(length: tabs.length, vsync: this);
     TruckModel? vehicle = Get.arguments;
     Future.delayed(Duration.zero, () async {
       if (vehicle != null) {
@@ -79,21 +76,23 @@ class AllTripController extends GetxController
       if (currentPage == 1) {
         hasMore.value = false;
         arrTrip.clear();
-        List<TripModel> localTrips =
+        List<TripModel>? localTrips =
             await TripService.getAllTrip(methodType: MethodType.local);
-        arrTrip.assignAll(localTrips);
-        arrTrip.sort((a, b) =>
-            b.startDate!.toDateTime().compareTo(a.startDate!.toDateTime()));
-        isLoading.value = false;
-        currentPage++;
+        if (localTrips != null && localTrips.isNotEmpty) {
+          arrTrip.assignAll(localTrips);
+          arrTrip.sort((a, b) =>
+              b.startDate!.toDateTime().compareTo(a.startDate!.toDateTime()));
+          isLoading.value = false;
+          currentPage++;
+        }
         return;
       }
       isLoading.value = true;
-      List<TripModel> newTrips = await TripService.getAllTrip(
+      List<TripModel>? newTrips = await TripService.getAllTrip(
         methodType: MethodType.api,
         reset: refresh,
       );
-      if (newTrips.isNotEmpty) {
+      if (newTrips != null && newTrips.isNotEmpty) {
         for (TripModel trip in newTrips) {
           if (!arrTrip.any((t) => t.id == trip.id)) {
             arrTrip.add(trip);
@@ -112,7 +111,12 @@ class AllTripController extends GetxController
   }
 
   Future<List<TripModel>> filteredTrips({String? truckNo}) async {
-    arrTrip.value = await TripService.filterTripWithTruckNo(truckNo: truckNo);
+    List<TripModel>? arrTripModel =
+        await TripService.filterTripWithTruckNo(truckNo: truckNo);
+    if (arrTripModel != null) {
+      arrTrip.clear();
+      arrTrip.addAll(arrTripModel);
+    }
     return arrTrip;
   }
 
@@ -133,7 +137,7 @@ class AllTripController extends GetxController
 
   @override
   void onClose() {
-    tabController.dispose();
+    tabController.value?.dispose();
     scrollController.dispose();
     super.onClose();
   }

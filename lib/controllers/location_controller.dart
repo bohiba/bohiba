@@ -87,7 +87,7 @@ class LocationController extends GetxController {
             userTitleMsg.value = 'Failed';
             userSubTitle.value =
                 'Unstable network connection! Refresh to try again';
-            GlobalService.appSnackBar(
+            GlobalService.showSnackBar(
                 status: AlertStatus.failure,
                 desc: 'Please retry something went wrong.');
             return null;

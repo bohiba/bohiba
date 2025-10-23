@@ -1,111 +1,122 @@
 import 'dart:io';
 
 import '/dist/app_enums.dart';
-
 import '/model/driver_model.dart';
 import '/model/profile_model.dart';
-import '/model/user_fav_model.dart';
 import '/model/truck_model.dart';
-import '/services/profile_service.dart';
-
+import 'profile_service.dart';
+import 'db2_service.dart';
 import 'api_end_point.dart';
 import 'device_info_service.dart';
 import 'dio_serivce.dart';
-import 'db_service.dart';
-import 'fav_service.dart';
 import 'global_service.dart';
 
 class TruckService {
-  static final DioService dioService = DioService();
-  static final DBService dBService = DBService();
+  static final DioService _dioService = DioService();
+  static final DatabaseService _databaseService = DatabaseService();
+  static int _currentPage = 1;
+  static int _lastPage = 1;
 
-  static Future<TruckModel?> createTruck(
-      {required String vehicleNumber}) async {
+  static Future<int> createTruck({required String vehicleNumber}) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return null;
+      return 0;
     }
     Map<String, dynamic> bodyObj = {'registration_number': vehicleNumber};
-
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await dioService.post(
+    ApiResponse serviceResponse = await _dioService.post(
       ApiEndPoint.apiAddTruck,
       body: bodyObj,
     );
-    GlobalService.dismissProgress();
 
     switch (serviceResponse.statusCode) {
       case 201:
-        List<UserFavouriteModel> arrFav =
-            await FavService.retriveAllFav() ?? [];
-        TruckModel truckModel =
-            TruckModel.fromJson(serviceResponse.data, favList: arrFav);
-
-        int insertSucess = await addOrUpdateTruck(newTruckInfo: truckModel);
-
-        ProfileModel? profile = await ProfileService.getProfile();
-        if (profile != null) {
-          profile.trucks = profile.trucks == null ? 1 : (profile.trucks! + 1);
+        Map<String, dynamic> resObj = TruckModel.toDB(serviceResponse.data);
+        int insert = await insertTruck(dbMap: resObj);
+        await ProfileService.updateTruckNo(deleteTruck: false);
+        GlobalService.dismissProgress();
+        if (insert > 0) {
+          GlobalService.showSnackBar(
+            status: AlertStatus.success,
+            title: 'Truck',
+            desc: serviceResponse.message,
+          );
         }
-        int profileUpdated =
-            await ProfileService.updatelocalProfile(profile: profile!);
-        if (profileUpdated <= 0) return null;
-        if (insertSucess <= 0) false;
-        GlobalService.showAppToast(message: serviceResponse.message);
-        return truckModel;
+        return insert;
       case 401:
+        GlobalService.dismissProgress();
         GlobalService.showAppToast(message: serviceResponse.message);
-        return null;
-
+        return 0;
       default:
+        GlobalService.dismissProgress();
         GlobalService.showAppToast(message: "Failed to create truck");
-        return null;
+        return 0;
     }
   }
 
-  static Future<List<TruckModel>> retriveAllTruck({
-    String? pageNo,
-    bool isInitial = false,
-    MethodType method = MethodType.local,
+  static Future<List<TruckModel>> getTruckList({
+    bool reset = false,
+    bool showProgress = false,
+    MethodType type = MethodType.local,
   }) async {
-    if (method == MethodType.local) {
-      List<TruckModel> truckList = await dBService.getAllData(tblTrucks);
-      return truckList;
+    if (type == MethodType.local) {
+      if (showProgress) GlobalService.showProgress();
+      String strQueryTruckList =
+          ''' SELECT * FROM $tblTrucks ORDER BY updatedAt DESC ''';
+      List<Map<String, dynamic>> truckList =
+          await _databaseService.getAllData(strQueryTruckList) ?? [];
+      if (showProgress) GlobalService.dismissProgress();
+      if (truckList.isNotEmpty) {
+        List<TruckModel> arrTruckModel = truckList.map((db) {
+          return TruckModel.fromDB(db);
+        }).toList();
+        return arrTruckModel;
+      }
+      return [];
     } else {
       if (!await DeviceInfoService.hasInternet()) return [];
-      GlobalService.showProgress();
 
-      if (isInitial) {
-        await localDeleteAll();
-        GlobalService.dismissProgress();
+      if (reset) {
+        await clearAllTrucks();
+        _currentPage = 1;
+        _lastPage = 1;
       }
-      ApiResponse apiRes =
-          await dioService.get('${ApiEndPoint.apiAllTruck}?page=$pageNo');
-      switch (apiRes.statusCode) {
+      if (_currentPage > _lastPage) {
+        return [];
+      }
+      if (showProgress) GlobalService.showProgress();
+      ApiResponse res = await _dioService
+          .get('${ApiEndPoint.apiAllTruck}?page=$_currentPage');
+      switch (res.statusCode) {
         case 200:
-          List<TruckModel> arrTruckModel = TruckModel.listFromJson(apiRes.data);
-          final Map<String, TruckModel> truckMap = {
-            for (var tm in arrTruckModel) '${tm.id}': tm,
-          };
-          int insertSucess =
-              await dBService.putAllData<TruckModel>(tblTrucks, truckMap);
-          GlobalService.printHandler('Truck insert $insertSucess');
-          ProfileModel? profile = await ProfileService.getProfile();
-          if (profile != null && profile.drivers != null) {
-            profile.drivers = arrTruckModel.length;
+          List<dynamic> truckList = res.data as List;
+          List<Map<String, dynamic>> dbTruckList = truckList.map((json) {
+            return TruckModel.toDB(json);
+          }).toList();
+
+          int insertTruck = await TruckService.insertAll(dbTruckList);
+          if (insertTruck > 0) {
+            List<TruckModel> arrTruckModel = dbTruckList.map((json) {
+              return TruckModel.fromDB(json);
+            }).toList();
+            return arrTruckModel;
           }
-          int profileUpdated =
-              await ProfileService.updatelocalProfile(profile: profile!);
-          GlobalService.dismissProgress();
-          if (profileUpdated <= 0) return [];
-          GlobalService.showAppToast(message: apiRes.message);
-          return arrTruckModel;
+          if (showProgress) GlobalService.dismissProgress();
+          return [];
         case 401:
-          GlobalService.dismissProgress();
-          GlobalService.showAppToast(message: apiRes.message);
+          if (showProgress) GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Truck',
+            desc: res.message,
+          );
           return [];
         default:
-          GlobalService.dismissProgress();
-          GlobalService.showAppToast(message: 'Failed to get trucks.');
+          if (showProgress) GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Truck',
+            desc: 'Failed to get trucks',
+          );
           return [];
       }
     }
@@ -117,32 +128,65 @@ class TruckService {
     MethodType methodType = MethodType.local,
   }) async {
     if (methodType == MethodType.local) {
+      String strGetQuery =
+          ''' SELECT * FROM $tblTrucks WHERE id = $truckId; ''';
       GlobalService.showProgress();
-      TruckModel? truck =
-          await dBService.getData<TruckModel>(tblTrucks, "$truckId");
+      List<Map<String, dynamic>> arrTruckList =
+          await _databaseService.getAllData(strGetQuery) ?? [];
       GlobalService.dismissProgress();
-      return truck;
+      if (arrTruckList.isNotEmpty) {
+        TruckModel truckModel = TruckModel.fromDB(arrTruckList.first);
+        return truckModel;
+      }
+
+      return null;
     } else {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
-      ApiResponse apiRes = await dioService
-          .delete("${ApiEndPoint.apiGetTruck}?value=$truckId&&type=$type");
+      ApiResponse apiRes = await _dioService
+          .get("${ApiEndPoint.apiGetTruck}?value=$truckId&type=$type");
 
       switch (apiRes.statusCode) {
         case 200:
-          Map<String, dynamic> truckObj = apiRes.data as Map<String, dynamic>;
-          List<UserFavouriteModel> arrFav =
-              await FavService.retriveAllFav() ?? [];
-          TruckModel truckModel =
-              TruckModel.fromJson(truckObj, favList: arrFav);
-          int insertTruck = await dBService.putData<TruckModel>(
-            tblTrucks,
-            "${truckModel.id}",
-            truckModel,
-          );
+          Map<String, dynamic> dbMap = TruckModel.toDB(apiRes.data);
+          String strUpdateQuery = '''
+              UPDATE $tblTrucks SET
+                  isFav = ${dbMap['isFav']}
+                , image = '${dbMap['image']}'
+                , vhNumber = '${dbMap['vhNumber']}'
+                , driverId = ${dbMap['driverId'] ?? 'NULL'}
+                , driverUuid = ${dbMap['driverUuid'] == null ? 'NULL' : "'${dbMap['driverUuid']}'"}
+                , driverName = ${dbMap['driverName'] == null ? 'NULL' : "'${dbMap['driverName']}'"}
+                , driverMobileNumber = ${dbMap['driverMobileNumber'] == null ? 'NULL' : "'${dbMap['driverMobileNumber']}'"}
+                , registrationPlace = '${dbMap['registrationPlace']}'
+                , registrationDate = '${dbMap['registrationDate']}'
+                , rcStatus = '${dbMap['rcStatus']}'
+                , rcModel = '${dbMap['rcModel']}'
+                , rcOwnerSr = ${dbMap['rcOwnerSr']}
+                , vhDesc = '${dbMap['vhDesc']}'
+                , vhBrand = '${dbMap['vhBrand']}'
+                , vhModel = '${dbMap['vhModel']}'
+                , vhEngineNo = '${dbMap['vhEngineNo']}'
+                , vhChassisNo = '${dbMap['vhChassisNo']}'
+                , vhFuelType = '${dbMap['vhFuelType']}'
+                , vhUnladenWeight = '${dbMap['vhUnladenWeight']}'
+                , vhFinancer = '${dbMap['vhFinancer']}'
+                , vhInsuranceNo = '${dbMap['vhInsuranceNo']}'
+                , vhInsuranceCompany = '${dbMap['vhInsuranceCompany']}'
+                , puccUpto = '${dbMap['puccUpto']}'
+                , insuranceUpto = '${dbMap['insuranceUpto']}'
+                , taxUpto = '${dbMap['taxUpto']}'
+                , fitnessUpto = '${dbMap['fitnessUpto']}'
+                , updatedAt = '${dbMap['updatedAt']}'
+              WHERE id = ${dbMap['id']};
+            ''';
+          int success = await _databaseService.updateData(strUpdateQuery);
           GlobalService.dismissProgress();
-          if (insertTruck <= 0) return null;
-          return truckModel;
+          if (success > 0) {
+            TruckModel model = TruckModel.fromJson(apiRes.data);
+            return model;
+          }
+          return null;
         case 401:
           GlobalService.dismissProgress();
           GlobalService.showAppToast(message: apiRes.message);
@@ -155,21 +199,27 @@ class TruckService {
     }
   }
 
-  static Future<TruckModel?> setTruckImage(
-      {TruckModel? oldTruck, required String imgPath}) async {
+  static Future<TruckModel?> setTruckImage({
+    TruckModel? oldTruck,
+    required String imgPath,
+  }) async {
     if (oldTruck == null || !await DeviceInfoService.hasInternet()) return null;
     GlobalService.showProgress();
     Map<String, dynamic> bodyObj = {
       'regd_number': oldTruck.regdNumber,
     };
-    ApiResponse apiRes = await dioService
+    ApiResponse apiRes = await _dioService
         .upload(ApiEndPoint.apiSetTruckImage, bodyObj, [File(imgPath)]);
 
     switch (apiRes.statusCode) {
       case 200:
         oldTruck.truckImage = apiRes.data['truck_image'];
-        int updateTruck = await dBService.putData<TruckModel>(
-            tblTrucks, '${oldTruck.id}', oldTruck);
+        String strUpdateQuery =
+            ''' UPDATE $tblTrucks SET image = ${oldTruck.truckImage} WHERE vhNumber = ?''';
+        int updateTruck =
+            await _databaseService.updateData(strUpdateQuery, argument: [
+          {oldTruck.regdNumber}
+        ]);
         GlobalService.dismissProgress();
         if (updateTruck <= 0) return null;
         GlobalService.showAppToast(message: apiRes.message);
@@ -184,7 +234,7 @@ class TruckService {
   }
 
   static Future<int> assignDriver({
-    required TruckModel oldTruck,
+    required String vhNumber,
     required DriverModel driver,
   }) async {
     if (!await DeviceInfoService.hasInternet()) return 0;
@@ -192,24 +242,28 @@ class TruckService {
     Map<String, dynamic> bodyObj = {
       'driver_uuid': driver.profile?.driverUuid,
     };
-    ApiResponse apiResponse = await dioService.post(
-      '${ApiEndPoint.apiAssignDriver}/${oldTruck.regdNumber}',
+    ApiResponse apiResponse = await _dioService.post(
+      '${ApiEndPoint.apiAssignDriver}/$vhNumber',
       body: bodyObj,
     );
 
     switch (apiResponse.statusCode) {
       case 200:
-        TruckModel truckModel = oldTruck;
-        truckModel.driver = TruckDriverModel(
-          id: driver.id,
-          uuid: driver.profile?.driverUuid,
-          name: driver.profile?.name,
-          mobileNumber: driver.profile?.mobileNumber,
+        String queryUpdate = ''' UPDATE $tblTrucks SET
+          driverId = ${driver.id}
+        , driverImage = ${driver.profile?.image != null ? "'${driver.profile?.image}'" : 'NULL'}
+        , driverUuid = ${driver.profile?.driverUuid != null ? "'${driver.profile?.driverUuid}'" : 'NULL'}
+        , driverName = ${driver.profile?.name != null ? "'${driver.profile?.name}'" : 'NULL'}
+        , driverMobileNumber = ${driver.profile?.mobileNumber != null ? "'${driver.profile?.mobileNumber}'" : 'NULL'}
+        WHERE vhNumber = ?
+         ''';
+        int updateSuccess = await _databaseService.updateData(
+          queryUpdate,
+          argument: [vhNumber],
         );
-        int update = await addOrUpdateTruck(newTruckInfo: truckModel);
         GlobalService.dismissProgress();
         GlobalService.showAppToast(message: apiResponse.message);
-        return update;
+        return updateSuccess;
       case 401:
         GlobalService.dismissProgress();
         GlobalService.showAppToast(message: apiResponse.message);
@@ -225,18 +279,28 @@ class TruckService {
     if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await dioService
+    ApiResponse serviceResponse = await _dioService
         .post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.regdNumber}');
 
     switch (serviceResponse.statusCode) {
       case 200:
-        oldTruck.driver = null;
-        int update = await addOrUpdateTruck(newTruckInfo: oldTruck);
+        String queryUpdate = ''' UPDATE $tblTrucks SET
+          driverId = NULL
+        , driverImage = NULL
+        , driverUuid = NULL
+        , driverName = NULL
+        , driverMobileNumber = NULL
+        WHERE vhNumber = ?
+         ''';
+        int updateSuccess = await _databaseService.updateData(
+          queryUpdate,
+          argument: ['${oldTruck.regdNumber}'],
+        );
         GlobalService.dismissProgress();
-        if (update > 0) {
+        if (updateSuccess > 0) {
           GlobalService.showAppToast(message: serviceResponse.message);
         }
-        return update;
+        return updateSuccess;
       case 401:
         GlobalService.dismissProgress();
         GlobalService.showAppToast(message: serviceResponse.message);
@@ -248,55 +312,137 @@ class TruckService {
     }
   }
 
-  static Future<bool> deleteTruck(
-      {required int truckId, required bool isMarkedFav}) async {
-    if (!await DeviceInfoService.hasInternet()) return false;
+  static Future<int> insertTruck({required Map<String, dynamic> dbMap}) async {
+    String strInsertQuery = '''
+    INSERT INTO $tblTrucks (
+        id
+      , isFav
+      , image
+      , vhNumber
+      , driverId
+      , driverUuid
+      , driverName
+      , driverMobileNumber
+      , registrationPlace
+      , registrationDate
+      , rcStatus
+      , rcModel
+      , rcOwnerSr
+      , vhDesc
+      , vhBrand
+      , vhModel
+      , vhEngineNo
+      , vhChassisNo
+      , vhFuelType
+      , vhUnladenWeight
+      , vhFinancer
+      , vhInsuranceNo
+      , vhInsuranceCompany
+      , insuranceUpto
+      , taxUpto
+      , puccUpto
+      , fitnessUpto
+      , updatedAt
+    ) VALUES (
+      ${dbMap['id']}
+    , ${dbMap['isFav'] ?? 0}
+    , '${dbMap['image']}'
+    , '${dbMap['vhNumber']}'
+    ,  ${dbMap['driverId'] ?? 'NULL'}
+    ,  ${dbMap['driverUuid'] ?? 'NULL'}
+    ,  ${dbMap['driverName'] ?? 'NULL'}
+    ,  ${dbMap['driverMobileNumber'] ?? 'NULL'}
+    , '${dbMap['registrationPlace']}'
+    , '${dbMap['registrationDate']}'
+    , '${dbMap['rcStatus']}'
+    , '${dbMap['rcModel']}'
+    ,  ${dbMap['rcOwnerSr']}
+    , '${dbMap['vhDesc']}'
+    , '${dbMap['vhBrand']}'
+    , '${dbMap['vhModel']}'
+    , '${dbMap['vhEngineNo']}'
+    , '${dbMap['vhChassisNo']}'
+    , '${dbMap['vhFuelType']}'
+    , '${dbMap['vhUnladenWeight']}'
+    , '${dbMap['vhFinancer']}'
+    , '${dbMap['vhInsuranceNo']}'
+    , '${dbMap['vhInsuranceCompany']}'
+    , '${dbMap['puccUpto']}'
+    , '${dbMap['insuranceUpto']}'
+    , '${dbMap['taxUpto']}'
+    , '${dbMap['fitnessUpto']}'
+    , '${dbMap['updatedAt']}'
+    )''';
 
+    int insertTruck = await _databaseService.insertData(strInsertQuery);
+    return insertTruck;
+  }
+
+  static Future<int> deleteTruck({required int truckId}) async {
+    if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();
-    ApiResponse serviceResponse =
-        await dioService.delete("${ApiEndPoint.apiDeleteTruck}/$truckId");
-    switch (serviceResponse.statusCode) {
-      case 200:
-        if (isMarkedFav) {
-          bool isFavDeleted = await FavService.findDeleteFav(truckId, "trucks");
-          GlobalService.printHandler('DB Delete Fav: $isFavDeleted');
-        }
-        int dbDeleted =
-            await dBService.deleteData<TruckModel>(tblTrucks, '$truckId');
-        if (dbDeleted <= 0) return false;
-        ProfileModel? profile = await ProfileService.getProfile();
-        if (profile != null && profile.trucks != null && profile.trucks! > 0) {
-          profile.trucks = profile.trucks! - 1;
-        }
-        int profileUpdated =
-            await ProfileService.updatelocalProfile(profile: profile!);
-        GlobalService.dismissProgress();
-        if (profileUpdated <= 0) return false;
-        GlobalService.showAppToast(message: serviceResponse.message);
-        return true;
-      case 401:
-        GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: serviceResponse.message);
-        return false;
-      default:
-        GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: 'Failed to delete truck.');
-        return false;
+    String deleteQuery = '''DELETE FROM $tblTrucks WHERE id = $truckId;''';
+    int dbDeleted = await _databaseService.delete(deleteQuery);
+
+    if (dbDeleted > 0) {
+      ApiResponse serviceResponse =
+          await _dioService.delete("${ApiEndPoint.apiDeleteTruck}/$truckId");
+      switch (serviceResponse.statusCode) {
+        case 200:
+          ProfileModel? profile = await ProfileService.getProfile();
+          if (profile != null &&
+              profile.trucks != null &&
+              profile.trucks! > 0) {
+            profile.trucks = profile.trucks! - 1;
+          }
+          int profileUpdated =
+              await ProfileService.updateTruckNo(deleteTruck: true);
+          if (profileUpdated > 0) {
+            // Update Profile
+          }
+          GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.success,
+            title: 'Truck',
+            desc: serviceResponse.message,
+          );
+
+          return 1;
+        case 401:
+          GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Truck',
+            desc: serviceResponse.message,
+          );
+          return 0;
+        default:
+          GlobalService.dismissProgress();
+          GlobalService.showSnackBar(
+            status: AlertStatus.success,
+            title: 'Truck',
+            desc: 'Failed to add truck',
+          );
+          return 0;
+      }
+    } else {
+      GlobalService.dismissProgress();
+      GlobalService.showAppToast(message: 'Failed to delete truck.');
+      return 0;
     }
   }
 
-  static Future<int> localDeleteTruck(int id) async {
-    return await dBService.deleteData(tblTrucks, "$id");
+  static Future<int> insertAll(List<Map<String, dynamic>> listTruck) async {
+    int insert = await _databaseService.insertAllData(tblTrucks, listTruck);
+    return insert;
   }
 
-  static Future<int> addOrUpdateTruck(
-      {required TruckModel newTruckInfo}) async {
-    int success = await dBService.putData<TruckModel>(
-        tblTrucks, '${newTruckInfo.id}', newTruckInfo);
-    return success;
-  }
-
-  static Future<void> localDeleteAll() async {
-    await dBService.clearBox<TruckModel>(tblTrucks);
+  static Future<int> clearAllTrucks() async {
+    String strDeleteQuery = ''' DELETE FROM $tblTrucks ''';
+    int deleteSuccess = await _databaseService.delete(strDeleteQuery);
+    if (deleteSuccess > 0) {
+      GlobalService.printHandler('TABLE TRUCK CLEARED');
+    }
+    return deleteSuccess;
   }
 }

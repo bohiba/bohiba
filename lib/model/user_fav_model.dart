@@ -1,26 +1,9 @@
-import '/services/db_service.dart';
-import 'package:hive/hive.dart';
-
-part 'user_fav_model.g.dart';
-
-@HiveType(typeId: favTypeID)
 class UserFavouriteModel {
-  @HiveField(0)
   int? id;
-
-  @HiveField(1)
   String? userUuid;
-
-  @HiveField(2)
   String? assetType;
-
-  @HiveField(3)
   int? assetId;
-
-  @HiveField(4)
   String? createdAt;
-
-  @HiveField(5)
   String? updatedAt;
 
   UserFavouriteModel({

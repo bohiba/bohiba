@@ -1,184 +1,134 @@
-import 'package:bohiba/component/bohiba_dropdown/primary_dropdown_menu.dart';
-import 'package:bohiba/pages/widget/required_label.dart';
-import 'package:widgets_easier/widgets_easier.dart';
+import 'package:bohiba/model/driver_model.dart';
+
+import '/pages/widget/required_label.dart';
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:intl/intl.dart';
+
 import '/controllers/driver_add_controller.dart';
-import 'package:get/get.dart';
+
 import '/dist/app_enums.dart';
-import 'package:flutter/material.dart';
-import 'package:remixicon/remixicon.dart';
 import '/dist/component_exports.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
 import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_dropdown/primary_dropdown_menu.dart';
+
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
+import 'package:widgets_easier/widgets_easier.dart';
 
 class DriverAddPage extends GetView<DriverAddController> {
   const DriverAddPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: TitleAppbar(title: "Add Driver"),
-      body: SafeArea(
-        child: Obx(
-          () {
-            return Padding(
-              padding: EdgeInsets.only(
-                top: ScreenUtils.height10,
-                left: ScreenUtils.width15,
-                right: ScreenUtils.width15,
-                // bottom: ScreenUtils.height10,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtils.height10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Row(
+    final NavigatorState navigatorState = Navigator.of(context);
+    return Obx(() {
+      return Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: TitleAppbar(
+          title: "Add Driver",
+          popResult: controller.popResult.value,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: ScreenUtils.height10,
+              left: ScreenUtils.width15,
+              right: ScreenUtils.width15,
+              // bottom: ScreenUtils.height10,
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: ScreenUtils.height10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            RadioGroup(
-                              groupValue: controller.addAsset.value,
-                              onChanged: (AddAssetUsing? change) {
-                                controller.addAsset.value =
-                                    change ?? AddAssetUsing.uuid;
-                              },
-                              child: Radio<AddAssetUsing>(
-                                value: AddAssetUsing.uuid,
-                              ),
+                            Row(
+                              children: [
+                                RadioGroup(
+                                  groupValue: controller.addAsset.value,
+                                  onChanged: (AddAssetUsing? change) {
+                                    controller.addAsset.value =
+                                        change ?? AddAssetUsing.uuid;
+                                  },
+                                  child: Radio<AddAssetUsing>(
+                                    value: AddAssetUsing.uuid,
+                                  ),
+                                ),
+                                Text("UUID",
+                                    style: bohibaTheme.textTheme.titleLarge),
+                              ],
                             ),
-                            Text("UUID",
-                                style: bohibaTheme.textTheme.titleLarge),
+                            Row(
+                              children: [
+                                RadioGroup(
+                                  groupValue: controller.addAsset.value,
+                                  onChanged: (AddAssetUsing? change) {
+                                    controller.addAsset.value =
+                                        change ?? AddAssetUsing.doc;
+                                  },
+                                  child: Radio<AddAssetUsing>(
+                                    value: AddAssetUsing.doc,
+                                  ),
+                                ),
+                                Text("Manual",
+                                    style: bohibaTheme.textTheme.titleLarge),
+                              ],
+                            ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            RadioGroup(
-                              groupValue: controller.addAsset.value,
-                              onChanged: (AddAssetUsing? change) {
-                                controller.addAsset.value =
-                                    change ?? AddAssetUsing.doc;
-                              },
-                              child: Radio<AddAssetUsing>(
-                                value: AddAssetUsing.doc,
-                              ),
-                            ),
-                            Text("Manual",
-                                style: bohibaTheme.textTheme.titleLarge),
-                          ],
+                      ),
+                      if (controller.addAsset.value == AddAssetUsing.uuid)
+                        UUIDDriverVerification()
+                      else
+                        ManualModeDriverVerification(),
+                      RequiredLabel(label: 'Assign Truck'),
+                      // Text('Assign Truck', style: bohibaTheme.textTheme.titleLarge),
+                      PrimaryDropDownMenu(
+                        padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtils.height10,
                         ),
-                      ],
-                    ),
+                        hint: controller.truck.value.driverName ??
+                            'Registration Number',
+                        items: controller.arrTruck
+                            .map((f) => f.regdNumber.toString())
+                            .toList(),
+                        enableSearch: true,
+                        focusOnTap: true,
+                        onChanged: (p0) {
+                          controller.strTruckRegdNo.value = p0 ?? '';
+                          GlobalService.printHandler(
+                              'ID: ${controller.strTruckRegdNo.value}');
+                          GlobalService.closeKeyboard();
+                        },
+                        menuController: controller.assignTruckCtlr,
+                      ),
+                    ],
                   ),
-                  if (controller.addAsset.value == AddAssetUsing.uuid)
-                    UUIDDriverVerification()
-                  else
-                    ManualModeDriverVerification(),
-                  RequiredLabel(label: 'Assign Truck'),
-                  // Text('Assign Truck', style: bohibaTheme.textTheme.titleLarge),
-                  PrimaryDropDownMenu(
-                    padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtils.height10,
-                    ),
-                    hint: controller.truck.value.driver?.name ??
-                        'Registration Number',
-                    items: controller.arrTruck
-                        .map((f) => f.regdNumber.toString())
-                        .toList(),
-                    enableSearch: true,
-                    focusOnTap: true,
-                    onChanged: (p0) {
-                      controller.strTruckRegdNo.value = p0 ?? '';
-                      GlobalService.printHandler(
-                          'ID: ${controller.strTruckRegdNo.value}');
-                      GlobalService.closeKeyboard();
-                    },
-                    menuController: controller.assignTruckCtlr,
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: ScreenUtils.height10,
-            left: ScreenUtils.width15,
-            right: ScreenUtils.width15,
-          ),
-          child: PrimaryButton(
-            label: "Add Driver",
-            onPressed: () async {
-              final isUuidFlow =
-                  controller.addAsset.value == AddAssetUsing.uuid;
-              final isDocFlow = controller.addAsset.value == AddAssetUsing.doc;
-
-              Map<String, dynamic>? bodyObj;
-
-              // UUID Flow
-              if (isUuidFlow) {
-                final uuid = controller.uuidCtlr.text.trim();
-
-                if (uuid.isEmpty) {
-                  GlobalService.showAppToast(
-                      message: 'Please provide driver UUID');
-                  return;
-                }
-                if (uuid.length != 6) {
-                  GlobalService.showAppToast(
-                      message: 'Please provide valid UUID');
-                  return;
-                }
-
-                bodyObj = {
-                  'driver_uuid': uuid,
-                  'type': 1,
-                };
-              }
-
-              // Document Flow
-              if (isDocFlow) {
-                final dl = controller.licenseCtrl.text.trim();
-                final dob = controller.dateController.text.trim();
-
-                if (dl.isEmpty) {
-                  GlobalService.showAppToast(
-                      message: 'Please provide driver DL Number');
-                  return;
-                }
-                if (dl.length != 16) {
-                  GlobalService.showAppToast(
-                      message: 'Please provide valid DL Number');
-                  return;
-                }
-                if (dob.isEmpty) {
-                  GlobalService.showAppToast(message: 'Please provide D.O.B');
-                  return;
-                }
-
-                bodyObj = {
-                  'license_number': dl,
-                  'dob': dob,
-                  'type': 0,
-                };
-              }
-
-              // Final API Call
-              if (bodyObj != null) {
-                await controller.addDriver(bodyMap: bodyObj);
-              }
-            },
+                ),
+                PrimaryButton(
+                  label: "Add Driver",
+                  onPressed: () async {
+                    DriverModel? driver = await controller.addDriver();
+                    if (driver != null) {
+                      navigatorState.pop(true);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

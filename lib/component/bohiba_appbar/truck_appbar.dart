@@ -12,7 +12,8 @@ import 'package:get/get.dart';
 class TruckAppbar extends GetView<TruckController>
     implements PreferredSizeWidget {
   final TruckModel truck;
-  const TruckAppbar({super.key, required this.truck});
+  final bool popResult;
+  const TruckAppbar({super.key, required this.truck, this.popResult = false});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class TruckAppbar extends GetView<TruckController>
         leading: InkWell(
           child: const Icon(Icons.arrow_back_ios_new_rounded),
           onTap: () {
-            navigate.pop(true);
+            navigate.pop(popResult);
           },
         ),
         actions: [
@@ -74,19 +75,20 @@ class TruckAppbar extends GetView<TruckController>
           ),*/
           TruckMenu(
             truck: truck,
-            // icon: const Icon(EvaIcons.plus),
             allowedActions: [
               ActionType.edit,
               ActionType.add,
+              ActionType.sync,
               ActionType.other,
               ActionType.delete,
             ],
             onActionComplete: {
               ActionType.edit: (value) async {
                 await controller.getTruckInfo(
-                  id: controller.truckModel.value.id!.toString(),
+                  id: controller.truckModel.value.id!,
                 );
-              }
+              },
+              ActionType.delete: (value) async {}
             },
           )
         ],

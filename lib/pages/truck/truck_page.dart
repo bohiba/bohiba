@@ -1,20 +1,18 @@
-import '/services/launcher_service.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '/component/bohiba_buttons/primary_button.dart';
-
 import '/component/bohiba_appbar/truck_appbar.dart';
-import '/controllers/truck_controller.dart';
 import '/routes/app_route.dart';
-import 'package:get/get.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
+import '/theme/bohiba_theme.dart';
+import '/dist/component_exports.dart';
+import '/services/launcher_service.dart';
 import '/pages/widget/role_widget.dart';
 import '/pages/widget/linear_box_widget.dart';
-import '/theme/bohiba_theme.dart';
+import '/controllers/truck_controller.dart';
+
+import 'package:get/get.dart';
 import 'package:gap/gap.dart';
-import '/dist/component_exports.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class TruckPage extends GetView<TruckController> {
   const TruckPage({super.key});
@@ -72,10 +70,12 @@ class TruckPage extends GetView<TruckController> {
                                                   controller.truckModel.value)
                                           .then(
                                         (onValue) async {
-                                          await controller.getTruckInfo(
-                                            id: controller.truckModel.value.id!
-                                                .toString(),
-                                          );
+                                          if (onValue != null) {
+                                            await controller.getTruckInfo(
+                                              id: controller
+                                                  .truckModel.value.id!,
+                                            );
+                                          }
                                         },
                                       );
                                     },
@@ -97,16 +97,16 @@ class TruckPage extends GetView<TruckController> {
                                         BohibaMarqueeText(
                                           width: ScreenUtils.width * 0.35,
                                           text: controller.truckModel.value
-                                                  .driver?.name ??
+                                                  .driverName ??
                                               '',
                                           overflowText: controller.truckModel
-                                                  .value.driver?.name ??
+                                                  .value.driverName ??
                                               '',
                                         ),
                                         Text(
-                                          controller.truckModel.value.driver
-                                                  ?.uuid ??
-                                              'NA',
+                                          controller.truckModel.value
+                                                  .driverUuid ??
+                                              '',
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontSize: bohibaTheme.textTheme
@@ -122,16 +122,16 @@ class TruckPage extends GetView<TruckController> {
                                     Spacer(),
                                     Visibility(
                                       visible: controller.truckModel.value
-                                                  .driver?.mobileNumber !=
+                                                  .driverMobileNumber !=
                                               null ||
-                                          controller.truckModel.value.driver
-                                                  ?.mobileNumber !=
+                                          controller.truckModel.value
+                                                  .driverMobileNumber !=
                                               '',
                                       child: GestureDetector(
                                         onTap: () async =>
                                             await LauncherService.makePhoneCall(
-                                          controller.truckModel.value.driver!
-                                              .mobileNumber!,
+                                          controller.truckModel.value
+                                              .driverMobileNumber!,
                                         ),
                                         child: Container(
                                           height: ScreenUtils.height30.w,
@@ -167,14 +167,12 @@ class TruckPage extends GetView<TruckController> {
                                 children: [
                                   BohibaMarqueeText(
                                     width: ScreenUtils.width * 0.35,
-                                    text:
-                                        controller.truckModel.value.owner?.name,
-                                    overflowText: controller
-                                        .truckModel.value.driver?.name,
+                                    text: controller.truckModel.value.ownerName,
+                                    overflowText:
+                                        controller.truckModel.value.ownerName,
                                   ),
                                   Text(
-                                    controller.truckModel.value.owner?.uuid ??
-                                        '',
+                                    controller.truckModel.value.ownerUuid ?? '',
                                     maxLines: 1,
                                     style: TextStyle(
                                       fontSize: bohibaTheme
@@ -189,17 +187,17 @@ class TruckPage extends GetView<TruckController> {
                               ),
                               Spacer(),
                               Visibility(
-                                visible: controller.truckModel.value.owner
-                                            ?.mobileNumber !=
+                                visible: controller.truckModel.value
+                                            .ownerMobileNumber !=
                                         null ||
-                                    controller.truckModel.value.owner
-                                            ?.mobileNumber !=
+                                    controller.truckModel.value
+                                            .ownerMobileNumber !=
                                         '',
                                 child: GestureDetector(
                                   onTap: () async =>
                                       LauncherService.makePhoneCall(
                                     controller
-                                        .truckModel.value.owner!.mobileNumber!,
+                                        .truckModel.value.ownerMobileNumber!,
                                   ),
                                   child: Container(
                                     height: 36.w,
@@ -233,31 +231,23 @@ class TruckPage extends GetView<TruckController> {
                         ),
                         LinearBoxWidget(
                           header: 'Regd. Date',
-                          title: controller.truckModel.value.registration
-                                  ?.registrationDate ??
-                              'NA',
+                          title: controller.truckModel.value.regdDate,
                         ),
                         LinearBoxWidget(
                           header: 'Insurance Upto',
-                          title: controller
-                                  .truckModel.value.validity?.insuranceUpto ??
-                              'NA',
+                          title: controller.truckModel.value.insuranceUpto,
                         ),
                         LinearBoxWidget(
                           header: 'Tax Upto',
-                          title:
-                              controller.truckModel.value.validity?.taxUpto ??
-                                  'NA',
+                          title: controller.truckModel.value.taxUpto,
                         ),
                         LinearBoxWidget(
                           header: 'Pucc Upto',
-                          title:
-                              controller.truckModel.value.validity?.puccUpto ??
-                                  'NA',
+                          title: controller.truckModel.value.puccUpto,
                         ),
                         LinearBoxWidget(
                           header: 'Last synced',
-                          title: controller.truckModel.value.updatedAt ?? 'NA',
+                          title: controller.truckModel.value.updatedAt,
                         ),
                         Padding(
                           padding: EdgeInsets.only(
@@ -271,41 +261,33 @@ class TruckPage extends GetView<TruckController> {
                         ),
                         LinearBoxWidget(
                           header: 'Fuel',
-                          title: controller.truckModel.value.specs?.fuelType,
+                          title: controller.truckModel.value.vhFuelType,
                         ),
                         LinearBoxWidget(
                           header: 'Unladen',
-                          title: controller
-                                  .truckModel.value.specs?.unladenWeight
-                                  .toString() ??
-                              'NA',
+                          title:
+                              "${controller.truckModel.value.vhUnladenWeight ?? ''}",
                         ),
                         LinearBoxWidget(
                           header: 'Model Number',
-                          title: controller.truckModel.value.specs?.model,
+                          title: controller.truckModel.value.vhModel,
                         ),
                         RoleWidget(
                           truckOwnerWidget: LinearBoxWidget(
                             header: 'Engine Number',
-                            title:
-                                controller.truckModel.value.specs?.engineNo ??
-                                    'NA',
+                            title: controller.truckModel.value.vhEngineNo,
                           ),
                         ),
                         RoleWidget(
                           truckOwnerWidget: LinearBoxWidget(
                             header: 'Chassis',
-                            title:
-                                controller.truckModel.value.specs?.chassisNo ??
-                                    'NA',
+                            title: controller.truckModel.value.vhChassisNo,
                           ),
                         ),
                         RoleWidget(
                           truckOwnerWidget: LinearBoxWidget(
                             header: 'Financer',
-                            title:
-                                controller.truckModel.value.specs?.financer ??
-                                    'NA',
+                            title: controller.truckModel.value.vhFinancer,
                           ),
                         ),
                         Padding(
@@ -320,21 +302,15 @@ class TruckPage extends GetView<TruckController> {
                         ),
                         LinearBoxWidget(
                           header: 'Insurance Company',
-                          title: controller
-                                  .truckModel.value.specs?.insuranceCompany ??
-                              'NA',
+                          title: controller.truckModel.value.vhInsuranceCompany,
                         ),
                         LinearBoxWidget(
                           header: 'Insurance no',
-                          title: controller
-                                  .truckModel.value.specs?.insurancePolicyNo ??
-                              'NA',
+                          title: controller.truckModel.value.vhInsuranceNo,
                         ),
                         LinearBoxWidget(
                           header: 'Valid Upto',
-                          title: controller
-                                  .truckModel.value.validity?.insuranceUpto ??
-                              'NA',
+                          title: controller.truckModel.value.insuranceUpto,
                         ),
                         /*Padding(
                           padding: EdgeInsets.only(

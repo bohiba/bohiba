@@ -41,6 +41,14 @@ class NewsScreen extends GetView<NewsController> {
                   decoration: TileDecorative(),
                   alignment: Alignment.bottomLeft,
                 ),
+                Gap(5.h),
+                Align(
+                  alignment: AlignmentGeometry.centerRight,
+                  child: Text(
+                    controller.newsDetail.value.updatedAt ?? '',
+                    style: bohibaTheme.textTheme.titleSmall,
+                  ),
+                ),
                 Gap(10.h),
                 Text(
                   controller.newsDetail.value.title ?? '',

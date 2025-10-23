@@ -81,10 +81,10 @@ class DriverMenu extends GetView<DriverAllController> {
           );
         }
 
-        if (allowedActions.contains(ActionType.other)) {
+        if (allowedActions.contains(ActionType.sync)) {
           menuItems.add(
             const PopupMenuItem(
-              value: ActionType.other,
+              value: ActionType.sync,
               child: Text('Sync'),
             ),
           );
@@ -164,18 +164,30 @@ class DriverMenu extends GetView<DriverAllController> {
                 type: driver.licenseDetail?.status ?? '',
               ).share();
               break;
+
+            case ActionType.sync:
+              GlobalService.showAppToast(message: '#Sync');
+              if (onActionComplete?[ActionType.sync] != null) {
+                onActionComplete![ActionType.sync]!(null);
+              }
+              break;
             case ActionType.delete:
               GlobalService.showAlertDialog(
-                  status: AlertStatus.warning,
-                  title: 'DELETE',
-                  description:
-                      'Driver will remove from truck. Are you sure you want to delete this driver?',
-                  discardBtnTxt: 'DELETE',
-                  onDiscard: () async => controller.deleteDriver(
-                        id: driver.id!.toString(),
-                      ),
-                  saveBtnTxt: 'CLOSE',
-                  onSave: () => Get.back());
+                status: AlertStatus.warning,
+                title: 'DELETE',
+                description:
+                    'Driver will remove from truck. Are you sure you want to delete this driver?',
+                discardBtnTxt: 'DELETE',
+                onDiscard: () async {
+                  navState.pop();
+                  int success = await controller.deleteDriver(id: driver.id!);
+                  if (success > 0) {
+                    navState.pop(true);
+                  }
+                },
+                saveBtnTxt: 'CLOSE',
+                onSave: () => navState.pop(),
+              );
               break;
             default:
               null;

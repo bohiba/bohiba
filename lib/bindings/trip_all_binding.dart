@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class AllTripBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<AllTripController>(AllTripController());
+    Get.lazyPut<AllTripController>(() => AllTripController(), fenix: true);
   }
 }

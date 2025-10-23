@@ -11,7 +11,11 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class AllJobPage extends GetView<AllJobController> {
-  const AllJobPage({super.key});
+  final bool showLeading;
+  const AllJobPage({
+    super.key,
+    this.showLeading = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +23,7 @@ class AllJobPage extends GetView<AllJobController> {
     return Scaffold(
       appBar: TitleAppbar(
         title: 'All Jobs',
+        showLeading: showLeading,
         actions: [
           RoleWidget(
             truckOwnerWidget: AppBarIconBox(
@@ -49,8 +54,14 @@ class AllJobPage extends GetView<AllJobController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(controller.strTitle.value),
-                          Text(controller.strSubTitle.value)
+                          Text(
+                            controller.strTitle.value,
+                            style: bohibaTheme.textTheme.displaySmall,
+                          ),
+                          Text(
+                            controller.strSubTitle.value,
+                            style: bohibaTheme.textTheme.titleLarge,
+                          )
                         ],
                       ),
                     )
@@ -66,7 +77,7 @@ class AllJobPage extends GetView<AllJobController> {
                         return GestureDetector(
                           onTap: () {
                             navigatorState
-                                .pushNamed(AppRoute.myJobDetail, arguments: job)
+                                .pushNamed(AppRoute.jobDetail, arguments: job)
                                 .then((onValue) async {
                               if (onValue != null || onValue != false) {
                                 await controller.getAllJobs();

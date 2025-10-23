@@ -7,9 +7,10 @@ import 'package:get/get.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<HomeController>(HomeController());
-    Get.put<TruckAllController>(TruckAllController());
+    Get.lazyPut<HomeController>(() => HomeController(), fenix: true);
+    Get.lazyPut<TruckAllController>(() => TruckAllController(), fenix: true);
     // Get.put<DriverAllController>(DriverAllController());
-    Get.put<OpenDriverListController>(OpenDriverListController());
+    Get.lazyPut<OpenDriverListController>(() => OpenDriverListController(),
+        fenix: true);
   }
 }

@@ -2,16 +2,13 @@ import '/component/image_path.dart';
 import '/services/role_permission_service.dart';
 import '/controllers/role_controller.dart';
 import '/controllers/home_controller.dart';
-import 'package:get/get.dart';
-
+import '/dist/component_exports.dart';
 import '/dist/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
+import 'package:get/get.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-
-import '/dist/component_exports.dart';
-// import '../image_path.dart';
 
 class HomeAppBar extends GetView<HomeController>
     implements PreferredSizeWidget {
@@ -22,6 +19,7 @@ class HomeAppBar extends GetView<HomeController>
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatState = Navigator.of(context);
     return PreferredSize(
       preferredSize: Size.fromHeight(ScreenUtils.height55),
       child: AppBar(
@@ -127,28 +125,27 @@ class HomeAppBar extends GetView<HomeController>
                 if (!context.mounted) return value;
                 switch (value) {
                   case ServiceType.driver:
-                    return await Get.toNamed(AppRoute.allDriver)!
+                    return await navigatState
+                        .pushNamed(AppRoute.allDriver)
                         .then((onValue) async {
                       if (onValue != null) {
                         await controller.getDriverList();
-                        await controller.getUserFavList();
                         controller.arrDriver.refresh();
                       }
                     });
                   case ServiceType.trip:
-                    return Get.toNamed(AppRoute.allTrip);
+                    return navigatState.pushNamed(AppRoute.allTrip);
                   case ServiceType.truck:
-                    return Get.toNamed(AppRoute.allTruck)!.then(
+                    return navigatState.pushNamed(AppRoute.allTruck).then(
                       (onValue) async {
                         if (onValue != null) {
-                          // await controller.getTruckList();
-                          // await controller.getUserFavList();
+                          await controller.getTruckList();
                           controller.arrTruck.refresh();
                         }
                       },
                     );
                   case ServiceType.expenses:
-                    return Get.toNamed(AppRoute.addOwnerExpense);
+                    return navigatState.pushNamed(AppRoute.addOwnerExpense);
                   case ServiceType.manager:
                     break;
 
@@ -163,7 +160,7 @@ class HomeAppBar extends GetView<HomeController>
           //Notification
           AppBarIconBox(
             onTap: () {
-              Navigator.of(context).pushNamed(AppRoute.notifyScreen);
+              navigatState.pushNamed(AppRoute.notifyScreen);
             },
             icon: const Icon(
               EvaIcons.bellOutline,

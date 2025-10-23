@@ -208,11 +208,12 @@ class DioService {
     } else if (response.statusCode == 200 && response.data != null ||
         response.statusCode == 201 && data['status'] == true) {
       return ApiResponse(
-          status: data["status"] ?? true,
-          statusCode: response.statusCode ?? 200,
-          message: data['message'] ?? "Success",
-          data: data['data'],
-          pagination: data['pagination']);
+        status: data["status"] ?? true,
+        statusCode: response.statusCode ?? 200,
+        message: data['message'] ?? "Success",
+        data: data['data'],
+        pagination: data['pagination'],
+      );
     } else {
       return ApiResponse(
         status: response.data["status"] ?? false,

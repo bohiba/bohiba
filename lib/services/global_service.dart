@@ -94,13 +94,13 @@ class GlobalService {
     Color? textColor = bohibaTheme.textTheme.bodySmall!.color;
     switch (status) {
       case AlertStatus.warning:
-        textColor = BohibaColors.warningColor;
+        textColor = bohibaTheme.colorScheme.error;
         break;
       case AlertStatus.success:
-        textColor = BohibaColors.successColor;
+        textColor = bohibaTheme.colorScheme.onSurface;
         break;
       case AlertStatus.info:
-        textColor = BohibaColors.primaryColor;
+        textColor = bohibaTheme.primaryColor;
         break;
       default:
     }
@@ -241,7 +241,7 @@ class GlobalService {
   }
 
   // ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
-  static SnackbarController appSnackBar({
+  static SnackbarController? showSnackBar({
     required AlertStatus status,
     String title = 'Bohiba',
     String desc = 'Something went wrong',
@@ -271,11 +271,15 @@ class GlobalService {
         iconData = Icons.wifi_off_rounded;
         break;
     }
+    if (Get.isSnackbarOpen) {
+      return null;
+    }
     return Get.showSnackbar(
       GetSnackBar(
         messageText: Text(
           desc,
           overflow: TextOverflow.ellipsis,
+          maxLines: 2,
           style: TextStyle(
             fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
             fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
@@ -285,7 +289,10 @@ class GlobalService {
         isDismissible: false,
         backgroundColor: color,
         shouldIconPulse: false,
-        icon: Icon(iconData, color: bohibaTheme.colorScheme.tertiary),
+        icon: Icon(
+          iconData,
+          color: bohibaTheme.colorScheme.tertiary,
+        ),
         borderRadius: 8.0,
         borderWidth: 0.0,
         margin: EdgeInsets.symmetric(horizontal: 15.w),
@@ -299,7 +306,7 @@ class GlobalService {
                   Get.back();
                 },
                 child: Text(
-                  'DISMISS',
+                  'CLOSE',
                   style: TextStyle(
                     fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                     fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
@@ -440,6 +447,6 @@ class GlobalService {
   }
 
   static printHandler(String log) {
-    // debugPrint("\n=================\n$log\n================\n");
+    debugPrint("\n=================\n$log\n================\n");
   }
 }

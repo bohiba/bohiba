@@ -1,10 +1,8 @@
 import '/dist/component_exports.dart';
 import 'package:get/get.dart';
-
-import '/controllers/fav_controller.dart';
 import 'package:flutter/material.dart';
 
-class FavouritePage extends GetView<FavController> {
+class FavouritePage extends GetView {
   const FavouritePage({super.key});
 
   @override

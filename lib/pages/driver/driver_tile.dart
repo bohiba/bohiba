@@ -55,7 +55,7 @@ class DriverTile extends GetView<DriverController> {
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
                       Text(
-                        driver.licenseDetail?.licenseNumber ?? 'NA',
+                        driver.licenseDetail?.licenseNumber ?? '',
                         maxLines: 1,
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,

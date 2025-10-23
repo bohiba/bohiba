@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/app_enums.dart';
+
 import '/model/news_model.dart';
 import '/services/news_service.dart';
 import 'package:get/get.dart';
@@ -12,17 +14,30 @@ class NewsController extends GetxController {
     NewsModel newsInfo = Get.arguments;
     super.onInit();
     Future.delayed(Duration.zero, () async {
-      await getNews(news: newsInfo);
+      if (newsInfo.id != null) {
+        await getNews(newsId: newsInfo.id!);
+      }
     });
   }
 
   Future<void> onRefreshNewsPage() async {
-    await getNews(news: newsDetail.value);
+    await getNews(
+        newsId: newsDetail.value.id!,
+        methodType: MethodType.api,
+        showLoading: false);
     newsRefresher.refreshCompleted();
   }
 
-  Future<void> getNews({required NewsModel news}) async {
-    NewsModel? newsModel = await NewsService.getNews(news: news);
+  Future<void> getNews({
+    required int newsId,
+    MethodType methodType = MethodType.local,
+    bool showLoading = true,
+  }) async {
+    NewsModel? newsModel = await NewsService.getNews(
+      id: newsId,
+      type: methodType,
+      showProgress: showLoading,
+    );
     if (newsModel != null) {
       newsDetail.value = newsModel;
     }
