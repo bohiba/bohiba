@@ -10,7 +10,7 @@ class DriverAllController extends GetxController {
   DioService dioService = DioService();
   AddAssetUsing addUserBy = AddAssetUsing.doc;
 
-  RxList<DriverModel> arrDriver = <DriverModel>[].obs;
+  RxList<UserModel> arrDriver = <UserModel>[].obs;
 
   @override
   void onInit() {
@@ -28,11 +28,11 @@ class DriverAllController extends GetxController {
     return success;
   }
 
-  Future<List<DriverModel>?> getDriverList({
+  Future<List<UserModel>?> getDriverList({
     MethodType type = MethodType.local,
     bool resetList = false,
   }) async {
-    List<DriverModel>? driverList =
+    List<UserModel>? driverList =
         await DriverService.getAllDriver(methodType: type, reset: resetList);
     if (driverList != null) {
       arrDriver.clear();

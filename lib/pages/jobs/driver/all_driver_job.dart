@@ -1,9 +1,11 @@
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
-import '/component/screen_utils.dart';
 import '/model/job_detail_model.dart';
 import '/extensions/bohiba_extension.dart';
+
+import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
+import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 
 import '/controllers/all_driver_job_controller.dart';
@@ -25,6 +27,14 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
       appBar: TitleAppbar(
         showLeading: false,
         title: 'Jobs',
+        actions: [
+          AppBarIconBox(
+            icon: Icon(EvaIcons.personAddOutline),
+            onTap: () {
+              navigateState.pushNamed(AppRoute.allRcvdRequest);
+            },
+          )
+        ],
       ),
       body: Obx(() {
         return SafeArea(

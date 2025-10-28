@@ -51,7 +51,7 @@ class DriverAddController extends ImageUploadController {
     });
   }
 
-  Future<DriverModel?> addDriver({String? truckNo}) async {
+  Future<UserModel?> addDriver({String? truckNo}) async {
     final isUuidFlow = addAsset.value == AddAssetUsing.uuid;
     final isDocFlow = addAsset.value == AddAssetUsing.doc;
 
@@ -108,7 +108,7 @@ class DriverAddController extends ImageUploadController {
     }
 
     if (bodyObj.isNotEmpty) {
-      DriverModel? driver = await DriverService.createDriver(
+      UserModel? driver = await DriverService.createDriver(
           bodyObj: bodyObj, vehcileNumber: truckNo);
       if (driver != null) {
         truckNo = null;

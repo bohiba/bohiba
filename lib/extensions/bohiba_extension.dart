@@ -154,35 +154,3 @@ ${Platform.isIOS ? "https://apps.apple.com/app/bohiba/driver-details/$id" : "htt
     await Share.share(shareableDriverDetails);
   }
 }
-
-extension ShareAppExtension on ShareApp {
-  String get shareApp {
-    return '''
-📢 *About Bohiba* 📢  
-
-Bohiba is a comprehensive fleet and driver management solution, designed to help businesses and individuals **efficiently manage drivers, track vehicles, and ensure regulatory compliance**.  
-
-✅ *Features of Bohiba*:  
-🔹 *Real-time driver & vehicle tracking*
-🔹 *Easy document & license management*  
-🔹 *Seamless communication & notifications*
-🔹 *Data-driven insights for better decision-making*
-
-Join thousands of businesses that trust Bohiba to *streamline fleet operations* and enhance *driver efficiency*.  
-
-📲 *Download Now*:  
-🔗 ${Platform.isIOS ? "https://apps.apple.com/app/bohiba" : "https://play.google.com/store/apps/details?id=com.bohiba.app"}  
-''';
-  }
-
-  Future<void> share() async {
-    await Share.share(shareApp);
-  }
-}
-
-class ShareApp {
-  final String code;
-  ShareApp({
-    required this.code,
-  });
-}

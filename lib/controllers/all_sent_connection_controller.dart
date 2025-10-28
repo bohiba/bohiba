@@ -3,7 +3,7 @@ import '/services/open_driver_service.dart';
 import 'package:get/get.dart';
 
 class AllSentRequestController extends GetxController {
-  RxList<DriverModel> arrSentReq = <DriverModel>[].obs;
+  RxList<UserModel> arrSentReq = <UserModel>[].obs;
   RxString strHeaderMsg = ''.obs;
   RxString strDescription = ''.obs;
 
@@ -17,7 +17,7 @@ class AllSentRequestController extends GetxController {
   }
 
   Future<void> getSentReq({bool showLoading = true, bool reset = false}) async {
-    List<DriverModel>? sentReqList = await OpenDriverService.getSentReqList(
+    List<UserModel>? sentReqList = await OpenDriverService.getSentReqList(
       showProgress: showLoading,
     );
 
@@ -33,7 +33,7 @@ class AllSentRequestController extends GetxController {
   }
 
   Future<void> getAllOpenDriver() async {
-    List<DriverModel>? openDriverList =
+    List<UserModel>? openDriverList =
         await OpenDriverService.getAllOpenDriver();
 
     if (openDriverList != null) {

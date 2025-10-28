@@ -117,7 +117,7 @@ class DriverAddPage extends GetView<DriverAddController> {
                 PrimaryButton(
                   label: "Add Driver",
                   onPressed: () async {
-                    DriverModel? driver = await controller.addDriver();
+                    UserModel? driver = await controller.addDriver();
                     if (driver != null) {
                       navigatorState.pop(true);
                     }

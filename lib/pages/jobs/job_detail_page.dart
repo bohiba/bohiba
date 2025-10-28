@@ -1,6 +1,6 @@
-import 'package:bohiba/component/bohiba_buttons/primary_button.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
-import 'package:bohiba/model/job_detail_model.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/extensions/bohiba_extension.dart';
+import '/model/job_detail_model.dart';
 
 import '/services/launcher_service.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -153,7 +153,9 @@ class JobDetailPage extends GetView<JobController> {
                             driverWidget: PrimaryButton(
                               height: 40,
                               label: 'Apply',
-                              onPressed: () {},
+                              onPressed: () async {
+                                await controller.applyToJob();
+                              },
                             ),
                           ),
                           RoleWidget(

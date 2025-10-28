@@ -10,7 +10,7 @@ import '/component/bohiba_buttons/primary_button.dart';
 import '/theme/bohiba_theme.dart';
 
 class DriverDetialsModalSheet extends GetView<DriverController> {
-  final DriverModel driver;
+  final UserModel driver;
   const DriverDetialsModalSheet({super.key, required this.driver});
 
   @override

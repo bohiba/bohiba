@@ -124,7 +124,7 @@ class RatingService {
       case 201:
         Get.back();
         GlobalService.dismissProgress();
-        GlobalService.getAlertDialog(
+        GlobalService.showDialog(
           status: AlertStatus.success,
           title: 'SUCCESS',
           description: 'Thank you for sharing your experience with us.',

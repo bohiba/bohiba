@@ -81,7 +81,7 @@ class HomeFavListSection extends GetView<HomeController> {
 
                   if (favObj.containsKey('license_detail')) {
                     return DriverTile(
-                      driver: DriverModel.fromJson(favObj),
+                      driver: UserModel.fromJson(favObj),
                       onPressed: () {
                         navigatorState
                             .pushNamed(AppRoute.driver, arguments: favObj)

@@ -15,12 +15,12 @@ class EditTruckController extends GetxController
   final TextEditingController assignDriverCtlr = TextEditingController();
   late AnimationController rotationController;
 
-  RxList<DriverModel> arrDriver = <DriverModel>[].obs;
+  RxList<UserModel> arrDriver = <UserModel>[].obs;
 
   RxBool isDriverAssigned = false.obs;
   RxBool isRotating = false.obs;
 
-  Rx<DriverModel> driverModel = DriverModel().obs;
+  Rx<UserModel> driverModel = UserModel().obs;
   Rx<TruckModel> truck = TruckModel().obs;
 
   @override
@@ -50,14 +50,14 @@ class EditTruckController extends GetxController
   }
 
   Future<void> _getDriverList() async {
-    List<DriverModel>? driverList = await DriverService.getAllDriver();
+    List<UserModel>? driverList = await DriverService.getAllDriver();
     if (driverList != null) {
       arrDriver.clear();
       arrDriver.addAll(driverList);
     }
   }
 
-  Future<int> assignDriver({required DriverModel driverInfo}) async {
+  Future<int> assignDriver({required UserModel driverInfo}) async {
     if (driverInfo.profile?.driverUuid == null) {
       GlobalService.showAppToast(message: 'Please select driver');
       return 0;

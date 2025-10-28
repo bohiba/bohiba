@@ -156,7 +156,7 @@ class TripPage extends GetView<TripController> {
                                   .tripInfo.value.tripStatus?.capitalizeFirst
                                   ?.replaceAll('_', ' ') ??
                               '',
-                          titleColor: controller.statusColor(),
+                          statusColor: controller.statusColor(),
                         ),
                       ],
                     ),

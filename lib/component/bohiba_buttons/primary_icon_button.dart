@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/component/screen_utils.dart';
 
 import '/theme/bohiba_theme.dart';
@@ -36,7 +38,7 @@ class PrimaryTextIconButton extends StatelessWidget {
       ),
       icon: widget,
       style: ElevatedButton.styleFrom(
-        fixedSize: Size(width ?? ScreenUtils.width * 0.9, height ?? 47),
+        fixedSize: Size(width ?? ScreenUtils.width * 0.9, height ?? 32.h),
         backgroundColor: color ?? BohibaColors.primaryColor,
       ),
     );

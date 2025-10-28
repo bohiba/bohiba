@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+
 import 'global_service.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -7,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 3;
+  static int dbversion = 4;
 
   /*================  DB CONFIG  =================== */
 
@@ -20,7 +24,14 @@ class DatabaseService {
   }
 
   Future<Database> _openDatabase() async {
-    String filePath = await getDatabasesPath();
+    String filePath = '';
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    } else {
+      databaseFactory = databaseFactory;
+      filePath = await getDatabasesPath();
+    }
+
     String dbPath = '$filePath/bohiba.db';
     GlobalService.printHandler('DB Path: $dbPath');
     return openDatabase(

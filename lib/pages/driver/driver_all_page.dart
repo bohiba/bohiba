@@ -94,7 +94,7 @@ class DriverAllPage extends GetView<DriverAllController> {
                     right: ScreenUtils.width15,
                   ),
                   itemBuilder: (context, index) {
-                    DriverModel driverObj = controller.arrDriver[index];
+                    UserModel driverObj = controller.arrDriver[index];
                     return DriverTile(
                       driver: driverObj,
                       allowedActions: [

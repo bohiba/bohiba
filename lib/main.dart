@@ -1,17 +1,16 @@
 import 'dart:async';
 
+import 'theme/bohiba_theme.dart';
 import '/controllers/theme_controller.dart';
 import '/services/pref_utils.dart';
 import '/services/db2_service.dart';
 import 'services/global_service.dart';
-import 'package:get/get.dart';
 import '/component/screen_utils.dart';
+import 'package:get/get.dart';
 import 'routes/app_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'theme/bohiba_theme.dart';
 
 Future<void> main() async {
   runZonedGuarded(() async {

@@ -21,7 +21,7 @@ class RatingAllPage extends GetView<DriverController> {
   Widget build(context) {
     final navigateState = Navigator.of(context);
     return Obx(() {
-      DriverModel driver = controller.driverModel.value;
+      UserModel driver = controller.driverModel.value;
       return Scaffold(
           appBar: TitleAppbar(
             title: driver.profile?.name ?? 'NA',

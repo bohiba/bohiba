@@ -25,8 +25,7 @@ class CreateUserPage extends GetView<CreateUserController> {
     var route = Get.arguments;
     if (route == null) {
     } else {
-      final Map<String, dynamic> argsObj = route as Map<String, dynamic>;
-      email = argsObj['email'];
+      email = route['email'];
     }
     final NavigatorState navigateState = Navigator.of(context);
     return Scaffold(
@@ -131,7 +130,7 @@ class CreateUserPage extends GetView<CreateUserController> {
                             await GlobalService.datePickerModal(
                           context: context,
                           endYear: endDateTime,
-                          title: 'Choose your Date of Birth',
+                          title: 'Choose Date of Birth',
                         );
 
                         if (controller.pickedDate != null) {

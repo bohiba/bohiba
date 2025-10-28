@@ -19,7 +19,6 @@ class ProfileService {
   static final DatabaseService _databaseService = DatabaseService();
   static final PrefUtils _prefUtils = PrefUtils();
 
-  /// TODO: On 2nd version
   static Future<int> switchAccount({required LoggedInAccountModel user}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
@@ -51,19 +50,7 @@ class ProfileService {
 
     switch (response.statusCode) {
       case 200:
-        Map<String, dynamic> resObj = response.data;
-        if (resObj.containsKey('user_uuid')) {
-          resObj['uuid'] = resObj['user_uuid'];
-          resObj.remove('user_uuid');
-        }
-        ProfileModel? profileModel = ProfileModel.fromJson(resObj);
-        String strQueryUpdate = ''' UPDATE $tblProfile SET
-          aadharNumber = '${profileModel.aadharNumber}'
-        , dlNumber = '${profileModel.dlNumber}'
-        , panNumber = '${profileModel.panNumber}' WHERE uuid = '${profileModel.uuid}'; ''';
-        int update = await _databaseService.updateData(strQueryUpdate);
-        GlobalService.dismissProgress();
-        return update;
+        return 1;
       case 401:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
@@ -127,7 +114,8 @@ class ProfileService {
     }
   }
 
-  static Future<int> setRole({required Map<String, dynamic> bodyMap}) async {
+  static Future<int> setRole(
+      {required Map<String, dynamic> bodyMap, bool initRole = false}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
@@ -138,6 +126,10 @@ class ProfileService {
     );
     switch (response.statusCode) {
       case 200:
+        if (initRole) {
+          GlobalService.dismissProgress();
+          return 1;
+        }
         Map<dynamic, dynamic> resMap = response.data as Map<dynamic, dynamic>;
         String updateImgQuery =
             '''UPDATE $tblProfile SET roleId = ${resMap['role_id']}''';
@@ -177,11 +169,8 @@ class ProfileService {
 
     switch (response.statusCode) {
       case 200:
-        String updateImgQuery =
-            '''UPDATE SET image = '${response.data.toString()}'; ''';
-        int success = await _databaseService.updateData(updateImgQuery);
         GlobalService.dismissProgress();
-        return success;
+        return 1;
       case 401:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
@@ -197,6 +186,7 @@ class ProfileService {
 
   static Future<int> addOrUpdateAddress({
     required Map<String, dynamic> bodyMap,
+    bool initAddress = false,
   }) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
@@ -206,7 +196,11 @@ class ProfileService {
         await _dioService.post(ApiEndPoint.apiAddAddress, body: bodyMap);
 
     switch (response.statusCode) {
-      case 201:
+      case 200 || 201:
+        if (initAddress) {
+          GlobalService.dismissProgress();
+          return 1;
+        }
         ProfileModel profile = ProfileModel.fromJson(response.data);
         String strQueryUpdate = '''UPDATE $tblProfile SET
           houseNo = '${profile.houseNo}'
@@ -336,16 +330,18 @@ class ProfileService {
         GlobalService.showSnackBar(status: AlertStatus.info, desc: res.message);
         return 0;
       case 200 || 201:
-        Map<String, dynamic> resObj = ProfileModel.toDB(res.data);
-        int insertSuccess = await addLocalProfile(profile: resObj);
+        Map<String, dynamic> resObj = res.data;
+        _dioService.setToken(resObj["token"]);
+        await _prefUtils.saveString(PrefUtils.token, resObj["token"]);
+        /*int insertSuccess = await addLocalProfile(profile: resObj);
         if (insertSuccess > 0) {
           GlobalService.showSnackBar(
               status: AlertStatus.success,
               title: 'Bohiba',
               desc: 'Account created succesfully');
-        }
+        }*/
         GlobalService.dismissProgress();
-        return insertSuccess;
+        return 1;
       default:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(

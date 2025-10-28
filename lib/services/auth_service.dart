@@ -209,9 +209,6 @@ class AuthService {
         );
         return 0;
       case 200:
-        String token = serviceResponse.data['token'];
-        _dioService.setToken(token);
-        await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
           status: AlertStatus.success,

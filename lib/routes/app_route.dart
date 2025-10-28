@@ -1,3 +1,7 @@
+import '/bindings/all_recived_request_binding.dart';
+
+import '/pages/jobs/driver/all_received_request_page.dart';
+
 import '/bindings/all_applied_job_binding.dart';
 import 'package:bohiba/bindings/change_password_binding.dart';
 import 'package:bohiba/pages/jobs/driver/all_applied_job.dart';
@@ -29,7 +33,7 @@ import '/bindings/forgot_password_binding.dart';
 import '/bindings/otp_binding.dart';
 
 import '/pages/authentication/password_screen/forgot_uuid_page.dart';
-import '/pages/driver/all_sent_request_page.dart';
+import '/pages/jobs/owner/all_sent_request_page.dart';
 import '/pages/expenses/add_owner_expenses_screen.dart';
 
 import '/bindings/analytic_binding.dart';
@@ -38,19 +42,22 @@ import '/pages/analytic/analytic_page.dart';
 import '/bindings/update_contact_binding.dart';
 import '/pages/user/user_profile/update_contact_info_page.dart';
 
-import '../pages/jobs/owner/add_jobs_page.dart';
-import '../pages/jobs/job_detail_page.dart';
-import '../pages/jobs/owner/all_job_page.dart';
+import '/pages/jobs/owner/add_jobs_page.dart';
+import '/pages/jobs/job_detail_page.dart';
+import '/pages/jobs/owner/all_job_page.dart';
 
 import '/bindings/all_job_binding.dart';
 import '/bindings/add_job_binding.dart';
-import '../bindings/job_detail_binding.dart';
+import '/bindings/job_detail_binding.dart';
 import '/bindings/security_binding.dart';
 
 import '/bindings/setting_binding.dart';
 import '/pages/security/security_page.dart';
 import '/pages/setting/setting_page.dart';
+
+import '/bindings/share_binding.dart';
 import '/pages/share/share_earn_page.dart';
+
 import '/pages/support/contact_support_page.dart';
 import '/pages/support/privacy_policy_page.dart';
 import '/pages/support/report_issue.dart';
@@ -179,6 +186,8 @@ class AppRoute {
   static const String allSentReq = '/all-sent-req';
 
   static const String ratingDriver = '/rate-driver';
+
+  static const String allRcvdRequest = '/all-rcvd-request';
 
   //Manager
   static const String manager = "/manger";
@@ -565,7 +574,11 @@ class AppRoute {
       binding: SecurityBinding(),
       page: () => SecurityPage(),
     ),
-    GetPage(name: shareEarn, page: () => ShareEarnPage()),
+    GetPage(
+      name: shareEarn,
+      binding: ShareBinding(),
+      page: () => ShareEarnPage(),
+    ),
 
     GetPage(name: policy, page: () => PolicyPage()),
     GetPage(name: contact, page: () => ContactSupportPage()),
@@ -591,6 +604,12 @@ class AppRoute {
       name: allAppliedJob,
       binding: AllAppliedJobBinding(),
       page: () => AllAppliedJobPage(),
-    )
+    ),
+
+    GetPage(
+      name: allRcvdRequest,
+      binding: AllRecivedRequestBinding(),
+      page: () => AllReceivedRequestPage(),
+    ),
   ];
 }

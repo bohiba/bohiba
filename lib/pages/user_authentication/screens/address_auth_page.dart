@@ -1,5 +1,3 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '/dist/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
@@ -34,7 +32,29 @@ class AddressAuthPage extends GetView<AddressAuthController> {
             AppBarIconBox(
               onTap: () {
                 GlobalService.closeKeyboard();
-                Get.bottomSheet(
+                showModalBottomSheet(
+                    context: context,
+                    shape: BottomModalShape(),
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    enableDrag: true,
+                    builder: (context) {
+                      return AllLocationModal();
+                    }).then((address) {
+                  if (address == null) {
+                    return;
+                  }
+                  controller.aHouseCtrl.text = address['name'] ?? '';
+                  controller.aLocalityCtrl.text = address['locality'] ?? '';
+                  controller.aStreetCtrl.text =
+                      '${address['street']}, ${address['locality']}';
+                  controller.aCityCtrl.text = address['city'] ?? '';
+                  controller.aDistrictCtrl.text = address['district'] ?? '';
+                  controller.aStateCtrl.text = address['state'] ?? '';
+                  controller.aPincodeCtrl.text = address['pincode'] ?? '';
+                  controller.aCountryCtrl.text = address['country'] ?? '';
+                });
+                /*Get.bottomSheet(
                   AllLocationModal(),
                   shape: BottomModalShape(),
                   ignoreSafeArea: false,
@@ -53,7 +73,7 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                   controller.aStateCtrl.text = address['state'] ?? '';
                   controller.aPincodeCtrl.text = address['pincode'] ?? '';
                   controller.aCountryCtrl.text = address['country'] ?? '';
-                });
+                });*/
               },
               icon: Icon(RemixIcons.map_pin_fill),
             )
@@ -81,9 +101,10 @@ class AddressAuthPage extends GetView<AddressAuthController> {
           },
           child: SafeArea(
             child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: ScreenUtils.height15,
-                horizontal: ScreenUtils.width20,
+              padding: EdgeInsets.only(
+                top: ScreenUtils.height15,
+                left: ScreenUtils.width20,
+                right: ScreenUtils.width20,
               ),
               child: Column(
                 children: [
@@ -202,7 +223,6 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                     ),
                   ),
                   PrimaryButton(
-                    padding: EdgeInsets.only(bottom: 15.h),
                     onPressed: () async {
                       int success = await controller.addAddress();
                       if (success > 0) {

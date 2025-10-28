@@ -17,7 +17,7 @@ import 'package:get/get.dart';
 
 class DriverMenu extends GetView<DriverAllController> {
   final Icon? icon;
-  final DriverModel driver;
+  final UserModel driver;
   final List<ActionType> allowedActions;
   final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
       onActionComplete;

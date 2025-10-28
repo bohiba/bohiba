@@ -72,17 +72,18 @@ class ExplorePage extends GetView<OpenDriverListController> {
       body: Obx(() {
         return Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: ScreenUtils.height10,
-                left: ScreenUtils.height15,
-                right: ScreenUtils.height15,
-                bottom: ScreenUtils.height10,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  navigateState.pushNamed(AppRoute.allSentReq);
-                },
+            GestureDetector(
+              onTap: () {
+                navigateState.pushNamed(AppRoute.allSentReq);
+              },
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: ScreenUtils.height10,
+                  left: ScreenUtils.height15,
+                  right: ScreenUtils.height15,
+                  bottom: ScreenUtils.height10,
+                ),
+                color: BohibaColors.transparent,
                 child: Container(
                   padding: EdgeInsets.only(
                     top: ScreenUtils.height10,
@@ -126,7 +127,7 @@ class ExplorePage extends GetView<OpenDriverListController> {
                   ),
                   itemCount: controller.arrOpenDriver.length,
                   itemBuilder: (context, index) {
-                    DriverModel openDriver = controller.arrOpenDriver[index];
+                    UserModel openDriver = controller.arrOpenDriver[index];
                     return OpenDriverTile(
                       openDriver: openDriver,
                       onTap: () {

@@ -17,7 +17,7 @@ class MasterController extends GetxController {
   final RxList<TripModel> arrTrip = <TripModel>[].obs;
   final RxList<TruckModel> arrTruck = <TruckModel>[].obs;
   final RxList<MinesModel> arrMines = <MinesModel>[].obs;
-  final RxList<DriverModel> arrDriver = <DriverModel>[].obs;
+  final RxList<UserModel> arrDriver = <UserModel>[].obs;
   final RxList arrOwnerExpense = [].obs;
   final RxList arrLookingJob = [].obs;
   final RxList arrPromotion = [].obs;

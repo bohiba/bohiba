@@ -23,7 +23,7 @@ class HomeController extends GetxController {
   final RxList<TripModel> arrTrip = <TripModel>[].obs;
   final RxList<TruckModel> arrTruck = <TruckModel>[].obs;
   final RxList<MinesModel> arrMines = <MinesModel>[].obs;
-  final RxList<DriverModel> arrDriver = <DriverModel>[].obs;
+  final RxList<UserModel> arrDriver = <UserModel>[].obs;
   final RxList arrOwnerExpense = [].obs;
   final RxList arrLookingJob = [].obs;
   final RxList arrPromotion = [].obs;
@@ -61,8 +61,8 @@ class HomeController extends GetxController {
     return favourite;
   }*/
 
-  Future<List<DriverModel>> getDriverList() async {
-    List<DriverModel> arrTucks = await DriverService.getAllDriver() ?? [];
+  Future<List<UserModel>> getDriverList() async {
+    List<UserModel> arrTucks = await DriverService.getAllDriver() ?? [];
     arrDriver.clear();
     arrDriver.addAll(arrTucks);
     return arrTucks;

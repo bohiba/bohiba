@@ -9,14 +9,14 @@ class StatusBoxWidget extends StatelessWidget {
   final VoidCallback? onClick;
   final String header;
   final String? title;
-  final Color? titleColor;
+  final Color? statusColor;
   final bool showArrow;
   const StatusBoxWidget({
     super.key,
     this.onClick,
     this.header = 'NA',
     this.title,
-    this.titleColor,
+    this.statusColor,
     this.showArrow = false,
   });
 
@@ -48,7 +48,7 @@ class StatusBoxWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
               decoration: BoxDecoration(
-                color: titleColor ??
+                color: statusColor ??
                     bohibaTheme.colorScheme.onSurface.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(20.r),
               ),
@@ -57,7 +57,7 @@ class StatusBoxWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                   fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                  color: bohibaTheme.textTheme.bodyLarge!.color,
+                  color: bohibaTheme.textTheme.displayLarge!.color,
                 ),
               ),
             ),

@@ -136,17 +136,10 @@ class UserDocAuthPage extends GetView<UserDocAuthController> {
                   onPressed: () async {
                     int verifiedDoc = await controller.validateUserDoc();
                     if (verifiedDoc > 0) {
-                      if (controller.isTruckOwner) {
-                        navigateState.popAndPushNamed(
-                          AppRoute.addTruck,
-                          arguments: {'showLeading': false},
-                        );
-                      } else {
-                        navigateState.pushNamedAndRemoveUntil(
-                          AppRoute.signIn,
-                          ModalRoute.withName(AppRoute.signIn),
-                        );
-                      }
+                      navigateState.pushNamedAndRemoveUntil(
+                        AppRoute.signIn,
+                        ModalRoute.withName(AppRoute.signIn),
+                      );
                     }
                   },
                   label: 'Verify',

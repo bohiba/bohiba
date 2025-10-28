@@ -36,6 +36,9 @@ class JobController extends GetxController {
 
   Future<void> applyToJob() async {
     int success = await DriverJobService.applyToJob(jobId: jobObj.value.id!);
+    if (success > 0) {
+      // Success
+    }
   }
 
   Future<void> driverJobDetail() async {

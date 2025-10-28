@@ -1,11 +1,11 @@
 import 'dart:async';
+import '/controllers/truck_controller.dart';
 import '/controllers/role_controller.dart';
 import '/services/role_permission_service.dart';
 
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
-import '/controllers/truck_all_controller.dart';
 import '/dist/app_enums.dart';
 import '/model/truck_model.dart';
 import '/pages/truck/vehicle_detail_modal.dart';
@@ -15,7 +15,7 @@ import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TruckMenu extends GetView<TruckAllController> {
+class TruckMenu extends GetView<TruckController> {
   final Icon? icon;
   final TruckModel truck;
   final List<ActionType> allowedActions;

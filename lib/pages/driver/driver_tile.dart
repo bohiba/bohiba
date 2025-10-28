@@ -11,7 +11,7 @@ import '/theme/bohiba_theme.dart';
 import 'package:get/get.dart';
 
 class DriverTile extends GetView<DriverController> {
-  final DriverModel driver;
+  final UserModel driver;
   final Function()? onPressed;
   final List<ActionType> allowedActions;
   final Map<ActionType, FutureOr<void> Function(dynamic value)?>?

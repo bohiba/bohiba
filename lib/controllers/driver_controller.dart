@@ -21,10 +21,10 @@ class DriverController extends GetxController {
   Rx<double> rateStar = 0.0.obs;
   TextEditingController feedbackCtrl = TextEditingController();
 
-  Rx<DriverModel> driverModel = DriverModel().obs;
+  Rx<UserModel> driverModel = UserModel().obs;
   Rx<ProfileModel> profileModel = ProfileModel().obs;
 
-  RxList<DriverModel> arrDriver = <DriverModel>[].obs;
+  RxList<UserModel> arrDriver = <UserModel>[].obs;
   final List suggestion = [
     'Safe Driver',
     'Need improvement in Driving',
@@ -46,7 +46,7 @@ class DriverController extends GetxController {
   }
 
   Future<void> getDriverInfo({MethodType methodType = MethodType.local}) async {
-    DriverModel? driver = await DriverService.getDriver(
+    UserModel? driver = await DriverService.getDriver(
         id: driverModel.value.id!, type: methodType);
     if (driver != null) {
       driverModel.value = driver;

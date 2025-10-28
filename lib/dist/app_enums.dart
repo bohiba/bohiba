@@ -39,3 +39,5 @@ enum TransitionType {
   scale,
   rotation
 }
+
+enum ConnectionType { accept, reject }

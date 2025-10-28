@@ -58,7 +58,7 @@ class AllSentRequestPage extends GetView<AllSentRequestController> {
                     ),
                     itemCount: controller.arrSentReq.length,
                     itemBuilder: (context, index) {
-                      DriverModel openDriver = controller.arrSentReq[index];
+                      UserModel openDriver = controller.arrSentReq[index];
                       return OpenDriverTile(
                         openDriver: openDriver,
                         onTap: () {

@@ -21,15 +21,9 @@ class TruckAllController extends GetxController {
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;
 
   RxBool isFav = false.obs;
-  bool showLeading = true;
 
   @override
   void onInit() {
-    Map? routeInfo = Get.arguments;
-    if (routeInfo != null) {
-      showLeading = routeInfo['showLeading'];
-    }
-
     super.onInit();
     Future.delayed(Duration.zero, () async {
       await getTruckList();

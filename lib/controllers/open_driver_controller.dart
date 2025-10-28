@@ -4,7 +4,7 @@ import '/services/open_driver_service.dart';
 import 'package:get/get.dart';
 
 class OpenDriverController extends GetxController {
-  Rx<DriverModel> openDriver = DriverModel().obs;
+  Rx<UserModel> openDriver = UserModel().obs;
   RxBool popResult = false.obs;
   RxDouble avgRating = 0.0.obs;
 
@@ -22,7 +22,7 @@ class OpenDriverController extends GetxController {
   Future<void> connect() async {
     if (openDriver.value.profile?.connect != null) return;
     openDriver.value.profile!.connect = 'pending';
-    DriverModel? openDriverInfo =
+    UserModel? openDriverInfo =
         await OpenDriverService.connectDriver(driverInfo: openDriver.value);
     if (openDriverInfo != null) {
       popResult.value = true;
@@ -31,7 +31,7 @@ class OpenDriverController extends GetxController {
   }
 
   Future<void> getOpenDriver({required int id}) async {
-    DriverModel? driverInfo =
+    UserModel? driverInfo =
         await OpenDriverService.getOpenDriverPrfl(driverId: id);
     if (driverInfo != null) {
       openDriver.value = driverInfo;

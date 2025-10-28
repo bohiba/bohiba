@@ -7,27 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-class AllTripController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class AllTripController extends GetxController {
   RefreshController refreshController = RefreshController();
-  Rxn<TabController> tabController = Rxn();
   final ScrollController scrollController = ScrollController();
 
   Rx<TripModel> tripModel = TripModel().obs;
   RxList<TripModel> arrTrip = <TripModel>[].obs;
 
-  final List<String> tabs = [
-    'All',
-    'In Transit',
-    'Completed',
-    'Unloading',
-    'Delayed',
-    'Cancelled',
-    'On Hold',
-    'Reassigned',
-  ];
-
-  List<String> get statuses => convertToSnakeCase(tabs);
+  // List<String> get statuses => convertToSnakeCase(List<String> tabs);
   RxBool isLoading = false.obs;
   RxBool hasMore = true.obs;
 
@@ -36,7 +23,6 @@ class AllTripController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController.value = TabController(length: tabs.length, vsync: this);
     TruckModel? vehicle = Get.arguments;
     Future.delayed(Duration.zero, () async {
       if (vehicle != null) {
@@ -137,7 +123,6 @@ class AllTripController extends GetxController
 
   @override
   void onClose() {
-    tabController.value?.dispose();
     scrollController.dispose();
     super.onClose();
   }

@@ -1,6 +1,8 @@
-import '/pages/widget/role_widget.dart';
+import '/dist/app_enums.dart';
 
+import '/pages/widget/role_widget.dart';
 import '/pages/widget/permission_widget.dart';
+import '/services/global_service.dart';
 import '/services/role_permission_service.dart';
 import '/extensions/bohiba_extension.dart';
 import '/routes/app_route.dart';
@@ -98,7 +100,6 @@ class DashboardPage extends GetView<DashboardController> {
                               ),
                             ),
 
-                            // TODO: On 2nd version
                             /*SmallTabComponent(
                               onTap: () {
                                 Navigator.push(
@@ -212,7 +213,16 @@ class DashboardPage extends GetView<DashboardController> {
                 ),
                 SingleTileTabComponent(
                   onTap: () {
-                    navigator.pushNamed(AppRoute.reportIssue);
+                    // navigator.pushNamed(AppRoute.reportIssue);
+                    GlobalService.showDialog(
+                      status: AlertStatus.info,
+                      title: 'Under Developement',
+                      description:
+                          'This feature is currently under development and will be available in a future release. Stay tuned for updates!',
+                      onExit: () {
+                        Navigator.pop(context);
+                      },
+                    );
                   },
                   icon: RemixIcons.bug_2_line,
                   title: 'Report an Issue',

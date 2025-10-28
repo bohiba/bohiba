@@ -5,7 +5,7 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class OpenDriverListController extends GetxController {
   RefreshController refreshController = RefreshController();
-  RxList<DriverModel> arrOpenDriver = <DriverModel>[].obs;
+  RxList<UserModel> arrOpenDriver = <UserModel>[].obs;
 
   @override
   void onInit() {
@@ -20,8 +20,7 @@ class OpenDriverListController extends GetxController {
     bool refresh = false,
     bool showLoading = true,
   }) async {
-    List<DriverModel>? openDriverList =
-        await OpenDriverService.getAllOpenDriver(
+    List<UserModel>? openDriverList = await OpenDriverService.getAllOpenDriver(
       reset: refresh,
       showProgress: showLoading,
     );

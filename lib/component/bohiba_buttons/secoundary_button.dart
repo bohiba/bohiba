@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -5,16 +7,16 @@ import 'package:flutter/material.dart';
 class SecoundaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final Color? color;
   final Color? textColor;
   const SecoundaryButton({
     super.key,
     this.onPressed,
     this.label = 'Submit',
-    this.width = 120,
-    this.height = 47,
+    this.width,
+    this.height,
     this.color,
     this.textColor,
   });
@@ -24,7 +26,7 @@ class SecoundaryButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        fixedSize: Size(width, height),
+        fixedSize: Size(width ?? 120.w, height ?? 32.h),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
             ScreenUtils.width10,

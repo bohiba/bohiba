@@ -1,23 +1,24 @@
-import '/component/bohiba_appbar/title_appbar.dart';
-import '/component/bohiba_buttons/primary_icon_button.dart';
-import '/component/bohiba_buttons/secoundary_button.dart';
-import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/services/launcher_service.dart';
+import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
 import '/pages/widget/icon_text_tile.dart';
-import '/pages/widget/linear_box_widget.dart';
-import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:remixicon/remixicon.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
 
-class ShareEarnPage extends StatelessWidget {
+import '/controllers/share_contoroller.dart';
+
+import 'package:get/get.dart';
+import 'package:gap/gap.dart';
+import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+
+class ShareEarnPage extends GetView<ShareController> {
   const ShareEarnPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitleAppbar(title: 'Share and Earn'),
+      appBar: TitleAppbar(title: 'Share'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -29,53 +30,82 @@ class ShareEarnPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Invite friends and earn rewards",
+                Text("Invite friends",
                     style: bohibaTheme.textTheme.headlineMedium),
                 Text(
-                  'Share your refferral code or link with friends When they join and complete their first trip, both you`ll both earn rewards.',
+                  'Share your refferral code or link with friends and start building strong community of driver and truck owner.',
                   style: bohibaTheme.textTheme.titleMedium,
                 ),
                 Gap(ScreenUtils.height20),
-                TextInputField(
+                /*TextInputField(
                   hintText: 'Refferal Code',
+                  controller: controller.textEditingController,
+                  maxLines: 1,
+                  readOnly: true,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SecoundaryButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await LauncherService.shareViaAnyApp();
+                      },
                       width: ScreenUtils.width * 0.65,
                       label: 'Share Link',
                     ),
                     PrimaryTextIconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                              text: controller.textEditingController.text),
+                        );
+                      },
                       width: ScreenUtils.width * 0.25,
                       widget: Icon(Icons.copy_all_outlined),
                       label: 'Copy',
                     )
                   ],
                 ),
-                Gap(ScreenUtils.height30),
+                Gap(ScreenUtils.height30),*/
                 Text('Share your Link via',
                     style: bohibaTheme.textTheme.headlineMedium),
                 IconTextTile(
                   icon: Remix.whatsapp_line,
                   text: 'WhatsApp',
+                  onTap: () async {
+                    await LauncherService.shareAppOnWhatsApp();
+                  },
                 ),
                 IconTextTile(
                   icon: Remix.telegram_2_line,
                   text: 'Telegram',
+                  onTap: () async {
+                    await LauncherService.shareAppOnTelegram();
+                  },
                 ),
                 IconTextTile(
                   icon: EvaIcons.emailOutline,
                   text: 'Mail',
+                  onTap: () async {
+                    await LauncherService.shareViaEmail();
+                  },
                 ),
                 IconTextTile(
                   icon: Icons.sms_outlined,
                   text: 'SMS',
+                  onTap: () async {
+                    await LauncherService.shareViaSms();
+                  },
+                ),
+                IconTextTile(
+                  icon: Icons.apps,
+                  text: 'Other',
+                  onTap: () async {
+                    await LauncherService.shareViaAnyApp();
+                  },
                 ),
                 Gap(ScreenUtils.height30),
-                Text('Rewards', style: bohibaTheme.textTheme.headlineMedium),
+                /*Text('Rewards', style: bohibaTheme.textTheme.headlineMedium),
                 LinearBoxWidget(
                   header: 'Friend Joined',
                   title: '1',
@@ -84,25 +114,26 @@ class ShareEarnPage extends StatelessWidget {
                   header: 'Point Earneds',
                   title: '500',
                 ),
-                Gap(ScreenUtils.height30),
+                Gap(ScreenUtils.height30),*/
                 Text('How it works',
                     style: bohibaTheme.textTheme.headlineMedium),
                 IconTextTile(
                   icon: Icons.share_outlined,
                   text: '1. Share',
                   subtitle:
-                      'Share your refferal link or code with you friends.',
+                      'Invite your fellow truck owners and drivers to join Bohiba.',
                 ),
                 IconTextTile(
                   icon: EvaIcons.personAddOutline,
-                  text: '2. Sign Up',
-                  subtitle: 'Your friend signup using your refferal.',
+                  text: '2. Grow the Community',
+                  subtitle:
+                      'The more users join, the stronger and more connected our trucking network becomes.',
                 ),
                 IconTextTile(
                   icon: EvaIcons.giftOutline,
-                  text: '3. Earn',
+                  text: '3. Benefit Together',
                   subtitle:
-                      'Once they complete their first trip, you both will get rewards.',
+                      'A bigger community means better updates, more opportunities, and easier access to trips and resources for everyone.',
                 ),
               ],
             ),

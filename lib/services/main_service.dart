@@ -27,8 +27,8 @@ class MainService {
       List<TripModel> mainTrips = await TripService.getAllTrip() ?? [];
       List<TruckModel> mainTrucks = await TruckService.getTruckList();
       List<MinesModel> mainMines = await MinesService.getMinesList() ?? [];
-      List<DriverModel> mainDrivers = await DriverService.getAllDriver() ?? [];
-      List<DriverModel> openToDriverList =
+      List<UserModel> mainDrivers = await DriverService.getAllDriver() ?? [];
+      List<UserModel> openToDriverList =
           await OpenDriverService.getAllOpenDriver() ?? [];
       List<NewsModel> mainNews = await NewsService.getAllNews() ?? [];
       return {
@@ -75,19 +75,19 @@ class MainService {
             GlobalService.printHandler("Truck Added in DB: $insertTruck");
           }
 
-          List<DriverModel> arrDriverModel = [];
+          List<UserModel> arrDriverModel = [];
           if (mainObj.containsKey('drivers')) {
             await DriverService.clearAllDriver();
             List<dynamic> driverList = mainObj['drivers'] as List;
             List<Map<String, dynamic>> arrMapDriver = driverList.map((json) {
-              return DriverModel.toDB(json);
+              return UserModel.toDB(json);
             }).toList();
             int insertDriver =
                 await DriverService.insertAllDriver(arrMapDriver);
 
             if (insertDriver > 0) {
               arrDriverModel = arrMapDriver.map((json) {
-                return DriverModel.fromDB(json);
+                return UserModel.fromDB(json);
               }).toList();
             }
             GlobalService.printHandler("Driver Added in DB: $insertDriver");
@@ -221,21 +221,15 @@ class MainService {
                 "Onwer Expense Added in DB: $insertOwnerExpense");
           }*/
 
-          List<DriverModel> arrOpenDriverModel = [];
+          List<UserModel> arrOpenDriverModel = [];
           if (mainObj.containsKey('looking_jobs')) {
-            await OpenDriverService.clearAll();
             List<dynamic> arrOpenDriver = mainObj['looking_jobs'];
             List<Map<String, dynamic>> arrMapOpenDriver =
                 arrOpenDriver.map((json) {
-              return DriverModel.toDB(json, isOpenDriver: true);
+              return UserModel.toDB(json, isOpenDriver: true);
             }).toList();
-            // int successInsert =
-            //     await OpenDriverService.insertAll(arrMapOpenDriver);
-            //   if (successInsert > 0) {}
-            //   GlobalService.printHandler(
-            //       "Open to Job Driver Added in DB: $successInsert");
             arrOpenDriverModel = arrMapOpenDriver.map((json) {
-              return DriverModel.fromDB(json);
+              return UserModel.fromDB(json);
             }).toList();
           }
 
@@ -253,10 +247,6 @@ class MainService {
                 return MinesModel.fromDB(mines);
               }).toList();
             }
-            // arrMinesDB = MinesModel.mapMinesJsonToDbList(mainObj['mines']);
-            // int insertMines =
-            //     await _service.insertAllData(tblMines, arrMinesDB);
-            // GlobalService.printHandler("Mines Added in DB: $insertMines");
           }
 
           /*List<Map<String, dynamic>> arrPromotionDB = [];

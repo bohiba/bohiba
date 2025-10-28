@@ -1,4 +1,5 @@
 import 'trip_tile.dart';
+
 import '/routes/app_route.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
@@ -11,9 +12,38 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
-class AllTripPage extends GetView<AllTripController> {
+class AllTripPage extends StatefulWidget {
   final bool showLeading;
-  const AllTripPage({super.key, this.showLeading = true});
+  const AllTripPage({
+    super.key,
+    this.showLeading = true,
+  });
+
+  @override
+  State<AllTripPage> createState() => _AllTripPageState();
+}
+
+class _AllTripPageState extends State<AllTripPage>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+  final controller = Get.find<AllTripController>();
+
+  final List<String> tabs = [
+    'All',
+    'In Transit',
+    'Completed',
+    'Unloading',
+    'Delayed',
+    'Cancelled',
+    'On Hold',
+    'Reassigned',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: tabs.length, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +51,7 @@ class AllTripPage extends GetView<AllTripController> {
     return Scaffold(
       appBar: TitleAppbar(
         title: 'Trips',
-        showLeading: showLeading,
+        showLeading: widget.showLeading,
         actions: [
           AppBarIconBox(
             onTap: () {
@@ -102,20 +132,20 @@ class AllTripPage extends GetView<AllTripController> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TabBar(
-                controller: controller.tabController.value,
+                controller: tabController,
                 isScrollable: true,
                 indicatorSize: TabBarIndicatorSize.label,
                 tabs: List.generate(
-                  controller.tabs.length,
+                  tabs.length,
                   (index) {
-                    return Tab(text: controller.tabs[index]);
+                    return Tab(text: tabs[index]);
                   },
                 ),
               ),
               Expanded(
                 child: TabBarView(
-                  controller: controller.tabController.value,
-                  children: controller.convertToSnakeCase(controller.tabs).map(
+                  controller: tabController,
+                  children: controller.convertToSnakeCase(tabs).map(
                     (status) {
                       final filteredTrips = controller.getTripsByStatus(status);
                       return filteredTrips.isEmpty
@@ -181,5 +211,11 @@ class AllTripPage extends GetView<AllTripController> {
         }),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 }

@@ -1182,7 +1182,7 @@ class TripService {
         ,  ${trip.finance?.tripPayment}
         ,  ${trip.finance?.tripExpense}
         ,  ${trip.finance?.tripProfit}
-        , '${trip.truck?.id}'
+        ,  ${trip.truck?.id}
         , '${trip.truck?.regdNumber}'
         , '${trip.truck?.model}'
         , '${trip.truck?.rcVhClassDesc}'

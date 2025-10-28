@@ -51,8 +51,8 @@ class AddressAuthController extends GetxController {
       'country': aCountryCtrl.text.trim(),
     };
 
-    int verifyAddress =
-        await ProfileService.addOrUpdateAddress(bodyMap: bodyObj);
+    int verifyAddress = await ProfileService.addOrUpdateAddress(
+        bodyMap: bodyObj, initAddress: true);
     return verifyAddress;
   }
 }

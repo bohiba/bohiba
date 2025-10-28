@@ -1,6 +1,4 @@
-import 'package:bohiba/dist/app_enums.dart';
-
-import 'master_controller.dart';
+import '/dist/app_enums.dart';
 
 import '/services/truck_service.dart';
 import '/model/truck_model.dart';
@@ -8,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class TruckController extends GetxController {
-  final MasterController masterController = Get.find<MasterController>();
   final RefreshController refreshTruckPage =
       RefreshController(initialRefresh: false);
 

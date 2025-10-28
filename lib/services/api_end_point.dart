@@ -73,11 +73,13 @@ class ApiEndPoint {
   static const String apiOpenDriver = '$baseUrl/owner/open';
   static const String apiViewDriver = '$baseUrl/owner/view-driver';
   static const String apiSendConnectReq = '$baseUrl/owner/send';
-  static const String apiAllReq = '$baseUrl/owner/all-requests';
+  static const String apiAllSentReq = '$baseUrl/owner/all-requests';
 
   static const String apiDriverJob = '$baseUrl/driver/get-jobs';
   static const String apiAppliedJob = '$baseUrl/driver/applied-job';
   static const String apiApplyToJob = '$baseUrl/driver/apply-to-job';
+  static const String apiAllRecvdReq = '$baseUrl/driver/requests';
+  static const String apiAllRespond = '$baseUrl/driver/respond';
 
   static const String apiNewsAll = '$baseUrl/news-all';
   static const String apiNews = '$baseUrl/news';

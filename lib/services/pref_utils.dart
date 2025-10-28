@@ -16,7 +16,7 @@ class PrefUtils {
   }
 
   Future<void> clearPreferencesData() async {
-    final keyPrefItems = [token];
+    final keyPrefItems = [token, showConnectDialog, roleKey, biometricKey];
     for (var key in keyPrefItems) {
       await _preferences!.remove(key);
     }
@@ -114,4 +114,5 @@ class PrefUtils {
   static const String themeKey = 'theme_mode';
   static const String biometricKey = 'biometric_enabled';
   static const String roleKey = 'user_role';
+  static const String showConnectDialog = 'show_con_dialog';
 }

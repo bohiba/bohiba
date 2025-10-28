@@ -114,14 +114,14 @@ class SignupScreen extends GetView<SignupController> {
                   alignment: Alignment.center,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have account? ',
+                        'Already have account?',
                         style: bohibaTheme.textTheme.titleSmall,
                       ),
-                      GestureDetector(
-                        onTap: () {
+                      TextButton(
+                        onPressed: () {
                           navState.popAndPushNamed(AppRoute.signIn);
                         },
                         child: Text(

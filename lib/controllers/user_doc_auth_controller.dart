@@ -24,7 +24,7 @@ class UserDocAuthController extends GetxController {
       return 0;
     }
     Map<String, dynamic> bodyObj = {
-      "aadhaar_number": aadharNumberController.text.trim().replaceAll('_', ''),
+      "aadhaar_number": aadharNumberController.text.trim().replaceAll('-', ''),
       "pan_number": panNumberController.text.trim(),
       if (!isTruckOwner) "dl_number": dlNumberController.text.trim(),
     };

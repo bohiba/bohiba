@@ -17,7 +17,6 @@ class AllLocationModal extends StatelessWidget {
       return SafeArea(
         child: Container(
           width: ScreenUtils.width,
-          padding: EdgeInsets.only(bottom: 15.h),
           decoration: BoxDecoration(
             color: bohibaTheme.scaffoldBackgroundColor,
             borderRadius: BorderRadius.only(
@@ -27,6 +26,7 @@ class AllLocationModal extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(

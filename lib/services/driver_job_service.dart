@@ -1,3 +1,5 @@
+import '/model/driver_model.dart';
+
 import 'api_end_point.dart';
 import 'device_info_service.dart';
 import 'global_service.dart';
@@ -8,11 +10,74 @@ import '/model/job_detail_model.dart';
 
 class DriverJobService {
   static final DioService _dioService = DioService();
-  // static final DatabaseService _databaseService = DatabaseService();
   static int _currentPage = 1;
   static int _lastPage = 1;
   static int _currentAppliedPage = 1;
   static int _lastAppliedPage = 1;
+
+  static Future<int> updateStatus(ConnectionType type, int id) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return 0;
+    }
+
+    GlobalService.showProgress();
+    Map<String, dynamic> bodyMap = {'status': type.name};
+    ApiResponse res = await _dioService.post('${ApiEndPoint.apiAllRespond}/$id',
+        body: bodyMap);
+    GlobalService.dismissProgress();
+    switch (res.statusCode) {
+      case 200:
+        return 1;
+      case 401:
+        return 0;
+      default:
+        return 0;
+    }
+  }
+
+  static Future<List<UserModel>?> getAllRecivedRequest({
+    bool showProgress = true,
+    bool reset = false,
+  }) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return null;
+    }
+
+    if (reset) {
+      _currentPage = 1;
+      _lastPage = 1;
+    }
+
+    if (_currentPage > _lastPage) {
+      return null;
+    }
+    if (showProgress) GlobalService.showProgress();
+    ApiResponse res = await _dioService.get(ApiEndPoint.apiAllRecvdReq);
+    if (showProgress) GlobalService.dismissProgress();
+    switch (res.statusCode) {
+      case 200:
+        List arrDriverJob = res.data;
+        List<UserModel> arrJobDetailModel = arrDriverJob.map((e) {
+          return UserModel.fromJson(e);
+        }).toList();
+
+        return arrJobDetailModel;
+      case 401:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Job',
+          desc: res.message,
+        );
+        return null;
+      default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Job',
+          desc: res.message,
+        );
+        return null;
+    }
+  }
 
   static Future<List<JobDetailModel>?> getAllDriverJob({
     MethodType type = MethodType.local,
@@ -70,26 +135,33 @@ class DriverJobService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse res = await _dioService.put(ApiEndPoint.apiApplyToJob);
+    ApiResponse res =
+        await _dioService.post('${ApiEndPoint.apiApplyToJob}/$jobId');
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:
         GlobalService.showSnackBar(
           status: AlertStatus.success,
           title: 'Job',
-          desc: 'Applied successfully',
+          desc: 'Applied',
         );
-        break;
+        return 1;
 
       case 401:
         GlobalService.showSnackBar(
-          status: AlertStatus.success,
+          status: AlertStatus.warning,
           title: 'Job',
-          desc: 'Applied successfully',
+          desc: res.message,
         );
+        return 0;
       default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          title: 'Job',
+          desc: 'Failed to apply. Retry Again',
+        );
+        return 0;
     }
-    return 1;
   }
 
   static Future<List<JobDetailModel>?> getAppliedJobs({

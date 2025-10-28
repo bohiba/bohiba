@@ -1,8 +1,8 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
-
-import '../bohiba_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -27,9 +27,8 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          fixedSize:
-              Size(width ?? ScreenUtils.width, height ?? ScreenUtils.height47),
-          backgroundColor: color ?? BohibaColors.primaryColor,
+          fixedSize: Size(width ?? ScreenUtils.width, height ?? 32.h),
+          backgroundColor: color ?? bohibaTheme.colorScheme.primary,
           disabledBackgroundColor: color?.withValues(alpha: 0.25) ??
               bohibaTheme.colorScheme.onPrimary,
         ),

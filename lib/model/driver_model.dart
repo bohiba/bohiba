@@ -1,18 +1,18 @@
 import '/model/rating_model.dart';
 
-class DriverModel {
+class UserModel {
   int? id;
   int? isSynced;
   int? isFav;
-  DriverProfile? profile;
+  UserProfile? profile;
   LicenseDetail? licenseDetail;
   List<RatingModel>? rating;
   String? createdAt;
   String? updatedAt;
-  DriverAddress? address;
+  CommonUserAddress? address;
   int? trips;
 
-  DriverModel({
+  UserModel({
     this.id,
     this.isSynced,
     this.profile,
@@ -25,20 +25,20 @@ class DriverModel {
     this.trips,
   });
 
-  factory DriverModel.fromJson(dynamic json) {
+  factory UserModel.fromJson(dynamic json) {
     Map<dynamic, dynamic> mapObj = json;
-    return DriverModel(
+    return UserModel(
       id: mapObj['id'],
       isSynced: mapObj['is_synced'],
       isFav: json['is_fav'],
       profile: mapObj['profile'] != null
-          ? DriverProfile.fromJson(mapObj['profile'])
+          ? UserProfile.fromJson(mapObj['profile'])
           : null,
       licenseDetail: mapObj['license_detail'] != null
           ? LicenseDetail.fromJson(mapObj['license_detail'])
           : null,
       address: mapObj['address'] != null
-          ? DriverAddress.fromJson(mapObj['address'])
+          ? CommonUserAddress.fromJson(mapObj['address'])
           : null,
       rating: mapObj['rating'] != null
           ? List<RatingModel>.from(
@@ -63,10 +63,10 @@ class DriverModel {
   //       'updated_at': updatedAt,
   //     };
 
-  static List<DriverModel> listFromJson(List<dynamic> jsonList) {
+  static List<UserModel> listFromJson(List<dynamic> jsonList) {
     return jsonList.map((json) {
       final map = json as Map<String, dynamic>;
-      return DriverModel.fromJson(map);
+      return UserModel.fromJson(map);
     }).toList();
   }
 
@@ -119,23 +119,24 @@ class DriverModel {
     return map;
   }
 
-  static DriverModel fromDB(Map<String, dynamic> dbMap) {
-    return DriverModel(
+  static UserModel fromDB(Map<String, dynamic> dbMap) {
+    return UserModel(
       id: dbMap['id'],
       isFav: dbMap['isFav'],
       isSynced: dbMap['isSynced'],
       createdAt: dbMap['createdAt'],
       updatedAt: dbMap['updatedAt'],
-      profile: DriverProfile.fromDbMap(dbMap),
-      address: DriverAddress.fromDbMap(dbMap),
+      profile: UserProfile.fromDbMap(dbMap),
+      address: CommonUserAddress.fromDbMap(dbMap),
       licenseDetail: LicenseDetail.fromDbMap(dbMap),
       trips: dbMap['trips'],
     );
   }
 }
 
-class DriverProfile {
+class UserProfile {
   String? driverUuid;
+  String? ownerUuid;
   String? name;
   String? email;
   String? mobileNumber;
@@ -145,8 +146,9 @@ class DriverProfile {
   String? isActive;
   String? connect;
 
-  DriverProfile({
+  UserProfile({
     this.driverUuid,
+    this.ownerUuid,
     this.name,
     this.email,
     this.mobileNumber,
@@ -157,8 +159,9 @@ class DriverProfile {
     this.connect,
   });
 
-  factory DriverProfile.fromJson(Map<String, dynamic> json) => DriverProfile(
+  factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
         driverUuid: json['driver_uuid'],
+        ownerUuid: json['owner_uuid'],
         name: json['name'],
         email: json['email'],
         mobileNumber: json['mobile_number'],
@@ -171,6 +174,7 @@ class DriverProfile {
 
   Map<String, dynamic> toJson() => {
         'driver_uuid': driverUuid,
+        'owner_uuid': ownerUuid,
         'name': name,
         'email': email,
         'mobile_number': mobileNumber,
@@ -181,9 +185,10 @@ class DriverProfile {
         'connect': connect,
       };
 
-  static DriverProfile fromDbMap(Map<String, dynamic> map) {
-    return DriverProfile(
+  static UserProfile fromDbMap(Map<String, dynamic> map) {
+    return UserProfile(
       driverUuid: map['uuid'],
+      ownerUuid: map[''],
       name: map['name'],
       email: map['email'],
       mobileNumber: map['mobileNumber'],
@@ -196,7 +201,7 @@ class DriverProfile {
   }
 }
 
-class DriverAddress {
+class CommonUserAddress {
   int? id;
   String? verified;
   String? houseNo;
@@ -208,7 +213,7 @@ class DriverAddress {
   String? country;
   String? pinCode;
 
-  DriverAddress({
+  CommonUserAddress({
     this.id,
     this.verified,
     this.houseNo,
@@ -221,7 +226,8 @@ class DriverAddress {
     this.pinCode,
   });
 
-  factory DriverAddress.fromJson(Map<String, dynamic> json) => DriverAddress(
+  factory CommonUserAddress.fromJson(Map<String, dynamic> json) =>
+      CommonUserAddress(
         id: json['id'],
         verified: json['verified'],
         houseNo: json['house_no'],
@@ -247,8 +253,8 @@ class DriverAddress {
         'pin_code': pinCode,
       };
 
-  static DriverAddress fromDbMap(Map<String, dynamic> map) {
-    return DriverAddress(
+  static CommonUserAddress fromDbMap(Map<String, dynamic> map) {
+    return CommonUserAddress(
       verified: map['verified'],
       houseNo: map['houseNo'],
       locality: map['locality'],

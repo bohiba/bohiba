@@ -235,7 +235,7 @@ class TruckService {
 
   static Future<int> assignDriver({
     required String vhNumber,
-    required DriverModel driver,
+    required UserModel driver,
   }) async {
     if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();

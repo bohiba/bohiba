@@ -22,7 +22,7 @@ class GlobalService {
   static XFile? imageFile;
   // DateTime eighteenYearsAgo = DateTime(today.year - 18, today.month, today.day);
 
-  static getAlertDialog({
+  static showDialog({
     required AlertStatus status,
     required String title,
     required String description,
@@ -52,9 +52,7 @@ class GlobalService {
             borderRadius: BorderRadius.circular(20),
           ),
           actionsPadding: EdgeInsets.all(ScreenUtils.height15),
-          title: Text(
-            title,
-          ),
+          title: Text(title),
           titleTextStyle: TextStyle(
             fontSize: bohibaTheme.textTheme.displayMedium!.fontSize,
             color: textColor,
@@ -68,6 +66,7 @@ class GlobalService {
             fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
             color: bohibaTheme.textTheme.titleLarge!.color,
           ),
+          contentPadding: EdgeInsets.symmetric(horizontal: ScreenUtils.width25),
           actions: [
             TextButton(
               onPressed: onExit ?? () => Get.back(result: true),

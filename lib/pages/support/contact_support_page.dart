@@ -1,15 +1,13 @@
-import '/services/global_service.dart';
+import '/services/launcher_service.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
-import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/screen_utils.dart';
 import '/pages/widget/icon_text_tile.dart';
 import '/theme/bohiba_theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContactSupportPage extends StatelessWidget {
   const ContactSupportPage({super.key});
@@ -43,7 +41,7 @@ class ContactSupportPage extends StatelessWidget {
                 "How do I view truck maintenance history?",
                 "Open the truck details page and select 'Maintenance History'.",
               ),
-              Gap(ScreenUtils.height20),
+              Gap(ScreenUtils.height50),
 
               // Contact Us Section
               Text("Contact Us", style: headerStyle),
@@ -51,18 +49,18 @@ class ContactSupportPage extends StatelessWidget {
               IconTextTile(
                 icon: Remix.whatsapp_line,
                 text: "WhatsApp Chat",
-                onTap: () async => await openWhatsApp(),
+                onTap: () async => await LauncherService.supportViaWhatsApp(),
               ),
 
               IconTextTile(
                 icon: Icons.email_outlined,
                 text: 'Email Support',
-                onTap: () async => await openEmailApp(),
+                onTap: () async => await LauncherService.supportViaEmail(),
               ),
 
               Gap(ScreenUtils.height30),
 
-              Text("Submit a Ticket", style: headerStyle),
+              /*Text("Submit a Ticket", style: headerStyle),
               Gap(ScreenUtils.height10),
               TextInputField(
                 hintText: "Subject",
@@ -93,7 +91,7 @@ class ContactSupportPage extends StatelessWidget {
                 onPressed: () {},
                 width: ScreenUtils.width,
                 label: 'Submit Ticket',
-              ),
+              ),*/
             ],
           ),
         ),
@@ -125,46 +123,5 @@ class ContactSupportPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<void> openWhatsApp() async {
-    final Uri whatsappUri = Uri.parse("https://wa.me/7852965860");
-    try {
-      bool canLaunch = await canLaunchUrl(whatsappUri);
-      if (canLaunch) {
-        await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
-      } else {
-        GlobalService.printHandler('Could not launch WhatsApp');
-      }
-    } catch (e) {
-      GlobalService.showAppToast(message: 'Could not launch WhatsApp');
-      GlobalService.printHandler('$e');
-    }
-  }
-
-  Future<void> openEmailApp({
-    String subject = "",
-    String body = "",
-  }) async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: 'support@bohiba.com',
-      queryParameters: {
-        'subject': subject,
-        'body': body,
-      },
-    );
-
-    try {
-      bool canLaunch = await canLaunchUrl(emailUri);
-      if (canLaunch) {
-        await launchUrl(emailUri, mode: LaunchMode.externalApplication);
-      } else {
-        GlobalService.showAppToast(message: 'Could not launch Email');
-      }
-    } catch (e) {
-      GlobalService.showAppToast(message: 'Could not launch Email');
-      GlobalService.printHandler('$e');
-    }
   }
 }

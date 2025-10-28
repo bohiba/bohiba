@@ -171,8 +171,8 @@ class SignInScreen extends GetView<AuthController> {
 
                           if (successLogin > 0) {
                             navigateState.pushNamedAndRemoveUntil(
-                              AppRoute.welcome,
-                              ModalRoute.withName(AppRoute.welcome),
+                              AppRoute.navBar,
+                              ModalRoute.withName(AppRoute.navBar),
                             );
                           }
                         },
@@ -189,11 +189,11 @@ class SignInScreen extends GetView<AuthController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Don\'t have account ? ',
+                        'Don\'t have account?',
                         style: bohibaTheme.textTheme.titleSmall,
                       ),
-                      GestureDetector(
-                        onTap: () {
+                      TextButton(
+                        onPressed: () {
                           navigateState.popAndPushNamed(AppRoute.signUp);
                         },
                         child: Text(

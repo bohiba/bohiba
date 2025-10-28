@@ -88,7 +88,6 @@ class TruckAppbar extends GetView<TruckController>
                   id: controller.truckModel.value.id!,
                 );
               },
-              ActionType.delete: (value) async {}
             },
           )
         ],

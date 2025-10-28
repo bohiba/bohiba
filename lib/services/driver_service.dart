@@ -15,11 +15,11 @@ class DriverService {
   static int _currentPage = 1;
   static int _lastPage = 1;
 
-  static Future<DriverModel?> createDriver(
+  static Future<UserModel?> createDriver(
       {required Map<String, dynamic> bodyObj, String? vehcileNumber}) async {
     if (!await DeviceInfoService.hasInternet()) return null;
     if (bodyObj['type'] == 0) {
-      GlobalService.getAlertDialog(
+      GlobalService.showDialog(
         status: AlertStatus.info,
         title: 'Feature Not Yet Supported',
         description:
@@ -32,7 +32,7 @@ class DriverService {
         await _dioService.post(ApiEndPoint.apiAddDriver, body: bodyObj);
     switch (response.statusCode) {
       case 201 || 200:
-        DriverModel driver = DriverModel.fromJson(response.data);
+        UserModel driver = UserModel.fromJson(response.data);
         int insertSuccess = await insertDriver(driver: driver);
         if (insertSuccess > 0) {
           await ProfileService.updateDriverNo(deleteDriver: false);
@@ -67,7 +67,7 @@ class DriverService {
     }
   }
 
-  static Future<List<DriverModel>?> getAllDriver({
+  static Future<List<UserModel>?> getAllDriver({
     bool reset = false,
     bool showProgress = false,
     MethodType methodType = MethodType.local,
@@ -77,8 +77,8 @@ class DriverService {
           ''' SELECT * FROM $tblDriver ORDER BY updatedAt DESC ''';
       List<Map<String, dynamic>> arrDriver =
           await _databaseService.getAllData(strGetQuery) ?? [];
-      List<DriverModel> driverModelList = arrDriver.map((e) {
-        return DriverModel.fromDB(e);
+      List<UserModel> driverModelList = arrDriver.map((e) {
+        return UserModel.fromDB(e);
       }).toList();
 
       return driverModelList;
@@ -108,15 +108,15 @@ class DriverService {
 
           List<dynamic> driverList = response.data as List;
           List<Map<String, dynamic>> dbDriverList = driverList.map((json) {
-            return DriverModel.toDB(json);
+            return UserModel.toDB(json);
           }).toList();
           int success = await insertAllDriver(dbDriverList);
           if (success > 0) {
             GlobalService.printHandler('Insert Success $success');
           }
           if (showProgress) GlobalService.dismissProgress();
-          List<DriverModel> model = dbDriverList.map((json) {
-            return DriverModel.fromDB(json);
+          List<UserModel> model = dbDriverList.map((json) {
+            return UserModel.fromDB(json);
           }).toList();
           return model;
         case 401:
@@ -139,7 +139,7 @@ class DriverService {
     }
   }
 
-  static Future<DriverModel?> getDriver(
+  static Future<UserModel?> getDriver(
       {required int id, MethodType type = MethodType.local}) async {
     if (type == MethodType.local) {
       String strGetDriver =
@@ -148,7 +148,7 @@ class DriverService {
           await _databaseService.getAllData(strGetDriver) ?? [];
 
       if (driverList.isNotEmpty) {
-        DriverModel driver = DriverModel.fromDB(driverList.first);
+        UserModel driver = UserModel.fromDB(driverList.first);
         return driver;
       } else {
         return null;
@@ -161,7 +161,7 @@ class DriverService {
 
       switch (response.statusCode) {
         case 200:
-          DriverModel driver = DriverModel.fromJson(response.data);
+          UserModel driver = UserModel.fromJson(response.data);
           String strUpdateQuery = '''
             UPDATE $tblDriver SET
               isFav = ${driver.isFav ?? 0},
@@ -267,7 +267,7 @@ class DriverService {
     }
   }
 
-  static Future<int> insertDriver({required DriverModel driver}) async {
+  static Future<int> insertDriver({required UserModel driver}) async {
     String strInsertQuery = '''
           INSERT INTO $tblDriver (
             id,

@@ -40,7 +40,8 @@ class SetRoleController extends GetxController {
     Map<String, dynamic> bodyObj = {
       'role_id': roleObj['role_id'],
     };
-    int updateRole = await ProfileService.setRole(bodyMap: bodyObj);
+    int updateRole =
+        await ProfileService.setRole(bodyMap: bodyObj, initRole: true);
     return updateRole;
   }
 }

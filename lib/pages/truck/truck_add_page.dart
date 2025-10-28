@@ -18,29 +18,8 @@ class AddTruckPage extends GetView<TruckAllController> {
   Widget build(BuildContext context) {
     final NavigatorState navigateState = Navigator.of(context);
     return Scaffold(
-      appBar: TitleAppbar(
-        title: "Add Truck",
-        showLeading: controller.showLeading,
-        actions: [
-          Visibility(
-            visible: !controller.showLeading,
-            child: Row(
-              children: [
-                Text(
-                  'Skip for now',
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
-                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                    color: bohibaTheme.textTheme.bodySmall!.color,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      appBar: TitleAppbar(title: "Add Truck"),
       body: PopScope(
-        canPop: controller.showLeading,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) {
             return;
