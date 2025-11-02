@@ -1,14 +1,14 @@
 class OwnerExpense {
-  final int? id;
-  final String? ownerUuid;
-  final String? truckRegd;
-  final String? expenseType;
-  final double? amount;
-  final String? expenseDate;
-  final String? description;
-  final String? severity;
-  final String? createdAt;
-  final String? updatedAt;
+  int? id;
+  String? ownerUuid;
+  String? truckRegd;
+  String? expenseType;
+  double? amount;
+  String? expenseDate;
+  String? description;
+  String? severity;
+  String? createdAt;
+  String? updatedAt;
 
   OwnerExpense({
     this.id,
@@ -49,20 +49,50 @@ class OwnerExpense {
         "updated_at": updatedAt,
       };
 
-  static List<Map<String, dynamic>> mapOwnerExpenseJsonDbList(
-      List<dynamic> jsonOwnExpense) {
-    return jsonOwnExpense.map((json) {
-      Map<String, dynamic> ownerExpense = json as Map<String, dynamic>;
-      return {
-        'id': ownerExpense['id'],
-        'ownerUuid': ownerExpense['owner_uuid'],
-        'vhNumber': ownerExpense['truck_regd'],
-        'expenseType': ownerExpense['expense_type'],
-        'amount': ownerExpense['amount'],
-        'date': ownerExpense['expense_date'],
-        'description': ownerExpense['description'],
-        'severity': ownerExpense['severity']
-      };
-    }).toList();
+  static Map<String, dynamic> toDB(Map<String, dynamic> json) {
+    final id = json['id'] ?? {};
+    final owner = json['owner_uuid'] ?? {};
+    final reg = json['truck_regd'] ?? {};
+    final specs = json['expense_type'] ?? {};
+    final valid = json['amount'] ?? {};
+    final date = json['expense_date'] ?? {};
+    final desc = json['description'] ?? {};
+    final severity = json['severity'] ?? {};
+    final created = json['created_at'] ?? {};
+    final updated = json['updated_at'] ?? {};
+    return {
+      'id': id,
+      'owner_uuid': owner,
+      'truck_regd': reg,
+      'expense_type': specs,
+      'amount': valid,
+      'expense_date': date,
+      'description': desc,
+      'severity': severity,
+      'created_at': created,
+      'updated_at': updated,
+    };
   }
+
+  factory OwnerExpense.fromDB(Map<String, dynamic> map) => OwnerExpense(
+        id: map['id'],
+        ownerUuid: map['owner_uuid'],
+        truckRegd: map['truck_regd'],
+        expenseType: map['expense_type'],
+        amount: (map['amount'])?.toDouble() ?? 0.0,
+        expenseDate: map['expense_date'],
+        description: map['description'],
+        severity: map['severity'],
+        createdAt: map['created_at'],
+        updatedAt: map['updated_at'],
+      )
+        ..ownerUuid = map['owner_uuid']
+        ..truckRegd = map['truck_regd']
+        ..expenseType = map['expense_type']
+        ..amount = (map['amount'])?.toDouble() ?? 0.0
+        ..expenseDate = map['expense_date']
+        ..description = map['description']
+        ..severity = map['severity']
+        ..createdAt = map['created_at']
+        ..updatedAt = map['updated_at'];
 }

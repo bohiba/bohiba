@@ -1,5 +1,7 @@
 class ApiEndPoint {
-  static const String baseUrl = 'https://bohiba.com/api';
+  //static const String baseUrl = 'https://bohiba.com/api';
+  static const String baseUrl = 'https://beta-server-t1.bohiba.com/api';
+
   static const String apiPostalCode = 'https://api.postalpincode.in/pincode';
   static const String apiVerifyEmail = '$baseUrl/verify-email';
   static const String apiVerifyOtp = '$baseUrl/verify-otp';
@@ -10,6 +12,7 @@ class ApiEndPoint {
   static const String apiSetRole = '$baseUrl/set-role';
   static const String apiEditDoc = '$baseUrl/add-document';
   static const String addOwnerExpense = '$baseUrl/add-expense';
+  static const String allOwnerExpense = '$baseUrl/all-expense';
   static const String apiEditUser = '$baseUrl/user-update';
 
   static const String apiForgotPassword = '$baseUrl/forgot-password';

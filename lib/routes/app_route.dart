@@ -1,3 +1,6 @@
+import 'package:bohiba/bindings/all_owner_expense_binding.dart';
+import 'package:bohiba/pages/expenses/all_owner_expense_screen.dart';
+
 import '/bindings/all_recived_request_binding.dart';
 
 import '/pages/jobs/driver/all_received_request_page.dart';
@@ -219,6 +222,7 @@ class AppRoute {
   static const String reportIssue = "/reportIssue";
   static const String about = "/about";
   static const String addOwnerExpense = "/add-owner-expense";
+  static const String allOwnerExpense = "/all-owner-expense";
 
   static const String allNewsScreen = "/all-news";
   static const String newsScreen = "/snews";
@@ -294,6 +298,12 @@ class AppRoute {
       name: addOwnerExpense,
       binding: OwnerExpenseBinding(),
       page: () => const AddOwnerExpensesScreen(),
+    ),
+
+    GetPage(
+      name: allOwnerExpense,
+      binding: AllOwnerExpenseBinding(),
+      page: () => const AllOwnerExpenseScreen(),
     ),
 
     GetPage(

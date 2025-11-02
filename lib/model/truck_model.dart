@@ -77,6 +77,7 @@ class TruckModel {
     this.updatedAt,
   });
 
+
   factory TruckModel.fromJson(Map<String, dynamic> json) {
     final registration = json['registration'] ?? {};
     final specs = json['specs'] ?? {};
@@ -169,6 +170,7 @@ class TruckModel {
   }
 
   /// ✅ Convert back from DB Map
+  /// 
   factory TruckModel.fromDB(Map<String, dynamic> map) => TruckModel(
         id: map['id'],
         truckImage: map['image'],

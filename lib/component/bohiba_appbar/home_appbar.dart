@@ -145,7 +145,7 @@ class HomeAppBar extends GetView<HomeController>
                       },
                     );
                   case ServiceType.expenses:
-                    return navigatState.pushNamed(AppRoute.addOwnerExpense);
+                    return navigatState.pushNamed(AppRoute.allOwnerExpense);
                   case ServiceType.manager:
                     break;
 
