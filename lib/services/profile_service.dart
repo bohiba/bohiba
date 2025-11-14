@@ -33,7 +33,8 @@ class ProfileService {
       GlobalService.printHandler("Reset Token: $token");
     }
     ProfileModel? profileModel = await getProfile(type: MethodType.api);
-    Map? mainObj = await MainService.mainApi(type: MethodType.api);
+    Map? mainObj =
+        await MainService.mainApi(type: MethodType.api, showProgress: true);
 
     return (mainObj != null && profileModel != null) ? 1 : 0;
   }
@@ -59,7 +60,7 @@ class ProfileService {
       default:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
-            status: AlertStatus.failure, desc: 'Something went wrong');
+            status: AlertStatus.failure, desc: 'Failed to add document');
         return 0;
     }
   }
@@ -108,7 +109,7 @@ class ProfileService {
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
           title: 'Profile',
-          desc: 'Something went wrong',
+          desc: 'Failed to update profile',
         );
         return null;
     }
@@ -146,7 +147,7 @@ class ProfileService {
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
           title: 'Profile',
-          desc: 'Something went wrong',
+          desc: 'Failed to set role',
         );
         return 0;
     }
@@ -179,7 +180,7 @@ class ProfileService {
       default:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
-            status: AlertStatus.warning, desc: 'Something went wrong');
+            status: AlertStatus.warning, desc: 'Failed to set image');
         return 0;
     }
   }
@@ -223,7 +224,7 @@ class ProfileService {
       default:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
-            status: AlertStatus.warning, desc: 'Something went wrong');
+            status: AlertStatus.warning, desc: 'Failed to add address');
         return 0;
     }
   }
@@ -235,22 +236,24 @@ class ProfileService {
     if (type == MethodType.local) {
       String strProfileQuery = ''' SELECT * FROM $tblProfile LIMIT 1''';
       List<Map<String, dynamic>> arrProfileList =
-          await _databaseService.getAllData(strProfileQuery) ?? [];
+          await _databaseService.executeQuery(strProfileQuery) ?? [];
       if (arrProfileList.isNotEmpty) {
         Map<String, dynamic> profileRow = arrProfileList.first;
         ProfileModel profile = ProfileModel.fromDb(profileRow);
 
         String strRatingQuery =
             ''' SELECT * FROM $tblRating WHERE driverUuid = '${profileRow['uuid']}' ''';
-        List<Map<String, dynamic>> arrRatingList =
-            await _databaseService.getAllData(strRatingQuery) ?? [];
-
-        List<RatingModel> arrRatingModel = arrRatingList.map((e) {
-          return RatingModel.fromDB(e);
-        }).toList();
+        List<Map<String, dynamic>>? arrRatingList =
+            await _databaseService.executeQuery(strRatingQuery);
+        List<RatingModel> arrRatingModel = [];
+        if (arrRatingList != null) {
+          arrRatingModel = arrRatingList.map((e) {
+            return RatingModel.fromDB(e);
+          }).toList();
+        }
 
         profile.ratings = [];
-        profile.ratings?.addAll(arrRatingModel);
+        profile.ratings!.addAll(arrRatingModel);
         return profile;
       }
       return null;
@@ -288,6 +291,7 @@ class ProfileService {
                 (resObj['ratings'] as List).isNotEmpty) {
               List arrRating = resObj['ratings'];
               List<Map<String, dynamic>> arrMapRating = arrRating.map((e) {
+                e['driverUuid'] = profileModel.uuid;
                 return RatingModel.toDB(e);
               }).toList();
 
@@ -311,7 +315,7 @@ class ProfileService {
         default:
           if (showProgress) GlobalService.dismissProgress();
           GlobalService.showSnackBar(
-              status: AlertStatus.warning, desc: 'Something went wrong');
+              status: AlertStatus.warning, desc: 'Failed to get profile info');
           return null;
       }
     }
@@ -347,7 +351,7 @@ class ProfileService {
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
           title: 'Bohiba',
-          desc: 'Something went wrong',
+          desc: 'Failed to create user',
         );
         return 0;
     }
@@ -447,7 +451,7 @@ class ProfileService {
   static Future<List<LoggedInAccountModel>> getLoggedAccount() async {
     String strQueryList = ''' SELECT * FROM $tblLoggedInUserList ''';
     List<Map<String, dynamic>> arrLoggedInUser =
-        await _databaseService.getAllData(strQueryList) ?? [];
+        await _databaseService.executeQuery(strQueryList) ?? [];
 
     List<LoggedInAccountModel> arrLoggedList = arrLoggedInUser
         .map((user) => LoggedInAccountModel(
@@ -483,7 +487,7 @@ class ProfileService {
 
   static Future<List<Map>?> getAllProfile() async {
     String strGetQuery = ''' SELECT * FROM $tblProfile ''';
-    List<Map>? arrProfile = await _databaseService.getAllData(strGetQuery);
+    List<Map>? arrProfile = await _databaseService.executeQuery(strGetQuery);
     return arrProfile;
   }
 }

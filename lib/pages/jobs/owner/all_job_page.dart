@@ -1,3 +1,4 @@
+import '/model/job_detail_model.dart';
 import '/controllers/all_job_controller.dart';
 import '/dist/component_exports.dart';
 import '/pages/widget/role_widget.dart';
@@ -73,13 +74,13 @@ class AllJobPage extends GetView<AllJobController> {
                       ),
                       itemCount: controller.arrJobs.length,
                       itemBuilder: (context, index) {
-                        Map job = controller.arrJobs[index];
+                        JobDetailModel job = controller.arrJobs[index];
                         return GestureDetector(
                           onTap: () {
                             navigatorState
                                 .pushNamed(AppRoute.jobDetail, arguments: job)
                                 .then((onValue) async {
-                              if (onValue != null || onValue != false) {
+                              if (onValue != null && onValue != false) {
                                 await controller.getAllJobs();
                               }
                             });
@@ -104,7 +105,7 @@ class AllJobPage extends GetView<AllJobController> {
                                         SizedBox(
                                           width: ScreenUtils.width * 0.7,
                                           child: Text(
-                                            job['job_title'] ?? '',
+                                            job.jobTitle ?? '',
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: bohibaTheme
@@ -116,7 +117,7 @@ class AllJobPage extends GetView<AllJobController> {
                                           children: [
                                             Icon(EvaIcons.pin, size: 14.w),
                                             Text(
-                                              " ${job['location'].toString().toUpperCase()}",
+                                              " ${job.location?.toString().toUpperCase() ?? ''}",
                                               style: TextStyle(
                                                 fontSize: bohibaTheme.textTheme
                                                     .bodyLarge!.fontSize,
@@ -132,7 +133,7 @@ class AllJobPage extends GetView<AllJobController> {
                                             Icon(EvaIcons.briefcase,
                                                 size: 14.w),
                                             Text(
-                                              ' ${job['job_type'].toString().toUpperCase()}',
+                                              ' ${job.jobType?.toString().toUpperCase() ?? ''}',
                                               style: TextStyle(
                                                 fontSize: bohibaTheme.textTheme
                                                     .bodyLarge!.fontSize,
@@ -150,9 +151,7 @@ class AllJobPage extends GetView<AllJobController> {
                                     ),
                                     Spacer(),
                                     Text(
-                                      job['status']
-                                              .toString()
-                                              .capitalizeFirst ??
+                                      job.status?.toString().capitalizeFirst ??
                                           '',
                                       style: TextStyle(
                                         fontFamily: bohibaTheme
@@ -160,7 +159,7 @@ class AllJobPage extends GetView<AllJobController> {
                                         fontSize: bohibaTheme
                                             .textTheme.labelLarge!.fontSize,
                                         color: controller.statusColor(
-                                          status: job['status'].toString(),
+                                          status: job.status.toString(),
                                         ),
                                       ),
                                     )
@@ -168,7 +167,7 @@ class AllJobPage extends GetView<AllJobController> {
                                 ),
                                 Gap(ScreenUtils.height5),
                                 Text(
-                                  job['created_at'],
+                                  job.createdAt ?? '',
                                   style: TextStyle(
                                     color: bohibaTheme
                                         .textTheme.titleMedium!.color,

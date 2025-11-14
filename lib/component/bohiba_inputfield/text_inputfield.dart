@@ -58,7 +58,6 @@ class TextInputField extends StatelessWidget {
         onEditingComplete: onEditingComplete,
         inputFormatters: inputFormatters,
         readOnly: readOnly,
-        // expands: true,
         textInputAction: nextActionType,
         style: TextStyle(
           fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
@@ -72,6 +71,7 @@ class TextInputField extends StatelessWidget {
           hintText: hintText,
           counterText: counterText ?? "",
           prefixIcon: prefixIcon,
+          errorMaxLines: 1,
           border: bohibaTheme.inputDecorationTheme.border,
           prefixIconColor: bohibaTheme.inputDecorationTheme.prefixIconColor,
           enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,

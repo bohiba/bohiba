@@ -1,3 +1,5 @@
+import 'package:bohiba/model/job_detail_model.dart';
+
 import '../services/owner_job_service.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -26,21 +28,21 @@ class AllJobController extends GetxController {
   }
 
   Future<void> getAllJobs() async {
-    List<dynamic> fetchList = await OwnerJobService.allJobs();
-    if (fetchList.isNotEmpty) {
-      arrJobs.clear();
-      arrJobs.addAll(fetchList);
-    } else {
+    List<JobDetailModel>? fetchList = await OwnerJobService.allJobs();
+    if (fetchList == null || fetchList.isEmpty) {
       arrJobs.clear();
       strTitle.value = 'No Jobs Found';
       strSubTitle.value = 'Post job to find driver in your area.';
+    } else {
+      arrJobs.clear();
+      arrJobs.addAll(fetchList);
     }
   }
 
   Color statusColor({required String status}) {
     switch (status) {
       case 'open':
-        return bohibaTheme.colorScheme.onSurface;
+        return bohibaTheme.colorScheme.onPrimary;
       case 'drafted':
         return bohibaTheme.colorScheme.secondary;
       case 'closed':

@@ -1,7 +1,6 @@
 class ApiEndPoint {
-  //static const String baseUrl = 'https://bohiba.com/api';
-  static const String baseUrl = 'https://beta-server-t1.bohiba.com/api';
-
+  static const String baseUrl = 'https://bohiba.com/api';
+  // static const String baseUrl = "https://beta-server-t1.bohiba.com/api";
   static const String apiPostalCode = 'https://api.postalpincode.in/pincode';
   static const String apiVerifyEmail = '$baseUrl/verify-email';
   static const String apiVerifyOtp = '$baseUrl/verify-otp';
@@ -11,8 +10,6 @@ class ApiEndPoint {
   static const String apiSetProfileImage = '$baseUrl/set-profile-image';
   static const String apiSetRole = '$baseUrl/set-role';
   static const String apiEditDoc = '$baseUrl/add-document';
-  static const String addOwnerExpense = '$baseUrl/add-expense';
-  static const String allOwnerExpense = '$baseUrl/all-expense';
   static const String apiEditUser = '$baseUrl/user-update';
 
   static const String apiForgotPassword = '$baseUrl/forgot-password';
@@ -64,6 +61,16 @@ class ApiEndPoint {
   static const String apiEditTripReassign = '$baseUrl/trip/update-reassignment';
   static const String apiDeleteTripReassign =
       '$baseUrl/trip/delete-reassignment';
+
+  static const String apiAddTripDoc = '$baseUrl/trip/add-document';
+  static const String apiGetAllTripDoc = '$baseUrl/trip/all-document';
+  static const String apiGetTripDoc = '$baseUrl/trip/get-document';
+
+  static const String addOwnerExpense = '$baseUrl/add-expense';
+  static const String allOwnerExpense = '$baseUrl/all-expense';
+  static const String apiGetOwnerExpense = '$baseUrl/get-expense';
+  static const String editOwnerExpense = '$baseUrl/post-expense';
+  static const String deleteOwnerExpense = '$baseUrl/delete-expense';
 
   static const String apiAllJobs = '$baseUrl/owner/job-posted';
   static const String apiCreateJobs = '$baseUrl/owner/job-create';

@@ -1,3 +1,5 @@
+import 'package:bohiba/component/app_skeleton_loader.dart';
+
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/model/driver_model.dart';
@@ -111,39 +113,64 @@ class ExplorePage extends GetView<OpenDriverListController> {
               ),
             ),
             Expanded(
-              child: SmartRefresher(
-                controller: controller.refreshController,
-                onRefresh: () async {
-                  await controller.getAllOpenDriver(
-                    refresh: true,
-                    showLoading: false,
-                  );
-                  controller.refreshController.refreshCompleted();
-                },
-                child: ListView.builder(
-                  padding: EdgeInsets.only(
-                    left: ScreenUtils.height15,
-                    right: ScreenUtils.height15,
-                  ),
-                  itemCount: controller.arrOpenDriver.length,
-                  itemBuilder: (context, index) {
-                    UserModel openDriver = controller.arrOpenDriver[index];
-                    return OpenDriverTile(
-                      openDriver: openDriver,
-                      onTap: () {
-                        navigateState
-                            .pushNamed(AppRoute.openDriver,
-                                arguments: openDriver)
-                            .then((onValue) async {
-                          if (onValue != null && onValue != false) {
-                            await controller.getAllOpenDriver();
-                          }
-                        });
-                      },
-                    );
-                  },
-                ),
-              ),
+              child: controller.arrOpenDriver.value == null
+                  ? AppSkeletonLoader(
+                      skeletonLength: 3,
+                    )
+                  : (controller.arrOpenDriver.value?.isEmpty == true)
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'No Driver Found',
+                              style: bohibaTheme.textTheme.displaySmall,
+                            ),
+                            Text(
+                              'At moment no driver are looking for jobs',
+                              style: bohibaTheme.textTheme.titleLarge,
+                            )
+                          ],
+                        )
+                      : SmartRefresher(
+                          controller: controller.refreshController,
+                          onRefresh: () async {
+                            await controller.getAllOpenDriver(
+                              refresh: true,
+                              showLoading: false,
+                            );
+                            controller.refreshController.refreshCompleted();
+                          },
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(
+                              left: ScreenUtils.height15,
+                              right: ScreenUtils.height15,
+                            ),
+                            itemCount:
+                                (controller.arrOpenDriver.value?.length ?? 0),
+                            itemBuilder: (context, index) {
+                              UserModel? openDriver =
+                                  controller.arrOpenDriver.value?[index];
+                              if (openDriver == null) {
+                                return SizedBox.shrink();
+                              } else {
+                                return OpenDriverTile(
+                                  openDriver: openDriver,
+                                  onTap: () {
+                                    navigateState
+                                        .pushNamed(AppRoute.openDriver,
+                                            arguments: openDriver)
+                                        .then((onValue) async {
+                                      if (onValue != null && onValue != false) {
+                                        await controller.getAllOpenDriver();
+                                      }
+                                    });
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        ),
             ),
           ],
         );

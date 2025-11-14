@@ -1,3 +1,7 @@
+import 'package:bohiba/services/global_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '/pages/widget/role_widget.dart';
 import '/component/image_path.dart';
 import '/services/role_permission_service.dart';
 import '/controllers/role_controller.dart';
@@ -7,8 +11,9 @@ import '/dist/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
 import 'package:get/get.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeAppBar extends GetView<HomeController>
     implements PreferredSizeWidget {
@@ -20,12 +25,12 @@ class HomeAppBar extends GetView<HomeController>
   @override
   Widget build(BuildContext context) {
     final NavigatorState navigatState = Navigator.of(context);
-    return PreferredSize(
+    /*return PreferredSize(
       preferredSize: Size.fromHeight(ScreenUtils.height55),
       child: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
-        titleSpacing: 16,
+        titleSpacing: 14.w,
         title: Image.asset(
           ImagePath.bohibaIcon,
           width: 80,
@@ -90,7 +95,7 @@ class HomeAppBar extends GetView<HomeController>
               }
               //Expenses Menu
               if (RoleService.hasPermission(
-                  RolePermissionService.viewExpenses)) {
+                  RolePermissionService.viewOwnerExpense)) {
                 items.add(
                   PopupMenuItem(
                     value: ServiceType.expenses,
@@ -111,8 +116,8 @@ class HomeAppBar extends GetView<HomeController>
                 context: context,
                 position: RelativeRect.fromLTRB(
                   tapDownDetails.globalPosition.dx,
-                  tapDownDetails.globalPosition.dy + 25,
-                  ScreenUtils.width50,
+                  tapDownDetails.globalPosition.dy + 20,
+                  0,
                   0,
                 ),
                 shape: const RoundedRectangleBorder(
@@ -158,7 +163,7 @@ class HomeAppBar extends GetView<HomeController>
           ),
 
           //Notification
-          AppBarIconBox(
+          /*AppBarIconBox(
             onTap: () {
               navigatState.pushNamed(AppRoute.notifyScreen);
             },
@@ -167,7 +172,7 @@ class HomeAppBar extends GetView<HomeController>
             ),
           ),
 
-          /*AppBarIconBox(
+          AppBarIconBox(
             onTap: () {
               Navigator.of(context).pushNamed(AppRoute.favList);
             },
@@ -175,6 +180,211 @@ class HomeAppBar extends GetView<HomeController>
           )*/
         ],
       ),
-    );
+    );*/
+
+    return Obx(() {
+      return SliverAppBar(
+        pinned: true,
+        stretch: true,
+        expandedHeight: 160.h,
+        automaticallyImplyLeading: false,
+        flexibleSpace: FlexibleSpaceBar(
+          background: RoleWidget(
+            truckOwnerWidget: Image.asset(
+              ImagePath.truckOwnerBanner,
+              fit: BoxFit.cover,
+            ),
+            driverWidget: Image.asset(
+              ImagePath.driverBanner,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        title: GestureDetector(
+          onTap: () {
+            navigatState.pushNamed(AppRoute.userProfile);
+          },
+          child: Card(
+            elevation: 0.5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6.r),
+            ),
+            child: Container(
+              height: 25.h,
+              width: 25.h,
+              decoration: BoxDecoration(
+                color: bohibaTheme.cardColor,
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6.r),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://bohiba.com/storage/app/public/images/profile/${controller.profile.value?.image}",
+                  fit: BoxFit.cover,
+                  placeholder: (context, child) {
+                    return Image.network(
+                      GlobalService.getAvatarUrl(
+                          controller.profile.value?.name ?? ''),
+                    );
+                  },
+                  errorWidget: (context, child, obj) {
+                    return Image.network(
+                      GlobalService.getAvatarUrl(
+                          controller.profile.value?.name ?? ''),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+        onStretchTrigger: () async {
+          await controller.onRefreshPage();
+        },
+        actions: [
+          AppBarIconBox(
+            onTapDown: (TapDownDetails tapDownDetails) {
+              final items = <PopupMenuEntry<ServiceType>>[];
+
+              if (RoleService.hasPermission(RolePermissionService.viewTrucks)) {
+                items.add(
+                  PopupMenuItem(
+                    value: ServiceType.truck,
+                    child: Text(
+                      'Truck',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              if (RoleService.hasPermission(RolePermissionService.viewDriver)) {
+                items.add(
+                  PopupMenuItem(
+                    value: ServiceType.driver,
+                    textStyle: TextStyle(),
+                    child: Text(
+                      'Driver',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              if (RoleService.hasPermission(RolePermissionService.viewTrips)) {
+                items.add(
+                  PopupMenuItem(
+                    value: ServiceType.trip,
+                    child: Text(
+                      'Trips',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              //Expenses Menu
+              if (RoleService.hasPermission(
+                  RolePermissionService.viewOwnerExpense)) {
+                items.add(
+                  PopupMenuItem(
+                    value: ServiceType.expenses,
+                    textStyle: TextStyle(),
+                    child: Text(
+                      'Expenses',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.titleSmall!.fontWeight,
+                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                  tapDownDetails.globalPosition.dx,
+                  tapDownDetails.globalPosition.dy,
+                  0,
+                  0,
+                ),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                items: items,
+              ).then((value) async {
+                if (!context.mounted) return value;
+                switch (value) {
+                  case ServiceType.driver:
+                    return await navigatState
+                        .pushNamed(AppRoute.allDriver)
+                        .then((onValue) async {
+                      if (onValue != null) {
+                        await controller.getDriverList();
+                        controller.arrDriver.refresh();
+                      }
+                    });
+                  case ServiceType.trip:
+                    return navigatState.pushNamed(AppRoute.allTrip);
+                  case ServiceType.truck:
+                    return navigatState.pushNamed(AppRoute.allTruck).then(
+                      (onValue) async {
+                        if (onValue != null) {
+                          await controller.getTruckList();
+                          controller.arrTruck.refresh();
+                        }
+                      },
+                    );
+                  case ServiceType.expenses:
+                    return navigatState.pushNamed(AppRoute.allOwnerExpense);
+                  case ServiceType.manager:
+                    break;
+
+                  default:
+                  // Manager
+                }
+              });
+            },
+            icon: const Icon(EvaIcons.plus),
+          ),
+
+          //Notification
+          /*AppBarIconBox(
+                onTap: () {
+                  navigatState.pushNamed(AppRoute.notifyScreen);
+                },
+                icon: const Icon(
+                  EvaIcons.bellOutline,
+                ),
+              ),
+        
+              AppBarIconBox(
+                onTap: () {
+                  Navigator.of(context).pushNamed(AppRoute.favList);
+                },
+                icon: Icon(Remix.heart_3_line),
+              )*/
+        ],
+      );
+    });
   }
 }

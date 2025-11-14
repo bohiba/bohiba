@@ -22,13 +22,9 @@ class TripExpenseController extends GetxController {
     }
   }
 
-  Future<void> deleteExpense({required int expenseId}) async {
+  Future<int> deleteExpense({required int expenseId}) async {
     Get.back();
     int deleteSucess = await TripService.deleteExpense(expenseId: expenseId);
-    if (deleteSucess > 0) {
-      Get.back(result: true);
-    } else {
-      Get.back(result: false);
-    }
+    return deleteSucess;
   }
 }

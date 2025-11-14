@@ -1,59 +1,61 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '/services/global_service.dart';
-import '/controllers/user_profile_config_controller.dart';
-import 'package:get/get.dart';
+import '/controllers/set_image_controller.dart';
+
 import '/component/image_upload_widget.dart';
 import '/routes/app_route.dart';
 import '/dist/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import '/component/bohiba_buttons/primary_button.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SetImagePage extends GetView<UserProfileConfigController> {
+class SetImagePage extends GetView<SetImageController> {
   const SetImagePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final NavigatorState navigateState = Navigator.of(context);
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop == true) {
-          return;
-        } else {
-          GlobalService.showAlertDialog(
-            status: AlertStatus.failure,
-            title: 'Verification',
-            description:
-                'Are your sure? You want to discontinue you verification process',
-            discardBtnTxt: 'No',
-            saveBtnTxt: 'Yes',
-            onSave: () {
-              navigateState.pop();
-              navigateState.pop(true);
-            },
-          );
-        }
-      },
-      child: Scaffold(
-        body: Obx(() {
-          Widget content = SizedBox();
-          UploadStatus checkStatus = controller.status.value;
-          if (checkStatus == UploadStatus.initial) {
-            content = InitialImageUploadWidget<UserProfileConfigController>();
-          } else if (checkStatus == UploadStatus.uploading) {
-            content = OnUploadingImageWidget<UserProfileConfigController>();
-          } else if (checkStatus == UploadStatus.success) {
-            content =
-                OnFetchingImageSuccessWidget<UserProfileConfigController>();
-          } else if (checkStatus == UploadStatus.failure) {
-            content = OnFetchingImageErrorWidget<UserProfileConfigController>();
+
+    return Obx(() {
+      Widget content = SizedBox();
+      UploadStatus checkStatus = controller.status.value;
+
+      if (checkStatus == UploadStatus.initial) {
+        content = InitialImageUploadWidget<SetImageController>();
+      } else if (checkStatus == UploadStatus.uploading) {
+        content = OnUploadingImageWidget<SetImageController>();
+      } else if (checkStatus == UploadStatus.success) {
+        content = OnFetchingImageSuccessWidget<SetImageController>();
+      } else if (checkStatus == UploadStatus.failure) {
+        content = OnFetchingImageErrorWidget<SetImageController>();
+      } else {
+        content = SizedBox.shrink();
+      }
+      return PopScope(
+        canPop: controller.canPop.value,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop == true) {
+            return;
           } else {
-            content = SizedBox.shrink();
+            GlobalService.showAlertDialog(
+              status: AlertStatus.failure,
+              title: 'Verification',
+              description:
+                  'Are your sure? You want to discontinue you verification process',
+              discardBtnTxt: 'No',
+              saveBtnTxt: 'Yes',
+              onSave: () {
+                navigateState.pop();
+                navigateState.pop(true);
+              },
+            );
           }
-          return SafeArea(
+        },
+        child: Scaffold(
+          appBar: TitleAppbar(title: 'Set Profile'),
+          body: SafeArea(
             child: Container(
               height: ScreenUtils.height,
               width: ScreenUtils.width,
@@ -61,6 +63,7 @@ class SetImagePage extends GetView<UserProfileConfigController> {
                 horizontal: ScreenUtils.width25,
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: ScreenUtils.height15),
@@ -120,7 +123,13 @@ class SetImagePage extends GetView<UserProfileConfigController> {
                         : () async {
                             int isUploaded = await controller.uploadImage();
                             if (isUploaded > 0) {
-                              navigateState.popAndPushNamed(AppRoute.roleType);
+                              if (controller.route.value == "pop") {
+                                navigateState.pop(true);
+                              } else if (controller.route.value ==
+                                  AppRoute.roleType) {
+                                navigateState
+                                    .popAndPushNamed(AppRoute.roleType);
+                              } else {}
                             }
                           },
                     label: 'Upload',
@@ -128,9 +137,9 @@ class SetImagePage extends GetView<UserProfileConfigController> {
                 ],
               ),
             ),
-          );
-        }),
-      ),
-    );
+          ),
+        ),
+      );
+    });
   }
 }

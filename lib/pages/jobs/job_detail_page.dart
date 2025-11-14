@@ -1,29 +1,24 @@
 import '/component/bohiba_buttons/primary_button.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/job_detail_model.dart';
-
 import '/services/launcher_service.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
-import '/dist/app_enums.dart';
 import '/services/global_service.dart';
-import 'package:readmore/readmore.dart';
-
+import '/dist/app_enums.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-
-import '../../controllers/job_controller.dart';
-import 'package:get/get.dart';
+import '/controllers/job_controller.dart';
 import '/routes/app_route.dart';
-
 import '/component/screen_utils.dart';
 import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/pages/widget/role_widget.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:get/get.dart';
+import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class JobDetailPage extends GetView<JobController> {
   const JobDetailPage({super.key});
@@ -240,12 +235,20 @@ class JobDetailPage extends GetView<JobController> {
                                         style: bohibaTheme
                                             .textTheme.headlineMedium,
                                       ),
-                                      Text(
-                                        "See All",
-                                        style: TextStyle(
-                                          fontSize: bohibaTheme.textTheme
-                                              .headlineMedium!.fontSize,
-                                          color: bohibaTheme.primaryColor,
+                                      GestureDetector(
+                                        onTap: () {
+                                          navigatorState.pushNamed(
+                                            AppRoute.allIntDriver,
+                                            arguments: controller.jobObj.value,
+                                          );
+                                        },
+                                        child: Text(
+                                          "See All",
+                                          style: TextStyle(
+                                            fontSize: bohibaTheme.textTheme
+                                                .headlineMedium!.fontSize,
+                                            color: bohibaTheme.primaryColor,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -266,6 +269,7 @@ class JobDetailPage extends GetView<JobController> {
                             truckOwnerWidget: (controller.arrIntDriver.isEmpty)
                                 ? SizedBox.shrink()
                                 : ListView.builder(
+                                    shrinkWrap: true,
                                     itemCount: controller.arrIntDriver.length,
                                     itemBuilder: (context, index) {
                                       InterestedDriver intDriver =
@@ -303,8 +307,8 @@ class JobDetailPage extends GetView<JobController> {
                                                 ),
                                                 Text(
                                                   intDriver.jobStatus
-                                                          .toString()
-                                                          .capitalizeFirst ??
+                                                          ?.toString()
+                                                          .toCapitalizedLabel() ??
                                                       '',
                                                   style: TextStyle(
                                                     fontSize: bohibaTheme
@@ -335,18 +339,18 @@ class JobDetailPage extends GetView<JobController> {
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: bohibaTheme
-                                                      .colorScheme.onSurface
+                                                      .colorScheme.onPrimary
                                                       .withValues(alpha: 0.25),
                                                 ),
                                                 child: Icon(
                                                   Icons.phone_sharp,
                                                   size: 16.w,
                                                   color: bohibaTheme
-                                                      .colorScheme.onSurface,
+                                                      .colorScheme.onPrimary,
                                                 ),
                                               ),
                                             ),
-                                            Gap(10.w),
+                                            /*Gap(10.w),
                                             GestureDetector(
                                               onTap: () {
                                                 GlobalService.showAppToast(
@@ -370,119 +374,13 @@ class JobDetailPage extends GetView<JobController> {
                                                       .colorScheme.error,
                                                 ),
                                               ),
-                                            ),
+                                            ),*/
                                           ],
                                         ),
                                       );
                                     },
                                   ),
                           ),
-                          /*if (controller.arrIntDriver.isEmpty)
-                            SizedBox.shrink()
-                          else
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: controller.arrIntDriver.length,
-                                itemBuilder: (context, index) {
-                                  InterestedDriver intDriver =
-                                      controller.arrIntDriver[index];
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: ScreenUtils.height10),
-                                    margin: EdgeInsets.only(
-                                        bottom: ScreenUtils.width5),
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor:
-                                              bohibaTheme.dividerColor,
-                                        ),
-                                        Gap(10.w),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              intDriver.name.toString(),
-                                              style: TextStyle(
-                                                fontSize: bohibaTheme.textTheme
-                                                    .bodyMedium!.fontSize,
-                                                fontWeight: bohibaTheme.textTheme
-                                                    .bodySmall!.fontWeight,
-                                                color: bohibaTheme
-                                                    .textTheme.titleMedium!.color,
-                                              ),
-                                            ),
-                                            Text(
-                                              intDriver.jobStatus
-                                                      .toString()
-                                                      .capitalizeFirst ??
-                                                  '',
-                                              style: TextStyle(
-                                                fontSize: bohibaTheme.textTheme
-                                                    .titleMedium!.fontSize,
-                                                fontWeight: bohibaTheme.textTheme
-                                                    .bodyMedium!.fontWeight,
-                                                color: bohibaTheme
-                                                    .textTheme.bodyMedium!.color,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Spacer(),
-                                        GestureDetector(
-                                          onTap: () async =>
-                                              await LauncherService.makePhoneCall(
-                                                  intDriver.mobileNumber
-                                                      .toString()),
-                                          child: Container(
-                                            height: 28.w,
-                                            width: 28.w,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: bohibaTheme
-                                                  .colorScheme.onSurface
-                                                  .withValues(alpha: 0.25),
-                                            ),
-                                            child: Icon(
-                                              Icons.phone_sharp,
-                                              size: 16.w,
-                                              color: bohibaTheme
-                                                  .colorScheme.onSurface,
-                                            ),
-                                          ),
-                                        ),
-                                        Gap(10.w),
-                                        GestureDetector(
-                                          onTap: () {
-                                            GlobalService.showAppToast(
-                                                message:
-                                                    'Mark as not interested');
-                                          },
-                                          child: Container(
-                                            height: 28.w,
-                                            width: 28.w,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: bohibaTheme.colorScheme.error
-                                                  .withValues(alpha: 0.25),
-                                            ),
-                                            child: Icon(
-                                              Icons.close,
-                                              size: 16.w,
-                                              color:
-                                                  bohibaTheme.colorScheme.error,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),*/
                         ],
                       ),
               ),

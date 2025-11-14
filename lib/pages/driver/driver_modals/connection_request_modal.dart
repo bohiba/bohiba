@@ -1,5 +1,4 @@
-import 'package:bohiba/services/pref_utils.dart';
-
+import '/services/pref_utils.dart';
 import '/dist/app_enums.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/screen_utils.dart';
@@ -46,7 +45,7 @@ class _ConnectionRequestModalState extends State<ConnectionRequestModal> {
       titleTextStyle: TextStyle(
         fontSize: bohibaTheme.textTheme.displaySmall!.fontSize,
         color: widget.connectionType == ConnectionType.accept
-            ? bohibaTheme.colorScheme.onSurface
+            ? bohibaTheme.colorScheme.onPrimary
             : bohibaTheme.colorScheme.error,
         fontFamily: bohibaTheme.textTheme.titleLarge!.fontFamily,
         fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
@@ -115,7 +114,7 @@ class _ConnectionRequestModalState extends State<ConnectionRequestModal> {
                     ? 'ACCEPT'
                     : 'REJECT',
                 color: widget.connectionType == ConnectionType.accept
-                    ? bohibaTheme.colorScheme.onSurface
+                    ? bohibaTheme.colorScheme.onPrimary
                     : bohibaTheme.colorScheme.error,
                 onPressed: widget.onAction)
           ],

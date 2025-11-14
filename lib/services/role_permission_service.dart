@@ -8,9 +8,9 @@ class RolePermissionService {
   static const String editDrivers = 'edit_drivers';
   static const String deleteDrivers = 'delete_drivers';
   static const String viewDriver = 'view_drivers';
-  static const String viewExpenses = 'view_expenses';
 
-  
+  static const String viewTripExpenses = 'view_trip_expenses';
+
   static const String viewTrips = "view_trips";
   static const String addTrips = "add_trips";
   static const String editTrips = 'edit_trips';
@@ -19,4 +19,8 @@ class RolePermissionService {
   static const String addExpenses = "add_expenses";
 
   static String viewMaintainance = 'view_maintainance';
+
+  static String viewOwnerExpense = 'view_owner_expense';
+  static String editOwnerExpense = 'edit_owner_expense';
+  static String deleteOwnerExpense = 'delete_owner_expense';
 }

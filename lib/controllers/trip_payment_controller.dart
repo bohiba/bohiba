@@ -27,8 +27,6 @@ class TripPaymentController extends GetxController {
     int deleteSucess = await TripService.deletePayment(paymentId: paymentId);
     if (deleteSucess > 0) {
       Get.back(result: true);
-    } else {
-      Get.back(result: false);
     }
   }
 }

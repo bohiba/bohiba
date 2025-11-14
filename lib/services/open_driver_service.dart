@@ -152,7 +152,7 @@ class OpenDriverService {
         return null;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: 'Something went wrong');
+        GlobalService.showAppToast(message: 'Failed to send request');
         return null;
     }
   }

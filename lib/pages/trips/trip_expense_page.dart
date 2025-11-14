@@ -17,6 +17,7 @@ class TripExpensePage extends GetView<TripExpenseController> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(
         title: 'Expense',
@@ -81,9 +82,13 @@ class TripExpensePage extends GetView<TripExpenseController> {
                       description:
                           'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
-                      onDiscard: () async => controller.deleteExpense(
-                        expenseId: controller.tripExpense.value.id!,
-                      ),
+                      onDiscard: () async {
+                        int success = await controller.deleteExpense(
+                            expenseId: controller.tripExpense.value.id!);
+                        if (success > 0) {
+                          navigatorState.pop(true);
+                        }
+                      },
                       saveBtnTxt: 'CLOSE',
                       onSave: () => Get.back(),
                     );

@@ -59,9 +59,7 @@ class AuthController extends GetxController {
   }
 
   String? validateUUIDField(String? value) {
-    if (value == null) {
-      return 'Something went wrong. Please retry.';
-    } else if (value.isEmpty) {
+    if (value == null || value.isEmpty) {
       return 'Please enter valid UUID';
     } else if (value.length > 7) {
       return 'UUID is too short. Please Enter valid UUID';

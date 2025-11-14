@@ -26,7 +26,7 @@ class TruckAllController extends GetxController {
   void onInit() {
     super.onInit();
     Future.delayed(Duration.zero, () async {
-      await getTruckList();
+      await getTruckList(showLoading: false);
     });
   }
 
@@ -35,15 +35,20 @@ class TruckAllController extends GetxController {
     return success;
   }
 
-  Future<List<TruckModel>> getTruckList({
+  Future<void> getTruckList({
     MethodType methodType = MethodType.local,
     bool resetList = false,
+    bool showLoading = false,
   }) async {
-    List<TruckModel> truckList =
-        await TruckService.getTruckList(type: methodType, reset: resetList);
-    arrTruck.clear();
-    arrTruck.addAll(truckList);
-    return arrTruck;
+    List<TruckModel>? truckList = await TruckService.getTruckList(
+      type: methodType,
+      reset: resetList,
+      showProgress: showLoading,
+    );
+    if (truckList != null) {
+      arrTruck.clear();
+      arrTruck.addAll(truckList);
+    }
   }
 
   Future<int> addVehicle() async {

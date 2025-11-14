@@ -124,12 +124,13 @@ class DriverAddController extends ImageUploadController {
     return null;
   }
 
-  Future<List<TruckModel>> getTruckList() async {
+  Future<void> getTruckList() async {
     arrTruck.clear();
-    List<TruckModel> truckList = await TruckService.getTruckList();
-    arrTruck.addAll(truckList);
-    arrTruck.refresh();
-    return truckList;
+    List<TruckModel>? truckList = await TruckService.getTruckList();
+    if (truckList != null) {
+      arrTruck.addAll(truckList);
+      arrTruck.refresh();
+    }
   }
 
   @override

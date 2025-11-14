@@ -45,7 +45,7 @@ class UserAuthController {
 
   Future<void> saveUserDetails({required BuildContext context}) async {
     Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoute.navBar, (Route<dynamic> route) => false);
+        AppRoute.truckOwnerNavBar, (Route<dynamic> route) => false);
     // Navigator.of(context).pushNamedAndRemoveUntil(newRouteName, predicate).toNamed(
     //   AppRoute.navBar,
     // );

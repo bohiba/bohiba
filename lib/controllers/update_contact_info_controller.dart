@@ -1,4 +1,3 @@
-import '/dist/app_enums.dart';
 import '/model/profile_model.dart';
 import '/services/global_service.dart';
 import '/services/profile_service.dart';
@@ -10,8 +9,6 @@ class UpdateContactInfoController extends GetxController {
   TextEditingController phoneController = TextEditingController();
 
   Rx<ProfileModel> profileModel = ProfileModel().obs;
-
-  Rx<AddAssetUsing> addAsset = AddAssetUsing.uuid.obs;
 
   @override
   void onInit() {
@@ -43,7 +40,7 @@ class UpdateContactInfoController extends GetxController {
       emailController.text = profileModel.value.email ?? '';
       phoneController.text = profileModel.value.mobileNumber ?? '';
     } else {
-      GlobalService.showAppToast(message: 'Something went wrong');
+      GlobalService.showAppToast(message: 'Failed to get profile');
     }
   }
 }

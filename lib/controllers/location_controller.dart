@@ -1,5 +1,3 @@
-import '/dist/app_enums.dart';
-
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/dio_serivce.dart';
@@ -87,9 +85,6 @@ class LocationController extends GetxController {
             userTitleMsg.value = 'Failed';
             userSubTitle.value =
                 'Unstable network connection! Refresh to try again';
-            GlobalService.showSnackBar(
-                status: AlertStatus.failure,
-                desc: 'Please retry something went wrong.');
             return null;
           }
         } else {

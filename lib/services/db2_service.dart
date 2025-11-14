@@ -11,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 4;
+  static int dbversion = 8;
 
   /*================  DB CONFIG  =================== */
 
@@ -28,7 +28,7 @@ class DatabaseService {
     if (kIsWeb) {
       databaseFactory = databaseFactoryFfiWeb;
     } else {
-      databaseFactory = databaseFactory;
+      // databaseFactory = databaseFactory;
       filePath = await getDatabasesPath();
     }
 
@@ -242,7 +242,7 @@ class DatabaseService {
     }
   }
 
-  Future<List<Map<String, dynamic>>?> getAllData(String query) async {
+  Future<List<Map<String, dynamic>>?> executeQuery(String query) async {
     try {
       if (_database == null || !(_database!.isOpen)) {
         await initDB();
@@ -352,6 +352,7 @@ class DatabaseService {
   , puccUpto TEXT
   , fitnessUpto TEXT
   , updatedAt TEXT
+  , createdAt TEXT
   )''';
 
   String strDriver = '''
@@ -396,6 +397,7 @@ class DatabaseService {
   , destination TEXT
   , startedAt TEXT
   , endedAt TEXT
+  , transporter TEXT
   , materialType TEXT
   , loadWeight DOUBLE NOT NULL DEFAULT 0.0
   , shortWeight DOUBLE NOT NULL DEFAULT 0.0
@@ -483,6 +485,8 @@ class DatabaseService {
   , date TEXT
   , description TEXT
   , severity TEXT
+  , updatedAt TEXT
+  , createdAt TEXT
   )''';
 
   String strOpenDriver = '''
@@ -578,3 +582,15 @@ final String tblReassignment = 'tblReassignment';
 final String tblTripExpense = 'tblTripExpense';
 final String tblTripPayment = 'tblTripPayment';
 final String tblDocument = 'tblDocument';
+
+String sqlValue(dynamic value) {
+  if (value == null) return 'NULL';
+
+  if (value is num) return value.toString();
+
+  if (value is bool) return value ? '1' : '0';
+
+  if (value is DateTime) return "'${value.toIso8601String()}'";
+
+  return "'${value.toString().replaceAll("'", "''")}'";
+}

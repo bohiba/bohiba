@@ -1,4 +1,5 @@
 import 'package:bohiba/model/profile_model.dart';
+import 'package:bohiba/services/user_role_type.dart';
 
 import '/routes/app_route.dart';
 
@@ -32,7 +33,7 @@ class SettingController extends GetxController {
     roleId.value = RoleService.roleId();
   }
 
-  Future<void> switchProfile() async {
+  Future<void> switchRole() async {
     Map<String, dynamic> bodyObj = {
       'role_id': roleId.value,
     };
@@ -46,8 +47,14 @@ class SettingController extends GetxController {
       await MainService.mainApi(type: MethodType.api);
       Get.deleteAll();
       Get.put(() => ThemeController());
-      Get.offAllNamed(AppRoute.navBar);
-      GlobalService.showAppToast(message: 'Role Updated Successfully');
+      if (roleId.value == UserRoles.truckOwner) {
+        Get.offAllNamed(AppRoute.truckOwnerNavBar);
+      } else {
+        Get.offAllNamed(AppRoute.truckDriverNavBar);
+      }
+
+      GlobalService.showSnackBar(
+          status: AlertStatus.success, desc: 'Role Updated Successfully');
     }
   }
 

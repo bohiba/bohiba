@@ -79,19 +79,19 @@ class MinesPage extends GetView<MinesController> {
                       ),
                       LinearBoxWidget(
                         header: 'Started',
-                        title: 'NA',
+                        title: '',
                       ),
                       LinearBoxWidget(
                         header: 'Lease Expiry',
-                        title: 'NA',
+                        title: '',
                       ),
                       LinearBoxWidget(
                         header: 'Mine Code',
-                        title: 'NA',
+                        title: '',
                       ),
                       LinearBoxWidget(
                         header: 'Lease Code',
-                        title: 'NA',
+                        title: '',
                       ),
                       LinearBoxWidget(
                         header: 'Ownership Type',
@@ -100,7 +100,7 @@ class MinesPage extends GetView<MinesController> {
                       ),
                       LinearBoxWidget(
                         header: 'Parent Company',
-                        title: "NA",
+                        title: "",
                       ),
                       LinearBoxWidget(
                         header: 'Material Type',
@@ -109,7 +109,7 @@ class MinesPage extends GetView<MinesController> {
                       ),
                       LinearBoxWidget(
                         header: 'Mine Area',
-                        title: 'NA',
+                        title: '',
                       ),
                       LinearBoxWidget(
                         header: 'Material Grade',

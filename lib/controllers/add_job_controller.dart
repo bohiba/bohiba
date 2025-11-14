@@ -72,6 +72,8 @@ class AddJobController extends GetxController {
         status: AlertStatus.success,
         title: 'Success',
         description: 'Do you want to create more jobs?',
+        discardBtnTxt: 'Yes',
+        saveBtnTxt: 'NO',
         onSave: () {
           Get.back();
           Get.back(result: true);

@@ -14,7 +14,6 @@ import '../bohiba_colors.dart';
 class TileDecorative extends BoxDecoration {
   TileDecorative({Color? color})
       : super(
-          // color: BohibaColors.lightGreyColor,
           color: color ?? bohibaTheme.cardColor,
           borderRadius: BorderRadius.circular(12.r),
         );

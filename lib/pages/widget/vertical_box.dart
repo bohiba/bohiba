@@ -1,6 +1,3 @@
-
-
-
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
@@ -38,13 +35,16 @@ class TripInfoItem extends StatelessWidget {
             text: value,
             overflowText: value,
             alignment: Alignment.centerLeft,
+            preserFontSize: [
+              theme.titleMedium!.fontSize!,
+            ],
             marqueeTextStyle: TextStyle(
-              fontSize: theme.bodyMedium!.fontSize,
+              fontSize: theme.titleMedium!.fontSize,
               fontWeight: theme.bodyLarge!.fontWeight,
               color: theme.bodyLarge!.color,
             ),
             style: TextStyle(
-              fontSize: theme.bodyMedium!.fontSize,
+              fontSize: theme.titleMedium!.fontSize,
               fontWeight: theme.bodyLarge!.fontWeight,
               color: theme.bodyLarge!.color,
             ),

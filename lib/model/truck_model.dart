@@ -39,6 +39,7 @@ class TruckModel {
   String? fitnessUpto;
 
   String? updatedAt;
+  String? createdAt;
 
   TruckModel({
     this.id,
@@ -75,55 +76,8 @@ class TruckModel {
     this.puccUpto,
     this.fitnessUpto,
     this.updatedAt,
+    this.createdAt,
   });
-
-
-  factory TruckModel.fromJson(Map<String, dynamic> json) {
-    final registration = json['registration'] ?? {};
-    final specs = json['specs'] ?? {};
-    final validity = json['validity'] ?? {};
-    final driver = json['driver'] ?? {};
-    final owner = json['owner'] ?? {};
-
-    return TruckModel(
-      id: json['id'],
-      truckImage: json['truck_image'],
-      regdNumber: json['regd_number'],
-      isFav: json['is_fav'] ?? 0,
-      driverId: driver['id'],
-      driverUuid: driver['uuid'],
-      driverImage: driver['image'],
-      driverName: driver['name'],
-      driverMobileNumber: driver['mobile_number'],
-      ownerId: owner['id'],
-      ownerUuid: owner['uuid'],
-      ownerImage: owner['image'],
-      ownerName: owner['name'],
-      ownerMobileNumber: owner['mobile_number'],
-      place: registration['place'],
-      regdDate: registration['registration_date'],
-      rcStatus: registration['rc_status'],
-      rcModel: registration['rc_model'],
-      rcOwnerSr: registration['rc_owner_sr'],
-      rcDesc: registration['rc_vh_class_desc'],
-      vhBrand: specs['brand'],
-      vhModel: specs['model'],
-      vhEngineNo: specs['engine_number'],
-      vhChassisNo: specs['chassis_number'],
-      vhFuelType: specs['fuel_type'],
-      vhUnladenWeight: (specs['unladen_weight'] is num)
-          ? (specs['unladen_weight'] as num).toDouble()
-          : null,
-      vhFinancer: specs['financer'],
-      vhInsuranceNo: specs['insurance_policy_no'],
-      vhInsuranceCompany: specs['insurance_company'],
-      insuranceUpto: validity['insurance_upto'],
-      taxUpto: validity['tax_upto'],
-      puccUpto: validity['pucc_upto'],
-      fitnessUpto: validity['fitness_upto'],
-      updatedAt: json['updated_at'],
-    );
-  }
 
   static Map<String, dynamic> toDB(Map<String, dynamic> json) {
     final driver = json['driver'] ?? {};
@@ -165,12 +119,12 @@ class TruckModel {
       'taxUpto': valid['tax_upto'],
       'puccUpto': valid['pucc_upto'],
       'fitnessUpto': valid['fitness_upto'],
-      'updatedAt': json['updated_at']
+      'updatedAt': json['updated_at'],
+      'createdAt': json['created_at']
     };
   }
 
   /// ✅ Convert back from DB Map
-  /// 
   factory TruckModel.fromDB(Map<String, dynamic> map) => TruckModel(
         id: map['id'],
         truckImage: map['image'],
@@ -206,5 +160,6 @@ class TruckModel {
         ..taxUpto = map['taxUpto']
         ..puccUpto = map['puccUpto']
         ..fitnessUpto = map['fitnessUpto']
-        ..updatedAt = map['updatedAt'];
+        ..updatedAt = map['updatedAt']
+        ..createdAt = map['createdAt'];
 }

@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'package:bohiba/component/image_path.dart';
+import 'package:bohiba/extensions/bohiba_extension.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/pages/widget/role_widget.dart';
 
 import '/pages/truck/add_truck_component/truck_menu.dart';
@@ -10,7 +15,6 @@ import '/model/truck_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:remixicon/remixicon.dart';
 
 class TruckTile extends GetView<TruckAllController> {
   final VoidCallback? onClick;
@@ -41,19 +45,52 @@ class TruckTile extends GetView<TruckAllController> {
               onTap: onClick,
               child: Row(
                 children: [
-                  Container(
-                    width: ScreenUtils.width * 0.095,
-                    height: ScreenUtils.width * 0.095,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: BohibaColors.primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Remix.truck_line,
-                      color: BohibaColors.white,
-                    ),
-                  ),
+                  truckInfo.truckImage == null
+                      ? Container(
+                          height: 32.h,
+                          width: 32.h,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: bohibaTheme.colorScheme.tertiary,
+                          ),
+                          child: Text(
+                            truckInfo.regdNumber?.shortCode ?? '',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.labelLarge!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                              color: bohibaTheme.textTheme.bodySmall!.color,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: 32.h,
+                          width: 32.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: bohibaTheme.dividerColor,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadiusGeometry.circular(35.r),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  '${ImagePath.truckImage}/${truckInfo.truckImage}',
+                              fit: BoxFit.cover,
+                              height: 32.h,
+                              width: 32.h,
+                              placeholder: (context, url) => Container(
+                                color: bohibaTheme.cardColor,
+                              ),
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.broken_image,
+                                size: 20,
+                                color: bohibaTheme.cardColor,
+                              ),
+                            ),
+                          ),
+                        ),
                   Gap(ScreenUtils.height15),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,

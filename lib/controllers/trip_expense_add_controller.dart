@@ -22,23 +22,23 @@ class AddTripExpenseController extends GetxController {
   TripModel? tripModel;
   TripExpense? tripExpense;
 
-  List<String> get arrPaymentMode => ['Cash', 'UPI', 'Bank', 'Cheque'];
+  List<String> get arrPaymentMode => ['cash', 'upi', 'bank', 'cheque'];
   List<String> get arrExpenseTypes => [
-        "Advance to Driver",
-        "Fuel",
-        "FastTag",
-        "Loading Charges",
-        "Unloading Charges",
-        "Driver Allowance / Fooding",
-        "Parking Charges",
-        "Typre Puncture",
-        "Urea",
-        "Tyre Replacement",
-        "Penalty / Fine",
-        "Weighbridge",
-        "Mobile Recharge",
-        "Other",
+        "fuel",
+        "fast_tag",
+        "loading_charges",
+        "unloading_charges",
+        "fooding",
+        "parking_charges",
+        "tyre_puncture",
+        "urea",
+        "tyre_replacement",
+        "fine",
+        "weighbridge",
+        "other",
       ];
+
+  RxInt countUpdate = 0.obs;
 
   @override
   void onInit() {
@@ -56,7 +56,8 @@ class AddTripExpenseController extends GetxController {
       'trip_id': tripModel?.id,
       'truck_regd_number': tripModel?.truck?.regdNumber?.trim(),
       'expense_date': expensedateController.text.trim(),
-      'expense_type': typeController.text.trim(),
+      'expense_type':
+          typeController.text.trim().replaceAll(' ', '_').toLowerCase(),
       'balance_amount': "0.0",
       'payment_mode': paymentModeController.text.trim(),
       'paid': (paidController.text.replaceAll(RegExp(r'[₹,]'), '').trim()),
@@ -70,6 +71,7 @@ class AddTripExpenseController extends GetxController {
         bodyMap: bodyObj,
       );
       if (editSucess > 0) {
+        countUpdate++;
         Get.back(result: true);
       }
     } else if (tripModel != null && tripExpense == null) {
@@ -79,6 +81,7 @@ class AddTripExpenseController extends GetxController {
         trip: tripModel!,
       );
       if (expenseAdded > 0) {
+        countUpdate++;
         // Get.back(result: true);
       }
     } else {

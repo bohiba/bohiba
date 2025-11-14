@@ -1,4 +1,5 @@
-import 'package:bohiba/model/job_detail_model.dart';
+import '/dist/app_enums.dart';
+import '/model/job_detail_model.dart';
 
 import '/services/global_service.dart';
 import '/services/api_end_point.dart';
@@ -7,6 +8,43 @@ import '/services/dio_serivce.dart';
 
 class OwnerJobService {
   static final DioService _dioService = DioService();
+
+  static Future<List<InterestedDriver>?> allApplicant(
+      {required int jobId, bool showLoading = false}) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return null;
+    }
+    if (showLoading) GlobalService.showProgress();
+    ApiResponse response =
+        await _dioService.get("${ApiEndPoint.apiApplicants}/$jobId");
+    if (showLoading) GlobalService.dismissProgress();
+    switch (response.statusCode) {
+      case 200:
+        if (response.data is List) {
+          List<dynamic> arrFetch = response.data;
+          List<InterestedDriver> arrIntDriver = arrFetch.map((e) {
+            return InterestedDriver.fromMap(e);
+          }).toList();
+          return arrIntDriver;
+        } else {
+          return null;
+        }
+      case 401:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Jobs',
+          desc: response.message,
+        );
+        return null;
+      default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          title: 'Jobs',
+          desc: 'Failed to fetch jobs',
+        );
+        return null;
+    }
+  }
 
   static Future<void> updateJob(
       {required Map<dynamic, dynamic> jobInfo}) async {
@@ -33,7 +71,7 @@ class OwnerJobService {
         GlobalService.showAppToast(message: response.message);
         return null;
       default:
-        GlobalService.showAppToast(message: 'Something went wrong');
+        GlobalService.showAppToast(message: 'Failed to get jobs');
         return null;
     }
   }
@@ -57,9 +95,9 @@ class OwnerJobService {
     }
   }
 
-  static Future<List<dynamic>> allJobs() async {
+  static Future<List<JobDetailModel>?> allJobs() async {
     if (!await DeviceInfoService.hasInternet()) {
-      return [];
+      return null;
     }
 
     GlobalService.showProgress();
@@ -68,16 +106,28 @@ class OwnerJobService {
     switch (response.statusCode) {
       case 200:
         if (response.data is List) {
-          return response.data;
+          List<dynamic> arrFetch = response.data;
+          List<JobDetailModel> arrJobDetail = arrFetch.map((e) {
+            return JobDetailModel.fromMap(e);
+          }).toList();
+          return arrJobDetail;
         } else {
-          return [];
+          return null;
         }
       case 401:
-        // GlobalService.showAppToast(message: response.message);
-        return [];
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Jobs',
+          desc: response.message,
+        );
+        return null;
       default:
-        GlobalService.showAppToast(message: 'Something went wrong');
-        return [];
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          title: 'Jobs',
+          desc: 'Failed to fetch jobs',
+        );
+        return null;
     }
   }
 
@@ -110,7 +160,7 @@ class OwnerJobService {
         GlobalService.showAppToast(message: response.message);
         return 0;
       default:
-        GlobalService.showAppToast(message: 'Something went wrong');
+        GlobalService.showAppToast(message: 'Failed to get job service');
         return 0;
     }
   }

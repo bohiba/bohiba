@@ -1,9 +1,22 @@
+import 'package:bohiba/dist/app_enums.dart';
+import 'package:bohiba/services/global_service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AnalyticConroller extends GetxController {
   Rx<String> selectedRange = "Week".obs;
+
+  @override
+  void onReady() {
+    super.onReady();
+    GlobalService.showDialog(
+      status: AlertStatus.info,
+      title: 'Note',
+      description:
+          'The displayed analytics are based on demo data, designed to highlight our upcoming features and showcase the powerful insights Bohiba will deliver.',
+    );
+  }
 
   Widget bottomTitleWidget(double value, TitleMeta meta) {
     switch (selectedRange.value) {

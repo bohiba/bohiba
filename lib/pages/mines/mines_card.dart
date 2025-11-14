@@ -137,7 +137,6 @@ class MinesVerticalCard extends StatelessWidget {
       },
       child: Container(
         width: ScreenUtils.width * 0.30,
-        height: ScreenUtils.height20,
         margin: EdgeInsets.only(
           right: ScreenUtils.width10,
         ),
@@ -148,7 +147,7 @@ class MinesVerticalCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: CircleAvatar(
-                radius: 40,
+                radius: 35,
                 backgroundColor: bohibaTheme.dividerColor,
                 backgroundImage: NetworkImage(minesInfo.logo ??
                     GlobalService.getAvatarUrl(minesInfo.mineName!)),

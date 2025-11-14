@@ -19,7 +19,7 @@ class NewsService {
     if (type == MethodType.local) {
       String strGetQuery = ''' SELECT * FROM $tblNews WHERE id = $id ''';
       List<Map<String, dynamic>>? newsMapList =
-          await _databaseService.getAllData(strGetQuery);
+          await _databaseService.executeQuery(strGetQuery);
 
       if (newsMapList != null && newsMapList.isNotEmpty) {
         NewsModel newsModel = NewsModel.fromDB(newsMapList.first);
@@ -62,7 +62,7 @@ class NewsService {
     if (type == MethodType.local) {
       String strNewsQuery = ''' SELECT * FROM $tblNews ''';
       List<Map<String, dynamic>> arrNews =
-          await _databaseService.getAllData(strNewsQuery) ?? [];
+          await _databaseService.executeQuery(strNewsQuery) ?? [];
 
       List<NewsModel> newsModelList = arrNews.map((e) {
         return NewsModel.fromDB(e);

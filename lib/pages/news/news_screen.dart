@@ -1,7 +1,8 @@
+import 'package:bohiba/component/image_path.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import '/component/bohiba_appbar/title_appbar.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
-import '/component/ui/tile_decorative.dart';
 import '/controllers/news_controller.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,53 +17,67 @@ class NewsScreen extends GetView<NewsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TitleAppbar(
-        title: 'News',
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: ScreenUtils.height20,
-          right: ScreenUtils.width15,
-          left: ScreenUtils.width15,
+    return Obx(() {
+      return Scaffold(
+        appBar: TitleAppbar(
+          title: 'News',
         ),
-        child: Obx(() {
-          return SmartRefresher(
-            controller: controller.newsRefresher,
-            onRefresh: () async {
-              await controller.onRefreshNewsPage();
-            },
-            child: Column(
-              children: [
-                Container(
-                  width: ScreenUtils.width,
-                  height: 160.h,
-                  padding: EdgeInsets.all(ScreenUtils.height10.h),
-                  decoration: TileDecorative(),
-                  alignment: Alignment.bottomLeft,
-                ),
-                Gap(5.h),
-                Align(
-                  alignment: AlignmentGeometry.centerRight,
-                  child: Text(
-                    controller.newsDetail.value.updatedAt ?? '',
-                    style: bohibaTheme.textTheme.titleSmall,
+        body: SmartRefresher(
+          controller: controller.newsRefresher,
+          onRefresh: () async {
+            await controller.onRefreshNewsPage();
+          },
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: ScreenUtils.height20,
+                right: ScreenUtils.width15,
+                left: ScreenUtils.width15,
+              ),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          '${ImagePath.newsImage}/${controller.newsDetail.value.image}',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey.shade200,
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.broken_image, size: 50),
+                      ),
+                    ),
                   ),
-                ),
-                Gap(10.h),
-                Text(
-                  controller.newsDetail.value.title ?? '',
-                  style: bohibaTheme.textTheme.headlineMedium,
-                ),
-                Text(
-                  controller.newsDetail.value.description ?? '',
-                  style: bohibaTheme.textTheme.titleMedium,
-                ),
-              ],
+                  Gap(5.h),
+                  Align(
+                    alignment: AlignmentGeometry.centerRight,
+                    child: Text(
+                      controller.newsDetail.value.updatedAt ?? '',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                        color: bohibaTheme.textTheme.bodyLarge!.color,
+                      ),
+                    ),
+                  ),
+                  Gap(10.h),
+                  Text(
+                    controller.newsDetail.value.title ?? '',
+                    style: bohibaTheme.textTheme.headlineMedium,
+                  ),
+                  Text(
+                    controller.newsDetail.value.description ?? '',
+                    style: bohibaTheme.textTheme.titleMedium,
+                  ),
+                  Gap(110.h)
+                ],
+              ),
             ),
-          );
-        }),
-      ),
-    );
+          ),
+        ),
+      );
+    });
   }
 }

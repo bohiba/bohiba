@@ -1,18 +1,18 @@
 import '/dist/app_enums.dart';
-
-import '/pages/widget/role_widget.dart';
-import '/pages/widget/permission_widget.dart';
-import '/services/global_service.dart';
-import '/services/role_permission_service.dart';
-import '/extensions/bohiba_extension.dart';
 import '/routes/app_route.dart';
+import '/services/global_service.dart';
+import '/extensions/bohiba_extension.dart';
+import '/services/role_permission_service.dart';
 import '/controllers/dashboard_controller.dart';
 
 import '/component/screen_utils.dart';
 import '/component/bohiba_appbar/dashboard_appbar.dart';
+
+import '/pages/widget/role_widget.dart';
+import '/pages/about/about_page.dart';
+import '/pages/widget/permission_widget.dart';
 import '/pages/dashboard/dashboard_component/bluebox_component.dart';
 import '/pages/dashboard/dashboard_component/small_tab_component.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '/pages/dashboard/dashboard_component/single_tile_tab_component.dart';
 
 import 'package:get/get.dart';
@@ -20,6 +20,7 @@ import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DashboardPage extends GetView<DashboardController> {
   const DashboardPage({super.key});
@@ -97,6 +98,16 @@ class DashboardPage extends GetView<DashboardController> {
                                 },
                                 label: "Jobs",
                                 icon: EvaIcons.briefcaseOutline,
+                              ),
+                            ),
+
+                            RoleWidget(
+                              truckOwnerWidget: SmallTabComponent(
+                                onTap: () {
+                                  navigator.pushNamed(AppRoute.allOwnerExpense);
+                                },
+                                label: "Expense",
+                                icon: EvaIcons.fileTextOutline,
                               ),
                             ),
 
@@ -194,7 +205,7 @@ class DashboardPage extends GetView<DashboardController> {
                     navigator.pushNamed(AppRoute.shareEarn);
                   },
                   icon: EvaIcons.shareOutline,
-                  title: 'Share & Earn',
+                  title: 'Share App',
                 ),
 
                 SingleTileTabComponent(
@@ -228,18 +239,13 @@ class DashboardPage extends GetView<DashboardController> {
                   title: 'Report an Issue',
                 ),
                 SingleTileTabComponent(
-                  onTap: () {},
-                  icon: EvaIcons.awardOutline,
-                  title: 'About Us',
-                ),
-                /*SingleTileTabComponent(
-                  onTap: () async {
-                    await controller.logout();
+                  onTap: () {
+                    navigator.push(
+                        MaterialPageRoute(builder: (context) => AboutPage()));
                   },
-                  icon: EvaIcons.logOutOutline,
-                  iconColor: BohibaColors.warningColor,
-                  title: 'Logout',
-                ),*/
+                  icon: EvaIcons.awardOutline,
+                  title: 'About App',
+                ),
               ],
             ),
           ),

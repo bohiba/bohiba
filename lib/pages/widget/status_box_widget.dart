@@ -49,7 +49,7 @@ class StatusBoxWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
               decoration: BoxDecoration(
                 color: statusColor ??
-                    bohibaTheme.colorScheme.onSurface.withValues(alpha: 0.25),
+                    bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(

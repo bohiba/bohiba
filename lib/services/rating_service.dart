@@ -146,7 +146,7 @@ class RatingService {
         GlobalService.showSnackBar(
             status: AlertStatus.failure,
             title: 'Rate Driver',
-            desc: 'Something went wrong');
+            desc: 'Failed to rate driver');
         return 0;
     }
   }
@@ -157,5 +157,15 @@ class RatingService {
         await _databaseService.insertAllData(tblRating, ratingList);
 
     return successInsert;
+  }
+
+  static Future<int> clearAllRating() async {
+    String strDeleteQuery = ''' DELETE FROM $tblRating ''';
+    int deleteSuccess = await _databaseService.delete(strDeleteQuery);
+
+    if (deleteSuccess > 0) {
+      GlobalService.printHandler('DELETED ALL RATING');
+    }
+    return deleteSuccess;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class MinesAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -17,16 +16,16 @@ class MinesAppBar extends StatelessWidget implements PreferredSizeWidget {
         automaticallyImplyLeading: false,
         title: Text(title),
         actions: [
-          IconButton(
-            tooltip: 'Search Company',
-            onPressed: () {
-              // showSearch(
-              //   context: context,
-              //   delegate: BohibaCompanySearchDelegate(),
-              // );
-            },
-            icon: const Icon(EvaIcons.searchOutline),
-          ),
+          // IconButton(
+          //   tooltip: 'Search Company',
+          //   onPressed: () {
+          //     // showSearch(
+          //     //   context: context,
+          //     //   delegate: BohibaCompanySearchDelegate(),
+          //     // );
+          //   },
+          //   icon: const Icon(EvaIcons.searchOutline),
+          // ),
         ],
       ),
     );

@@ -1,7 +1,7 @@
+import '/pages/widget/required_label.dart';
 import '/routes/app_route.dart';
 import 'package:gap/gap.dart';
 
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
   Widget build(BuildContext context) {
     final navigatorState = Navigator.of(context);
     return Scaffold(
-      appBar: const TitleAppbar(title: "Edit Profile"),
+      appBar: const TitleAppbar(title: "Update Profile"),
       body: Padding(
         padding: EdgeInsets.only(
           left: ScreenUtils.width15,
@@ -41,7 +41,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Setup Profile',
+                'Profile',
                 style: bohibaTheme.textTheme.displayMedium,
               ),
               Text(
@@ -52,53 +52,18 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Name",
-                    style: bohibaTheme.textTheme.labelLarge,
+                  RequiredLabel(label: 'Name'),
+                  TextInputField(
+                    hintText: "Name",
+                    controller: nameController,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
-                    child: TextInputField(
-                      hintText: "Name",
-                      controller: nameController,
-                    ),
+                  RequiredLabel(label: "Phone Number"),
+                  TextInputField(
+                    hintText: "Mobile Number",
+                    controller: mobileController,
+                    keyboardType: TextInputType.phone,
                   ),
-                  Text(
-                    "Phone Number",
-                    style: bohibaTheme.textTheme.labelLarge,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
-                    child: TextInputField(
-                      hintText: "Mobile Number",
-                      controller: mobileController,
-                      keyboardType: TextInputType.phone,
-                    ),
-                  ),
-                  Text(
-                    "Email",
-                    style: bohibaTheme.textTheme.labelLarge,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtils.height5),
-                    child: TextInputField(
-                      hintText: "example@mail.com",
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                  ),
-                  Text(
-                    "Update Role",
-                    style: bohibaTheme.textTheme.labelLarge,
-                  ),
-                  AppDropdown(
-                    items: <Map<String, dynamic>>[
-                      {'role_id': 6, 'label': 'Truck Owner'},
-                      {'role_id': 8, 'label': 'Driver'}
-                    ],
-                    labelBuilder: (p0) => p0['label'],
-                    onChanged: (pv) {},
-                  ),
+
                   /*Padding(
                     padding: EdgeInsets.only(
                         top: ScreenUtils.height5, bottom: ScreenUtils.height5),

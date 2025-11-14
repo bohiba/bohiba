@@ -93,7 +93,7 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                           ),
                           decoration: TileDecorative(
                             color: isLoggedIn
-                                ? bohibaTheme.colorScheme.onPrimary
+                                ? bohibaTheme.colorScheme.onSurface
                                 : null,
                           ),
                           child: Row(

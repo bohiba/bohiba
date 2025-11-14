@@ -4,6 +4,8 @@ import '/model/truck_model.dart';
 import '/model/driver_model.dart';
 import '/model/mines_model.dart';
 import '/model/trip_model.dart';
+import '/model/rating_model.dart';
+import '/model/owner_expenses_model.dart';
 
 import 'db2_service.dart';
 import 'driver_service.dart';
@@ -16,21 +18,25 @@ import 'api_end_point.dart';
 import 'device_info_service.dart';
 import 'dio_serivce.dart';
 import 'global_service.dart';
+import 'owner_expense_service.dart';
+import 'rating_service.dart';
 
 class MainService {
   static final DioService _dioService = DioService();
   static Future<Map<String, dynamic>?> mainApi({
     MethodType type = MethodType.local,
-    bool showProgress = true,
+    bool showProgress = false,
   }) async {
     if (type == MethodType.local) {
+      if (showProgress) GlobalService.showProgress();
       List<TripModel> mainTrips = await TripService.getAllTrip() ?? [];
-      List<TruckModel> mainTrucks = await TruckService.getTruckList();
+      List<TruckModel> mainTrucks = await TruckService.getTruckList() ?? [];
       List<MinesModel> mainMines = await MinesService.getMinesList() ?? [];
       List<UserModel> mainDrivers = await DriverService.getAllDriver() ?? [];
       List<UserModel> openToDriverList =
-          await OpenDriverService.getAllOpenDriver() ?? [];
+          await OpenDriverService.getAllOpenDriver(showProgress: false) ?? [];
       List<NewsModel> mainNews = await NewsService.getAllNews() ?? [];
+      if (showProgress) GlobalService.dismissProgress();
       return {
         "trips": mainTrips,
         "trucks": mainTrucks,
@@ -43,15 +49,15 @@ class MainService {
         "news": mainNews,
       };
     } else {
-      if (!await DeviceInfoService.hasInternet()) {
-        return null;
-      }
+      if (!await DeviceInfoService.hasInternet()) return null;
+
       if (showProgress) GlobalService.showProgress();
       ApiResponse serviceResponse = await _dioService
           .handleApiWithRetry(() => _dioService.get(ApiEndPoint.apiMain));
-      if (showProgress) GlobalService.dismissProgress();
+
       switch (serviceResponse.statusCode) {
         case 401:
+          if (showProgress) GlobalService.dismissProgress();
           GlobalService.showAppToast(message: serviceResponse.message);
           return null;
         case 200:
@@ -78,10 +84,29 @@ class MainService {
           List<UserModel> arrDriverModel = [];
           if (mainObj.containsKey('drivers')) {
             await DriverService.clearAllDriver();
+            await RatingService.clearAllRating();
             List<dynamic> driverList = mainObj['drivers'] as List;
             List<Map<String, dynamic>> arrMapDriver = driverList.map((json) {
               return UserModel.toDB(json);
             }).toList();
+
+            for (Map driver in driverList) {
+              if (driver.containsKey('rating')) {
+                List<dynamic> ratingList = driver['rating'];
+                List<Map<String, dynamic>> arrRatingObj =
+                    ratingList.map((rating) {
+                  return RatingModel.toDB(rating);
+                }).toList();
+
+                int insertRating =
+                    await RatingService.insertAll(ratingList: arrRatingObj);
+                if (insertRating > 0) {
+                  GlobalService.printHandler(
+                    'Insert rating success: $insertRating',
+                  );
+                }
+              }
+            }
             int insertDriver =
                 await DriverService.insertAllDriver(arrMapDriver);
 
@@ -210,16 +235,22 @@ class MainService {
             }
           }
 
-          /*List<Map<String, dynamic>> arrOwnerExpenseDB = [];
+          List<OwnerExpense> arrOwnerExpenseModel = [];
           if (mainObj.containsKey('owner_expense')) {
-            arrOwnerExpenseDB = OwnerExpense.mapOwnerExpenseJsonDbList(
-                mainObj['owner_expense']);
-
-            int insertOwnerExpense = await _service.insertAllData(
-                tblOwnerExpense, arrOwnerExpenseDB);
+            List<dynamic> expenseList = mainObj['owner_expense'];
+            List<Map<String, dynamic>> arrMapOwnerExpense =
+                expenseList.map((e) => OwnerExpense.toDB(e)).toList();
+            await OwnerExpenseService.clearAll();
+            int insertOwnerExpense =
+                await OwnerExpenseService.insertAll(arrMapOwnerExpense);
+            if (insertOwnerExpense > 0) {
+              arrOwnerExpenseModel = arrMapOwnerExpense
+                  .map((e) => OwnerExpense.fromDB(e))
+                  .toList();
+            }
             GlobalService.printHandler(
                 "Onwer Expense Added in DB: $insertOwnerExpense");
-          }*/
+          }
 
           List<UserModel> arrOpenDriverModel = [];
           if (mainObj.containsKey('looking_jobs')) {
@@ -271,22 +302,20 @@ class MainService {
                   "News Added in DB: $successNewsInsert");
             }
           }
-          GlobalService.dismissProgress();
-
-          GlobalService.dismissProgress();
+          if (showProgress) GlobalService.dismissProgress();
           return {
             "trips": arrTripModel,
             "trucks": arrTruckModel,
             "drivers": arrDriverModel,
             "mines": arrMinesModel,
-            "owner_expense": [],
+            "owner_expense": arrOwnerExpenseModel,
             "looking_jobs": arrOpenDriverModel,
             "favList": [],
             "promotion": [],
             "news": arrNewsModel,
           };
         default:
-          GlobalService.dismissProgress();
+          if (showProgress) GlobalService.dismissProgress();
           return null;
       }
     }

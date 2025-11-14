@@ -44,16 +44,23 @@ class TruckService {
         return insert;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: serviceResponse.message);
+        GlobalService.showDialog(
+          status: AlertStatus.info,
+          title: 'Truck',
+          description: serviceResponse.message,
+        );
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: "Failed to create truck");
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          desc: 'Failed to add truck',
+        );
         return 0;
     }
   }
 
-  static Future<List<TruckModel>> getTruckList({
+  static Future<List<TruckModel>?> getTruckList({
     bool reset = false,
     bool showProgress = false,
     MethodType type = MethodType.local,
@@ -61,9 +68,9 @@ class TruckService {
     if (type == MethodType.local) {
       if (showProgress) GlobalService.showProgress();
       String strQueryTruckList =
-          ''' SELECT * FROM $tblTrucks ORDER BY updatedAt DESC ''';
+          ''' SELECT * FROM $tblTrucks ORDER BY createdAt DESC ''';
       List<Map<String, dynamic>> truckList =
-          await _databaseService.getAllData(strQueryTruckList) ?? [];
+          await _databaseService.executeQuery(strQueryTruckList) ?? [];
       if (showProgress) GlobalService.dismissProgress();
       if (truckList.isNotEmpty) {
         List<TruckModel> arrTruckModel = truckList.map((db) {
@@ -71,7 +78,7 @@ class TruckService {
         }).toList();
         return arrTruckModel;
       }
-      return [];
+      return null;
     } else {
       if (!await DeviceInfoService.hasInternet()) return [];
 
@@ -101,7 +108,7 @@ class TruckService {
             return arrTruckModel;
           }
           if (showProgress) GlobalService.dismissProgress();
-          return [];
+          return null;
         case 401:
           if (showProgress) GlobalService.dismissProgress();
           GlobalService.showSnackBar(
@@ -109,7 +116,7 @@ class TruckService {
             title: 'Truck',
             desc: res.message,
           );
-          return [];
+          return null;
         default:
           if (showProgress) GlobalService.dismissProgress();
           GlobalService.showSnackBar(
@@ -117,22 +124,27 @@ class TruckService {
             title: 'Truck',
             desc: 'Failed to get trucks',
           );
-          return [];
+          return null;
       }
     }
   }
 
   static Future<TruckModel?> getTruck({
-    required int truckId,
+    dynamic value,
     int type = 1,
     MethodType methodType = MethodType.local,
   }) async {
     if (methodType == MethodType.local) {
-      String strGetQuery =
-          ''' SELECT * FROM $tblTrucks WHERE id = $truckId; ''';
+      String strGetQuery = '';
+      if (type == 1) {
+        strGetQuery = ''' SELECT * FROM $tblTrucks WHERE id = $value; ''';
+      } else {
+        strGetQuery =
+            ''' SELECT * FROM $tblTrucks WHERE vhNumber = '$value'; ''';
+      }
       GlobalService.showProgress();
       List<Map<String, dynamic>> arrTruckList =
-          await _databaseService.getAllData(strGetQuery) ?? [];
+          await _databaseService.executeQuery(strGetQuery) ?? [];
       GlobalService.dismissProgress();
       if (arrTruckList.isNotEmpty) {
         TruckModel truckModel = TruckModel.fromDB(arrTruckList.first);
@@ -144,7 +156,7 @@ class TruckService {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
       ApiResponse apiRes = await _dioService
-          .get("${ApiEndPoint.apiGetTruck}?value=$truckId&type=$type");
+          .get("${ApiEndPoint.apiGetTruck}?value=$value&type=$type");
 
       switch (apiRes.statusCode) {
         case 200:
@@ -183,7 +195,7 @@ class TruckService {
           int success = await _databaseService.updateData(strUpdateQuery);
           GlobalService.dismissProgress();
           if (success > 0) {
-            TruckModel model = TruckModel.fromJson(apiRes.data);
+            TruckModel model = TruckModel.fromDB(dbMap);
             return model;
           }
           return null;
@@ -201,15 +213,17 @@ class TruckService {
 
   static Future<TruckModel?> setTruckImage({
     TruckModel? oldTruck,
-    required String imgPath,
+    required String imagePath,
+    required List<File> imageFile,
   }) async {
     if (oldTruck == null || !await DeviceInfoService.hasInternet()) return null;
     GlobalService.showProgress();
     Map<String, dynamic> bodyObj = {
-      'regd_number': oldTruck.regdNumber,
+      "regd_number": oldTruck.regdNumber,
+      "truck_image": imagePath
     };
-    ApiResponse apiRes = await _dioService
-        .upload(ApiEndPoint.apiSetTruckImage, bodyObj, [File(imgPath)]);
+    ApiResponse apiRes = await _dioService.upload(
+        ApiEndPoint.apiSetTruckImage, bodyObj, imageFile);
 
     switch (apiRes.statusCode) {
       case 200:
@@ -222,13 +236,24 @@ class TruckService {
         ]);
         GlobalService.dismissProgress();
         if (updateTruck <= 0) return null;
-        GlobalService.showAppToast(message: apiRes.message);
+        GlobalService.showSnackBar(
+          status: AlertStatus.success,
+          desc: apiRes.message,
+        );
         return oldTruck;
       case 401:
-        GlobalService.showAppToast(message: apiRes.message);
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          desc: apiRes.message,
+        );
         return null;
       default:
-        GlobalService.showAppToast(message: 'Failed to set truck image.');
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          desc: 'Failed to set truck image.',
+        );
         return null;
     }
   }
@@ -262,7 +287,11 @@ class TruckService {
           argument: [vhNumber],
         );
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: apiResponse.message);
+        GlobalService.showSnackBar(
+          status: AlertStatus.success,
+          title: 'Truck',
+          desc: apiResponse.message,
+        );
         return updateSuccess;
       case 401:
         GlobalService.dismissProgress();
@@ -343,6 +372,7 @@ class TruckService {
       , puccUpto
       , fitnessUpto
       , updatedAt
+      , createdAt
     ) VALUES (
       ${dbMap['id']}
     , ${dbMap['isFav'] ?? 0}
@@ -372,6 +402,7 @@ class TruckService {
     , '${dbMap['taxUpto']}'
     , '${dbMap['fitnessUpto']}'
     , '${dbMap['updatedAt']}'
+    , '${dbMap['createdAt']}'
     )''';
 
     int insertTruck = await _databaseService.insertData(strInsertQuery);

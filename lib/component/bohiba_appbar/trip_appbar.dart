@@ -51,43 +51,56 @@ class TripAppBar extends GetView<TripController>
         ),
         actions: [
           RoleWidget(
-            truckOwnerWidget: TripMenu(
-              allowedActions: [
-                TripActionType.document,
-                TripActionType.expense,
-                TripActionType.payment,
-                TripActionType.reassignment,
-                TripActionType.edit,
-                TripActionType.share,
-                TripActionType.delete
-              ],
-              onActionComplete: {
-                TripActionType.edit: (edit) async {
-                  if (edit != null && edit != false) {
-                    await controller.getTripInfo(
-                      methodType: MethodType.api,
-                      id: controller.tripInfo.value.id!,
-                    );
+            truckOwnerWidget: Visibility(
+              visible: controller.tripInfo.value != null,
+              child: TripMenu(
+                allowedActions: [
+                  TripActionType.edit,
+                  TripActionType.document,
+                  TripActionType.expense,
+                  TripActionType.payment,
+                  TripActionType.reassignment,
+                  TripActionType.share,
+                  TripActionType.delete
+                ],
+                onActionComplete: {
+                  TripActionType.edit: (edit) async {
+                    if (edit != null && edit != false) {
+                      await controller.getTripInfo(
+                        id: controller.tripInfo.value!.id!,
+                      );
+                    }
+                  },
+                  TripActionType.document: (doc) async {
+                    if (doc != null && doc != false) {
+                      await controller.getTripInfo(
+                        id: controller.tripInfo.value!.id!,
+                      );
+                    }
+                  },
+                  TripActionType.expense: (expense) async {
+                    if (expense != null && expense != false) {
+                      await controller.getTripInfo(
+                        id: controller.tripInfo.value!.id!,
+                      );
+                    }
+                  },
+                  TripActionType.payment: (payment) async {
+                    if (payment != null && payment != false) {
+                      await controller.getTripInfo(
+                        methodType: MethodType.api,
+                        id: controller.tripInfo.value!.id!,
+                      );
+                    }
+                  },
+                  TripActionType.delete: (delete) async {
+                    if (delete != null && delete > 0) {
+                      navigate.pop(true);
+                    }
                   }
                 },
-                TripActionType.expense: (expense) async {
-                  if (expense != null && expense != false) {
-                    await controller.getTripInfo(
-                      methodType: MethodType.api,
-                      id: controller.tripInfo.value.id!,
-                    );
-                  }
-                },
-                TripActionType.payment: (payment) async {
-                  if (payment != null && payment != false) {
-                    await controller.getTripInfo(
-                      methodType: MethodType.api,
-                      id: controller.tripInfo.value.id!,
-                    );
-                  }
-                },
-              },
-              trip: controller.tripInfo.value,
+                trip: controller.tripInfo.value,
+              ),
             ),
             driverWidget: TripMenu(
               trip: controller.tripInfo.value,
@@ -97,11 +110,12 @@ class TripAppBar extends GetView<TripController>
               ],
               onActionComplete: {
                 TripActionType.document: (document) async {
-                  await controller.getTripInfo(
-                    methodType: MethodType.api,
-                    id: controller.tripInfo.value.id!,
-                  );
-                }
+                  if (document != null && document != false) {
+                    await controller.getTripInfo(
+                      id: controller.tripInfo.value!.id!,
+                    );
+                  }
+                },
               },
             ),
           )

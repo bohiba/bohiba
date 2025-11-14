@@ -1,4 +1,7 @@
+import 'package:bohiba/routes/app_route.dart';
 import 'package:bohiba/services/main_service.dart';
+import 'package:bohiba/services/user_role_type.dart';
+import 'package:get/get.dart';
 
 import '/controllers/role_controller.dart';
 import '/dist/app_enums.dart';
@@ -94,12 +97,15 @@ class AuthService {
         _dioService.setToken(token);
         await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.printHandler("App Token: $token");
-        ProfileModel? loggedInUser =
-            await ProfileService.getProfile(type: MethodType.api);
-
+        ProfileModel? loggedInUser = await ProfileService.getProfile(
+          type: MethodType.api,
+          showProgress: false,
+        );
         RoleService.initRole(loggedInUser);
-        Map<String, dynamic>? mainService =
-            await MainService.mainApi(type: MethodType.api);
+        Map<String, dynamic>? mainService = await MainService.mainApi(
+          type: MethodType.api,
+          showProgress: false,
+        );
         if (loggedInUser != null) {
           await ProfileService.loggedInUser(
             loggedInUser: LoggedInAccountModel(
@@ -111,13 +117,20 @@ class AuthService {
             ),
           );
         }
+
+        if (loggedInUser?.roleId == UserRoles.truckOwner) {
+          Get.offAllNamed(AppRoute.truckOwnerNavBar);
+        } else if (loggedInUser?.roleId == UserRoles.driver) {
+          Get.offAllNamed(AppRoute.truckDriverNavBar);
+        }
+
         GlobalService.dismissProgress();
         return (loggedInUser != null && mainService != null) ? 1 : 0;
       default:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
-          desc: 'Something went wrong. Please try after sometime',
+          desc: 'Failed to signin',
         );
         return 0;
     }
@@ -146,7 +159,7 @@ class AuthService {
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
-          desc: 'Something went wrong',
+          desc: 'Faile to reset password',
         );
         return 0;
     }
@@ -179,7 +192,7 @@ class AuthService {
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
-          desc: 'Something went wrong',
+          desc: 'Failed to resend otp.',
         );
         return 0;
     }
@@ -249,7 +262,7 @@ class AuthService {
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
-          desc: 'Something went wrong. Please try after sometime',
+          desc: 'Failed to send otp',
         );
         return 0;
     }
@@ -283,7 +296,7 @@ class AuthService {
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
-          desc: 'Something went wrong',
+          desc: 'Failed to send otp',
         );
         return 0;
     }

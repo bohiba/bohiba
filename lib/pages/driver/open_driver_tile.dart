@@ -2,6 +2,7 @@ import '/dist/app_enums.dart';
 import '/model/driver_model.dart';
 import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
+import '/extensions/bohiba_extension.dart';
 import '/component/ui/tile_decorative.dart';
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 
@@ -9,7 +10,7 @@ import '/pages/widget/role_widget.dart';
 import '/pages/driver/driver_modals/connection_request_modal.dart';
 
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
+
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -110,10 +111,27 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
             Spacer(),
             RoleWidget(
               truckOwnerWidget: (widget.showStatus == true)
-                  ? Text(user.profile?.connect?.capitalizeFirst ?? '')
+                  ? Text(
+                      user.profile?.connect?.toCapitalizedLabel() ?? '',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        color: bohibaTheme.colorScheme.onPrimary,
+                      ),
+                    )
                   : SizedBox.shrink(),
-              driverWidget: user.profile?.connect == ConnectionType.accept.name
-                  ? Text(user.profile?.connect?.capitalizeFirst ?? '')
+              driverWidget: (user.profile?.connect ==
+                      ConnectionType.accept.name)
+                  ? Text(
+                      user.profile?.connect?.toCapitalizedLabel() ?? '',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        color: bohibaTheme.colorScheme.onPrimary,
+                      ),
+                    )
                   : Row(
                       children: [
                         GestureDetector(
@@ -167,13 +185,13 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: bohibaTheme.colorScheme.onSurface
+                              color: bohibaTheme.colorScheme.onPrimary
                                   .withValues(alpha: 0.25),
                             ),
                             child: Icon(
                               EvaIcons.checkmark,
                               size: 22.w,
-                              color: bohibaTheme.colorScheme.onSurface,
+                              color: bohibaTheme.colorScheme.onPrimary,
                             ),
                           ),
                         ),

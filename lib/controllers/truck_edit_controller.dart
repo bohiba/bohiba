@@ -69,7 +69,7 @@ class EditTruckController extends GetxController
 
     if (assigned > 0) {
       TruckModel? updatedTruck =
-          await TruckService.getTruck(truckId: truck.value.id!);
+          await TruckService.getTruck(value: truck.value.id!);
       if (updatedTruck != null) {
         truck.value = updatedTruck;
         isDriverAssigned.value = true;
@@ -82,7 +82,7 @@ class EditTruckController extends GetxController
     int success = await TruckService.removeDriver(oldTruck: truckInfo);
     if (success > 0) {
       TruckModel? updatedTruck =
-          await TruckService.getTruck(truckId: truck.value.id!);
+          await TruckService.getTruck(value: truck.value.id!);
       if (updatedTruck != null) {
         truck.value = updatedTruck;
         isDriverAssigned.value = false;

@@ -175,8 +175,8 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                     ?.toString()
                                     .toLowerCase() ==
                                 'pending'
-                            ? bohibaTheme.colorScheme.onPrimary
-                            : bohibaTheme.colorScheme.onSurface,
+                            ? bohibaTheme.colorScheme.onSurface
+                            : bohibaTheme.colorScheme.onPrimary,
                     onPressed: () async => await controller.connect(),
                   ),
                   Text(

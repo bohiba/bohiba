@@ -119,7 +119,7 @@ class _HomePopularSectionState extends State<HomePopularSection> {
                 MaterialType materialTypes = materialType[index];
                 return GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed(
-                    AppRoute.navBar,
+                    AppRoute.truckOwnerNavBar,
                     arguments: {
                       "current_index": 2,
                       "market_screen_index": index + 2

@@ -1,14 +1,15 @@
-import '/controllers/trip_controller.dart';
-import 'package:get/get.dart';
-
 import '/model/trip_model.dart';
-
-import '/component/screen_utils.dart';
-import '/component/ui/tile_decorative.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
+import '/component/screen_utils.dart';
+import '/extensions/bohiba_extension.dart';
+import '/controllers/trip_controller.dart';
+import '/component/ui/tile_decorative.dart';
+
+import 'package:get/get.dart';
 import 'package:gap/gap.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
 
 class TripTile extends GetView<TripController> {
   final TripModel tripInfo;
@@ -34,10 +35,23 @@ class TripTile extends GetView<TripController> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: bohibaTheme.dividerColor,
-                // child: Text(tripInfo.id.toString()),
+              Container(
+                height: 32.h,
+                width: 32.h,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: bohibaTheme.colorScheme.tertiary,
+                ),
+                child: Text(
+                  tripInfo.tripStatus?.shortCode ?? '',
+                  // tripInfo.id.toString(),
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                    color: bohibaTheme.textTheme.bodySmall!.color,
+                  ),
+                ),
               ),
               Gap(ScreenUtils.height15),
               Column(
@@ -45,7 +59,7 @@ class TripTile extends GetView<TripController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tripInfo.tripCode ?? 'NA',
+                    tripInfo.tripCode ?? '',
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
@@ -61,15 +75,6 @@ class TripTile extends GetView<TripController> {
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                       color: bohibaTheme.textTheme.labelLarge!.color,
-                    ),
-                  ),
-                  Text(
-                    tripInfo.startDate ?? '',
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: colors,
                     ),
                   ),
                 ],

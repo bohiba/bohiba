@@ -26,10 +26,13 @@ class TripPaymentAddController extends GetxController {
     thousandSeparator: ",",
   );
 
-  List<String> get arrPaymentMode => ['Cash', 'UPI', 'Bank Transfer', 'Cheque'];
-  List<String> get arrRecievedBy => ['Driver', 'Manager', 'Self', 'Other'];
+  List<String> get arrPaymentMode =>
+      ['bank_transfer', 'cash', 'cheque', 'discounted', 'upi'];
+  List<String> get arrRecievedBy => ['driver', 'manager', 'self', 'other'];
   List<String> get arrPaymentType =>
       ['Discount', 'Disel Advance', 'Final Settelement', 'Other'];
+
+  RxInt countUpdate = 0.obs;
 
   @override
   void onInit() {
@@ -60,9 +63,10 @@ class TripPaymentAddController extends GetxController {
       );
       if (editPayment > 0) {
         // Get.back();
+        countUpdate++;
         Get.back(result: true);
       } else {
-        GlobalService.showAppToast(message: 'Something went wrong');
+        GlobalService.showAppToast(message: 'Failed to update payment');
       }
     } else if (tripModel != null && tripPayment == null) {
       bodyObj['trip_id'] = tripModel!.id;
@@ -71,9 +75,10 @@ class TripPaymentAddController extends GetxController {
         tripModel: tripModel!,
       );
       if (addPayment > 0) {
+        countUpdate++;
         Get.back(result: true);
       } else {
-        GlobalService.showAppToast(message: 'Something went wrong');
+        GlobalService.showAppToast(message: 'Failed to update payment');
       }
     } else {
       // No Operation
@@ -82,11 +87,13 @@ class TripPaymentAddController extends GetxController {
   }
 
   void clearController() {
+    paymentDateController.clear();
     paymentTypeController.clear();
     paidByController.clear();
     rcviedController.clear();
     paymentTypeController.clear();
     paymentModeController.clear();
+    paidController.updateValue(0.0);
   }
 
   void editPayment() {
@@ -102,6 +109,22 @@ class TripPaymentAddController extends GetxController {
       decimalSeparator: ".",
       thousandSeparator: ",",
     );
+  }
+
+  void disposeController() {
+    paymentDateController.dispose();
+    paymentTypeController.dispose();
+    paidByController.dispose();
+    rcviedController.dispose();
+    paymentTypeController.dispose();
+    paymentModeController.dispose();
+    paidController.dispose();
+  }
+
+  @override
+  void dispose() {
+    disposeController();
+    super.dispose();
   }
 
   onExit() {

@@ -45,6 +45,7 @@ class ForgotPasswordPage extends GetView<ForgotPasswordController> {
                         ),
                       ),
                       EmailInputField(
+                        readOnly: true,
                         hintText: 'Email',
                         controller: controller.emailController,
                       ),

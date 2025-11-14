@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 
 class TruckAppbar extends GetView<TruckController>
     implements PreferredSizeWidget {
-  final TruckModel truck;
+  final TruckModel? truck;
   final bool popResult;
   const TruckAppbar({super.key, required this.truck, this.popResult = false});
 
@@ -26,7 +26,7 @@ class TruckAppbar extends GetView<TruckController>
         title: SizedBox(
           width: ScreenUtils.width * 0.45,
           child: AutoSizeText(
-            controller.truckModel.value.regdNumber ?? '',
+            controller.truckModel.value?.regdNumber ?? '',
             maxLines: 1,
             style: bohibaTheme.appBarTheme.titleTextStyle,
             overflowReplacement: MarqueeText(
@@ -34,7 +34,7 @@ class TruckAppbar extends GetView<TruckController>
               alwaysScroll: true,
               style: bohibaTheme.appBarTheme.titleTextStyle,
               text: TextSpan(
-                text: controller.truckModel.value.regdNumber ?? '',
+                text: controller.truckModel.value?.regdNumber ?? '',
               ),
             ),
           ),
@@ -73,22 +73,25 @@ class TruckAppbar extends GetView<TruckController>
               );
             },
           ),*/
-          TruckMenu(
-            truck: truck,
-            allowedActions: [
-              ActionType.edit,
-              ActionType.add,
-              ActionType.sync,
-              ActionType.other,
-              ActionType.delete,
-            ],
-            onActionComplete: {
-              ActionType.edit: (value) async {
-                await controller.getTruckInfo(
-                  id: controller.truckModel.value.id!,
-                );
+          Visibility(
+            visible: controller.truckModel.value != null,
+            child: TruckMenu(
+              truck: truck,
+              allowedActions: [
+                ActionType.edit,
+                // ActionType.add,
+                // ActionType.sync,
+                // ActionType.other,
+                ActionType.delete,
+              ],
+              onActionComplete: {
+                ActionType.edit: (value) async {
+                  await controller.getTruckInfo(
+                    truckFetchValue: controller.truckModel.value!.regdNumber!,
+                  );
+                },
               },
-            },
+            ),
           )
         ],
       ),

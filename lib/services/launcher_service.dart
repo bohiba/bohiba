@@ -34,7 +34,6 @@ class LauncherService {
     final Uri smsUrl = Platform.isAndroid
         ? Uri.parse("sms:?body=$smsBody")
         : Uri.parse("sms:&body=$smsBody");
-    ;
 
     try {
       await launchUrl(smsUrl);

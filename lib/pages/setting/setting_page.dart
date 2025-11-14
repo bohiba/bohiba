@@ -67,10 +67,10 @@ class SettingPage extends GetView<SettingController> {
                         value: ThemeMode.dark,
                         child: Text("Dark"),
                       ),
-                      DropdownMenuItem(
-                        value: ThemeMode.system,
-                        child: Text("System"),
-                      ),
+                      // DropdownMenuItem(
+                      //   value: ThemeMode.system,
+                      //   child: Text("System"),
+                      // ),
                     ],
                     onChanged: (ThemeMode? newMode) async {
                       if (newMode != null) {
@@ -80,8 +80,8 @@ class SettingPage extends GetView<SettingController> {
                   ),
                 ),
               ),
-              Gap(ScreenUtils.height30),
-              Text("Storage", style: bohibaTheme.textTheme.headlineMedium),
+              // Gap(ScreenUtils.height30),
+              /*Text("Storage", style: bohibaTheme.textTheme.headlineMedium),
               LinearBoxWidget(
                 onClick: () {},
                 header: 'Clear Cache',
@@ -102,7 +102,7 @@ class SettingPage extends GetView<SettingController> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               Gap(ScreenUtils.height30),
               Text(
                 "Account",
@@ -130,22 +130,24 @@ class SettingPage extends GetView<SettingController> {
                       if (userRole != null &&
                           controller.roleId.value != userRole) {
                         controller.roleId.value = userRole;
-                        await controller.switchProfile();
+                        await controller.switchRole();
                       }
                     },
                   ),
                 ),
               ),
-              LinearBoxWidget(
-                onClick: () {},
-                header: 'Edit profile',
-                showArrow: true,
-              ),
+              // LinearBoxWidget(
+              //   onClick: () {
+              //     navigation.pushNamed(AppRoute.editProfile);
+              //   },
+              //   header: 'Edit profile',
+              //   showArrow: true,
+              // ),
               LinearBoxWidget(
                 onClick: () {
                   navigation.pushNamed(AppRoute.updateContact);
                 },
-                header: 'Change phone/ email',
+                header: 'Change phone number',
                 showArrow: true,
               ),
             ],

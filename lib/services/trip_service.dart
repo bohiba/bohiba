@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'api_end_point.dart';
 import 'device_info_service.dart';
 import 'dio_serivce.dart';
@@ -25,9 +27,9 @@ class TripService {
         await _dioService.post(ApiEndPoint.apiAddTrip, body: bodyMap);
     switch (apiResponse.statusCode) {
       case 201:
+        GlobalService.dismissProgress();
         TripModel tripModel = TripModel.fromJson(apiResponse.data);
         int sucessInsert = await insertTrip(trip: tripModel);
-        GlobalService.dismissProgress();
         if (sucessInsert > 0) {
           GlobalService.showSnackBar(
             status: AlertStatus.success,
@@ -35,7 +37,6 @@ class TripService {
             desc: apiResponse.message,
           );
         }
-        GlobalService.printHandler(apiResponse.message);
         return sucessInsert;
       case 401:
         GlobalService.dismissProgress();
@@ -50,7 +51,7 @@ class TripService {
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
           title: 'Trip',
-          desc: apiResponse.message,
+          desc: "Failed to add trip",
         );
         return 0;
     }
@@ -62,7 +63,13 @@ class TripService {
     MethodType methodType = MethodType.local,
   }) async {
     if (methodType == MethodType.local) {
-      String strQueryList = '''
+      String strQueryList = ''' SELECT 
+        id
+      , tripCode
+      , tripStatus
+      , vhNumber
+       FROM $tblTrips ''';
+      /*String strQueryList = '''
           SELECT 
             t.*, 
 
@@ -97,16 +104,18 @@ class TripService {
             d.image AS document_image,
             d.uploadedAt AS document_uploadedAt
 
-          FROM tblTrips t
-          LEFT JOIN tblReassignment r ON t.id = r.tripId
-          LEFT JOIN tblTripExpense e ON t.id = e.tripId
-          LEFT JOIN tblTripPayment p ON t.id = p.tripId
-          LEFT JOIN tblDocument d ON t.id = d.tripId
-          ORDER BY t.id DESC;
-        ''';
+          FROM $tblTrips t
+          LEFT JOIN $tblReassignment r ON t.id = r.tripId
+          LEFT JOIN $tblTripExpense e ON t.id = e.tripId
+          LEFT JOIN $tblTripPayment p ON t.id = p.tripId
+          LEFT JOIN $tblDocument d ON t.id = d.tripId
+          ORDER BY t.startedAt DESC;
+        ''';*/
+      if (showProgress) GlobalService.showProgress();
 
       List<Map<String, dynamic>>? arrTrip =
-          await _databaseService.getAllData(strQueryList);
+          await _databaseService.executeQuery(strQueryList);
+      if (showProgress) GlobalService.dismissProgress();
       if (arrTrip != null) {
         List<TripModel> tripList = arrTrip.map((trip) {
           return TripModel.fromDb(trip);
@@ -115,9 +124,7 @@ class TripService {
       }
       return null;
     } else {
-      if (!await DeviceInfoService.hasInternet()) {
-        return [];
-      }
+      if (!await DeviceInfoService.hasInternet()) return null;
 
       if (reset) {
         _currentPage = 1;
@@ -181,8 +188,8 @@ class TripService {
                 (trip['payments'] as List).isNotEmpty) {
               List tripPayments = trip['payments'];
               List<Map<String, dynamic>> arrMapPayment =
-                  tripPayments.map((payment) {
-                return TripPayment.toDB(payment);
+                  tripPayments.map((json) {
+                return TripPayment.toDB(json);
               }).toList();
 
               int successPayment = await TripService.insertTripInfo(
@@ -191,9 +198,8 @@ class TripService {
               );
 
               if (successPayment > 0) {
-                List<TripPayment> tripPaymentList =
-                    arrMapPayment.map((payment) {
-                  return TripPayment.fromDb(payment);
+                List<TripPayment> tripPaymentList = arrMapPayment.map((mapObj) {
+                  return TripPayment.fromDb(mapObj);
                 }).toList();
 
                 tripModel.payments?.addAll(tripPaymentList);
@@ -250,7 +256,6 @@ class TripService {
                     "Trip Reassign in DB: $successReassign");
               }
             }
-
             arrTripModel.add(tripModel);
           }
 
@@ -272,113 +277,82 @@ class TripService {
     required int tripId,
   }) async {
     if (method == MethodType.local) {
-      String strGetQuery = ''' SELECT 
-        t.*,
-        r.id AS reassignment_id,
-        r.vhNumber AS reassignment_vhNumber,
-        r.reassignmentAt AS reassignment_at,
-        r.reAssignVhNumber AS reassignment_newVhNumber,
-        r.reason AS reassignment_reason,
-        
-        e.id AS expense_id,
-        e.expenseType AS expense_type,
-        e.paymentMode AS expense_paymentMode,
-        e.paid AS expense_paid,
-        e.paidTo AS expense_paidTo,
-        e.expenseDate AS expense_date,
-        e.remarks AS expense_remarks,
-
-        p.id AS payment_id,
-        p.payerType AS payment_payerType,
-        p.payementMode AS payment_mode,
-        p.amount AS payment_amount,
-        p.paidBy AS payment_paidBy,
-        p.receivedBy AS payment_receivedBy,
-        p.paymentTime AS payment_time,
-
-        d.id AS document_id,
-        d.docType AS document_type,
-        d.image AS document_image,
-        d.uploadedAt AS document_uploadedAt
-
-        FROM tblTrips t
-        LEFT JOIN tblReassignment r ON t.id = r.tripId
-        LEFT JOIN tblTripExpense e ON t.id = e.tripId
-        LEFT JOIN tblTripPayment p ON t.id = p.tripId
-        LEFT JOIN tblDocument d ON t.id = d.tripId
-        WHERE t.id = $tripId;''';
-
+      String strGetQuery = ''' SELECT * FROM $tblTrips WHERE id = $tripId ''';
       List<Map<String, dynamic>>? arrTripList =
-          await _databaseService.getAllData(strGetQuery);
-      List<TripModel> tripList = [];
-      if (arrTripList != null || arrTripList!.isEmpty) {
-        tripList = arrTripList.map((trip) {
-          return TripModel.fromDb(trip);
-        }).toList();
-        TripModel tripInfo = tripList.first;
-        tripInfo.reassignment = arrTripList
-            .where((r) =>
-                r['reassignment_id'] != null ||
-                r['reassignment_id'].toString().isEmpty)
-            .map((r) => Reassignment(
-                  id: r['reassignment_id'],
-                  tripId: r['id'],
-                  regdNumber: r['reassignment_vhNumber'],
-                  date: r['reassignment_at'],
-                  reassignVehicle: r['reassignment_newVhNumber'],
-                  reason: r['reassignment_reason'],
-                ))
-            .toList();
-
-        tripInfo.expenses = arrTripList
-            .where((e) =>
-                e['expense_id'] != null || e['expense_id'].toString().isEmpty)
-            .map((expense) {
-          return TripExpense(
-            id: expense['expense_id'],
-            tripId: expense['id'],
-            expenseType: expense['expense_type'],
-            paymentMode: expense['expense_paymentMode'],
-            paid: expense['expense_paid'],
-            paidTo: expense['expense_paidTo'],
-            expenseDate: expense['expense_date'],
-            remarks: expense['expense_remarks'],
-          );
-        }).toList();
-
-        tripInfo.payments = arrTripList
-            .where((payment) =>
-                payment['payment_id'] != null ||
-                payment['payment_id'].toString().isEmpty)
-            .map((payment) {
-          return TripPayment(
-            id: payment['payment_id'],
-            tripId: payment['id'],
-            payerType: payment['payment_payerType'],
-            paymentMode: payment['payment_mode'],
-            paidBy: payment['payment_paidBy'],
-            receivedBy: payment['payment_receivedBy'],
-            amount: payment['payment_amount'],
-            paymentTime: payment['payment_time'],
-          );
-        }).toList();
-
-        tripInfo.documents = arrTripList
-            .where((doc) =>
-                doc['document_id'] != null ||
-                doc['document_id'].toString().isEmpty)
-            .map((doc) {
-          return TripDocument(
-              id: doc['document_id'],
-              tripId: doc['id'],
-              docType: doc['document_type'],
-              image: doc['document_image'],
-              updatedAt: doc['document_uploadedAt']);
-        }).toList();
-
-        return tripInfo;
+          await _databaseService.executeQuery(strGetQuery);
+      if (arrTripList == null || arrTripList.isEmpty) {
+        return null;
       }
-      return null;
+      List<TripModel> tripList =
+          arrTripList.map((trip) => TripModel.fromDb(trip)).toList();
+      TripModel trip = tripList.first;
+
+      final arrPayment = await _databaseService
+          .executeQuery("SELECT * FROM $tblTripPayment WHERE tripId = $tripId");
+
+      // PAYMENT
+      trip.payments = arrPayment?.map((p) {
+            return TripPayment(
+              id: p['id'],
+              tripId: p['tripId'],
+              payerType: p['payerType'],
+              paymentMode: p['payementMode'],
+              paidBy: p['paidBy'],
+              receivedBy: p['receivedBy'],
+              amount: p['amount'],
+              paymentTime: p['paymentTime'],
+            );
+          }).toList() ??
+          [];
+
+      final List<Map<String, dynamic>>? arrExpense = await _databaseService
+          .executeQuery("SELECT * FROM tblTripExpense WHERE tripId = $tripId");
+
+      trip.expenses = arrExpense?.map((e) {
+            return TripExpense(
+              id: e['id'],
+              tripId: e['tripId'],
+              expenseType: e['expenseType'],
+              paymentMode: e['paymentMode'],
+              paid: e['paid'],
+              paidTo: e['paidTo'],
+              expenseDate: e['expenseDate'],
+              remarks: e['remarks'],
+            );
+          }).toList() ??
+          [];
+
+      // REASSIGNMENT
+      final List<Map<String, dynamic>>? arrReassignment =
+          await _databaseService.executeQuery(
+              "SELECT * FROM $tblReassignment WHERE tripId = $tripId");
+      trip.reassignment = arrReassignment?.map((r) {
+            return Reassignment(
+              id: r['id'],
+              tripId: r['tripId'],
+              regdNumber: r['vhNumber'],
+              date: r['reassignmentAt'],
+              reassignVehicle: r['reAssignVhNumber'],
+              reason: r['reason'],
+            );
+          }).toList() ??
+          [];
+
+      // TRIP-DOCUMENT
+      final List<Map<String, dynamic>>? arrTripDoc = await _databaseService
+          .executeQuery("SELECT * FROM $tblDocument WHERE tripId = $tripId");
+      trip.documents = arrTripDoc?.map((d) {
+            return TripDocument(
+              id: d['id'],
+              tripId: d['tripId'],
+              docType: d['docType'],
+              image: d['image'],
+              uploadedBy: d['uploadedBy'],
+              updatedAt: d['uploadedAt'],
+            );
+          }).toList() ??
+          [];
+      return trip;
     } else if (method == MethodType.api) {
       if (!await DeviceInfoService.hasInternet()) {
         return null;
@@ -431,6 +405,24 @@ class TripService {
             TripModel tripModel = TripModel();
             tripModel = TripModel.fromDb(mapTrip);
             // UPDATE payment
+            List<TripPayment> arrPayment = [];
+            if (tripObj.containsKey('payments') &&
+                tripObj['payments'] != null &&
+                tripObj['payments'] is List &&
+                (tripObj['payments'] as List).isNotEmpty) {
+              List tripPayment = tripObj['payments'];
+              List<Map<String, dynamic>> arrMapPayment = tripPayment
+                  .map((payment) => TripPayment.toDB(payment))
+                  .toList();
+
+              int upsertPayment = await _databaseService.insertAllData(
+                  tblTripPayment, arrMapPayment);
+              if (upsertPayment > 0) {
+                arrPayment =
+                    arrMapPayment.map((e) => TripPayment.fromDb(e)).toList();
+              }
+              tripModel.payments = List<TripPayment>.from(arrPayment);
+            }
 
             // UPDATE reassignment
             List<Reassignment> arrReassigModel = [];
@@ -523,7 +515,7 @@ class TripService {
           GlobalService.showSnackBar(
             status: AlertStatus.failure,
             title: 'Trip',
-            desc: 'Something went wrong',
+            desc: 'Failed to get trip',
           );
           return null;
       }
@@ -599,8 +591,7 @@ class TripService {
       return 0;
     }
     GlobalService.showProgress();
-    String strQueryDelete =
-        ''' DELETE FROM $tblReassignment WHERE id = $tripId; ''';
+    String strQueryDelete = ''' DELETE FROM $tblTrips WHERE id = $tripId; ''';
     int deleteSucess = await _databaseService.delete(strQueryDelete);
     if (deleteSucess > 0) {
       ApiResponse apiResponse =
@@ -654,7 +645,7 @@ class TripService {
       case 201:
         TripPayment tripPayment = TripPayment.fromJson(apiResponse.data);
         String strQueryPayment = ''' INSERT INTO $tblTripPayment (
-        , id
+        id
         , tripId
         , payerType
         , payementMode
@@ -923,7 +914,7 @@ class TripService {
   }
 
   static Future<int> deleteExpense({required int expenseId}) async {
-    if (await DeviceInfoService.hasInternet()) {
+    if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
     GlobalService.showProgress();
@@ -971,9 +962,8 @@ class TripService {
   static Future<int> addReassignment({
     required Map<String, dynamic> bodyObj,
   }) async {
-    if (await DeviceInfoService.hasInternet()) {
-      return 0;
-    }
+    if (!await DeviceInfoService.hasInternet()) return 0;
+
     GlobalService.showProgress();
     ApiResponse apiResponse =
         await _dioService.post(ApiEndPoint.apiAddTripReassign, body: bodyObj);
@@ -989,12 +979,12 @@ class TripService {
         , reAssignVhNumber
         , reason
         ) VALUE (
-           ${reassignment.id}
-        ,  ${reassignment.tripId}
-        , '${reassignment.regdNumber}'
-        , '${reassignment.date}'
-        , '${reassignment.reassignVehicle}'
-        , '${reassignment.reason}'
+          ${sqlValue(reassignment.id)}
+        , ${sqlValue(reassignment.tripId)}
+        , ${sqlValue(reassignment.regdNumber)}
+        , ${sqlValue(reassignment.date)}
+        , ${sqlValue(reassignment.reassignVehicle)}
+        , ${sqlValue(reassignment.reason)}
         );''';
         int updateTrip = await _databaseService.insertData(strReassignQuery);
         GlobalService.dismissProgress();
@@ -1113,6 +1103,139 @@ class TripService {
     }
   }
 
+  static Future<List<TripDocument>?> getAllDocument(
+      {required int tripId}) async {
+    if (!await DeviceInfoService.hasInternet()) return null;
+    GlobalService.showProgress();
+    ApiResponse res =
+        await _dioService.get('${ApiEndPoint.apiGetAllTripDoc}/$tripId');
+    GlobalService.dismissProgress();
+    switch (res.statusCode) {
+      case 200:
+        List<Map> tripDocList = List.from(res.data);
+        List<Map<String, dynamic>> arrMapTripDoc =
+            tripDocList.map((e) => TripDocument.toDB(e)).toList();
+        await clearAllTripDoc(tripId: tripId);
+        int successAdd =
+            await _databaseService.insertAllData(tblDocument, arrMapTripDoc);
+        if (successAdd > 0) {
+          List<TripDocument> arrTripDoc =
+              arrMapTripDoc.map((trip) => TripDocument.fromDb(trip)).toList();
+          return arrTripDoc;
+        }
+        return null;
+      case 401:
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          title: 'Trip',
+          desc: res.data,
+        );
+        return null;
+      default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Trip',
+          desc: "Failed to add document",
+        );
+        return null;
+    }
+  }
+
+  static Future<TripDocument?> getDocument(
+      {required int id, MethodType type = MethodType.local}) async {
+    if (type == MethodType.local) {
+      String strGetQuery = ''' SELECT * FROM $tblDocument WHERE id = $id''';
+      List<Map<String, dynamic>>? arrDoc =
+          await _databaseService.executeQuery(strGetQuery);
+      if (arrDoc != null) {
+        List<TripDocument> arrTripDoc =
+            arrDoc.map((e) => TripDocument.fromDb(e)).toList();
+        return arrTripDoc.first;
+      }
+      return null;
+    } else {
+      if (!await DeviceInfoService.hasInternet()) return null;
+      GlobalService.showProgress();
+      ApiResponse res =
+          await _dioService.get('${ApiEndPoint.apiGetTripDoc}/$id');
+      GlobalService.dismissProgress();
+      switch (res.statusCode) {
+        case 200:
+          Map<String, dynamic> tripDocObj = TripDocument.toDB(res.data);
+          TripDocument tripDocument = TripDocument.fromDb(tripDocObj);
+          return tripDocument;
+        case 401:
+          GlobalService.showSnackBar(
+            status: AlertStatus.failure,
+            title: 'Trip',
+            desc: res.data,
+          );
+          return null;
+        default:
+          GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Trip',
+            desc: "Failed to add document",
+          );
+          return null;
+      }
+    }
+  }
+
+  static Future<int> addDocument({
+    required Map<String, dynamic> bodyObj,
+    required List<File> imageList,
+  }) async {
+    if (!await DeviceInfoService.hasInternet()) return 0;
+
+    GlobalService.showProgress();
+    ApiResponse res =
+        await _dioService.upload(ApiEndPoint.apiAddTripDoc, bodyObj, imageList);
+    GlobalService.dismissProgress();
+    switch (res.statusCode) {
+      case 200:
+        Map<String, dynamic> docObj = TripDocument.toDB(res.data);
+        String strQueryInsert = ''' INSERT INTO $tblDocument VALUES 
+          id
+        , tripId
+        , docType
+        , image
+        , uploadedBy
+        , uploadedAt VALUES (
+           ${docObj['id']},
+        ,  ${docObj['trip_id']}
+        , '${docObj['doc_type']}'
+        , '${docObj['doc_image']}' 
+        , '${docObj['uploaded_by_uuid']}'
+        , '${docObj['updated_at']}'
+        ); ''';
+        int successDoc = await _databaseService.insertData(strQueryInsert);
+        return successDoc;
+      case 401:
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          title: 'Trip',
+          desc: res.data,
+        );
+        return 0;
+      default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Trip',
+          desc: "Failed to add document",
+        );
+        return 0;
+    }
+  }
+
+  static Future<int> editDocument() async {
+    return 0;
+  }
+
+  static Future<int> deleteDocument() async {
+    return 0;
+  }
+
   static Future<int> upsertTrip(String tblName,
       {required List<Map<String, dynamic>> listData}) async {
     for (Map<String, dynamic> item in listData) {
@@ -1165,46 +1288,68 @@ class TripService {
         , ownerMobileNumber
         , updatedAt
         ) VALUES (
-          ${trip.id}
-        , ${trip.isFav}
-        , '${trip.tripCode}'
-        , '${trip.tripStatus}'
-        , '${trip.origin}'
-        , '${trip.destination}'                
-        , '${trip.startDate}'
-        , '${trip.endedDate}'
-        , '${trip.loadDetail?.materialType}'
-        ,  ${trip.loadDetail?.loadWeight}
-        ,  ${trip.loadDetail?.shortWeight}
-        ,  ${trip.loadDetail?.rate}
-        ,  ${trip.finance?.id}
-        ,  ${trip.finance?.amount}
-        ,  ${trip.finance?.tripPayment}
-        ,  ${trip.finance?.tripExpense}
-        ,  ${trip.finance?.tripProfit}
-        ,  ${trip.truck?.id}
-        , '${trip.truck?.regdNumber}'
-        , '${trip.truck?.model}'
-        , '${trip.truck?.rcVhClassDesc}'
-        ,  ${trip.driver?.id}
-        , '${trip.driver?.uuid}'
-        , '${trip.driver?.name}'
-        , '${trip.driver?.mobile}'
-        ,  ${trip.owner?.id}
-        , '${trip.owner?.uuid}'
-        , '${trip.owner?.name}'
-        , '${trip.owner?.mobile}'
-        , '${trip.updatedAt}'
+          ${sqlValue(trip.id)}
+        , ${sqlValue(trip.isFav)}
+        , ${sqlValue(trip.tripCode)}
+        , ${sqlValue(trip.tripStatus)}
+        , ${sqlValue(trip.origin)}
+        , ${sqlValue(trip.destination)}
+        , ${sqlValue(trip.startDate)}
+        , ${sqlValue(trip.endedDate)}
+        , ${sqlValue(trip.loadDetail?.materialType)}
+        , ${sqlValue(trip.loadDetail?.loadWeight)}
+        , ${sqlValue(trip.loadDetail?.shortWeight)}
+        , ${sqlValue(trip.loadDetail?.rate)}
+        , ${sqlValue(trip.finance?.id)}
+        , ${sqlValue(trip.finance?.amount)}
+        , ${sqlValue(trip.finance?.tripPayment)}
+        , ${sqlValue(trip.finance?.tripExpense)}
+        , ${sqlValue(trip.finance?.tripProfit)}
+        , ${sqlValue(trip.truck?.id)}
+        , ${sqlValue(trip.truck?.regdNumber)}
+        , ${sqlValue(trip.truck?.model)}
+        , ${sqlValue(trip.truck?.rcVhClassDesc)}
+        , ${sqlValue(trip.driver?.id)}
+        , ${sqlValue(trip.driver?.uuid)}
+        , ${sqlValue(trip.driver?.name)}
+        , ${sqlValue(trip.driver?.mobile)}
+        , ${sqlValue(trip.owner?.id)}
+        , ${sqlValue(trip.owner?.uuid)}
+        , ${sqlValue(trip.owner?.name)}
+        , ${sqlValue(trip.owner?.mobile)}
+        , ${sqlValue(trip.updatedAt)}
         );''';
     int insertTrip = await _databaseService.insertData(strInsertTrip);
     return insertTrip;
   }
 
+  static Future<int> clearAllTripDoc({required int tripId}) async {
+    String strDeleteQuery =
+        ''' DELETE FROM $tblDocument WHERE trip_id = $tripId ''';
+    int deleteSuccess = await _databaseService.delete(strDeleteQuery);
+    if (deleteSuccess > 0) {
+      GlobalService.printHandler('DELETED TRIP ALL DOC');
+    }
+    return deleteSuccess;
+  }
+
   static Future<int> clearAll() async {
     String strDeleteQuery = ''' DELETE FROM $tblTrips ''';
+    String strTblPayment = ''' DELETE FROM $tblTripPayment ''';
+    String strTblExpense = ''' DELETE FROM $tblTripExpense ''';
+    String strTblDoc = ''' DELETE FROM $tblDocument ''';
+    String strTblReassignment = ''' DELETE FROM $tblReassignment ''';
     int deleteSuccess = await _databaseService.delete(strDeleteQuery);
+    int delete2 = await _databaseService.delete(strTblPayment);
+    int delete3 = await _databaseService.delete(strTblExpense);
+    int delete4 = await _databaseService.delete(strTblDoc);
+    int delete5 = await _databaseService.delete(strTblReassignment);
 
-    if (deleteSuccess > 0) {
+    if (deleteSuccess > 0 &&
+        delete2 > 0 &&
+        delete3 > 0 &&
+        delete4 > 0 &&
+        delete5 > 0) {
       GlobalService.printHandler('DELETED ALL TRIPS');
     }
     return deleteSuccess;

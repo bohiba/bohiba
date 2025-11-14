@@ -91,7 +91,7 @@ class ProfileModel {
     final verification = json['verification'] ?? {};
     return {
       'uuid': json['uuid'],
-      'image': json['image'],
+      'image': json['profile_image'],
       'name': json['name'],
       'email': json['email'],
       'mobileNumber': json['mobile_number'],
@@ -99,7 +99,7 @@ class ProfileModel {
       'dob': json['dob'],
       'jobStatus': json['job_status'],
       'trucks': json['trucks'],
-      'driver': json['driver'],
+      'driver': json['drivers'],
       'panNumber': verification['pan_number'],
       'aadharNumber': verification['aadhaar_number'],
       'dlNumber': verification['dl_number'],

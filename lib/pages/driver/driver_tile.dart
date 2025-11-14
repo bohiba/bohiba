@@ -1,5 +1,11 @@
 import 'dart:async';
 
+import 'package:bohiba/component/image_path.dart';
+import 'package:bohiba/extensions/bohiba_extension.dart';
+import 'package:bohiba/services/global_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/dist/app_enums.dart';
 import '/pages/driver/driver_modals/driver_menu.dart';
 import '/controllers/driver_controller.dart';
@@ -26,23 +32,59 @@ class DriverTile extends GetView<DriverController> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        padding: EdgeInsets.only(left: ScreenUtils.width15),
-        width: ScreenUtils.width,
-        height: ScreenUtils.height * 0.075,
-        margin: EdgeInsets.only(bottom: ScreenUtils.width5),
-        decoration: TileDecorative(),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
+    return Container(
+      padding: EdgeInsets.only(left: ScreenUtils.width15),
+      width: ScreenUtils.width,
+      height: ScreenUtils.height * 0.075,
+      margin: EdgeInsets.only(bottom: ScreenUtils.width5),
+      decoration: TileDecorative(),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: onPressed,
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: bohibaTheme.dividerColor,
+                  Container(
+                    height: 32.h,
+                    width: 32.h,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: bohibaTheme.colorScheme.tertiary,
+                    ),
+                    child: driver.profile?.image == null
+                        ? Text(
+                            driver.profile?.name?.shortCode ?? '',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.labelLarge!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                              color: bohibaTheme.textTheme.bodySmall!.color,
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(6.r),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  "${ImagePath.profileImage}/${driver.profile?.image}",
+                              fit: BoxFit.cover,
+                              placeholder: (context, child) {
+                                return Image.network(
+                                  GlobalService.getAvatarUrl(
+                                      driver.profile?.name ?? ''),
+                                );
+                              },
+                              errorWidget: (context, child, obj) {
+                                return Image.network(
+                                  GlobalService.getAvatarUrl(
+                                      driver.profile?.name ?? ''),
+                                );
+                              },
+                            ),
+                          ),
                   ),
                   Gap(ScreenUtils.height15),
                   Column(
@@ -69,13 +111,13 @@ class DriverTile extends GetView<DriverController> {
                 ],
               ),
             ),
-            DriverMenu(
-              allowedActions: allowedActions,
-              driver: driver,
-              onActionComplete: onActionComplete,
-            )
-          ],
-        ),
+          ),
+          DriverMenu(
+            allowedActions: allowedActions,
+            driver: driver,
+            onActionComplete: onActionComplete,
+          )
+        ],
       ),
     );
   }

@@ -1,11 +1,10 @@
-import 'package:bohiba/model/rating_model.dart';
+import '/model/rating_model.dart';
 
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
 import '/controllers/dashboard_controller.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
-import '/services/global_service.dart';
 import '/services/role_permission_service.dart';
 import '/extensions/bohiba_extension.dart';
 import '/pages/widget/role_widget.dart';
@@ -28,281 +27,288 @@ class UserProfilePage extends GetView<DashboardController> {
     final navigator = Navigator.of(context);
     return Scaffold(
       appBar: const TitleAppbar(title: "Profile"),
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: ScreenUtils.height20,
-          right: ScreenUtils.width15,
-          left: ScreenUtils.width15,
-        ),
-        child: Obx(() {
+      body: Obx(
+        () {
           return SmartRefresher(
             onRefresh: () async => await controller.onRefreshProfilePage(),
             controller: controller.refreshProfile,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                UserProfileCard(
-                  userImage: GlobalService.getAvatarUrl(
-                      controller.profileModel.value!.name!),
-                  userName: controller.profileModel.value?.name,
-                  userID: controller.profileModel.value?.uuid,
-                ),
-                Gap(ScreenUtils.height20),
-                Text(
-                  "Basic Info",
-                  style: bohibaTheme.textTheme.headlineMedium,
-                ),
-                LinearBoxWidget(
-                  header: 'Role',
-                  title: controller.profileModel.value?.roleId?.roleName(),
-                ),
-                RoleWidget(
-                  truckOwnerWidget: LinearBoxWidget(
-                    header: 'Hiring Status',
-                    widget: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: controller.statusOption
-                                .contains(controller.opted.value)
-                            ? controller.opted.value
-                            : null,
-                        isDense: true,
-                        hint: Text('Select status'),
-                        borderRadius: BorderRadius.circular(8.0),
-                        items: controller.statusOption
-                            .map(
-                              (status) => DropdownMenuItem<String>(
-                                value: status,
-                                child: Text(status),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (status) async {
-                          if (status != null &&
-                              controller.opted.value != status) {
-                            controller.opted.value = status;
-                            await controller.updateUserHiringStatus();
-                          }
-                        },
-                      ),
-                    ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: ScreenUtils.height20,
+                right: ScreenUtils.width15,
+                left: ScreenUtils.width15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  UserProfileCard(
+                    userImage: controller.profileModel.value?.image ?? '',
+                    userName: controller.profileModel.value?.name,
+                    userID: controller.profileModel.value?.uuid,
                   ),
-                  driverWidget: LinearBoxWidget(
-                    header: 'Job Status',
-                    widget: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: controller.statusOption
-                                .contains(controller.opted.value)
-                            ? controller.opted.value
-                            : null,
-                        isDense: true,
-                        borderRadius: BorderRadius.circular(8.0),
-                        hint: Text('Select status'),
-                        items: controller.statusOption
-                            .map(
-                              (status) => DropdownMenuItem<String>(
-                                value: status,
-                                child: Text(status),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (status) async {
-                          if (status != null &&
-                              controller.opted.value != status) {
-                            controller.opted.value = status;
-                            // await controller.updateUserHiringStatus();
-                            //TODO: UPDATE USER JOB SEARCH STATUS
-                          }
-                        },
-                      ),
-                    ),
+                  Gap(ScreenUtils.height20),
+                  Text(
+                    "Basic Info",
+                    style: bohibaTheme.textTheme.headlineMedium,
                   ),
-                ),
-                LinearBoxWidget(
-                  header: 'D.O.B',
-                  title: controller.profileModel.value?.dob,
-                ),
-                LinearBoxWidget(
-                  onClick: () {
-                    navigator
-                        .pushNamed(AppRoute.allTruck)
-                        .then((onValue) async {
-                      await controller.getProfileModel();
-                    });
-                  },
-                  header: 'Total Truck',
-                  title: controller.profileModel.value?.trucks.toString(),
-                  showArrow: true,
-                ),
-                PermissionWidget(
-                  permission: RolePermissionService.viewDriver,
-                  child: LinearBoxWidget(
-                    onClick: () {
-                      navigator.pushNamed(AppRoute.allDriver);
-                    },
-                    header: 'Total Driver',
-                    title: controller.profileModel.value?.driver.toString(),
-                    showArrow: true,
+                  LinearBoxWidget(
+                    header: 'Role',
+                    title: controller.profileModel.value?.roleId?.roleName(),
                   ),
-                ),
-                Gap(ScreenUtils.height20),
-                Text(
-                  "Contact Info",
-                  style: bohibaTheme.textTheme.headlineMedium,
-                ),
-                LinearBoxWidget(
-                  header: 'Mobile Number',
-                  title: controller.profileModel.value?.mobileNumber,
-                ),
-                LinearBoxWidget(
-                  header: 'E-Mail',
-                  title: controller.profileModel.value?.email,
-                ),
-                Gap(ScreenUtils.height20),
-                RoleWidget(
-                  driverWidget: Column(
-                    children: [
-                      Align(
-                        alignment: AlignmentGeometry.centerLeft,
-                        child: Text(
-                          "Ratings",
-                          style: bohibaTheme.textTheme.headlineMedium,
+                  RoleWidget(
+                    truckOwnerWidget: LinearBoxWidget(
+                      header: 'Hiring Status',
+                      widget: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: controller.statusOption
+                                  .contains(controller.opted.value)
+                              ? controller.opted.value
+                              : null,
+                          isDense: true,
+                          hint: Text('Select status'),
+                          borderRadius: BorderRadius.circular(8.0),
+                          items: controller.statusOption
+                              .map(
+                                (status) => DropdownMenuItem<String>(
+                                  value: status,
+                                  child: Text(status),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (status) async {
+                            if (status != null &&
+                                controller.opted.value != status) {
+                              controller.opted.value = status;
+                              await controller.updateUserHiringStatus();
+                            }
+                          },
                         ),
                       ),
-                      Obx(
-                        () {
-                          final ratings =
-                              controller.profileModel.value?.ratings;
-
-                          if (ratings != null && ratings.isNotEmpty) {
-                            return ListView.builder(
-                              itemCount: controller
-                                      .profileModel.value?.ratings?.length ??
-                                  0,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding:
-                                  EdgeInsets.only(top: ScreenUtils.height10),
-                              itemBuilder: (context, index) {
-                                RatingModel rating = ratings[index];
-                                return Container(
-                                  margin: EdgeInsets.only(
-                                      bottom: ScreenUtils.height10),
-                                  // padding: EdgeInsets.symmetric(
-                                  //   horizontal: ScreenUtils.width15,
-                                  // ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 15.w,
-                                        backgroundColor:
-                                            bohibaTheme.dividerColor,
-                                      ),
-                                      Gap(8.w),
-                                      SizedBox(
-                                        width: ScreenUtils.width * 0.55.w,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              rating.reviewerName ?? '',
-                                              style: bohibaTheme
-                                                  .textTheme.labelLarge,
-                                            ),
-                                            ReadMoreText(
-                                              rating.feedback ?? '',
-                                              trimLines: 2,
-                                              trimMode: TrimMode.Line,
-                                              trimCollapsedText: ' Read more',
-                                              trimExpandedText: ' Show less',
-                                              style: TextStyle(
-                                                fontSize: bohibaTheme.textTheme
-                                                    .labelMedium!.fontSize,
-                                                color: bohibaTheme.textTheme
-                                                    .titleMedium!.color,
-                                              ),
-                                              moreStyle: TextStyle(
-                                                fontSize: bohibaTheme.textTheme
-                                                    .labelMedium!.fontSize,
-                                                fontWeight: FontWeight.bold,
-                                                color: bohibaTheme.primaryColor,
-                                              ),
-                                              lessStyle: TextStyle(
-                                                fontSize: bohibaTheme.textTheme
-                                                    .labelMedium!.fontSize,
-                                                fontWeight: FontWeight.bold,
-                                                color: bohibaTheme.primaryColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Container(
-                                        height: 35.h,
-                                        alignment: Alignment.center,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              rating.rating
-                                                      ?.toStringAsFixed(1) ??
-                                                  '',
-                                              style: bohibaTheme
-                                                  .textTheme.labelLarge,
-                                            ),
-                                            const Icon(
-                                              Icons.star_rounded,
-                                              color: Colors.amber,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          }
-
-                          {
-                            return Container(
-                              width: ScreenUtils.width * 0.75,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: ScreenUtils.height20),
-                              constraints: BoxConstraints(
-                                  minHeight: ScreenUtils.height * 0.25),
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'No Rating',
-                                    textAlign: TextAlign.center,
-                                    style: bohibaTheme.textTheme.headlineLarge,
-                                  ),
-                                  Text(
-                                    'You haven\'t received any rating from truck owners. Your truck owner can help you to get first rating.',
-                                    textAlign: TextAlign.center,
-                                    style: bohibaTheme.textTheme.titleMedium,
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                    ),
+                    driverWidget: LinearBoxWidget(
+                      header: 'Job Status',
+                      widget: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: controller.statusOption
+                                  .contains(controller.opted.value)
+                              ? controller.opted.value
+                              : null,
+                          isDense: true,
+                          borderRadius: BorderRadius.circular(8.0),
+                          hint: Text('Select status'),
+                          items: controller.statusOption
+                              .map(
+                                (status) => DropdownMenuItem<String>(
+                                  value: status,
+                                  child: Text(status),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (status) async {
+                            if (status != null &&
+                                controller.opted.value != status) {
+                              controller.opted.value = status;
+                              await controller.updateUserHiringStatus();
+                            }
+                          },
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  LinearBoxWidget(
+                    header: 'D.O.B',
+                    title: controller.profileModel.value?.dob,
+                  ),
+                  LinearBoxWidget(
+                    onClick: () {
+                      navigator
+                          .pushNamed(AppRoute.allTruck)
+                          .then((onValue) async {
+                        await controller.getProfileModel();
+                      });
+                    },
+                    header: 'Total Truck',
+                    title: controller.profileModel.value?.trucks.toString(),
+                    showArrow: true,
+                  ),
+                  PermissionWidget(
+                    permission: RolePermissionService.viewDriver,
+                    child: LinearBoxWidget(
+                      onClick: () {
+                        navigator.pushNamed(AppRoute.allDriver);
+                      },
+                      header: 'Total Driver',
+                      title:
+                          controller.profileModel.value?.driver?.toString() ??
+                              '0',
+                      showArrow: true,
+                    ),
+                  ),
+                  Gap(ScreenUtils.height20),
+                  Text(
+                    "Contact Info",
+                    style: bohibaTheme.textTheme.headlineMedium,
+                  ),
+                  LinearBoxWidget(
+                    header: 'Mobile Number',
+                    title: controller.profileModel.value?.mobileNumber,
+                  ),
+                  LinearBoxWidget(
+                    header: 'E-Mail',
+                    title: controller.profileModel.value?.email,
+                  ),
+                  Gap(ScreenUtils.height20),
+                  RoleWidget(
+                    driverWidget: Column(
+                      children: [
+                        Align(
+                          alignment: AlignmentGeometry.centerLeft,
+                          child: Text(
+                            "Ratings",
+                            style: bohibaTheme.textTheme.headlineMedium,
+                          ),
+                        ),
+                        Obx(
+                          () {
+                            final ratings =
+                                controller.profileModel.value?.ratings;
+
+                            if (ratings != null && ratings.isNotEmpty) {
+                              return ListView.builder(
+                                itemCount: controller
+                                        .profileModel.value?.ratings?.length ??
+                                    0,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding:
+                                    EdgeInsets.only(top: ScreenUtils.height10),
+                                itemBuilder: (context, index) {
+                                  RatingModel rating = ratings[index];
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: ScreenUtils.height10),
+                                    // padding: EdgeInsets.symmetric(
+                                    //   horizontal: ScreenUtils.width15,
+                                    // ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 15.w,
+                                          backgroundColor:
+                                              bohibaTheme.dividerColor,
+                                        ),
+                                        Gap(8.w),
+                                        SizedBox(
+                                          width: ScreenUtils.width * 0.55.w,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                rating.reviewerName ?? '',
+                                                style: bohibaTheme
+                                                    .textTheme.labelLarge,
+                                              ),
+                                              ReadMoreText(
+                                                rating.feedback ?? '',
+                                                trimLines: 2,
+                                                trimMode: TrimMode.Line,
+                                                trimCollapsedText: ' Read more',
+                                                trimExpandedText: ' Show less',
+                                                style: TextStyle(
+                                                  fontSize: bohibaTheme
+                                                      .textTheme
+                                                      .labelMedium!
+                                                      .fontSize,
+                                                  color: bohibaTheme.textTheme
+                                                      .titleMedium!.color,
+                                                ),
+                                                moreStyle: TextStyle(
+                                                  fontSize: bohibaTheme
+                                                      .textTheme
+                                                      .labelMedium!
+                                                      .fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      bohibaTheme.primaryColor,
+                                                ),
+                                                lessStyle: TextStyle(
+                                                  fontSize: bohibaTheme
+                                                      .textTheme
+                                                      .labelMedium!
+                                                      .fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      bohibaTheme.primaryColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Container(
+                                          height: 35.h,
+                                          alignment: Alignment.center,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                rating.rating
+                                                        ?.toStringAsFixed(1) ??
+                                                    '',
+                                                style: bohibaTheme
+                                                    .textTheme.labelLarge,
+                                              ),
+                                              const Icon(
+                                                Icons.star_rounded,
+                                                color: Colors.amber,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              return Container(
+                                width: ScreenUtils.width * 0.75,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: ScreenUtils.height20),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'No Rating',
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          bohibaTheme.textTheme.headlineLarge,
+                                    ),
+                                    Text(
+                                      'You haven\'t received any rating from truck owners. Your truck owner can help you to get first rating.',
+                                      textAlign: TextAlign.center,
+                                      style: bohibaTheme.textTheme.titleMedium,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
-        }),
+        },
       ),
     );
   }

@@ -8,8 +8,11 @@ class BohibaMarqueeText extends StatelessWidget {
   final String? overflowText;
   final bool alwaysScroll;
   final TextStyle? style;
+  final TextAlign? alignText;
   final TextStyle? marqueeTextStyle;
   final AlignmentGeometry? alignment;
+  final double? minFontSize;
+  final List<double>? preserFontSize;
 
   const BohibaMarqueeText({
     super.key,
@@ -20,6 +23,9 @@ class BohibaMarqueeText extends StatelessWidget {
     this.style,
     this.marqueeTextStyle,
     this.alignment,
+    this.alignText,
+    this.minFontSize,
+    this.preserFontSize,
   });
 
   @override
@@ -31,6 +37,10 @@ class BohibaMarqueeText extends StatelessWidget {
         text ?? '',
         maxLines: 1,
         style: style,
+        textAlign: alignText,
+        wrapWords: false,
+        presetFontSizes: preserFontSize ?? [12],
+        minFontSize: minFontSize ?? 12,
         overflowReplacement: MarqueeText(
           speed: 10,
           alwaysScroll: alwaysScroll,

@@ -164,17 +164,10 @@ class SignInScreen extends GetView<AuthController> {
                           //   },
                           // );
 
-                          int successLogin = await controller.signin(
+                          await controller.signin(
                             uuid: controller.idController.text.trim(),
                             password: controller.pwdController.text.trim(),
                           );
-
-                          if (successLogin > 0) {
-                            navigateState.pushNamedAndRemoveUntil(
-                              AppRoute.navBar,
-                              ModalRoute.withName(AppRoute.navBar),
-                            );
-                          }
                         },
                       ),
                     ],

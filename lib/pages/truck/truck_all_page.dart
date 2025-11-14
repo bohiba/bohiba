@@ -122,7 +122,8 @@ class AllTruckPage extends GetView<TruckAllController> {
                           },
                           onClick: () {
                             Get.toNamed(AppRoute.truck,
-                                    arguments: controller.arrTruck[index].id)
+                                    arguments:
+                                        controller.arrTruck[index].regdNumber)
                                 ?.then(
                               (onValue) async {
                                 if (onValue != null) {

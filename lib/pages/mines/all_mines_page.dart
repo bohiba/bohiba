@@ -1,4 +1,3 @@
-
 import '/component/screen_utils.dart';
 import '/controllers/mines_controller.dart';
 import '/model/mines_model.dart';
@@ -13,9 +12,7 @@ class AllMinesPage extends GetView<MinesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MinesAppBar(
-        title: 'Mines',
-      ),
+      appBar: MinesAppBar(title: 'Mines'),
       body: Obx(() {
         return ListView.builder(
           padding: EdgeInsets.only(

@@ -4,7 +4,7 @@ enum ActionType { view, add, edit, delete, route, share, sync, other }
 
 enum UserRoleType { driver, manager, truckowner, unknown }
 
-enum UploadStatus { initial, uploading, success, verified, failure }
+enum UploadStatus { initial, uploading, editing, success, verified, failure }
 
 enum AlertStatus { info, warning, failure, success, noInternet }
 

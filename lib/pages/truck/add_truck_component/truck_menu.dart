@@ -17,7 +17,7 @@ import 'package:get/get.dart';
 
 class TruckMenu extends GetView<TruckController> {
   final Icon? icon;
-  final TruckModel truck;
+  final TruckModel? truck;
   final List<ActionType> allowedActions;
   final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
       onActionComplete;
@@ -169,7 +169,7 @@ class TruckMenu extends GetView<TruckController> {
                 onDiscard: () async {
                   navigate.pop();
                   int success =
-                      await controller.deleteTruck(truckId: truck.id!);
+                      await controller.deleteTruck(truckId: truck!.id!);
                   if (success > 0) {
                     navigate.pop(true);
                   }

@@ -5,6 +5,7 @@ import '/services/device_info_service.dart';
 import 'package:get/get.dart';
 
 class SecurityController extends GetxController {
+  TextEditingController emailController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 

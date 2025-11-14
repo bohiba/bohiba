@@ -10,12 +10,24 @@ import '/dist/app_enums.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UserProfileConfigController extends ImageUploadController {
+class SetImageController extends ImageUploadController {
   DateTime pickedDate = DateTime.now();
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImg;
 
   Rx<UploadStatus> status = UploadStatus.initial.obs;
+
+  RxBool canPop = false.obs;
+
+  Rx<String> route = "".obs;
+
+  @override
+  void onInit() {
+    Map info = Get.arguments as Map;
+    route.value = info['route'] ?? 'pop';
+    canPop.value = info['canPop'] ?? false;
+    super.onInit();
+  }
 
   Future<void> verifyDocument() async {}
 
@@ -76,7 +88,7 @@ class UserProfileConfigController extends ImageUploadController {
       status.value = UploadStatus.failure;
       GlobalService.showSnackBar(
         status: AlertStatus.failure,
-        desc: 'Something went wrong while uploading image',
+        desc: 'Failed to upload image',
       );
     }
   }

@@ -67,7 +67,7 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         runSpacing: 5.h,
                         children: [
                           metricCard('Total Trip', '1,250'),
-                          metricCard("Average Trip Distance", "350 miles"),
+                          metricCard("Average Trip Distance", "350 KM"),
                           metricCard("On-Time Delivery Rate", "95%"),
                         ],
                       ),
@@ -76,7 +76,7 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         value: "1,250",
                         subLabel: "Last 30 Days",
                         subValue: "+12%",
-                        subColor: bohibaTheme.colorScheme.onSurface,
+                        subColor: bohibaTheme.colorScheme.onPrimary,
                         child: ReusableLineChart(
                           bottomTitlesBuilder: controller.bottomTitleWidget,
                           spots: [
@@ -95,20 +95,28 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         spacing: 5.w,
                         runSpacing: 5.h,
                         children: [
-                          metricCard("Total Fuel Cost", "\$50,000"),
+                          metricCard("Total Fuel Cost", "₹ 50,000"),
                           metricCard("Average Fuel Efficiency", "6.5 MPG"),
-                          metricCard("Maintenance Expenses", "\$10,000"),
+                          metricCard("Maintenance Expenses", "₹ 10,000"),
                         ],
                       ),
                       chartSection(
                         title: "Fuel Costs by Month",
-                        value: "\$50,000",
+                        value: "₹ 50,000",
                         subLabel: "Last 6 Months",
                         subValue: "-5%",
                         subColor: Color(0xFFFA6238),
-                        child: Placeholder(
-                          fallbackHeight: 180,
-                          color: Colors.tealAccent.shade100,
+                        child: ReusableLineChart(
+                          bottomTitlesBuilder: controller.bottomTitleWidget,
+                          spots: [
+                            FlSpot(1.5, 4.2),
+                            FlSpot(2.6, 2.8),
+                            FlSpot(4.9, 5),
+                            FlSpot(6.8, 3),
+                            FlSpot(8.2, 4),
+                            FlSpot(9.5, 3),
+                            FlSpot(10.5, 4),
+                          ],
                         ),
                       ),
                       sectionTitle("Driver Analytics"),
@@ -187,7 +195,7 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         children: [
                           metricCard("Average Truck Utilization", "85%"),
                           metricCard("Truck Downtime", "10 days"),
-                          metricCard("Maintenance Costs per Truck", "\$2,000"),
+                          metricCard("Maintenance Costs per Truck", "₹ 2,000"),
                         ],
                       ),
                       chartSection(
@@ -195,7 +203,7 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         value: "85%",
                         subLabel: "Last Month",
                         subValue: "+3%",
-                        subColor: bohibaTheme.colorScheme.onSurface,
+                        subColor: bohibaTheme.colorScheme.onPrimary,
                         child: ReusableLineChart(
                           bottomTitlesBuilder: controller.bottomTitleWidget,
                           spots: [
@@ -214,28 +222,35 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         spacing: 5.w,
                         runSpacing: 5.h,
                         children: [
-                          metricCard("Total Revenue", "\$200,000"),
+                          metricCard("Total Revenue", "₹ 200,000"),
                           metricCard("Profit Margin", "20%"),
-                          metricCard("Outstanding Invoices", "\$15,000"),
+                          metricCard("Outstanding Invoices", "₹ 15,000"),
                         ],
                       ),
                       chartSection(
                         title: "Revenue Over Time",
-                        value: "\$200,000",
+                        value: "₹ 200,000",
                         subLabel: "Last Year",
                         subValue: "+15%",
                         subColor: Color(0xFF0BDA5B),
-                        child: Placeholder(
-                          fallbackHeight: 180,
-                          color: Colors.green.shade200,
+                        child: ReusableLineChart(
+                          bottomTitlesBuilder: controller.bottomTitleWidget,
+                          spots: [
+                            FlSpot(0, 3),
+                            FlSpot(2.6, 2),
+                            FlSpot(4.9, 5),
+                            FlSpot(6.8, 2.5),
+                            FlSpot(8, 4),
+                            FlSpot(9.5, 3),
+                            FlSpot(11, 4),
+                          ],
                         ),
                       ),
                       sectionTitle("Business Insights"),
                       sectionText(
-                          "Key trends and insights based on your data, including areas for improvement and opportunities for growth."),
-                      sectionTitle("Alerts & Predictions"),
-                      sectionText(
-                          "Upcoming maintenance alerts, predicted fuel costs, and other important notifications."),
+                          "Note: The given data are just used for demo reperesentation to show you what feature are upcoming up next to enhance your business"),
+                      // sectionText(
+                      //     "Key trends and insights based on your data, including areas for improvement and opportunities for growth."),
                     ],
                   ),
                 ),
@@ -254,15 +269,12 @@ class AnalyticPage extends GetView<AnalyticConroller> {
         child: Text(title, style: bohibaTheme.textTheme.headlineLarge),
       );
 
-  static Widget sectionText(String text) => Padding(
-        padding: EdgeInsetsGeometry.symmetric(vertical: 10.h),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            height: 1.4,
-          ),
+  static Widget sectionText(String text) => Text(
+        text,
+        style: TextStyle(
+          color: bohibaTheme.textTheme.titleMedium!.color,
+          fontSize: 14,
+          height: 1.4,
         ),
       );
 

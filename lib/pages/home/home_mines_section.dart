@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/pages/mines/mines_card.dart';
 
 import '/controllers/home_controller.dart';
@@ -16,7 +18,7 @@ class HomeMinesSection extends GetView<HomeController> {
     final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
-        visible: controller.arrMines.isNotEmpty,
+        visible: controller.arrMines.value?.isNotEmpty ?? false,
         child: Column(
           children: [
             Padding(
@@ -60,26 +62,29 @@ class HomeMinesSection extends GetView<HomeController> {
             ),
 
             // Home Market Section
+
             Container(
-              height: ScreenUtils.height * 0.195,
+              height: 130.h,
               margin: EdgeInsets.only(
                   bottom: ScreenUtils.height25, left: ScreenUtils.width15),
               constraints:
                   BoxConstraints(minHeight: 0.05 * ScreenUtils.width50),
               child: Obx(
                 () {
-                  return controller.arrMines.isEmpty
+                  return controller.arrMines.value?.isEmpty ?? true
                       ? const Center(
                           child: Text('No Mines Available'),
                         )
                       : ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: controller.arrMines.length >= 10
-                              ? 10
-                              : controller.arrMines.length,
+                          shrinkWrap: true,
+                          itemCount:
+                              (controller.arrMines.value?.length ?? 0) >= 10
+                                  ? 10
+                                  : controller.arrMines.value?.length,
                           itemBuilder: (context, index) {
                             return MinesVerticalCard(
-                              minesInfo: controller.arrMines[index],
+                              minesInfo: controller.arrMines.value![index],
                             );
                           },
                         );

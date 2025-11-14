@@ -40,7 +40,6 @@ class DriverController extends GetxController {
     driverModel.value = Get.arguments;
     Future.delayed(Duration.zero, () async {
       await getDriverInfo();
-      await _getProfile();
       isRated();
     });
   }
@@ -81,7 +80,8 @@ class DriverController extends GetxController {
    ====================================
    */
 
-  bool isRated() {
+  Future<bool> isRated() async {
+    await _getProfile();
     if (driverModel.value.rating == null) return false;
     if (driverModel.value.rating!.isEmpty) return false;
     bool isReviewed = driverModel.value.rating

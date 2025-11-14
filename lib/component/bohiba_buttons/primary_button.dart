@@ -11,6 +11,7 @@ class PrimaryButton extends StatelessWidget {
   final double? height;
   final Color? color;
   final EdgeInsetsGeometry? padding;
+  final TextStyle? textStyle;
   const PrimaryButton(
       {super.key,
       this.label = "Label",
@@ -18,7 +19,8 @@ class PrimaryButton extends StatelessWidget {
       this.width,
       this.height,
       this.color,
-      this.padding});
+      this.padding,
+      this.textStyle});
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +32,16 @@ class PrimaryButton extends StatelessWidget {
           fixedSize: Size(width ?? ScreenUtils.width, height ?? 32.h),
           backgroundColor: color ?? bohibaTheme.colorScheme.primary,
           disabledBackgroundColor: color?.withValues(alpha: 0.25) ??
-              bohibaTheme.colorScheme.onPrimary,
+              bohibaTheme.colorScheme.onSurface,
         ),
         child: Text(
           label.toUpperCase(),
-          style: TextStyle(
-            fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-            fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-            color: bohibaTheme.textTheme.displayLarge!.color,
-          ),
+          style: textStyle ??
+              TextStyle(
+                fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                color: bohibaTheme.textTheme.displayLarge!.color,
+              ),
         ),
       ),
     );

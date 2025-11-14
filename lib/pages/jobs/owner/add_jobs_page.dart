@@ -24,7 +24,7 @@ class AddJobsPage extends GetView<AddJobController> {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.only(
-                    top: ScreenUtils.height20,
+                    top: ScreenUtils.height15,
                     left: ScreenUtils.width15,
                     right: ScreenUtils.width15,
                   ),
@@ -32,7 +32,7 @@ class AddJobsPage extends GetView<AddJobController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RequiredLabel(
-                        label: 'Start From',
+                        label: 'Start driving',
                         required: true,
                       ),
                       DateInputField(
@@ -101,6 +101,7 @@ class AddJobsPage extends GetView<AddJobController> {
                         height: ScreenUtils.height * 0.32,
                         maxLines: 12,
                         keyboardType: TextInputType.multiline,
+                        textCapitalization: TextCapitalization.sentences,
                         nextActionType: TextInputAction.next,
                         controller: controller.descEditingController,
                       ),
@@ -110,6 +111,7 @@ class AddJobsPage extends GetView<AddJobController> {
               ),
             ),
             PrimaryButton(
+              padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
               onPressed: () async => await controller.createJob(),
               label: 'Create Job',
             )

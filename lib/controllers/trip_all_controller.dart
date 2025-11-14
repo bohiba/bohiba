@@ -1,5 +1,6 @@
-import '/dist/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
+
+import '/dist/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/services/trip_service.dart';
@@ -12,9 +13,8 @@ class AllTripController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
   Rx<TripModel> tripModel = TripModel().obs;
-  RxList<TripModel> arrTrip = <TripModel>[].obs;
+  Rxn<List<TripModel>> arrTrip = Rxn<List<TripModel>>();
 
-  // List<String> get statuses => convertToSnakeCase(List<String> tabs);
   RxBool isLoading = false.obs;
   RxBool hasMore = true.obs;
 
@@ -37,15 +37,22 @@ class AllTripController extends GetxController {
               scrollController.position.maxScrollExtent - 250 &&
           !isLoading.value &&
           hasMore.value) {
-        await fetchTrips();
+        await getAllTrip(type: MethodType.api);
       }
     });
   }
 
-  Future<void> refreshPage() async {
-    await fetchTrips(refresh: true);
-    refreshController.refreshCompleted();
-    return;
+  Future<void> getAllTrip({
+    MethodType type = MethodType.local,
+    bool showLoading = false,
+    bool refreshTrip = false,
+  }) async {
+    arrTrip.value = null;
+    List<TripModel>? newTrips = await TripService.getAllTrip(
+        methodType: type, showProgress: showLoading, reset: refreshTrip);
+    if (newTrips != null) {
+      arrTrip.value = List<TripModel>.from(newTrips);
+    }
   }
 
   Future<void> fetchTrips({bool refresh = false}) async {
@@ -55,21 +62,26 @@ class AllTripController extends GetxController {
     if (refresh == true) {
       currentPage = 1;
       hasMore.value = true;
-      arrTrip.clear();
+      arrTrip.value?.clear();
     }
 
     try {
       if (currentPage == 1) {
         hasMore.value = false;
-        arrTrip.clear();
+        arrTrip.value?.clear();
         List<TripModel>? localTrips =
             await TripService.getAllTrip(methodType: MethodType.local);
         if (localTrips != null && localTrips.isNotEmpty) {
-          arrTrip.assignAll(localTrips);
-          arrTrip.sort((a, b) =>
-              b.startDate!.toDateTime().compareTo(a.startDate!.toDateTime()));
+          arrTrip.value = List<TripModel>.from(localTrips);
+          arrTrip.value!.sort((a, b) {
+            return b.startDate!
+                .toDateTime()
+                .compareTo(a.startDate!.toDateTime());
+          });
           isLoading.value = false;
           currentPage++;
+        } else {
+          arrTrip.value = [];
         }
         return;
       }
@@ -80,12 +92,10 @@ class AllTripController extends GetxController {
       );
       if (newTrips != null && newTrips.isNotEmpty) {
         for (TripModel trip in newTrips) {
-          if (!arrTrip.any((t) => t.id == trip.id)) {
-            arrTrip.add(trip);
+          if (!arrTrip.value!.any((t) => t.id == trip.id)) {
+            arrTrip.value?.add(trip);
           }
         }
-        arrTrip.sort((a, b) =>
-            (b.startDate!.toDateTime()).compareTo((a.startDate!.toDateTime())));
         currentPage++;
         return;
       } else {
@@ -100,17 +110,17 @@ class AllTripController extends GetxController {
     List<TripModel>? arrTripModel =
         await TripService.filterTripWithTruckNo(truckNo: truckNo);
     if (arrTripModel != null) {
-      arrTrip.clear();
-      arrTrip.addAll(arrTripModel);
+      arrTrip.value?.clear();
+      arrTrip.value = List<TripModel>.from(arrTripModel);
     }
-    return arrTrip;
+    return arrTripModel ?? [];
   }
 
-  List<TripModel> getTripsByStatus(String status) {
+  List<TripModel>? getTripsByStatus(String status) {
     if (status == 'all') {
-      return arrTrip;
+      return arrTrip.value;
     }
-    return arrTrip.where((trip) {
+    return arrTrip.value?.where((trip) {
       return (trip.tripStatus! == status);
     }).toList();
   }

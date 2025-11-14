@@ -71,18 +71,19 @@ class BohibaTheme {
           ),
         ),
       ),
+      canvasColor: BohibaColors.bgColor,
       colorScheme: ColorScheme.light(
         primary: BohibaColors.primaryColor,
-        onPrimary: BohibaColors.primaryVariantColor,
         secondary: BohibaColors.secoundaryColor,
         tertiary: BohibaColors.white,
         onTertiary: BohibaColors.black,
+        onPrimary: BohibaColors.successColor,
         surface: BohibaColors.errorColor,
-        onSurface: BohibaColors.successColor,
+        onSurface: BohibaColors.primaryVariantColor,
         error: BohibaColors.warningColor,
       ),
       primaryColor: BohibaColors.primaryColor,
-      cardColor: BohibaColors.lightGreyColor,
+      cardColor: BohibaColors.tileColor,
       dividerColor: BohibaColors.borderColor,
       fontFamily: 'Poppins',
       tabBarTheme: TabBarThemeData(
@@ -293,8 +294,10 @@ class BohibaTheme {
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: BohibaColors.bgColor,
       ),
-      dividerTheme:
-          DividerThemeData(thickness: 0.12, color: BohibaColors.greyColor),
+      dividerTheme: DividerThemeData(
+        thickness: 1.0,
+        color: BohibaColors.borderColor,
+      ),
       searchBarTheme: SearchBarThemeData(
         elevation: WidgetStatePropertyAll(0),
         backgroundColor: WidgetStatePropertyAll(BohibaColors.primaryColor),
@@ -313,12 +316,12 @@ class BohibaTheme {
       disabledColor: DarkColors.primaryVariantColor,
       colorScheme: const ColorScheme.dark(
         primary: DarkColors.primaryColor,
-        onPrimary: DarkColors.primaryVariantColor,
+        onPrimary: DarkColors.successColor,
         secondary: DarkColors.secoundaryColor,
         tertiary: DarkColors.white,
         onTertiary: DarkColors.black,
         surface: DarkColors.errorColor,
-        onSurface: DarkColors.successColor,
+        onSurface: DarkColors.primaryVariantColor,
         error: DarkColors.warningColor,
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -575,7 +578,10 @@ class BohibaTheme {
             WidgetStatePropertyAll(DarkColors.white.withValues(alpha: 0.1)),
       ),
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: DarkColors.black),
-      dividerTheme: DividerThemeData(thickness: 1.0),
+      dividerTheme: DividerThemeData(
+        thickness: 1.0,
+        color: DarkColors.borderColor,
+      ),
       searchBarTheme: SearchBarThemeData(
         elevation: WidgetStatePropertyAll(0),
         backgroundColor: WidgetStatePropertyAll(BohibaColors.primaryColor),

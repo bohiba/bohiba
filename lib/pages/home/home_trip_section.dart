@@ -1,3 +1,5 @@
+import 'package:bohiba/component/app_skeleton_loader.dart';
+
 import '/routes/app_route.dart';
 
 import '/controllers/home_controller.dart';
@@ -16,7 +18,7 @@ class HomeTripSection extends GetView<HomeController> {
     final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
-        visible: controller.arrTrip.isNotEmpty,
+        visible: controller.arrTrip.value?.isNotEmpty ?? true,
         child: Column(
           children: [
             // Home WishList Header
@@ -25,54 +27,65 @@ class HomeTripSection extends GetView<HomeController> {
               child: Row(
                 children: [
                   Text(
-                    "Ongoing Trips",
+                    "Trips",
                     style: bohibaTheme.textTheme.headlineLarge,
                   ),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      navigatorState.pushNamed(AppRoute.allTrip);
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtils.height5,
-                      ),
-                      child: Text(
-                        "See All",
-                        style: TextStyle(
-                          fontSize:
-                              bohibaTheme.textTheme.headlineMedium!.fontSize,
-                          color: bohibaTheme.primaryColor,
+                  if (controller.arrTrip.value?.isNotEmpty ?? true)
+                    GestureDetector(
+                      onTap: () {
+                        navigatorState.pushNamed(AppRoute.allTrip);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtils.height5,
+                        ),
+                        child: Text(
+                          "See All",
+                          style: TextStyle(
+                            fontSize:
+                                bohibaTheme.textTheme.headlineMedium!.fontSize,
+                            color: bohibaTheme.primaryColor,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    )
+                  else
+                    SizedBox.shrink()
                 ],
               ),
             ),
 
             // Home WishList Section
-            Container(
-              padding: EdgeInsets.only(bottom: ScreenUtils.height25),
-              alignment: Alignment.center,
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtils.height15),
-                shrinkWrap: true,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return TripTile(
-                    tripInfo: controller.arrTrip[index],
-                    onClick: () {
-                      navigatorState.pushNamed(
-                        AppRoute.trips,
-                        arguments: controller.arrTrip[index],
-                      );
-                    },
-                  );
-                },
+            if (controller.arrTrip.value == null)
+              AppSkeletonLoader(skeletonLength: 3)
+            else
+              Container(
+                alignment: Alignment.center,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(
+                    left: ScreenUtils.width15,
+                    right: ScreenUtils.width15,
+                    bottom: ScreenUtils.height15,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: (controller.arrTrip.value?.length ?? 0) >= 3
+                      ? 3
+                      : controller.arrTrip.value?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    return TripTile(
+                      tripInfo: controller.arrTrip.value![index],
+                      onClick: () {
+                        navigatorState.pushNamed(
+                          AppRoute.trips,
+                          arguments: controller.arrTrip.value![index],
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
           ],
         ),
       );

@@ -129,7 +129,7 @@ class CreateUserPage extends GetView<CreateUserController> {
                         controller.pickedDate =
                             await GlobalService.datePickerModal(
                           context: context,
-                          endYear: endDateTime,
+                          endTime: endDateTime,
                           title: 'Choose Date of Birth',
                         );
 

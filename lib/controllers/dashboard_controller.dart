@@ -32,13 +32,13 @@ class DashboardController extends GetxController {
   }
 
   Future<void> onRefreshDashPage() async {
-    await getProfileModel(methodType: MethodType.local);
+    await getProfileModel(methodType: MethodType.api);
     deviceInfo = await DeviceInfoService.getDeviceInfo();
     refreshDashboard.refreshCompleted();
   }
 
   Future<void> onRefreshProfilePage() async {
-    await getProfileModel(methodType: MethodType.api, showLoading: false);
+    await getProfileModel(methodType: MethodType.api);
     deviceInfo = await DeviceInfoService.getDeviceInfo();
     refreshProfile.refreshCompleted();
   }

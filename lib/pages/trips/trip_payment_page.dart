@@ -77,7 +77,7 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                       description:
                           'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
-                      onDiscard: () async => controller.deletePayment(
+                      onDiscard: () async => await controller.deletePayment(
                         paymentId: controller.tripPayment.value.id!,
                       ),
                       saveBtnTxt: 'CLOSE',
@@ -123,7 +123,7 @@ class TripPaymentPage extends GetView<TripPaymentController> {
               LinearBoxWidget(
                 header: 'Payment Type',
                 title: controller.tripPayment.value.payerType,
-                // titleColor: bohibaTheme.colorScheme.onSurface,
+                // titleColor: bohibaTheme.colorScheme.onPrimary,
               ),
               LinearBoxWidget(
                 header: 'Amount',

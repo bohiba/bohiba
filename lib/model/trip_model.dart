@@ -7,6 +7,7 @@ class TripModel {
   String? destination;
   String? startDate;
   String? endedDate;
+  String? transporter;
   LoadDetail? loadDetail;
   TripFinance? finance;
   TripTruck? truck;
@@ -28,6 +29,7 @@ class TripModel {
     this.destination,
     this.startDate,
     this.endedDate,
+    this.transporter,
     this.loadDetail,
     this.finance,
     this.truck,
@@ -56,6 +58,7 @@ class TripModel {
       destination: jsonTrip["destination"],
       startDate: jsonTrip["started_at"],
       endedDate: jsonTrip["ended_at"],
+      transporter: jsonTrip['transporter'],
       loadDetail: jsonTrip["load_detail"] == null
           ? null
           : LoadDetail.fromJson(loadInfo),
@@ -81,9 +84,11 @@ class TripModel {
           : (jsonTrip['payments'] as List).map((p) {
               return TripPayment.fromJson(p);
             }).toList(),
-      documents: (jsonTrip['documents'] as List).map((d) {
-        return TripDocument.fromJson(d);
-      }).toList(),
+      documents: jsonTrip['documents'] == null
+          ? null
+          : (jsonTrip['documents'] as List).map((d) {
+              return TripDocument.fromJson(d);
+            }).toList(),
       createdAt: jsonTrip['created_at'],
       updatedAt: jsonTrip['updated_at'],
     );
@@ -99,6 +104,7 @@ class TripModel {
       destination: mapObj["destination"],
       startDate: mapObj["startedAt"],
       endedDate: mapObj["endedAt"],
+      transporter: mapObj['transporter'],
       loadDetail: LoadDetail.fromDb(mapObj),
       finance: TripFinance.fromDb(mapObj),
       truck: TripTruck.fromDb(mapObj),
@@ -108,11 +114,11 @@ class TripModel {
   }
 
   static Map<String, dynamic> toDB(dynamic json) {
-    Map<String, dynamic> loadInfo = json["load_detail"] ?? {};
-    Map<String, dynamic> financeInfo = json["finance"] ?? {};
-    Map<String, dynamic> truckInfo = json["truck"] ?? {};
-    Map<String, dynamic> driverInfo = json['driver'] ?? {};
-    Map<String, dynamic> ownerInfo = json['owner'] ?? {};
+    Map<String, dynamic>? loadInfo = json["load_detail"];
+    Map<String, dynamic>? financeInfo = json["finance"];
+    Map<String, dynamic>? truckInfo = json["truck"];
+    Map<String, dynamic>? driverInfo = json['driver'];
+    Map<String, dynamic>? ownerInfo = json['owner'];
     return {
       'id': json['id'],
       'isFav': json['is_fav'] ?? 0,
@@ -122,28 +128,29 @@ class TripModel {
       'destination': json['destination'],
       'startedAt': json['started_at'],
       'endedAt': json['ended_at'],
-      'materialType': loadInfo['material_type'],
-      'loadWeight': loadInfo['load_weight'],
-      'shortWeight': loadInfo['short_weight'],
-      'rate': loadInfo['rate'],
-      'fnId': financeInfo['id'],
-      'fnAmount': financeInfo['amount'],
-      'fnPayment': financeInfo['trip_payment'],
-      'fnExpense': financeInfo['trip_profit'],
-      'fnProfit': financeInfo['trip_expense'],
-      'vhId': truckInfo['id'],
-      'vhNumber': truckInfo['regd_number'],
-      'vhModel': truckInfo['model'],
-      'vhDesc': truckInfo['rc_vh_class_desc'],
-      'dvId': driverInfo['id'],
-      'dvUuid': driverInfo['uuid'],
-      'dvName': driverInfo['name'],
-      'dvMobile': driverInfo['mobile'],
-      'ownerId': ownerInfo['id'],
-      'ownerImage': ownerInfo['image'],
-      'ownerUuid': ownerInfo['uuid'],
-      'ownerName': ownerInfo['name'],
-      'ownerMobileNumber': ownerInfo['mobile'],
+      'transporter': json['transporter'],
+      'materialType': loadInfo == null ? null : loadInfo['material_type'],
+      'loadWeight': loadInfo == null ? null : loadInfo['load_weight'],
+      'shortWeight': loadInfo == null ? null : loadInfo['short_weight'],
+      'rate': loadInfo == null ? null : loadInfo['rate'],
+      'fnId': financeInfo == null ? null : financeInfo['id'],
+      'fnAmount': financeInfo == null ? null : financeInfo['amount'],
+      'fnPayment': financeInfo == null ? null : financeInfo['trip_payment'],
+      'fnExpense': financeInfo == null ? null : financeInfo['trip_profit'],
+      'fnProfit': financeInfo == null ? null : financeInfo['trip_expense'],
+      'vhId': truckInfo == null ? null : truckInfo['id'],
+      'vhNumber': truckInfo == null ? null : truckInfo['regd_number'],
+      'vhModel': truckInfo == null ? null : truckInfo['model'],
+      'vhDesc': truckInfo == null ? null : truckInfo['rc_vh_class_desc'],
+      'dvId': driverInfo == null ? null : driverInfo['id'],
+      'dvUuid': driverInfo == null ? null : driverInfo['uuid'],
+      'dvName': driverInfo == null ? null : driverInfo['name'],
+      'dvMobile': driverInfo == null ? null : driverInfo['mobile'],
+      'ownerId': ownerInfo == null ? null : ownerInfo['id'],
+      'ownerImage': ownerInfo == null ? null : ownerInfo['image'],
+      'ownerUuid': ownerInfo == null ? null : ownerInfo['uuid'],
+      'ownerName': ownerInfo == null ? null : ownerInfo['name'],
+      'ownerMobileNumber': ownerInfo == null ? null : ownerInfo['mobile'],
     };
   }
 }
@@ -441,18 +448,6 @@ class TripExpense {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "trip_id": tripId,
-        "expense_type": expenseType,
-        "added_by_uuid": addedByUuid,
-        "payment_mode": paymentMode,
-        "paid": paid,
-        "paid_to": paidTo,
-        "expense_date": expenseDate,
-        "remarks": remarks,
-      };
-
   static Map<String, dynamic> toDB(Map json) {
     return {
       'id': json['id'],
@@ -505,7 +500,7 @@ class TripPayment {
       tripId: map["tripId"],
       payerType: map["payerType"],
       paymentMode: map["payementMode"],
-      amount: map["amount"],
+      amount: double.parse(map["amount"].toString()),
       paidBy: map["paidBy"],
       receivedBy: map["receivedBy"],
       paymentTime: map["paymentTime"],
@@ -518,10 +513,10 @@ class TripPayment {
       "tripId": db["trip_id"],
       "payerType": db["payer_type"],
       "payementMode": db["payment_mode"],
-      "amount": db["amount"],
+      "amount": double.parse(db["amount"]?.toString() ?? "0.0"),
       "paidBy": db["paid_by"],
       "receivedBy": db["received_by"],
-      "paymentTime": db["received_by"],
+      "paymentTime": db["payment_time"],
     };
   }
 }
@@ -570,7 +565,7 @@ class TripDocument {
       "id": json["id"],
       "tripId": json["trip_id"],
       "docType": json["doc_type"],
-      "image": json["image"],
+      "image": json["doc_image"],
       "uploadedBy": json["uploaded_by_uuid"],
       "uploadedAt": json["updated_at"]
     };

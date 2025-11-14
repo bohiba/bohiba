@@ -42,7 +42,7 @@ class UserModel {
           : null,
       rating: mapObj['rating'] != null
           ? List<RatingModel>.from(
-              mapObj['rating'].map((x) => RatingModel.fromJson(x)))
+              (mapObj['rating'] as List).map((x) => RatingModel.fromJson(x)))
           : [],
       trips: mapObj['trips'],
       createdAt: mapObj['created_at'],

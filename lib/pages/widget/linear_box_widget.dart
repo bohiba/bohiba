@@ -48,21 +48,25 @@ class LinearBoxWidget extends StatelessWidget {
             Spacer(),
             if (title != null)
               BohibaMarqueeText(
-                width: 160.w,
-                text: title ?? '',
-                overflowText: title ?? '',
-                alignment: Alignment.centerRight,
-                marqueeTextStyle: TextStyle(
-                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                  color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
-                ),
-                style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                  color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
-                ),
-              ),
+                  width: 160.w,
+                  text: title ?? '',
+                  overflowText: title ?? '',
+                  alignment: Alignment.centerRight,
+                  marqueeTextStyle: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                    color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
+                  ),
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                    color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
+                  ),
+                  preserFontSize: [
+                    bohibaTheme.textTheme.bodyMedium!.fontSize!,
+                  ])
+            else
+              widget ?? SizedBox.shrink(),
             if (showArrow == true)
               Padding(
                 padding: EdgeInsets.only(left: 5.w),
@@ -72,7 +76,6 @@ class LinearBoxWidget extends StatelessWidget {
                   color: bohibaTheme.primaryColor,
                 ),
               ),
-            widget ?? Container(),
           ],
         ),
       ),

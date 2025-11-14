@@ -96,7 +96,7 @@ class GlobalService {
         textColor = bohibaTheme.colorScheme.error;
         break;
       case AlertStatus.success:
-        textColor = bohibaTheme.colorScheme.onSurface;
+        textColor = bohibaTheme.colorScheme.onPrimary;
         break;
       case AlertStatus.info:
         textColor = bohibaTheme.primaryColor;
@@ -155,7 +155,8 @@ class GlobalService {
   static Future<DateTime?> datePickerModal({
     required BuildContext context,
     String title = 'Select date',
-    DateTime? endYear,
+    DateTime? endTime,
+    DateTime? startTime,
   }) async {
     return await showModalBottomSheet(
       context: context,
@@ -166,7 +167,8 @@ class GlobalService {
       builder: (context) {
         return AppDatePicker(
           title: title,
-          lastDateTime: endYear,
+          lastDateTime: endTime,
+          startDateTime: startTime,
         );
       },
     );
@@ -250,7 +252,7 @@ class GlobalService {
     IconData iconData = Icons.error;
     switch (status) {
       case AlertStatus.success:
-        color = bohibaTheme.colorScheme.onSurface;
+        color = bohibaTheme.colorScheme.onPrimary;
         iconData = Remix.checkbox_circle_fill;
         break;
       case AlertStatus.info:
@@ -296,7 +298,7 @@ class GlobalService {
         borderWidth: 0.0,
         margin: EdgeInsets.symmetric(horizontal: 15.w),
         padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-        duration: const Duration(seconds: 10),
+        duration: const Duration(seconds: 2),
         mainButton: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: actionButton ??
@@ -365,7 +367,12 @@ class GlobalService {
     return emailValid;
   }
 
-  static void showProgress([String? msg, Function()? onCancel]) {
+  static Future<void> showProgress([String? msg, Function()? onCancel]) async {
+    bool isSnackOpen = Get.isSnackbarOpen;
+    if (isSnackOpen) {
+      Get.back();
+    }
+
     if (isProgressOpen) {
       return;
     }
@@ -432,7 +439,7 @@ class GlobalService {
       isProgressOpen = false;
     }
 
-    Future.delayed(const Duration(seconds: 60), () {
+    Future.delayed(const Duration(seconds: 10), () {
       if (isProgressOpen) {
         dismissProgress();
       }

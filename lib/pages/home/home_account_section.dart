@@ -6,14 +6,9 @@ import '/component/bohiba_buttons/primary_icon_button.dart';
 import '/component/bohiba_colors.dart';
 import '/routes/app_route.dart';
 
-class HomeAccountSection extends StatefulWidget {
+class HomeAccountSection extends StatelessWidget {
   const HomeAccountSection({super.key});
 
-  @override
-  State<HomeAccountSection> createState() => _HomeAccountSectionState();
-}
-
-class _HomeAccountSectionState extends State<HomeAccountSection> {
   @override
   Widget build(BuildContext context) {
     NavigatorState navigate = Navigator.of(context);
@@ -23,9 +18,10 @@ class _HomeAccountSectionState extends State<HomeAccountSection> {
       },
       child: Padding(
         padding: EdgeInsets.only(
+          top: ScreenUtils.width5,
           left: ScreenUtils.width15,
           right: ScreenUtils.width15,
-          bottom: ScreenUtils.height30,
+          bottom: ScreenUtils.height10,
         ),
         child: Column(
           children: [

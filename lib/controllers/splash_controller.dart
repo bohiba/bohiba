@@ -25,49 +25,56 @@ class SplashController extends GetxController {
   Future<void> _initApp() async {
     String strToken = _prefUtils.getString(PrefUtils.token);
     bool isBioMetricEnabled = DeviceInfoService.isBioMetricEnabled();
-    Future.delayed(Duration.zero, () async {
-      if (strToken.isEmpty) {
-        Get.offAllNamed(AppRoute.signIn);
-      } else if (strToken.isNotEmpty) {
-        MethodType methodType = await DeviceInfoService.hasInternet()
-            ? MethodType.api
-            : MethodType.local;
-        _dio.setToken(strToken);
-        final ProfileModel? profileModel = await ProfileService.getProfile(
-          type: methodType,
-          showProgress: false,
-        );
-        int userRole = RoleService.initRole(profileModel);
-        if (profileModel == null) {
+    Future.delayed(
+      Duration.zero,
+      () async {
+        if (strToken.isEmpty) {
           Get.offAllNamed(AppRoute.signIn);
-          return;
-        } else if (profileModel.mobileNumber == null) {
-          Get.offAllNamed(AppRoute.signIn);
-          return;
-        } else if (profileModel.pinCode == null) {
-          Get.offAllNamed(AppRoute.userAddressAuthScreen);
-          return;
-        } else if (userRole == UserRoles.guest) {
-          Get.offAllNamed(AppRoute.roleType);
-        } else {
-          if (isBioMetricEnabled == true) {
-            bool success = await DeviceInfoService.authenticateUser();
-            if (success) {
-              RoleService.initRole(profileModel);
-              await MainService.mainApi(type: methodType);
-              Get.offAllNamed(AppRoute.navBar);
-            } else {
-              // Navigate to Lock Screen
-            }
+        } else if (strToken.isNotEmpty) {
+          MethodType methodType = await DeviceInfoService.hasInternet()
+              ? MethodType.api
+              : MethodType.local;
+          _dio.setToken(strToken);
+          final ProfileModel? profileModel = await ProfileService.getProfile(
+            type: methodType,
+            showProgress: false,
+          );
+          int userRole = RoleService.initRole(profileModel);
+          if (profileModel == null) {
+            Get.offAllNamed(AppRoute.signIn);
+            return;
+          } else if (profileModel.mobileNumber == null) {
+            Get.offAllNamed(AppRoute.signIn);
+            return;
+          } else if (profileModel.pinCode == null) {
+            Get.offAllNamed(AppRoute.userAddressAuthScreen);
+            return;
+          } else if (userRole == UserRoles.guest) {
+            Get.offAllNamed(AppRoute.roleType);
           } else {
-            await MainService.mainApi(type: methodType, showProgress: false);
-            Get.offAllNamed(AppRoute.navBar);
+            if (isBioMetricEnabled == true) {
+              bool success = await DeviceInfoService.authenticateUser();
+              if (success) {
+                MainService.mainApi(type: methodType, showProgress: false);
+                if (userRole == UserRoles.truckOwner) {
+                  Get.offAllNamed(AppRoute.truckOwnerNavBar);
+                } else if (userRole == UserRoles.driver) {
+                  Get.offAllNamed(AppRoute.truckDriverNavBar);
+                }
+              } else {
+                // Navigate to Lock Screen
+              }
+            } else {
+              MainService.mainApi(type: methodType, showProgress: false);
+              if (userRole == UserRoles.truckOwner) {
+                Get.offAllNamed(AppRoute.truckOwnerNavBar);
+              } else if (userRole == UserRoles.driver) {
+                Get.offAllNamed(AppRoute.truckDriverNavBar);
+              }
+            }
           }
         }
-      } else {
-        await MainService.mainApi();
-        Get.offAllNamed(AppRoute.navBar);
-      }
-    });
+      },
+    );
   }
 }

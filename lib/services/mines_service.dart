@@ -7,7 +7,7 @@ class MinesService {
 
   static Future<List<MinesModel>?> getMinesList() async {
     String strQuery = '''SELECT * FROM $tblMines''';
-    List<Map>? arrMapMines = await _databaseService.getAllData(strQuery);
+    List<Map>? arrMapMines = await _databaseService.executeQuery(strQuery);
     if (arrMapMines != null) {
       List<MinesModel> minesModel = arrMapMines.map((e) {
         return MinesModel.fromDB(e);

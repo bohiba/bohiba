@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+
 import '/dist/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/dist/component_exports.dart';
@@ -44,21 +46,25 @@ class DriverPage extends GetView<DriverController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
+                        SizedBox(
                           width: ScreenUtils.width,
                           height: ScreenUtils.height * 0.3,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                GlobalService.getAvatarUrl(
-                                  controller.driverModel.value.profile?.name ??
-                                      '',
-                                  rounded: false,
+                          child: controller.driverModel.value.profile!.image !=
+                                  null
+                              ? CachedNetworkImage(
+                                  imageUrl: controller
+                                      .driverModel.value.profile!.image!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  GlobalService.getAvatarUrl(
+                                    controller
+                                            .driverModel.value.profile?.name ??
+                                        '',
+                                    rounded: false,
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                            ),
-                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(
@@ -130,14 +136,14 @@ class DriverPage extends GetView<DriverController> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: bohibaTheme
-                                              .colorScheme.onSurface
+                                              .colorScheme.onPrimary
                                               .withValues(alpha: 0.25),
                                         ),
                                         child: Icon(
                                           Icons.phone_sharp,
                                           size: 16.w,
                                           color:
-                                              bohibaTheme.colorScheme.onSurface,
+                                              bohibaTheme.colorScheme.onPrimary,
                                         ),
                                       ),
                                     ),
@@ -369,7 +375,8 @@ class DriverPage extends GetView<DriverController> {
                   ),
                 ),
               ),
-              if (controller.didReviewed.isTrue)
+              if (controller.didReviewed.value == true ||
+                  controller.driverModel.value.rating == null)
                 SizedBox.shrink()
               else
                 Padding(

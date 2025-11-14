@@ -11,6 +11,7 @@ class SecoundaryButton extends StatelessWidget {
   final double? height;
   final Color? color;
   final Color? textColor;
+  final TextStyle? textStyle;
   const SecoundaryButton({
     super.key,
     this.onPressed,
@@ -19,6 +20,7 @@ class SecoundaryButton extends StatelessWidget {
     this.height,
     this.color,
     this.textColor,
+    this.textStyle,
   });
 
   @override
@@ -42,11 +44,12 @@ class SecoundaryButton extends StatelessWidget {
       ),
       child: Text(
         label.toUpperCase(),
-        style: TextStyle(
-          fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
-          color: textColor ?? bohibaTheme.textTheme.bodySmall!.color,
-          fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-        ),
+        style: textStyle ??
+            TextStyle(
+              fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
+              color: textColor ?? bohibaTheme.textTheme.bodySmall!.color,
+              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+            ),
       ),
     );
   }

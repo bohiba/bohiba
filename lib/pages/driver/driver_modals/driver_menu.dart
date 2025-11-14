@@ -34,6 +34,7 @@ class DriverMenu extends GetView<DriverAllController> {
     final NavigatorState navState = Navigator.of(context);
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onPanDown: (details) {
         final menuItems = <PopupMenuEntry<ActionType>>[];
         if (allowedActions.contains(ActionType.view)) {

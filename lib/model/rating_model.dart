@@ -1,6 +1,6 @@
 class RatingModel {
   int? id;
-  int? driverUuid;
+  String? driverUuid;
   int? reviewerId;
   String? reviewerUuid;
   String? reviewerImage;
@@ -27,7 +27,7 @@ class RatingModel {
     Map<String, dynamic> reviewer = json['reviewer'];
     return RatingModel(
       id: json['id'],
-      driverUuid: json['uuid'],
+      driverUuid: json['driverUuid'],
       reviewerId: reviewer['id'],
       reviewerUuid: reviewer['uuid'],
       reviewerImage: reviewer['profile_image'],
@@ -43,7 +43,7 @@ class RatingModel {
     Map<String, dynamic> reviewer = json['reviewer'];
     return {
       'id': json['id'],
-      'driverUuid': json['uuid'],
+      'driverUuid': json['driverUuid'],
       'reviewerId': reviewer['id'],
       'reviewerUuid': reviewer['uuid'],
       'reviewerImage': reviewer['profile_image'],

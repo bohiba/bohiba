@@ -1,4 +1,4 @@
-import 'package:bohiba/model/driver_model.dart';
+import '/model/driver_model.dart';
 
 import '/pages/widget/required_label.dart';
 import '/services/global_service.dart';
@@ -90,27 +90,35 @@ class DriverAddPage extends GetView<DriverAddController> {
                         UUIDDriverVerification()
                       else
                         ManualModeDriverVerification(),
-                      RequiredLabel(label: 'Assign Truck'),
-                      // Text('Assign Truck', style: bohibaTheme.textTheme.titleLarge),
-                      PrimaryDropDownMenu(
-                        padding: EdgeInsets.symmetric(
-                          vertical: ScreenUtils.height10,
+                      Visibility(
+                        visible: controller.arrTruck.isNotEmpty,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RequiredLabel(label: 'Assign Truck'),
+                            PrimaryDropDownMenu(
+                              padding: EdgeInsets.symmetric(
+                                vertical: ScreenUtils.height10,
+                              ),
+                              hint: controller.truck.value.driverName ??
+                                  'Registration Number',
+                              items: controller.arrTruck
+                                  .map((f) => f.regdNumber.toString())
+                                  .toList(),
+                              enableSearch: true,
+                              focusOnTap: true,
+                              onChanged: (p0) {
+                                controller.strTruckRegdNo.value = p0 ?? '';
+                                GlobalService.printHandler(
+                                    'ID: ${controller.strTruckRegdNo.value}');
+                                GlobalService.closeKeyboard();
+                              },
+                              menuController: controller.assignTruckCtlr,
+                            ),
+                          ],
                         ),
-                        hint: controller.truck.value.driverName ??
-                            'Registration Number',
-                        items: controller.arrTruck
-                            .map((f) => f.regdNumber.toString())
-                            .toList(),
-                        enableSearch: true,
-                        focusOnTap: true,
-                        onChanged: (p0) {
-                          controller.strTruckRegdNo.value = p0 ?? '';
-                          GlobalService.printHandler(
-                              'ID: ${controller.strTruckRegdNo.value}');
-                          GlobalService.closeKeyboard();
-                        },
-                        menuController: controller.assignTruckCtlr,
                       ),
+                      // Text('Assign Truck', style: bohibaTheme.textTheme.titleLarge),
                     ],
                   ),
                 ),

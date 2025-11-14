@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class VehicleDetailModal extends GetView<TruckAllController> {
-  final TruckModel vehicleDetails;
+  final TruckModel? vehicleDetails;
   const VehicleDetailModal({super.key, required this.vehicleDetails});
 
   @override
@@ -40,7 +40,7 @@ class VehicleDetailModal extends GetView<TruckAllController> {
                 right: ScreenUtils.width15,
               ),
               child: Text(
-                vehicleDetails.regdNumber ?? 'NA',
+                vehicleDetails?.regdNumber ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: bohibaTheme.textTheme.headlineLarge,
@@ -56,32 +56,32 @@ class VehicleDetailModal extends GetView<TruckAllController> {
                     RoleWidget(
                       truckOwnerWidget: SubInfoTile(
                         title: "Driver:",
-                        data: vehicleDetails.driverName ?? '',
+                        data: vehicleDetails?.driverName ?? '',
                       ),
                       driverWidget: SubInfoTile(
                         title: "Owner:",
-                        data: vehicleDetails.ownerName ?? '',
+                        data: vehicleDetails?.ownerName ?? '',
                       ),
                     ),
                     SubInfoTile(
                       title: "Unladen Weight:",
-                      data: '${vehicleDetails.vhUnladenWeight}',
+                      data: '${vehicleDetails?.vhUnladenWeight}',
                     ),
                     SubInfoTile(
                       title: "Insurance Upto:",
-                      data: vehicleDetails.insuranceUpto,
+                      data: vehicleDetails?.insuranceUpto,
                     ),
                     SubInfoTile(
                       title: "Fitness Upto:",
-                      data: vehicleDetails.fitnessUpto,
+                      data: vehicleDetails?.fitnessUpto,
                     ),
                     SubInfoTile(
                       title: "Tax Upto:",
-                      data: vehicleDetails.taxUpto,
+                      data: vehicleDetails?.taxUpto,
                     ),
                     SubInfoTile(
                       title: "PUCC Upto:",
-                      data: vehicleDetails.puccUpto,
+                      data: vehicleDetails?.puccUpto,
                       enableBorder: false,
                     ),
                     Padding(
@@ -95,7 +95,7 @@ class VehicleDetailModal extends GetView<TruckAllController> {
                         onPressed: () {
                           navigatorState
                               .popAndPushNamed(AppRoute.truck,
-                                  arguments: vehicleDetails.id)
+                                  arguments: vehicleDetails!.id)
                               .then((onValue) async {
                             if (onValue != null) {
                               await controller.getTruckList();

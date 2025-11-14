@@ -1,3 +1,5 @@
+import 'package:bohiba/model/rating_model.dart';
+import 'package:bohiba/services/rating_service.dart';
 import 'package:bohiba/services/truck_service.dart';
 
 import '/dist/app_enums.dart';
@@ -76,7 +78,7 @@ class DriverService {
       String strGetQuery =
           ''' SELECT * FROM $tblDriver ORDER BY updatedAt DESC ''';
       List<Map<String, dynamic>> arrDriver =
-          await _databaseService.getAllData(strGetQuery) ?? [];
+          await _databaseService.executeQuery(strGetQuery) ?? [];
       List<UserModel> driverModelList = arrDriver.map((e) {
         return UserModel.fromDB(e);
       }).toList();
@@ -145,7 +147,7 @@ class DriverService {
       String strGetDriver =
           ''' SELECT * FROM $tblDriver WHERE id = $id LIMIT 1 ''';
       List<Map<String, dynamic>> driverList =
-          await _databaseService.getAllData(strGetDriver) ?? [];
+          await _databaseService.executeQuery(strGetDriver) ?? [];
 
       if (driverList.isNotEmpty) {
         UserModel driver = UserModel.fromDB(driverList.first);
@@ -162,6 +164,19 @@ class DriverService {
       switch (response.statusCode) {
         case 200:
           UserModel driver = UserModel.fromJson(response.data);
+          Map driverObj = response.data;
+          if (driverObj.containsKey('rating')) {
+            List<dynamic> ratingList = driverObj['rating'];
+            List<Map<String, dynamic>> arrRatingObj = ratingList.map((rating) {
+              return RatingModel.toDB(rating);
+            }).toList();
+
+            int insertRating =
+                await RatingService.insertAll(ratingList: arrRatingObj);
+            if (insertRating > 0) {
+              // Insert Success
+            }
+          }
           String strUpdateQuery = '''
             UPDATE $tblDriver SET
               isFav = ${driver.isFav ?? 0},

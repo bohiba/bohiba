@@ -8,8 +8,14 @@ import 'package:flutter/material.dart';
 class EmailInputField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
+  final bool readOnly;
 
-  const EmailInputField({super.key, required this.hintText, this.controller});
+  const EmailInputField({
+    super.key,
+    required this.hintText,
+    this.controller,
+    this.readOnly = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +26,7 @@ class EmailInputField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         keyboardType: TextInputType.emailAddress,
+        readOnly: readOnly,
         style: TextStyle(
           fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
           color: bohibaTheme.textTheme.bodyLarge!.color,

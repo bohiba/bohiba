@@ -1,17 +1,17 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/model/owner_expenses.dart';
-import 'package:bohiba/services/owner_expense_service.dart';
+import 'package:bohiba/theme/bohiba_theme.dart';
+import 'package:flutter/material.dart';
+
+import '/dist/app_enums.dart';
+import '../model/owner_expenses_model.dart';
+import '/services/owner_expense_service.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class AllOwnerExpenseController extends GetxController {
-  final RefreshController refreshTruckList = RefreshController();
+  final RefreshController refreshExpenseList = RefreshController();
 
- // Driver Details
+  // Driver Details
   RxList<OwnerExpense> arrOwnerExp = <OwnerExpense>[].obs;
-
-  RxBool isFav = false.obs;
 
   @override
   void onInit() {
@@ -20,22 +20,31 @@ class AllOwnerExpenseController extends GetxController {
       await getOwnerExpenseList();
     });
   }
- Future<List<OwnerExpense>> getOwnerExpenseList({
-    MethodType methodType = MethodType.api,
+
+  Future<void> getOwnerExpenseList({
+    MethodType methodType = MethodType.local,
     bool resetList = false,
   }) async {
-    
+    List<OwnerExpense>? expenseList =
+        await OwnerExpenseService.getOwnerExpenseList(
+            type: methodType, reset: resetList);
 
-    List<OwnerExpense> truckList =
-        await OwnerExpenseService.getOwnerExpenseList(type: methodType, reset: resetList);
-    arrOwnerExp.clear();
-    arrOwnerExp.addAll(truckList);
-    return arrOwnerExp;
+    if (expenseList != null) {
+      arrOwnerExp.clear();
+      arrOwnerExp.addAll(expenseList);
+    }
   }
- @override
-  void dispose() {
-   
-    super.dispose();
+
+  Color? expenseColor(String severity) {
+    switch (severity) {
+      case 'low':
+        return bohibaTheme.colorScheme.onPrimary;
+      case 'medium':
+        return bohibaTheme.colorScheme.surface;
+      case 'high':
+        return bohibaTheme.colorScheme.error;
+      default:
+        return bohibaTheme.textTheme.titleMedium!.color;
+    }
   }
-  
 }

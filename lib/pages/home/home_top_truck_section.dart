@@ -1,3 +1,4 @@
+import '/component/app_skeleton_loader.dart';
 import '/controllers/home_controller.dart';
 import '/dist/app_enums.dart';
 import '/model/truck_model.dart';
@@ -17,7 +18,7 @@ class HomeTopTruck extends GetView<HomeController> {
     final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
-        visible: controller.arrTruck.isNotEmpty,
+        visible: controller.arrTruck.value?.isNotEmpty ?? true,
         child: Column(
           children: [
             Padding(
@@ -52,51 +53,49 @@ class HomeTopTruck extends GetView<HomeController> {
                 ],
               ),
             ),
-
-            // Top Tipper's List
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: ScreenUtils.height25,
-              ),
-              child: Container(
+            if (controller.arrTrip.value == null)
+              AppSkeletonLoader(skeletonLength: 3)
+            else
+              Container(
                 alignment: Alignment.center,
-                child: Obx(() {
-                  return ListView.builder(
-                      padding: EdgeInsets.only(
-                        left: ScreenUtils.width15,
-                        right: ScreenUtils.width15,
-                        bottom: ScreenUtils.height5,
-                      ),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: controller.arrTruck.length,
-                      itemBuilder: (context, index) {
-                        TruckModel topVehicleObj = controller.arrTruck[index];
-                        return TruckTile(
-                          truckInfo: topVehicleObj,
-                          allowedActions: [
-                            ActionType.view,
-                            ActionType.add,
-                            ActionType.edit,
-                            ActionType.other,
-                          ],
-                          onClick: () {
-                            Get.toNamed(AppRoute.truck,
-                                    arguments: topVehicleObj.id)
-                                ?.then(
-                              (onValue) async {
-                                if (onValue != null) {
-                                  await controller.getTruckList();
-                                  controller.arrTruck.refresh();
-                                }
-                              },
-                            );
+                child: ListView.builder(
+                  padding: EdgeInsets.only(
+                    left: ScreenUtils.width15,
+                    right: ScreenUtils.width15,
+                    bottom: ScreenUtils.height15,
+                  ),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: controller.arrTruck.value!.length > 3
+                      ? 3
+                      : controller.arrTruck.value?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    TruckModel topVehicleObj =
+                        controller.arrTruck.value![index];
+                    return TruckTile(
+                      truckInfo: topVehicleObj,
+                      allowedActions: [
+                        ActionType.view,
+                        ActionType.add,
+                        ActionType.edit,
+                        ActionType.other,
+                      ],
+                      onClick: () {
+                        Get.toNamed(AppRoute.truck,
+                                arguments: topVehicleObj.regdNumber)
+                            ?.then(
+                          (onValue) async {
+                            if (onValue != null) {
+                              await controller.getTruckList();
+                              controller.arrTruck.refresh();
+                            }
                           },
                         );
-                      });
-                }),
-              ),
-            )
+                      },
+                    );
+                  },
+                ),
+              )
           ],
         ),
       );

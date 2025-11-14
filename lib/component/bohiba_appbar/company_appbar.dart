@@ -1,3 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:marquee_text/marquee_text.dart';
+
 import '/theme/bohiba_theme.dart';
 
 import '/component/bohiba_text/bohiba_marquee_text.dart';
@@ -31,7 +34,19 @@ class _CompanyAppBarState extends State<CompanyAppBar> {
           },
           child: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
-        title: Text(widget.title),
+        title: AutoSizeText(
+          widget.title,
+          maxLines: 1,
+          style: bohibaTheme.appBarTheme.titleTextStyle,
+          overflowReplacement: MarqueeText(
+            speed: 10,
+            alwaysScroll: true,
+            style: bohibaTheme.appBarTheme.titleTextStyle,
+            text: TextSpan(
+              text: widget.title,
+            ),
+          ),
+        ),
         titleSpacing: 0,
         actions: [
           GestureDetector(

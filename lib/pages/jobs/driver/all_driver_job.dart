@@ -1,3 +1,5 @@
+import 'package:bohiba/component/app_skeleton_loader.dart';
+
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/model/job_detail_model.dart';
@@ -37,8 +39,7 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
         ],
       ),
       body: Obx(() {
-        return SafeArea(
-            child: Column(
+        return Column(
           children: [
             InkWell(
               onTap: () {
@@ -76,116 +77,165 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
               ),
             ),
             Expanded(
-              child: SmartRefresher(
-                controller: controller.refreshController,
-                onRefresh: () {
-                  controller.getAllJobs(refresh: true, showLoading: false);
-                  controller.refreshController.refreshCompleted();
-                },
-                child: ListView.builder(
-                  padding: EdgeInsets.only(
-                    left: ScreenUtils.height15,
-                    right: ScreenUtils.height15,
-                  ),
-                  itemCount: controller.arrJobDetail.length,
-                  itemBuilder: (context, index) {
-                    JobDetailModel jobDetail = controller.arrJobDetail[index];
-                    return GestureDetector(
-                      onTap: () {
-                        navigateState.pushNamed(
-                          AppRoute.jobDetail,
-                          arguments: jobDetail,
-                        );
+              child: (controller.arrJobDetail.value == null)
+                  ? AppSkeletonLoader(skeletonLength: 3)
+                  : SmartRefresher(
+                      controller: controller.refreshController,
+                      onRefresh: () {
+                        controller.getAllJobs(
+                            refresh: true, showLoading: false);
+                        controller.refreshController.refreshCompleted();
                       },
-                      child: Container(
-                        width: ScreenUtils.width,
-                        padding: EdgeInsets.all(ScreenUtils.height15),
-                        margin: EdgeInsets.only(bottom: ScreenUtils.width5),
-                        decoration: TileDecorative(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      child: (controller.arrJobDetail.value!.isEmpty)
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: ScreenUtils.width * 0.7,
-                                      child: Text(
-                                        jobDetail.jobTitle ?? '',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: bohibaTheme
-                                            .textTheme.headlineMedium,
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(EvaIcons.pin, size: 14.w),
-                                        Text(
-                                          ' ${jobDetail.location?.toCapitalizedLabel() ?? ''} ',
-                                          style: TextStyle(
-                                            fontSize: bohibaTheme
-                                                .textTheme.labelLarge!.fontSize,
-                                            fontWeight: bohibaTheme.textTheme
-                                                .titleLarge!.fontWeight,
-                                            color: bohibaTheme
-                                                .textTheme.titleLarge!.color,
-                                          ),
-                                        ),
-                                        Gap(10.w),
-                                        Icon(EvaIcons.briefcase, size: 14.w),
-                                        Text(
-                                          ' ${jobDetail.jobType?.toCapitalizedLabel() ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: bohibaTheme
-                                                .textTheme.labelLarge!.fontSize,
-                                            fontWeight: bohibaTheme.textTheme
-                                                .titleLarge!.fontWeight,
-                                            color: bohibaTheme
-                                                .textTheme.titleLarge!.color,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
                                 Text(
-                                  jobDetail.status?.toCapitalizedLabel() ?? '',
-                                  style: TextStyle(
-                                    fontFamily: bohibaTheme
-                                        .textTheme.labelLarge!.fontFamily,
-                                    fontSize: bohibaTheme
-                                        .textTheme.labelLarge!.fontSize,
-                                    color: Colors.blue,
-                                  ),
+                                  'No Jobs Found',
+                                  style: bohibaTheme.textTheme.displaySmall,
+                                ),
+                                Text(
+                                  'Sorry for inconvience. We unable to find any job',
+                                  textAlign: TextAlign.center,
+                                  style: bohibaTheme.textTheme.titleMedium,
                                 ),
                               ],
-                            ),
-                            Gap(ScreenUtils.height5),
-                            Text(
-                              jobDetail.createdAt ?? '',
-                              style: TextStyle(
-                                color: bohibaTheme.textTheme.titleMedium!.color,
-                                fontSize:
-                                    bohibaTheme.textTheme.labelMedium!.fontSize,
-                              ),
                             )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                          : ListView.builder(
+                              padding: EdgeInsets.only(
+                                left: ScreenUtils.height15,
+                                right: ScreenUtils.height15,
+                              ),
+                              itemCount:
+                                  (controller.arrJobDetail.value?.length ?? 0),
+                              itemBuilder: (context, index) {
+                                JobDetailModel? jobDetail =
+                                    controller.arrJobDetail.value?[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    navigateState.pushNamed(
+                                      AppRoute.jobDetail,
+                                      arguments: jobDetail,
+                                    );
+                                  },
+                                  child: Container(
+                                    width: ScreenUtils.width,
+                                    padding:
+                                        EdgeInsets.all(ScreenUtils.height15),
+                                    margin: EdgeInsets.only(
+                                        bottom: ScreenUtils.width5),
+                                    decoration: TileDecorative(),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width:
+                                                      ScreenUtils.width * 0.7,
+                                                  child: Text(
+                                                    jobDetail?.jobTitle ?? '',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: bohibaTheme.textTheme
+                                                        .headlineMedium,
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Icon(EvaIcons.pin,
+                                                        size: 14.w),
+                                                    Text(
+                                                      ' ${jobDetail?.location?.toCapitalizedLabel() ?? ''} ',
+                                                      style: TextStyle(
+                                                        fontSize: bohibaTheme
+                                                            .textTheme
+                                                            .labelLarge!
+                                                            .fontSize,
+                                                        fontWeight: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .fontWeight,
+                                                        color: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .color,
+                                                      ),
+                                                    ),
+                                                    Gap(10.w),
+                                                    Icon(EvaIcons.briefcase,
+                                                        size: 14.w),
+                                                    Text(
+                                                      ' ${jobDetail?.jobType?.toCapitalizedLabel() ?? ''}',
+                                                      style: TextStyle(
+                                                        fontSize: bohibaTheme
+                                                            .textTheme
+                                                            .labelLarge!
+                                                            .fontSize,
+                                                        fontWeight: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .fontWeight,
+                                                        color: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .color,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              jobDetail?.status
+                                                      ?.toCapitalizedLabel() ??
+                                                  '',
+                                              style: TextStyle(
+                                                fontFamily: bohibaTheme
+                                                    .textTheme
+                                                    .labelLarge!
+                                                    .fontFamily,
+                                                fontSize: bohibaTheme.textTheme
+                                                    .labelLarge!.fontSize,
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Gap(ScreenUtils.height5),
+                                        Text(
+                                          jobDetail?.createdAt ?? '',
+                                          style: TextStyle(
+                                            color: bohibaTheme
+                                                .textTheme.titleMedium!.color,
+                                            fontSize: bohibaTheme.textTheme
+                                                .labelMedium!.fontSize,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
             ),
           ],
-        ));
+        );
       }),
     );
   }

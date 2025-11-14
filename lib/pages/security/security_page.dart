@@ -10,7 +10,6 @@ import '/controllers/security_controller.dart';
 
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
-import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_inputfield/password_inputfield.dart';
@@ -128,13 +127,13 @@ class SecurityPage extends GetView<SecurityController> {
                       );
                     },
                   ),
-                  LinearBoxWidget(
+                  /*LinearBoxWidget(
                     header: 'Forgot Password',
                     showArrow: true,
                     onClick: () {
                       navigateState.pushNamed(AppRoute.forgotPwd);
                     },
-                  ),
+                  ),*/
                   Gap(ScreenUtils.height30),
                   Text('App Information',
                       style: bohibaTheme.textTheme.headlineMedium),
@@ -151,7 +150,7 @@ class SecurityPage extends GetView<SecurityController> {
                     title: controller.appInfo['updateTime'].toString(),
                   ),
                   Gap(ScreenUtils.height30),
-                  Text('Active Session',
+                  /*Text('Active Session',
                       style: bohibaTheme.textTheme.headlineMedium),
                   IconTextTile(
                     icon: Icons.smartphone_outlined,
@@ -177,7 +176,7 @@ class SecurityPage extends GetView<SecurityController> {
                       ),
                     ),
                   ),
-                  Gap(ScreenUtils.height30),
+                  Gap(ScreenUtils.height30),*/
                   Container(
                     padding: EdgeInsets.symmetric(
                       vertical: ScreenUtils.height10,

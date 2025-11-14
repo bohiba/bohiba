@@ -1,10 +1,13 @@
 import 'dart:io';
-import 'package:bohiba/services/truck_service.dart';
+
+import 'package:bohiba/extensions/bohiba_extension.dart';
+import 'package:bohiba/services/global_service.dart';
 
 import '/controllers/image_upload_controller.dart';
 import '/dist/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
+import '/services/truck_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/trip_service.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +16,13 @@ import 'package:get/get.dart';
 
 class TripAddController extends ImageUploadController {
   DioService dioService = DioService();
+  final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState<String>> startDateKey =
+      GlobalKey<FormFieldState<String>>();
 
-  TripModel? tripModel;
+  Rxn<TripModel> tripModel = Rxn<TripModel>();
   Rx<TruckModel> truckModel = TruckModel().obs;
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;
-  RxList<TruckModel> arrDoc = <TruckModel>[].obs;
 
   TextEditingController startAtController = TextEditingController();
   TextEditingController endedAtController = TextEditingController();
@@ -37,65 +42,69 @@ class TripAddController extends ImageUploadController {
   );
 
   final List<String> tripStatus = [
-    'In Transit',
-    'Completed',
-    'Unloading',
-    'Delayed',
-    'Cancelled',
-    'On Hold',
-    'Reassigned',
-    'Other',
+    'in_transit',
+    'completed',
+    'unloading',
+    'delayed',
+    'cancelled',
+    'on_hold',
+    'reassigned',
+    'other',
   ];
-  final List<String> ironOreTypes = [
-    'Iron Ore (Lumps)',
-    'Iron Ore (Fines)',
-    'Pellets',
-    'Blue Dust',
-    'Sinter Feed',
-    'Manganese Ore',
-    'Laterite',
-    'Slurry (Pipelines)',
+
+  List<String> ironOreTypes = [
+    "bauxite",
+    "basalt",
+    "chromite",
+    "clay",
+    "coal",
+    "copper_ore",
+    "dolomite",
+    "feldspar",
+    "galena_lead_ore",
+    "gold_ore",
+    "granite",
+    "gypsum",
+    "ilmenite",
+    "iron_ore",
+    "laterite",
+    "limestone",
+    "lignite",
+    "manganese_ore",
+    "marble",
+    "monazite",
+    "nickel_ore",
+    "platinum_ore",
+    "quartz",
+    "rare_earth_ore",
+    "rutile",
+    "silica_sand",
+    "sphalerite_zinc_ore",
+    "tin_ore",
+    "uranium_ore"
   ];
 
   DateTime pickedDate = DateTime.now();
 
-  // Document
-  Rx<UploadStatus> status = UploadStatus.initial.obs;
+  Rx<String> strOre = "".obs;
+  Rx<String> strStatus = "".obs;
 
   @override
   void onInit() {
     super.onInit();
-    tripModel = Get.arguments;
+    tripModel.value = Get.arguments;
 
     Future.delayed(Duration.zero, () async {
-      if (tripModel != null) {
+      await getTruckList();
+      if (tripModel.value != null) {
         await editTripController();
       }
-      await getTruckList();
     });
   }
 
-  Future<void> addUpdateTrip() async {
-    if (truckController.text.isEmpty) {
-      Get.showSnackbar(
-        GetSnackBar(
-          title: "Truck",
-          message: 'Please select truck for trip.',
-          duration: const Duration(seconds: 5),
-        ),
-      );
-      return;
-    }
-
-    if (truckModel.value.driverUuid == null) {
-      Get.showSnackbar(
-        GetSnackBar(
-          title: "Driver",
-          message: 'Please assign driver to your truck.',
-          duration: const Duration(seconds: 5),
-        ),
-      );
-      return;
+  Future<int> addUpdateTrip() async {
+    if (!globalKey.currentState!.validate()) {
+      return 0;
     }
 
     String tripCode1 = (truckController.text
@@ -114,36 +123,41 @@ class TripAddController extends ImageUploadController {
       'ended_at': endedAtController.text.trim(),
       'regd_number': truckController.text.trim(),
       'driver_uuid': truckModel.value.driverUuid,
-      'origin': originController.text.trim(),
-      'destination': destinationController.text.trim(),
-      'material_type': materialController.text.trim(),
+      'origin': originController.text.trim().toLowerCase(),
+      'destination': destinationController.text.trim().toLowerCase(),
+      'material_type':
+          materialController.text.replaceAll(' ', '_').toLowerCase(),
       'trip_status': statusTrip,
       'load_weight': totalWeightController.text.trim(),
       'short_weight': shortWeightController.text.trim(),
       'rate': rateTrip,
     };
-    if (tripModel == null) {
-      int addSucess = await TripService.addTrip(
+    int addOrUpdateSucess = 0;
+    if (tripModel.value == null) {
+      addOrUpdateSucess = await TripService.addTrip(
           bodyMap: bodyObj, truckModel: truckModel.value);
-      if (addSucess > 0) {
-        Get.back(result: true);
+      if (addOrUpdateSucess > 0) {
+        clearController();
       }
     } else {
-      int addSucess = await TripService.updateTrip(
+      addOrUpdateSucess = await TripService.updateTrip(
         bodyMap: bodyObj,
-        trip: tripModel!,
+        trip: tripModel.value!,
       );
-      if (addSucess > 0) {
-        Get.back(result: true);
+      if (addOrUpdateSucess > 0) {
+        clearController();
       }
     }
+    return addOrUpdateSucess;
   }
 
-  Future<List<TruckModel>> getTruckList() async {
+  Future<void> getTruckList() async {
     arrTruck.clear();
-    List<TruckModel> truckList = await TruckService.getTruckList();
-    arrTruck.addAll(truckList);
-    return truckList;
+    List<TruckModel>? truckList = await TruckService.getTruckList();
+    if (truckList != null) {
+      arrTruck.clear();
+      arrTruck.addAll(truckList);
+    }
   }
 
   void clearController() {
@@ -156,39 +170,43 @@ class TripAddController extends ImageUploadController {
     statusController.clear();
     totalWeightController.clear();
     shortWeightController.clear();
-    rateController = MoneyMaskedTextController(
-      initialValue: 00.00,
-      precision: 2,
-      leftSymbol: "₹",
-      decimalSeparator: ".",
-      thousandSeparator: ",",
-    );
+    rateController.updateValue(0.0);
   }
 
   Future<void> editTripController() async {
-    // truckModel.value =
-    //     await TruckService.getTruck(truckId: tripModel!.truck!.id!) ??
-    //         TruckModel();
-
-    startAtController.text = tripModel?.startDate ?? '';
-    endedAtController.text = tripModel?.endedDate ?? '';
-    truckController.text = tripModel?.truck?.regdNumber ?? '';
-    originController.text = tripModel?.origin ?? '';
-    destinationController.text = tripModel?.destination ?? '';
+    startAtController.text = tripModel.value?.startDate ?? '';
+    endedAtController.text = tripModel.value?.endedDate ?? '';
+    truckController.text = tripModel.value?.truck?.regdNumber ?? '';
+    originController.text = tripModel.value?.origin?.toUpperCase() ?? '';
+    destinationController.text =
+        tripModel.value?.destination?.toUpperCase() ?? '';
     materialController.text =
-        tripModel?.loadDetail?.materialType?.capitalizeFirst ?? '';
-    statusController.text = tripModel?.tripStatus?.capitalizeFirst ?? '';
+        tripModel.value?.loadDetail?.materialType?.toCapitalizedLabel() ?? '';
+    statusController.text =
+        tripModel.value?.tripStatus?.toCapitalizedLabel() ?? '';
     totalWeightController.text =
-        tripModel?.loadDetail?.loadWeight.toString() ?? '';
+        tripModel.value?.loadDetail?.loadWeight.toString() ?? '';
     shortWeightController.text =
-        tripModel?.loadDetail?.shortWeight.toString() ?? '';
+        tripModel.value?.loadDetail?.shortWeight.toString() ?? '';
     rateController = MoneyMaskedTextController(
-      initialValue: tripModel?.loadDetail?.rate ?? 0.0,
+      initialValue: tripModel.value?.loadDetail?.rate ?? 0.0,
       precision: 2,
       leftSymbol: "₹",
       decimalSeparator: ".",
       thousandSeparator: ",",
     );
+
+    try {
+      truckModel.value = arrTruck.firstWhere(
+          (truck) => truck.regdNumber == tripModel.value?.truck?.regdNumber);
+      strOre.value = ironOreTypes.firstWhere(
+          (ore) => ore == tripModel.value?.loadDetail?.materialType);
+
+      strStatus.value = tripStatus
+          .firstWhere((status) => status == tripModel.value?.tripStatus);
+    } catch (e) {
+      GlobalService.printHandler("$e");
+    }
   }
 
   /*

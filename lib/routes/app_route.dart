@@ -1,25 +1,38 @@
-import 'package:bohiba/bindings/all_owner_expense_binding.dart';
-import 'package:bohiba/pages/expenses/all_owner_expense_screen.dart';
+import 'package:bohiba/bindings/add_trip_doc_binding.dart';
+import 'package:bohiba/pages/trips/add_trip_document_page.dart';
+
+import '/bindings/all_open_driver_binding.dart';
+import '/bindings/user_qr_binding.dart';
+import '/bindings/user_scan_qr_binding.dart';
+
+import '/pages/user/user_profile/user_qr_page.dart';
+import '/pages/user/user_profile/user_scan_qr_page.dart';
+
+import '/bindings/all_owner_expense_binding.dart';
+import '/bindings/owner_expense_binding.dart';
+import '/pages/expenses/all_owner_expense_screen.dart';
+
+import '/bindings/all_int_driver_binding.dart';
+import '/pages/expenses/owner_expense_page.dart';
+import '/pages/jobs/owner/all_int_driver_page.dart';
 
 import '/bindings/all_recived_request_binding.dart';
-
 import '/pages/jobs/driver/all_received_request_page.dart';
 
 import '/bindings/all_applied_job_binding.dart';
-import 'package:bohiba/bindings/change_password_binding.dart';
-import 'package:bohiba/pages/jobs/driver/all_applied_job.dart';
+import '/bindings/change_password_binding.dart';
+import '/pages/jobs/driver/all_applied_job.dart';
 
 import '/bindings/all_driver_job_binding.dart';
 import '/pages/jobs/driver/all_driver_job.dart';
 
 import '/pages/driver/driver_modals/driver_rating_page.dart';
-import '/pages/welcome.dart';
 
 import '/bindings/open_driver_binding.dart';
 import '/pages/driver/open_driver_page.dart';
 
 import '/bindings/news_binding.dart';
-import '/bindings/owner_expense_binding.dart';
+import '../bindings/add_owner_expense_binding.dart';
 import '/pages/news/news_screen.dart';
 
 import '/bindings/all_news_binding.dart';
@@ -100,7 +113,7 @@ import '/bindings/driver_binding.dart';
 import '/bindings/truck_all_binding.dart';
 import '/bindings/dasboard_binding.dart';
 import '/bindings/splash_binding.dart';
-import '/bindings/user_profile_congif_binding.dart';
+import '../bindings/set_image_binding.dart';
 
 import '/pages/dashboard/dash_page/dashboard_page.dart';
 import '/pages/mines/all_mines_page.dart';
@@ -168,7 +181,8 @@ class AppRoute {
   static const String roleType = "/role-type";
 
   // NavBar
-  static const String navBar = "/nav-bar";
+  static const String truckOwnerNavBar = "/owner-nav-bar";
+  static const String truckDriverNavBar = "/driver-nav-bar";
   static const String favList = '/favList';
 
   // Vehicle
@@ -204,8 +218,8 @@ class AppRoute {
   static const String addExpense = '/add-expense';
   static const String addPayment = '/add-payment';
   static const String addReassignment = '/add-reassign';
+  static const String addTripDocument = '/add-trip-doc';
   static const String reassignment = '/reassign';
-
   static const String payment = '/payment';
   static const String expense = '/expense';
 
@@ -221,11 +235,9 @@ class AppRoute {
   static const String contact = "/contact";
   static const String reportIssue = "/reportIssue";
   static const String about = "/about";
-  static const String addOwnerExpense = "/add-owner-expense";
-  static const String allOwnerExpense = "/all-owner-expense";
 
   static const String allNewsScreen = "/all-news";
-  static const String newsScreen = "/snews";
+  static const String newsScreen = "/news";
   static const String notifyScreen = "/notify";
   static const String orderScreen = "/order";
   static const String statusScreen = "/status";
@@ -246,28 +258,27 @@ class AppRoute {
   // DASHBOARD
   static const String userProfile = '/user-profile';
   static const String editProfile = '/edit-profile';
+  static const String userQrPage = '/user-qr-page';
+  static const String userScanQrPage = '/user-scan-qr-page';
   static const String kyc = '/kyc';
 
   static const String allJobs = '/all-jobs';
   static const String addJobs = '/add-jobs';
   static const String jobDetail = '/my-job-details';
+  static const String allIntDriver = '/all-int-driver';
 
   static const String allDriverJob = '/all-driver-job';
   static const String allAppliedJob = '/driver/applied-job';
 
-  //TODO - It should be removed
-  static const String welcome = '/welcome';
+  static const String addOwnerExpense = "/add-owner-expense";
+  static const String allOwnerExpense = "/all-owner-expense";
+  static const String ownerExpense = "/owner-expense";
 
   static final List<GetPage> routes = [
     GetPage(
       name: splashScreen,
       binding: SplashBinding(),
       page: () => const SplashScreen(),
-    ),
-
-    GetPage(
-      name: welcome,
-      page: () => const WelcomeSceen(),
     ),
     // Auth
     GetPage(
@@ -296,7 +307,7 @@ class AppRoute {
 
     GetPage(
       name: addOwnerExpense,
-      binding: OwnerExpenseBinding(),
+      binding: AddOwnerExpenseBinding(),
       page: () => const AddOwnerExpensesScreen(),
     ),
 
@@ -304,6 +315,12 @@ class AppRoute {
       name: allOwnerExpense,
       binding: AllOwnerExpenseBinding(),
       page: () => const AllOwnerExpenseScreen(),
+    ),
+
+    GetPage(
+      name: ownerExpense,
+      binding: OwnerExpenseBinding(),
+      page: () => const OwnerExpensePage(),
     ),
 
     GetPage(
@@ -338,7 +355,7 @@ class AppRoute {
 
     GetPage(
       name: imageAuth,
-      binding: UserProfileConfigBinding(),
+      binding: SetImageBinding(),
       page: () => const SetImagePage(),
     ),
 
@@ -356,7 +373,19 @@ class AppRoute {
 
     // Main
     GetPage(
-      name: navBar,
+      name: truckOwnerNavBar,
+      // binding: MasterBinding(),
+      bindings: [
+        HomeBinding(),
+        AllTripBinding(),
+        AllOpenDriverBinding(),
+        DasboardBinding(),
+      ],
+      page: () => const BohibaNavBar(),
+    ),
+
+    GetPage(
+      name: truckDriverNavBar,
       // binding: MasterBinding(),
       bindings: [
         HomeBinding(),
@@ -522,7 +551,17 @@ class AppRoute {
       page: () => TripPaymentPage(),
     ),
 
-    GetPage(name: trips, binding: TripBinding(), page: () => const TripPage()),
+    GetPage(
+      name: trips,
+      binding: TripBinding(),
+      page: () => const TripPage(),
+    ),
+
+    GetPage(
+      binding: AddTripDocBinding(),
+      name: addTripDocument,
+      page: () => AddTripDocumentPage(),
+    ),
 
     GetPage(
       binding: TripAddReassignBinding(),
@@ -574,6 +613,19 @@ class AppRoute {
       binding: DasboardBinding(),
       page: () => EditUserProfilePage(),
     ),
+
+    GetPage(
+      name: userQrPage,
+      binding: UserQrBinding(),
+      page: () => UserQrPage(),
+    ),
+
+    GetPage(
+      name: userScanQrPage,
+      binding: UserScanQrBinding(),
+      page: () => UserScanQrPage(),
+    ),
+
     GetPage(
       name: setting,
       binding: SettingBinding(),
@@ -602,6 +654,12 @@ class AppRoute {
       binding: JobDetailBinding(),
       name: jobDetail,
       page: () => JobDetailPage(),
+    ),
+
+    GetPage(
+      name: allIntDriver,
+      binding: AllIntDriverBinding(),
+      page: () => AllIntDriverPage(),
     ),
 
     GetPage(

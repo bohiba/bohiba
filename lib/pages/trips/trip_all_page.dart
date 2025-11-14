@@ -1,9 +1,11 @@
-import 'trip_tile.dart';
+import 'package:bohiba/pages/widget/role_widget.dart';
 
+import 'trip_tile.dart';
 import '/routes/app_route.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
 import '/dist/component_exports.dart';
+import '/component/app_skeleton_loader.dart';
 import '/pages/widget/permission_widget.dart';
 import '/controllers/trip_all_controller.dart';
 import '/services/role_permission_service.dart';
@@ -58,7 +60,7 @@ class _AllTripPageState extends State<AllTripPage>
               showSearch(
                 context: context,
                 delegate: BohibaSearchDelegate<TripModel>(
-                  items: controller.arrTrip,
+                  items: controller.arrTrip.value ?? [],
                   hintText: 'Search by trip name',
                   searchPredicate: (TripModel item, String query) {
                     final q = query.toLowerCase();
@@ -76,7 +78,7 @@ class _AllTripPageState extends State<AllTripPage>
                         Get.toNamed(AppRoute.trips, arguments: item)!
                             .then((onValue) async {
                           if (onValue) {
-                            await controller.fetchTrips();
+                            await controller.getAllTrip();
                           }
                         });
                       },
@@ -117,8 +119,8 @@ class _AllTripPageState extends State<AllTripPage>
               icon: const Icon(EvaIcons.plus),
               onTap: () {
                 navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
-                  if (value != null) {
-                    await controller.fetchTrips(refresh: true);
+                  if (value != null && value != false) {
+                    await controller.getAllTrip();
                   }
                 });
               },
@@ -148,60 +150,75 @@ class _AllTripPageState extends State<AllTripPage>
                   children: controller.convertToSnakeCase(tabs).map(
                     (status) {
                       final filteredTrips = controller.getTripsByStatus(status);
-                      return filteredTrips.isEmpty
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'No Trip Found, Press below to add trip.',
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    navigatorState
-                                        .pushNamed(AppRoute.addTrip)
-                                        .then((value) async {
-                                      if (value != null) {
-                                        await controller.fetchTrips();
-                                      }
-                                    });
-                                  },
-                                  child: Text('Add Trip'),
-                                )
-                              ],
-                            )
-                          : ListView.builder(
-                              controller: controller.scrollController,
-                              itemCount: filteredTrips.length +
-                                  (controller.hasMore.value ? 1 : 0),
-                              padding: EdgeInsets.only(
-                                top: ScreenUtils.height20,
-                                left: ScreenUtils.width15,
-                                right: ScreenUtils.width15,
-                              ),
-                              itemBuilder: (context, index) {
-                                if (index < filteredTrips.length) {
-                                  return TripTile(
-                                    tripInfo: filteredTrips[index],
-                                    onClick: () {
-                                      Get.toNamed(AppRoute.trips,
-                                              arguments: filteredTrips[index])!
-                                          .then((onValue) async {
-                                        if (onValue) {
-                                          await controller.fetchTrips();
-                                        }
-                                      });
-                                    },
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                }
+                      if (filteredTrips == null) {
+                        return AppSkeletonLoader(
+                          padding: EdgeInsets.only(top: ScreenUtils.height20),
+                          skeletonLength: 3,
+                        );
+                      } else if (filteredTrips.isEmpty) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'No Trip Found',
+                              style: bohibaTheme.textTheme.displaySmall,
+                            ),
+                            Text(
+                              'No trip found, Press below to add trip.',
+                              style: bohibaTheme.textTheme.titleMedium,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                navigatorState
+                                    .pushNamed(AppRoute.addTrip)
+                                    .then((value) async {
+                                  if (value != null) {
+                                    await controller.getAllTrip();
+                                  }
+                                });
                               },
-                            );
+                              child: RoleWidget(
+                                truckOwnerWidget: Text('Add Trip'),
+                              ),
+                            )
+                          ],
+                        );
+                      } else {
+                        return ListView.builder(
+                          // controller: controller.scrollController,
+                          itemCount: (filteredTrips.length) +
+                              (controller.hasMore.value ? 1 : 0),
+                          padding: EdgeInsets.only(
+                            top: ScreenUtils.height20,
+                            left: ScreenUtils.width15,
+                            right: ScreenUtils.width15,
+                          ),
+                          itemBuilder: (context, index) {
+                            if (index < filteredTrips.length) {
+                              return TripTile(
+                                tripInfo: filteredTrips[index],
+                                onClick: () {
+                                  navigatorState
+                                      .pushNamed(AppRoute.trips,
+                                          arguments: filteredTrips[index])
+                                      .then((onValue) async {
+                                    if (onValue != false) {
+                                      await controller.getAllTrip();
+                                    }
+                                  });
+                                },
+                              );
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      }
                     },
                   ).toList(),
                 ),

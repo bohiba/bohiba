@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 
 class TripMenu extends GetView<TripController> {
   final Icon? icon;
-  final TripModel trip;
+  final TripModel? trip;
   final List<TripActionType> allowedActions;
   final Map<TripActionType, FutureOr<void> Function(dynamic value)?>?
       onActionComplete;
@@ -44,6 +44,15 @@ class TripMenu extends GetView<TripController> {
           );
         }
 
+        if (allowedActions.contains(TripActionType.document)) {
+          menuItems.add(
+            const PopupMenuItem(
+              value: TripActionType.document,
+              child: Text('Document'),
+            ),
+          );
+        }
+
         if (allowedActions.contains(TripActionType.expense)) {
           menuItems.add(
             const PopupMenuItem(
@@ -67,15 +76,6 @@ class TripMenu extends GetView<TripController> {
             const PopupMenuItem(
               value: TripActionType.reassignment,
               child: Text('Reassignment'),
-            ),
-          );
-        }
-
-        if (allowedActions.contains(TripActionType.document)) {
-          menuItems.add(
-            const PopupMenuItem(
-              value: TripActionType.document,
-              child: Text('Document'),
             ),
           );
         }
@@ -156,13 +156,23 @@ class TripMenu extends GetView<TripController> {
                   onActionComplete![TripActionType.payment]!(result);
                 }
               });
-
+              break;
             case TripActionType.reassignment:
               navigatorState
                   .pushNamed(AppRoute.addReassignment, arguments: trip)
                   .then((result) {
                 if (onActionComplete?[TripActionType.reassignment] != null) {
                   onActionComplete![TripActionType.reassignment]!(result);
+                }
+              });
+              break;
+
+            case TripActionType.document:
+              navigatorState
+                  .pushNamed(AppRoute.addTripDocument, arguments: trip)
+                  .then((result) {
+                if (onActionComplete?[TripActionType.document] != null) {
+                  onActionComplete![TripActionType.document]!(result);
                 }
               });
 
@@ -177,15 +187,18 @@ class TripMenu extends GetView<TripController> {
                     'Trip and related data will be deleted permanently? Are you sure',
                 discardBtnTxt: 'DELETE',
                 onDiscard: () async {
-                  controller.deleteTrip(
-                    tripId: trip.id!,
-                  );
+                  navigatorState.pop();
+                  await controller.deleteTrip(tripId: trip!.id!).then((result) {
+                    if (onActionComplete?[TripActionType.delete] != null) {
+                      onActionComplete![TripActionType.delete]!(result);
+                    }
+                  });
                 },
                 saveBtnTxt: 'CLOSE',
                 onSave: () => Get.back(),
               ).then((result) {
-                if (onActionComplete?[TripActionType.payment] != null) {
-                  onActionComplete![TripActionType.payment]!(result);
+                if (onActionComplete?[TripActionType.delete] != null) {
+                  onActionComplete![TripActionType.delete]!(result);
                 }
               });
               break;
