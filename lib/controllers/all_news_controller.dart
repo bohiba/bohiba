@@ -1,4 +1,4 @@
-import 'package:bohiba/dist/app_enums.dart';
+import '/dist/app_enums.dart';
 
 import '/model/news_model.dart';
 import '/services/news_service.dart';
@@ -22,7 +22,7 @@ class AllNewsController extends GetxController {
     bool showLoading = true,
   }) async {
     List<NewsModel>? newsList = await NewsService.getAllNews(
-      type: MethodType.api,
+      type: methodType,
       showProgress: showLoading,
     );
     if (newsList != null) {

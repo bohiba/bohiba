@@ -1,4 +1,4 @@
-import 'package:bohiba/component/app_skeleton_loader.dart';
+import '/component/app_skeleton_loader.dart';
 
 import '/routes/app_route.dart';
 
@@ -43,8 +43,7 @@ class HomeTripSection extends GetView<HomeController> {
                         child: Text(
                           "See All",
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.headlineMedium!.fontSize,
+                            fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
                             color: bohibaTheme.primaryColor,
                           ),
                         ),
@@ -70,9 +69,7 @@ class HomeTripSection extends GetView<HomeController> {
                     bottom: ScreenUtils.height15,
                   ),
                   shrinkWrap: true,
-                  itemCount: (controller.arrTrip.value?.length ?? 0) >= 3
-                      ? 3
-                      : controller.arrTrip.value?.length ?? 0,
+                  itemCount: (controller.arrTrip.value?.length ?? 0) >= 3 ? 3 : controller.arrTrip.value?.length ?? 0,
                   itemBuilder: (context, index) {
                     return TripTile(
                       tripInfo: controller.arrTrip.value![index],

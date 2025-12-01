@@ -226,7 +226,13 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                     onPressed: () async {
                       int success = await controller.addAddress();
                       if (success > 0) {
-                        navigateState.popAndPushNamed(AppRoute.imageAuth);
+                        navigateState.popAndPushNamed(
+                          AppRoute.imageAuth,
+                          arguments: {
+                            'canPop': true,
+                            'route': AppRoute.roleType
+                          },
+                        );
                       }
                     },
                     label: "Submit",

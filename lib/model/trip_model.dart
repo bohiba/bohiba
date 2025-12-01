@@ -108,7 +108,7 @@ class TripModel {
       loadDetail: LoadDetail.fromDb(mapObj),
       finance: TripFinance.fromDb(mapObj),
       truck: TripTruck.fromDb(mapObj),
-      driver: TripDriver.fromDb(mapObj),
+      // driver: TripDriver.fromDb(mapObj),
       owner: TripOwner.fromDb(mapObj),
     );
   }
@@ -291,12 +291,12 @@ class TripDriver {
         mobile: json["mobile"],
       );
 
-  factory TripDriver.fromDb(Map<String, dynamic> map) => TripDriver(
-        id: map['dvId'],
-        uuid: map["dvUuid"],
-        name: map["dvName"],
-        mobile: map["dvMobile"],
-      );
+  // factory TripDriver.fromDb(Map<String, dynamic> map) => TripDriver(
+  //       id: map['dvId'],
+  //       uuid: map["dvUuid"],
+  //       name: map["dvName"],
+  //       mobile: map["dvMobile"],
+  //     );
 
   Map<String, dynamic> toJson() => {
         "id": id,

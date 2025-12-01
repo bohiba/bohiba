@@ -21,7 +21,8 @@ class ImagePath {
   static String truckOwnerBanner = "assets/images/truck_owner_banner_1.png";
   static String driverBanner = "assets/images/driver_banner_1.png";
 
-  static String basePath = "https://bohiba.com/storage/app/public/images";
+  // static String basePath = "https://bohiba.com/storage/app/public/images";
+  static String basePath = "https://beta-server-t1.bohiba.com/storage/app/public/images";
   static String profileImage = "$basePath/profile";
   static String truckImage = "$basePath/truck";
   static String newsImage = "$basePath/news";

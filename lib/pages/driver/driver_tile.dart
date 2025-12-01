@@ -1,15 +1,14 @@
 import 'dart:async';
 
-import 'package:bohiba/component/image_path.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
-import 'package:bohiba/services/global_service.dart';
+import '/component/image_path.dart';
+import '/extensions/bohiba_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/dist/app_enums.dart';
 import '/pages/driver/driver_modals/driver_menu.dart';
 import '/controllers/driver_controller.dart';
-import '/model/driver_model.dart';
+import '../../model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '/dist/component_exports.dart';
@@ -20,8 +19,7 @@ class DriverTile extends GetView<DriverController> {
   final UserModel driver;
   final Function()? onPressed;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
-      onActionComplete;
+  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
   const DriverTile({
     super.key,
     required this.driver,
@@ -58,30 +56,21 @@ class DriverTile extends GetView<DriverController> {
                         ? Text(
                             driver.profile?.name?.shortCode ?? '',
                             style: TextStyle(
-                              fontSize:
-                                  bohibaTheme.textTheme.labelLarge!.fontSize,
-                              fontWeight:
-                                  bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                              fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
                               color: bohibaTheme.textTheme.bodySmall!.color,
                             ),
                           )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(6.r),
                             child: CachedNetworkImage(
-                              imageUrl:
-                                  "${ImagePath.profileImage}/${driver.profile?.image}",
+                              imageUrl: "${ImagePath.profileImage}/${driver.profile?.image}",
                               fit: BoxFit.cover,
                               placeholder: (context, child) {
-                                return Image.network(
-                                  GlobalService.getAvatarUrl(
-                                      driver.profile?.name ?? ''),
-                                );
+                                return SizedBox.shrink();
                               },
                               errorWidget: (context, child, obj) {
-                                return Image.network(
-                                  GlobalService.getAvatarUrl(
-                                      driver.profile?.name ?? ''),
-                                );
+                                return SizedBox.shrink();
                               },
                             ),
                           ),
@@ -101,8 +90,7 @@ class DriverTile extends GetView<DriverController> {
                         maxLines: 1,
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                       ),

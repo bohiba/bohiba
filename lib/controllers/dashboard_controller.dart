@@ -1,5 +1,6 @@
-import 'package:bohiba/services/global_service.dart';
-import 'package:bohiba/services/user_role_type.dart';
+import '/controllers/home_controller.dart';
+import '/services/global_service.dart';
+import '/services/user_role_type.dart';
 
 import '/dist/app_enums.dart';
 import '/model/profile_model.dart';
@@ -10,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DashboardController extends GetxController {
+  HomeController homeController = Get.find<HomeController>();
   RefreshController refreshProfile = RefreshController();
   RefreshController refreshDashboard = RefreshController();
 
@@ -48,24 +50,19 @@ class DashboardController extends GetxController {
   }
 
   Future<void> getLoggedUserAccount() async {
-    List<LoggedInAccountModel> arrList =
-        await ProfileService.getLoggedAccount();
+    List<LoggedInAccountModel> arrList = await ProfileService.getLoggedAccount();
     arrLoggedInUser.clear();
     arrLoggedInUser.addAll(arrList);
-    List<LoggedInAccountModel> arrUserList = arrList
-        .where((user) => (user.uuid == profileModel.value!.uuid!))
-        .toList();
+    List<LoggedInAccountModel> arrUserList = arrList.where((user) => (user.uuid == profileModel.value!.uuid!)).toList();
     if (arrUserList.isNotEmpty) {
       selectUser.value = arrUserList.first;
     }
   }
 
   Future<void> updateUserHiringStatus() async {
-    profileModel.value?.jobStatus =
-        opted.value.replaceAll(' ', '_').toLowerCase();
+    profileModel.value?.jobStatus = opted.value.replaceAll(' ', '_').toLowerCase();
     GlobalService.printHandler(opted.value.replaceAll(' ', '_').toLowerCase());
-    ProfileModel? profileInfo = await ProfileService.updateUserProfile(
-        bodyMap: {'job_status': profileModel.value?.jobStatus});
+    ProfileModel? profileInfo = await ProfileService.updateUserProfile(bodyMap: {'job_status': profileModel.value?.jobStatus});
 
     if (profileInfo != null) {
       profileModel.value = profileInfo;
@@ -76,19 +73,17 @@ class DashboardController extends GetxController {
     MethodType methodType = MethodType.local,
     bool showLoading = false,
   }) async {
-    ProfileModel? profile = await ProfileService.getProfile(
-        type: methodType, showProgress: showLoading);
+    ProfileModel? profile = await ProfileService.getProfile(type: methodType, showProgress: showLoading);
     if (profile != null) {
       profileModel.value = profile;
       if (profile.roleId == UserRoles.truckOwner) {
         statusOption.value = ['HIRING', 'NOT HIRING'];
-        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ??
-            'Not Hiring';
+        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ?? 'Not Hiring';
       } else {
         statusOption.value = ['LOOKING', 'NOT LOOKING'];
-        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ??
-            'Not Looking';
+        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ?? 'Not Looking';
       }
+      homeController.profile.value = profile;
       return profile;
     }
 

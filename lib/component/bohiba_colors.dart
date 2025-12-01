@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 // Colors
 class ColorSchemes {
-  static final bohibaColorsScheme =
-      ColorScheme.fromSeed(seedColor: Colors.transparent);
+  static final bohibaColorsScheme = ColorScheme.fromSeed(seedColor: Colors.transparent);
 }
 
 class BohibaColors {
   static const primaryColor = Color.fromRGBO(4, 123, 252, 1);
-  static const primaryVariantColor = Color.fromRGBO(183, 217, 254, 1);
+  static const primaryVariantColor = Color.fromRGBO(120, 179, 242, 1);
 
   static const greyColor = Color.fromRGBO(158, 158, 158, 1);
   static const lightGreyColor = Color.fromRGBO(245, 245, 245, 1);
@@ -22,8 +21,8 @@ class BohibaColors {
   static const black = Color.fromRGBO(37, 37, 37, 1);
 
   static const errorColor = Color(0xFFFAC638);
-  static const successColor = Color.fromRGBO(76, 175, 80, 1);
-  static const warningColor = Color(0xFFFF5252);
+  static const successColor = Color.fromARGB(255, 26, 162, 27);
+  static const warningColor = Color.fromRGBO(210, 10, 10, 1);
 
   static const transparent = Color(0x00000000);
 }
@@ -44,8 +43,8 @@ class DarkColors {
   static const black = Color.fromRGBO(28, 28, 28, 1);
 
   static const errorColor = Color.fromRGBO(252, 206, 81, 1);
-  static const successColor = Color.fromRGBO(129, 199, 132, 1);
-  static const warningColor = Color(0xFFFF7043);
+  static const successColor = Color.fromARGB(255, 34, 188, 34);
+  static const warningColor = Color.fromRGBO(182, 7, 7, 1);
 
   static const transparent = Color(0x00000000);
 }

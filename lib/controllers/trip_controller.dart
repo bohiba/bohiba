@@ -12,6 +12,7 @@ class TripController extends GetxController {
 
   Rxn<TripModel> tripInfo = Rxn<TripModel>();
 
+  RxString strErrorTitle = ''.obs;
   RxString strErrorDesc = ''.obs;
 
   @override
@@ -39,11 +40,11 @@ class TripController extends GetxController {
     bool showLoading = true,
     required int id,
   }) async {
-    TripModel? tripModel = await TripService.getTrip(
-        method: methodType, tripId: id, showProgress: showLoading);
+    TripModel? tripModel = await TripService.getTrip(method: methodType, tripId: id, showProgress: showLoading);
     if (tripModel != null) {
       tripInfo.value = tripModel;
     } else {
+      strErrorTitle.value = 'Trip Not Found';
       strErrorDesc.value = 'Sorry we unable to find this trip';
     }
   }
@@ -56,7 +57,7 @@ class TripController extends GetxController {
   Color statusColor() {
     switch (tripInfo.value?.tripStatus) {
       case 'in_transit':
-        return bohibaTheme.colorScheme.secondary;
+        return bohibaTheme.colorScheme.surface;
 
       case 'delay':
         return bohibaTheme.colorScheme.onSurface;
@@ -70,10 +71,8 @@ class TripController extends GetxController {
       case 'delayed':
         return bohibaTheme.colorScheme.error;
 
-      case 'on_hold':
-        return bohibaTheme.colorScheme.primary;
       default:
-        return bohibaTheme.textTheme.titleLarge!.color!;
+        return bohibaTheme.colorScheme.primary;
     }
   }
 

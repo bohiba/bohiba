@@ -1,4 +1,4 @@
-import 'package:bohiba/component/image_path.dart';
+import '/component/image_path.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
@@ -36,18 +36,21 @@ class NewsScreen extends GetView<NewsController> {
               ),
               child: Column(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          '${ImagePath.newsImage}/${controller.newsDetail.value.image}',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: Colors.grey.shade200,
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.grey.shade300,
-                        child: const Icon(Icons.broken_image, size: 50),
+                  SizedBox(
+                    width: ScreenUtils.width,
+                    height: 160.h,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: CachedNetworkImage(
+                        imageUrl: '${ImagePath.newsImage}/${controller.newsDetail.value.image}',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: bohibaTheme.cardColor,
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: bohibaTheme.cardColor,
+                          child: Icon(Icons.broken_image, size: 50, color: bohibaTheme.dividerColor),
+                        ),
                       ),
                     ),
                   ),
@@ -57,7 +60,7 @@ class NewsScreen extends GetView<NewsController> {
                     child: Text(
                       controller.newsDetail.value.updatedAt ?? '',
                       style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                        fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
                         color: bohibaTheme.textTheme.bodyLarge!.color,
                       ),
                     ),

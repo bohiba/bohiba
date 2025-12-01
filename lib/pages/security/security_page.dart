@@ -1,3 +1,5 @@
+import '/component/bohiba_appbar/appbar_icon.dart';
+
 import '/dist/app_enums.dart';
 import '/services/global_service.dart';
 
@@ -55,8 +57,7 @@ class SecurityPage extends GetView<SecurityController> {
                     ),
                   ),
                   Gap(ScreenUtils.height30),
-                  Text('Password Management',
-                      style: bohibaTheme.textTheme.headlineMedium),
+                  Text('Password Management', style: bohibaTheme.textTheme.headlineMedium),
                   LinearBoxWidget(
                     header: 'Change Password',
                     showArrow: true,
@@ -102,9 +103,7 @@ class SecurityPage extends GetView<SecurityController> {
                                   padding: EdgeInsets.only(top: 15.h),
                                   label: 'Verify',
                                   onPressed: () {
-                                    if (controller.pwdController.text.isEmpty ||
-                                        controller.pwdController.text.length <=
-                                            6) {
+                                    if (controller.pwdController.text.isEmpty || controller.pwdController.text.length <= 6) {
                                       GlobalService.showSnackBar(
                                         status: AlertStatus.info,
                                         title: 'Security',
@@ -135,8 +134,7 @@ class SecurityPage extends GetView<SecurityController> {
                     },
                   ),*/
                   Gap(ScreenUtils.height30),
-                  Text('App Information',
-                      style: bohibaTheme.textTheme.headlineMedium),
+                  Text('App Information', style: bohibaTheme.textTheme.headlineMedium),
                   LinearBoxWidget(
                     header: 'Version',
                     title: controller.appInfo['version'],
@@ -147,11 +145,10 @@ class SecurityPage extends GetView<SecurityController> {
                   ),
                   LinearBoxWidget(
                     header: 'Last Updated',
-                    title: controller.appInfo['updateTime'].toString(),
+                    title: (controller.appInfo['updateTime'].toString()),
                   ),
                   Gap(ScreenUtils.height30),
-                  /*Text('Active Session',
-                      style: bohibaTheme.textTheme.headlineMedium),
+                  Text('Active Session', style: bohibaTheme.textTheme.headlineMedium),
                   IconTextTile(
                     icon: Icons.smartphone_outlined,
                     text: 'iPhone 13 Pro',
@@ -176,7 +173,60 @@ class SecurityPage extends GetView<SecurityController> {
                       ),
                     ),
                   ),
-                  Gap(ScreenUtils.height30),*/
+                  Gap(ScreenUtils.height30),
+                  /*Text('Delete Account', style: bohibaTheme.textTheme.headlineMedium),
+                  GestureDetector(
+                    onTap: () => GlobalService.showAlertDialog(
+                      width: ScreenUtils.width * 0.45,
+                      status: AlertStatus.warning,
+                      title: 'Delete Account?',
+                      description: 'Are you sure? This will remove all your data and can’t be undone.',
+                      discardBtnTxt: 'Yes, Delete my account',
+                      onDiscard: () => controller.deleteAccount(),
+                      saveBtnTxt: 'Keep My Account',
+                      onSave: () => navigateState.pop(),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtils.height10,
+                        horizontal: ScreenUtils.width15,
+                      ),
+                      margin: EdgeInsets.only(
+                        top: ScreenUtils.height5,
+                        bottom: ScreenUtils.width15,
+                      ),
+                      decoration: BoxDecoration(
+                        color: bohibaTheme.cardColor,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Delete account',
+                              style: TextStyle(
+                                fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                                color: bohibaTheme.colorScheme.error,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.w),
+                              child: Icon(
+                                Icons.delete_rounded,
+                                size: ScreenUtils.height15.h,
+                                color: bohibaTheme.colorScheme.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Gap(ScreenUtils.height15),*/
+                  Text('Manage session', style: bohibaTheme.textTheme.headlineMedium),
                   Container(
                     padding: EdgeInsets.symmetric(
                       vertical: ScreenUtils.height10,
@@ -193,20 +243,16 @@ class SecurityPage extends GetView<SecurityController> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtils.height5),
+                          padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Log out from all other devices',
                                 style: TextStyle(
-                                  fontSize: bohibaTheme
-                                      .textTheme.bodyMedium!.fontSize,
-                                  fontWeight: bohibaTheme
-                                      .textTheme.bodySmall!.fontWeight,
-                                  color:
-                                      bohibaTheme.textTheme.titleMedium!.color,
+                                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                  fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                                  color: bohibaTheme.textTheme.bodyMedium!.color,
                                 ),
                               ),
                               Padding(
@@ -226,8 +272,7 @@ class SecurityPage extends GetView<SecurityController> {
                             GlobalService.showAlertDialog(
                               status: AlertStatus.warning,
                               title: 'Logout',
-                              description:
-                                  'Are you sure? You want to log out from this account. Press `Log out` to proceed',
+                              description: 'Are you sure? You want to log out from this account. Press `Log out` to proceed',
                               onSave: () {
                                 navigateState.pop();
                               },
@@ -237,26 +282,21 @@ class SecurityPage extends GetView<SecurityController> {
                                 navigateState.pop();
                                 int loggedOut = await controller.logOut();
                                 if (loggedOut > 0) {
-                                  navigateState.pushNamedAndRemoveUntil(
-                                      AppRoute.signIn,
-                                      (Route<dynamic> route) => false);
+                                  navigateState.pushNamedAndRemoveUntil(AppRoute.signIn, (Route<dynamic> route) => false);
                                 }
                               },
                             );
                           },
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: ScreenUtils.height5),
+                            padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Log out from this device',
                                   style: TextStyle(
-                                    fontSize: bohibaTheme
-                                        .textTheme.bodyMedium!.fontSize,
-                                    fontWeight: bohibaTheme
-                                        .textTheme.bodySmall!.fontWeight,
+                                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                    fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
                                     color: bohibaTheme.colorScheme.error,
                                   ),
                                 ),

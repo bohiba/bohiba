@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/all_driver_job_controller.dart';
+import '/controllers/all_driver_job_controller.dart';
 import 'package:get/get.dart';
 
 class AllDriverJobBinding extends Bindings {

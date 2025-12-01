@@ -3,7 +3,7 @@ import '/pages/truck/truck_tile.dart';
 
 import '/controllers/home_controller.dart';
 import '/dist/app_enums.dart';
-import '/model/driver_model.dart';
+import '../../model/user_model.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/pages/trips/trip_tile.dart';
@@ -50,8 +50,7 @@ class HomeFavListSection extends GetView<HomeController> {
                       child: Text(
                         "See All",
                         style: TextStyle(
-                          fontSize:
-                              bohibaTheme.textTheme.headlineMedium!.fontSize,
+                          fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
                           color: bohibaTheme.primaryColor,
                         ),
                       ),
@@ -73,9 +72,7 @@ class HomeFavListSection extends GetView<HomeController> {
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: controller.arrFavList.length > 3
-                    ? 3
-                    : controller.arrFavList.length,
+                itemCount: controller.arrFavList.length > 3 ? 3 : controller.arrFavList.length,
                 itemBuilder: (context, index) {
                   Map<String, dynamic> favObj = controller.arrFavList[index];
 
@@ -83,9 +80,7 @@ class HomeFavListSection extends GetView<HomeController> {
                     return DriverTile(
                       driver: UserModel.fromJson(favObj),
                       onPressed: () {
-                        navigatorState
-                            .pushNamed(AppRoute.driver, arguments: favObj)
-                            .then((onValue) async {
+                        navigatorState.pushNamed(AppRoute.driver, arguments: favObj['id']).then((onValue) async {
                           await controller.getDriverList();
                         });
                       },
@@ -108,9 +103,7 @@ class HomeFavListSection extends GetView<HomeController> {
                         ActionType.other,
                       ],
                       onClick: () {
-                        Get.toNamed(AppRoute.truck,
-                                arguments: TruckModel.fromDB(favObj).id)
-                            ?.then(
+                        Get.toNamed(AppRoute.truck, arguments: TruckModel.fromDB(favObj).id)?.then(
                           (onValue) async {
                             if (onValue != null) {
                               await controller.getTruckList();

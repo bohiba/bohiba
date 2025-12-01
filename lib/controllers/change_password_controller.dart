@@ -1,6 +1,6 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/services/auth_service.dart';
-import 'package:bohiba/services/global_service.dart';
+import '/dist/app_enums.dart';
+import '/services/auth_service.dart';
+import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,10 +41,7 @@ class ChangePasswordController extends GetxController {
       return 0;
     }
 
-    int success = await AuthService.changePassword(bodyObj: {
-      'current_password': currentPwd,
-      'new_password': pwdController.text
-    });
+    int success = await AuthService.changePassword(bodyObj: {'current_password': currentPwd, 'new_password': pwdController.text});
 
     return success;
   }

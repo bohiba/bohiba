@@ -1,4 +1,4 @@
-import 'package:bohiba/services/driver_job_service.dart';
+import '/services/driver_job_service.dart';
 
 import '/model/job_detail_model.dart';
 import '/services/pref_utils.dart';
@@ -66,8 +66,7 @@ class JobController extends GetxController {
   }
 
   Future<void> ownerJobDetail() async {
-    JobDetailModel? jobInfo =
-        await OwnerJobService.getJob(jobId: jobObj.value.id!);
+    JobDetailModel? jobInfo = await OwnerJobService.getJob(jobId: jobObj.value.id!);
     if (jobInfo != null) {
       jobObj.value = jobInfo;
       jobStatus.value = jobObj.value.status ?? '';

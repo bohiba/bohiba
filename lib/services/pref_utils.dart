@@ -115,4 +115,5 @@ class PrefUtils {
   static const String biometricKey = 'biometric_enabled';
   static const String roleKey = 'user_role';
   static const String showConnectDialog = 'show_con_dialog';
+  static const String keyFirebaseToken = 'firebase_token';
 }

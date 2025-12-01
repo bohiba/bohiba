@@ -110,34 +110,25 @@ class _HomePopularSectionState extends State<HomePopularSection> {
               itemCount: materialType.length,
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10.5,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 1.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10.5, crossAxisSpacing: 10, childAspectRatio: 1.0),
               itemBuilder: (context, index) {
                 MaterialType materialTypes = materialType[index];
                 return GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed(
                     AppRoute.truckOwnerNavBar,
-                    arguments: {
-                      "current_index": 2,
-                      "market_screen_index": index + 2
-                    },
+                    arguments: {"current_index": 2, "market_screen_index": index + 2},
                   ),
                   child: Container(
                     height: ScreenUtils.height * 0.14,
                     width: ScreenUtils.width * 0.45,
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtils.width10,
-                        vertical: ScreenUtils.height10),
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width10, vertical: ScreenUtils.height10),
                     decoration: BoxDecoration(
-                      color: BohibaColors.tileColor,
+                      color: bohibaTheme.cardColor,
                       borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(
                         width: 0.0,
-                        color: BohibaColors.tileColor,
+                        color: bohibaTheme.cardColor,
                       ),
                     ),
                     child: Column(
@@ -160,10 +151,8 @@ class _HomePopularSectionState extends State<HomePopularSection> {
                                   maxLines: 1,
                                   minFontSize: 24,
                                   style: TextStyle(
-                                    fontWeight: bohibaTheme
-                                        .textTheme.displaySmall!.fontWeight,
-                                    fontFamily: bohibaTheme
-                                        .textTheme.displaySmall!.fontFamily,
+                                    fontWeight: bohibaTheme.textTheme.displaySmall!.fontWeight,
+                                    fontFamily: bohibaTheme.textTheme.displaySmall!.fontFamily,
                                   ),
                                   overflowReplacement: MarqueeText(
                                     speed: 10,
@@ -171,12 +160,9 @@ class _HomePopularSectionState extends State<HomePopularSection> {
                                     text: TextSpan(
                                       text: materialTypes.material,
                                       style: TextStyle(
-                                        fontSize: bohibaTheme
-                                            .textTheme.displaySmall!.fontSize,
-                                        fontWeight: bohibaTheme
-                                            .textTheme.displaySmall!.fontWeight,
-                                        fontFamily: bohibaTheme
-                                            .textTheme.displaySmall!.fontFamily,
+                                        fontSize: bohibaTheme.textTheme.displaySmall!.fontSize,
+                                        fontWeight: bohibaTheme.textTheme.displaySmall!.fontWeight,
+                                        fontFamily: bohibaTheme.textTheme.displaySmall!.fontFamily,
                                       ),
                                     ),
                                   ),

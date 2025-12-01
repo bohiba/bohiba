@@ -1,11 +1,15 @@
-import 'package:bohiba/pages/widget/role_widget.dart';
-
 import 'trip_tile.dart';
+
 import '/routes/app_route.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
+
+import '/dist/widget_exports.dart';
 import '/dist/component_exports.dart';
+
 import '/component/app_skeleton_loader.dart';
+
+import '/pages/widget/role_widget.dart';
 import '/pages/widget/permission_widget.dart';
 import '/controllers/trip_all_controller.dart';
 import '/services/role_permission_service.dart';
@@ -25,8 +29,7 @@ class AllTripPage extends StatefulWidget {
   State<AllTripPage> createState() => _AllTripPageState();
 }
 
-class _AllTripPageState extends State<AllTripPage>
-    with SingleTickerProviderStateMixin {
+class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStateMixin {
   late TabController tabController;
   final controller = Get.find<AllTripController>();
 
@@ -61,22 +64,19 @@ class _AllTripPageState extends State<AllTripPage>
                 context: context,
                 delegate: BohibaSearchDelegate<TripModel>(
                   items: controller.arrTrip.value ?? [],
-                  hintText: 'Search by trip name',
+                  hintText: 'Search by driver, trip code, vehicle number',
                   searchPredicate: (TripModel item, String query) {
                     final q = query.toLowerCase();
-                    return item.tripCode.toString().toLowerCase().contains(q) ||
-                        item.truck!.regdNumber!
-                            .toString()
-                            .toLowerCase()
-                            .contains(q) ||
-                        item.driver!.name.toString().toLowerCase().contains(q);
+                    final tripCode = item.tripCode?.toLowerCase() ?? '';
+                    final truckNumber = item.truck?.regdNumber?.toLowerCase() ?? '';
+                    final driverName = item.driver?.name?.toLowerCase() ?? '';
+                    return tripCode.contains(q) || truckNumber.contains(q) || driverName.contains(q);
                   },
                   itemBuilder: (BuildContext context, TripModel item) {
                     return GestureDetector(
                       onTap: () {
                         navigatorState.pop();
-                        Get.toNamed(AppRoute.trips, arguments: item)!
-                            .then((onValue) async {
+                        Get.toNamed(AppRoute.trips, arguments: item)!.then((onValue) async {
                           if (onValue) {
                             await controller.getAllTrip();
                           }
@@ -113,6 +113,53 @@ class _AllTripPageState extends State<AllTripPage>
             },
             icon: const Icon(EvaIcons.searchOutline),
           ),
+          AppBarIconBox(
+            onTapDown: (tapDownDetails) => showMenu(
+              context: context,
+              menuPadding: EdgeInsets.zero,
+              elevation: 4,
+              position: RelativeRect.fromLTRB(
+                tapDownDetails.globalPosition.dx,
+                tapDownDetails.globalPosition.dy,
+                0,
+                0,
+              ),
+              items: [
+                PopupMenuItem(
+                  padding: EdgeInsets.zero,
+                  enabled: false,
+                  child: FilterMenu(
+                    status: true,
+                    statusText: 'Trip Status',
+                    statusHint: controller.tripStatus.first,
+                    statusList: controller.tripStatus,
+                  ),
+                ),
+              ],
+            ),
+            icon: Icon(EvaIcons.funnelOutline),
+          ),
+          // AppBarIconBox(
+          //   onTapDown: (tapDownDetails) => showMenu(
+          //     context: context,
+          //     menuPadding: EdgeInsets.zero,
+          //     elevation: 4,
+          //     position: RelativeRect.fromLTRB(
+          //       tapDownDetails.globalPosition.dx,
+          //       tapDownDetails.globalPosition.dy,
+          //       0,
+          //       0,
+          //     ),
+          //     items: [
+          //       PopupMenuItem(
+          //         padding: EdgeInsets.zero,
+          //         enabled: false,
+          //         child: SortMenu(),
+          //       ),
+          //     ],
+          //   ),
+          //   icon: Icon(Icons.sort),
+          // ),
           PermissionWidget(
             permission: RolePermissionService.addTrips,
             child: AppBarIconBox(
@@ -169,9 +216,7 @@ class _AllTripPageState extends State<AllTripPage>
                             ),
                             TextButton(
                               onPressed: () {
-                                navigatorState
-                                    .pushNamed(AppRoute.addTrip)
-                                    .then((value) async {
+                                navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
                                   if (value != null) {
                                     await controller.getAllTrip();
                                   }
@@ -186,8 +231,7 @@ class _AllTripPageState extends State<AllTripPage>
                       } else {
                         return ListView.builder(
                           // controller: controller.scrollController,
-                          itemCount: (filteredTrips.length) +
-                              (controller.hasMore.value ? 1 : 0),
+                          itemCount: (filteredTrips.length) + (controller.hasMore.value ? 1 : 0),
                           padding: EdgeInsets.only(
                             top: ScreenUtils.height20,
                             left: ScreenUtils.width15,
@@ -198,10 +242,7 @@ class _AllTripPageState extends State<AllTripPage>
                               return TripTile(
                                 tripInfo: filteredTrips[index],
                                 onClick: () {
-                                  navigatorState
-                                      .pushNamed(AppRoute.trips,
-                                          arguments: filteredTrips[index])
-                                      .then((onValue) async {
+                                  navigatorState.pushNamed(AppRoute.trips, arguments: filteredTrips[index]).then((onValue) async {
                                     if (onValue != false) {
                                       await controller.getAllTrip();
                                     }

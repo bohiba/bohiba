@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:bohiba/extensions/bohiba_extension.dart';
-import 'package:bohiba/services/global_service.dart';
+import '/extensions/bohiba_extension.dart';
+import '/services/global_service.dart';
 
 import '/controllers/image_upload_controller.dart';
 import '/dist/app_enums.dart';
@@ -17,8 +17,7 @@ import 'package:get/get.dart';
 class TripAddController extends ImageUploadController {
   DioService dioService = DioService();
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-  final GlobalKey<FormFieldState<String>> startDateKey =
-      GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> startDateKey = GlobalKey<FormFieldState<String>>();
 
   Rxn<TripModel> tripModel = Rxn<TripModel>();
   Rx<TruckModel> truckModel = TruckModel().obs;
@@ -29,6 +28,7 @@ class TripAddController extends ImageUploadController {
   TextEditingController truckController = TextEditingController();
   TextEditingController originController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
+  TextEditingController transporterController = TextEditingController();
   TextEditingController materialController = TextEditingController();
   TextEditingController statusController = TextEditingController();
   TextEditingController totalWeightController = TextEditingController();
@@ -107,26 +107,21 @@ class TripAddController extends ImageUploadController {
       return 0;
     }
 
-    String tripCode1 = (truckController.text
-        .trim()
-        .toString()
-        .substring(2, truckController.text.length - 4));
+    String tripCode1 = (truckController.text.trim().toString().substring(2, truckController.text.length - 4));
     String tripCode2 = (startAtController.text.trim().replaceAll('-', ''));
-    String rateTrip =
-        rateController.text.replaceAll(RegExp(r'[₹,]'), '').trim();
-    String statusTrip =
-        statusController.text.trim().toLowerCase().replaceAll(' ', '_');
+    String rateTrip = rateController.text.replaceAll(RegExp(r'[₹,]'), '').trim();
+    String statusTrip = statusController.text.trim().toLowerCase().replaceAll(' ', '_');
 
     Map<String, dynamic> bodyObj = {
       'trip_code': tripCode1 + tripCode2,
       'started_at': startAtController.text.trim(),
       'ended_at': endedAtController.text.trim(),
+      'transporter': transporterController.text.trim().replaceAll(' ', '_').toLowerCase(),
       'regd_number': truckController.text.trim(),
       'driver_uuid': truckModel.value.driverUuid,
       'origin': originController.text.trim().toLowerCase(),
       'destination': destinationController.text.trim().toLowerCase(),
-      'material_type':
-          materialController.text.replaceAll(' ', '_').toLowerCase(),
+      'material_type': materialController.text.replaceAll(' ', '_').toLowerCase(),
       'trip_status': statusTrip,
       'load_weight': totalWeightController.text.trim(),
       'short_weight': shortWeightController.text.trim(),
@@ -134,8 +129,7 @@ class TripAddController extends ImageUploadController {
     };
     int addOrUpdateSucess = 0;
     if (tripModel.value == null) {
-      addOrUpdateSucess = await TripService.addTrip(
-          bodyMap: bodyObj, truckModel: truckModel.value);
+      addOrUpdateSucess = await TripService.addTrip(bodyMap: bodyObj, truckModel: truckModel.value);
       if (addOrUpdateSucess > 0) {
         clearController();
       }
@@ -163,6 +157,7 @@ class TripAddController extends ImageUploadController {
   void clearController() {
     startAtController.clear();
     endedAtController.clear();
+    transporterController.clear();
     truckController.clear();
     originController.clear();
     destinationController.clear();
@@ -176,18 +171,14 @@ class TripAddController extends ImageUploadController {
   Future<void> editTripController() async {
     startAtController.text = tripModel.value?.startDate ?? '';
     endedAtController.text = tripModel.value?.endedDate ?? '';
+    transporterController.text = tripModel.value?.transporter?.toCapitalizedLabel() ?? '';
     truckController.text = tripModel.value?.truck?.regdNumber ?? '';
     originController.text = tripModel.value?.origin?.toUpperCase() ?? '';
-    destinationController.text =
-        tripModel.value?.destination?.toUpperCase() ?? '';
-    materialController.text =
-        tripModel.value?.loadDetail?.materialType?.toCapitalizedLabel() ?? '';
-    statusController.text =
-        tripModel.value?.tripStatus?.toCapitalizedLabel() ?? '';
-    totalWeightController.text =
-        tripModel.value?.loadDetail?.loadWeight.toString() ?? '';
-    shortWeightController.text =
-        tripModel.value?.loadDetail?.shortWeight.toString() ?? '';
+    destinationController.text = tripModel.value?.destination?.toUpperCase() ?? '';
+    materialController.text = tripModel.value?.loadDetail?.materialType?.toCapitalizedLabel() ?? '';
+    statusController.text = tripModel.value?.tripStatus?.toCapitalizedLabel() ?? '';
+    totalWeightController.text = tripModel.value?.loadDetail?.loadWeight.toString() ?? '';
+    shortWeightController.text = tripModel.value?.loadDetail?.shortWeight.toString() ?? '';
     rateController = MoneyMaskedTextController(
       initialValue: tripModel.value?.loadDetail?.rate ?? 0.0,
       precision: 2,
@@ -197,13 +188,10 @@ class TripAddController extends ImageUploadController {
     );
 
     try {
-      truckModel.value = arrTruck.firstWhere(
-          (truck) => truck.regdNumber == tripModel.value?.truck?.regdNumber);
-      strOre.value = ironOreTypes.firstWhere(
-          (ore) => ore == tripModel.value?.loadDetail?.materialType);
+      truckModel.value = arrTruck.firstWhere((truck) => truck.regdNumber == tripModel.value?.truck?.regdNumber);
+      strOre.value = ironOreTypes.firstWhere((ore) => ore == tripModel.value?.loadDetail?.materialType);
 
-      strStatus.value = tripStatus
-          .firstWhere((status) => status == tripModel.value?.tripStatus);
+      strStatus.value = tripStatus.firstWhere((status) => status == tripModel.value?.tripStatus);
     } catch (e) {
       GlobalService.printHandler("$e");
     }

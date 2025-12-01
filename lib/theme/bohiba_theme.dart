@@ -421,8 +421,7 @@ class BohibaTheme {
           ),
           prefixIconColor: DarkColors.secoundaryColor,
           suffixIconColor: DarkColors.secoundaryColor,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
           outlineBorder: BorderSide(color: DarkColors.secoundaryColor),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -456,7 +455,7 @@ class BohibaTheme {
         color: DarkColors.tileColor,
         iconColor: DarkColors.primaryVariantColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
       menuTheme: MenuThemeData(
@@ -467,13 +466,6 @@ class BohibaTheme {
       ),
       primaryIconTheme: IconThemeData(
         color: DarkColors.primaryColor,
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: ButtonStyle(
-          textStyle: WidgetStatePropertyAll(
-            TextStyle(color: DarkColors.primaryVariantColor),
-          ),
-        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -551,6 +543,15 @@ class BohibaTheme {
         selectionColor: DarkColors.primaryColor,
         selectionHandleColor: DarkColors.primaryColor,
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+            width: 1.5,
+            color: DarkColors.secoundaryColor,
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: DarkColors.primaryColor,
@@ -574,8 +575,7 @@ class BohibaTheme {
           }
           return DarkColors.white;
         }),
-        overlayColor:
-            WidgetStatePropertyAll(DarkColors.white.withValues(alpha: 0.1)),
+        overlayColor: WidgetStatePropertyAll(DarkColors.white.withValues(alpha: 0.1)),
       ),
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: DarkColors.black),
       dividerTheme: DividerThemeData(

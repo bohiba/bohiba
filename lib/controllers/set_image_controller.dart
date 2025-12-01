@@ -33,8 +33,8 @@ class SetImageController extends ImageUploadController {
 
   Future<int> uploadImage() async {
     if (pickedImg != null) {
-      int status = await ProfileService.setImage(
-          imagePath: pickedImg!.path, imageFile: [File(pickedImg!.path)]);
+      int status =
+          await ProfileService.setImage(imageFile: [File(pickedImg!.path)]);
       return status;
     } else {
       GlobalService.showSnackBar(

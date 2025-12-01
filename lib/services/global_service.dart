@@ -82,6 +82,7 @@ class GlobalService {
   }
 
   static Future<T?> showAlertDialog<T>({
+    double? width,
     required AlertStatus status,
     required String title,
     required String description,
@@ -142,7 +143,7 @@ class GlobalService {
             ),
             PrimaryButton(
               height: ScreenUtils.height * 0.047,
-              width: ScreenUtils.width * 0.25,
+              width: width ?? ScreenUtils.width * 0.25,
               label: saveBtnTxt,
               onPressed: onSave,
             )
@@ -182,14 +183,8 @@ class GlobalService {
     DateTime? chooseDate = DateTime.now();
     DateFormat dateFormat = DateFormat(dateFormatter);
 
-    chooseDate = await showDatePicker(
-        context: context,
-        firstDate: DateTime(1820),
-        lastDate: DateTime.now(),
-        helpText: hintText,
-        fieldHintText: 'DD-MM-YYYY',
-        fieldLabelText: '',
-        keyboardType: TextInputType.numberWithOptions());
+    chooseDate =
+        await showDatePicker(context: context, firstDate: DateTime(1820), lastDate: DateTime.now(), helpText: hintText, fieldHintText: 'DD-MM-YYYY', fieldLabelText: '', keyboardType: TextInputType.numberWithOptions());
     if (chooseDate != null) {
       return dateFormat.format(chooseDate);
     } else {
@@ -208,8 +203,7 @@ class GlobalService {
   }
 
   static Future<void> pickImage() async {
-    XFile? selected =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? selected = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (selected != null) {
       imageFile = selected;
       decodeBase64ToImage(imageFile!.path);
@@ -342,8 +336,7 @@ class GlobalService {
     );
   }
 
-  static String getAvatarUrl(String fullName,
-      {bool rounded = true, bool isTruck = false}) {
+  static String getAvatarUrl(String fullName, {bool rounded = true, bool isTruck = false}) {
     String username = 'UN';
 
     if (isTruck) {
@@ -360,9 +353,7 @@ class GlobalService {
   }
 
   static bool isEmail(String em) {
-    bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(em);
+    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(em);
 
     return emailValid;
   }

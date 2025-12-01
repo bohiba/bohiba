@@ -68,12 +68,10 @@ class AllNewsScreen extends GetView<AllNewsController> {
                     NewsModel news = controller.arrNews[index];
                     return GestureDetector(
                       onTap: () {
-                        navigateState.pushNamed(AppRoute.newsScreen,
-                            arguments: news);
+                        navigateState.pushNamed(AppRoute.newsScreen, arguments: news);
                       },
                       child: Padding(
-                        padding:
-                            EdgeInsets.only(bottom: ScreenUtils.height20.h),
+                        padding: EdgeInsets.only(bottom: ScreenUtils.height20.h),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -86,18 +84,14 @@ class AllNewsScreen extends GetView<AllNewsController> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12.r),
                                       child: CachedNetworkImage(
-                                        imageUrl:
-                                            '${ImagePath.newsImage}/${news.image}',
+                                        imageUrl: '${ImagePath.newsImage}/${news.image}',
                                         fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
-                                            Container(
-                                          color: Colors.grey.shade200,
+                                        placeholder: (context, url) => Container(
+                                          color: bohibaTheme.cardColor,
                                         ),
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                          color: Colors.grey.shade300,
-                                          child: const Icon(Icons.broken_image,
-                                              size: 50),
+                                        errorWidget: (context, url, error) => Container(
+                                          color: bohibaTheme.cardColor,
+                                          child: Icon(Icons.broken_image, size: 50, color: bohibaTheme.dividerColor),
                                         ),
                                       ),
                                     ),
@@ -115,9 +109,7 @@ class AllNewsScreen extends GetView<AllNewsController> {
                                           bottomLeft: Radius.circular(12.r),
                                           bottomRight: Radius.circular(12.r),
                                         ),
-                                        color: bohibaTheme
-                                            .colorScheme.onTertiary
-                                            .withValues(alpha: 0.5),
+                                        color: bohibaTheme.colorScheme.onTertiary.withValues(alpha: 0.5),
                                       ),
                                       padding: EdgeInsets.only(
                                         top: ScreenUtils.height5,
@@ -129,11 +121,7 @@ class AllNewsScreen extends GetView<AllNewsController> {
                                         news.title ?? '',
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: bohibaTheme
-                                                .textTheme.displayLarge!.color,
-                                            fontSize: bohibaTheme.textTheme
-                                                .titleMedium!.fontSize),
+                                        style: TextStyle(color: bohibaTheme.textTheme.displayLarge!.color, fontSize: bohibaTheme.textTheme.titleMedium!.fontSize),
                                       ),
                                     ),
                                   ),
@@ -148,12 +136,9 @@ class AllNewsScreen extends GetView<AllNewsController> {
                                 textAlign: TextAlign.justify,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontSize: bohibaTheme
-                                      .textTheme.bodyMedium!.fontSize,
-                                  color:
-                                      bohibaTheme.textTheme.titleLarge!.color,
-                                  fontWeight: bohibaTheme
-                                      .textTheme.bodySmall!.fontWeight,
+                                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                  color: bohibaTheme.textTheme.titleLarge!.color,
+                                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                                 ),
                               ),
                             ),

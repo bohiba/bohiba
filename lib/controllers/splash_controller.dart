@@ -1,3 +1,5 @@
+import '/services/firebase_app_service.dart';
+
 import '/dist/app_enums.dart';
 import '/routes/app_route.dart';
 import '/model/profile_model.dart';
@@ -31,9 +33,7 @@ class SplashController extends GetxController {
         if (strToken.isEmpty) {
           Get.offAllNamed(AppRoute.signIn);
         } else if (strToken.isNotEmpty) {
-          MethodType methodType = await DeviceInfoService.hasInternet()
-              ? MethodType.api
-              : MethodType.local;
+          MethodType methodType = await DeviceInfoService.hasInternet() ? MethodType.api : MethodType.local;
           _dio.setToken(strToken);
           final ProfileModel? profileModel = await ProfileService.getProfile(
             type: methodType,
@@ -52,10 +52,10 @@ class SplashController extends GetxController {
           } else if (userRole == UserRoles.guest) {
             Get.offAllNamed(AppRoute.roleType);
           } else {
+            Future.wait([MainService.mainApi(type: methodType, showProgress: false), FirebaseAppService.registerToken()]);
             if (isBioMetricEnabled == true) {
               bool success = await DeviceInfoService.authenticateUser();
               if (success) {
-                MainService.mainApi(type: methodType, showProgress: false);
                 if (userRole == UserRoles.truckOwner) {
                   Get.offAllNamed(AppRoute.truckOwnerNavBar);
                 } else if (userRole == UserRoles.driver) {
@@ -65,7 +65,6 @@ class SplashController extends GetxController {
                 // Navigate to Lock Screen
               }
             } else {
-              MainService.mainApi(type: methodType, showProgress: false);
               if (userRole == UserRoles.truckOwner) {
                 Get.offAllNamed(AppRoute.truckOwnerNavBar);
               } else if (userRole == UserRoles.driver) {

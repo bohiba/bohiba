@@ -1,4 +1,4 @@
-import 'package:bohiba/services/owner_job_service.dart';
+import '/services/owner_job_service.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '/model/job_detail_model.dart';
@@ -19,8 +19,7 @@ class AllIntDriverController extends GetxController {
   }
 
   Future<void> getAllApplicant() async {
-    List<InterestedDriver>? arrFetched =
-        await OwnerJobService.allApplicant(jobId: jobDetail.value.id!);
+    List<InterestedDriver>? arrFetched = await OwnerJobService.allApplicant(jobId: jobDetail.value.id!);
     if (arrFetched != null) {
       arrIntDriver.clear();
       arrIntDriver.addAll(arrFetched);

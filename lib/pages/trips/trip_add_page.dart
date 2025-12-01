@@ -1,3 +1,6 @@
+import '/model/truck_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/pages/widget/required_label.dart';
 import '/extensions/bohiba_extension.dart';
 import '/dist/component_exports.dart';
@@ -58,12 +61,9 @@ class AddTripPage extends GetView<TripAddController> {
                               }
                             },
                             onTap: () async {
-                              DateTime? pickedDate =
-                                  await GlobalService.datePickerModal(
-                                      context: context);
+                              DateTime? pickedDate = await GlobalService.datePickerModal(context: context);
                               if (pickedDate != null) {
-                                controller.startAtController.text =
-                                    DateFormat('dd-MM-yyyy').format(pickedDate);
+                                controller.startAtController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
                               }
                             },
                           ),
@@ -80,28 +80,24 @@ class AddTripPage extends GetView<TripAddController> {
                             },
                             onTap: () async {
                               if (controller.startAtController.text.isEmpty) {
-                                GlobalService.showAppToast(
-                                    message: 'Please select start date');
+                                GlobalService.showAppToast(message: 'Please select start date');
                               } else {
-                                DateTime? pickedDate =
-                                    await GlobalService.datePickerModal(
+                                DateTime? pickedDate = await GlobalService.datePickerModal(
                                   context: context,
-                                  startTime: DateFormat('dd-MM-yyyy')
-                                      .parse(controller.startAtController.text),
+                                  startTime: DateFormat('dd-MM-yyyy').parse(controller.startAtController.text),
                                 );
                                 if (pickedDate != null) {
-                                  controller.endedAtController.text =
-                                      DateFormat('dd-MM-yyyy')
-                                          .format(pickedDate);
+                                  controller.endedAtController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
                                 }
                               }
                             },
                           ),
                         ],
                       ),
-                      AppDropdown(
+                      AppDropdown<TruckModel>(
+                        padding: EdgeInsets.symmetric(vertical: 5.h),
                         hint: 'Select Truck',
-                        items: controller.arrTruck.value,
+                        items: controller.arrTruck,
                         initialValue: controller.truckModel.value,
                         labelBuilder: (truck) {
                           return truck.regdNumber!;
@@ -146,7 +142,21 @@ class AddTripPage extends GetView<TripAddController> {
                           }
                         },
                       ),
+                      RequiredLabel(label: 'Transporter', required: true),
+                      TextInputField(
+                        controller: controller.transporterController,
+                        textCapitalization: TextCapitalization.characters,
+                        nextActionType: TextInputAction.next,
+                        validateField: (inputValue) {
+                          if (inputValue == null || inputValue.isEmpty) {
+                            return 'Please enter Transporter Name';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                       AppDropdown(
+                        padding: EdgeInsets.symmetric(vertical: 5.h),
                         hint: 'Material Type',
                         initialValue: controller.strOre.value,
                         items: controller.ironOreTypes,
@@ -163,6 +173,7 @@ class AddTripPage extends GetView<TripAddController> {
                         },
                       ),
                       AppDropdown(
+                        padding: EdgeInsets.symmetric(vertical: 5.h),
                         hint: 'Trip Status',
                         initialValue: controller.strStatus.value,
                         items: controller.tripStatus,
@@ -186,17 +197,12 @@ class AddTripPage extends GetView<TripAddController> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RequiredLabel(
-                                  label: 'Total Weight', required: true),
+                              RequiredLabel(label: 'Total Weight', required: true),
                               TextInputField(
                                 width: ScreenUtils.width * 0.44,
                                 hintText: '00.00 in Tonne',
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'(^\d*\.?\d*)'))
-                                ],
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
+                                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)'))],
+                                keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 nextActionType: TextInputAction.next,
                                 controller: controller.totalWeightController,
                                 validateField: (value) {
@@ -216,8 +222,7 @@ class AddTripPage extends GetView<TripAddController> {
                               TextInputField(
                                 width: ScreenUtils.width * 0.44,
                                 hintText: '00.00 in Tonne',
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
+                                keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 nextActionType: TextInputAction.next,
                                 controller: controller.shortWeightController,
                               ),

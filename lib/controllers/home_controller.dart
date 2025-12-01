@@ -1,9 +1,11 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/model/profile_model.dart';
-import 'package:bohiba/services/profile_service.dart';
-import 'package:bohiba/services/trip_service.dart';
+import '/dist/app_enums.dart';
+import '/model/profile_model.dart';
+import '/services/profile_service.dart';
+import '/services/trip_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 import '/model/mines_model.dart';
 import '/model/news_model.dart';
 import '/model/trip_model.dart';
@@ -16,6 +18,9 @@ import 'package:get/get.dart';
 class HomeController extends GetxController {
   // RxList arrFav = [].obs;
   // final RxList<Map<String, dynamic>> emptySteps = <Map<String, dynamic>>[].obs;
+  ScrollController scrollController = ScrollController();
+  RxBool isScrolled = false.obs;
+
   final RxList<dynamic> arrFavList = <dynamic>[].obs;
   final Rxn<List<TripModel>> arrTrip = Rxn<List<TripModel>>();
   final Rxn<List<TruckModel>> arrTruck = Rxn<List<TruckModel>>();
@@ -34,12 +39,26 @@ class HomeController extends GetxController {
     super.onInit();
     Future.delayed(Duration.zero, () async {
       await mainApi(showLoading: false);
-      profile.value = await ProfileService.getProfile(showProgress: false);
+      getProfile();
+    });
+
+    scrollController.addListener(() {
+      bool scroll = scrollController.offset > 90.h;
+      if (scroll != isScrolled.value) {
+        isScrolled.value = scroll;
+      }
     });
   }
 
   Future<void> onRefreshPage() async {
-    await mainApi(methodType: MethodType.local, showLoading: true);
+    await mainApi(methodType: MethodType.api, showLoading: true);
+  }
+
+  Future<void> getProfile() async {
+    ProfileModel? profileModel = await ProfileService.getProfile(showProgress: false);
+    if (profileModel != null) {
+      profile.value = profileModel;
+    }
   }
 
   /*Future<List<dynamic>> getUserFavList() async {
@@ -77,10 +96,12 @@ class HomeController extends GetxController {
   }
 
   Future<void> getTruckList() async {
+    arrTruck.value = null;
     List<TruckModel>? truckList = await TruckService.getTruckList();
     if (truckList != null) {
-      arrTruck.value?.clear();
-      arrTruck.value?.addAll(truckList);
+      arrTruck.value = List<TruckModel>.from(truckList);
+    } else {
+      arrTruck.value = [];
     }
   }
 
@@ -144,8 +165,7 @@ class HomeController extends GetxController {
     bool refreshPage = false,
     bool showLoading = true,
   }) async {
-    Map<String, dynamic>? mainObj =
-        await MainService.mainApi(type: methodType, showProgress: showLoading);
+    Map<String, dynamic>? mainObj = await MainService.mainApi(type: methodType, showProgress: showLoading);
     if (mainObj != null) {
       if (mainObj.containsKey('drivers')) {
         arrDriver.value?.clear();

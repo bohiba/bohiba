@@ -1,4 +1,10 @@
-import '/component/bohiba_dropdown/primary_dropdown_menu.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '/component/bohiba_inputfield/date_inputfield.dart';
+import '/extensions/bohiba_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +16,35 @@ class FilterMenu extends StatefulWidget {
   final bool dateRange;
   final bool status;
   final bool search;
-  const FilterMenu(
-      {super.key,
-      this.dateRange = true,
-      this.status = true,
-      this.search = true});
+  final String? statusText;
+  final String? statusHint;
+  final List<String>? statusList;
+
+  /// Creates a customizable filter menu.
+  ///
+  /// * [dateRange] — show date range filter (default: `true`)
+  /// * [status] — show status filter (default: `false`)
+  /// * [search] — show keyword search field (default: `false`)
+  ///
+  /// **NOTE:**
+  /// If [status] == `true`, then:
+  /// - [statusText] cannot be empty
+  /// - [statusList] cannot be null or empty
+  /// - [statusHint] cannot be empty
+  ///
+  /// This rule ensures the status filter is fully functional.
+  FilterMenu({
+    super.key,
+    this.dateRange = true,
+    this.status = false,
+    this.search = false,
+    this.statusText,
+    this.statusHint,
+    this.statusList,
+  }) : assert(
+          status == false || (statusList != null && statusList.isNotEmpty) || (statusText != null && statusText.isNotEmpty) || (statusHint != null && statusHint.isNotEmpty),
+          'If status is true, statusList and statusHint cannot be null or empty',
+        );
 
   @override
   State<FilterMenu> createState() => _FilterMenuState();
@@ -25,12 +55,12 @@ class _FilterMenuState extends State<FilterMenu> {
   final TextEditingController _dateToController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _menuController = TextEditingController();
-  String strStatus = 'Booked';
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Title
@@ -52,14 +82,17 @@ class _FilterMenuState extends State<FilterMenu> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Icon(Icons.close),
+                onTap: () => navigatorState.pop(),
+                child: Icon(
+                  Icons.close,
+                  color: bohibaTheme.primaryColor,
+                ),
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, height: 0),
-        // Date Range
+        Divider(height: 2),
+
         Padding(
           padding: EdgeInsets.only(
             // top: BohibaResponsiveScreen.height5,
@@ -70,6 +103,7 @@ class _FilterMenuState extends State<FilterMenu> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // date range
               Visibility(
                 visible: widget.dateRange,
                 child: Column(
@@ -84,42 +118,33 @@ class _FilterMenuState extends State<FilterMenu> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
+                          child: DateInputField(
+                            showPrefixIcon: false,
                             onTap: () async {
-                              _dateFromController.text =
-                                  await GlobalService.pickDate(
+                              DateTime? dateTime = await GlobalService.datePickerModal(
                                 context: context,
-                                dateFormatter: 'dd-MM-yyyy',
-                                hintText: 'Start Form',
                               );
+
+                              if (dateTime != null) {
+                                _dateFromController.text = DateFormat('dd-MM-yyyy').format(dateTime);
+                              }
                             },
                             controller: _dateFromController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              hintText: 'From',
-                              // suffixIcon: Icon(Icons.calendar_today, size: 14),
-                              border: OutlineInputBorder(),
-                            ),
+                            hintText: 'From',
                           ),
                         ),
-                        SizedBox(width: ScreenUtils.width5),
+                        Gap(ScreenUtils.width5),
                         Expanded(
-                          child: TextFormField(
+                          child: DateInputField(
+                            showPrefixIcon: false,
                             onTap: () async {
-                              _dateToController.text =
-                                  await GlobalService.pickDate(
-                                context: context,
-                                dateFormatter: 'dd-MM-yyyy',
-                                hintText: 'Start Form',
-                              );
+                              DateTime? dateTime = await GlobalService.datePickerModal(context: context, startTime: DateFormat('dd-MM-yyyy').parse(_dateFromController.text));
+                              if (dateTime != null) {
+                                _dateToController.text = DateFormat('dd-MM-yyyy').format(dateTime);
+                              }
                             },
                             controller: _dateToController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              hintText: 'To',
-                              // suffixIcon: Icon(Icons.calendar_today, size: 14),
-                              border: OutlineInputBorder(),
-                            ),
+                            hintText: 'To',
                           ),
                         ),
                       ],
@@ -133,8 +158,7 @@ class _FilterMenuState extends State<FilterMenu> {
                 visible: false,
                 child: Column(
                   children: [
-                    FilterHeaderWidget(
-                        onPressTrailing: () {}, title: 'Activity Type'),
+                    FilterHeaderWidget(onPressTrailing: () {}, title: 'Activity Type'),
                     DropdownButtonFormField<String>(
                       initialValue: 'All warehouses',
                       items: ['All warehouses', 'Warehouse 1', 'Warehouse 2']
@@ -151,26 +175,31 @@ class _FilterMenuState extends State<FilterMenu> {
                 ),
               ),
 
+              // Status
               Visibility(
                 visible: widget.status,
                 child: Column(
                   children: [
-                    // Status
                     FilterHeaderWidget(
                       onPressTrailing: () {
-                        strStatus = 'Booked';
+                        _menuController.clear();
                         setState(() {});
                       },
-                      title: 'Status',
+                      title: widget.statusText ?? '',
                     ),
-
-                    PrimaryDropDownMenu(
-                      menuController: _menuController,
-                      width: ScreenUtils.width,
-                      hint: "Booked",
-                      items: ['Booked', 'Sucessful', 'Cancelled'],
-                      dropDownValue: 'Driver',
-                    ),
+                    if (widget.status)
+                      if (widget.statusList != null || (widget.statusList?.isNotEmpty ?? false))
+                        AppDropdown(
+                          menuController: _menuController,
+                          items: widget.statusList!,
+                          initialValue: widget.statusHint?.toCapitalizedLabel(),
+                          hint: 'Select trip status',
+                          labelBuilder: (String p1) {
+                            return p1.toCapitalizedLabel();
+                          },
+                        )
+                      else
+                        SizedBox.shrink()
                   ],
                 ),
               ),
@@ -196,34 +225,35 @@ class _FilterMenuState extends State<FilterMenu> {
                   ],
                 ),
               ),
-              Gap(ScreenUtils.height15),
+              Gap(ScreenUtils.height10),
 
               // Buttons
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      _dateFromController.clear();
-                      _dateToController.clear();
-                      _searchController.clear();
-                      strStatus = 'Booked';
-                      setState(() {});
-                    },
-                    child: Text('Reset All',
-                        style: TextStyle(color: BohibaColors.warningColor)),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Apply Now',
-                      style: TextStyle(
-                        color: BohibaColors.white,
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _dateFromController.clear();
+                        _dateToController.clear();
+                        _searchController.clear();
+                        _menuController.clear();
+                        setState(() {});
+                      },
+                      child: Text(
+                        'Reset All',
+                        style: TextStyle(color: bohibaTheme.colorScheme.error),
                       ),
                     ),
                   ),
+                  Gap(ScreenUtils.width5),
+                  Expanded(
+                    child: PrimaryButton(
+                      height: 15.h,
+                      width: ScreenUtils.width / 5,
+                      label: 'Apply',
+                      onPressed: () {},
+                    ),
+                  )
                 ],
               ),
             ],

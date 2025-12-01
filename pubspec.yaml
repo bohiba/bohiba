@@ -56,8 +56,12 @@ dependencies:
   sqflite_common_ffi_web: ^1.0.1+2
   shimmer_animation: ^2.2.2
   qr_bar_code: ^3.0.0
+  qr_code_scanner_plus: ^2.0.14
   encrypt: ^5.0.3
 
+  firebase_core: ^4.0.0
+  firebase_messaging: ^16.0.4
+  flutter_local_notifications: ^19.5.0
 
 dev_dependencies:
   flutter_test:

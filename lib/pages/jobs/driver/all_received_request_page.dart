@@ -2,7 +2,7 @@ import '/dist/app_enums.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/screen_utils.dart';
 import '/controllers/all_recieved_request_controller.dart';
-import '/model/driver_model.dart';
+import '../../../model/user_model.dart';
 import '/pages/driver/open_driver_tile.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -62,16 +62,14 @@ class AllReceivedRequestPage extends GetView<AllRecievedRequestController> {
                         onTap: () {},
                         onReject: () async {
                           navigatorState.pop();
-                          int rejected = await controller.updateStatus(
-                              ConnectionType.reject, openDriver.id!);
+                          int rejected = await controller.updateStatus(ConnectionType.reject, openDriver.id!);
                           if (rejected > 0) {
                             await controller.allRequest(refresh: true);
                           }
                         },
                         onAccept: () async {
                           navigatorState.pop();
-                          int accepted = await controller.updateStatus(
-                              ConnectionType.accept, openDriver.id!);
+                          int accepted = await controller.updateStatus(ConnectionType.accept, openDriver.id!);
                           if (accepted > 0) {
                             await controller.allRequest(refresh: true);
                           }

@@ -1,6 +1,7 @@
-import 'package:bohiba/routes/app_route.dart';
-import 'package:bohiba/services/main_service.dart';
-import 'package:bohiba/services/user_role_type.dart';
+import '/routes/app_route.dart';
+import '/services/firebase_app_service.dart';
+import '/services/main_service.dart';
+import '/services/user_role_type.dart';
 import 'package:get/get.dart';
 
 import '/controllers/role_controller.dart';
@@ -106,6 +107,8 @@ class AuthService {
           type: MethodType.api,
           showProgress: false,
         );
+
+        await FirebaseAppService.registerToken();
         if (loggedInUser != null) {
           await ProfileService.loggedInUser(
             loggedInUser: LoggedInAccountModel(
@@ -302,14 +305,12 @@ class AuthService {
     }
   }
 
-  static Future<int> changePassword(
-      {required Map<String, dynamic> bodyObj}) async {
+  static Future<int> changePassword({required Map<String, dynamic> bodyObj}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse res =
-        await _dioService.post(ApiEndPoint.apiResetPassword, body: bodyObj);
+    ApiResponse res = await _dioService.post(ApiEndPoint.apiResetPassword, body: bodyObj);
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:

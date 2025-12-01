@@ -26,8 +26,7 @@ class PolicyPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Privacy Policy",
-                    style: bohibaTheme.textTheme.headlineMedium),
+                Text("Privacy Policy", style: bohibaTheme.textTheme.headlineMedium),
                 Gap(ScreenUtils.height20),
                 Text("Updates", style: bohibaTheme.textTheme.headlineMedium),
                 Text(
@@ -42,8 +41,7 @@ class PolicyPage extends StatelessWidget {
                   style: titleStyle,
                 ),
                 Gap(ScreenUtils.height20),
-                Text("Information Collection and Use",
-                    style: bohibaTheme.textTheme.headlineMedium),
+                Text("Information Collection and Use", style: bohibaTheme.textTheme.headlineMedium),
                 Text(
                   'The Application collects information when you download and use it. This information may include:\n\n'
                   '• Your device\'s Internet Protocol address (e.g. IP address)\n'
@@ -58,8 +56,7 @@ class PolicyPage extends StatelessWidget {
                   style: titleStyle,
                 ),
                 Gap(ScreenUtils.height20),
-                Text("Third Party Access",
-                    style: bohibaTheme.textTheme.headlineMedium),
+                Text("Third Party Access", style: bohibaTheme.textTheme.headlineMedium),
                 Text(
                   'Only aggregated, anonymized data is periodically transmitted to external services to aid the '
                   'Service Provider in improving the Application and their service.\n\n'
@@ -70,16 +67,14 @@ class PolicyPage extends StatelessWidget {
                   style: titleStyle,
                 ),
                 Gap(ScreenUtils.height20),
-                Text("Opt-Out Rights",
-                    style: bohibaTheme.textTheme.headlineMedium),
+                Text("Opt-Out Rights", style: bohibaTheme.textTheme.headlineMedium),
                 Text(
                   'You can stop all collection of information by the Application easily by uninstalling it. '
                   'You may use the standard uninstall processes of your mobile device or application marketplace.',
                   style: titleStyle,
                 ),
                 Gap(ScreenUtils.height20),
-                Text("Data Retention Policy",
-                    style: bohibaTheme.textTheme.headlineMedium),
+                Text("Data Retention Policy", style: bohibaTheme.textTheme.headlineMedium),
                 Text(
                   'The Service Provider will retain User Provided data for as long as you use the Application '
                   'and for a reasonable time thereafter. To request deletion, contact support@bohiba.com.',
@@ -107,8 +102,7 @@ class PolicyPage extends StatelessWidget {
                   style: titleStyle,
                 ),
                 Gap(ScreenUtils.height20),
-                Text("Your Consent",
-                    style: bohibaTheme.textTheme.headlineMedium),
+                Text("Your Consent", style: bohibaTheme.textTheme.headlineMedium),
                 Text(
                   'By using the Application, you consent to the processing of your information as set forth in this Privacy Policy.',
                   style: titleStyle,
@@ -120,21 +114,23 @@ class PolicyPage extends StatelessWidget {
                   style: titleStyle,
                 ),
                 Gap(ScreenUtils.height20),
-                Text(
-                  'For full policy, visit or website',
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
-                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                      color: bohibaTheme.textTheme.bodySmall!.color),
+                GestureDetector(
+                  onTap: () => openBohibaWeb('privacy-policy'),
+                  child: Text(
+                    'For full policy, visit or website',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
+                        fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                        color: bohibaTheme.textTheme.bodySmall!.color),
+                  ),
                 ),
                 Gap(ScreenUtils.height30),
                 Center(
                   child: GestureDetector(
                     onTap: () async => await openBohibaWeb(),
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: ScreenUtils.height25),
+                      padding: EdgeInsets.symmetric(vertical: ScreenUtils.height25),
                       child: Text(
                         'www.bohiba.com',
                         style: titleStyle,
@@ -150,16 +146,14 @@ class PolicyPage extends StatelessWidget {
     );
   }
 
-  Future<void> openBohibaWeb() async {
-    final Uri emailUri = Uri(path: 'www.bohiba.com');
+  Future<void> openBohibaWeb([String endpoint = '']) async {
+    final Uri url = Uri.parse('https://bohiba.com/$endpoint');
 
     try {
-      bool canLaunch = await canLaunchUrl(emailUri);
-      if (canLaunch) {
-        await launchUrl(emailUri, mode: LaunchMode.inAppBrowserView);
-      } else {
-        GlobalService.showAppToast(message: 'Could not launch website');
-      }
+      await launchUrl(
+        url,
+        mode: LaunchMode.inAppBrowserView,
+      );
     } catch (e) {
       GlobalService.showAppToast(message: 'Could not launch website');
       GlobalService.printHandler('$e');

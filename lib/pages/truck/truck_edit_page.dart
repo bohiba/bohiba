@@ -1,3 +1,4 @@
+import '/model/user_model.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/services/global_service.dart';
@@ -33,14 +34,13 @@ class TruckEditPage extends GetView<EditTruckController> {
                   style: bohibaTheme.textTheme.headlineMedium,
                 ),
                 Gap(ScreenUtils.width5),
-                AppDropdown(
+                AppDropdown<UserModel>(
                   hint: controller.truck.value.driverName ?? 'Select driver',
                   items: controller.arrDriver.value,
                   labelBuilder: (driver) => driver.profile!.name!,
                   onChanged: (p0) {
                     controller.driverModel.value = p0!;
-                    GlobalService.printHandler(
-                        'Name: ${controller.driverModel.value.profile?.name.toString()}');
+                    GlobalService.printHandler('Name: ${controller.driverModel.value.profile?.name.toString()}');
                   },
                   menuController: controller.assignDriverCtlr,
                 ),

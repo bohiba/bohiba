@@ -1,8 +1,8 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/model/driver_model.dart';
-import 'package:bohiba/services/driver_job_service.dart';
-import 'package:bohiba/services/global_service.dart';
-import 'package:bohiba/services/pref_utils.dart';
+import '/dist/app_enums.dart';
+import '/model/user_model.dart';
+import '/services/driver_job_service.dart';
+import '/services/global_service.dart';
+import '/services/pref_utils.dart';
 import 'package:get/get.dart';
 
 class AllRecievedRequestController extends GetxController {

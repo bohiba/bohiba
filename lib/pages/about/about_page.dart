@@ -1,6 +1,6 @@
-import 'package:bohiba/component/bohiba_appbar/title_appbar.dart';
-import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/bohiba_appbar/title_appbar.dart';
+import '/component/screen_utils.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';

@@ -1,10 +1,10 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/dist/component_exports.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
-import 'package:bohiba/pages/expenses/expense_component/expense_menu.dart';
-import 'package:bohiba/pages/widget/linear_box_widget.dart';
-import 'package:bohiba/pages/widget/status_box_widget.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/dist/app_enums.dart';
+import '/dist/component_exports.dart';
+import '/extensions/bohiba_extension.dart';
+import '/pages/expenses/expense_component/expense_menu.dart';
+import '/pages/widget/linear_box_widget.dart';
+import '/pages/widget/status_box_widget.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -22,9 +22,7 @@ class OwnerExpensePage extends GetView<OwnerExpenseController> {
     return Obx(() {
       return Scaffold(
         appBar: TitleAppbar(
-          title: controller.ownerExpense.value?.expenseType
-                  ?.toCapitalizedLabel() ??
-              '',
+          title: controller.ownerExpense.value?.expenseType?.toCapitalizedLabel() ?? '',
           actions: [
             OwnerExpenseMenu(
               allowedActions: [
@@ -49,8 +47,7 @@ class OwnerExpensePage extends GetView<OwnerExpenseController> {
         body: SmartRefresher(
           controller: controller.refreshController,
           onRefresh: () async {
-            controller.getExpense(
-                methodType: MethodType.api, refreshPage: true);
+            controller.getExpense(methodType: MethodType.api, refreshPage: true);
             controller.refreshController.refreshCompleted();
           },
           child: SingleChildScrollView(
@@ -70,20 +67,15 @@ class OwnerExpensePage extends GetView<OwnerExpenseController> {
                           header: 'Date',
                           title: controller.ownerExpense.value?.expenseDate,
                         ),
-                        LinearBoxWidget(
-                            header: 'Vehicle',
-                            title: controller.ownerExpense.value?.truckRegd),
+                        LinearBoxWidget(header: 'Vehicle', title: controller.ownerExpense.value?.truckRegd),
                         StatusBoxWidget(
                           header: 'Critical Level',
-                          title: controller.ownerExpense.value?.severity
-                              ?.toCapitalizedLabel(),
-                          statusColor: controller.expenseColor(
-                              controller.ownerExpense.value?.severity ?? ''),
+                          title: controller.ownerExpense.value?.severity?.toCapitalizedLabel(),
+                          statusColor: controller.expenseColor(controller.ownerExpense.value?.severity ?? ''),
                         ),
                         LinearBoxWidget(
                           header: 'Amount',
-                          title:
-                              "₹ ${controller.ownerExpense.value?.amount.toString()}",
+                          title: "₹ ${controller.ownerExpense.value?.amount.toString()}",
                         ),
                         LinearBoxWidget(
                           header: 'Added on',
@@ -93,22 +85,16 @@ class OwnerExpensePage extends GetView<OwnerExpenseController> {
                         Text(
                           'Service Type',
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.bodyMedium!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleMedium!.color,
                           ),
                         ),
                         Text(
-                          controller.ownerExpense.value?.expenseType
-                                  ?.toCapitalizedLabel() ??
-                              '',
+                          controller.ownerExpense.value?.expenseType?.toCapitalizedLabel() ?? '',
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.bodyMedium!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                            fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                            fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
                             color: bohibaTheme.textTheme.bodyLarge!.color,
                           ),
                         ),
@@ -116,20 +102,16 @@ class OwnerExpensePage extends GetView<OwnerExpenseController> {
                         Text(
                           'Description',
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.bodyMedium!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleMedium!.color,
                           ),
                         ),
                         Text(
                           controller.ownerExpense.value?.description ?? '',
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.bodyMedium!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                            fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                            fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
                             color: bohibaTheme.textTheme.bodyLarge!.color,
                           ),
                         )

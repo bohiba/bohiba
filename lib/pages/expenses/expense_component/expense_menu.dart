@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:bohiba/component/ui/tile_decorative.dart';
-import 'package:bohiba/controllers/owner_expense_controller.dart';
-import 'package:bohiba/controllers/role_controller.dart';
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/routes/app_route.dart';
-import 'package:bohiba/services/global_service.dart';
-import 'package:bohiba/services/role_permission_service.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/component/ui/tile_decorative.dart';
+import '/controllers/owner_expense_controller.dart';
+import '/controllers/role_controller.dart';
+import '/dist/app_enums.dart';
+import '/routes/app_route.dart';
+import '/services/global_service.dart';
+import '/services/role_permission_service.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:get/get.dart';
 
 import '/component/screen_utils.dart';
@@ -16,13 +16,8 @@ import 'package:flutter/material.dart';
 class OwnerExpenseMenu extends GetView<OwnerExpenseController> {
   final Icon? icon;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
-      onActionComplete;
-  const OwnerExpenseMenu(
-      {super.key,
-      this.icon,
-      required this.allowedActions,
-      this.onActionComplete});
+  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
+  const OwnerExpenseMenu({super.key, this.icon, required this.allowedActions, this.onActionComplete});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +25,7 @@ class OwnerExpenseMenu extends GetView<OwnerExpenseController> {
     return GestureDetector(
       onTapDown: (details) {
         final menuItems = <PopupMenuEntry<ActionType>>[];
-        if (allowedActions.contains(ActionType.edit) &&
-            RoleService.hasPermission(RolePermissionService.editOwnerExpense)) {
+        if (allowedActions.contains(ActionType.edit) && RoleService.hasPermission(RolePermissionService.editOwnerExpense)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.edit,
@@ -40,9 +34,7 @@ class OwnerExpenseMenu extends GetView<OwnerExpenseController> {
           );
         }
 
-        if (allowedActions.contains(ActionType.delete) &&
-            RoleService.hasPermission(
-                RolePermissionService.deleteOwnerExpense)) {
+        if (allowedActions.contains(ActionType.delete) && RoleService.hasPermission(RolePermissionService.deleteOwnerExpense)) {
           menuItems.add(
             PopupMenuItem(
               value: ActionType.delete,
@@ -87,8 +79,7 @@ class OwnerExpenseMenu extends GetView<OwnerExpenseController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.warning,
                 title: 'DELETE',
-                description:
-                    'Expense will be deleted permanently? Are you sure',
+                description: 'Expense will be deleted permanently? Are you sure',
                 discardBtnTxt: 'DELETE',
                 onDiscard: () async {
                   navigatorState.pop();

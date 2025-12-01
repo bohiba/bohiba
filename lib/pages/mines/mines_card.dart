@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart' as intl;
+
 import '/routes/app_route.dart';
 import '../../services/global_service.dart';
 import '/controllers/mines_controller.dart';
@@ -19,6 +21,7 @@ class MinesHorizontalCard extends GetView<MinesController> {
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
+
     return InkWell(
       onTap: () {
         navigator.pushNamed(AppRoute.mines, arguments: minesInfo);
@@ -39,9 +42,9 @@ class MinesHorizontalCard extends GetView<MinesController> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: bohibaTheme.dividerColor,
-                    backgroundImage: NetworkImage(
-                        GlobalService.getAvatarUrl(minesInfo.mineName ?? 'NA')),
+                    backgroundColor: bohibaTheme.colorScheme.tertiary,
+                    // backgroundColor: bohibaTheme.dividerColor,
+                    backgroundImage: NetworkImage(GlobalService.getAvatarUrl(minesInfo.mineName ?? 'NA')),
                   ),
                   Gap(ScreenUtils.width20),
                   Column(
@@ -61,14 +64,12 @@ class MinesHorizontalCard extends GetView<MinesController> {
                         overflowText: minesInfo.location ?? 'NA',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                         marqueeTextStyle: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                       ),
@@ -131,15 +132,14 @@ class MinesVerticalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
+    final intl.DateFormat dateFormat = intl.DateFormat('HH:mm');
     return GestureDetector(
       onTap: () {
         navigator.pushNamed(AppRoute.mines, arguments: minesInfo);
       },
       child: Container(
         width: ScreenUtils.width * 0.30,
-        margin: EdgeInsets.only(
-          right: ScreenUtils.width10,
-        ),
+        margin: EdgeInsets.only(right: ScreenUtils.width10),
         decoration: TileDecorative(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -148,16 +148,12 @@ class MinesVerticalCard extends StatelessWidget {
               padding: const EdgeInsets.all(5.0),
               child: CircleAvatar(
                 radius: 35,
-                backgroundColor: bohibaTheme.dividerColor,
-                backgroundImage: NetworkImage(minesInfo.logo ??
-                    GlobalService.getAvatarUrl(minesInfo.mineName!)),
+                backgroundColor: bohibaTheme.colorScheme.tertiary,
+                child: Text(minesInfo.mineName?.shortCode ?? ""),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                  left: ScreenUtils.width10,
-                  right: ScreenUtils.width10,
-                  top: ScreenUtils.height10),
+              padding: EdgeInsets.only(left: ScreenUtils.width10, right: ScreenUtils.width10, top: ScreenUtils.height10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -186,7 +182,8 @@ class MinesVerticalCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    minesInfo.waitingPeriod!.toHHMM(),
+                    minesInfo.waitingPeriod == null ? '00:00 Hour' : '${dateFormat.format(DateTime.fromMillisecondsSinceEpoch(minesInfo.waitingPeriod ?? 0).toLocal())} Hour',
+                    // minesInfo.waitingPeriod?.toHHMM() ?? '',
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
                       color: Colors.green,

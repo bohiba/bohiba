@@ -19,8 +19,7 @@ class TruckMenu extends GetView<TruckController> {
   final Icon? icon;
   final TruckModel? truck;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
-      onActionComplete;
+  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
 
   const TruckMenu({
     super.key,
@@ -45,8 +44,7 @@ class TruckMenu extends GetView<TruckController> {
             ),
           );
         }
-        if (allowedActions.contains(ActionType.edit) &&
-            RoleService.hasPermission(RolePermissionService.editTrucks)) {
+        if (allowedActions.contains(ActionType.edit) && RoleService.hasPermission(RolePermissionService.editTrucks)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.edit,
@@ -54,8 +52,7 @@ class TruckMenu extends GetView<TruckController> {
             ),
           );
         }
-        if (allowedActions.contains(ActionType.add) &&
-            RoleService.hasPermission(RolePermissionService.viewTrips)) {
+        if (allowedActions.contains(ActionType.add) && RoleService.hasPermission(RolePermissionService.viewTrips)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.add,
@@ -64,8 +61,7 @@ class TruckMenu extends GetView<TruckController> {
           );
         }
 
-        if (allowedActions.contains(ActionType.other) &&
-            RoleService.hasPermission(RolePermissionService.viewMaintainance)) {
+        if (allowedActions.contains(ActionType.other) && RoleService.hasPermission(RolePermissionService.viewMaintainance)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.other,
@@ -74,8 +70,7 @@ class TruckMenu extends GetView<TruckController> {
           );
         }
 
-        if (allowedActions.contains(ActionType.sync) &&
-            RoleService.hasPermission(RolePermissionService.viewTrucks)) {
+        if (allowedActions.contains(ActionType.sync) && RoleService.hasPermission(RolePermissionService.viewTrucks)) {
           menuItems.add(
             const PopupMenuItem(
               value: ActionType.sync,
@@ -84,8 +79,7 @@ class TruckMenu extends GetView<TruckController> {
           );
         }
 
-        if (allowedActions.contains(ActionType.delete) &&
-            RoleService.hasPermission(RolePermissionService.deleteTrucks)) {
+        if (allowedActions.contains(ActionType.delete) && RoleService.hasPermission(RolePermissionService.deleteTrucks)) {
           menuItems.add(PopupMenuItem(
             value: ActionType.delete,
             child: Text(
@@ -159,8 +153,7 @@ class TruckMenu extends GetView<TruckController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.warning,
                 title: 'DELETE',
-                description:
-                    'Driver will be removed, but data will remain. Are you sure you want to delete this truck?',
+                description: 'Driver will be removed, but data will remain. Are you sure you want to delete this truck?',
                 saveBtnTxt: 'Close',
                 onSave: () {
                   navigate.pop();
@@ -168,17 +161,13 @@ class TruckMenu extends GetView<TruckController> {
                 discardBtnTxt: 'Delete',
                 onDiscard: () async {
                   navigate.pop();
-                  int success =
-                      await controller.deleteTruck(truckId: truck!.id!);
-                  if (success > 0) {
-                    navigate.pop(true);
-                  }
+                  controller.deleteTruck(truckId: truck!.id!).then((result) {
+                    if (onActionComplete?[ActionType.delete] != null) {
+                      onActionComplete![ActionType.delete]!(result);
+                    }
+                  });
                 },
-              ).then((result) async {
-                if (onActionComplete?[ActionType.delete] != null) {
-                  onActionComplete![ActionType.delete]!(result);
-                }
-              });
+              );
               break;
             case ActionType.sync:
               GlobalService.showAppToast(message: '#Sync');

@@ -153,25 +153,28 @@ class ProfileService {
     }
   }
 
-  static Future<int> setImage({
-    required String imagePath,
-    required List<File> imageFile,
-  }) async {
+  static Future<int> setImage({required List<File> imageFile}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
     GlobalService.showProgress();
-    Map<String, dynamic> bodyObj = {"profile_image": imagePath};
     ApiResponse response = await _dioService.upload(
       ApiEndPoint.apiSetProfileImage,
-      bodyObj,
       imageFile,
+      fileField: 'profile_image',
     );
-
+    GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
-        GlobalService.dismissProgress();
-        return 1;
+        String strQueryUpdate =
+            '''UPDATE $tblProfile SET image = '${response.data}' ''';
+        int updateProfile = await _databaseService.updateData(strQueryUpdate);
+        if (updateProfile > 0) {
+          GlobalService.showSnackBar(
+              status: AlertStatus.success, desc: response.message);
+          return 1;
+        }
+        return 0;
       case 401:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(

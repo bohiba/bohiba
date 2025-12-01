@@ -1,23 +1,24 @@
+import '/controllers/driver_rating_controller.dart';
+
+import '/component/screen_utils.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
-import '/dist/app_enums.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+
+import '/theme/bohiba_theme.dart';
 import '/pages/widget/required_label.dart';
 
-import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_colors.dart';
-import '/component/bohiba_inputfield/text_inputfield.dart';
-import '/component/screen_utils.dart';
-import '/controllers/driver_controller.dart';
-import '/theme/bohiba_theme.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
-class DriverRatingPage extends GetView<DriverController> {
+class DriverRatingPage extends GetView<DriverRatingController> {
   const DriverRatingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigateState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(title: 'Rate Driver'),
       body: SafeArea(
@@ -38,12 +39,12 @@ class DriverRatingPage extends GetView<DriverController> {
                   Padding(
                     padding: EdgeInsets.only(top: 10.h),
                     child: Text(
-                      controller.driverModel.value.profile?.name ?? '',
+                      controller.driverModel.value?.profile?.name ?? '',
                       style: bohibaTheme.textTheme.headlineMedium,
                     ),
                   ),
                   Text(
-                    "UUID: ${controller.driverModel.value.profile?.driverUuid ?? ''}",
+                    "UUID: ${controller.driverModel.value?.profile?.driverUuid ?? ''}",
                     style: bohibaTheme.textTheme.titleLarge,
                   ),
                   Container(
@@ -52,8 +53,7 @@ class DriverRatingPage extends GetView<DriverController> {
                     child: RequiredLabel(label: 'Rate your exprience'),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: ScreenUtils.height20),
+                    padding: EdgeInsets.symmetric(vertical: ScreenUtils.height20),
                     child: StarRating(
                       size: 48.h,
                       rating: controller.rateStar.value,
@@ -89,40 +89,26 @@ class DriverRatingPage extends GetView<DriverController> {
                   ),
                   Wrap(
                     children: controller.suggestion.map((txt) {
-                      controller.isSelected.value =
-                          controller.selectedRateMsgIndex.value == txt;
+                      controller.isSelected.value = controller.selectedRateMsgIndex.value == txt;
                       return Padding(
-                        padding: EdgeInsets.only(right: 8.w),
+                        padding: EdgeInsets.only(right: 4.w),
                         child: ChoiceChip(
                           label: Text(
                             txt,
                             style: TextStyle(
-                              color:
-                                  controller.selectedRateMsgIndex.value == txt
-                                      ? bohibaTheme.colorScheme.tertiary
-                                      : bohibaTheme.colorScheme.onTertiary,
+                              color: controller.selectedRateMsgIndex.value == txt ? bohibaTheme.colorScheme.tertiary : bohibaTheme.colorScheme.primary,
                             ),
                           ),
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color:
-                                    controller.selectedRateMsgIndex.value == txt
-                                        ? BohibaColors.transparent
-                                        : bohibaTheme.colorScheme.primary),
+                            side: BorderSide(color: controller.selectedRateMsgIndex.value == txt ? bohibaTheme.scaffoldBackgroundColor : bohibaTheme.colorScheme.primary),
                             borderRadius: BorderRadius.circular(8.0.h),
                           ),
                           selected: controller.isSelected.value,
                           onSelected: (value) {
                             controller.onSelectMsg(txt);
                           },
-                          selectedColor:
-                              controller.selectedRateMsgIndex.value == txt
-                                  ? bohibaTheme.colorScheme.primary
-                                  : BohibaColors.transparent,
-                          backgroundColor:
-                              controller.selectedRateMsgIndex.value == txt
-                                  ? bohibaTheme.colorScheme.primary
-                                  : bohibaTheme.scaffoldBackgroundColor,
+                          selectedColor: controller.selectedRateMsgIndex.value == txt ? bohibaTheme.colorScheme.primary : bohibaTheme.scaffoldBackgroundColor,
+                          backgroundColor: controller.selectedRateMsgIndex.value == txt ? bohibaTheme.colorScheme.primary : bohibaTheme.scaffoldBackgroundColor,
                         ),
                       );
                     }).toList(),
@@ -133,21 +119,15 @@ class DriverRatingPage extends GetView<DriverController> {
                         padding: EdgeInsets.only(top: 10.h, bottom: 35.h),
                         label: 'RATE',
                         onPressed: () async {
-                          await controller
-                              .rateDriver(
-                            txtUuid: controller
-                                .driverModel.value.profile!.driverUuid!,
+                          int v = await controller.rateDriver(
+                            txtUuid: controller.driverModel.value!.profile!.driverUuid!,
                             rating: controller.rateStar.value,
                             txtFeedback: controller.feedbackCtrl.text.trim(),
-                          )
-                              .then((onValue) async {
-                            if (onValue == 1) {
-                              // Get Driver Info
-                              await controller.getDriverInfo(
-                                methodType: MethodType.api,
-                              );
-                            }
-                          });
+                          );
+
+                          if (v > 1) {
+                            navigateState.pop();
+                          }
                         }),
                   )
                 ],

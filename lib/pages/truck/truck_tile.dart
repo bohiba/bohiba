@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:bohiba/component/image_path.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
+import '/component/image_path.dart';
+import '/extensions/bohiba_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,8 +20,7 @@ class TruckTile extends GetView<TruckAllController> {
   final VoidCallback? onClick;
   final TruckModel truckInfo;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
-      onActionComplete;
+  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
   const TruckTile({
     super.key,
     this.onClick,
@@ -57,10 +56,8 @@ class TruckTile extends GetView<TruckAllController> {
                           child: Text(
                             truckInfo.regdNumber?.shortCode ?? '',
                             style: TextStyle(
-                              fontSize:
-                                  bohibaTheme.textTheme.labelLarge!.fontSize,
-                              fontWeight:
-                                  bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                              fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
                               color: bohibaTheme.textTheme.bodySmall!.color,
                             ),
                           ),
@@ -75,8 +72,7 @@ class TruckTile extends GetView<TruckAllController> {
                           child: ClipRRect(
                             borderRadius: BorderRadiusGeometry.circular(35.r),
                             child: CachedNetworkImage(
-                              imageUrl:
-                                  '${ImagePath.truckImage}/${truckInfo.truckImage}',
+                              imageUrl: '${ImagePath.truckImage}/${truckInfo.truckImage}',
                               fit: BoxFit.cover,
                               height: 32.h,
                               width: 32.h,
@@ -106,10 +102,8 @@ class TruckTile extends GetView<TruckAllController> {
                           truckInfo.driverName ?? 'Not Assigned',
                           maxLines: 1,
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.titleMedium!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleMedium!.color,
                           ),
                         ),
@@ -118,12 +112,9 @@ class TruckTile extends GetView<TruckAllController> {
                                 truckInfo.ownerName ?? '',
                                 maxLines: 1,
                                 style: TextStyle(
-                                  fontSize: bohibaTheme
-                                      .textTheme.titleMedium!.fontSize,
-                                  fontWeight: bohibaTheme
-                                      .textTheme.bodySmall!.fontWeight,
-                                  color:
-                                      bohibaTheme.textTheme.titleMedium!.color,
+                                  fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                  color: bohibaTheme.textTheme.titleMedium!.color,
                                 ),
                               )
                             : SizedBox.shrink(),

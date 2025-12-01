@@ -33,6 +33,33 @@ class DioService {
           final statusCode = error.response?.statusCode ?? 401;
           final responseData = error.response?.data;
 
+          if (error.type == DioExceptionType.connectionTimeout || error.type == DioExceptionType.sendTimeout || error.type == DioExceptionType.receiveTimeout) {
+            return handler.resolve(
+              Response(
+                requestOptions: error.requestOptions,
+                statusCode: 408, // Request Timeout
+                data: {
+                  'status': false,
+                  'message': 'Slow internet connection. Please try again.',
+                },
+              ),
+            );
+          }
+
+          // 2️⃣ CHECK FOR NO INTERNET
+          if (error.type == DioExceptionType.unknown && error.error is SocketException) {
+            return handler.resolve(
+              Response(
+                requestOptions: error.requestOptions,
+                statusCode: 0,
+                data: {
+                  'status': false,
+                  'message': 'No internet connection.',
+                },
+              ),
+            );
+          }
+
           if (statusCode == 498) {
             handler.resolve(
               Response(
@@ -41,6 +68,7 @@ class DioService {
                 data: responseData ??
                     {
                       'status': false,
+                      'statusCode': 498,
                       'message': 'Invalid token',
                     },
               ),
@@ -130,14 +158,14 @@ class DioService {
 
   Future<ApiResponse> upload(
     String endpoint,
-    Map<String, dynamic> fields,
     List<File> files, {
-    String fileField = 'image',
+    Map<String, dynamic>? body,
+    required String fileField,
     bool withToken = true,
   }) async {
     final formData = FormData();
 
-    fields.forEach((key, value) {
+    body?.forEach((key, value) {
       formData.fields.add(MapEntry(key, value.toString()));
     });
 
@@ -161,8 +189,7 @@ class DioService {
     return _handleResponse(response);
   }
 
-  Future<ApiResponse> handleApiWithRetry(
-      Future<ApiResponse> Function() apiCall) async {
+  Future<ApiResponse> handleApiWithRetry(Future<ApiResponse> Function() apiCall) async {
     ApiResponse response = await apiCall();
 
     if (response.statusCode == 498) {
@@ -179,8 +206,7 @@ class DioService {
       return false;
     }
     GlobalService.showProgress();
-    ApiResponse serviceResponse =
-        await _instance.post(ApiEndPoint.apiRefreshToken);
+    ApiResponse serviceResponse = await _instance.post(ApiEndPoint.apiRefreshToken);
     GlobalService.dismissProgress();
     switch (serviceResponse.statusCode) {
       case 401:
@@ -205,8 +231,7 @@ class DioService {
         statusCode: 401,
         message: 'Unknown error occurred',
       );
-    } else if (response.statusCode == 200 && response.data != null ||
-        response.statusCode == 201 && data['status'] == true) {
+    } else if (response.statusCode == 200 && response.data != null || response.statusCode == 201 && data['status'] == true) {
       return ApiResponse(
         status: data["status"] ?? true,
         statusCode: response.statusCode ?? 200,

@@ -20,6 +20,17 @@ class AllTripController extends GetxController {
 
   int currentPage = 1;
 
+  final List<String> tripStatus = [
+    'in_transit',
+    'completed',
+    'unloading',
+    'delayed',
+    'cancelled',
+    'on_hold',
+    'reassigned',
+    'other',
+  ];
+
   @override
   void onInit() {
     super.onInit();
@@ -33,10 +44,7 @@ class AllTripController extends GetxController {
     });
 
     scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent - 250 &&
-          !isLoading.value &&
-          hasMore.value) {
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 250 && !isLoading.value && hasMore.value) {
         await getAllTrip(type: MethodType.api);
       }
     });
@@ -48,8 +56,7 @@ class AllTripController extends GetxController {
     bool refreshTrip = false,
   }) async {
     arrTrip.value = null;
-    List<TripModel>? newTrips = await TripService.getAllTrip(
-        methodType: type, showProgress: showLoading, reset: refreshTrip);
+    List<TripModel>? newTrips = await TripService.getAllTrip(methodType: type, showProgress: showLoading, reset: refreshTrip);
     if (newTrips != null) {
       arrTrip.value = List<TripModel>.from(newTrips);
     }
@@ -68,15 +75,12 @@ class AllTripController extends GetxController {
     try {
       if (currentPage == 1) {
         hasMore.value = false;
-        arrTrip.value?.clear();
-        List<TripModel>? localTrips =
-            await TripService.getAllTrip(methodType: MethodType.local);
+        arrTrip.value = [];
+        List<TripModel>? localTrips = await TripService.getAllTrip(methodType: MethodType.local);
         if (localTrips != null && localTrips.isNotEmpty) {
           arrTrip.value = List<TripModel>.from(localTrips);
           arrTrip.value!.sort((a, b) {
-            return b.startDate!
-                .toDateTime()
-                .compareTo(a.startDate!.toDateTime());
+            return b.startDate!.toDateTime().compareTo(a.startDate!.toDateTime());
           });
           isLoading.value = false;
           currentPage++;
@@ -107,8 +111,7 @@ class AllTripController extends GetxController {
   }
 
   Future<List<TripModel>> filteredTrips({String? truckNo}) async {
-    List<TripModel>? arrTripModel =
-        await TripService.filterTripWithTruckNo(truckNo: truckNo);
+    List<TripModel>? arrTripModel = await TripService.filterTripWithTruckNo(truckNo: truckNo);
     if (arrTripModel != null) {
       arrTrip.value?.clear();
       arrTrip.value = List<TripModel>.from(arrTripModel);
@@ -126,9 +129,7 @@ class AllTripController extends GetxController {
   }
 
   List<String> convertToSnakeCase(List<String> inputList) {
-    return inputList
-        .map((item) => item.toLowerCase().replaceAll(' ', '_'))
-        .toList();
+    return inputList.map((item) => item.toLowerCase().replaceAll(' ', '_')).toList();
   }
 
   @override

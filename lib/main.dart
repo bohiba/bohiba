@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'theme/bohiba_theme.dart';
 import '/controllers/theme_controller.dart';
+import '/services/firebase_app_service.dart';
 import '/services/pref_utils.dart';
 import '/services/db2_service.dart';
 import 'services/global_service.dart';
@@ -11,76 +12,52 @@ import 'routes/app_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await FirebaseAppService.initFirebase();
+  GlobalService.printHandler('Firebase Background Message: ${message.messageId}');
+}
 
 Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    // MUST BE CALLED FIRST
+    await FirebaseAppService.initFirebase();
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
-    ]).then((value) async {
-      try {
-        await PrefUtils.init();
-        await DatabaseService().initDB();
-        Get.put<ThemeController>(ThemeController());
-        runApp(MyApp());
-      } catch (e) {
-        GlobalService.printHandler(e.toString());
-      }
-    });
+    ]);
+
+    await PrefUtils.init();
+    await DatabaseService().initDB();
+    await FirebaseAppService.initNotification();
+    Get.lazyPut<ThemeController>(() => ThemeController());
+    runApp(MyApp());
   }, (error, errorstack) {
-    GlobalService.dismissProgress();
-    GlobalService.printHandler(
-        '\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
+    GlobalService.printHandler('\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
   });
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  final themeController = Get.find<ThemeController>();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.detached:
-        // dbService.clearAllBox();
-        break;
-      case AppLifecycleState.inactive:
-        // dbService.disposeDB();
-        break;
-      case AppLifecycleState.resumed:
-      // dbService.initDB();
-      default:
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtils.getDimensions(context);
-
+    final controller = Get.put<ThemeController>(ThemeController());
     return Obx(() {
       return AnimatedTheme(
-        data: themeController.isDarkMode
-            ? BohibaTheme.lightTheme
-            : BohibaTheme.darkTheme,
+        data: controller.isDarkMode ? BohibaTheme.lightTheme : BohibaTheme.darkTheme,
         duration: const Duration(seconds: 1),
         curve: Curves.easeIn,
         child: ScreenUtilInit(
           child: GetMaterialApp(
             theme: BohibaTheme.lightTheme,
             darkTheme: BohibaTheme.darkTheme,
-            themeMode: themeController.themeMode.value,
+            themeMode: controller.themeMode.value,
             // debugShowMaterialGrid: true,
             debugShowCheckedModeBanner: false,
             getPages: AppRoute.routes,
@@ -89,11 +66,5 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
       );
     });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 }

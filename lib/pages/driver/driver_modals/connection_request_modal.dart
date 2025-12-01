@@ -2,7 +2,7 @@ import '/services/pref_utils.dart';
 import '/dist/app_enums.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/screen_utils.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -37,16 +37,12 @@ class _ConnectionRequestModalState extends State<ConnectionRequestModal> {
       ),
       title: Center(
         child: Text(
-          widget.connectionType == ConnectionType.accept
-              ? 'Accept Request'
-              : 'Reject Request',
+          widget.connectionType == ConnectionType.accept ? 'Accept Request' : 'Reject Request',
         ),
       ),
       titleTextStyle: TextStyle(
         fontSize: bohibaTheme.textTheme.displaySmall!.fontSize,
-        color: widget.connectionType == ConnectionType.accept
-            ? bohibaTheme.colorScheme.onPrimary
-            : bohibaTheme.colorScheme.error,
+        color: widget.connectionType == ConnectionType.accept ? bohibaTheme.colorScheme.onPrimary : bohibaTheme.colorScheme.error,
         fontFamily: bohibaTheme.textTheme.titleLarge!.fontFamily,
         fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
       ),
@@ -110,12 +106,8 @@ class _ConnectionRequestModalState extends State<ConnectionRequestModal> {
             PrimaryButton(
                 width: 120.w,
                 height: 32.h,
-                label: widget.connectionType == ConnectionType.accept
-                    ? 'ACCEPT'
-                    : 'REJECT',
-                color: widget.connectionType == ConnectionType.accept
-                    ? bohibaTheme.colorScheme.onPrimary
-                    : bohibaTheme.colorScheme.error,
+                label: widget.connectionType == ConnectionType.accept ? 'ACCEPT' : 'REJECT',
+                color: widget.connectionType == ConnectionType.accept ? bohibaTheme.colorScheme.onPrimary : bohibaTheme.colorScheme.error,
                 onPressed: widget.onAction)
           ],
         )

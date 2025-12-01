@@ -1,6 +1,6 @@
 class ApiEndPoint {
-  static const String baseUrl = 'https://bohiba.com/api';
-  // static const String baseUrl = "https://beta-server-t1.bohiba.com/api";
+  // static const String baseUrl = 'https://bohiba.com/api';
+  static const String baseUrl = "https://beta-server-t1.bohiba.com/api";
   static const String apiPostalCode = 'https://api.postalpincode.in/pincode';
   static const String apiVerifyEmail = '$baseUrl/verify-email';
   static const String apiVerifyOtp = '$baseUrl/verify-otp';
@@ -18,6 +18,9 @@ class ApiEndPoint {
   static const String apiLogin = '$baseUrl/login';
   static const String apiLogout = '$baseUrl/logout';
   static const String apiRefreshToken = '$baseUrl/refresh-token';
+
+  static const String firbaseToken = '$baseUrl/firebase/register-token';
+
   static const String apiProfile = '$baseUrl/profile';
   static const String apiMain = '$baseUrl/main';
 
@@ -59,8 +62,7 @@ class ApiEndPoint {
 
   static const String apiAddTripReassign = '$baseUrl/trip/add-reassignment';
   static const String apiEditTripReassign = '$baseUrl/trip/update-reassignment';
-  static const String apiDeleteTripReassign =
-      '$baseUrl/trip/delete-reassignment';
+  static const String apiDeleteTripReassign = '$baseUrl/trip/delete-reassignment';
 
   static const String apiAddTripDoc = '$baseUrl/trip/add-document';
   static const String apiGetAllTripDoc = '$baseUrl/trip/all-document';
@@ -93,4 +95,6 @@ class ApiEndPoint {
 
   static const String apiNewsAll = '$baseUrl/news-all';
   static const String apiNews = '$baseUrl/news';
+
+  static const String apiSearchUser = '$baseUrl/search/user';
 }

@@ -1,4 +1,4 @@
-import 'package:bohiba/routes/app_route.dart';
+import '/routes/app_route.dart';
 
 import '/model/rating_model.dart';
 
@@ -6,7 +6,7 @@ import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/screen_utils.dart';
 import '/controllers/driver_controller.dart';
-import '/model/driver_model.dart';
+import '../../model/user_model.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,28 +21,23 @@ class RatingAllPage extends GetView<DriverController> {
   Widget build(context) {
     final navigateState = Navigator.of(context);
     return Obx(() {
-      UserModel driver = controller.driverModel.value;
+      UserModel? driver = controller.driverModel.value;
       return Scaffold(
           appBar: TitleAppbar(
-            title: driver.profile?.name ?? 'NA',
+            title: driver?.profile?.name ?? 'NA',
           ),
           body: SafeArea(
             child: Column(
               children: [
                 Expanded(
-                  child: controller.driverModel.value.rating != null ||
-                          controller.driverModel.value.rating!.isNotEmpty
+                  child: controller.driverModel.value?.rating != null || (controller.driverModel.value?.rating?.isNotEmpty ?? false)
                       ? ListView.builder(
-                          itemCount:
-                              controller.driverModel.value.rating?.length,
+                          itemCount: controller.driverModel.value?.rating?.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            RatingModel driverModelRating =
-                                controller.driverModel.value.rating![index];
+                            RatingModel? driverModelRating = controller.driverModel.value?.rating![index];
                             return Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: ScreenUtils.height5,
-                                  horizontal: ScreenUtils.width15),
+                              margin: EdgeInsets.symmetric(vertical: ScreenUtils.height5, horizontal: ScreenUtils.width15),
                               padding: EdgeInsets.symmetric(
                                 vertical: ScreenUtils.height5,
                               ),
@@ -58,38 +53,30 @@ class RatingAllPage extends GetView<DriverController> {
                                   SizedBox(
                                     width: ScreenUtils.width * 0.45.w,
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          driverModelRating.reviewerName ??
-                                              'NA',
-                                          style:
-                                              bohibaTheme.textTheme.labelLarge,
+                                          driverModelRating?.reviewerName ?? 'NA',
+                                          style: bohibaTheme.textTheme.labelLarge,
                                         ),
                                         ReadMoreText(
-                                          driverModelRating.feedback ?? '',
+                                          driverModelRating?.feedback ?? '',
                                           trimLines: 2,
                                           trimMode: TrimMode.Line,
                                           trimCollapsedText: ' Read more',
                                           trimExpandedText: ' Show less',
                                           style: TextStyle(
-                                            fontSize: bohibaTheme.textTheme
-                                                .labelMedium!.fontSize,
-                                            color: bohibaTheme
-                                                .textTheme.titleMedium!.color,
+                                            fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                                            color: bohibaTheme.textTheme.titleMedium!.color,
                                           ),
                                           moreStyle: TextStyle(
-                                            fontSize: bohibaTheme.textTheme
-                                                .labelMedium!.fontSize,
+                                            fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.blue,
                                           ),
                                           lessStyle: TextStyle(
-                                            fontSize: bohibaTheme.textTheme
-                                                .labelMedium!.fontSize,
+                                            fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.blue,
                                           ),
@@ -102,15 +89,11 @@ class RatingAllPage extends GetView<DriverController> {
                                     height: 35.h,
                                     alignment: Alignment.center,
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          driverModelRating.rating
-                                                  ?.toString() ??
-                                              '0',
-                                          style:
-                                              bohibaTheme.textTheme.labelLarge,
+                                          driverModelRating?.rating?.toString() ?? '0',
+                                          style: bohibaTheme.textTheme.labelLarge,
                                         ),
                                         const Icon(
                                           Icons.star_rounded,

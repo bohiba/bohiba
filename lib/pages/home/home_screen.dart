@@ -19,10 +19,11 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: HomeAppBar(),
-      extendBodyBehindAppBar: true,
+      appBar: null,
+      // extendBodyBehindAppBar: true,
       body: CustomScrollView(
-        // shrinkWrap: true,
+        shrinkWrap: true,
+        controller: controller.scrollController,
         physics: BouncingScrollPhysics(),
         slivers: [
           HomeAppBar(),
@@ -36,7 +37,7 @@ class HomePage extends GetView<HomeController> {
               HomeTopTruck(),
               HomeDriverSection(),
               HomeMinesSection(),
-              HomeNewsSection()
+              HomeNewsSection(),
             ]),
           )
         ],

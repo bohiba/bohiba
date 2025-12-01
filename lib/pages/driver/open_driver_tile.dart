@@ -1,5 +1,5 @@
 import '/dist/app_enums.dart';
-import '/model/driver_model.dart';
+import '../../model/user_model.dart';
 import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';
@@ -89,8 +89,7 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                       "${user.address?.district ?? ''} ",
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.labelMedium!.fontWeight,
+                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
                         color: bohibaTheme.textTheme.bodyLarge!.color,
                       ),
                     ),
@@ -99,8 +98,7 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                       user.address?.state ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.labelMedium!.fontWeight,
+                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
                         color: bohibaTheme.textTheme.bodyLarge!.color,
                       ),
                     ),
@@ -115,20 +113,17 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                       user.profile?.connect?.toCapitalizedLabel() ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
                         color: bohibaTheme.colorScheme.onPrimary,
                       ),
                     )
                   : SizedBox.shrink(),
-              driverWidget: (user.profile?.connect ==
-                      ConnectionType.accept.name)
+              driverWidget: (user.profile?.connect == ConnectionType.accept.name)
                   ? Text(
                       user.profile?.connect?.toCapitalizedLabel() ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
                         color: bohibaTheme.colorScheme.onPrimary,
                       ),
                     )
@@ -154,8 +149,7 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: bohibaTheme.colorScheme.error
-                                  .withValues(alpha: 0.25),
+                              color: bohibaTheme.colorScheme.error.withValues(alpha: 0.25),
                             ),
                             child: Icon(
                               Icons.close,
@@ -185,8 +179,7 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: bohibaTheme.colorScheme.onPrimary
-                                  .withValues(alpha: 0.25),
+                              color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
                             ),
                             child: Icon(
                               EvaIcons.checkmark,

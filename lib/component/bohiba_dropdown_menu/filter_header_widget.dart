@@ -15,20 +15,23 @@ class FilterHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-          top: ScreenUtils.height15, bottom: ScreenUtils.height10),
+      padding: EdgeInsets.only(top: ScreenUtils.height15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
-            style: TextStyle(
-                fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                color: bohibaTheme.textTheme.bodySmall!.color),
+            style: TextStyle(fontSize: bohibaTheme.textTheme.titleMedium!.fontSize, color: bohibaTheme.textTheme.bodySmall!.color),
           ),
           GestureDetector(
             onTap: onPressTrailing,
-            child: Text('Reset'),
+            child: Text(
+              'Reset',
+              style: TextStyle(
+                fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
+                color: bohibaTheme.colorScheme.error,
+              ),
+            ),
           ),
         ],
       ),

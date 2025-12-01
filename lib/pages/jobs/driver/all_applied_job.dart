@@ -1,4 +1,4 @@
-import 'package:bohiba/extensions/bohiba_extension.dart';
+import '/extensions/bohiba_extension.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -57,8 +57,7 @@ class AllAppliedJobPage extends GetView<AllAppliedJobController> {
                     ),
                     itemCount: controller.arrAppliedJob.length,
                     itemBuilder: (context, index) {
-                      JobDetailModel jobDetail =
-                          controller.arrAppliedJob[index];
+                      JobDetailModel jobDetail = controller.arrAppliedJob[index];
                       return GestureDetector(
                         onTap: () {},
                         child: Container(
@@ -73,8 +72,7 @@ class AllAppliedJobPage extends GetView<AllAppliedJobController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
@@ -83,8 +81,7 @@ class AllAppliedJobPage extends GetView<AllAppliedJobController> {
                                           jobDetail.jobTitle ?? '',
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: bohibaTheme
-                                              .textTheme.headlineMedium,
+                                          style: bohibaTheme.textTheme.headlineMedium,
                                         ),
                                       ),
                                       Row(
@@ -94,12 +91,9 @@ class AllAppliedJobPage extends GetView<AllAppliedJobController> {
                                           Text(
                                             ' ${jobDetail.location?.toCapitalizedLabel() ?? ''} ',
                                             style: TextStyle(
-                                              fontSize: bohibaTheme.textTheme
-                                                  .labelLarge!.fontSize,
-                                              fontWeight: bohibaTheme.textTheme
-                                                  .titleLarge!.fontWeight,
-                                              color: bohibaTheme
-                                                  .textTheme.titleLarge!.color,
+                                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                                              fontWeight: bohibaTheme.textTheme.titleLarge!.fontWeight,
+                                              color: bohibaTheme.textTheme.titleLarge!.color,
                                             ),
                                           ),
                                           Gap(10.w),
@@ -107,12 +101,9 @@ class AllAppliedJobPage extends GetView<AllAppliedJobController> {
                                           Text(
                                             ' ${jobDetail.jobType?.toCapitalizedLabel() ?? ''}',
                                             style: TextStyle(
-                                              fontSize: bohibaTheme.textTheme
-                                                  .labelLarge!.fontSize,
-                                              fontWeight: bohibaTheme.textTheme
-                                                  .titleLarge!.fontWeight,
-                                              color: bohibaTheme
-                                                  .textTheme.titleLarge!.color,
+                                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                                              fontWeight: bohibaTheme.textTheme.titleLarge!.fontWeight,
+                                              color: bohibaTheme.textTheme.titleLarge!.color,
                                             ),
                                           ),
                                         ],
@@ -121,13 +112,10 @@ class AllAppliedJobPage extends GetView<AllAppliedJobController> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    jobDetail.status?.toCapitalizedLabel() ??
-                                        '',
+                                    jobDetail.status?.toCapitalizedLabel() ?? '',
                                     style: TextStyle(
-                                      fontFamily: bohibaTheme
-                                          .textTheme.labelLarge!.fontFamily,
-                                      fontSize: bohibaTheme
-                                          .textTheme.labelLarge!.fontSize,
+                                      fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
+                                      fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
                                       color: Colors.blue,
                                     ),
                                   ),
@@ -137,10 +125,8 @@ class AllAppliedJobPage extends GetView<AllAppliedJobController> {
                               Text(
                                 jobDetail.createdAt ?? '',
                                 style: TextStyle(
-                                  color:
-                                      bohibaTheme.textTheme.titleMedium!.color,
-                                  fontSize: bohibaTheme
-                                      .textTheme.labelMedium!.fontSize,
+                                  color: bohibaTheme.textTheme.titleMedium!.color,
+                                  fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                                 ),
                               )
                             ],

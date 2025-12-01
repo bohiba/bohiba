@@ -1,5 +1,5 @@
 import '/model/rating_model.dart';
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 import '/services/open_driver_service.dart';
 import 'package:get/get.dart';
 
@@ -15,24 +15,22 @@ class OpenDriverController extends GetxController {
     super.onInit();
 
     Future.delayed(Duration.zero, () async {
-      await getOpenDriver(id: openDriver.value.id!);
+      await getDriver(id: openDriver.value.id!);
     });
   }
 
   Future<void> connect() async {
     if (openDriver.value.profile?.connect != null) return;
     openDriver.value.profile!.connect = 'pending';
-    UserModel? openDriverInfo =
-        await OpenDriverService.connectDriver(driverInfo: openDriver.value);
+    UserModel? openDriverInfo = await OpenDriverService.connectDriver(driverInfo: openDriver.value);
     if (openDriverInfo != null) {
       popResult.value = true;
       openDriver.value = openDriverInfo;
     }
   }
 
-  Future<void> getOpenDriver({required int id}) async {
-    UserModel? driverInfo =
-        await OpenDriverService.getOpenDriverPrfl(driverId: id);
+  Future<void> getDriver({required int id}) async {
+    UserModel? driverInfo = await OpenDriverService.getOpenDriverPrfl(driverId: id);
     if (driverInfo != null) {
       openDriver.value = driverInfo;
       avgRating.value = _getAverageRating(driverInfo.rating);
@@ -41,8 +39,7 @@ class OpenDriverController extends GetxController {
 
   double _getAverageRating(List<RatingModel>? ratings) {
     if (ratings == null || ratings.isEmpty) return 0.0;
-    final double total =
-        ratings.fold<double>(0.0, (sum, item) => sum + (item.rating ?? 0));
+    final double total = ratings.fold<double>(0.0, (sum, item) => sum + (item.rating ?? 0));
     return total / ratings.length;
   }
 }

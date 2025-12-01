@@ -25,9 +25,7 @@ class HomeTopTipper extends StatelessWidget {
                 borderRadius: BorderRadius.circular(ScreenUtils.width5),
                 onTap: () {},
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtils.height8,
-                      horizontal: ScreenUtils.width10),
+                  padding: EdgeInsets.symmetric(vertical: ScreenUtils.height8, horizontal: ScreenUtils.width10),
                   child: Text(
                     'See All',
                     style: TextStyle(

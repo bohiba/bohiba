@@ -17,9 +17,10 @@ class HomeTopTruck extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
-      return Visibility(
-        visible: controller.arrTruck.value?.isNotEmpty ?? true,
-        child: Column(
+      if (controller.arrTruck.value?.isEmpty ?? true) {
+        return SizedBox.shrink();
+      } else {
+        return Column(
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
@@ -43,8 +44,7 @@ class HomeTopTruck extends GetView<HomeController> {
                       child: Text(
                         'See All',
                         style: TextStyle(
-                          fontSize:
-                              bohibaTheme.textTheme.headlineMedium!.fontSize,
+                          fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
                           color: bohibaTheme.primaryColor,
                         ),
                       ),
@@ -66,39 +66,37 @@ class HomeTopTruck extends GetView<HomeController> {
                   ),
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: controller.arrTruck.value!.length > 3
-                      ? 3
-                      : controller.arrTruck.value?.length ?? 0,
+                  itemCount: (controller.arrTruck.value?.length ?? 0) > 3 ? 3 : controller.arrTruck.value?.length ?? 0,
                   itemBuilder: (context, index) {
-                    TruckModel topVehicleObj =
-                        controller.arrTruck.value![index];
-                    return TruckTile(
-                      truckInfo: topVehicleObj,
-                      allowedActions: [
-                        ActionType.view,
-                        ActionType.add,
-                        ActionType.edit,
-                        ActionType.other,
-                      ],
-                      onClick: () {
-                        Get.toNamed(AppRoute.truck,
-                                arguments: topVehicleObj.regdNumber)
-                            ?.then(
-                          (onValue) async {
-                            if (onValue != null) {
-                              await controller.getTruckList();
-                              controller.arrTruck.refresh();
-                            }
-                          },
-                        );
-                      },
-                    );
+                    if (controller.arrTruck.value != null) {
+                      TruckModel truckModel = controller.arrTruck.value![index];
+                      return TruckTile(
+                          truckInfo: truckModel,
+                          allowedActions: [
+                            ActionType.view,
+                            ActionType.add,
+                            ActionType.edit,
+                            ActionType.other,
+                          ],
+                          onClick: () {
+                            navigatorState
+                                .pushNamed(
+                              AppRoute.truck,
+                              arguments: truckModel.regdNumber,
+                            )
+                                .then((onValue) async {
+                              if (onValue != null) await controller.getTruckList();
+                            });
+                          });
+                    } else {
+                      return SizedBox.shrink();
+                    }
                   },
                 ),
               )
           ],
-        ),
-      );
+        );
+      }
     });
   }
 }

@@ -1,12 +1,13 @@
-import 'package:bohiba/bindings/add_trip_doc_binding.dart';
-import 'package:bohiba/pages/trips/add_trip_document_page.dart';
+import '/bindings/add_trip_doc_binding.dart';
+import '/pages/trips/add_trip_document_page.dart';
+import '/pages/user/user_scan/scan_qr_action_page.dart';
 
 import '/bindings/all_open_driver_binding.dart';
 import '/bindings/user_qr_binding.dart';
 import '/bindings/user_scan_qr_binding.dart';
 
-import '/pages/user/user_profile/user_qr_page.dart';
-import '/pages/user/user_profile/user_scan_qr_page.dart';
+import '../pages/user/user_scan/user_qr_page.dart';
+import '../pages/user/user_scan/user_scan_qr_page.dart';
 
 import '/bindings/all_owner_expense_binding.dart';
 import '/bindings/owner_expense_binding.dart';
@@ -20,12 +21,12 @@ import '/bindings/all_recived_request_binding.dart';
 import '/pages/jobs/driver/all_received_request_page.dart';
 
 import '/bindings/all_applied_job_binding.dart';
-import '/bindings/change_password_binding.dart';
 import '/pages/jobs/driver/all_applied_job.dart';
 
 import '/bindings/all_driver_job_binding.dart';
 import '/pages/jobs/driver/all_driver_job.dart';
 
+import '/bindings/driver_rating_binding.dart';
 import '/pages/driver/driver_modals/driver_rating_page.dart';
 
 import '/bindings/open_driver_binding.dart';
@@ -129,7 +130,10 @@ import '/pages/manager/manager.dart';
 import '/pages/truck/truck_page.dart';
 import '/pages/manager/all_manager.dart';
 import '/pages/user_authentication/screens/set_role_page.dart';
-import '../pages/authentication/password_screen/change_password_page.dart';
+
+import '/bindings/change_password_binding.dart';
+import '/pages/authentication/password_screen/change_password_page.dart';
+
 import '/pages/authentication/signup_screen/create_user_page.dart';
 import '/pages/user_authentication/screens/set_image_page.dart';
 import '/pages/driver/driver_all_page.dart';
@@ -246,8 +250,7 @@ class AppRoute {
   // Wallet Screen
   static const String bankAccountScreen = "/bank-account";
   static const String walletDepositScreen = "/wallet-deposit";
-  static const String walletTransactionHistoryScreen =
-      "/wallet-transcation-history";
+  static const String walletTransactionHistoryScreen = "/wallet-transcation-history";
   static const String walletWithdrawScreen = "/wallet-withdraw";
 
   // static const String companyScreen = "/company";
@@ -260,6 +263,8 @@ class AppRoute {
   static const String editProfile = '/edit-profile';
   static const String userQrPage = '/user-qr-page';
   static const String userScanQrPage = '/user-scan-qr-page';
+  static const String userScanAction = '/user-scan-action';
+
   static const String kyc = '/kyc';
 
   static const String allJobs = '/all-jobs';
@@ -480,7 +485,7 @@ class AppRoute {
 
     GetPage(
       name: ratingDriver,
-      // binding: DriverBinding(),
+      binding: DriverRatingBinding(),
       page: () => DriverRatingPage(),
     ),
 
@@ -624,6 +629,11 @@ class AppRoute {
       name: userScanQrPage,
       binding: UserScanQrBinding(),
       page: () => UserScanQrPage(),
+    ),
+
+    GetPage(
+      name: userScanAction,
+      page: () => ScanQrActionPage(),
     ),
 
     GetPage(

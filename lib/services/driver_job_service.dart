@@ -1,4 +1,4 @@
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 
 import 'api_end_point.dart';
 import 'device_info_service.dart';
@@ -22,8 +22,7 @@ class DriverJobService {
 
     GlobalService.showProgress();
     Map<String, dynamic> bodyMap = {'status': type.name};
-    ApiResponse res = await _dioService.post('${ApiEndPoint.apiAllRespond}/$id',
-        body: bodyMap);
+    ApiResponse res = await _dioService.post('${ApiEndPoint.apiAllRespond}/$id', body: bodyMap);
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:
@@ -135,8 +134,7 @@ class DriverJobService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse res =
-        await _dioService.post('${ApiEndPoint.apiApplyToJob}/$jobId');
+    ApiResponse res = await _dioService.post('${ApiEndPoint.apiApplyToJob}/$jobId');
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:

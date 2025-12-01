@@ -1,4 +1,3 @@
-import 'package:bohiba/services/global_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '/pages/widget/role_widget.dart';
@@ -15,8 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomeAppBar extends GetView<HomeController>
-    implements PreferredSizeWidget {
+class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
   @override
@@ -25,350 +23,184 @@ class HomeAppBar extends GetView<HomeController>
   @override
   Widget build(BuildContext context) {
     final NavigatorState navigatState = Navigator.of(context);
-    /*return PreferredSize(
-      preferredSize: Size.fromHeight(ScreenUtils.height55),
-      child: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        titleSpacing: 14.w,
-        title: Image.asset(
-          ImagePath.bohibaIcon,
-          width: 80,
-          alignment: Alignment.centerLeft,
-        ),
-        actions: [
-          // Add Vehicle
-          AppBarIconBox(
-            onTapDown: (TapDownDetails tapDownDetails) {
-              final items = <PopupMenuEntry<ServiceType>>[];
-
-              if (RoleService.hasPermission(RolePermissionService.viewTrucks)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.truck,
-                    child: Text(
-                      'Truck',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
-                      ),
-                    ),
-                  ),
-                );
-              }
-
-              if (RoleService.hasPermission(RolePermissionService.viewDriver)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.driver,
-                    textStyle: TextStyle(),
-                    child: Text(
-                      'Driver',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
-                      ),
-                    ),
-                  ),
-                );
-              }
-
-              if (RoleService.hasPermission(RolePermissionService.viewTrips)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.trip,
-                    child: Text(
-                      'Trips',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
-                      ),
-                    ),
-                  ),
-                );
-              }
-              //Expenses Menu
-              if (RoleService.hasPermission(
-                  RolePermissionService.viewOwnerExpense)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.expenses,
-                    textStyle: TextStyle(),
-                    child: Text(
-                      'Expenses',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
-                      ),
-                    ),
-                  ),
-                );
-              }
-              showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(
-                  tapDownDetails.globalPosition.dx,
-                  tapDownDetails.globalPosition.dy + 20,
-                  0,
-                  0,
-                ),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
-                items: items,
-              ).then((value) async {
-                if (!context.mounted) return value;
-                switch (value) {
-                  case ServiceType.driver:
-                    return await navigatState
-                        .pushNamed(AppRoute.allDriver)
-                        .then((onValue) async {
-                      if (onValue != null) {
-                        await controller.getDriverList();
-                        controller.arrDriver.refresh();
-                      }
-                    });
-                  case ServiceType.trip:
-                    return navigatState.pushNamed(AppRoute.allTrip);
-                  case ServiceType.truck:
-                    return navigatState.pushNamed(AppRoute.allTruck).then(
-                      (onValue) async {
-                        if (onValue != null) {
-                          await controller.getTruckList();
-                          controller.arrTruck.refresh();
-                        }
-                      },
-                    );
-                  case ServiceType.expenses:
-                    return navigatState.pushNamed(AppRoute.allOwnerExpense);
-                  case ServiceType.manager:
-                    break;
-
-                  default:
-                  // Manager
-                }
-              });
-            },
-            icon: const Icon(EvaIcons.plus),
+    return Obx(
+      () {
+        return SliverAppBar(
+          pinned: true,
+          stretch: true,
+          expandedHeight: 160.h,
+          automaticallyImplyLeading: false,
+          flexibleSpace: FlexibleSpaceBar(
+            background: RoleWidget(
+              truckOwnerWidget: Image.asset(
+                ImagePath.truckOwnerBanner,
+                fit: BoxFit.cover,
+              ),
+              driverWidget: Image.asset(
+                ImagePath.driverBanner,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-
-          //Notification
-          /*AppBarIconBox(
+          title: GestureDetector(
             onTap: () {
-              navigatState.pushNamed(AppRoute.notifyScreen);
+              navigatState.pushNamed(AppRoute.userProfile);
             },
-            icon: const Icon(
-              EvaIcons.bellOutline,
+            child: Card(
+              elevation: 0.5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: Container(
+                height: 25.h,
+                width: 25.h,
+                decoration: BoxDecoration(
+                  color: bohibaTheme.cardColor,
+                  borderRadius: BorderRadius.circular(6.r),
+                ),
+                child: controller.profile.value?.image == null || (controller.profile.value?.image?.isEmpty ?? true)
+                    ? SizedBox.shrink()
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(6.r),
+                        child: CachedNetworkImage(
+                          imageUrl: "${ImagePath.profileImage}/${controller.profile.value!.image}",
+                          fit: BoxFit.cover,
+                          placeholder: (context, child) {
+                            return SizedBox.shrink();
+                          },
+                          errorWidget: (context, child, obj) {
+                            return SizedBox.shrink();
+                          },
+                        ),
+                      ),
+              ),
             ),
           ),
-
-          AppBarIconBox(
-            onTap: () {
-              Navigator.of(context).pushNamed(AppRoute.favList);
-            },
-            icon: Icon(Remix.heart_3_line),
-          )*/
-        ],
-      ),
-    );*/
-
-    return Obx(() {
-      return SliverAppBar(
-        pinned: true,
-        stretch: true,
-        expandedHeight: 160.h,
-        automaticallyImplyLeading: false,
-        flexibleSpace: FlexibleSpaceBar(
-          background: RoleWidget(
-            truckOwnerWidget: Image.asset(
-              ImagePath.truckOwnerBanner,
-              fit: BoxFit.cover,
-            ),
-            driverWidget: Image.asset(
-              ImagePath.driverBanner,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        title: GestureDetector(
-          onTap: () {
-            navigatState.pushNamed(AppRoute.userProfile);
+          onStretchTrigger: () async {
+            Future.delayed(Duration.zero, () async {
+              await controller.onRefreshPage();
+            });
           },
-          child: Card(
-            elevation: 0.5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6.r),
-            ),
-            child: Container(
-              height: 25.h,
-              width: 25.h,
-              decoration: BoxDecoration(
-                color: bohibaTheme.cardColor,
-                borderRadius: BorderRadius.circular(6.r),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6.r),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      "https://bohiba.com/storage/app/public/images/profile/${controller.profile.value?.image}",
-                  fit: BoxFit.cover,
-                  placeholder: (context, child) {
-                    return Image.network(
-                      GlobalService.getAvatarUrl(
-                          controller.profile.value?.name ?? ''),
-                    );
-                  },
-                  errorWidget: (context, child, obj) {
-                    return Image.network(
-                      GlobalService.getAvatarUrl(
-                          controller.profile.value?.name ?? ''),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-        onStretchTrigger: () async {
-          await controller.onRefreshPage();
-        },
-        actions: [
-          AppBarIconBox(
-            onTapDown: (TapDownDetails tapDownDetails) {
-              final items = <PopupMenuEntry<ServiceType>>[];
+          actions: [
+            AppBarIconBox(
+              onTapDown: (TapDownDetails tapDownDetails) {
+                final items = <PopupMenuEntry<ServiceType>>[];
 
-              if (RoleService.hasPermission(RolePermissionService.viewTrucks)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.truck,
-                    child: Text(
-                      'Truck',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                if (RoleService.hasPermission(RolePermissionService.viewTrucks)) {
+                  items.add(
+                    PopupMenuItem(
+                      value: ServiceType.truck,
+                      child: Text(
+                        'Truck',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          color: bohibaTheme.textTheme.bodyMedium!.color,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              if (RoleService.hasPermission(RolePermissionService.viewDriver)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.driver,
-                    textStyle: TextStyle(),
-                    child: Text(
-                      'Driver',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                if (RoleService.hasPermission(RolePermissionService.viewDriver)) {
+                  items.add(
+                    PopupMenuItem(
+                      value: ServiceType.driver,
+                      textStyle: TextStyle(),
+                      child: Text(
+                        'Driver',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          color: bohibaTheme.textTheme.bodyMedium!.color,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              if (RoleService.hasPermission(RolePermissionService.viewTrips)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.trip,
-                    child: Text(
-                      'Trips',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                if (RoleService.hasPermission(RolePermissionService.viewTrips)) {
+                  items.add(
+                    PopupMenuItem(
+                      value: ServiceType.trip,
+                      child: Text(
+                        'Trips',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          color: bohibaTheme.textTheme.bodyMedium!.color,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
-              //Expenses Menu
-              if (RoleService.hasPermission(
-                  RolePermissionService.viewOwnerExpense)) {
-                items.add(
-                  PopupMenuItem(
-                    value: ServiceType.expenses,
-                    textStyle: TextStyle(),
-                    child: Text(
-                      'Expenses',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.titleSmall!.fontWeight,
-                        color: bohibaTheme.textTheme.bodyMedium!.color,
+                  );
+                }
+                //Expenses Menu
+                if (RoleService.hasPermission(RolePermissionService.viewOwnerExpense)) {
+                  items.add(
+                    PopupMenuItem(
+                      value: ServiceType.expenses,
+                      textStyle: TextStyle(),
+                      child: Text(
+                        'Expenses',
+                        style: TextStyle(
+                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          color: bohibaTheme.textTheme.bodyMedium!.color,
+                        ),
                       ),
                     ),
+                  );
+                }
+                showMenu(
+                  context: context,
+                  position: RelativeRect.fromLTRB(
+                    tapDownDetails.globalPosition.dx,
+                    tapDownDetails.globalPosition.dy,
+                    0,
+                    0,
                   ),
-                );
-              }
-              showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(
-                  tapDownDetails.globalPosition.dx,
-                  tapDownDetails.globalPosition.dy,
-                  0,
-                  0,
-                ),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   ),
-                ),
-                items: items,
-              ).then((value) async {
-                if (!context.mounted) return value;
-                switch (value) {
-                  case ServiceType.driver:
-                    return await navigatState
-                        .pushNamed(AppRoute.allDriver)
-                        .then((onValue) async {
-                      if (onValue != null) {
-                        await controller.getDriverList();
-                        controller.arrDriver.refresh();
-                      }
-                    });
-                  case ServiceType.trip:
-                    return navigatState.pushNamed(AppRoute.allTrip);
-                  case ServiceType.truck:
-                    return navigatState.pushNamed(AppRoute.allTruck).then(
-                      (onValue) async {
+                  items: items,
+                ).then((value) async {
+                  if (!context.mounted) return value;
+                  switch (value) {
+                    case ServiceType.driver:
+                      return await navigatState.pushNamed(AppRoute.allDriver).then((onValue) async {
+                        if (onValue != null) {
+                          await controller.getDriverList();
+                          controller.arrDriver.refresh();
+                        }
+                      });
+                    case ServiceType.trip:
+                      return navigatState.pushNamed(AppRoute.allTrip);
+                    case ServiceType.truck:
+                      return navigatState.pushNamed(AppRoute.allTruck).then((onValue) async {
                         if (onValue != null) {
                           await controller.getTruckList();
-                          controller.arrTruck.refresh();
                         }
-                      },
-                    );
-                  case ServiceType.expenses:
-                    return navigatState.pushNamed(AppRoute.allOwnerExpense);
-                  case ServiceType.manager:
-                    break;
+                      });
+                    case ServiceType.expenses:
+                      return navigatState.pushNamed(AppRoute.allOwnerExpense);
+                    case ServiceType.manager:
+                      break;
 
-                  default:
-                  // Manager
-                }
-              });
-            },
-            icon: const Icon(EvaIcons.plus),
-          ),
+                    default:
+                    // None
+                  }
+                });
+              },
+              icon: Icon(
+                EvaIcons.plus,
+                color: controller.isScrolled.value ? bohibaTheme.iconTheme.color : bohibaTheme.colorScheme.tertiary,
+              ),
+            ),
 
-          //Notification
-          /*AppBarIconBox(
+            //Notification
+            /*AppBarIconBox(
                 onTap: () {
                   navigatState.pushNamed(AppRoute.notifyScreen);
                 },
@@ -383,8 +215,9 @@ class HomeAppBar extends GetView<HomeController>
                 },
                 icon: Icon(Remix.heart_3_line),
               )*/
-        ],
-      );
-    });
+          ],
+        );
+      },
+    );
   }
 }

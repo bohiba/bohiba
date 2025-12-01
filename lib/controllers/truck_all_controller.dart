@@ -18,9 +18,14 @@ class TruckAllController extends GetxController {
   Rx<AddAssetUsing> addAsset = AddAssetUsing.scan.obs;
 
   // Driver Details
-  RxList<TruckModel> arrTruck = <TruckModel>[].obs;
+  Rxn<List<TruckModel>> arrTruck = Rxn<List<TruckModel>>();
 
   RxBool isFav = false.obs;
+
+  RxInt countUpdate = 0.obs;
+
+  RxString strErrorDes = ''.obs;
+  RxString strErrorTitle = ''.obs;
 
   @override
   void onInit() {
@@ -30,24 +35,22 @@ class TruckAllController extends GetxController {
     });
   }
 
-  Future<int> deleteTruck({required int truckId}) async {
-    int success = await TruckService.deleteTruck(truckId: truckId);
-    return success;
-  }
-
   Future<void> getTruckList({
     MethodType methodType = MethodType.local,
     bool resetList = false,
     bool showLoading = false,
   }) async {
+    arrTruck.value = null;
     List<TruckModel>? truckList = await TruckService.getTruckList(
       type: methodType,
       reset: resetList,
       showProgress: showLoading,
     );
     if (truckList != null) {
-      arrTruck.clear();
-      arrTruck.addAll(truckList);
+      arrTruck.value = List<TruckModel>.from(truckList);
+    } else {
+      strErrorTitle.value = 'Truck Not Found';
+      strErrorDes.value = 'Add a driver to assign them to a truck and start trips quickly';
     }
   }
 
@@ -65,6 +68,7 @@ class TruckAllController extends GetxController {
     );
     if (model > 0) {
       vehicleNumberController.clear();
+      countUpdate++;
     }
     return model;
   }

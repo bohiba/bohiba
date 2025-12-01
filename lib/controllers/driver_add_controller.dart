@@ -3,7 +3,7 @@ import 'dart:io';
 
 import '/dist/app_enums.dart';
 import '/model/truck_model.dart';
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 import '/services/dio_serivce.dart';
 import '/services/truck_service.dart';
 import '/services/driver_service.dart';
@@ -108,8 +108,7 @@ class DriverAddController extends ImageUploadController {
     }
 
     if (bodyObj.isNotEmpty) {
-      UserModel? driver = await DriverService.createDriver(
-          bodyObj: bodyObj, vehcileNumber: truckNo);
+      UserModel? driver = await DriverService.createDriver(bodyObj: bodyObj, vehcileNumber: truckNo);
       if (driver != null) {
         truckNo = null;
         licenseCtrl.clear();

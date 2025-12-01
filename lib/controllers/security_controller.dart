@@ -28,6 +28,8 @@ class SecurityController extends GetxController {
     if (enable) {}
   }
 
+  Future<void> deleteAccount() async {}
+
   Future<void> getBiometricInfo() async {
     isBioMetricEnabled.value = DeviceInfoService.isBioMetricEnabled();
   }

@@ -1,4 +1,4 @@
-import 'package:bohiba/extensions/bohiba_extension.dart';
+import '/extensions/bohiba_extension.dart';
 
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
@@ -48,8 +48,7 @@ class StatusBoxWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
               decoration: BoxDecoration(
-                color: statusColor ??
-                    bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
+                color: statusColor ?? bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(

@@ -10,6 +10,7 @@ class DateInputField extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String? inputValue)? validateField;
   final String? hintText;
+  final bool showPrefixIcon;
   const DateInputField({
     super.key,
     this.width,
@@ -18,6 +19,7 @@ class DateInputField extends StatefulWidget {
     this.controller,
     this.hintText,
     this.validateField,
+    this.showPrefixIcon = true,
   });
 
   @override
@@ -40,25 +42,19 @@ class _DateInputFieldState extends State<DateInputField> {
         onChanged: (value) {},
         validator: widget.validateField,
         style: TextStyle(
-          fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
           color: bohibaTheme.textTheme.bodyLarge!.color,
           letterSpacing: 1.2,
         ),
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: bohibaTheme.inputDecorationTheme.hintStyle,
-          // fillColor: BohibaColors.primaryColor,
-          prefixIcon: Icon(
-            EvaIcons.calendarOutline,
-            // color: BohibaColors.borderColor,
-          ),
-
+          prefixIcon: widget.showPrefixIcon ? Icon(EvaIcons.calendarOutline) : null,
           border: bohibaTheme.inputDecorationTheme.border,
           prefixIconColor: bohibaTheme.inputDecorationTheme.prefixIconColor,
           enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
           focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
-          focusedErrorBorder:
-              bohibaTheme.inputDecorationTheme.focusedErrorBorder,
+          focusedErrorBorder: bohibaTheme.inputDecorationTheme.focusedErrorBorder,
           errorBorder: bohibaTheme.inputDecorationTheme.focusedErrorBorder,
         ),
       ),

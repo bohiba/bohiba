@@ -62,14 +62,62 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       sectionTitle("Trip Analytics"),
-                      Wrap(
-                        spacing: 5.w,
-                        runSpacing: 5.h,
-                        children: [
-                          metricCard('Total Trip', '1,250'),
-                          metricCard("Average Trip Distance", "350 KM"),
-                          metricCard("On-Time Delivery Rate", "95%"),
-                        ],
+                      Row(
+                        children: List.generate(
+                          controller.arrTripAnalytic.length,
+                          (index) {
+                            Map tripAnalytic = controller.arrTripAnalytic[index];
+                            if (tripAnalytic['enable']) {
+                              return Expanded(
+                                child: Container(
+                                  height: ScreenUtils.width / 4,
+                                  padding: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: index % 2 == 0 ? bohibaTheme.cardColor : bohibaTheme.dividerColor,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        tripAnalytic['name'],
+                                        maxLines: 2,
+                                        style: bohibaTheme.textTheme.titleMedium,
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          '$index',
+                                          style: bohibaTheme.textTheme.headlineLarge,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        ),
+                      ),
+
+                      Container(
+                        height: 25.h,
+                        width: ScreenUtils.width,
+                        margin: EdgeInsets.symmetric(vertical: 10.h),
+                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.r),
+                          border: Border.all(width: 1.0, color: bohibaTheme.colorScheme.onPrimary),
+                          color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.2),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('On-Time Delivery Rate'),
+                            Text('100%'),
+                          ],
+                        ),
                       ),
                       chartSection(
                         title: "Trips Over Time",
@@ -247,8 +295,7 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         ),
                       ),
                       sectionTitle("Business Insights"),
-                      sectionText(
-                          "Note: The given data are just used for demo reperesentation to show you what feature are upcoming up next to enhance your business"),
+                      sectionText("Note: The given data are just used for demo reperesentation to show you what feature are upcoming up next to enhance your business"),
                       // sectionText(
                       //     "Key trends and insights based on your data, including areas for improvement and opportunities for growth."),
                     ],
@@ -281,10 +328,7 @@ class AnalyticPage extends GetView<AnalyticConroller> {
   static Widget metricRow(List<Widget> children) => Padding(
         padding: const EdgeInsets.all(12),
         child: Row(
-          children: children
-              .map((w) => Expanded(
-                  child: Padding(padding: const EdgeInsets.all(6), child: w)))
-              .toList(),
+          children: children.map((w) => Expanded(child: Padding(padding: const EdgeInsets.all(6), child: w))).toList(),
         ),
       );
 
@@ -419,8 +463,7 @@ class ReusableLineChart extends StatelessWidget {
                 showTitles: true,
                 reservedSize: 15,
                 interval: 1,
-                getTitlesWidget: (value, meta) =>
-                    Text(value.toInt().toString()),
+                getTitlesWidget: (value, meta) => Text(value.toInt().toString()),
               ),
             ),
             topTitles: AxisTitles(
@@ -500,16 +543,14 @@ class ReusableBarChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: showTitles,
                 reservedSize: 28,
-                getTitlesWidget: (value, meta) =>
-                    Text(value.toInt().toString()),
+                getTitlesWidget: (value, meta) => Text(value.toInt().toString()),
               ),
             ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: showTitles,
                 reservedSize: 28,
-                getTitlesWidget: (value, meta) =>
-                    Text(value.toInt().toString()),
+                getTitlesWidget: (value, meta) => Text(value.toInt().toString()),
               ),
             ),
             topTitles: AxisTitles(

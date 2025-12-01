@@ -1,4 +1,4 @@
-import 'package:bohiba/model/job_detail_model.dart';
+import '/model/job_detail_model.dart';
 
 import '../services/owner_job_service.dart';
 import '/theme/bohiba_theme.dart';

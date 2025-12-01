@@ -1,4 +1,4 @@
-import 'package:bohiba/controllers/open_driver_list_controller.dart';
+import '/controllers/open_driver_list_controller.dart';
 import 'package:get/get.dart';
 
 class AllOpenDriverBinding extends Bindings {

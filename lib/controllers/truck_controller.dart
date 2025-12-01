@@ -11,8 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class TruckController extends ImageUploadController {
-  final RefreshController refreshTruckPage =
-      RefreshController(initialRefresh: false);
+  final RefreshController refreshTruckPage = RefreshController(initialRefresh: false);
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImg;
 
@@ -22,6 +21,7 @@ class TruckController extends ImageUploadController {
   RxBool isDriverAssigned = false.obs;
 
   RxString strErrorDes = ''.obs;
+  RxString strErrorTitle = ''.obs;
 
   @override
   void onInit() {
@@ -42,18 +42,20 @@ class TruckController extends ImageUploadController {
     }
   }
 
-  Future<void> setImage() async {
+  Future<int> setImage() async {
     TruckModel? model;
     if (selectedImg.value != null) {
       model = await TruckService.setTruckImage(
-          oldTruck: truckModel.value,
-          imagePath: pickedImg!.path,
-          imageFile: [File(pickedImg!.path)]);
+        oldTruck: truckModel.value,
+        imageFile: [File(pickedImg!.path)],
+      );
     }
-
     if (model != null) {
+      selectedImg.value = null;
       truckModel.value = model;
+      return 1;
     }
+    return 0;
   }
 
   Future<TruckModel?> getTruckInfo({
@@ -61,25 +63,22 @@ class TruckController extends ImageUploadController {
     MethodType methodType = MethodType.local,
     int fetchType = 0,
   }) async {
-    TruckModel? truck = await TruckService.getTruck(
-        value: truckFetchValue, methodType: methodType, type: fetchType);
+    TruckModel? truck = await TruckService.getTruck(value: truckFetchValue, methodType: methodType, type: fetchType);
     if (truck != null) {
       truckModel.value = truck;
       update();
     } else {
-      strErrorDes.value =
-          'Sorry we unable to find your truck, Make sure truck is added with your account.';
+      strErrorTitle.value = 'Truck Not Found';
+      strErrorDes.value = 'Sorry we unable to find your truck, Make sure truck is added with your account.';
     }
-    isDriverAssigned.value =
-        truckModel.value?.driverUuid == null ? false : true;
+    isDriverAssigned.value = truckModel.value?.driverUuid == null ? false : true;
     return truck;
   }
 
   Future<int> removeDriver() async {
     int success = await TruckService.removeDriver(oldTruck: truckModel.value!);
     if (success > 0) {
-      TruckModel? updatedTruck =
-          await TruckService.getTruck(value: truckModel.value?.id!);
+      TruckModel? updatedTruck = await TruckService.getTruck(value: truckModel.value?.id!);
       if (updatedTruck != null) {
         truckModel.value = updatedTruck;
         isDriverAssigned.value = false;
@@ -118,8 +117,7 @@ class TruckController extends ImageUploadController {
         GlobalService.showAlertDialog(
           status: AlertStatus.info,
           title: 'Permission',
-          description:
-              'Bohiba need file permission to select image by you! Please `Allow access` to access',
+          description: 'Bohiba need file permission to select image by you! Please `Allow access` to access',
           discardBtnTxt: 'Deny',
           saveBtnTxt: 'Allow',
           onSave: () async {

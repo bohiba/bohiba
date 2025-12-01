@@ -1,9 +1,9 @@
+import '/dist/component_exports.dart';
+
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
-import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';
 import '/controllers/trip_controller.dart';
-import '/component/ui/tile_decorative.dart';
 
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
@@ -59,22 +59,40 @@ class TripTile extends GetView<TripController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tripInfo.tripCode ?? '',
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                      letterSpacing:
-                          bohibaTheme.textTheme.labelMedium!.letterSpacing,
-                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: colors,
-                    ),
-                  ),
-                  Text(
                     tripInfo.truck?.regdNumber ?? '',
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                       color: bohibaTheme.textTheme.labelLarge!.color,
+                    ),
+                  ),
+                  BohibaMarqueeText(
+                    width: ScreenUtils.width * 0.45,
+                    text: tripInfo.origin?.toUpperCase(),
+                    overflowText: tripInfo.origin?.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                      letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
+                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                      color: colors,
+                    ),
+                    marqueeTextStyle: TextStyle(
+                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                      letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
+                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                      color: colors,
+                    ),
+                    preserFontSize: [
+                      bohibaTheme.textTheme.labelMedium!.fontSize!,
+                    ],
+                  ),
+                  Text(
+                    tripInfo.startDate ?? '',
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
+                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                      color: colors,
                     ),
                   ),
                 ],

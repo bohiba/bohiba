@@ -1,7 +1,7 @@
 import '/dist/app_enums.dart';
 import '/model/news_model.dart';
 import '/model/truck_model.dart';
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 import '/model/mines_model.dart';
 import '/model/trip_model.dart';
 import '/model/rating_model.dart';
@@ -33,8 +33,7 @@ class MainService {
       List<TruckModel> mainTrucks = await TruckService.getTruckList() ?? [];
       List<MinesModel> mainMines = await MinesService.getMinesList() ?? [];
       List<UserModel> mainDrivers = await DriverService.getAllDriver() ?? [];
-      List<UserModel> openToDriverList =
-          await OpenDriverService.getAllOpenDriver(showProgress: false) ?? [];
+      List<UserModel> openToDriverList = await OpenDriverService.getAllOpenDriver(showProgress: false) ?? [];
       List<NewsModel> mainNews = await NewsService.getAllNews() ?? [];
       if (showProgress) GlobalService.dismissProgress();
       return {
@@ -52,8 +51,7 @@ class MainService {
       if (!await DeviceInfoService.hasInternet()) return null;
 
       if (showProgress) GlobalService.showProgress();
-      ApiResponse serviceResponse = await _dioService
-          .handleApiWithRetry(() => _dioService.get(ApiEndPoint.apiMain));
+      ApiResponse serviceResponse = await _dioService.handleApiWithRetry(() => _dioService.get(ApiEndPoint.apiMain));
 
       switch (serviceResponse.statusCode) {
         case 401:
@@ -93,13 +91,11 @@ class MainService {
             for (Map driver in driverList) {
               if (driver.containsKey('rating')) {
                 List<dynamic> ratingList = driver['rating'];
-                List<Map<String, dynamic>> arrRatingObj =
-                    ratingList.map((rating) {
+                List<Map<String, dynamic>> arrRatingObj = ratingList.map((rating) {
                   return RatingModel.toDB(rating);
                 }).toList();
 
-                int insertRating =
-                    await RatingService.insertAll(ratingList: arrRatingObj);
+                int insertRating = await RatingService.insertAll(ratingList: arrRatingObj);
                 if (insertRating > 0) {
                   GlobalService.printHandler(
                     'Insert rating success: $insertRating',
@@ -107,8 +103,7 @@ class MainService {
                 }
               }
             }
-            int insertDriver =
-                await DriverService.insertAllDriver(arrMapDriver);
+            int insertDriver = await DriverService.insertAllDriver(arrMapDriver);
 
             if (insertDriver > 0) {
               arrDriverModel = arrMapDriver.map((json) {
@@ -126,18 +121,13 @@ class MainService {
               Map<String, dynamic> mapTrip = TripModel.toDB(trip);
 
               TripModel tripModel = TripModel.fromDb(mapTrip);
-              int successTripInsert =
-                  await TripService.insertTrip(trip: tripModel);
-              GlobalService.printHandler(
-                  "Trip Added in DB: $successTripInsert");
+              int successTripInsert = await TripService.insertTrip(trip: tripModel);
+              GlobalService.printHandler("Trip Added in DB: $successTripInsert");
 
               // Expense Insert
-              if (trip.containsKey('expenses') &&
-                  trip['expenses'] != null &&
-                  (trip['expenses'] as List).isNotEmpty) {
+              if (trip.containsKey('expenses') && trip['expenses'] != null && (trip['expenses'] as List).isNotEmpty) {
                 List tripExpense = trip['expenses'];
-                List<Map<String, dynamic>> arrMapExpense =
-                    tripExpense.map((expense) {
+                List<Map<String, dynamic>> arrMapExpense = tripExpense.map((expense) {
                   return TripExpense.toDB(expense);
                 }).toList();
 
@@ -151,17 +141,13 @@ class MainService {
                   }).toList();
 
                   tripModel.expenses?.addAll(tripExpenseList);
-                  GlobalService.printHandler(
-                      "Trip Expense in DB: $successExpense");
+                  GlobalService.printHandler("Trip Expense in DB: $successExpense");
                 }
               }
 
-              if (trip.containsKey('payments') &&
-                  trip['payments'] != null &&
-                  (trip['payments'] as List).isNotEmpty) {
+              if (trip.containsKey('payments') && trip['payments'] != null && (trip['payments'] as List).isNotEmpty) {
                 List tripPayments = trip['payments'];
-                List<Map<String, dynamic>> arrMapPayment =
-                    tripPayments.map((payment) {
+                List<Map<String, dynamic>> arrMapPayment = tripPayments.map((payment) {
                   return TripPayment.toDB(payment);
                 }).toList();
 
@@ -171,20 +157,16 @@ class MainService {
                 );
 
                 if (successPayment > 0) {
-                  List<TripPayment> tripPaymentList =
-                      arrMapPayment.map((payment) {
+                  List<TripPayment> tripPaymentList = arrMapPayment.map((payment) {
                     return TripPayment.fromDb(payment);
                   }).toList();
 
                   tripModel.payments?.addAll(tripPaymentList);
-                  GlobalService.printHandler(
-                      "Trip Payment in DB: $successPayment");
+                  GlobalService.printHandler("Trip Payment in DB: $successPayment");
                 }
               }
 
-              if (trip.containsKey('documents') &&
-                  trip['documents'] != null &&
-                  (trip['documents'] as List).isNotEmpty) {
+              if (trip.containsKey('documents') && trip['documents'] != null && (trip['documents'] as List).isNotEmpty) {
                 List tripDocuments = trip['documents'];
                 List<Map<String, dynamic>> arrMapDoc = tripDocuments.map((doc) {
                   return TripDocument.toDB(doc);
@@ -205,12 +187,9 @@ class MainService {
                 }
               }
 
-              if (trip.containsKey('reassignment') &&
-                  trip['reassignment'] != null &&
-                  (trip['reassignment'] as List).isNotEmpty) {
+              if (trip.containsKey('reassignment') && trip['reassignment'] != null && (trip['reassignment'] as List).isNotEmpty) {
                 List tripReassignment = trip['reassignment'];
-                List<Map<String, dynamic>> arrMapReassign =
-                    tripReassignment.map((assign) {
+                List<Map<String, dynamic>> arrMapReassign = tripReassignment.map((assign) {
                   return Reassignment.toDB(assign);
                 }).toList();
 
@@ -220,14 +199,12 @@ class MainService {
                 );
 
                 if (successReassign > 0) {
-                  List<Reassignment> tripReassignList =
-                      arrMapReassign.map((assign) {
+                  List<Reassignment> tripReassignList = arrMapReassign.map((assign) {
                     return Reassignment.fromDb(assign);
                   }).toList();
 
                   tripModel.reassignment?.addAll(tripReassignList);
-                  GlobalService.printHandler(
-                      "Trip Reassign in DB: $successReassign");
+                  GlobalService.printHandler("Trip Reassign in DB: $successReassign");
                 }
               }
 
@@ -238,25 +215,19 @@ class MainService {
           List<OwnerExpense> arrOwnerExpenseModel = [];
           if (mainObj.containsKey('owner_expense')) {
             List<dynamic> expenseList = mainObj['owner_expense'];
-            List<Map<String, dynamic>> arrMapOwnerExpense =
-                expenseList.map((e) => OwnerExpense.toDB(e)).toList();
+            List<Map<String, dynamic>> arrMapOwnerExpense = expenseList.map((e) => OwnerExpense.toDB(e)).toList();
             await OwnerExpenseService.clearAll();
-            int insertOwnerExpense =
-                await OwnerExpenseService.insertAll(arrMapOwnerExpense);
+            int insertOwnerExpense = await OwnerExpenseService.insertAll(arrMapOwnerExpense);
             if (insertOwnerExpense > 0) {
-              arrOwnerExpenseModel = arrMapOwnerExpense
-                  .map((e) => OwnerExpense.fromDB(e))
-                  .toList();
+              arrOwnerExpenseModel = arrMapOwnerExpense.map((e) => OwnerExpense.fromDB(e)).toList();
             }
-            GlobalService.printHandler(
-                "Onwer Expense Added in DB: $insertOwnerExpense");
+            GlobalService.printHandler("Onwer Expense Added in DB: $insertOwnerExpense");
           }
 
           List<UserModel> arrOpenDriverModel = [];
           if (mainObj.containsKey('looking_jobs')) {
             List<dynamic> arrOpenDriver = mainObj['looking_jobs'];
-            List<Map<String, dynamic>> arrMapOpenDriver =
-                arrOpenDriver.map((json) {
+            List<Map<String, dynamic>> arrMapOpenDriver = arrOpenDriver.map((json) {
               return UserModel.toDB(json, isOpenDriver: true);
             }).toList();
             arrOpenDriverModel = arrMapOpenDriver.map((json) {
@@ -298,8 +269,7 @@ class MainService {
               arrNewsModel = dbNewsList.map((news) {
                 return NewsModel.fromDB(news);
               }).toList();
-              GlobalService.printHandler(
-                  "News Added in DB: $successNewsInsert");
+              GlobalService.printHandler("News Added in DB: $successNewsInsert");
             }
           }
           if (showProgress) GlobalService.dismissProgress();

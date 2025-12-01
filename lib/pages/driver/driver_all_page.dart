@@ -1,7 +1,7 @@
 import '/theme/bohiba_theme.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-import '/model/driver_model.dart';
+import '../../model/user_model.dart';
 import '/pages/driver/driver_tile.dart';
 import '/routes/app_route.dart';
 import '/dist/app_enums.dart';
@@ -52,41 +52,39 @@ class DriverAllPage extends GetView<DriverAllController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'No Driver Found',
+                          controller.strErrorTitle.value,
                           style: bohibaTheme.textTheme.displaySmall,
                         ),
                         Text(
-                          'Add a driver to assign them to a truck and start trips quickly.',
+                          controller.strErrorDes.value,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleSmall!.color,
                           ),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            navState
-                                .pushNamed(AppRoute.addDriver)
-                                .then((onValue) async {
-                              if (onValue != null) {
-                                await controller.getDriverList(
-                                  type: MethodType.api,
-                                );
-                              }
-                            });
-                          },
-                          child: Text('Add New Driver'),
-                        )
+                        if (controller.strErrorDes.isEmpty)
+                          TextButton(
+                            onPressed: () {
+                              navState.pushNamed(AppRoute.addDriver).then((onValue) async {
+                                if (onValue != null) {
+                                  await controller.getDriverList(
+                                    type: MethodType.api,
+                                  );
+                                }
+                              });
+                            },
+                            child: Text('Add New Driver'),
+                          )
+                        else
+                          SizedBox.shrink()
                       ],
                     ),
                   ),
                 )
               : ListView.builder(
-                  itemCount: controller.arrDriver.length > 3
-                      ? 3
-                      : controller.arrDriver.length,
+                  itemCount: controller.arrDriver.length > 3 ? 3 : controller.arrDriver.length,
                   padding: EdgeInsets.only(
                     top: ScreenUtils.height10,
                     bottom: ScreenUtils.height5,
@@ -94,22 +92,18 @@ class DriverAllPage extends GetView<DriverAllController> {
                     right: ScreenUtils.width15,
                   ),
                   itemBuilder: (context, index) {
-                    UserModel driverObj = controller.arrDriver[index];
+                    UserModel driver = controller.arrDriver[index];
                     return DriverTile(
-                      driver: driverObj,
-                      allowedActions: [
-                        ActionType.view,
-                        ActionType.share,
-                        ActionType.other
-                      ],
+                      driver: driver,
+                      allowedActions: [ActionType.view, ActionType.share, ActionType.other],
                       onPressed: () {
-                        navState
-                            .pushNamed(AppRoute.driver, arguments: driverObj)
-                            .then((onValue) async {
-                          if (onValue != null) {
-                            await controller.getDriverList();
-                          }
-                        });
+                        navState.pushNamed(AppRoute.driver, arguments: driver.id).then(
+                          (onValue) async {
+                            if (onValue != null) {
+                              await controller.getDriverList();
+                            }
+                          },
+                        );
                       },
                     );
                   },

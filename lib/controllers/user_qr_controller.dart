@@ -1,7 +1,7 @@
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/model/profile_model.dart';
-import 'package:bohiba/services/encryption_service.dart';
-import 'package:bohiba/services/profile_service.dart';
+import '/dist/app_enums.dart';
+import '/model/profile_model.dart';
+import '/services/encryption_service.dart';
+import '/services/profile_service.dart';
 import 'package:get/get.dart';
 
 class UserQrController extends GetxController {
@@ -19,8 +19,7 @@ class UserQrController extends GetxController {
     MethodType methodType = MethodType.local,
     bool showLoading = false,
   }) async {
-    ProfileModel? profile = await ProfileService.getProfile(
-        type: methodType, showProgress: showLoading);
+    ProfileModel? profile = await ProfileService.getProfile(type: methodType, showProgress: showLoading);
     if (profile != null) {
       profileModel.value = profile;
       return profile;

@@ -3,15 +3,14 @@ import 'api_end_point.dart';
 import 'global_service.dart';
 import 'device_info_service.dart';
 import '/dist/app_enums.dart';
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 
 class OpenDriverService {
   static int _currentPage = 1;
   static int _lastPage = 1;
   static final DioService _dioService = DioService();
 
-  static Future<List<UserModel>?> getSentReqList(
-      {bool showProgress = true}) async {
+  static Future<List<UserModel>?> getSentReqList({bool showProgress = true}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return null;
     }
@@ -36,7 +35,7 @@ class OpenDriverService {
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
           title: 'Connection',
-          desc: 'Failed to get connection',
+          desc: response.message,
         );
         return null;
     }
@@ -47,9 +46,7 @@ class OpenDriverService {
       return null;
     }
     GlobalService.showProgress();
-    ApiResponse response = await _dioService.get(
-      '${ApiEndPoint.apiViewDriver}/$driverId',
-    );
+    ApiResponse response = await _dioService.get('${ApiEndPoint.apiViewDriver}/$driverId');
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:

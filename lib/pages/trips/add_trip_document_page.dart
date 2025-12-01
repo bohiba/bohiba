@@ -1,6 +1,6 @@
-import 'package:bohiba/component/bohiba_dropdown/app_dropdown_button.dart';
-import 'package:bohiba/dist/component_exports.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
+import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '/dist/component_exports.dart';
+import '/extensions/bohiba_extension.dart';
 
 import '/controllers/add_trip_document_controller.dart';
 import '/component/bohiba_buttons/primary_button.dart';
@@ -64,23 +64,14 @@ class AddTripDocumentPage extends GetView<AddTripDocumentController> {
               AppDropdown(
                 menuHeight: ScreenUtils.height * 0.20,
                 hint: 'Choose Document type',
-                items: [
-                  'challan',
-                  'e-way_bill',
-                  'fuel_bill',
-                  'toll_receipt',
-                  'weighbridge_slip',
-                  'rto_receipt',
-                  'other'
-                ],
+                items: ['challan', 'e-way_bill', 'fuel_bill', 'toll_receipt', 'weighbridge_slip', 'rto_receipt', 'other'],
                 labelBuilder: (String p1) {
                   return p1.toCapitalizedLabel();
                 },
               ),
               Spacer(),
               Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
                 child: PrimaryButton(
                   onPressed: () async => await controller.addDocument(),
                   label: 'Save',

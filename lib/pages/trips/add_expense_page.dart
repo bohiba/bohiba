@@ -1,6 +1,6 @@
-import 'package:bohiba/component/bohiba_buttons/primary_button.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
-import 'package:bohiba/pages/widget/required_label.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/extensions/bohiba_extension.dart';
+import '/pages/widget/required_label.dart';
 
 import '/controllers/trip_expense_add_controller.dart';
 import 'package:get/get.dart';
@@ -38,16 +38,10 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                   DateInputField(
                     width: ScreenUtils.width,
                     onTap: () async {
-                      DateTime? expenseDate =
-                          await GlobalService.datePickerModal(
-                              context: context,
-                              startTime: DateFormat('dd-MM-yyyy')
-                                  .parse(controller.tripModel?.startDate ?? ''),
-                              endTime: DateFormat('dd-MM-yyyy').parse(
-                                  controller.tripModel?.endedDate ?? ''));
+                      DateTime? expenseDate = await GlobalService.datePickerModal(
+                          context: context, startTime: DateFormat('dd-MM-yyyy').parse(controller.tripModel?.startDate ?? ''), endTime: DateFormat('dd-MM-yyyy').parse(controller.tripModel?.endedDate ?? ''));
                       if (expenseDate != null) {
-                        controller.expensedateController.text =
-                            DateFormat('dd-MM-yyyy').format(expenseDate);
+                        controller.expensedateController.text = DateFormat('dd-MM-yyyy').format(expenseDate);
                       }
                     },
                     controller: controller.expensedateController,
@@ -73,8 +67,7 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                   RequiredLabel(label: 'Expense', required: true),
                   TextInputField(
                     hintText: 'Amount',
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
                     controller: controller.paidController,
                   ),
                 ],

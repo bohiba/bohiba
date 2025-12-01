@@ -1,5 +1,5 @@
-import 'package:bohiba/dist/component_exports.dart';
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/dist/component_exports.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,8 +23,7 @@ class AppSkeletonLoader extends StatefulWidget {
   State<AppSkeletonLoader> createState() => _AppSkeletonLoaderState();
 }
 
-class _AppSkeletonLoaderState extends State<AppSkeletonLoader>
-    with SingleTickerProviderStateMixin {
+class _AppSkeletonLoaderState extends State<AppSkeletonLoader> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late CurvedAnimation _animation;
 
@@ -66,8 +65,7 @@ class _AppSkeletonLoaderState extends State<AppSkeletonLoader>
                 return Padding(
                   padding: EdgeInsets.only(bottom: 5.h),
                   child: ClipRRect(
-                    borderRadius:
-                        widget.borderRadius ?? BorderRadius.circular(12.r),
+                    borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
                     child: ShaderMask(
                       shaderCallback: (bounds) {
                         final shimmerWidth = bounds.width * 0.95;
@@ -82,11 +80,9 @@ class _AppSkeletonLoaderState extends State<AppSkeletonLoader>
                             Colors.grey,
                           ],
                           stops: [
-                            ((dx - shimmerWidth) / bounds.width)
-                                .clamp(0.0, 1.0),
+                            ((dx - shimmerWidth) / bounds.width).clamp(0.0, 1.0),
                             (dx / bounds.width).clamp(0.0, 1.0),
-                            ((dx + shimmerWidth) / bounds.width)
-                                .clamp(0.0, 1.0),
+                            ((dx + shimmerWidth) / bounds.width).clamp(0.0, 1.0),
                           ],
                         ).createShader(bounds);
                       },
@@ -96,8 +92,7 @@ class _AppSkeletonLoaderState extends State<AppSkeletonLoader>
                         height: widget.height ?? ScreenUtils.height * 0.075,
                         decoration: BoxDecoration(
                           color: baseColor,
-                          borderRadius: widget.borderRadius ??
-                              BorderRadius.circular(12.r),
+                          borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
                         ),
                         child: Row(
                           children: [

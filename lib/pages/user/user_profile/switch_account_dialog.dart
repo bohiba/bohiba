@@ -1,6 +1,8 @@
+import '/dist/component_exports.dart';
+import '/services/user_role_type.dart';
+import 'package:remixicon/remixicon.dart';
+
 import '/model/logged_in_user_model.dart';
-import '/component/screen_utils.dart';
-import '/component/ui/tile_decorative.dart';
 import '/component/bohiba_buttons/secoundary_button.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/bohiba_inputfield/password_inputfield.dart';
@@ -75,11 +77,8 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                     itemCount: controller.arrLoggedInUser.length,
                     padding: EdgeInsets.only(top: ScreenUtils.height10),
                     itemBuilder: (context, index) {
-                      LoggedInAccountModel loggedUser =
-                          controller.arrLoggedInUser[index];
-                      isLoggedIn =
-                          (controller.profileModel.value?.uuid ?? '') ==
-                              (loggedUser.uuid ?? '');
+                      LoggedInAccountModel loggedUser = controller.arrLoggedInUser[index];
+                      isLoggedIn = (controller.profileModel.value?.uuid ?? '') == (loggedUser.uuid ?? '');
                       return GestureDetector(
                         onTap: () {
                           controller.selectUser.value = loggedUser;
@@ -92,39 +91,29 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                             vertical: ScreenUtils.height10,
                           ),
                           decoration: TileDecorative(
-                            color: isLoggedIn
-                                ? bohibaTheme.colorScheme.onSurface
-                                : null,
+                            color: isLoggedIn ? bohibaTheme.colorScheme.onSurface : null,
                           ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CircleAvatar(
                                 radius: 20.w,
-                                backgroundColor: bohibaTheme.dividerColor,
+                                backgroundColor: bohibaTheme.colorScheme.tertiary,
+                                child: loggedUser.roleId == UserRoles.truckOwner ? Icon(Remix.user_2_fill) : Icon(Remix.truck_line),
                               ),
-                              Gap(8.w),
-                              SizedBox(
-                                width: ScreenUtils.width * 0.35.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      loggedUser.name ?? '',
-                                      style: bohibaTheme.textTheme.labelLarge,
+                              Gap(10.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  BohibaMarqueeText(width: ScreenUtils.width * 0.35.w, text: loggedUser.name ?? '', overflowText: loggedUser.name ?? ''),
+                                  Text(
+                                    loggedUser.uuid ?? '',
+                                    style: TextStyle(
+                                      fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
+                                      color: bohibaTheme.textTheme.titleLarge!.color,
                                     ),
-                                    Text(
-                                      loggedUser.uuid ?? '',
-                                      style: TextStyle(
-                                        fontSize: bohibaTheme
-                                            .textTheme.titleSmall!.fontSize,
-                                        color: bohibaTheme
-                                            .textTheme.titleLarge!.color,
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                               const Spacer(),
                               Obx(
@@ -161,8 +150,7 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                             isScrollControlled: false,
                             useRootNavigator: true,
                             shape: BottomModalShape(),
-                            backgroundColor:
-                                bohibaTheme.scaffoldBackgroundColor,
+                            backgroundColor: bohibaTheme.scaffoldBackgroundColor,
                             Padding(
                               padding: EdgeInsets.only(
                                 left: ScreenUtils.height15,
@@ -179,29 +167,25 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Login to new account',
-                                        style:
-                                            bohibaTheme.textTheme.displaySmall,
+                                        style: bohibaTheme.textTheme.displaySmall,
                                       ),
                                     ),
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         "Choose an account to switch — stay connected and keep your work flowing smoothly.",
-                                        style:
-                                            bohibaTheme.textTheme.titleMedium,
+                                        style: bohibaTheme.textTheme.titleMedium,
                                       ),
                                     ),
                                     TextInputField(
                                       width: ScreenUtils.width,
                                       hintText: 'User ID',
                                       maxLength: 6,
-                                      textCapitalization:
-                                          TextCapitalization.characters,
+                                      textCapitalization: TextCapitalization.characters,
                                       nextActionType: TextInputAction.next,
                                       prefixIcon: Icon(
                                         Icons.person_rounded,
-                                        color: bohibaTheme.inputDecorationTheme
-                                            .prefixIconColor,
+                                        color: bohibaTheme.inputDecorationTheme.prefixIconColor,
                                       ),
                                     ),
                                     PasswordInputField(
@@ -223,13 +207,10 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                       PrimaryButton(
                         width: ScreenUtils.width / 2.3,
                         label: 'Switch Account',
-                        onPressed: controller.selectUser.value.uuid == null ||
-                                (controller.selectUser.value.uuid ==
-                                    controller.profileModel.value?.uuid)
+                        onPressed: controller.selectUser.value.uuid == null || (controller.selectUser.value.uuid == controller.profileModel.value?.uuid)
                             ? null
                             : () async {
-                                GlobalService.printHandler(
-                                    '${controller.selectUser.toJson()}');
+                                GlobalService.printHandler('${controller.selectUser.toJson()}');
                               },
                       )
                     ],

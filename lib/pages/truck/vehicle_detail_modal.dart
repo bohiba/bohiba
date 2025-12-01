@@ -1,4 +1,4 @@
-import 'package:bohiba/pages/widget/role_widget.dart';
+import '/pages/widget/role_widget.dart';
 
 import '../../controllers/truck_all_controller.dart';
 import '/routes/app_route.dart';
@@ -23,8 +23,7 @@ class VehicleDetailModal extends GetView<TruckAllController> {
     final NavigatorState navigatorState = Navigator.of(context);
     return SafeArea(
       child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -93,10 +92,7 @@ class VehicleDetailModal extends GetView<TruckAllController> {
                         width: ScreenUtils.width,
                         label: 'Detail View',
                         onPressed: () {
-                          navigatorState
-                              .popAndPushNamed(AppRoute.truck,
-                                  arguments: vehicleDetails!.id)
-                              .then((onValue) async {
+                          navigatorState.popAndPushNamed(AppRoute.truck, arguments: vehicleDetails!.id).then((onValue) async {
                             if (onValue != null) {
                               await controller.getTruckList();
                             }

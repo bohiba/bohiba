@@ -1,5 +1,5 @@
-import 'package:bohiba/extensions/bohiba_extension.dart';
-import 'package:bohiba/model/owner_expenses_model.dart';
+import '/extensions/bohiba_extension.dart';
+import '/model/owner_expenses_model.dart';
 
 import '/model/truck_model.dart';
 import '/services/truck_service.dart';
@@ -66,8 +66,7 @@ class AddOwnerExpenseController extends GetxController {
       'expense_date': expensedateController.text,
       'truck_regd': vehicleController.text,
       'severity': severityController.text.toLowerCase(),
-      'expense_type':
-          expenseTypeController.text.toLowerCase().replaceAll(' ', '_'),
+      'expense_type': expenseTypeController.text.toLowerCase().replaceAll(' ', '_'),
       'amount': amountController.numberValue,
       'description': descController.text
     };
@@ -85,8 +84,7 @@ class AddOwnerExpenseController extends GetxController {
         'expense_date': expensedateController.text,
         'truck_regd': vehicleController.text,
         'severity': severityController.text.toLowerCase(),
-        'expense_type':
-            expenseTypeController.text.toLowerCase().replaceAll(' ', '_'),
+        'expense_type': expenseTypeController.text.toLowerCase().replaceAll(' ', '_'),
         'amount': amountController.numberValue,
         'description': descController.text
       };
@@ -113,12 +111,8 @@ class AddOwnerExpenseController extends GetxController {
   void assignEditValue() {
     expensedateController.text = ownerExpense.value?.expenseDate ?? '';
     vehicleController.text = ownerExpense.value?.truckRegd ?? '';
-    expenseTypeController.text = ownerExpense.value?.expenseType
-            ?.toCapitalizedLabel()
-            .replaceAll('_', ' ') ??
-        '';
-    severityController.text =
-        ownerExpense.value?.severity?.toCapitalizedLabel() ?? '';
+    expenseTypeController.text = ownerExpense.value?.expenseType?.toCapitalizedLabel().replaceAll('_', ' ') ?? '';
+    severityController.text = ownerExpense.value?.severity?.toCapitalizedLabel() ?? '';
     descController.text = ownerExpense.value?.description ?? '';
     amountController.text = ownerExpense.value?.amount.toString() ?? '';
   }

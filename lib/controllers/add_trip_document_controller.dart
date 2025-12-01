@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bohiba/controllers/image_upload_controller.dart';
-import 'package:bohiba/dist/app_enums.dart';
-import 'package:bohiba/model/trip_model.dart';
-import 'package:bohiba/model/truck_model.dart';
-import 'package:bohiba/services/global_service.dart';
-import 'package:bohiba/services/permission_service.dart';
-import 'package:bohiba/services/trip_service.dart';
+import '/controllers/image_upload_controller.dart';
+import '/dist/app_enums.dart';
+import '/model/trip_model.dart';
+import '/model/truck_model.dart';
+import '/services/global_service.dart';
+import '/services/permission_service.dart';
+import '/services/trip_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -27,10 +27,7 @@ class AddTripDocumentController extends ImageUploadController {
   }
 
   Future<int> addDocument() async {
-    Map<String, dynamic> bodyMap = {
-      "trip_id": trip.value?.id,
-      "doc_type": pickedImg?.path
-    };
+    Map<String, dynamic> bodyMap = {"trip_id": trip.value?.id, "doc_type": pickedImg?.path};
     int success = await TripService.addDocument(bodyObj: bodyMap, imageList: [
       File(pickedImg!.path),
     ]);
@@ -62,8 +59,7 @@ class AddTripDocumentController extends ImageUploadController {
         GlobalService.showAlertDialog(
           status: AlertStatus.info,
           title: 'Permission',
-          description:
-              'Bohiba need file permission to select image by you! Please `Allow access` to access',
+          description: 'Bohiba need file permission to select image by you! Please `Allow access` to access',
           discardBtnTxt: 'Deny',
           saveBtnTxt: 'Allow',
           onSave: () async {

@@ -1,8 +1,10 @@
-import 'package:bohiba/component/app_skeleton_loader.dart';
+import '/component/app_skeleton_loader.dart';
+import '/component/search_driver_delegate.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
-import '/model/driver_model.dart';
+import '/model/user_model.dart';
 import '/dist/component_exports.dart';
 import '/pages/driver/open_driver_tile.dart';
 import '/controllers/open_driver_list_controller.dart';
@@ -23,52 +25,18 @@ class ExplorePage extends GetView<OpenDriverListController> {
       appBar: ExploreAppBar(
         title: 'Explore',
         actions: [
-          /*AppBarIconBox(
-            onTap: () {
-              showSearch(
-                context: context,
-                delegate: BohibaSearchDelegate<String>(
-                  items: ['Bidyut', 'Amit'],
-                  hintText: 'Search by trip name',
-                  searchPredicate: (String item, String query) {
-                    final q = query.toLowerCase();
-                    return item.toString().toLowerCase().contains(q) ||
-                        item.toString().toLowerCase().contains(q) ||
-                        item.toString().toLowerCase().contains(q);
-                  },
-                  itemBuilder: (BuildContext context, String item) {
-                    return GestureDetector(
-                      onTap: () {
-                        navigateState.pop();
-                        // Navigate to profile
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 1.0,
-                              color: bohibaTheme.cardColor,
-                            ),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item,
-                              style: bohibaTheme.textTheme.labelLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-            icon: const Icon(EvaIcons.searchOutline),
-          ),*/
+          Tooltip(
+            message: 'Search Driver',
+            child: AppBarIconBox(
+              onTap: () {
+                showSearch(
+                  context: context,
+                  delegate: SearchDriverDelegate(),
+                );
+              },
+              icon: const Icon(EvaIcons.searchOutline),
+            ),
+          ),
         ],
       ),
       body: Obx(() {
@@ -98,8 +66,7 @@ class ExplorePage extends GetView<OpenDriverListController> {
                         'Sent Connect Request',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
                           color: bohibaTheme.textTheme.bodyLarge!.color,
                         ),
                       ),
@@ -146,26 +113,22 @@ class ExplorePage extends GetView<OpenDriverListController> {
                               left: ScreenUtils.height15,
                               right: ScreenUtils.height15,
                             ),
-                            itemCount:
-                                (controller.arrOpenDriver.value?.length ?? 0),
+                            itemCount: (controller.arrOpenDriver.value?.length ?? 0),
                             itemBuilder: (context, index) {
-                              UserModel? openDriver =
-                                  controller.arrOpenDriver.value?[index];
+                              UserModel? openDriver = controller.arrOpenDriver.value?[index];
                               if (openDriver == null) {
                                 return SizedBox.shrink();
                               } else {
                                 return OpenDriverTile(
                                   openDriver: openDriver,
-                                  onTap: () {
-                                    navigateState
-                                        .pushNamed(AppRoute.openDriver,
-                                            arguments: openDriver)
-                                        .then((onValue) async {
-                                      if (onValue != null && onValue != false) {
-                                        await controller.getAllOpenDriver();
-                                      }
-                                    });
-                                  },
+                                  onTap: () => navigateState
+                                      .pushNamed(
+                                    AppRoute.openDriver,
+                                    arguments: openDriver,
+                                  )
+                                      .then((onValue) async {
+                                    if (onValue != null && onValue != false) await controller.getAllOpenDriver();
+                                  }),
                                 );
                               }
                             },

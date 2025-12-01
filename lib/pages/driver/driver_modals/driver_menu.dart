@@ -6,7 +6,7 @@ import '/component/ui/tile_decorative.dart';
 import '/controllers/driver_all_controller.dart';
 import '/dist/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
-import '/model/driver_model.dart';
+import '../../../model/user_model.dart';
 import '/pages/driver/driver_modals/driver_detail_modal.dart';
 import '/pages/driver/driver_modals/edit_driver_model.dart';
 import '/routes/app_route.dart';
@@ -19,8 +19,7 @@ class DriverMenu extends GetView<DriverAllController> {
   final Icon? icon;
   final UserModel driver;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
-      onActionComplete;
+  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
   const DriverMenu({
     super.key,
     this.icon,
@@ -176,8 +175,7 @@ class DriverMenu extends GetView<DriverAllController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.warning,
                 title: 'DELETE',
-                description:
-                    'Driver will remove from truck. Are you sure you want to delete this driver?',
+                description: 'Driver will remove from truck. Are you sure you want to delete this driver?',
                 discardBtnTxt: 'DELETE',
                 onDiscard: () async {
                   navState.pop();

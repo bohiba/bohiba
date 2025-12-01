@@ -1,4 +1,4 @@
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 import '/dist/app_enums.dart';
@@ -25,9 +25,7 @@ class AllOwnerExpenseController extends GetxController {
     MethodType methodType = MethodType.local,
     bool resetList = false,
   }) async {
-    List<OwnerExpense>? expenseList =
-        await OwnerExpenseService.getOwnerExpenseList(
-            type: methodType, reset: resetList);
+    List<OwnerExpense>? expenseList = await OwnerExpenseService.getOwnerExpenseList(type: methodType, reset: resetList);
 
     if (expenseList != null) {
       arrOwnerExp.clear();

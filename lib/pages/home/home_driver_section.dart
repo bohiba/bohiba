@@ -1,7 +1,7 @@
 import '/dist/app_enums.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
-import '/model/driver_model.dart';
+import '../../model/user_model.dart';
 import '/component/screen_utils.dart';
 import '/pages/driver/driver_tile.dart';
 import '/controllers/home_controller.dart';
@@ -42,8 +42,7 @@ class HomeDriverSection extends GetView<HomeController> {
                         child: Text(
                           'See All',
                           style: TextStyle(
-                            fontSize:
-                                bohibaTheme.textTheme.headlineMedium!.fontSize,
+                            fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
                             color: bohibaTheme.primaryColor,
                           ),
                         ),
@@ -67,8 +66,7 @@ class HomeDriverSection extends GetView<HomeController> {
                     shrinkWrap: true,
                     itemCount: controller.arrDriver.value?.length ?? 0,
                     itemBuilder: (context, index) {
-                      UserModel driverModel =
-                          controller.arrDriver.value![index];
+                      UserModel driverModel = controller.arrDriver.value![index];
                       return DriverTile(
                         driver: driverModel,
                         allowedActions: [
@@ -78,10 +76,7 @@ class HomeDriverSection extends GetView<HomeController> {
                           ActionType.other,
                         ],
                         onPressed: () {
-                          navigatorState
-                              .pushNamed(AppRoute.driver,
-                                  arguments: driverModel)
-                              .then(
+                          navigatorState.pushNamed(AppRoute.driver, arguments: driverModel.id).then(
                             (onValue) async {
                               if (onValue != null) {
                                 await controller.getDriverList();

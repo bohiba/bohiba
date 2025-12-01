@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import '/dist/app_enums.dart';
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 import '/model/profile_model.dart';
 import '/model/truck_model.dart';
 import 'profile_service.dart';
@@ -67,10 +67,13 @@ class TruckService {
   }) async {
     if (type == MethodType.local) {
       if (showProgress) GlobalService.showProgress();
-      String strQueryTruckList =
-          ''' SELECT * FROM $tblTrucks ORDER BY createdAt DESC ''';
-      List<Map<String, dynamic>> truckList =
-          await _databaseService.executeQuery(strQueryTruckList) ?? [];
+      String strQueryTruckList = ''' SELECT 
+            id
+          , image
+          , vhNumber
+          , driverName
+           FROM $tblTrucks ORDER BY createdAt DESC ''';
+      List<Map<String, dynamic>> truckList = await _databaseService.executeQuery(strQueryTruckList) ?? [];
       if (showProgress) GlobalService.dismissProgress();
       if (truckList.isNotEmpty) {
         List<TruckModel> arrTruckModel = truckList.map((db) {
@@ -91,8 +94,7 @@ class TruckService {
         return [];
       }
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res = await _dioService
-          .get('${ApiEndPoint.apiAllTruck}?page=$_currentPage');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.apiAllTruck}?page=$_currentPage');
       switch (res.statusCode) {
         case 200:
           List<dynamic> truckList = res.data as List;
@@ -139,12 +141,10 @@ class TruckService {
       if (type == 1) {
         strGetQuery = ''' SELECT * FROM $tblTrucks WHERE id = $value; ''';
       } else {
-        strGetQuery =
-            ''' SELECT * FROM $tblTrucks WHERE vhNumber = '$value'; ''';
+        strGetQuery = ''' SELECT * FROM $tblTrucks WHERE vhNumber = '$value'; ''';
       }
       GlobalService.showProgress();
-      List<Map<String, dynamic>> arrTruckList =
-          await _databaseService.executeQuery(strGetQuery) ?? [];
+      List<Map<String, dynamic>> arrTruckList = await _databaseService.executeQuery(strGetQuery) ?? [];
       GlobalService.dismissProgress();
       if (arrTruckList.isNotEmpty) {
         TruckModel truckModel = TruckModel.fromDB(arrTruckList.first);
@@ -155,8 +155,7 @@ class TruckService {
     } else {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
-      ApiResponse apiRes = await _dioService
-          .get("${ApiEndPoint.apiGetTruck}?value=$value&type=$type");
+      ApiResponse apiRes = await _dioService.get("${ApiEndPoint.apiGetTruck}?value=$value&type=$type");
 
       switch (apiRes.statusCode) {
         case 200:
@@ -213,25 +212,25 @@ class TruckService {
 
   static Future<TruckModel?> setTruckImage({
     TruckModel? oldTruck,
-    required String imagePath,
     required List<File> imageFile,
   }) async {
     if (oldTruck == null || !await DeviceInfoService.hasInternet()) return null;
     GlobalService.showProgress();
     Map<String, dynamic> bodyObj = {
       "regd_number": oldTruck.regdNumber,
-      "truck_image": imagePath
     };
     ApiResponse apiRes = await _dioService.upload(
-        ApiEndPoint.apiSetTruckImage, bodyObj, imageFile);
+      ApiEndPoint.apiSetTruckImage,
+      imageFile,
+      fileField: 'truck_image',
+      body: bodyObj,
+    );
 
     switch (apiRes.statusCode) {
       case 200:
         oldTruck.truckImage = apiRes.data['truck_image'];
-        String strUpdateQuery =
-            ''' UPDATE $tblTrucks SET image = ${oldTruck.truckImage} WHERE vhNumber = ?''';
-        int updateTruck =
-            await _databaseService.updateData(strUpdateQuery, argument: [
+        String strUpdateQuery = ''' UPDATE $tblTrucks SET image = '${oldTruck.truckImage}' WHERE vhNumber = ?''';
+        int updateTruck = await _databaseService.updateData(strUpdateQuery, argument: [
           {oldTruck.regdNumber}
         ]);
         GlobalService.dismissProgress();
@@ -272,6 +271,8 @@ class TruckService {
       body: bodyObj,
     );
 
+    GlobalService.printHandler(apiResponse.message);
+
     switch (apiResponse.statusCode) {
       case 200:
         String queryUpdate = ''' UPDATE $tblTrucks SET
@@ -299,7 +300,7 @@ class TruckService {
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: 'Failed to assign driver.');
+        GlobalService.showSnackBar(status: AlertStatus.failure, desc: 'Failed to assign driver.');
         return 0;
     }
   }
@@ -308,8 +309,7 @@ class TruckService {
     if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService
-        .post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.regdNumber}');
+    ApiResponse serviceResponse = await _dioService.post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.regdNumber}');
 
     switch (serviceResponse.statusCode) {
       case 200:
@@ -327,12 +327,12 @@ class TruckService {
         );
         GlobalService.dismissProgress();
         if (updateSuccess > 0) {
-          GlobalService.showAppToast(message: serviceResponse.message);
+          GlobalService.showSnackBar(status: AlertStatus.success, desc: serviceResponse.message);
         }
         return updateSuccess;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: serviceResponse.message);
+        GlobalService.showSnackBar(status: AlertStatus.info, desc: serviceResponse.message);
         return 0;
       default:
         GlobalService.dismissProgress();
@@ -416,18 +416,14 @@ class TruckService {
     int dbDeleted = await _databaseService.delete(deleteQuery);
 
     if (dbDeleted > 0) {
-      ApiResponse serviceResponse =
-          await _dioService.delete("${ApiEndPoint.apiDeleteTruck}/$truckId");
+      ApiResponse serviceResponse = await _dioService.delete("${ApiEndPoint.apiDeleteTruck}/$truckId");
       switch (serviceResponse.statusCode) {
         case 200:
           ProfileModel? profile = await ProfileService.getProfile();
-          if (profile != null &&
-              profile.trucks != null &&
-              profile.trucks! > 0) {
+          if (profile != null && profile.trucks != null && profile.trucks! > 0) {
             profile.trucks = profile.trucks! - 1;
           }
-          int profileUpdated =
-              await ProfileService.updateTruckNo(deleteTruck: true);
+          int profileUpdated = await ProfileService.updateTruckNo(deleteTruck: true);
           if (profileUpdated > 0) {
             // Update Profile
           }

@@ -1,4 +1,4 @@
-import '/model/driver_model.dart';
+import '../../model/user_model.dart';
 
 import '/pages/widget/required_label.dart';
 import '/services/global_service.dart';
@@ -56,15 +56,13 @@ class DriverAddPage extends GetView<DriverAddController> {
                                 RadioGroup(
                                   groupValue: controller.addAsset.value,
                                   onChanged: (AddAssetUsing? change) {
-                                    controller.addAsset.value =
-                                        change ?? AddAssetUsing.uuid;
+                                    controller.addAsset.value = change ?? AddAssetUsing.uuid;
                                   },
                                   child: Radio<AddAssetUsing>(
                                     value: AddAssetUsing.uuid,
                                   ),
                                 ),
-                                Text("UUID",
-                                    style: bohibaTheme.textTheme.titleLarge),
+                                Text("UUID", style: bohibaTheme.textTheme.titleLarge),
                               ],
                             ),
                             Row(
@@ -72,24 +70,19 @@ class DriverAddPage extends GetView<DriverAddController> {
                                 RadioGroup(
                                   groupValue: controller.addAsset.value,
                                   onChanged: (AddAssetUsing? change) {
-                                    controller.addAsset.value =
-                                        change ?? AddAssetUsing.doc;
+                                    controller.addAsset.value = change ?? AddAssetUsing.doc;
                                   },
                                   child: Radio<AddAssetUsing>(
                                     value: AddAssetUsing.doc,
                                   ),
                                 ),
-                                Text("Manual",
-                                    style: bohibaTheme.textTheme.titleLarge),
+                                Text("Manual", style: bohibaTheme.textTheme.titleLarge),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      if (controller.addAsset.value == AddAssetUsing.uuid)
-                        UUIDDriverVerification()
-                      else
-                        ManualModeDriverVerification(),
+                      if (controller.addAsset.value == AddAssetUsing.uuid) UUIDDriverVerification() else ManualModeDriverVerification(),
                       Visibility(
                         visible: controller.arrTruck.isNotEmpty,
                         child: Column(
@@ -100,17 +93,13 @@ class DriverAddPage extends GetView<DriverAddController> {
                               padding: EdgeInsets.symmetric(
                                 vertical: ScreenUtils.height10,
                               ),
-                              hint: controller.truck.value.driverName ??
-                                  'Registration Number',
-                              items: controller.arrTruck
-                                  .map((f) => f.regdNumber.toString())
-                                  .toList(),
+                              hint: controller.truck.value.driverName ?? 'Registration Number',
+                              items: controller.arrTruck.map((f) => f.regdNumber.toString()).toList(),
                               enableSearch: true,
                               focusOnTap: true,
                               onChanged: (p0) {
                                 controller.strTruckRegdNo.value = p0 ?? '';
-                                GlobalService.printHandler(
-                                    'ID: ${controller.strTruckRegdNo.value}');
+                                GlobalService.printHandler('ID: ${controller.strTruckRegdNo.value}');
                                 GlobalService.closeKeyboard();
                               },
                               menuController: controller.assignTruckCtlr,
@@ -239,11 +228,9 @@ class ManualModeDriverVerification extends GetView<DriverAddController> {
           width: ScreenUtils.width,
           controller: controller.dateController,
           onTap: () async {
-            DateTime? pickedDate =
-                await GlobalService.datePickerModal(context: context);
+            DateTime? pickedDate = await GlobalService.datePickerModal(context: context);
             if (pickedDate != null) {
-              controller.dateController.text =
-                  DateFormat('dd-MM-yyyy').format(pickedDate);
+              controller.dateController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
             }
           },
           hintText: "D.O.B",

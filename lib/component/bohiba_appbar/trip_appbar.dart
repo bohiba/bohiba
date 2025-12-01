@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bohiba/pages/widget/role_widget.dart';
+import '/pages/widget/role_widget.dart';
 import '/component/screen_utils.dart';
 import '/controllers/trip_controller.dart';
 import '/dist/app_enums.dart';
@@ -10,8 +10,7 @@ import 'package:marquee_text/marquee_text.dart';
 
 import 'package:flutter/material.dart';
 
-class TripAppBar extends GetView<TripController>
-    implements PreferredSizeWidget {
+class TripAppBar extends GetView<TripController> implements PreferredSizeWidget {
   final String title;
 
   const TripAppBar({
@@ -60,7 +59,7 @@ class TripAppBar extends GetView<TripController>
                   TripActionType.expense,
                   TripActionType.payment,
                   TripActionType.reassignment,
-                  TripActionType.share,
+                  // TripActionType.share,
                   TripActionType.delete
                 ],
                 onActionComplete: {
@@ -106,7 +105,7 @@ class TripAppBar extends GetView<TripController>
               trip: controller.tripInfo.value,
               allowedActions: [
                 TripActionType.document,
-                TripActionType.share,
+                // TripActionType.share,
               ],
               onActionComplete: {
                 TripActionType.document: (document) async {

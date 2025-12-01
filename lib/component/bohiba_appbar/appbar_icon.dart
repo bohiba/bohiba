@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '/dist/component_exports.dart';
 
 class AppBarIconBox extends StatelessWidget {
-  const AppBarIconBox({super.key, this.onTap, this.onTapDown, this.icon});
+  const AppBarIconBox({super.key, this.toolTipMessage, this.richMessage, this.onTap, this.onTapDown, this.icon});
 
+  final String? toolTipMessage;
+  final InlineSpan? richMessage;
   final VoidCallback? onTap;
   final Function(TapDownDetails)? onTapDown;
   final Widget? icon;

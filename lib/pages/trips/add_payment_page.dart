@@ -1,5 +1,5 @@
-import 'package:bohiba/component/bohiba_dropdown/app_dropdown_button.dart';
-import 'package:bohiba/extensions/bohiba_extension.dart';
+import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '/extensions/bohiba_extension.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/controllers/trip_payment_add_controller.dart';
@@ -30,8 +30,7 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
         },
         child: Scaffold(
           appBar: TitleAppbar(
-            title:
-                controller.tripModel == null ? 'Edit Payment' : 'Add Payment',
+            title: controller.tripModel == null ? 'Edit Payment' : 'Add Payment',
             popResult: controller.countUpdate > 0,
           ),
           body: SafeArea(
@@ -49,16 +48,14 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                         DateInputField(
                           width: ScreenUtils.width,
                           onTap: () async {
-                            DateTime? paymentDate =
-                                await GlobalService.datePickerModal(
+                            DateTime? paymentDate = await GlobalService.datePickerModal(
                               context: context,
                               startTime: DateFormat('dd-MM-yyyy').parse(
                                 controller.tripModel!.startDate!,
                               ),
                             );
                             if (paymentDate != null) {
-                              controller.paymentDateController.text =
-                                  DateFormat('dd-MM-yyyy').format(paymentDate);
+                              controller.paymentDateController.text = DateFormat('dd-MM-yyyy').format(paymentDate);
                             }
                           },
                           controller: controller.paymentDateController,
@@ -93,8 +90,7 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                         TextInputField(
                           width: ScreenUtils.width,
                           hintText: 'Amount',
-                          keyboardType:
-                              TextInputType.numberWithOptions(decimal: true),
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
                           controller: controller.paidController,
                         ),
                       ],
@@ -102,8 +98,7 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                   ),
                 ),
                 PrimaryButton(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+                  padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
                   onPressed: () async => await controller.addUpdatePayment(),
                   label: controller.tripModel == null ? 'UPDATE' : 'SAVE',
                 ),

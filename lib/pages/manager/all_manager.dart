@@ -5,7 +5,6 @@ import 'package:gap/gap.dart';
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
-import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 
 class AllManagerPage extends StatelessWidget {
@@ -14,9 +13,7 @@ class AllManagerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(AppRoute.driver);
-      },
+      onTap: () {},
       child: Container(
         margin: EdgeInsets.only(
           left: ScreenUtils.width15,

@@ -18,13 +18,10 @@ class TripService {
   static int _currentPage = 1;
   static int _lastPage = 1;
 
-  static Future<int> addTrip(
-      {required Map<String, dynamic> bodyMap,
-      required TruckModel truckModel}) async {
+  static Future<int> addTrip({required Map<String, dynamic> bodyMap, required TruckModel truckModel}) async {
     if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();
-    ApiResponse apiResponse =
-        await _dioService.post(ApiEndPoint.apiAddTrip, body: bodyMap);
+    ApiResponse apiResponse = await _dioService.post(ApiEndPoint.apiAddTrip, body: bodyMap);
     switch (apiResponse.statusCode) {
       case 201:
         GlobalService.dismissProgress();
@@ -67,8 +64,13 @@ class TripService {
         id
       , tripCode
       , tripStatus
+      , origin
+      , destination     
       , vhNumber
-       FROM $tblTrips ''';
+      , dvName
+      , startedAt
+      , endedAt
+       FROM $tblTrips ORDER BY startedAt DESC''';
       /*String strQueryList = '''
           SELECT 
             t.*, 
@@ -113,8 +115,7 @@ class TripService {
         ''';*/
       if (showProgress) GlobalService.showProgress();
 
-      List<Map<String, dynamic>>? arrTrip =
-          await _databaseService.executeQuery(strQueryList);
+      List<Map<String, dynamic>>? arrTrip = await _databaseService.executeQuery(strQueryList);
       if (showProgress) GlobalService.dismissProgress();
       if (arrTrip != null) {
         List<TripModel> tripList = arrTrip.map((trip) {
@@ -137,8 +138,7 @@ class TripService {
       }
 
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res =
-          await _dioService.get('${ApiEndPoint.apiAllTrip}?page=$_currentPage');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.apiAllTrip}?page=$_currentPage');
       if (showProgress) GlobalService.dismissProgress();
 
       switch (res.statusCode) {
@@ -154,17 +154,13 @@ class TripService {
             Map<String, dynamic> mapTrip = TripModel.toDB(trip);
 
             TripModel tripModel = TripModel.fromDb(mapTrip);
-            int successTripInsert =
-                await TripService.insertTrip(trip: tripModel);
+            int successTripInsert = await TripService.insertTrip(trip: tripModel);
             GlobalService.printHandler("Trip Added in DB: $successTripInsert");
 
             // Expense Insert
-            if (trip.containsKey('expenses') &&
-                trip['expenses'] != null &&
-                (trip['expenses'] as List).isNotEmpty) {
+            if (trip.containsKey('expenses') && trip['expenses'] != null && (trip['expenses'] as List).isNotEmpty) {
               List tripExpense = trip['expenses'];
-              List<Map<String, dynamic>> arrMapExpense =
-                  tripExpense.map((expense) {
+              List<Map<String, dynamic>> arrMapExpense = tripExpense.map((expense) {
                 return TripExpense.toDB(expense);
               }).toList();
 
@@ -178,17 +174,13 @@ class TripService {
                 }).toList();
 
                 tripModel.expenses?.addAll(tripExpenseList);
-                GlobalService.printHandler(
-                    "Trip Expense in DB: $successExpense");
+                GlobalService.printHandler("Trip Expense in DB: $successExpense");
               }
             }
 
-            if (trip.containsKey('payments') &&
-                trip['payments'] != null &&
-                (trip['payments'] as List).isNotEmpty) {
+            if (trip.containsKey('payments') && trip['payments'] != null && (trip['payments'] as List).isNotEmpty) {
               List tripPayments = trip['payments'];
-              List<Map<String, dynamic>> arrMapPayment =
-                  tripPayments.map((json) {
+              List<Map<String, dynamic>> arrMapPayment = tripPayments.map((json) {
                 return TripPayment.toDB(json);
               }).toList();
 
@@ -203,14 +195,11 @@ class TripService {
                 }).toList();
 
                 tripModel.payments?.addAll(tripPaymentList);
-                GlobalService.printHandler(
-                    "Trip Payment in DB: $successPayment");
+                GlobalService.printHandler("Trip Payment in DB: $successPayment");
               }
             }
 
-            if (trip.containsKey('documents') &&
-                trip['documents'] != null &&
-                (trip['documents'] as List).isNotEmpty) {
+            if (trip.containsKey('documents') && trip['documents'] != null && (trip['documents'] as List).isNotEmpty) {
               List tripDocuments = trip['documents'];
               List<Map<String, dynamic>> arrMapDoc = tripDocuments.map((doc) {
                 return TripDocument.toDB(doc);
@@ -231,12 +220,9 @@ class TripService {
               }
             }
 
-            if (trip.containsKey('reassignment') &&
-                trip['reassignment'] != null &&
-                (trip['reassignment'] as List).isNotEmpty) {
+            if (trip.containsKey('reassignment') && trip['reassignment'] != null && (trip['reassignment'] as List).isNotEmpty) {
               List tripReassignment = trip['reassignment'];
-              List<Map<String, dynamic>> arrMapReassign =
-                  tripReassignment.map((assign) {
+              List<Map<String, dynamic>> arrMapReassign = tripReassignment.map((assign) {
                 return Reassignment.toDB(assign);
               }).toList();
 
@@ -246,14 +232,12 @@ class TripService {
               );
 
               if (successReassign > 0) {
-                List<Reassignment> tripReassignList =
-                    arrMapReassign.map((assign) {
+                List<Reassignment> tripReassignList = arrMapReassign.map((assign) {
                   return Reassignment.fromDb(assign);
                 }).toList();
 
                 tripModel.reassignment?.addAll(tripReassignList);
-                GlobalService.printHandler(
-                    "Trip Reassign in DB: $successReassign");
+                GlobalService.printHandler("Trip Reassign in DB: $successReassign");
               }
             }
             arrTripModel.add(tripModel);
@@ -278,17 +262,14 @@ class TripService {
   }) async {
     if (method == MethodType.local) {
       String strGetQuery = ''' SELECT * FROM $tblTrips WHERE id = $tripId ''';
-      List<Map<String, dynamic>>? arrTripList =
-          await _databaseService.executeQuery(strGetQuery);
+      List<Map<String, dynamic>>? arrTripList = await _databaseService.executeQuery(strGetQuery);
       if (arrTripList == null || arrTripList.isEmpty) {
         return null;
       }
-      List<TripModel> tripList =
-          arrTripList.map((trip) => TripModel.fromDb(trip)).toList();
+      List<TripModel> tripList = arrTripList.map((trip) => TripModel.fromDb(trip)).toList();
       TripModel trip = tripList.first;
 
-      final arrPayment = await _databaseService
-          .executeQuery("SELECT * FROM $tblTripPayment WHERE tripId = $tripId");
+      final arrPayment = await _databaseService.executeQuery("SELECT * FROM $tblTripPayment WHERE tripId = $tripId");
 
       // PAYMENT
       trip.payments = arrPayment?.map((p) {
@@ -305,8 +286,7 @@ class TripService {
           }).toList() ??
           [];
 
-      final List<Map<String, dynamic>>? arrExpense = await _databaseService
-          .executeQuery("SELECT * FROM tblTripExpense WHERE tripId = $tripId");
+      final List<Map<String, dynamic>>? arrExpense = await _databaseService.executeQuery("SELECT * FROM tblTripExpense WHERE tripId = $tripId");
 
       trip.expenses = arrExpense?.map((e) {
             return TripExpense(
@@ -323,9 +303,7 @@ class TripService {
           [];
 
       // REASSIGNMENT
-      final List<Map<String, dynamic>>? arrReassignment =
-          await _databaseService.executeQuery(
-              "SELECT * FROM $tblReassignment WHERE tripId = $tripId");
+      final List<Map<String, dynamic>>? arrReassignment = await _databaseService.executeQuery("SELECT * FROM $tblReassignment WHERE tripId = $tripId");
       trip.reassignment = arrReassignment?.map((r) {
             return Reassignment(
               id: r['id'],
@@ -339,8 +317,7 @@ class TripService {
           [];
 
       // TRIP-DOCUMENT
-      final List<Map<String, dynamic>>? arrTripDoc = await _databaseService
-          .executeQuery("SELECT * FROM $tblDocument WHERE tripId = $tripId");
+      final List<Map<String, dynamic>>? arrTripDoc = await _databaseService.executeQuery("SELECT * FROM $tblDocument WHERE tripId = $tripId");
       trip.documents = arrTripDoc?.map((d) {
             return TripDocument(
               id: d['id'],
@@ -359,8 +336,7 @@ class TripService {
       }
 
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res =
-          await _dioService.get('${ApiEndPoint.apiGetTrip}/$tripId');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.apiGetTrip}/$tripId');
 
       switch (res.statusCode) {
         case 200:
@@ -370,34 +346,35 @@ class TripService {
           String strUpdateQuery = '''
               UPDATE $tblTrips SET
                 isFav = ${mapTrip['isFav'] ?? 0},
-                tripCode = ${mapTrip['tripCode'] != null ? "'${mapTrip['tripCode']}'" : 'NULL'},
-                tripStatus = ${mapTrip['tripStatus'] != null ? "'${mapTrip['tripStatus']}'" : 'NULL'},
-                origin = ${mapTrip['origin'] != null ? "'${mapTrip['origin']}'" : 'NULL'},
-                destination = ${mapTrip['destination'] != null ? "'${mapTrip['destination']}'" : 'NULL'},
-                startedAt = ${mapTrip['startedAt'] != null ? "'${mapTrip['startedAt']}'" : 'NULL'},
-                endedAt = ${mapTrip['endedAt'] != null ? "'${mapTrip['endedAt']}'" : 'NULL'},
-                materialType = ${mapTrip['materialType'] != null ? "'${mapTrip['materialType']}'" : 'NULL'},
-                loadWeight = ${mapTrip['loadWeight'] ?? 0.0},
-                shortWeight = ${mapTrip['shortWeight'] ?? 0.0},
-                rate = ${mapTrip['rate'] ?? 0.0},
-                fnId = ${mapTrip['fnId'] ?? 'NULL'},
-                fnAmount = ${mapTrip['fnAmount'] ?? 0.0},
-                fnPayment = ${mapTrip['fnPayment'] ?? 0.0},
-                fnExpense = ${mapTrip['fnExpense'] ?? 0.0},
-                fnProfit = ${mapTrip['fnProfit'] ?? 0.0},
-                vhId = ${mapTrip['vhId'] ?? 'NULL'},
-                vhNumber = ${mapTrip['vhNumber'] != null ? "'${mapTrip['vhNumber']}'" : 'NULL'},
-                vhModel = ${mapTrip['vhModel'] != null ? "'${mapTrip['vhModel']}'" : 'NULL'},
-                vhDesc = ${mapTrip['vhDesc'] != null ? "'${mapTrip['vhDesc']}'" : 'NULL'},
-                dvId = ${mapTrip['dvId'] ?? 'NULL'},
-                dvUuid = ${mapTrip['dvUuid'] != null ? "'${mapTrip['dvUuid']}'" : 'NULL'},
-                dvName = ${mapTrip['dvName'] != null ? "'${mapTrip['dvName']}'" : 'NULL'},
-                dvMobile = ${mapTrip['dvMobile'] != null ? "'${mapTrip['dvMobile']}'" : 'NULL'},
-                ownerId = ${mapTrip['ownerId'] ?? 'NULL'},
-                ownerUuid = ${mapTrip['ownerUuid'] != null ? "'${mapTrip['ownerUuid']}'" : 'NULL'},
-                ownerName = ${mapTrip['ownerName'] != null ? "'${mapTrip['ownerName']}'" : 'NULL'},
-                ownerMobileNumber = ${mapTrip['ownerMobileNumber'] != null ? "'${mapTrip['ownerMobileNumber']}'" : 'NULL'},
-                updatedAt = ${mapTrip['updatedAt'] != null ? "'${mapTrip['updatedAt']}'" : 'NULL'}
+                tripCode = ${sqlValue(mapTrip['trip_code'])},
+                tripStatus = ${sqlValue(mapTrip['tripStatus'])},
+                origin = ${sqlValue(mapTrip['origin'])},
+                destination = ${sqlValue(mapTrip['destination'])},
+                startedAt = ${sqlValue(mapTrip['startedAt'])},
+                endedAt = ${sqlValue(mapTrip['endedAt'])},
+                transporter = ${sqlValue(mapTrip['transporter'])},
+                materialType = ${sqlValue(mapTrip['materialType'])},
+                loadWeight = ${sqlValue(mapTrip['loadWeight'])},
+                shortWeight = ${sqlValue(mapTrip['shortWeight'] ?? 0.0)},
+                rate = ${sqlValue(mapTrip['rate'] ?? 0.0)},
+                fnId = ${sqlValue(mapTrip['fnId'])},
+                fnAmount = ${sqlValue(mapTrip['fnAmount'] ?? 0.0)},
+                fnPayment = ${sqlValue(mapTrip['fnPayment'] ?? 0.0)},
+                fnExpense = ${sqlValue(mapTrip['fnExpense'] ?? 0.0)},
+                fnProfit = ${sqlValue(mapTrip['fnProfit'] ?? 0.0)},
+                vhId = ${sqlValue(mapTrip['vhId'])},
+                vhNumber = ${sqlValue(mapTrip['vhNumber'])},
+                vhModel = ${sqlValue(mapTrip['vhModel'])},
+                vhDesc = ${sqlValue(mapTrip['vhDesc'])},
+                dvId = ${sqlValue(mapTrip['dvId'])},
+                dvUuid = ${sqlValue(mapTrip['dvUuid'])},
+                dvName = ${sqlValue(mapTrip['dvName'])},
+                dvMobile = ${sqlValue(mapTrip['dvMobile'])},
+                ownerId = ${sqlValue(mapTrip['ownerId'])},
+                ownerUuid = ${sqlValue(mapTrip['ownerUuid'])},
+                ownerName = ${sqlValue(mapTrip['ownerName'])},
+                ownerMobileNumber = ${sqlValue(mapTrip['ownerMobileNumber'])},
+                updatedAt = ${sqlValue(mapTrip['updatedAt'])}
               WHERE id = $tripId;
               ''';
           int successUpdate = await _databaseService.updateData(strUpdateQuery);
@@ -406,37 +383,26 @@ class TripService {
             tripModel = TripModel.fromDb(mapTrip);
             // UPDATE payment
             List<TripPayment> arrPayment = [];
-            if (tripObj.containsKey('payments') &&
-                tripObj['payments'] != null &&
-                tripObj['payments'] is List &&
-                (tripObj['payments'] as List).isNotEmpty) {
+            if (tripObj.containsKey('payments') && tripObj['payments'] != null && tripObj['payments'] is List && (tripObj['payments'] as List).isNotEmpty) {
               List tripPayment = tripObj['payments'];
-              List<Map<String, dynamic>> arrMapPayment = tripPayment
-                  .map((payment) => TripPayment.toDB(payment))
-                  .toList();
+              List<Map<String, dynamic>> arrMapPayment = tripPayment.map((payment) => TripPayment.toDB(payment)).toList();
 
-              int upsertPayment = await _databaseService.insertAllData(
-                  tblTripPayment, arrMapPayment);
+              int upsertPayment = await _databaseService.insertAllData(tblTripPayment, arrMapPayment);
               if (upsertPayment > 0) {
-                arrPayment =
-                    arrMapPayment.map((e) => TripPayment.fromDb(e)).toList();
+                arrPayment = arrMapPayment.map((e) => TripPayment.fromDb(e)).toList();
               }
               tripModel.payments = List<TripPayment>.from(arrPayment);
             }
 
             // UPDATE reassignment
             List<Reassignment> arrReassigModel = [];
-            if (tripObj.containsKey('reassignment') &&
-                tripObj['reassignment'] != null &&
-                tripObj['reassignment'] is List &&
-                (tripObj['reassignment'] as List).isNotEmpty) {
+            if (tripObj.containsKey('reassignment') && tripObj['reassignment'] != null && tripObj['reassignment'] is List && (tripObj['reassignment'] as List).isNotEmpty) {
               List tripReassign = tripObj['reassignment'];
               List<Map<String, dynamic>> arrMapReassign = tripReassign.map((r) {
                 return Reassignment.toDB(r);
               }).toList();
 
-              int successReassign =
-                  await upsertTrip(tblReassignment, listData: arrMapReassign);
+              int successReassign = await upsertTrip(tblReassignment, listData: arrMapReassign);
               if (successReassign > 0) {
                 arrReassigModel = arrMapReassign.map((c) {
                   return Reassignment.fromDb(c);
@@ -444,25 +410,19 @@ class TripService {
                 tripModel.reassignment = [];
                 tripModel.reassignment?.addAll(arrReassigModel);
 
-                GlobalService.printHandler(
-                    'Trip Reassignment Upsert $successReassign');
+                GlobalService.printHandler('Trip Reassignment Upsert $successReassign');
               }
             }
 
             // UPDATE expenses
             List<TripExpense> arrExpenseModel = [];
-            if (tripObj.containsKey('expenses') &&
-                tripObj['expenses'] != null &&
-                tripObj['expenses'] is List &&
-                (tripObj['expenses'] as List).isNotEmpty) {
+            if (tripObj.containsKey('expenses') && tripObj['expenses'] != null && tripObj['expenses'] is List && (tripObj['expenses'] as List).isNotEmpty) {
               List tripExpense = tripObj['expenses'];
-              List<Map<String, dynamic>> arrMapExpense =
-                  tripExpense.map((expense) {
+              List<Map<String, dynamic>> arrMapExpense = tripExpense.map((expense) {
                 return TripExpense.toDB(expense);
               }).toList();
 
-              int successExpense =
-                  await upsertTrip(tblTripExpense, listData: arrMapExpense);
+              int successExpense = await upsertTrip(tblTripExpense, listData: arrMapExpense);
               if (successExpense > 0) {
                 arrExpenseModel = arrMapExpense.map((e) {
                   return TripExpense.fromDb(e);
@@ -470,32 +430,26 @@ class TripService {
                 tripModel.expenses = [];
                 tripModel.expenses?.addAll(arrExpenseModel);
 
-                GlobalService.printHandler(
-                    'Trip Expenses Upsert $successExpense');
+                GlobalService.printHandler('Trip Expenses Upsert $successExpense');
               }
             }
 
             // UPDATE documents
             List<TripDocument> arrDocModel = [];
-            if (tripObj.containsKey('documents') &&
-                tripObj['documents'] != null &&
-                tripObj['documents'] is List &&
-                (tripObj['documents'] as List).isNotEmpty) {
+            if (tripObj.containsKey('documents') && tripObj['documents'] != null && tripObj['documents'] is List && (tripObj['documents'] as List).isNotEmpty) {
               List docList = tripObj['documents'];
               List<Map<String, dynamic>> arrMapDoc = docList.map((r) {
                 return TripDocument.toDB(r);
               }).toList();
 
-              int sucessDocInsert =
-                  await upsertTrip(tblDocument, listData: arrMapDoc);
+              int sucessDocInsert = await upsertTrip(tblDocument, listData: arrMapDoc);
               if (sucessDocInsert > 0) {
                 arrDocModel = arrMapDoc.map((e) {
                   return TripDocument.fromDb(e);
                 }).toList();
                 tripModel.documents = [];
                 tripModel.documents?.addAll(arrDocModel);
-                GlobalService.printHandler(
-                    'Trip Expenses Upsert $sucessDocInsert');
+                GlobalService.printHandler('Trip Expenses Upsert $sucessDocInsert');
               }
             }
 
@@ -545,6 +499,7 @@ class TripService {
           , destination = '${bodyMap['destination']}'
           , startedAt = '${bodyMap['started_at']}'
           , endedAt = '${bodyMap['ended_at']}'
+          , transporter = '${bodyMap['transporter']}'
           , materialType = '${bodyMap['material_type']}'
           , loadWeight = ${bodyMap['load_weight'].toString().toDouble()}
           , shortWeight = ${bodyMap['short_weight'].toString().toDouble()}
@@ -594,8 +549,7 @@ class TripService {
     String strQueryDelete = ''' DELETE FROM $tblTrips WHERE id = $tripId; ''';
     int deleteSucess = await _databaseService.delete(strQueryDelete);
     if (deleteSucess > 0) {
-      ApiResponse apiResponse =
-          await _dioService.delete('${ApiEndPoint.apiDeleteTrip}/$tripId');
+      ApiResponse apiResponse = await _dioService.delete('${ApiEndPoint.apiDeleteTrip}/$tripId');
       GlobalService.dismissProgress();
       switch (apiResponse.statusCode) {
         case 200:
@@ -638,8 +592,7 @@ class TripService {
     }
 
     GlobalService.showProgress();
-    ApiResponse apiResponse =
-        await _dioService.post(ApiEndPoint.apiAddTripPayment, body: bodyMap);
+    ApiResponse apiResponse = await _dioService.post(ApiEndPoint.apiAddTripPayment, body: bodyMap);
 
     switch (apiResponse.statusCode) {
       case 201:
@@ -700,8 +653,7 @@ class TripService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse apiResponse = await _dioService
-        .post('${ApiEndPoint.apiEditTripPayment}/$paymentId', body: bodyMap);
+    ApiResponse apiResponse = await _dioService.post('${ApiEndPoint.apiEditTripPayment}/$paymentId', body: bodyMap);
 
     switch (apiResponse.statusCode) {
       case 200:
@@ -745,14 +697,12 @@ class TripService {
     }
   }
 
-  static Future<List<TripModel>?> filterTripWithTruckNo(
-      {String? truckNo}) async {
+  static Future<List<TripModel>?> filterTripWithTruckNo({String? truckNo}) async {
     List<TripModel>? tripList = await getAllTrip(methodType: MethodType.local);
     if (tripList != null) {
       List<TripModel> filterTrip = [];
       if (truckNo != null && truckNo.isNotEmpty) {
-        filterTrip.addAll(
-            tripList.where((truck) => truck.truck?.regdNumber == truckNo));
+        filterTrip.addAll(tripList.where((truck) => truck.truck?.regdNumber == truckNo));
       } else {
         filterTrip.addAll(tripList);
       }
@@ -763,12 +713,10 @@ class TripService {
 
   static Future<int> deletePayment({required int paymentId}) async {
     GlobalService.showProgress();
-    String strQueryDelete =
-        ''' DELETE FROM $tblTripExpense WHERE id = $paymentId; ''';
+    String strQueryDelete = ''' DELETE FROM $tblTripExpense WHERE id = $paymentId; ''';
     int deletePayment = await _databaseService.delete(strQueryDelete);
     if (deletePayment > 0) {
-      ApiResponse apiResponse = await _dioService
-          .delete('${ApiEndPoint.apiDeleteTripPayment}/$paymentId');
+      ApiResponse apiResponse = await _dioService.delete('${ApiEndPoint.apiDeleteTripPayment}/$paymentId');
       GlobalService.dismissProgress();
       switch (apiResponse.statusCode) {
         case 200:
@@ -812,8 +760,7 @@ class TripService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse apiResponse =
-        await _dioService.post(ApiEndPoint.apiAddTripExpense, body: bodyObj);
+    ApiResponse apiResponse = await _dioService.post(ApiEndPoint.apiAddTripExpense, body: bodyObj);
     switch (apiResponse.statusCode) {
       case 201:
         TripExpense tripExpense = TripExpense.fromJson(apiResponse.data);
@@ -871,8 +818,7 @@ class TripService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse apiResponse = await _dioService
-        .post('${ApiEndPoint.apiEditTripExpense}/$expenseId', body: bodyMap);
+    ApiResponse apiResponse = await _dioService.post('${ApiEndPoint.apiEditTripExpense}/$expenseId', body: bodyMap);
     switch (apiResponse.statusCode) {
       case 200:
         TripExpense tripExpense = TripExpense.fromJson(apiResponse.data);
@@ -918,12 +864,10 @@ class TripService {
       return 0;
     }
     GlobalService.showProgress();
-    String strQueryDelete =
-        ''' DELETE FROM $tblTripExpense WHERE id = $expenseId; ''';
+    String strQueryDelete = ''' DELETE FROM $tblTripExpense WHERE id = $expenseId; ''';
     int deletePayment = await _databaseService.delete(strQueryDelete);
     if (deletePayment > 0) {
-      ApiResponse apiResponse = await _dioService
-          .delete('${ApiEndPoint.apiDeleteTripExpense}/$expenseId');
+      ApiResponse apiResponse = await _dioService.delete('${ApiEndPoint.apiDeleteTripExpense}/$expenseId');
       GlobalService.dismissProgress();
       switch (apiResponse.statusCode) {
         case 200:
@@ -965,8 +909,7 @@ class TripService {
     if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
-    ApiResponse apiResponse =
-        await _dioService.post(ApiEndPoint.apiAddTripReassign, body: bodyObj);
+    ApiResponse apiResponse = await _dioService.post(ApiEndPoint.apiAddTripReassign, body: bodyObj);
 
     switch (apiResponse.statusCode) {
       case 201:
@@ -1023,8 +966,7 @@ class TripService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse apiResponse = await _dioService
-        .post('${ApiEndPoint.apiEditTripReassign}/$reassignId', body: bodyMap);
+    ApiResponse apiResponse = await _dioService.post('${ApiEndPoint.apiEditTripReassign}/$reassignId', body: bodyMap);
     GlobalService.dismissProgress();
     switch (apiResponse.statusCode) {
       case 200:
@@ -1035,16 +977,10 @@ class TripService {
         WHERE id = ${tripDocument.id} AND tripId = ${tripDocument.tripId};
         ''';
         int updateTrip = await _databaseService.updateData(strQuery);
-        GlobalService.showSnackBar(
-            status: AlertStatus.success,
-            title: 'Reaasignment',
-            desc: apiResponse.message);
+        GlobalService.showSnackBar(status: AlertStatus.success, title: 'Reaasignment', desc: apiResponse.message);
         return updateTrip;
       case 401:
-        GlobalService.showSnackBar(
-            status: AlertStatus.warning,
-            title: 'Reaasignment',
-            desc: apiResponse.message);
+        GlobalService.showSnackBar(status: AlertStatus.warning, title: 'Reaasignment', desc: apiResponse.message);
         return 0;
       default:
         GlobalService.showSnackBar(
@@ -1061,12 +997,10 @@ class TripService {
       return 0;
     }
     GlobalService.showProgress();
-    String strQueryDelete =
-        ''' DELETE FROM $tblReassignment WHERE id = $expenseId; ''';
+    String strQueryDelete = ''' DELETE FROM $tblReassignment WHERE id = $expenseId; ''';
     int deleteReassign = await _databaseService.delete(strQueryDelete);
     if (deleteReassign > 0) {
-      ApiResponse apiResponse = await _dioService
-          .delete('${ApiEndPoint.apiDeleteTripExpense}/$expenseId');
+      ApiResponse apiResponse = await _dioService.delete('${ApiEndPoint.apiDeleteTripExpense}/$expenseId');
       GlobalService.dismissProgress();
       switch (apiResponse.statusCode) {
         case 200:
@@ -1103,24 +1037,19 @@ class TripService {
     }
   }
 
-  static Future<List<TripDocument>?> getAllDocument(
-      {required int tripId}) async {
+  static Future<List<TripDocument>?> getAllDocument({required int tripId}) async {
     if (!await DeviceInfoService.hasInternet()) return null;
     GlobalService.showProgress();
-    ApiResponse res =
-        await _dioService.get('${ApiEndPoint.apiGetAllTripDoc}/$tripId');
+    ApiResponse res = await _dioService.get('${ApiEndPoint.apiGetAllTripDoc}/$tripId');
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:
         List<Map> tripDocList = List.from(res.data);
-        List<Map<String, dynamic>> arrMapTripDoc =
-            tripDocList.map((e) => TripDocument.toDB(e)).toList();
+        List<Map<String, dynamic>> arrMapTripDoc = tripDocList.map((e) => TripDocument.toDB(e)).toList();
         await clearAllTripDoc(tripId: tripId);
-        int successAdd =
-            await _databaseService.insertAllData(tblDocument, arrMapTripDoc);
+        int successAdd = await _databaseService.insertAllData(tblDocument, arrMapTripDoc);
         if (successAdd > 0) {
-          List<TripDocument> arrTripDoc =
-              arrMapTripDoc.map((trip) => TripDocument.fromDb(trip)).toList();
+          List<TripDocument> arrTripDoc = arrMapTripDoc.map((trip) => TripDocument.fromDb(trip)).toList();
           return arrTripDoc;
         }
         return null;
@@ -1141,23 +1070,19 @@ class TripService {
     }
   }
 
-  static Future<TripDocument?> getDocument(
-      {required int id, MethodType type = MethodType.local}) async {
+  static Future<TripDocument?> getDocument({required int id, MethodType type = MethodType.local}) async {
     if (type == MethodType.local) {
       String strGetQuery = ''' SELECT * FROM $tblDocument WHERE id = $id''';
-      List<Map<String, dynamic>>? arrDoc =
-          await _databaseService.executeQuery(strGetQuery);
+      List<Map<String, dynamic>>? arrDoc = await _databaseService.executeQuery(strGetQuery);
       if (arrDoc != null) {
-        List<TripDocument> arrTripDoc =
-            arrDoc.map((e) => TripDocument.fromDb(e)).toList();
+        List<TripDocument> arrTripDoc = arrDoc.map((e) => TripDocument.fromDb(e)).toList();
         return arrTripDoc.first;
       }
       return null;
     } else {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
-      ApiResponse res =
-          await _dioService.get('${ApiEndPoint.apiGetTripDoc}/$id');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.apiGetTripDoc}/$id');
       GlobalService.dismissProgress();
       switch (res.statusCode) {
         case 200:
@@ -1189,8 +1114,7 @@ class TripService {
     if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
-    ApiResponse res =
-        await _dioService.upload(ApiEndPoint.apiAddTripDoc, bodyObj, imageList);
+    ApiResponse res = await _dioService.upload(ApiEndPoint.apiAddTripDoc, imageList, fileField: 'doc_image', body: bodyObj);
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:
@@ -1236,8 +1160,7 @@ class TripService {
     return 0;
   }
 
-  static Future<int> upsertTrip(String tblName,
-      {required List<Map<String, dynamic>> listData}) async {
+  static Future<int> upsertTrip(String tblName, {required List<Map<String, dynamic>> listData}) async {
     for (Map<String, dynamic> item in listData) {
       return await _databaseService.upsertData(
         tableName: tblName,
@@ -1265,6 +1188,7 @@ class TripService {
         , destination
         , startedAt
         , endedAt
+        , transporter
         , materialType
         , loadWeight
         , shortWeight
@@ -1296,6 +1220,7 @@ class TripService {
         , ${sqlValue(trip.destination)}
         , ${sqlValue(trip.startDate)}
         , ${sqlValue(trip.endedDate)}
+        , ${sqlValue(trip.transporter)}
         , ${sqlValue(trip.loadDetail?.materialType)}
         , ${sqlValue(trip.loadDetail?.loadWeight)}
         , ${sqlValue(trip.loadDetail?.shortWeight)}
@@ -1324,8 +1249,7 @@ class TripService {
   }
 
   static Future<int> clearAllTripDoc({required int tripId}) async {
-    String strDeleteQuery =
-        ''' DELETE FROM $tblDocument WHERE trip_id = $tripId ''';
+    String strDeleteQuery = ''' DELETE FROM $tblDocument WHERE trip_id = $tripId ''';
     int deleteSuccess = await _databaseService.delete(strDeleteQuery);
     if (deleteSuccess > 0) {
       GlobalService.printHandler('DELETED TRIP ALL DOC');
@@ -1345,11 +1269,7 @@ class TripService {
     int delete4 = await _databaseService.delete(strTblDoc);
     int delete5 = await _databaseService.delete(strTblReassignment);
 
-    if (deleteSuccess > 0 &&
-        delete2 > 0 &&
-        delete3 > 0 &&
-        delete4 > 0 &&
-        delete5 > 0) {
+    if (deleteSuccess > 0 && delete2 > 0 && delete3 > 0 && delete4 > 0 && delete5 > 0) {
       GlobalService.printHandler('DELETED ALL TRIPS');
     }
     return deleteSuccess;

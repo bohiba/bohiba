@@ -1,5 +1,5 @@
 import '/routes/app_route.dart';
-import '/model/driver_model.dart';
+import '../../../model/user_model.dart';
 import 'package:get/get.dart';
 import '/dist/component_exports.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +15,10 @@ class DriverDetialsModalSheet extends GetView<DriverController> {
 
   @override
   Widget build(BuildContext context) {
+    NavigatorState navigatorState = Navigator.of(context);
     return SafeArea(
       child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -76,7 +76,7 @@ class DriverDetialsModalSheet extends GetView<DriverController> {
                     label: 'DETAIL VIEW',
                     onPressed: () {
                       Navigator.pop(context);
-                      Get.toNamed(AppRoute.driver, arguments: driver);
+                      navigatorState.pushNamed(AppRoute.driver, arguments: driver.id);
                     },
                   ),
                 ],

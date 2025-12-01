@@ -1,5 +1,5 @@
 import '/dist/app_enums.dart';
-import '/model/driver_model.dart';
+import '../model/user_model.dart';
 import '/services/driver_service.dart';
 import '/services/dio_serivce.dart';
 import 'package:get/get.dart';
@@ -11,6 +11,9 @@ class DriverAllController extends GetxController {
   AddAssetUsing addUserBy = AddAssetUsing.doc;
 
   RxList<UserModel> arrDriver = <UserModel>[].obs;
+
+  RxString strErrorDes = ''.obs;
+  RxString strErrorTitle = ''.obs;
 
   @override
   void onInit() {
@@ -32,12 +35,14 @@ class DriverAllController extends GetxController {
     MethodType type = MethodType.local,
     bool resetList = false,
   }) async {
-    List<UserModel>? driverList =
-        await DriverService.getAllDriver(methodType: type, reset: resetList);
+    List<UserModel>? driverList = await DriverService.getAllDriver(methodType: type, reset: resetList);
     if (driverList != null) {
       arrDriver.clear();
       arrDriver.addAll(driverList);
       return driverList;
+    } else {
+      strErrorTitle.value = 'Driver Not Found';
+      strErrorDes.value = 'Add a driver and assign them driver and start trips quickly';
     }
     return null;
   }

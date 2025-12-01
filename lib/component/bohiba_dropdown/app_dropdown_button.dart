@@ -1,4 +1,4 @@
-import 'package:bohiba/theme/bohiba_theme.dart';
+import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,7 +26,7 @@ class AppDropdown<T> extends FormField<T> {
 
             return Container(
               width: width ?? double.infinity,
-              margin: const EdgeInsets.symmetric(vertical: 6),
+              margin: padding,
               child: DropdownMenu<T>(
                 width: width,
                 initialSelection: state.value,
@@ -41,29 +41,19 @@ class AppDropdown<T> extends FormField<T> {
                   color: bohibaTheme.textTheme.bodyLarge!.color,
                   letterSpacing: 1.2,
                 ),
-                trailingIcon: showIcon == true
-                    ? Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 24,
-                        color: bohibaTheme.dividerColor,
-                      )
-                    : Container(),
+                trailingIcon: showIcon == true ? Icon(Icons.keyboard_arrow_down, size: 24, color: bohibaTheme.inputDecorationTheme.enabledBorder!.borderSide.color) : Container(),
                 selectedTrailingIcon: Icon(Icons.keyboard_arrow_up),
                 inputDecorationTheme: InputDecorationTheme(
                   isDense: true,
                   isCollapsed: true,
                   suffixIconColor: bohibaTheme.primaryColor,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 15.w),
+                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15.w),
                 ),
-                expandedInsets:
-                    padding ?? EdgeInsets.symmetric(vertical: 5.0.h),
+                expandedInsets: padding ?? EdgeInsets.symmetric(vertical: 5.0.h),
                 searchCallback: (entries, query) {
                   if (query.isEmpty) return null;
                   final index = entries.indexWhere(
-                    (entry) => labelBuilder(entry.value!)
-                        .toLowerCase()
-                        .contains(query.toLowerCase()),
+                    (entry) => labelBuilder(entry.value!).toLowerCase().contains(query.toLowerCase()),
                   );
                   return index != -1 ? index : null;
                 },

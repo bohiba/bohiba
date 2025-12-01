@@ -1,5 +1,5 @@
-import 'package:bohiba/model/profile_model.dart';
-import 'package:bohiba/services/user_role_type.dart';
+import '/model/profile_model.dart';
+import '/services/user_role_type.dart';
 
 import '/routes/app_route.dart';
 
@@ -39,8 +39,7 @@ class SettingController extends GetxController {
     };
     int updateRole = await ProfileService.setRole(bodyMap: bodyObj);
     if (updateRole > 0) {
-      ProfileModel? profileModel =
-          await ProfileService.getProfile(type: MethodType.api);
+      ProfileModel? profileModel = await ProfileService.getProfile(type: MethodType.api);
       if (profileModel != null) {
         roleId.value = RoleService.initRole(profileModel);
       }
@@ -53,8 +52,7 @@ class SettingController extends GetxController {
         Get.offAllNamed(AppRoute.truckDriverNavBar);
       }
 
-      GlobalService.showSnackBar(
-          status: AlertStatus.success, desc: 'Role Updated Successfully');
+      GlobalService.showSnackBar(status: AlertStatus.success, desc: 'Role Updated Successfully');
     }
   }
 

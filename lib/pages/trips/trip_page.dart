@@ -49,7 +49,7 @@ class TripPage extends GetView<TripController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Trip not found',
+                          controller.strErrorTitle.value,
                           style: bohibaTheme.textTheme.headlineMedium,
                         ),
                         Text(
@@ -79,38 +79,25 @@ class TripPage extends GetView<TripController> {
                                       BohibaMarqueeText(
                                         width: ScreenUtils.width * 0.32,
                                         alwaysScroll: true,
-                                        text: controller.tripInfo.value?.origin
-                                                ?.toUpperCase() ??
-                                            '',
-                                        style: bohibaTheme
-                                            .textTheme.headlineMedium,
+                                        text: controller.tripInfo.value?.origin?.toUpperCase() ?? '',
+                                        style: bohibaTheme.textTheme.headlineMedium,
                                         alignment: Alignment.center,
                                         alignText: TextAlign.center,
-                                        overflowText: controller
-                                                .tripInfo.value?.origin
-                                                ?.toUpperCase() ??
-                                            '',
-                                        marqueeTextStyle: bohibaTheme
-                                            .textTheme.headlineMedium,
+                                        overflowText: controller.tripInfo.value?.origin?.toUpperCase() ?? '',
+                                        marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
                                         preserFontSize: [
-                                          bohibaTheme.textTheme.headlineMedium!
-                                              .fontSize!,
+                                          bohibaTheme.textTheme.headlineMedium!.fontSize!,
                                         ],
-                                        minFontSize: bohibaTheme
-                                            .textTheme.headlineMedium!.fontSize,
+                                        minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
                                       ),
                                       Text(
-                                        controller.tripInfo.value?.startDate ??
-                                            '',
+                                        controller.tripInfo.value?.startDate ?? '',
                                         textAlign: TextAlign.center,
                                         maxLines: 1,
                                         style: TextStyle(
-                                          fontSize: bohibaTheme
-                                              .textTheme.bodyMedium!.fontSize,
-                                          fontWeight: bohibaTheme
-                                              .textTheme.bodySmall!.fontWeight,
-                                          color: bohibaTheme
-                                              .textTheme.titleMedium!.color,
+                                          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                          color: bohibaTheme.textTheme.titleMedium!.color,
                                         ),
                                       ),
                                     ],
@@ -127,37 +114,23 @@ class TripPage extends GetView<TripController> {
                                       BohibaMarqueeText(
                                         width: ScreenUtils.width * 0.32,
                                         alwaysScroll: true,
-                                        text: controller
-                                                .tripInfo.value?.destination
-                                                ?.toUpperCase() ??
-                                            '',
+                                        text: controller.tripInfo.value?.destination?.toUpperCase() ?? '',
                                         alignment: Alignment.center,
                                         alignText: TextAlign.center,
-                                        style: bohibaTheme
-                                            .textTheme.headlineMedium,
-                                        overflowText: controller
-                                                .tripInfo.value?.destination
-                                                ?.toUpperCase() ??
-                                            '',
-                                        marqueeTextStyle: bohibaTheme
-                                            .textTheme.headlineMedium,
+                                        style: bohibaTheme.textTheme.headlineMedium,
+                                        overflowText: controller.tripInfo.value?.destination?.toUpperCase() ?? '',
+                                        marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
                                         preserFontSize: [
-                                          bohibaTheme.textTheme.headlineMedium!
-                                              .fontSize!,
+                                          bohibaTheme.textTheme.headlineMedium!.fontSize!,
                                         ],
-                                        minFontSize: bohibaTheme
-                                            .textTheme.headlineMedium!.fontSize,
+                                        minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
                                       ),
                                       Text(
-                                        controller.tripInfo.value?.endedDate ??
-                                            '',
+                                        controller.tripInfo.value?.endedDate ?? '',
                                         style: TextStyle(
-                                          fontSize: bohibaTheme
-                                              .textTheme.bodyMedium!.fontSize,
-                                          fontWeight: bohibaTheme
-                                              .textTheme.bodySmall!.fontWeight,
-                                          color: bohibaTheme
-                                              .textTheme.titleMedium!.color,
+                                          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                          color: bohibaTheme.textTheme.titleMedium!.color,
                                         ),
                                       ),
                                     ],
@@ -177,8 +150,7 @@ class TripPage extends GetView<TripController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      top: ScreenUtils.height20),
+                                  padding: EdgeInsets.only(top: ScreenUtils.height20),
                                   child: Text(
                                     'Basic Info',
                                     style: bohibaTheme.textTheme.headlineMedium,
@@ -187,38 +159,31 @@ class TripPage extends GetView<TripController> {
                                 LinearBoxWidget(
                                   onClick: () {},
                                   header: 'Transporter',
-                                  title: controller.tripInfo.value?.transporter,
+                                  title: controller.tripInfo.value?.transporter?.toDisplayLabel(),
                                 ),
                                 LinearBoxWidget(
                                   onClick: () {
                                     Get.toNamed(
                                       AppRoute.truck,
-                                      arguments: controller
-                                          .tripInfo.value?.truck!.regdNumber,
+                                      arguments: controller.tripInfo.value?.truck!.regdNumber,
                                     );
                                   },
                                   header: 'Truck',
-                                  title: controller
-                                      .tripInfo.value?.truck?.regdNumber,
+                                  title: controller.tripInfo.value?.truck?.regdNumber,
                                 ),
                                 RoleWidget(
                                   truckOwnerWidget: LinearBoxWidget(
                                     header: 'Driver',
-                                    title: controller
-                                            .tripInfo.value?.driver?.name ??
-                                        'No driver',
+                                    title: controller.tripInfo.value?.driver?.name ?? 'No driver',
                                   ),
                                   driverWidget: LinearBoxWidget(
                                     header: 'Owner',
-                                    title:
-                                        controller.tripInfo.value?.owner?.name,
+                                    title: controller.tripInfo.value?.owner?.name,
                                   ),
                                 ),
                                 StatusBoxWidget(
                                   header: 'Status',
-                                  title:
-                                      controller.tripInfo.value?.tripStatus ??
-                                          '',
+                                  title: controller.tripInfo.value?.tripStatus ?? '',
                                   statusColor: controller.statusColor(),
                                 ),
                               ],
@@ -238,45 +203,35 @@ class TripPage extends GetView<TripController> {
                                 Expanded(
                                   child: Container(
                                     decoration: TileDecorative(
-                                      color: bohibaTheme.cardColor
-                                          .withValues(alpha: 0.5),
+                                      color: bohibaTheme.cardColor.withValues(alpha: 0.5),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       vertical: ScreenUtils.height10,
                                       horizontal: ScreenUtils.width15,
                                     ),
-                                    margin: EdgeInsets.only(
-                                        right: ScreenUtils.width10),
+                                    margin: EdgeInsets.only(right: ScreenUtils.width10),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Load Info',
-                                          style: bohibaTheme
-                                              .textTheme.headlineMedium,
+                                          style: bohibaTheme.textTheme.headlineMedium,
                                         ),
                                         TripInfoItem(
                                           label: 'Material Type',
-                                          value: controller.tripInfo.value
-                                                  ?.loadDetail?.materialType
-                                                  ?.toCapitalizedLabel() ??
-                                              '',
+                                          value: controller.tripInfo.value?.loadDetail?.materialType?.toCapitalizedLabel() ?? '',
                                         ),
                                         TripInfoItem(
                                           label: 'Load Weight',
-                                          value:
-                                              '${controller.tripInfo.value?.loadDetail?.loadWeight ?? '0.0'} Ton',
+                                          value: '${controller.tripInfo.value?.loadDetail?.loadWeight ?? '0.0'} Ton',
                                         ),
                                         TripInfoItem(
                                           label: 'Short Weight',
-                                          value:
-                                              '${controller.tripInfo.value?.loadDetail?.shortWeight ?? '0.0'} Ton',
+                                          value: '${controller.tripInfo.value?.loadDetail?.shortWeight ?? '0.0'} Ton',
                                         ),
                                         TripInfoItem(
                                           label: 'Rate per Ton',
-                                          value:
-                                              '${controller.tripInfo.value?.loadDetail?.rate ?? '0.0'} Ton',
+                                          value: '${controller.tripInfo.value?.loadDetail?.rate ?? '0.0'} Ton',
                                         ),
                                       ],
                                     ),
@@ -286,45 +241,36 @@ class TripPage extends GetView<TripController> {
                                   truckOwnerWidget: Expanded(
                                     child: Container(
                                       decoration: TileDecorative(
-                                        color: bohibaTheme.cardColor
-                                            .withValues(alpha: 0.5),
+                                        color: bohibaTheme.cardColor.withValues(alpha: 0.5),
                                       ),
                                       padding: EdgeInsets.symmetric(
                                         vertical: ScreenUtils.height10,
                                         horizontal: ScreenUtils.width15,
                                       ),
-                                      margin: EdgeInsets.only(
-                                          left: ScreenUtils.width10),
+                                      margin: EdgeInsets.only(left: ScreenUtils.width10),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             'Finance Info',
-                                            style: bohibaTheme
-                                                .textTheme.headlineMedium,
+                                            style: bohibaTheme.textTheme.headlineMedium,
                                           ),
                                           TripInfoItem(
                                             label: 'Amount',
-                                            value:
-                                                '₹ ${controller.tripInfo.value?.finance?.amount ?? '0.00'}',
+                                            value: '₹ ${controller.tripInfo.value?.finance?.amount ?? '0.00'}',
                                           ),
                                           TripInfoItem(
                                             label: 'Total Expense',
-                                            value:
-                                                '₹ ${controller.tripInfo.value?.finance?.tripExpense ?? ''}',
+                                            value: '₹ ${controller.tripInfo.value?.finance?.tripExpense ?? ''}',
                                           ),
                                           TripInfoItem(
                                             label: 'Total Payment',
-                                            value:
-                                                '₹ ${controller.tripInfo.value?.finance?.tripPayment ?? ''}',
+                                            value: '₹ ${controller.tripInfo.value?.finance?.tripPayment ?? ''}',
                                           ),
                                           TripInfoItem(
                                             label: 'Total Profit',
-                                            value:
-                                                '₹ ${controller.tripInfo.value?.finance?.tripProfit ?? ''}',
+                                            value: '₹ ${controller.tripInfo.value?.finance?.tripProfit ?? ''}',
                                           ),
                                         ],
                                       ),
@@ -337,9 +283,7 @@ class TripPage extends GetView<TripController> {
 
                           // Trip Payment
                           Visibility(
-                            visible: controller
-                                    .tripInfo.value?.payments?.isNotEmpty ??
-                                false,
+                            visible: controller.tripInfo.value?.payments?.isNotEmpty ?? false,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -357,9 +301,7 @@ class TripPage extends GetView<TripController> {
                                 ListView.separated(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
-                                  itemCount: controller
-                                          .tripInfo.value?.payments?.length ??
-                                      0,
+                                  itemCount: controller.tripInfo.value?.payments?.length ?? 0,
                                   padding: EdgeInsets.only(
                                     left: ScreenUtils.height15,
                                     right: ScreenUtils.height15,
@@ -368,8 +310,7 @@ class TripPage extends GetView<TripController> {
                                     return Divider();
                                   },
                                   itemBuilder: (context, index) {
-                                    final TripPayment payment = controller
-                                        .tripInfo.value!.payments![index];
+                                    final TripPayment payment = controller.tripInfo.value!.payments![index];
                                     return InkWell(
                                       onTap: () {
                                         navigatorState
@@ -379,12 +320,10 @@ class TripPage extends GetView<TripController> {
                                         )
                                             .then(
                                           (onValue) async {
-                                            if (onValue != null &&
-                                                onValue != false) {
+                                            if (onValue != null && onValue != false) {
                                               await controller.getTripInfo(
                                                 methodType: MethodType.api,
-                                                id: controller
-                                                    .tripInfo.value!.id!,
+                                                id: controller.tripInfo.value!.id!,
                                               );
                                             }
                                           },
@@ -396,82 +335,51 @@ class TripPage extends GetView<TripController> {
                                         ),
                                         width: ScreenUtils.width,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             CircleAvatar(
                                               radius: 20,
-                                              backgroundColor: bohibaTheme
-                                                  .colorScheme.onSurface,
-                                              child: Icon(EvaIcons
-                                                  .diagonalArrowRightUpOutline),
+                                              backgroundColor: bohibaTheme.colorScheme.onSurface,
+                                              child: Icon(EvaIcons.diagonalArrowRightUpOutline),
                                             ),
                                             Gap(ScreenUtils.height15),
                                             Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  payment.paidBy
-                                                          ?.toCapitalizedLabel() ??
-                                                      '',
+                                                  payment.paidBy?.toCapitalizedLabel() ?? '',
                                                   maxLines: 1,
-                                                  style: bohibaTheme
-                                                      .textTheme.bodyMedium,
+                                                  style: bohibaTheme.textTheme.bodyMedium,
                                                 ),
                                                 Text(
-                                                  payment.paymentTime
-                                                          ?.toCapitalizedLabel() ??
-                                                      '',
+                                                  payment.paymentTime?.toCapitalizedLabel() ?? '',
                                                   maxLines: 1,
                                                   style: TextStyle(
-                                                    fontSize: bohibaTheme
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .fontSize,
-                                                    fontWeight: bohibaTheme
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .fontWeight,
-                                                    color: bohibaTheme.textTheme
-                                                        .titleMedium!.color,
+                                                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                                                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                                    color: bohibaTheme.textTheme.titleMedium!.color,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             const Spacer(),
                                             Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  payment.amount == null
-                                                      ? ''
-                                                      : '₹ ${payment.amount ?? ''}',
+                                                  payment.amount == null ? '' : '₹ ${payment.amount ?? ''}',
                                                   style: TextStyle(
-                                                    color: bohibaTheme
-                                                        .colorScheme.onPrimary,
+                                                    color: bohibaTheme.colorScheme.onPrimary,
                                                   ),
                                                 ),
                                                 Text(
-                                                  payment.payerType
-                                                          ?.toCapitalizedLabel() ??
-                                                      '',
+                                                  payment.payerType?.toCapitalizedLabel() ?? '',
                                                   style: TextStyle(
-                                                    fontSize: bohibaTheme
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .fontSize,
-                                                    fontWeight: bohibaTheme
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .fontWeight,
-                                                    color: bohibaTheme.textTheme
-                                                        .titleMedium!.color,
+                                                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                                                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                                    color: bohibaTheme.textTheme.titleMedium!.color,
                                                   ),
                                                 ),
                                               ],
@@ -488,10 +396,7 @@ class TripPage extends GetView<TripController> {
 
                           // Trip Expense
                           Visibility(
-                            visible: (controller.tripInfo.value != null &&
-                                controller
-                                        .tripInfo.value?.expenses?.isNotEmpty ==
-                                    true),
+                            visible: (controller.tripInfo.value != null && controller.tripInfo.value?.expenses?.isNotEmpty == true),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -516,24 +421,16 @@ class TripPage extends GetView<TripController> {
                                   separatorBuilder: (context, index) {
                                     return Divider();
                                   },
-                                  itemCount: controller
-                                          .tripInfo.value?.expenses?.length ??
-                                      0,
+                                  itemCount: controller.tripInfo.value?.expenses?.length ?? 0,
                                   itemBuilder: (context, index) {
-                                    final TripExpense expenses = controller
-                                        .tripInfo.value!.expenses![index];
+                                    final TripExpense expenses = controller.tripInfo.value!.expenses![index];
                                     return InkWell(
                                       onTap: () {
-                                        navigatorState
-                                            .pushNamed(AppRoute.expense,
-                                                arguments: expenses)
-                                            .then(
+                                        navigatorState.pushNamed(AppRoute.expense, arguments: expenses).then(
                                           (onValue) async {
-                                            if (onValue != null &&
-                                                (onValue != false)) {
+                                            if (onValue != null && (onValue != false)) {
                                               await controller.getTripInfo(
-                                                id: controller
-                                                    .tripInfo.value!.id!,
+                                                id: controller.tripInfo.value!.id!,
                                               );
                                             }
                                           },
@@ -548,78 +445,51 @@ class TripPage extends GetView<TripController> {
                                           children: [
                                             CircleAvatar(
                                               radius: 20,
-                                              backgroundColor: bohibaTheme
-                                                  .colorScheme.onSurface,
-                                              child: Icon(EvaIcons
-                                                  .diagonalArrowLeftDown),
+                                              backgroundColor: bohibaTheme.colorScheme.onSurface,
+                                              child: Icon(EvaIcons.diagonalArrowLeftDown),
                                             ),
                                             Gap(ScreenUtils.height15),
                                             Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  expenses.expenseType
-                                                          ?.toCapitalizedLabel() ??
-                                                      '',
+                                                  expenses.expenseType?.toCapitalizedLabel() ?? '',
                                                   maxLines: 1,
-                                                  style: bohibaTheme
-                                                      .textTheme.bodyMedium,
+                                                  style: bohibaTheme.textTheme.bodyMedium,
                                                 ),
                                                 Text(
                                                   expenses.expenseDate ?? '',
                                                   maxLines: 1,
                                                   style: TextStyle(
-                                                    fontSize: bohibaTheme
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .fontSize,
-                                                    fontWeight: bohibaTheme
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .fontWeight,
-                                                    color: bohibaTheme.textTheme
-                                                        .titleMedium!.color,
+                                                    fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                                                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                                    color: bohibaTheme.textTheme.titleMedium!.color,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             const Spacer(),
                                             Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
+                                                  alignment: Alignment.centerRight,
                                                   child: Text(
                                                     '- ₹ ${expenses.paid}',
                                                     style: TextStyle(
-                                                      color: bohibaTheme
-                                                          .colorScheme.error,
+                                                      color: bohibaTheme.colorScheme.error,
                                                     ),
                                                   ),
                                                 ),
                                                 Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
+                                                  alignment: Alignment.centerLeft,
                                                   child: Text(
                                                     '${expenses.paymentMode}',
                                                     style: TextStyle(
-                                                      fontSize: bohibaTheme
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .fontSize,
-                                                      fontWeight: bohibaTheme
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .fontWeight,
-                                                      color: bohibaTheme
-                                                          .textTheme
-                                                          .titleMedium!
-                                                          .color,
+                                                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                                                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                                      color: bohibaTheme.textTheme.titleMedium!.color,
                                                     ),
                                                   ),
                                                 ),
@@ -637,10 +507,7 @@ class TripPage extends GetView<TripController> {
 
                           // Trip Reassignment
                           Visibility(
-                            visible: (controller.tripInfo.value != null &&
-                                controller.tripInfo.value?.reassignment
-                                        ?.isNotEmpty ==
-                                    true),
+                            visible: (controller.tripInfo.value != null && controller.tripInfo.value?.reassignment?.isNotEmpty == true),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -662,15 +529,12 @@ class TripPage extends GetView<TripController> {
                                     left: ScreenUtils.width15,
                                     right: ScreenUtils.width15,
                                   ),
-                                  itemCount: controller.tripInfo.value
-                                          ?.reassignment?.length ??
-                                      0,
+                                  itemCount: controller.tripInfo.value?.reassignment?.length ?? 0,
                                   separatorBuilder: (context, index) {
                                     return Divider();
                                   },
                                   itemBuilder: (context, index) {
-                                    final Reassignment reassignment = controller
-                                        .tripInfo.value!.reassignment![index];
+                                    final Reassignment reassignment = controller.tripInfo.value!.reassignment![index];
                                     return InkWell(
                                       onTap: () {
                                         navigatorState.pushNamed(
@@ -684,71 +548,44 @@ class TripPage extends GetView<TripController> {
                                         ),
                                         width: ScreenUtils.width,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             CircleAvatar(
                                               radius: 20,
-                                              backgroundColor: bohibaTheme
-                                                  .colorScheme.onSurface,
+                                              backgroundColor: bohibaTheme.colorScheme.onSurface,
                                               child: Icon(Remix.truck_line),
                                             ),
                                             Gap(ScreenUtils.height15),
                                             SizedBox(
                                               width: ScreenUtils.width * 0.45.w,
                                               child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    reassignment.regdNumber ??
-                                                        '',
+                                                    reassignment.regdNumber ?? '',
                                                     maxLines: 1,
-                                                    style: bohibaTheme
-                                                        .textTheme.bodyMedium,
+                                                    style: bohibaTheme.textTheme.bodyMedium,
                                                   ),
                                                   ReadMoreText(
-                                                    reassignment.reason
-                                                            ?.toCapitalizedLabel() ??
-                                                        '',
+                                                    reassignment.reason?.toCapitalizedLabel() ?? '',
                                                     trimLines: 2,
                                                     trimMode: TrimMode.Line,
-                                                    trimCollapsedText:
-                                                        ' Read more',
-                                                    trimExpandedText:
-                                                        ' Show less',
+                                                    trimCollapsedText: ' Read more',
+                                                    trimExpandedText: ' Show less',
                                                     style: TextStyle(
-                                                      fontSize: bohibaTheme
-                                                          .textTheme
-                                                          .labelMedium!
-                                                          .fontSize,
-                                                      fontWeight: bohibaTheme
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .fontWeight,
-                                                      color: bohibaTheme
-                                                          .textTheme
-                                                          .titleMedium!
-                                                          .color,
+                                                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                                                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                                      color: bohibaTheme.textTheme.titleMedium!.color,
                                                     ),
                                                     moreStyle: TextStyle(
-                                                      fontSize: bohibaTheme
-                                                          .textTheme
-                                                          .labelMedium!
-                                                          .fontSize,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                                                      fontWeight: FontWeight.bold,
                                                       color: Colors.blue,
                                                     ),
                                                     lessStyle: TextStyle(
-                                                      fontSize: bohibaTheme
-                                                          .textTheme
-                                                          .labelMedium!
-                                                          .fontSize,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                                                      fontWeight: FontWeight.bold,
                                                       color: Colors.blue,
                                                     ),
                                                   ),
@@ -756,8 +593,7 @@ class TripPage extends GetView<TripController> {
                                               ),
                                             ),
                                             Spacer(),
-                                            Icon(
-                                                Icons.arrow_forward_ios_rounded)
+                                            Icon(Icons.arrow_forward_ios_rounded)
                                           ],
                                         ),
                                       ),
@@ -769,10 +605,7 @@ class TripPage extends GetView<TripController> {
                           ),
 
                           Visibility(
-                            visible: (controller.tripInfo.value != null &&
-                                controller.tripInfo.value?.documents
-                                        ?.isNotEmpty ==
-                                    true),
+                            visible: (controller.tripInfo.value != null && controller.tripInfo.value?.documents?.isNotEmpty == true),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -796,72 +629,47 @@ class TripPage extends GetView<TripController> {
                                     right: ScreenUtils.width15,
                                     bottom: ScreenUtils.height20,
                                   ),
-                                  itemCount: controller
-                                      .tripInfo.value?.documents?.length,
+                                  itemCount: controller.tripInfo.value?.documents?.length,
                                   itemBuilder: (context, index) {
-                                    TripDocument document = controller
-                                        .tripInfo.value!.documents![index];
+                                    TripDocument document = controller.tripInfo.value!.documents![index];
                                     return InkWell(
                                       onTap: () {},
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: bohibaTheme.cardColor,
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
+                                          borderRadius: BorderRadius.circular(8.r),
                                         ),
                                         alignment: Alignment.center,
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              height:
-                                                  ScreenUtils.height * 0.185,
+                                              height: ScreenUtils.height * 0.185,
                                               decoration: BoxDecoration(
                                                 color: bohibaTheme.dividerColor,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8.r),
-                                                  topRight:
-                                                      Radius.circular(8.r),
+                                                  topRight: Radius.circular(8.r),
                                                 ),
                                               ),
                                               child: document.image == null
                                                   ? null
                                                   : ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadiusGeometry
-                                                              .only(
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                8.r),
-                                                        topRight:
-                                                            Radius.circular(
-                                                                8.r),
+                                                      borderRadius: BorderRadiusGeometry.only(
+                                                        topLeft: Radius.circular(8.r),
+                                                        topRight: Radius.circular(8.r),
                                                       ),
                                                       child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            '${ImagePath.tripImage}/${document.image}',
-                                                        height:
-                                                            ScreenUtils.height *
-                                                                0.185,
-                                                        width:
-                                                            ScreenUtils.width,
+                                                        imageUrl: '${ImagePath.tripImage}/${document.image}',
+                                                        height: ScreenUtils.height * 0.185,
+                                                        width: ScreenUtils.width,
                                                         fit: BoxFit.cover,
-                                                        placeholder:
-                                                            (context, url) =>
-                                                                Container(
-                                                          color: Colors
-                                                              .grey.shade200,
+                                                        placeholder: (context, url) => Container(
+                                                          color: Colors.grey.shade200,
                                                         ),
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            Container(
-                                                          color: bohibaTheme
-                                                              .dividerColor,
-                                                          child: const Icon(
-                                                              Icons
-                                                                  .broken_image,
-                                                              size: 20),
+                                                        errorWidget: (context, url, error) => Container(
+                                                          color: bohibaTheme.dividerColor,
+                                                          child: const Icon(Icons.broken_image, size: 20),
                                                         ),
                                                       ),
                                                     ),
@@ -872,42 +680,25 @@ class TripPage extends GetView<TripController> {
                                                 vertical: ScreenUtils.width10,
                                               ),
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
                                                   BohibaMarqueeText(
                                                     width: ScreenUtils.width,
-                                                    text: document.docType
-                                                            ?.toCapitalizedLabel() ??
-                                                        '',
-                                                    overflowText: document
-                                                            .docType
-                                                            ?.toCapitalizedLabel() ??
-                                                        '',
-                                                    style: bohibaTheme
-                                                        .textTheme.bodySmall,
-                                                    marqueeTextStyle:
-                                                        bohibaTheme.textTheme
-                                                            .bodySmall,
+                                                    text: document.docType?.toCapitalizedLabel() ?? '',
+                                                    overflowText: document.docType?.toCapitalizedLabel() ?? '',
+                                                    style: bohibaTheme.textTheme.bodySmall,
+                                                    marqueeTextStyle: bohibaTheme.textTheme.bodySmall,
                                                     preserFontSize: [
-                                                      bohibaTheme.textTheme
-                                                          .bodySmall!.fontSize!,
+                                                      bohibaTheme.textTheme.bodySmall!.fontSize!,
                                                     ],
                                                   ),
                                                   BohibaMarqueeText(
                                                     width: ScreenUtils.width,
-                                                    text: document.updatedAt ??
-                                                        '',
-                                                    overflowText:
-                                                        document.updatedAt ??
-                                                            '',
-                                                    style: bohibaTheme
-                                                        .textTheme.titleMedium,
-                                                    marqueeTextStyle:
-                                                        bohibaTheme.textTheme
-                                                            .titleMedium,
+                                                    text: document.updatedAt ?? '',
+                                                    overflowText: document.updatedAt ?? '',
+                                                    style: bohibaTheme.textTheme.titleMedium,
+                                                    marqueeTextStyle: bohibaTheme.textTheme.titleMedium,
                                                   ),
                                                 ],
                                               ),
@@ -917,10 +708,9 @@ class TripPage extends GetView<TripController> {
                                       ),
                                     );
                                   },
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    childAspectRatio: 0.85,
+                                    childAspectRatio: 0.82,
                                     mainAxisSpacing: ScreenUtils.height10,
                                     crossAxisSpacing: ScreenUtils.width10,
                                   ),

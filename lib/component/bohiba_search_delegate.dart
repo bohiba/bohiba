@@ -22,7 +22,10 @@ class BohibaSearchDelegate<T> extends SearchDelegate<T?> {
       IconButton(
         icon: const Icon(Icons.clear),
         color: bohibaTheme.iconTheme.color,
-        onPressed: () => query = '',
+        onPressed: () {
+          query = '';
+          close(context, null);
+        },
       ),
     ];
   }
@@ -38,8 +41,7 @@ class BohibaSearchDelegate<T> extends SearchDelegate<T?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final results =
-        items.where((item) => searchPredicate(item, query)).toList();
+    final results = items.where((item) => searchPredicate(item, query)).toList();
 
     if (results.isEmpty) {
       return const Center(child: Text("No results found"));
@@ -53,8 +55,7 @@ class BohibaSearchDelegate<T> extends SearchDelegate<T?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions =
-        items.where((item) => searchPredicate(item, query)).toList();
+    final suggestions = items.where((item) => searchPredicate(item, query)).toList();
 
     return ListView.builder(
       itemCount: suggestions.length,
@@ -72,6 +73,7 @@ class BohibaCompanySearchDelegate extends SearchDelegate<String> {
         icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
+          close(context, '');
         },
       ),
     ];
@@ -128,14 +130,12 @@ class BohibaCompanySearchDelegate extends SearchDelegate<String> {
   }
 }
 
-class CustomLocalizationDelegate
-    extends LocalizationsDelegate<MaterialLocalizations> {
+class CustomLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizations> {
   const CustomLocalizationDelegate();
   @override
   bool isSupported(Locale locale) => locale.languageCode == 'en';
   @override
-  Future<MaterialLocalizations> load(Locale locale) =>
-      SynchronousFuture<MaterialLocalizations>(const CustomLocalization());
+  Future<MaterialLocalizations> load(Locale locale) => SynchronousFuture<MaterialLocalizations>(const CustomLocalization());
   @override
   bool shouldReload(CustomLocalizationDelegate old) => false;
   @override

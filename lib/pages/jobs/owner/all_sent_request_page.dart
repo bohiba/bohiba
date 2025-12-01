@@ -1,7 +1,7 @@
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 
-import '/model/driver_model.dart';
+import '../../../model/user_model.dart';
 import 'package:get/get.dart';
 
 import '/controllers/all_sent_connection_controller.dart';
@@ -62,10 +62,7 @@ class AllSentRequestPage extends GetView<AllSentRequestController> {
                       return OpenDriverTile(
                         openDriver: openDriver,
                         onTap: () {
-                          navigateState
-                              .pushNamed(AppRoute.openDriver,
-                                  arguments: openDriver)
-                              .then(
+                          navigateState.pushNamed(AppRoute.openDriver, arguments: openDriver).then(
                             (onValue) async {
                               if (onValue != null && onValue != false) {
                                 await controller.getAllOpenDriver();

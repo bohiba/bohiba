@@ -7,8 +7,7 @@ import '/dist/app_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DriverAppbar extends GetView<DriverController>
-    implements PreferredSizeWidget {
+class DriverAppbar extends GetView<DriverController> implements PreferredSizeWidget {
   const DriverAppbar({super.key});
   @override
   Widget build(BuildContext context) {
@@ -20,9 +19,9 @@ class DriverAppbar extends GetView<DriverController>
         titleSpacing: 0,
         title: BohibaMarqueeText(
           width: ScreenUtils.width * 0.5,
-          text: controller.driverModel.value.profile?.name,
+          text: controller.driverModel.value?.profile?.name,
           style: bohibaTheme.appBarTheme.titleTextStyle,
-          overflowText: controller.driverModel.value.profile?.name,
+          overflowText: controller.driverModel.value?.profile?.name,
           marqueeTextStyle: bohibaTheme.appBarTheme.titleTextStyle,
           preserFontSize: [bohibaTheme.appBarTheme.titleTextStyle!.fontSize!],
           alwaysScroll: true,
@@ -34,14 +33,16 @@ class DriverAppbar extends GetView<DriverController>
           },
         ),
         actions: [
-          DriverMenu(
-            driver: controller.driverModel.value,
-            allowedActions: [
-              ActionType.share,
-              ActionType.other,
-              ActionType.delete,
-            ],
-          )
+          controller.driverModel.value == null
+              ? SizedBox.shrink()
+              : DriverMenu(
+                  driver: controller.driverModel.value!,
+                  allowedActions: [
+                    ActionType.share,
+                    ActionType.other,
+                    ActionType.delete,
+                  ],
+                )
         ],
       ),
     );

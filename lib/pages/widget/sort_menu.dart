@@ -1,4 +1,6 @@
+import '/component/bohiba_buttons/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../dist/component_exports.dart';
@@ -19,6 +21,7 @@ class _SortMenuState extends State<SortMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final NavigatorState navigatorState = Navigator.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,16 +41,20 @@ class _SortMenuState extends State<SortMenu> {
                 'Sort by',
                 style: TextStyle(
                   fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                  color: bohibaTheme.textTheme.bodySmall!.color,
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Icon(Icons.close),
+                onTap: () => navigatorState.pop(context),
+                child: Icon(
+                  Icons.close,
+                  color: bohibaTheme.iconTheme.color,
+                ),
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, height: 0),
+        Divider(height: 2),
         // Sort by Date
         Padding(
           padding: EdgeInsets.only(
@@ -114,10 +121,12 @@ class _SortMenuState extends State<SortMenu> {
                       style: TextStyle(color: BohibaColors.primaryColor),
                     ),
                   ),
-                  ElevatedButton(
+                  PrimaryButton(
+                    height: 15.h,
+                    width: ScreenUtils.width / 5,
+                    label: 'Apply',
                     onPressed: () {},
-                    child: Text('Apply Now'),
-                  ),
+                  )
                 ],
               ),
             ],
@@ -147,10 +156,7 @@ class _SortOption extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int?> onChanged;
 
-  const _SortOption(
-      {required this.options,
-      required this.selectedIndex,
-      required this.onChanged});
+  const _SortOption({required this.options, required this.selectedIndex, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

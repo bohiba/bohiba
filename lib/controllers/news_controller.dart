@@ -1,4 +1,4 @@
-import 'package:bohiba/dist/app_enums.dart';
+import '/dist/app_enums.dart';
 
 import '/model/news_model.dart';
 import '/services/news_service.dart';
@@ -21,10 +21,7 @@ class NewsController extends GetxController {
   }
 
   Future<void> onRefreshNewsPage() async {
-    await getNews(
-        newsId: newsDetail.value.id!,
-        methodType: MethodType.api,
-        showLoading: false);
+    await getNews(newsId: newsDetail.value.id!, methodType: MethodType.api, showLoading: false);
     newsRefresher.refreshCompleted();
   }
 
