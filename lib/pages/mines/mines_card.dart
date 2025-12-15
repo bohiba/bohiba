@@ -42,7 +42,7 @@ class MinesHorizontalCard extends GetView<MinesController> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: bohibaTheme.colorScheme.tertiary,
+                    backgroundColor: bohibaTheme.colorScheme.surface,
                     // backgroundColor: bohibaTheme.dividerColor,
                     backgroundImage: NetworkImage(GlobalService.getAvatarUrl(minesInfo.mineName ?? 'NA')),
                   ),
@@ -148,7 +148,7 @@ class MinesVerticalCard extends StatelessWidget {
               padding: const EdgeInsets.all(5.0),
               child: CircleAvatar(
                 radius: 35,
-                backgroundColor: bohibaTheme.colorScheme.tertiary,
+                backgroundColor: bohibaTheme.colorScheme.surface,
                 child: Text(minesInfo.mineName?.shortCode ?? ""),
               ),
             ),

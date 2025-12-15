@@ -57,7 +57,7 @@ class TripController extends GetxController {
   Color statusColor() {
     switch (tripInfo.value?.tripStatus) {
       case 'in_transit':
-        return bohibaTheme.colorScheme.surface;
+        return bohibaTheme.colorScheme.secondary;
 
       case 'delay':
         return bohibaTheme.colorScheme.onSurface;

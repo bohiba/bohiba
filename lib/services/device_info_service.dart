@@ -38,12 +38,7 @@ class DeviceInfoService {
   static Future<bool> hasInternet() async {
     final connectivityResult = await Connectivity().checkConnectivity();
     bool internet = (connectivityResult.contains(ConnectivityResult.none));
-    if (internet) {
-      GlobalService.showSnackBar(
-        status: AlertStatus.noInternet,
-        desc: 'No Internet connectivity. Please check and retry',
-      );
-    }
+    if (internet) GlobalService.showSnackBar(status: AlertStatus.noInternet, desc: 'No Internet connectivity');
     return !internet;
   }
 
@@ -106,7 +101,7 @@ class DeviceInfoService {
         options: const AuthenticationOptions(
           biometricOnly: true,
           stickyAuth: true, // re-authenticate on resume
-          useErrorDialogs: false,
+          useErrorDialogs: true,
         ),
       );
       return didAuthenticate;

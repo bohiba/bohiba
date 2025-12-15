@@ -46,8 +46,7 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                   }
                   controller.aHouseCtrl.text = address['name'] ?? '';
                   controller.aLocalityCtrl.text = address['locality'] ?? '';
-                  controller.aStreetCtrl.text =
-                      '${address['street']}, ${address['locality']}';
+                  controller.aStreetCtrl.text = '${address['street']}, ${address['locality']}';
                   controller.aCityCtrl.text = address['city'] ?? '';
                   controller.aDistrictCtrl.text = address['district'] ?? '';
                   controller.aStateCtrl.text = address['state'] ?? '';
@@ -88,8 +87,7 @@ class AddressAuthPage extends GetView<AddressAuthController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.failure,
                 title: 'Verification',
-                description:
-                    'Are your sure? You want to discontinue you verification process',
+                description: 'Are your sure? You want to discontinue you verification process',
                 discardBtnTxt: 'No',
                 saveBtnTxt: 'Yes',
                 onSave: () {
@@ -123,10 +121,8 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                             Text(
                               'Fill in your information to start getting matched with owners.',
                               style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodySmall!.fontSize,
-                                fontWeight:
-                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                                 color: bohibaTheme.textTheme.titleSmall!.color,
                               ),
                             ),
@@ -135,8 +131,7 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                               controller: controller.aHouseCtrl,
                               nextActionType: TextInputAction.next,
                             ),
-                            RequiredLabel(
-                                label: 'Colony/Locality', required: true),
+                            RequiredLabel(label: 'Colony/Locality', required: true),
                             TextInputField(
                               controller: controller.aLocalityCtrl,
                               nextActionType: TextInputAction.next,
@@ -230,7 +225,8 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                           AppRoute.imageAuth,
                           arguments: {
                             'canPop': true,
-                            'route': AppRoute.roleType
+                            'route': AppRoute.roleType,
+                            'canSkip': true,
                           },
                         );
                       }

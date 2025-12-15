@@ -1,15 +1,15 @@
-import '/model/owner_expenses_model.dart';
-
+import 'owner_expense_tile.dart';
+import '/component/screen_utils.dart';
 import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
-import '/component/screen_utils.dart';
-import '/controllers/all_owner_expense_controller.dart';
 import '/dist/app_enums.dart';
-import 'owner_expense_tile.dart';
-import '/pages/widget/permission_widget.dart';
 import '/routes/app_route.dart';
-import '/services/role_permission_service.dart';
 import '/theme/bohiba_theme.dart';
+import '/model/owner_expenses_model.dart';
+import '/pages/widget/permission_widget.dart';
+import '/services/role_permission_service.dart';
+import '/controllers/all_owner_expense_controller.dart';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -49,8 +49,7 @@ class AllOwnerExpenseScreen extends GetView<AllOwnerExpenseController> {
           body: SmartRefresher(
             controller: controller.refreshExpenseList,
             onRefresh: () async => {
-              await controller.getOwnerExpenseList(
-                  methodType: MethodType.api, resetList: true),
+              await controller.getOwnerExpenseList(methodType: MethodType.api, resetList: true),
               controller.refreshExpenseList.refreshCompleted(),
             },
             child: controller.arrOwnerExp.isEmpty
@@ -68,18 +67,14 @@ class AllOwnerExpenseScreen extends GetView<AllOwnerExpenseController> {
                             'Add Your first expense to get started.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize:
-                                  bohibaTheme.textTheme.bodySmall!.fontSize,
-                              fontWeight:
-                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
+                              fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                               color: bohibaTheme.textTheme.titleSmall!.color,
                             ),
                           ),
                           TextButton(
                             onPressed: () {
-                              navigateState
-                                  .pushNamed(AppRoute.addOwnerExpense)
-                                  .then((onValue) async {
+                              navigateState.pushNamed(AppRoute.addOwnerExpense).then((onValue) async {
                                 if (onValue != null) {
                                   await controller.getOwnerExpenseList();
                                 }
@@ -111,10 +106,7 @@ class AllOwnerExpenseScreen extends GetView<AllOwnerExpenseController> {
                         ],
                         onActionComplete: {},
                         onClick: () {
-                          navigateState
-                              .pushNamed(AppRoute.ownerExpense,
-                                  arguments: model)
-                              .then((onValue) async {
+                          navigateState.pushNamed(AppRoute.ownerExpense, arguments: model).then((onValue) async {
                             if (onValue != null) {
                               await controller.getOwnerExpenseList();
                             }

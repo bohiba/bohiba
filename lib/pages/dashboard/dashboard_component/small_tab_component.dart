@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -24,37 +25,44 @@ class SmallTabComponent extends StatelessWidget {
       child: Container(
         height: ScreenUtils.height47,
         width: ScreenUtils.width * 0.25,
-        margin: EdgeInsets.only(right: ScreenUtils.height20),
-        decoration: BoxDecoration(
-          color: BohibaColors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
+        margin: EdgeInsets.only(right: ScreenUtils.height10),
+        decoration: TileDecorative(color: bohibaTheme.colorScheme.onSecondary),
         child: Row(
           children: [
             Container(
               height: ScreenUtils.width * 0.108,
               width: ScreenUtils.width * 0.108,
-              decoration: BoxDecoration(
-                color: bohibaTheme.primaryColor,
-                border: Border.all(color: BohibaColors.white),
-                borderRadius: BorderRadius.circular(10),
-              ),
+              margin: EdgeInsets.all(1.0),
+              decoration: TileDecorative(color: bohibaTheme.primaryColor),
               child: Icon(
                 icon,
-                color: BohibaColors.white,
+                color: bohibaTheme.colorScheme.onSecondary,
               ),
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.adaptSize),
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: AutoSizeText(
                   label,
-                  style: bohibaTheme.textTheme.labelMedium,
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                    fontFamily: bohibaTheme.textTheme.labelMedium!.fontFamily,
+                    color: bohibaTheme.textTheme.labelMedium!.color,
+                  ),
+                  presetFontSizes: [
+                    bohibaTheme.textTheme.labelMedium!.fontSize!,
+                  ],
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflowReplacement: MarqueeText(
                     speed: 5,
-                    style: bohibaTheme.textTheme.labelMedium,
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                      fontFamily: bohibaTheme.textTheme.labelMedium!.fontFamily,
+                      color: bohibaTheme.textTheme.labelMedium!.color,
+                    ),
                     textAlign: TextAlign.center,
                     alwaysScroll: false,
                     text: TextSpan(text: label),

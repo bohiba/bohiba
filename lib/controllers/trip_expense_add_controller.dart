@@ -56,8 +56,7 @@ class AddTripExpenseController extends GetxController {
       'trip_id': tripModel?.id,
       'truck_regd_number': tripModel?.truck?.regdNumber?.trim(),
       'expense_date': expensedateController.text.trim(),
-      'expense_type':
-          typeController.text.trim().replaceAll(' ', '_').toLowerCase(),
+      'expense_type': typeController.text.trim().replaceAll(' ', '_').toLowerCase(),
       'balance_amount': "0.0",
       'payment_mode': paymentModeController.text.trim(),
       'paid': (paidController.text.replaceAll(RegExp(r'[₹,]'), '').trim()),
@@ -72,7 +71,7 @@ class AddTripExpenseController extends GetxController {
       );
       if (editSucess > 0) {
         countUpdate++;
-        Get.back(result: true);
+        Get.back();
       }
     } else if (tripModel != null && tripExpense == null) {
       bodyObj['trip_id'] = tripModel!.id!;
@@ -82,7 +81,7 @@ class AddTripExpenseController extends GetxController {
       );
       if (expenseAdded > 0) {
         countUpdate++;
-        // Get.back(result: true);
+        Get.back();
       }
     } else {
       DoNothingAction();

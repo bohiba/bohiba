@@ -17,8 +17,7 @@ class TripMenu extends GetView<TripController> {
   final Icon? icon;
   final TripModel? trip;
   final List<TripActionType> allowedActions;
-  final Map<TripActionType, FutureOr<void> Function(dynamic value)?>?
-      onActionComplete;
+  final Map<TripActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
   const TripMenu({
     super.key,
     this.icon,
@@ -129,9 +128,7 @@ class TripMenu extends GetView<TripController> {
 
           switch (actionType) {
             case TripActionType.edit:
-              navigatorState
-                  .pushNamed(AppRoute.addTrip, arguments: trip)
-                  .then((result) {
+              navigatorState.pushNamed(AppRoute.addTrip, arguments: trip).then((result) {
                 if (onActionComplete?[TripActionType.edit] != null) {
                   onActionComplete![TripActionType.edit]!(result);
                 }
@@ -139,9 +136,7 @@ class TripMenu extends GetView<TripController> {
               break;
 
             case TripActionType.expense:
-              navigatorState
-                  .pushNamed(AppRoute.addExpense, arguments: trip)
-                  .then((result) {
+              navigatorState.pushNamed(AppRoute.addExpense, arguments: trip).then((result) {
                 if (onActionComplete?[TripActionType.expense] != null) {
                   onActionComplete![TripActionType.expense]!(result);
                 }
@@ -149,18 +144,14 @@ class TripMenu extends GetView<TripController> {
               break;
 
             case TripActionType.payment:
-              navigatorState
-                  .pushNamed(AppRoute.addPayment, arguments: trip)
-                  .then((result) {
+              navigatorState.pushNamed(AppRoute.addPayment, arguments: trip).then((result) {
                 if (onActionComplete?[TripActionType.payment] != null) {
                   onActionComplete![TripActionType.payment]!(result);
                 }
               });
               break;
             case TripActionType.reassignment:
-              navigatorState
-                  .pushNamed(AppRoute.addReassignment, arguments: trip)
-                  .then((result) {
+              navigatorState.pushNamed(AppRoute.addReassignment, arguments: trip).then((result) {
                 if (onActionComplete?[TripActionType.reassignment] != null) {
                   onActionComplete![TripActionType.reassignment]!(result);
                 }
@@ -168,9 +159,7 @@ class TripMenu extends GetView<TripController> {
               break;
 
             case TripActionType.document:
-              navigatorState
-                  .pushNamed(AppRoute.addTripDocument, arguments: trip)
-                  .then((result) {
+              navigatorState.pushNamed(AppRoute.addTripDocument, arguments: trip).then((result) {
                 if (onActionComplete?[TripActionType.document] != null) {
                   onActionComplete![TripActionType.document]!(result);
                 }
@@ -183,8 +172,7 @@ class TripMenu extends GetView<TripController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.warning,
                 title: 'DELETE',
-                description:
-                    'Trip and related data will be deleted permanently? Are you sure',
+                description: 'Trip and related data will be deleted permanently? Are you sure',
                 discardBtnTxt: 'DELETE',
                 onDiscard: () async {
                   navigatorState.pop();
@@ -196,11 +184,7 @@ class TripMenu extends GetView<TripController> {
                 },
                 saveBtnTxt: 'CLOSE',
                 onSave: () => Get.back(),
-              ).then((result) {
-                if (onActionComplete?[TripActionType.delete] != null) {
-                  onActionComplete![TripActionType.delete]!(result);
-                }
-              });
+              );
               break;
             default:
               null;
@@ -217,10 +201,6 @@ class TripMenu extends GetView<TripController> {
     );
   }
 }
-
-/*
-
- */
 
 class TripMenuMoreOption extends StatelessWidget {
   const TripMenuMoreOption({super.key});

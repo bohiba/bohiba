@@ -1,19 +1,19 @@
 import '/pages/mines/mines_tile.dart';
 import '/pages/truck/truck_tile.dart';
-
-import '/controllers/home_controller.dart';
-import '/dist/app_enums.dart';
-import '../../model/user_model.dart';
-import '/model/trip_model.dart';
-import '/model/truck_model.dart';
-import '/pages/trips/trip_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '/pages/driver/driver_tile.dart';
 
+import '/dist/app_enums.dart';
+import '/controllers/home_controller.dart';
+
+import '/model/user_model.dart';
+import '/model/truck_model.dart';
+
 import '/routes/app_route.dart';
-import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
+import '/component/screen_utils.dart';
+
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class HomeFavListSection extends GetView<HomeController> {
   const HomeFavListSection({super.key});
@@ -122,7 +122,7 @@ class HomeFavListSection extends GetView<HomeController> {
                   }
 
                   if (favObj.containsKey('trip_code')) {
-                    return TripTile(tripInfo: TripModel.fromJson(favObj));
+                    return SizedBox.fromSize();
                   }
                   return Container();
                 },

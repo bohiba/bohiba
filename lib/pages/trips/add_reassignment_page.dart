@@ -15,59 +15,55 @@ class AddReassignementPage extends GetView<TripAddReassignController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TitleAppbar(
-          title: controller.tripModel == null
-              ? 'Edit Reassignment'
-              : 'Reassignment',
-          popResult: true),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: ScreenUtils.height20,
-            left: ScreenUtils.height15,
-            right: ScreenUtils.height15,
-          ),
-          child: Column(
-            children: [
-              DateInputField(
-                width: ScreenUtils.width,
-                onTap: () async {
-                  controller.assignDate =
-                      await GlobalService.datePickerModal(context: context);
+    return Obx(() {
+      return Scaffold(
+        appBar: TitleAppbar(title: controller.tripModel == null ? 'Edit Reassignment' : 'Reassignment', popResult: controller.countUpdate.value > 0 ? true : false),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: ScreenUtils.height20,
+              left: ScreenUtils.height15,
+              right: ScreenUtils.height15,
+            ),
+            child: Column(
+              children: [
+                DateInputField(
+                  width: ScreenUtils.width,
+                  onTap: () async {
+                    controller.assignDate = await GlobalService.datePickerModal(context: context);
 
-                  if (controller.assignDate != null) {
-                    controller.dateController.text =
-                        DateFormat('dd-MM-yyyy').format(controller.assignDate!);
-                  }
-                },
-                controller: controller.dateController,
-                hintText: 'Payment Date',
-              ),
-              TextInputField(
-                hintText: 'Truck Number',
-                controller: controller.truckNumberController,
-                textCapitalization: TextCapitalization.characters,
-              ),
-              TextInputField(
-                height: 110,
-                maxLines: 4,
-                maxLength: 30,
-                counterText: '30',
-                hintText: 'Remark',
-                textCapitalization: TextCapitalization.none,
-                controller: controller.remarkController,
-              ),
-              Spacer(),
-              PrimaryButton(
-                onPressed: () => controller.addUpdateReassign(),
-                label: controller.tripModel == null ? 'UPDATE' : 'SAVE',
-              )
-            ],
+                    if (controller.assignDate != null) {
+                      controller.dateController.text = DateFormat('yyyy-MM-dd').format(controller.assignDate!);
+                    }
+                  },
+                  controller: controller.dateController,
+                  hintText: 'Payment Date',
+                ),
+                TextInputField(
+                  hintText: 'Truck Number',
+                  controller: controller.truckNumberController,
+                  textCapitalization: TextCapitalization.characters,
+                ),
+                TextInputField(
+                  height: 110,
+                  maxLines: 4,
+                  maxLength: 30,
+                  counterText: '30',
+                  hintText: 'Remark',
+                  textCapitalization: TextCapitalization.none,
+                  controller: controller.remarkController,
+                ),
+                Spacer(),
+                PrimaryButton(
+                  onPressed: () => controller.addUpdateReassign(),
+                  label: controller.tripModel == null ? 'UPDATE' : 'SAVE',
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

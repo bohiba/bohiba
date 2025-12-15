@@ -1,3 +1,6 @@
+import 'package:bohiba/component/image_path.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import '/model/rating_model.dart';
 
 import '/routes/app_route.dart';
@@ -60,10 +63,7 @@ class UserProfilePage extends GetView<DashboardController> {
                       header: 'Hiring Status',
                       widget: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-                          value: controller.statusOption
-                                  .contains(controller.opted.value)
-                              ? controller.opted.value
-                              : null,
+                          value: controller.statusOption.contains(controller.opted.value) ? controller.opted.value : null,
                           isDense: true,
                           hint: Text('Select status'),
                           borderRadius: BorderRadius.circular(8.0),
@@ -76,8 +76,7 @@ class UserProfilePage extends GetView<DashboardController> {
                               )
                               .toList(),
                           onChanged: (status) async {
-                            if (status != null &&
-                                controller.opted.value != status) {
+                            if (status != null && controller.opted.value != status) {
                               controller.opted.value = status;
                               await controller.updateUserHiringStatus();
                             }
@@ -89,10 +88,7 @@ class UserProfilePage extends GetView<DashboardController> {
                       header: 'Job Status',
                       widget: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-                          value: controller.statusOption
-                                  .contains(controller.opted.value)
-                              ? controller.opted.value
-                              : null,
+                          value: controller.statusOption.contains(controller.opted.value) ? controller.opted.value : null,
                           isDense: true,
                           borderRadius: BorderRadius.circular(8.0),
                           hint: Text('Select status'),
@@ -105,8 +101,7 @@ class UserProfilePage extends GetView<DashboardController> {
                               )
                               .toList(),
                           onChanged: (status) async {
-                            if (status != null &&
-                                controller.opted.value != status) {
+                            if (status != null && controller.opted.value != status) {
                               controller.opted.value = status;
                               await controller.updateUserHiringStatus();
                             }
@@ -121,9 +116,7 @@ class UserProfilePage extends GetView<DashboardController> {
                   ),
                   LinearBoxWidget(
                     onClick: () {
-                      navigator
-                          .pushNamed(AppRoute.allTruck)
-                          .then((onValue) async {
+                      navigator.pushNamed(AppRoute.allTruck).then((onValue) async {
                         await controller.getProfileModel();
                       });
                     },
@@ -138,9 +131,7 @@ class UserProfilePage extends GetView<DashboardController> {
                         navigator.pushNamed(AppRoute.allDriver);
                       },
                       header: 'Total Driver',
-                      title:
-                          controller.profileModel.value?.driver?.toString() ??
-                              '0',
+                      title: controller.profileModel.value?.driver?.toString() ?? '0',
                       showArrow: true,
                     ),
                   ),
@@ -170,48 +161,77 @@ class UserProfilePage extends GetView<DashboardController> {
                         ),
                         Obx(
                           () {
-                            final ratings =
-                                controller.profileModel.value?.ratings;
+                            final ratings = controller.profileModel.value?.ratings;
 
                             if (ratings != null && ratings.isNotEmpty) {
                               return ListView.builder(
-                                itemCount: controller
-                                        .profileModel.value?.ratings?.length ??
-                                    0,
+                                itemCount: controller.profileModel.value?.ratings?.length ?? 0,
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                padding:
-                                    EdgeInsets.only(top: ScreenUtils.height10),
+                                padding: EdgeInsets.only(top: ScreenUtils.height10),
                                 itemBuilder: (context, index) {
                                   RatingModel rating = ratings[index];
                                   return Container(
-                                    margin: EdgeInsets.only(
-                                        bottom: ScreenUtils.height10),
+                                    margin: EdgeInsets.only(bottom: ScreenUtils.height10),
                                     // padding: EdgeInsets.symmetric(
                                     //   horizontal: ScreenUtils.width15,
                                     // ),
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        CircleAvatar(
-                                          radius: 15.w,
-                                          backgroundColor:
-                                              bohibaTheme.dividerColor,
+                                        Container(
+                                          height: 32.h,
+                                          width: 32.h,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: bohibaTheme.colorScheme.surface,
+                                          ),
+                                          child: rating.reviewerImage == null || (rating.reviewerImage?.isEmpty ?? true)
+                                              ? Text(
+                                                  rating.reviewerImage?.shortCode ?? '',
+                                                  style: TextStyle(
+                                                    fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                                                    fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                                                    color: bohibaTheme.textTheme.bodySmall!.color,
+                                                  ),
+                                                )
+                                              : Container(
+                                                  height: 32.h,
+                                                  width: 32.h,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: bohibaTheme.dividerColor,
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadiusGeometry.circular(35.r),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: '${ImagePath.profileImage}/${rating.reviewerImage}',
+                                                      fit: BoxFit.cover,
+                                                      height: 32.h,
+                                                      width: 32.h,
+                                                      placeholder: (context, url) => Container(
+                                                        color: bohibaTheme.cardColor,
+                                                      ),
+                                                      errorWidget: (context, url, error) => Icon(
+                                                        Icons.broken_image,
+                                                        size: 20,
+                                                        color: bohibaTheme.cardColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                         ),
                                         Gap(8.w),
                                         SizedBox(
                                           width: ScreenUtils.width * 0.55.w,
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Text(
                                                 rating.reviewerName ?? '',
-                                                style: bohibaTheme
-                                                    .textTheme.labelLarge,
+                                                style: bohibaTheme.textTheme.labelLarge,
                                               ),
                                               ReadMoreText(
                                                 rating.feedback ?? '',
@@ -220,30 +240,18 @@ class UserProfilePage extends GetView<DashboardController> {
                                                 trimCollapsedText: ' Read more',
                                                 trimExpandedText: ' Show less',
                                                 style: TextStyle(
-                                                  fontSize: bohibaTheme
-                                                      .textTheme
-                                                      .labelMedium!
-                                                      .fontSize,
-                                                  color: bohibaTheme.textTheme
-                                                      .titleMedium!.color,
+                                                  fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                                                  color: bohibaTheme.textTheme.titleMedium!.color,
                                                 ),
                                                 moreStyle: TextStyle(
-                                                  fontSize: bohibaTheme
-                                                      .textTheme
-                                                      .labelMedium!
-                                                      .fontSize,
+                                                  fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                                                   fontWeight: FontWeight.bold,
-                                                  color:
-                                                      bohibaTheme.primaryColor,
+                                                  color: bohibaTheme.primaryColor,
                                                 ),
                                                 lessStyle: TextStyle(
-                                                  fontSize: bohibaTheme
-                                                      .textTheme
-                                                      .labelMedium!
-                                                      .fontSize,
+                                                  fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                                                   fontWeight: FontWeight.bold,
-                                                  color:
-                                                      bohibaTheme.primaryColor,
+                                                  color: bohibaTheme.primaryColor,
                                                 ),
                                               ),
                                             ],
@@ -254,15 +262,11 @@ class UserProfilePage extends GetView<DashboardController> {
                                           height: 35.h,
                                           alignment: Alignment.center,
                                           child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                rating.rating
-                                                        ?.toStringAsFixed(1) ??
-                                                    '',
-                                                style: bohibaTheme
-                                                    .textTheme.labelLarge,
+                                                rating.rating?.toStringAsFixed(1) ?? '',
+                                                style: bohibaTheme.textTheme.labelLarge,
                                               ),
                                               const Icon(
                                                 Icons.star_rounded,
@@ -279,16 +283,14 @@ class UserProfilePage extends GetView<DashboardController> {
                             } else {
                               return Container(
                                 width: ScreenUtils.width * 0.75,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: ScreenUtils.height20),
+                                padding: EdgeInsets.symmetric(vertical: ScreenUtils.height20),
                                 alignment: Alignment.center,
                                 child: Column(
                                   children: [
                                     Text(
                                       'No Rating',
                                       textAlign: TextAlign.center,
-                                      style:
-                                          bohibaTheme.textTheme.headlineLarge,
+                                      style: bohibaTheme.textTheme.headlineLarge,
                                     ),
                                     Text(
                                       'You haven\'t received any rating from truck owners. Your truck owner can help you to get first rating.',

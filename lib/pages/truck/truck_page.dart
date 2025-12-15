@@ -103,7 +103,7 @@ class TruckImageSection extends GetView<TruckController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.truckModel.value?.truckImage == null) {
+        if (controller.truckModel.value?.truckImage == null || (controller.truckModel.value?.truckImage?.isEmpty ?? true)) {
           return Container(
             width: ScreenUtils.width,
             height: ScreenUtils.width * 0.5,
@@ -133,7 +133,7 @@ class TruckImageSection extends GetView<TruckController> {
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: 20.h,
-                              color: bohibaTheme.colorScheme.tertiary,
+                              color: bohibaTheme.colorScheme.surface,
                             ),
                           ),
                           Gap(5.h),
@@ -146,7 +146,7 @@ class TruckImageSection extends GetView<TruckController> {
                     : SizedBox.shrink(),
                 if (controller.selectedImg.value == null)
                   PrimaryButton(
-                    width: 120.w,
+                    width: 130.w,
                     height: 8.h,
                     label: 'Upload Image',
                     onPressed: () => controller.pickImage(
@@ -362,7 +362,7 @@ class RelatedPersonSection extends GetView<TruckController> {
                       Gap(10.w),
                       GestureDetector(
                         onTap: () => GlobalService.showAlertDialog(
-                          status: AlertStatus.info,
+                          status: AlertStatus.warning,
                           title: 'Remove Driver',
                           description: 'Are you sure you want to remove driver from this truck?',
                           discardBtnTxt: 'Remove',

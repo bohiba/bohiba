@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/component/bohiba_dropdown/app_dropdown_button.dart';
 import '/extensions/bohiba_extension.dart';
 
@@ -50,9 +52,7 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                           onTap: () async {
                             DateTime? paymentDate = await GlobalService.datePickerModal(
                               context: context,
-                              startTime: DateFormat('dd-MM-yyyy').parse(
-                                controller.tripModel!.startDate!,
-                              ),
+                              startTime: DateFormat('yyyy-MM-dd').parse(controller.tripModel?.startDate ?? ''),
                             );
                             if (paymentDate != null) {
                               controller.paymentDateController.text = DateFormat('dd-MM-yyyy').format(paymentDate);
@@ -68,20 +68,21 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                           nextActionType: TextInputAction.next,
                         ),
                         AppDropdown(
-                          width: ScreenUtils.width,
+                          padding: EdgeInsets.only(bottom: 5.h),
                           hint: 'Recieved by (Manager/Driver/Self)',
                           items: controller.arrRecievedBy,
                           menuController: controller.rcviedController,
                           labelBuilder: (p) => p.toDisplayLabel(),
                         ),
                         AppDropdown(
+                          padding: EdgeInsets.only(bottom: 5.h),
                           hint: 'Select Payment Mode',
                           items: controller.arrPaymentMode,
                           menuController: controller.paymentModeController,
                           labelBuilder: (p) => p.toDisplayLabel(),
                         ),
                         AppDropdown(
-                          width: ScreenUtils.width,
+                          padding: EdgeInsets.only(bottom: 5.h),
                           hint: 'Select Payment Mode',
                           items: controller.arrPaymentType,
                           menuController: controller.paymentTypeController,

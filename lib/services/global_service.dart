@@ -94,7 +94,7 @@ class GlobalService {
     Color? textColor = bohibaTheme.textTheme.bodySmall!.color;
     switch (status) {
       case AlertStatus.warning:
-        textColor = bohibaTheme.colorScheme.error;
+        textColor = bohibaTheme.colorScheme.tertiary;
         break;
       case AlertStatus.success:
         textColor = bohibaTheme.colorScheme.onPrimary;
@@ -135,7 +135,7 @@ class GlobalService {
               child: Text(
                 discardBtnTxt.toUpperCase(),
                 style: TextStyle(
-                  color: bohibaTheme.colorScheme.error,
+                  color: textColor,
                   fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
                   fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
                 ),
@@ -235,6 +235,18 @@ class GlobalService {
     Get.focusScope?.requestFocus();
   }
 
+  static SnackbarController? showLocalNotification({
+    String title = 'Bohiba',
+    String message = '',
+  }) {
+    return Get.snackbar(
+      title,
+      message,
+      duration: Duration(seconds: 2),
+      backgroundColor: bohibaTheme.scaffoldBackgroundColor,
+    );
+  }
+
   // ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
   static SnackbarController? showSnackBar({
     required AlertStatus status,
@@ -258,11 +270,11 @@ class GlobalService {
         iconData = Icons.warning;
         break;
       case AlertStatus.failure:
-        color = bohibaTheme.colorScheme.error;
+        color = bohibaTheme.colorScheme.tertiary;
         iconData = Icons.error;
         break;
       case AlertStatus.noInternet:
-        color = bohibaTheme.colorScheme.surface;
+        color = bohibaTheme.colorScheme.error;
         iconData = Icons.wifi_off_rounded;
         break;
     }
@@ -286,7 +298,7 @@ class GlobalService {
         shouldIconPulse: false,
         icon: Icon(
           iconData,
-          color: bohibaTheme.colorScheme.tertiary,
+          color: bohibaTheme.colorScheme.surface,
         ),
         borderRadius: 8.0,
         borderWidth: 0.0,

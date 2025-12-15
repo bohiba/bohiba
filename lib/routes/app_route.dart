@@ -1,3 +1,5 @@
+import '/pages/user/user_profile/manage_account_page.dart';
+
 import '/bindings/add_trip_doc_binding.dart';
 import '/pages/trips/add_trip_document_page.dart';
 import '/pages/user/user_scan/scan_qr_action_page.dart';
@@ -232,6 +234,7 @@ class AppRoute {
   static const String dashboardScreen = "/dashboard";
   static const String loadHistoryScreen = "/load-history";
   static const String analytics = "/analytics";
+  static const String manageAccount = "/manage-account";
   static const String setting = "/setting";
   static const String security = "/security";
   static const String shareEarn = "/shareEarn";
@@ -408,9 +411,11 @@ class AppRoute {
     ),
 
     GetPage(
-      binding: AnalyticBinding(),
       name: analytics,
+      binding: AnalyticBinding(),
       page: () => AnalyticPage(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
 
     GetPage(
@@ -611,7 +616,12 @@ class AppRoute {
     ),
 
     // DASHBOARD
-    GetPage(name: userProfile, page: () => UserProfilePage()),
+    GetPage(
+      name: userProfile,
+      page: () => UserProfilePage(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
 
     GetPage(
       name: editProfile,
@@ -637,33 +647,63 @@ class AppRoute {
     ),
 
     GetPage(
+      name: manageAccount,
+      page: () => ManageAccountPage(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+
+    GetPage(
       name: setting,
       binding: SettingBinding(),
       page: () => SettingPage(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
     GetPage(
       name: security,
       binding: SecurityBinding(),
       page: () => SecurityPage(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
     GetPage(
       name: shareEarn,
       binding: ShareBinding(),
       page: () => ShareEarnPage(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
 
-    GetPage(name: policy, page: () => PolicyPage()),
-    GetPage(name: contact, page: () => ContactSupportPage()),
-    GetPage(name: reportIssue, page: () => ReportIssuePage()),
+    GetPage(
+      name: policy,
+      page: () => PolicyPage(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+    GetPage(
+      name: contact,
+      page: () => ContactSupportPage(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+    GetPage(
+      name: reportIssue,
+      page: () => ReportIssuePage(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
 
     GetPage(binding: AllJobBinding(), name: allJobs, page: () => AllJobPage()),
 
     GetPage(binding: AddJobBinding(), name: addJobs, page: () => AddJobsPage()),
 
     GetPage(
-      binding: JobDetailBinding(),
       name: jobDetail,
+      binding: JobDetailBinding(),
       page: () => JobDetailPage(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
 
     GetPage(
@@ -682,12 +722,19 @@ class AppRoute {
       name: allAppliedJob,
       binding: AllAppliedJobBinding(),
       page: () => AllAppliedJobPage(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
 
     GetPage(
       name: allRcvdRequest,
       binding: AllRecivedRequestBinding(),
       page: () => AllReceivedRequestPage(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
   ];
+
+  static const Transition _transition = Transition.rightToLeft;
+  static const Duration _duration = Duration(milliseconds: 300);
 }

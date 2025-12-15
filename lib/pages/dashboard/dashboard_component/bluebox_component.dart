@@ -1,4 +1,5 @@
 import '/theme/bohiba_theme.dart';
+import '/component/ui/tile_decorative.dart';
 import '/component/screen_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -22,10 +23,7 @@ class BlueBoxComponent extends StatelessWidget {
       width: ScreenUtils.width,
       height: ScreenUtils.height * 0.233,
       margin: EdgeInsets.only(bottom: ScreenUtils.height15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: bohibaTheme.primaryColor,
-      ),
+      decoration: TileDecorative(color: bohibaTheme.primaryColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -64,12 +62,7 @@ class BlueBoxComponent extends StatelessWidget {
             ),
           ),
           Spacer(),
-          Divider(
-            // height: 45,
-            thickness: 1,
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(),
           Container(
             padding: EdgeInsets.only(left: ScreenUtils.width10),
             width: ScreenUtils.width,

@@ -1,7 +1,7 @@
 import '/dist/app_enums.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
-import '../../model/user_model.dart';
+import '/model/user_model.dart';
 import '/component/screen_utils.dart';
 import '/pages/driver/driver_tile.dart';
 import '/controllers/home_controller.dart';

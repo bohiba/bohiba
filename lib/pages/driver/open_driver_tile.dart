@@ -1,6 +1,7 @@
 import '/dist/app_enums.dart';
-import '../../model/user_model.dart';
+import '/model/user_model.dart';
 import '/theme/bohiba_theme.dart';
+import '/component/image_path.dart';
 import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';
 import '/component/ui/tile_decorative.dart';
@@ -10,10 +11,10 @@ import '/pages/widget/role_widget.dart';
 import '/pages/driver/driver_modals/connection_request_modal.dart';
 
 import 'package:gap/gap.dart';
-
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class OpenDriverTile extends StatefulWidget {
   final UserModel openDriver;
@@ -58,9 +59,48 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
         decoration: TileDecorative(),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: bohibaTheme.dividerColor,
+            Container(
+              height: 32.h,
+              width: 32.h,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: bohibaTheme.colorScheme.surface,
+              ),
+              child: (user.profile == null || user.profile?.image == null || (user.profile?.image?.isEmpty ?? true))
+                  ? Text(
+                      user.profile?.name?.shortCode ?? '',
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                        fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                        color: bohibaTheme.textTheme.bodySmall!.color,
+                      ),
+                    )
+                  : Container(
+                      height: 32.h,
+                      width: 32.h,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: bohibaTheme.dividerColor,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadiusGeometry.circular(35.r),
+                        child: CachedNetworkImage(
+                          imageUrl: '${ImagePath.profileImage}/${user.profile?.image}',
+                          fit: BoxFit.cover,
+                          height: 32.h,
+                          width: 32.h,
+                          placeholder: (context, url) => Container(
+                            color: bohibaTheme.cardColor,
+                          ),
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.broken_image,
+                            size: 20,
+                            color: bohibaTheme.cardColor,
+                          ),
+                        ),
+                      ),
+                    ),
             ),
             Gap(10.w),
             Column(

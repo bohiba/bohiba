@@ -71,7 +71,10 @@ class TruckService {
             id
           , image
           , vhNumber
+          , driverUuid
           , driverName
+          , ownerUuid
+          , ownerName
            FROM $tblTrucks ORDER BY createdAt DESC ''';
       List<Map<String, dynamic>> truckList = await _databaseService.executeQuery(strQueryTruckList) ?? [];
       if (showProgress) GlobalService.dismissProgress();

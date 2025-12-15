@@ -90,11 +90,9 @@ class CompanyTile extends StatelessWidget {
                       child: Text(
                         'Report',
                         style: TextStyle(
-                          color: BohibaColors.warningColor,
-                          fontStyle:
-                              bohibaTheme.textTheme.titleMedium!.fontStyle,
-                          fontWeight:
-                              bohibaTheme.textTheme.titleMedium!.fontWeight,
+                          color: bohibaTheme.colorScheme.tertiary,
+                          fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
+                          fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
                         ),
                       ),
                     ),

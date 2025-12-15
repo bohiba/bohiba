@@ -44,14 +44,14 @@ class TruckTile extends GetView<TruckAllController> {
               onTap: onClick,
               child: Row(
                 children: [
-                  truckInfo.truckImage == null
+                  truckInfo.truckImage == null || (truckInfo.truckImage?.isEmpty ?? true)
                       ? Container(
                           height: 32.h,
                           width: 32.h,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: bohibaTheme.colorScheme.tertiary,
+                            color: bohibaTheme.colorScheme.surface,
                           ),
                           child: Text(
                             truckInfo.regdNumber?.shortCode ?? '',

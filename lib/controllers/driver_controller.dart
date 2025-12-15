@@ -32,7 +32,7 @@ class DriverController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    driverModel.value?.id = Get.arguments;
+    driverModel.value = UserModel(id: Get.arguments);
     Future.delayed(Duration.zero, () async {
       await getDriverInfo();
       isRated();

@@ -41,8 +41,7 @@ class ReassignmentPage extends GetView<ReassignmentController> {
                         'Edit',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
                           color: bohibaTheme.textTheme.bodyMedium!.color,
                         ),
                       ),
@@ -52,11 +51,9 @@ class ReassignmentPage extends GetView<ReassignmentController> {
                       child: Text(
                         'Delete',
                         style: TextStyle(
-                          color: bohibaTheme.colorScheme.error,
-                          fontStyle:
-                              bohibaTheme.textTheme.titleMedium!.fontStyle,
-                          fontWeight:
-                              bohibaTheme.textTheme.titleMedium!.fontWeight,
+                          color: bohibaTheme.colorScheme.tertiary,
+                          fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
+                          fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
                         ),
                       ),
                     ),
@@ -78,8 +75,7 @@ class ReassignmentPage extends GetView<ReassignmentController> {
                     GlobalService.showAlertDialog(
                       status: AlertStatus.warning,
                       title: 'DELETE EXPENSE',
-                      description:
-                          'Payment details will be removed permanently! Are you sure you want to delete this driver?',
+                      description: 'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
                       onDiscard: () async => controller.deleteReassign(
                         expenseId: controller.reassignment.value.id!,

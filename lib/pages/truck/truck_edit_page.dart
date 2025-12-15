@@ -35,11 +35,12 @@ class TruckEditPage extends GetView<EditTruckController> {
                 ),
                 Gap(ScreenUtils.width5),
                 AppDropdown<UserModel>(
-                  hint: controller.truck.value.driverName ?? 'Select driver',
+                  hint: controller.truck.value.driverName ?? 'Select Driver',
                   items: controller.arrDriver.value,
-                  labelBuilder: (driver) => driver.profile!.name!,
+                  labelBuilder: (UserModel driver) => driver.profile!.name!,
+                  initialValue: UserModel(profile: UserProfile(name: controller.truck.value.driverName)),
                   onChanged: (p0) {
-                    controller.driverModel.value = p0!;
+                    if (p0 != null) controller.driverModel.value = p0;
                     GlobalService.printHandler('Name: ${controller.driverModel.value.profile?.name.toString()}');
                   },
                   menuController: controller.assignDriverCtlr,

@@ -107,15 +107,16 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                         margin: EdgeInsets.symmetric(vertical: 10.h),
                         padding: EdgeInsets.symmetric(horizontal: 10.w),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.r),
-                          border: Border.all(width: 1.0, color: bohibaTheme.colorScheme.onPrimary),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(width: 0.8, color: bohibaTheme.colorScheme.onPrimary),
                           color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.2),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('On-Time Delivery Rate'),
+                            Spacer(),
                             Text('100%'),
+                            Icon(Icons.arrow_forward_ios_rounded, size: 18.adaptSize),
                           ],
                         ),
                       ),

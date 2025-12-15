@@ -75,9 +75,9 @@ class _AppSkeletonLoaderState extends State<AppSkeletonLoader> with SingleTicker
                           begin: const Alignment(-2.2, -1.2),
                           end: const Alignment(1.2, 1.2),
                           colors: [
-                            Colors.grey,
+                            baseColor,
                             highlightColor,
-                            Colors.grey,
+                            baseColor,
                           ],
                           stops: [
                             ((dx - shimmerWidth) / bounds.width).clamp(0.0, 1.0),
@@ -91,7 +91,7 @@ class _AppSkeletonLoaderState extends State<AppSkeletonLoader> with SingleTicker
                         width: widget.width ?? ScreenUtils.width,
                         height: widget.height ?? ScreenUtils.height * 0.075,
                         decoration: BoxDecoration(
-                          color: baseColor,
+                          color: bohibaTheme.listTileTheme.tileColor,
                           borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
                         ),
                         child: Row(

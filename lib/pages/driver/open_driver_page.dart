@@ -65,10 +65,11 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                                             text: controller.openDriver.value.profile?.name ?? '',
                                             overflowText: controller.openDriver.value.profile?.name ?? '',
                                             style: TextStyle(
-                                              fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                                              fontSize: bohibaTheme.textTheme.headlineSmall!.fontSize,
                                               fontWeight: bohibaTheme.textTheme.headlineSmall!.fontWeight,
                                               color: bohibaTheme.textTheme.headlineSmall!.color,
                                             ),
+                                            preserFontSize: [bohibaTheme.textTheme.headlineSmall!.fontSize!],
                                           ),
                                           Text(
                                             controller.openDriver.value.profile?.driverUuid ?? '',
@@ -187,7 +188,7 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                           ),
                           child: Text(
                             // 'House no, Locality, City, Street, District, State, Country, Pincode',
-                            '${controller.openDriver.value.address?.houseNo ?? ''} ${controller.openDriver.value.address?.locality ?? ''} ${controller.openDriver.value.address?.street ?? ''} ${controller.openDriver.value.address?.city ?? ''} ${controller.openDriver.value.address?.district ?? ''} ${controller.openDriver.value.address?.state ?? ''} ${controller.openDriver.value.address?.country ?? ''} ${controller.openDriver.value.address?.pinCode ?? ''}',
+                            '${controller.openDriver.value.address?.houseNo?.trim() ?? ''} ${controller.openDriver.value.address?.locality?.trim() ?? ''} ${controller.openDriver.value.address?.street?.trim() ?? ''} ${controller.openDriver.value.address?.city?.trim() ?? ''} ${controller.openDriver.value.address?.district?.trim() ?? ''} ${controller.openDriver.value.address?.state?.trim() ?? ''} ${controller.openDriver.value.address?.country?.trim() ?? ''} ${controller.openDriver.value.address?.pinCode?.trim() ?? ''}',
 
                             style: TextStyle(
                               fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,

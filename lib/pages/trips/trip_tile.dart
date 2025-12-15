@@ -22,7 +22,6 @@ class TripTile extends GetView<TripController> {
 
   @override
   Widget build(BuildContext context) {
-    Color? colors = bohibaTheme.textTheme.titleLarge!.color;
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtils.height5),
       child: Container(
@@ -41,7 +40,7 @@ class TripTile extends GetView<TripController> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: bohibaTheme.colorScheme.tertiary,
+                  color: bohibaTheme.colorScheme.surface,
                 ),
                 child: Text(
                   tripInfo.tripStatus?.shortCode ?? '',
@@ -74,25 +73,25 @@ class TripTile extends GetView<TripController> {
                       fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                       letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
                       fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: colors,
+                      color: bohibaTheme.textTheme.labelLarge!.color,
                     ),
                     marqueeTextStyle: TextStyle(
                       fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                       letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
                       fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: colors,
+                      color: bohibaTheme.textTheme.labelLarge!.color,
                     ),
                     preserFontSize: [
                       bohibaTheme.textTheme.labelMedium!.fontSize!,
                     ],
                   ),
                   Text(
-                    tripInfo.startDate ?? '',
+                    tripInfo.startDate?.toDDMMYYYY() ?? '',
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
                       fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: colors,
+                      color: bohibaTheme.textTheme.titleLarge!.color,
                     ),
                   ),
                 ],

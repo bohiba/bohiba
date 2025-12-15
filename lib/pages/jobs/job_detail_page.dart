@@ -35,27 +35,21 @@ class JobDetailPage extends GetView<JobController> {
             RoleWidget(
               truckOwnerWidget: AppBarIconBox(
                 onTapDown: (p0) {
-                  showMenu(
-                      context: context,
-                      position: RelativeRect.fromLTRB(p0.globalPosition.dx,
-                          p0.globalPosition.dy + 20, 0, 0),
-                      items: [
-                        PopupMenuItem(
-                          value: ActionType.edit,
-                          child: Text('Edit'),
-                        ),
-                        PopupMenuItem(
-                          value: ActionType.delete,
-                          textStyle: TextStyle(
-                            color: bohibaTheme.colorScheme.error,
-                            fontStyle:
-                                bohibaTheme.textTheme.titleMedium!.fontStyle,
-                            fontWeight:
-                                bohibaTheme.textTheme.titleMedium!.fontWeight,
-                          ),
-                          child: Text('Delete'),
-                        ),
-                      ]).then((onValue) {
+                  showMenu(context: context, position: RelativeRect.fromLTRB(p0.globalPosition.dx, p0.globalPosition.dy + 20, 0, 0), items: [
+                    PopupMenuItem(
+                      value: ActionType.edit,
+                      child: Text('Edit'),
+                    ),
+                    PopupMenuItem(
+                      value: ActionType.delete,
+                      textStyle: TextStyle(
+                        color: bohibaTheme.colorScheme.tertiary,
+                        fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
+                        fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
+                      ),
+                      child: Text('Delete'),
+                    ),
+                  ]).then((onValue) {
                     switch (onValue) {
                       case ActionType.edit:
                         navigatorState.pushNamed(AppRoute.addJobs);
@@ -72,8 +66,7 @@ class JobDetailPage extends GetView<JobController> {
                           },
                           onDiscard: () {
                             navigatorState.pop();
-                            GlobalService.showAppToast(
-                                message: 'Under Development');
+                            GlobalService.showAppToast(message: 'Under Development');
                           },
                         );
                         break;
@@ -101,13 +94,13 @@ class JobDetailPage extends GetView<JobController> {
                 controller.refreshController.refreshCompleted();
               },
               child: SingleChildScrollView(
-                child: (controller.jobObj.value.id == null)
+                child: (controller.jobDetailModel.value.id == null)
                     ? SizedBox.shrink()
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            controller.jobObj.value.jobTitle ?? '',
+                            controller.jobDetailModel.value.jobTitle ?? '',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: bohibaTheme.textTheme.headlineMedium,
@@ -118,27 +111,21 @@ class JobDetailPage extends GetView<JobController> {
                             children: [
                               Icon(EvaIcons.pin, size: 14.w),
                               Text(
-                                " ${(controller.jobObj.value.location ?? '').toString().toUpperCase()}",
+                                " ${(controller.jobDetailModel.value.location ?? '').toString().toUpperCase()}",
                                 style: TextStyle(
-                                  fontSize:
-                                      bohibaTheme.textTheme.bodyLarge!.fontSize,
-                                  fontWeight: bohibaTheme
-                                      .textTheme.labelMedium!.fontWeight,
-                                  color:
-                                      bohibaTheme.textTheme.titleLarge!.color,
+                                  fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+                                  fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                                  color: bohibaTheme.textTheme.titleLarge!.color,
                                 ),
                               ),
                               Gap(10.w),
                               Icon(EvaIcons.briefcase, size: 14.w),
                               Text(
-                                ' ${(controller.jobObj.value.jobType ?? '').toString().toUpperCase()}',
+                                ' ${(controller.jobDetailModel.value.jobType ?? '').toString().toUpperCase()}',
                                 style: TextStyle(
-                                  fontSize:
-                                      bohibaTheme.textTheme.bodyLarge!.fontSize,
-                                  fontWeight: bohibaTheme
-                                      .textTheme.labelMedium!.fontWeight,
-                                  color:
-                                      bohibaTheme.textTheme.titleLarge!.color,
+                                  fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
+                                  fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                                  color: bohibaTheme.textTheme.titleLarge!.color,
                                 ),
                               ),
                             ],
@@ -156,17 +143,13 @@ class JobDetailPage extends GetView<JobController> {
                           RoleWidget(
                             driverWidget: LinearBoxWidget(
                               header: 'Status',
-                              title: controller.jobStatus.value
-                                  .toCapitalizedLabel(),
+                              title: controller.jobDetailModel.value.status?.toCapitalizedLabel(),
                             ),
                             truckOwnerWidget: LinearBoxWidget(
                               header: 'Status',
                               widget: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  value: controller.statusItem.contains(
-                                          controller.jobObj.value.status)
-                                      ? controller.jobObj.value.status
-                                      : null,
+                                  value: controller.statusItem.contains(controller.jobDetailModel.value.status) ? controller.jobDetailModel.value.status : null,
                                   isDense: true,
                                   borderRadius: BorderRadius.circular(8.0),
                                   items: controller.statusItem.map((e) {
@@ -189,17 +172,15 @@ class JobDetailPage extends GetView<JobController> {
                           ),
                           LinearBoxWidget(
                             header: 'Truck Number',
-                            title: controller.jobObj.value.regdNumber
-                                .toString()
-                                .toUpperCase(),
+                            title: controller.jobDetailModel.value.regdNumber.toString().toUpperCase(),
                           ),
                           LinearBoxWidget(
                             header: 'Last Updated',
-                            title: controller.jobObj.value.updatedAt.toString(),
+                            title: controller.jobDetailModel.value.updatedAt.toString(),
                           ),
                           LinearBoxWidget(
                             header: 'Created At',
-                            title: controller.jobObj.value.createdAt.toString(),
+                            title: controller.jobDetailModel.value.createdAt.toString(),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 15.h),
@@ -209,14 +190,12 @@ class JobDetailPage extends GetView<JobController> {
                             ),
                           ),
                           ReadMoreText(
-                            controller.jobObj.value.description.toString(),
+                            controller.jobDetailModel.value.description.toString(),
                             trimLines: 5,
                             trimMode: TrimMode.Line,
                             style: bohibaTheme.textTheme.titleMedium,
-                            moreStyle:
-                                TextStyle(color: bohibaTheme.primaryColor),
-                            lessStyle:
-                                TextStyle(color: bohibaTheme.primaryColor),
+                            moreStyle: TextStyle(color: bohibaTheme.primaryColor),
+                            lessStyle: TextStyle(color: bohibaTheme.primaryColor),
                           ),
                           Gap(15.h),
                           RoleWidget(
@@ -225,28 +204,24 @@ class JobDetailPage extends GetView<JobController> {
                                 Padding(
                                   padding: EdgeInsets.only(top: 15.h),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         'Intreseted Drivers',
-                                        style: bohibaTheme
-                                            .textTheme.headlineMedium,
+                                        style: bohibaTheme.textTheme.headlineMedium,
                                       ),
                                       GestureDetector(
                                         onTap: () {
                                           navigatorState.pushNamed(
                                             AppRoute.allIntDriver,
-                                            arguments: controller.jobObj.value,
+                                            arguments: controller.jobDetailModel.value,
                                           );
                                         },
                                         child: Text(
                                           "See All",
                                           style: TextStyle(
-                                            fontSize: bohibaTheme.textTheme
-                                                .headlineMedium!.fontSize,
+                                            fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
                                             color: bohibaTheme.primaryColor,
                                           ),
                                         ),
@@ -255,12 +230,7 @@ class JobDetailPage extends GetView<JobController> {
                                   ),
                                 ),
                                 Row(
-                                  children: [
-                                    Icon(EvaIcons.people),
-                                    Gap(10.w),
-                                    Text(
-                                        '${controller.arrIntDriver.length.toString()} Applicants')
-                                  ],
+                                  children: [Icon(EvaIcons.people), Gap(10.w), Text('${controller.arrIntDriver.length.toString()} Applicants')],
                                 ),
                               ],
                             ),
@@ -272,81 +242,52 @@ class JobDetailPage extends GetView<JobController> {
                                     shrinkWrap: true,
                                     itemCount: controller.arrIntDriver.length,
                                     itemBuilder: (context, index) {
-                                      InterestedDriver intDriver =
-                                          controller.arrIntDriver[index];
+                                      InterestedDriver intDriver = controller.arrIntDriver[index];
                                       return Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: ScreenUtils.height10),
-                                        margin: EdgeInsets.only(
-                                            bottom: ScreenUtils.width5),
+                                        padding: EdgeInsets.symmetric(vertical: ScreenUtils.height10),
+                                        margin: EdgeInsets.only(bottom: ScreenUtils.width5),
                                         child: Row(
                                           children: [
                                             CircleAvatar(
-                                              backgroundColor:
-                                                  bohibaTheme.dividerColor,
+                                              backgroundColor: bohibaTheme.dividerColor,
                                             ),
                                             Gap(10.w),
                                             Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   intDriver.name.toString(),
                                                   style: TextStyle(
-                                                    fontSize: bohibaTheme
-                                                        .textTheme
-                                                        .bodyMedium!
-                                                        .fontSize,
-                                                    fontWeight: bohibaTheme
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .fontWeight,
-                                                    color: bohibaTheme.textTheme
-                                                        .titleMedium!.color,
+                                                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                                    color: bohibaTheme.textTheme.titleMedium!.color,
                                                   ),
                                                 ),
                                                 Text(
-                                                  intDriver.jobStatus
-                                                          ?.toString()
-                                                          .toCapitalizedLabel() ??
-                                                      '',
+                                                  intDriver.jobStatus?.toString().toCapitalizedLabel() ?? '',
                                                   style: TextStyle(
-                                                    fontSize: bohibaTheme
-                                                        .textTheme
-                                                        .titleMedium!
-                                                        .fontSize,
-                                                    fontWeight: bohibaTheme
-                                                        .textTheme
-                                                        .bodyMedium!
-                                                        .fontWeight,
-                                                    color: bohibaTheme.textTheme
-                                                        .bodyMedium!.color,
+                                                    fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                                                    fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                                                    color: bohibaTheme.textTheme.bodyMedium!.color,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             Spacer(),
                                             GestureDetector(
-                                              onTap: () async =>
-                                                  await LauncherService
-                                                      .makePhoneCall(intDriver
-                                                          .mobileNumber
-                                                          .toString()),
+                                              onTap: () async => await LauncherService.makePhoneCall(intDriver.mobileNumber.toString()),
                                               child: Container(
                                                 height: 28.w,
                                                 width: 28.w,
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: bohibaTheme
-                                                      .colorScheme.onPrimary
-                                                      .withValues(alpha: 0.25),
+                                                  color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
                                                 ),
                                                 child: Icon(
                                                   Icons.phone_sharp,
                                                   size: 16.w,
-                                                  color: bohibaTheme
-                                                      .colorScheme.onPrimary,
+                                                  color: bohibaTheme.colorScheme.onPrimary,
                                                 ),
                                               ),
                                             ),

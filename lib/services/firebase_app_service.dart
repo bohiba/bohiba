@@ -1,8 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
-import '/services/api_end_point.dart';
 import '/services/dio_serivce.dart';
-
+import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
 import '/services/pref_utils.dart';
@@ -45,12 +45,8 @@ class FirebaseAppService {
         provisional: false,
         sound: true,
       );
-      const AndroidNotificationChannel notificationChannel = AndroidNotificationChannel(
-        'bohiba_alerts',
-        'Bohiba Alerts',
-        description: 'Notifications for trip updates, payments & announcements',
-        importance: Importance.high,
-      );
+      const AndroidNotificationChannel notificationChannel = AndroidNotificationChannel('bohiba_alerts', 'Bohiba Alerts',
+          description: 'Notifications for trip updates, payments & announcements', importance: Importance.max, playSound: true, enableLights: true, enableVibration: true);
 
       final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -77,7 +73,6 @@ class FirebaseAppService {
         AndroidNotification? android = message.notification?.android;
 
         if (Platform.isAndroid && notification != null && android != null) {
-          // Show only local notification
           flutterLocalNotificationsPlugin.show(
             message.hashCode,
             notification.title,
@@ -92,14 +87,14 @@ class FirebaseAppService {
                 priority: Priority.high,
                 enableVibration: true,
                 onlyAlertOnce: true,
-                color: bohibaTheme.colorScheme.tertiary,
+                color: bohibaTheme.colorScheme.surface,
               ),
             ),
           );
         }
       });
 
-      FirebaseMessaging.instance.subscribeToTopic('all');
+      await FirebaseMessaging.instance.subscribeToTopic('all');
     } catch (e) {
       GlobalService.printHandler('Firebase Exception : ${e.toString()}');
     }
@@ -132,12 +127,12 @@ class FirebaseAppService {
     paramObj['platform'] = deviceInfo['platform'];
     paramObj['app_version'] = "v${appInfo['version']}.${appInfo['buildNumber']}";
     paramObj['device_name'] = deviceInfo['model'];
-    GlobalService.printHandler('FCM TOKEN: $paramObj');
 
     ApiResponse res = await _dioService.post(ApiEndPoint.firbaseToken, body: paramObj);
     switch (res.statusCode) {
       case 200:
-        // await _prefUtils.saveString(PrefUtils.keyFirebaseToken, res.data);
+        GlobalService.printHandler('FCM REGISTER SUCCESS: $paramObj');
+        await _prefUtils.saveString(PrefUtils.keyFirebaseToken, jsonEncode(res.data));
         GlobalService.dismissProgress();
         return;
       case 401:

@@ -38,7 +38,7 @@ class AllOwnerExpenseController extends GetxController {
       case 'low':
         return bohibaTheme.colorScheme.onPrimary;
       case 'medium':
-        return bohibaTheme.colorScheme.surface;
+        return bohibaTheme.colorScheme.tertiary;
       case 'high':
         return bohibaTheme.colorScheme.error;
       default:

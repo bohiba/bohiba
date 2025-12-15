@@ -73,14 +73,31 @@ class BohibaTheme {
       ),
       canvasColor: BohibaColors.bgColor,
       colorScheme: ColorScheme.light(
+        // primary: BohibaColors.primaryColor,
+        // secondary: BohibaColors.secoundaryColor,
+        // tertiary: BohibaColors.white,
+        // onTertiary: BohibaColors.black,
+        // onPrimary: BohibaColors.successColor,
+        // surface: BohibaColors.errorColor,
+        // onSurface: BohibaColors.primaryVariantColor,
+        // error: BohibaColors.warningColor,
+
+        brightness: Brightness.light,
+
         primary: BohibaColors.primaryColor,
-        secondary: BohibaColors.secoundaryColor,
-        tertiary: BohibaColors.white,
-        onTertiary: BohibaColors.black,
         onPrimary: BohibaColors.successColor,
-        surface: BohibaColors.errorColor,
+
+        secondary: BohibaColors.black,
+        onSecondary: BohibaColors.white,
+
+        tertiary: BohibaColors.warningColor, // << your WARNING color
+        onTertiary: BohibaColors.black,
+
+        error: BohibaColors.errorColor,
+        onError: Colors.white,
+
+        surface: BohibaColors.white,
         onSurface: BohibaColors.primaryVariantColor,
-        error: BohibaColors.warningColor,
       ),
       primaryColor: BohibaColors.primaryColor,
       cardColor: BohibaColors.tileColor,
@@ -315,14 +332,17 @@ class BohibaTheme {
       highlightColor: DarkColors.primaryVariantColor,
       disabledColor: DarkColors.primaryVariantColor,
       colorScheme: const ColorScheme.dark(
+        brightness: Brightness.dark,
         primary: DarkColors.primaryColor,
         onPrimary: DarkColors.successColor,
         secondary: DarkColors.secoundaryColor,
-        tertiary: DarkColors.white,
+        onSecondary: DarkColors.white,
+        tertiary: DarkColors.warningColor,
         onTertiary: DarkColors.black,
-        surface: DarkColors.errorColor,
+        error: DarkColors.errorColor,
+        onError: DarkColors.white,
+        surface: DarkColors.white,
         onSurface: DarkColors.primaryVariantColor,
-        error: DarkColors.warningColor,
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         elevation: 0,

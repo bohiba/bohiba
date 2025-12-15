@@ -20,7 +20,12 @@ class RequiredLabel extends StatelessWidget {
       child: RichText(
         text: TextSpan(
           text: label,
-          style: bohibaTheme.textTheme.labelLarge,
+          style: TextStyle(
+            fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
+            fontFamily: bohibaTheme.textTheme.titleMedium!.fontFamily,
+            fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+            color: bohibaTheme.textTheme.titleSmall!.color,
+          ),
           children: required
               ? const [
                   TextSpan(

@@ -25,7 +25,8 @@ class TripService {
     switch (apiResponse.statusCode) {
       case 201:
         GlobalService.dismissProgress();
-        TripModel tripModel = TripModel.fromJson(apiResponse.data);
+        Map<String, dynamic> tripMap = TripModel.toDB(apiResponse.data);
+        TripModel tripModel = TripModel.fromDb(tripMap);
         int sucessInsert = await insertTrip(trip: tripModel);
         if (sucessInsert > 0) {
           GlobalService.showSnackBar(
@@ -512,7 +513,7 @@ class TripService {
           , dvUuid = '${trip.driver?.uuid}'
           , dvName = '${trip.driver?.name}'
           , dvMobile = '${trip.driver?.mobile}'
-          , updatedAt = '${trip.updatedAt}'
+          , updatedAt = '${trip.updatedAt}' WHERE id = ${trip.id}
         ''';
         int updateTrip = await _databaseService.updateData(strUpdateQuery);
         GlobalService.dismissProgress();
@@ -766,6 +767,7 @@ class TripService {
         TripExpense tripExpense = TripExpense.fromJson(apiResponse.data);
         String insertExpense = '''INSERT INTO $tblTripExpense (
             id
+          , tripId  
           , expenseType
           , paymentMode
           , paid
@@ -774,6 +776,7 @@ class TripService {
           , remarks
         ) VALUES (
           ${tripExpense.id}
+        , ${sqlValue(tripExpense.tripId)}  
         , '${tripExpense.expenseType}'
         , '${tripExpense.paymentMode}'
         , '${tripExpense.paid}'
@@ -906,7 +909,7 @@ class TripService {
   static Future<int> addReassignment({
     required Map<String, dynamic> bodyObj,
   }) async {
-    if (!await DeviceInfoService.hasInternet()) return 0;
+    if (await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
     ApiResponse apiResponse = await _dioService.post(ApiEndPoint.apiAddTripReassign, body: bodyObj);

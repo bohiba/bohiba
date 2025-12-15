@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class TripModel {
   int? id;
   int? isFav;
@@ -43,57 +45,6 @@ class TripModel {
     this.updatedAt,
   });
 
-  factory TripModel.fromJson(Map<String, dynamic> jsonTrip) {
-    Map<String, dynamic> loadInfo = jsonTrip["load_detail"] ?? {};
-    Map<String, dynamic> financeInfo = jsonTrip["finance"] ?? {};
-    Map<String, dynamic> truckInfo = jsonTrip["truck"] ?? {};
-    Map<String, dynamic> driverInfo = jsonTrip['driver'] ?? {};
-    Map<String, dynamic> ownerInfo = jsonTrip['owner'] ?? {};
-    return TripModel(
-      id: jsonTrip['id'],
-      isFav: 0,
-      tripCode: jsonTrip["trip_code"],
-      tripStatus: jsonTrip["trip_status"],
-      origin: jsonTrip["origin"],
-      destination: jsonTrip["destination"],
-      startDate: jsonTrip["started_at"],
-      endedDate: jsonTrip["ended_at"],
-      transporter: jsonTrip['transporter'],
-      loadDetail: jsonTrip["load_detail"] == null
-          ? null
-          : LoadDetail.fromJson(loadInfo),
-      finance: jsonTrip["finance"] == null
-          ? null
-          : TripFinance.fromJson(financeInfo),
-      truck: jsonTrip['truck'] == null ? null : TripTruck.fromJson(truckInfo),
-      driver:
-          jsonTrip['driver'] == null ? null : TripDriver.fromJson(driverInfo),
-      owner: jsonTrip['owner'] == null ? null : TripOwner.fromJson(ownerInfo),
-      reassignment: jsonTrip['reassignment'] == null
-          ? null
-          : (jsonTrip['reassignment'] as List).map((e) {
-              return Reassignment.fromJson(e);
-            }).toList(),
-      expenses: jsonTrip['expenses'] == null
-          ? null
-          : (jsonTrip['expenses'] as List).map((e) {
-              return TripExpense.fromJson(e);
-            }).toList(),
-      payments: jsonTrip['payments'] == null
-          ? null
-          : (jsonTrip['payments'] as List).map((p) {
-              return TripPayment.fromJson(p);
-            }).toList(),
-      documents: jsonTrip['documents'] == null
-          ? null
-          : (jsonTrip['documents'] as List).map((d) {
-              return TripDocument.fromJson(d);
-            }).toList(),
-      createdAt: jsonTrip['created_at'],
-      updatedAt: jsonTrip['updated_at'],
-    );
-  }
-
   factory TripModel.fromDb(Map<String, dynamic> mapObj) {
     return TripModel(
       id: mapObj["id"],
@@ -108,7 +59,7 @@ class TripModel {
       loadDetail: LoadDetail.fromDb(mapObj),
       finance: TripFinance.fromDb(mapObj),
       truck: TripTruck.fromDb(mapObj),
-      // driver: TripDriver.fromDb(mapObj),
+      driver: TripDriver.fromDb(mapObj),
       owner: TripOwner.fromDb(mapObj),
     );
   }
@@ -119,6 +70,12 @@ class TripModel {
     Map<String, dynamic>? truckInfo = json["truck"];
     Map<String, dynamic>? driverInfo = json['driver'];
     Map<String, dynamic>? ownerInfo = json['owner'];
+    DateTime startedDate = DateFormat("dd-MM-yyyy").parse(json["started_at"]);
+    String strStartedDate = DateFormat("yyyy-MM-dd").format(startedDate);
+
+    DateTime endDated = DateFormat("dd-MM-yyyy").parse(json["ended_at"]);
+    String strEndedDate = DateFormat("yyyy-MM-dd").format(endDated);
+
     return {
       'id': json['id'],
       'isFav': json['is_fav'] ?? 0,
@@ -126,8 +83,8 @@ class TripModel {
       'tripStatus': json['trip_status'],
       'origin': json['origin'],
       'destination': json['destination'],
-      'startedAt': json['started_at'],
-      'endedAt': json['ended_at'],
+      'startedAt': strStartedDate,
+      'endedAt': strEndedDate,
       'transporter': json['transporter'],
       'materialType': loadInfo == null ? null : loadInfo['material_type'],
       'loadWeight': loadInfo == null ? null : loadInfo['load_weight'],
@@ -291,12 +248,12 @@ class TripDriver {
         mobile: json["mobile"],
       );
 
-  // factory TripDriver.fromDb(Map<String, dynamic> map) => TripDriver(
-  //       id: map['dvId'],
-  //       uuid: map["dvUuid"],
-  //       name: map["dvName"],
-  //       mobile: map["dvMobile"],
-  //     );
+  factory TripDriver.fromDb(Map<String, dynamic> map) => TripDriver(
+        id: map['dvId'],
+        uuid: map["dvUuid"],
+        name: map["dvName"],
+        mobile: map["dvMobile"],
+      );
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -359,14 +316,18 @@ class Reassignment {
     this.reassignVehicle,
   });
 
-  factory Reassignment.fromJson(Map<String, dynamic> json) => Reassignment(
-        id: json['id'],
-        tripId: json['trip_id'],
-        regdNumber: json["regd_number"],
-        reason: json["reason"],
-        date: json["reassigned_at"],
-        reassignVehicle: json['truck_regd_number'],
-      );
+  factory Reassignment.fromJson(Map<String, dynamic> json) {
+    DateTime reassignDate = DateFormat("dd-MM-yyyy").parse(json["reassigned_at"]);
+    String strReassignDate = DateFormat("yyyy-MM-dd").format(reassignDate);
+    return Reassignment(
+      id: json['id'],
+      tripId: json['trip_id'],
+      regdNumber: json["regd_number"],
+      reason: json["reason"],
+      date: strReassignDate,
+      reassignVehicle: json['truck_regd_number'],
+    );
+  }
 
   factory Reassignment.fromDb(Map<String, dynamic> map) {
     return Reassignment(
@@ -389,14 +350,6 @@ class Reassignment {
       'reason': json["reason"],
     };
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "regd_number": regdNumber,
-        "reassigned_at": date,
-        "truck_regd_number": reassignVehicle,
-        "reason": reason,
-      };
 }
 
 class TripExpense {
@@ -422,17 +375,21 @@ class TripExpense {
     this.remarks,
   });
 
-  factory TripExpense.fromJson(Map<String, dynamic> json) => TripExpense(
-        id: json["id"],
-        tripId: json["trip_id"],
-        expenseType: json["expense_type"],
-        addedByUuid: json["added_by_uuid"],
-        paymentMode: json["payment_mode"],
-        paid: json["paid"]?.toDouble() ?? 0.0,
-        paidTo: json["paid_to"],
-        expenseDate: json["expense_date"],
-        remarks: json["remarks"],
-      );
+  factory TripExpense.fromJson(Map<String, dynamic> json) {
+    DateTime expenseDate = DateFormat("dd-MM-yyyy").parse(json["expense_date"]);
+    String strExpenseDate = DateFormat("yyyy-MM-dd").format(expenseDate);
+    return TripExpense(
+      id: json["id"],
+      tripId: json["trip_id"],
+      expenseType: json["expense_type"],
+      addedByUuid: json["added_by_uuid"],
+      paymentMode: json["payment_mode"],
+      paid: json["paid"]?.toDouble() ?? 0.0,
+      paidTo: json["paid_to"],
+      expenseDate: strExpenseDate,
+      remarks: json["remarks"],
+    );
+  }
 
   factory TripExpense.fromDb(Map<String, dynamic> map) {
     return TripExpense(
@@ -483,16 +440,20 @@ class TripPayment {
     this.paymentTime,
   });
 
-  factory TripPayment.fromJson(Map<String, dynamic> json) => TripPayment(
-        id: json["id"],
-        tripId: json["trip_id"],
-        payerType: json["payer_type"],
-        paymentMode: json["payment_mode"],
-        amount: json["amount"].toDouble(),
-        paidBy: json["paid_by"],
-        receivedBy: json["received_by"],
-        paymentTime: json["payment_time"],
-      );
+  factory TripPayment.fromJson(Map<String, dynamic> json) {
+    DateTime paymentDate = DateFormat("dd-MM-yyyy").parse(json["payment_time"]);
+    String strPaymentDate = DateFormat("yyyy-MM-dd").format(paymentDate);
+    return TripPayment(
+      id: json["id"],
+      tripId: json["trip_id"],
+      payerType: json["payer_type"],
+      paymentMode: json["payment_mode"],
+      amount: json["amount"].toDouble(),
+      paidBy: json["paid_by"],
+      receivedBy: json["received_by"],
+      paymentTime: strPaymentDate,
+    );
+  }
 
   factory TripPayment.fromDb(Map<String, dynamic> map) {
     return TripPayment(
@@ -561,13 +522,6 @@ class TripDocument {
   }
 
   static Map<String, dynamic> toDB(dynamic json) {
-    return {
-      "id": json["id"],
-      "tripId": json["trip_id"],
-      "docType": json["doc_type"],
-      "image": json["doc_image"],
-      "uploadedBy": json["uploaded_by_uuid"],
-      "uploadedAt": json["updated_at"]
-    };
+    return {"id": json["id"], "tripId": json["trip_id"], "docType": json["doc_type"], "image": json["doc_image"], "uploadedBy": json["uploaded_by_uuid"], "uploadedAt": json["updated_at"]};
   }
 }

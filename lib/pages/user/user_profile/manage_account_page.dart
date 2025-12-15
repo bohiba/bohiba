@@ -17,14 +17,14 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SwitchAccountDialog extends StatefulWidget {
-  const SwitchAccountDialog({super.key});
+class ManageAccountPage extends StatefulWidget {
+  const ManageAccountPage({super.key});
 
   @override
-  State<SwitchAccountDialog> createState() => _SwitchAccountDialogState();
+  State<ManageAccountPage> createState() => _ManageAccountPageState();
 }
 
-class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
+class _ManageAccountPageState extends State<ManageAccountPage> {
   final controller = Get.find<DashboardController>();
   @override
   void initState() {
@@ -37,8 +37,9 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = false;
-    return SafeArea(
-      child: Container(
+    return Scaffold(
+      appBar: TitleAppbar(title: 'Manage Account'),
+      body: Container(
         height: ScreenUtils.height * 0.83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -57,13 +58,6 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Your Accounts',
-                    style: bohibaTheme.textTheme.displaySmall,
-                  ),
-                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -98,7 +92,7 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                             children: [
                               CircleAvatar(
                                 radius: 20.w,
-                                backgroundColor: bohibaTheme.colorScheme.tertiary,
+                                backgroundColor: bohibaTheme.colorScheme.surface,
                                 child: loggedUser.roleId == UserRoles.truckOwner ? Icon(Remix.user_2_fill) : Icon(Remix.truck_line),
                               ),
                               Gap(10.w),
@@ -194,7 +188,7 @@ class _SwitchAccountDialogState extends State<SwitchAccountDialog> {
                                     ),
                                     PrimaryButton(
                                       padding: EdgeInsets.only(top: 15.h),
-                                      label: 'Log in',
+                                      label: 'Add Account',
                                       onPressed: () {},
                                     )
                                   ],

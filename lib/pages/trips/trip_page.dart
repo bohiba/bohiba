@@ -66,128 +66,14 @@ class TripPage extends GetView<TripController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // From -> To Section
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: ScreenUtils.height15,
-                              bottom: ScreenUtils.height10,
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      BohibaMarqueeText(
-                                        width: ScreenUtils.width * 0.32,
-                                        alwaysScroll: true,
-                                        text: controller.tripInfo.value?.origin?.toUpperCase() ?? '',
-                                        style: bohibaTheme.textTheme.headlineMedium,
-                                        alignment: Alignment.center,
-                                        alignText: TextAlign.center,
-                                        overflowText: controller.tripInfo.value?.origin?.toUpperCase() ?? '',
-                                        marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
-                                        preserFontSize: [
-                                          bohibaTheme.textTheme.headlineMedium!.fontSize!,
-                                        ],
-                                        minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                                      ),
-                                      Text(
-                                        controller.tripInfo.value?.startDate ?? '',
-                                        textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                          color: bohibaTheme.textTheme.titleMedium!.color,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Icon(
-                                  RemixIcons.arrow_right_double_line,
-                                  color: bohibaTheme.primaryColor,
-                                  size: 32.w,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      BohibaMarqueeText(
-                                        width: ScreenUtils.width * 0.32,
-                                        alwaysScroll: true,
-                                        text: controller.tripInfo.value?.destination?.toUpperCase() ?? '',
-                                        alignment: Alignment.center,
-                                        alignText: TextAlign.center,
-                                        style: bohibaTheme.textTheme.headlineMedium,
-                                        overflowText: controller.tripInfo.value?.destination?.toUpperCase() ?? '',
-                                        marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
-                                        preserFontSize: [
-                                          bohibaTheme.textTheme.headlineMedium!.fontSize!,
-                                        ],
-                                        minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                                      ),
-                                      Text(
-                                        controller.tripInfo.value?.endedDate ?? '',
-                                        style: TextStyle(
-                                          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                          color: bohibaTheme.textTheme.titleMedium!.color,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                          OriginDestinationInfoSection(
+                            tripInfo: controller.tripInfo.value,
                           ),
 
                           // Basic Info
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: ScreenUtils.height15,
-                              right: ScreenUtils.height15,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: ScreenUtils.height20),
-                                  child: Text(
-                                    'Basic Info',
-                                    style: bohibaTheme.textTheme.headlineMedium,
-                                  ),
-                                ),
-                                LinearBoxWidget(
-                                  onClick: () {},
-                                  header: 'Transporter',
-                                  title: controller.tripInfo.value?.transporter?.toDisplayLabel(),
-                                ),
-                                LinearBoxWidget(
-                                  onClick: () {
-                                    Get.toNamed(
-                                      AppRoute.truck,
-                                      arguments: controller.tripInfo.value?.truck!.regdNumber,
-                                    );
-                                  },
-                                  header: 'Truck',
-                                  title: controller.tripInfo.value?.truck?.regdNumber,
-                                ),
-                                RoleWidget(
-                                  truckOwnerWidget: LinearBoxWidget(
-                                    header: 'Driver',
-                                    title: controller.tripInfo.value?.driver?.name ?? 'No driver',
-                                  ),
-                                  driverWidget: LinearBoxWidget(
-                                    header: 'Owner',
-                                    title: controller.tripInfo.value?.owner?.name,
-                                  ),
-                                ),
-                                StatusBoxWidget(
-                                  header: 'Status',
-                                  title: controller.tripInfo.value?.tripStatus ?? '',
-                                  statusColor: controller.statusColor(),
-                                ),
-                              ],
-                            ),
+                          BasicInfoSection(
+                            tripInfo: controller.tripInfo.value,
+                            statusLabelColor: controller.statusColor(),
                           ),
 
                           // Load Info and Finance Info
@@ -231,7 +117,7 @@ class TripPage extends GetView<TripController> {
                                         ),
                                         TripInfoItem(
                                           label: 'Rate per Ton',
-                                          value: '${controller.tripInfo.value?.loadDetail?.rate ?? '0.0'} Ton',
+                                          value: '₹ ${controller.tripInfo.value?.loadDetail?.rate ?? '0.0'}',
                                         ),
                                       ],
                                     ),
@@ -340,7 +226,8 @@ class TripPage extends GetView<TripController> {
                                             CircleAvatar(
                                               radius: 20,
                                               backgroundColor: bohibaTheme.colorScheme.onSurface,
-                                              child: Icon(EvaIcons.diagonalArrowRightUpOutline),
+                                              // child: Icon(EvaIcons.diagonalArrowRightUpOutline),
+                                              child: Text('${payment.id}'),
                                             ),
                                             Gap(ScreenUtils.height15),
                                             Column(
@@ -430,6 +317,7 @@ class TripPage extends GetView<TripController> {
                                           (onValue) async {
                                             if (onValue != null && (onValue != false)) {
                                               await controller.getTripInfo(
+                                                methodType: MethodType.api,
                                                 id: controller.tripInfo.value!.id!,
                                               );
                                             }
@@ -478,7 +366,7 @@ class TripPage extends GetView<TripController> {
                                                   child: Text(
                                                     '- ₹ ${expenses.paid}',
                                                     style: TextStyle(
-                                                      color: bohibaTheme.colorScheme.error,
+                                                      color: bohibaTheme.colorScheme.tertiary,
                                                     ),
                                                   ),
                                                 ),
@@ -726,6 +614,150 @@ class TripPage extends GetView<TripController> {
           ),
         );
       },
+    );
+  }
+}
+
+class OriginDestinationInfoSection extends StatelessWidget {
+  final TripModel? tripInfo;
+  const OriginDestinationInfoSection({super.key, this.tripInfo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: ScreenUtils.height15,
+        bottom: ScreenUtils.height10,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                BohibaMarqueeText(
+                  width: ScreenUtils.width * 0.32,
+                  alwaysScroll: true,
+                  text: tripInfo?.origin?.toUpperCase() ?? '',
+                  style: bohibaTheme.textTheme.headlineMedium,
+                  alignment: Alignment.center,
+                  alignText: TextAlign.center,
+                  overflowText: tripInfo?.origin?.toUpperCase() ?? '',
+                  marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
+                  preserFontSize: [
+                    bohibaTheme.textTheme.headlineMedium!.fontSize!,
+                  ],
+                  minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                ),
+                Text(
+                  tripInfo?.startDate?.toDDMMYYYY() ?? '',
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                    color: bohibaTheme.textTheme.titleMedium!.color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            RemixIcons.arrow_right_double_line,
+            color: bohibaTheme.primaryColor,
+            size: 32.w,
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                BohibaMarqueeText(
+                  width: ScreenUtils.width * 0.32,
+                  alwaysScroll: true,
+                  text: tripInfo?.destination?.toUpperCase() ?? '',
+                  alignment: Alignment.center,
+                  alignText: TextAlign.center,
+                  style: bohibaTheme.textTheme.headlineMedium,
+                  overflowText: tripInfo?.destination?.toUpperCase() ?? '',
+                  marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
+                  preserFontSize: [
+                    bohibaTheme.textTheme.headlineMedium!.fontSize!,
+                  ],
+                  minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                ),
+                Text(
+                  tripInfo?.endedDate?.toDDMMYYYY() ?? '',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                    color: bohibaTheme.textTheme.titleMedium!.color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BasicInfoSection extends StatelessWidget {
+  final TripModel? tripInfo;
+  final Color? statusLabelColor;
+  const BasicInfoSection({
+    super.key,
+    this.tripInfo,
+    this.statusLabelColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: ScreenUtils.height15,
+        right: ScreenUtils.height15,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: ScreenUtils.height20),
+            child: Text(
+              'Basic Info',
+              style: bohibaTheme.textTheme.headlineMedium,
+            ),
+          ),
+          LinearBoxWidget(
+            onClick: () {},
+            header: 'Transporter',
+            title: tripInfo?.transporter?.toDisplayLabel(),
+          ),
+          LinearBoxWidget(
+            onClick: () {
+              Get.toNamed(
+                AppRoute.truck,
+                arguments: tripInfo?.truck!.regdNumber,
+              );
+            },
+            header: 'Truck',
+            title: tripInfo?.truck?.regdNumber,
+          ),
+          RoleWidget(
+            truckOwnerWidget: LinearBoxWidget(
+              header: 'Driver',
+              title: tripInfo?.driver?.name ?? 'No driver',
+            ),
+            driverWidget: LinearBoxWidget(
+              header: 'Owner',
+              title: tripInfo?.owner?.name,
+            ),
+          ),
+          StatusBoxWidget(
+            header: 'Status',
+            title: tripInfo?.tripStatus ?? '',
+            statusColor: statusLabelColor,
+          ),
+        ],
+      ),
     );
   }
 }

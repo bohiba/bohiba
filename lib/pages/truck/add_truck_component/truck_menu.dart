@@ -8,7 +8,6 @@ import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
 import '/dist/app_enums.dart';
 import '/model/truck_model.dart';
-import '/pages/truck/vehicle_detail_modal.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
@@ -36,14 +35,14 @@ class TruckMenu extends GetView<TruckController> {
       onTapDown: (tapDownDetails) {
         final menuItems = <PopupMenuEntry<ActionType>>[];
 
-        if (allowedActions.contains(ActionType.view)) {
-          menuItems.add(
-            const PopupMenuItem(
-              value: ActionType.view,
-              child: Text('View'),
-            ),
-          );
-        }
+        // if (allowedActions.contains(ActionType.view)) {
+        //   menuItems.add(
+        //     const PopupMenuItem(
+        //       value: ActionType.view,
+        //       child: Text('View'),
+        //     ),
+        //   );
+        // }
         if (allowedActions.contains(ActionType.edit) && RoleService.hasPermission(RolePermissionService.editTrucks)) {
           menuItems.add(
             const PopupMenuItem(
@@ -106,24 +105,6 @@ class TruckMenu extends GetView<TruckController> {
         ).then((value) {
           if (!context.mounted) return;
           switch (value) {
-            case ActionType.view:
-              showModalBottomSheet(
-                isScrollControlled: true,
-                isDismissible: false,
-                shape: BottomModalShape(),
-                context: context,
-                builder: (context) {
-                  return VehicleDetailModal(
-                    vehicleDetails: truck,
-                  );
-                },
-              ).then((result) {
-                if (onActionComplete?[ActionType.view] != null) {
-                  onActionComplete![ActionType.view]!(result);
-                }
-              });
-
-              break;
             case ActionType.add:
               navigate
                   .pushNamed(

@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
 import '/controllers/driver_all_controller.dart';
 import '/dist/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
-import '../../../model/user_model.dart';
+import '/model/user_model.dart';
 import '/pages/driver/driver_modals/driver_detail_modal.dart';
 import '/pages/driver/driver_modals/edit_driver_model.dart';
 import '/routes/app_route.dart';
@@ -97,7 +96,7 @@ class DriverMenu extends GetView<DriverAllController> {
               child: Text(
                 'Delete',
                 style: TextStyle(
-                  color: BohibaColors.warningColor,
+                  color: bohibaTheme.colorScheme.tertiary,
                   fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
                   fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
                 ),

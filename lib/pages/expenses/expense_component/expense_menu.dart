@@ -41,7 +41,7 @@ class OwnerExpenseMenu extends GetView<OwnerExpenseController> {
               child: Text(
                 'Delete',
                 style: TextStyle(
-                  color: bohibaTheme.colorScheme.error,
+                  color: bohibaTheme.colorScheme.tertiary,
                   fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
                   fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
                 ),

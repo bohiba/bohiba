@@ -31,8 +31,7 @@ class OwnerExpenseController extends GetxController {
     MethodType methodType = MethodType.local,
     bool refreshPage = false,
   }) async {
-    OwnerExpense? model =
-        await OwnerExpenseService.getExpense(id: ownerExpense.value!.id!);
+    OwnerExpense? model = await OwnerExpenseService.getExpense(id: ownerExpense.value!.id!);
     if (model != null) {
       ownerExpense.value = model;
     }
@@ -43,7 +42,7 @@ class OwnerExpenseController extends GetxController {
       case 'low':
         return bohibaTheme.colorScheme.onPrimary;
       case 'medium':
-        return bohibaTheme.colorScheme.surface;
+        return bohibaTheme.colorScheme.tertiary;
       case 'high':
         return bohibaTheme.colorScheme.error;
       default:

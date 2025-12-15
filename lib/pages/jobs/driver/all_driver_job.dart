@@ -1,5 +1,3 @@
-import '/component/app_skeleton_loader.dart';
-
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/model/job_detail_model.dart';
@@ -7,6 +5,7 @@ import '/extensions/bohiba_extension.dart';
 
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
+import '/component/app_skeleton_loader.dart';
 import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 
@@ -85,7 +84,7 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
                         controller.getAllJobs(refresh: true, showLoading: false);
                         controller.refreshController.refreshCompleted();
                       },
-                      child: (controller.arrJobDetail.value!.isEmpty)
+                      child: (controller.arrJobDetail.value?.isEmpty ?? true)
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,

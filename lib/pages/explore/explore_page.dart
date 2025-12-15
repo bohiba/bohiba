@@ -1,6 +1,5 @@
 import '/component/app_skeleton_loader.dart';
 import '/component/search_driver_delegate.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
@@ -12,6 +11,7 @@ import '/component/bohiba_appbar/explore_appbar.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 

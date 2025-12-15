@@ -157,7 +157,7 @@ class SecurityPage extends GetView<SecurityController> {
                       icon: Icon(
                         EvaIcons.logOutOutline,
                         size: ScreenUtils.height15.h,
-                        color: bohibaTheme.colorScheme.error,
+                        color: bohibaTheme.colorScheme.tertiary,
                       ),
                     ),
                   ),
@@ -169,7 +169,7 @@ class SecurityPage extends GetView<SecurityController> {
                       icon: Icon(
                         EvaIcons.logOutOutline,
                         size: ScreenUtils.height15.h,
-                        color: bohibaTheme.colorScheme.error,
+                        color: bohibaTheme.colorScheme.tertiary,
                       ),
                     ),
                   ),
@@ -297,13 +297,13 @@ class SecurityPage extends GetView<SecurityController> {
                                   style: TextStyle(
                                     fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                                     fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                                    color: bohibaTheme.colorScheme.error,
+                                    color: bohibaTheme.colorScheme.tertiary,
                                   ),
                                 ),
                                 Icon(
                                   EvaIcons.logOutOutline,
                                   size: ScreenUtils.height15.h,
-                                  color: bohibaTheme.colorScheme.error,
+                                  color: bohibaTheme.colorScheme.tertiary,
                                 ),
                               ],
                             ),

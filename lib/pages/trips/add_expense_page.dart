@@ -39,7 +39,10 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                     width: ScreenUtils.width,
                     onTap: () async {
                       DateTime? expenseDate = await GlobalService.datePickerModal(
-                          context: context, startTime: DateFormat('dd-MM-yyyy').parse(controller.tripModel?.startDate ?? ''), endTime: DateFormat('dd-MM-yyyy').parse(controller.tripModel?.endedDate ?? ''));
+                        context: context,
+                        startTime: DateFormat('yyyy-MM-dd').parse(controller.tripModel?.startDate ?? ''),
+                        endTime: DateFormat('yyyy-MM-dd').parse(controller.tripModel?.endedDate ?? ''),
+                      );
                       if (expenseDate != null) {
                         controller.expensedateController.text = DateFormat('dd-MM-yyyy').format(expenseDate);
                       }
@@ -53,13 +56,13 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                     labelBuilder: (type) => type.toCapitalizedLabel(),
                     onChanged: (p0) {
                       GlobalService.printHandler(p0.toString());
-                      // controller.update();
                     },
                     hint: 'Select Expense Type',
                     menuController: controller.typeController,
                   ),
                   AppDropdown(
                     hint: 'Select Payment Mode',
+                    padding: EdgeInsets.only(top: ScreenUtils.height5),
                     items: controller.arrPaymentMode,
                     labelBuilder: (mode) => mode.toUpperCase(),
                     menuController: controller.paymentModeController,

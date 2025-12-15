@@ -21,11 +21,11 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            fixedSize: Size(width ?? ScreenUtils.width, height ?? 32.h),
-            backgroundColor: color ?? bohibaTheme.colorScheme.primary,
-            disabledBackgroundColor: color?.withValues(alpha: 0.25) ?? bohibaTheme.colorScheme.onSurface),
+            fixedSize: Size(width ?? ScreenUtils.width, height ?? 32.h), backgroundColor: color ?? bohibaTheme.primaryColor, disabledBackgroundColor: color?.withValues(alpha: 0.25) ?? bohibaTheme.colorScheme.onSurface),
         child: Text(
           label.toUpperCase(),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: textStyle ??
               TextStyle(
                 fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,

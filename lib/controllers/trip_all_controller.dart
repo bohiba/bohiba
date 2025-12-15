@@ -1,11 +1,10 @@
-import '/extensions/bohiba_extension.dart';
-
 import '/dist/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/services/trip_service.dart';
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class AllTripController extends GetxController {
@@ -69,7 +68,7 @@ class AllTripController extends GetxController {
     if (refresh == true) {
       currentPage = 1;
       hasMore.value = true;
-      arrTrip.value?.clear();
+      arrTrip.value = [];
     }
 
     try {
@@ -79,9 +78,6 @@ class AllTripController extends GetxController {
         List<TripModel>? localTrips = await TripService.getAllTrip(methodType: MethodType.local);
         if (localTrips != null && localTrips.isNotEmpty) {
           arrTrip.value = List<TripModel>.from(localTrips);
-          arrTrip.value!.sort((a, b) {
-            return b.startDate!.toDateTime().compareTo(a.startDate!.toDateTime());
-          });
           isLoading.value = false;
           currentPage++;
         } else {

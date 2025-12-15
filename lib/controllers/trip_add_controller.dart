@@ -1,15 +1,16 @@
 import 'dart:io';
-
 import '/extensions/bohiba_extension.dart';
-import '/services/global_service.dart';
 
 import '/controllers/image_upload_controller.dart';
 import '/dist/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
-import '/services/truck_service.dart';
+
 import '/services/dio_serivce.dart';
 import '/services/trip_service.dart';
+import '/services/truck_service.dart';
+import '/services/global_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
@@ -89,6 +90,8 @@ class TripAddController extends ImageUploadController {
   Rx<String> strOre = "".obs;
   Rx<String> strStatus = "".obs;
 
+  RxInt countUpdate = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -131,6 +134,7 @@ class TripAddController extends ImageUploadController {
     if (tripModel.value == null) {
       addOrUpdateSucess = await TripService.addTrip(bodyMap: bodyObj, truckModel: truckModel.value);
       if (addOrUpdateSucess > 0) {
+        countUpdate++;
         clearController();
       }
     } else {
@@ -139,6 +143,7 @@ class TripAddController extends ImageUploadController {
         trip: tripModel.value!,
       );
       if (addOrUpdateSucess > 0) {
+        countUpdate++;
         clearController();
       }
     }
@@ -146,7 +151,6 @@ class TripAddController extends ImageUploadController {
   }
 
   Future<void> getTruckList() async {
-    arrTruck.clear();
     List<TruckModel>? truckList = await TruckService.getTruckList();
     if (truckList != null) {
       arrTruck.clear();

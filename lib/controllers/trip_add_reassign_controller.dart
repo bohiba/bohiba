@@ -15,6 +15,8 @@ class TripAddReassignController extends GetxController {
   TripModel? tripModel;
   Reassignment? reassign;
 
+  RxInt countUpdate = 0.obs;
+
   @override
   void onInit() {
     if (Get.arguments is TripModel) {
@@ -34,22 +36,20 @@ class TripAddReassignController extends GetxController {
     };
 
     if (reassign != null && tripModel == null) {
-      int editSuccess = await TripService.editReassign(
-          bodyMap: bodyObj, reassignId: reassign!.id!);
+      int editSuccess = await TripService.editReassign(bodyMap: bodyObj, reassignId: reassign!.id!);
       if (editSuccess > 0) {
+        countUpdate++;
+        discard();
         Get.back(result: true);
       }
     } else if (reassign == null && tripModel != null) {
       bodyObj['trip_id'] = tripModel!.id!;
       int addSucess = await TripService.addReassignment(bodyObj: bodyObj);
       if (addSucess > 0) {
-        //
+        countUpdate++;
+        discard();
       }
-    } else {
-      DoNothingAction();
     }
-
-    discard();
   }
 
   void onEditTextController() {

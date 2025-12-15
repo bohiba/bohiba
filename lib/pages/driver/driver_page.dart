@@ -1,24 +1,25 @@
-import 'package:cached_network_image/cached_network_image.dart';
-
 import '/dist/app_enums.dart';
 import '/theme/bohiba_theme.dart';
-import '/dist/component_exports.dart';
 import '/routes/app_route.dart';
 import '/model/rating_model.dart';
-import '/services/global_service.dart';
 import '/services/launcher_service.dart';
 import '/extensions/bohiba_extension.dart';
+
+import '/component/image_path.dart';
+import '/component/screen_utils.dart';
 import '/component/bohiba_appbar/driver_appbar.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 
 import '/controllers/driver_controller.dart';
 import '/pages/widget/linear_box_widget.dart';
 
-import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
+import '/component/bohiba_text/bohiba_marquee_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DriverPage extends GetView<DriverController> {
@@ -70,16 +71,10 @@ class DriverPage extends GetView<DriverController> {
                               SizedBox(
                                 width: ScreenUtils.width,
                                 height: ScreenUtils.height * 0.3,
-                                child: controller.driverModel.value?.profile?.image != null
-                                    ? CachedNetworkImage(
-                                        imageUrl: controller.driverModel.value!.profile!.image!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.network(
-                                        GlobalService.getAvatarUrl(
-                                          controller.driverModel.value?.profile?.name ?? '',
-                                          rounded: false,
-                                        ),
+                                child: controller.driverModel.value?.profile?.image == null || (controller.driverModel.value!.profile?.image?.isEmpty ?? true)
+                                    ? SizedBox.shrink()
+                                    : CachedNetworkImage(
+                                        imageUrl: "${ImagePath.profileImage}/${controller.driverModel.value?.profile?.image}",
                                         fit: BoxFit.cover,
                                       ),
                               ),
@@ -102,8 +97,9 @@ class DriverPage extends GetView<DriverController> {
                                               width: ScreenUtils.width * 0.45,
                                               text: controller.driverModel.value?.profile?.name ?? '',
                                               overflowText: controller.driverModel.value?.profile?.name ?? '',
-                                              style: bohibaTheme.textTheme.headlineSmall,
-                                              marqueeTextStyle: bohibaTheme.textTheme.headlineSmall,
+                                              style: bohibaTheme.textTheme.headlineMedium,
+                                              marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
+                                              preserFontSize: [bohibaTheme.textTheme.headlineMedium!.fontSize!],
                                             ),
                                             Text(
                                               controller.driverModel.value?.profile?.driverUuid ?? '',

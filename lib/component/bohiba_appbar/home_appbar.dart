@@ -195,7 +195,7 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               },
               icon: Icon(
                 EvaIcons.plus,
-                color: controller.isScrolled.value ? bohibaTheme.iconTheme.color : bohibaTheme.colorScheme.tertiary,
+                color: controller.isScrolled.value ? bohibaTheme.iconTheme.color : bohibaTheme.colorScheme.surface,
               ),
             ),
 

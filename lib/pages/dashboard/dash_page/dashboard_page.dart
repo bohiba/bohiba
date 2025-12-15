@@ -64,6 +64,16 @@ class DashboardPage extends GetView<DashboardController> {
                               icon: EvaIcons.personOutline,
                             ),
 
+                            RoleWidget(
+                              truckOwnerWidget: SmallTabComponent(
+                                onTap: () {
+                                  navigator.pushNamed(AppRoute.allOwnerExpense);
+                                },
+                                label: "Expense",
+                                icon: EvaIcons.fileTextOutline,
+                              ),
+                            ),
+
                             PermissionWidget(
                               permission: RolePermissionService.viewDriver,
                               child: SmallTabComponent(
@@ -98,16 +108,6 @@ class DashboardPage extends GetView<DashboardController> {
                                 },
                                 label: "Jobs",
                                 icon: EvaIcons.briefcaseOutline,
-                              ),
-                            ),
-
-                            RoleWidget(
-                              truckOwnerWidget: SmallTabComponent(
-                                onTap: () {
-                                  navigator.pushNamed(AppRoute.allOwnerExpense);
-                                },
-                                label: "Expense",
-                                icon: EvaIcons.fileTextOutline,
                               ),
                             ),
 
@@ -154,33 +154,13 @@ class DashboardPage extends GetView<DashboardController> {
                 }),
                 Gap(ScreenUtils.height10),
 
-                /*SingleTileTabComponent(
+                /*
+                SingleTileTabComponent(
                   onTap: () {
-                    controller.isSwitchedA.value = !controller.isSwitchedA.value;
-                    Future.delayed(Duration.zero, () {
-                      controller.themeChanger.toggleTheme();
-                    });
-                    controller.update();
-                    GlobalService.printHandler(
-                      controller.isSwitchedA.toString(),
-                    );
+                    navigator.pushNamed(AppRoute.manageAccount);
                   },
-                  icon: controller.isSwitchedA.value == true
-                      ? Remix.sun_line
-                      : EvaIcons.moonOutline,
-                  title: 'Dark Mode',
-                  trailing: Switch(
-                    value: controller.isSwitchedA.value,
-                    onChanged: (value) {
-                      controller.isSwitchedA.value = value;
-                      Future.delayed(Duration.zero, () {
-                        controller.themeChanger.toggleTheme();
-                      });
-                      GlobalService.printHandler(
-                        controller.isSwitchedA.toString(),
-                      );
-                    },
-                  ),
+                  icon: Icons.account_circle_outlined,
+                  title: 'Manage Account',
                 ),*/
                 SingleTileTabComponent(
                   onTap: () {
@@ -228,8 +208,7 @@ class DashboardPage extends GetView<DashboardController> {
                     GlobalService.showDialog(
                       status: AlertStatus.info,
                       title: 'Under Developement',
-                      description:
-                          'This feature is currently under development and will be available in a future release. Stay tuned for updates!',
+                      description: 'This feature is currently under development and will be available in a future release. Stay tuned for updates!',
                       onExit: () {
                         Navigator.pop(context);
                       },
@@ -240,8 +219,7 @@ class DashboardPage extends GetView<DashboardController> {
                 ),
                 SingleTileTabComponent(
                   onTap: () {
-                    navigator.push(
-                        MaterialPageRoute(builder: (context) => AboutPage()));
+                    navigator.push(MaterialPageRoute(builder: (context) => AboutPage()));
                   },
                   icon: EvaIcons.awardOutline,
                   title: 'About App',

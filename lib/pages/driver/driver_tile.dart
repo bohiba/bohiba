@@ -50,9 +50,9 @@ class DriverTile extends GetView<DriverController> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: bohibaTheme.colorScheme.tertiary,
+                      color: bohibaTheme.colorScheme.surface,
                     ),
-                    child: driver.profile?.image == null
+                    child: driver.profile?.image == null || (driver.profile?.image?.isEmpty ?? true)
                         ? Text(
                             driver.profile?.name?.shortCode ?? '',
                             style: TextStyle(
@@ -61,17 +61,29 @@ class DriverTile extends GetView<DriverController> {
                               color: bohibaTheme.textTheme.bodySmall!.color,
                             ),
                           )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(6.r),
-                            child: CachedNetworkImage(
-                              imageUrl: "${ImagePath.profileImage}/${driver.profile?.image}",
-                              fit: BoxFit.cover,
-                              placeholder: (context, child) {
-                                return SizedBox.shrink();
-                              },
-                              errorWidget: (context, child, obj) {
-                                return SizedBox.shrink();
-                              },
+                        : Container(
+                            height: 32.h,
+                            width: 32.h,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: bohibaTheme.dividerColor,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(35.r),
+                              child: CachedNetworkImage(
+                                imageUrl: '${ImagePath.profileImage}/${driver.profile?.image}',
+                                fit: BoxFit.cover,
+                                height: 32.h,
+                                width: 32.h,
+                                placeholder: (context, url) => Container(
+                                  color: bohibaTheme.cardColor,
+                                ),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.broken_image,
+                                  size: 20,
+                                  color: bohibaTheme.cardColor,
+                                ),
+                              ),
                             ),
                           ),
                   ),

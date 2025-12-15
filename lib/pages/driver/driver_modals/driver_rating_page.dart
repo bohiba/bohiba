@@ -96,7 +96,7 @@ class DriverRatingPage extends GetView<DriverRatingController> {
                           label: Text(
                             txt,
                             style: TextStyle(
-                              color: controller.selectedRateMsgIndex.value == txt ? bohibaTheme.colorScheme.tertiary : bohibaTheme.colorScheme.primary,
+                              color: controller.selectedRateMsgIndex.value == txt ? bohibaTheme.colorScheme.surface : bohibaTheme.colorScheme.primary,
                             ),
                           ),
                           shape: RoundedRectangleBorder(

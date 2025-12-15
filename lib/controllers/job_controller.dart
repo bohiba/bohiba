@@ -13,7 +13,7 @@ class JobController extends GetxController {
   final refreshController = RefreshController();
   final PrefUtils _prefUtils = PrefUtils();
 
-  Rx<JobDetailModel> jobObj = JobDetailModel().obs;
+  Rx<JobDetailModel> jobDetailModel = JobDetailModel().obs;
 
   RxList<InterestedDriver> arrIntDriver = <InterestedDriver>[].obs;
   RxList<String> statusItem = ['open', 'closed', 'drafted'].obs;
@@ -24,7 +24,7 @@ class JobController extends GetxController {
   void onInit() {
     super.onInit();
     Future.delayed(Duration.zero, () async {
-      jobObj.value = Get.arguments;
+      jobDetailModel.value = Get.arguments;
       int roleId = _prefUtils.getInt(PrefUtils.roleKey);
       if (roleId == UserRoles.truckOwner) {
         await ownerJobDetail();
@@ -35,7 +35,7 @@ class JobController extends GetxController {
   }
 
   Future<void> applyToJob() async {
-    int success = await DriverJobService.applyToJob(jobId: jobObj.value.id!);
+    int success = await DriverJobService.applyToJob(jobId: jobDetailModel.value.id!);
     if (success > 0) {
       // Success
     }
@@ -56,7 +56,7 @@ class JobController extends GetxController {
 
   Future<void> updateJob() async {
     int success = await OwnerJobService.updateJobPost(
-      jobInfo: jobObj.value,
+      jobInfo: jobDetailModel.value,
       status: jobStatus.value,
     );
     if (success > 0) {
@@ -66,13 +66,13 @@ class JobController extends GetxController {
   }
 
   Future<void> ownerJobDetail() async {
-    JobDetailModel? jobInfo = await OwnerJobService.getJob(jobId: jobObj.value.id!);
+    JobDetailModel? jobInfo = await OwnerJobService.getJob(jobId: jobDetailModel.value.id!);
     if (jobInfo != null) {
-      jobObj.value = jobInfo;
-      jobStatus.value = jobObj.value.status ?? '';
-      if (jobObj.value.interestedDrivers != null) {
+      jobDetailModel.value = jobInfo;
+      jobStatus.value = jobDetailModel.value.status ?? '';
+      if (jobDetailModel.value.interestedDrivers != null) {
         arrIntDriver.clear();
-        arrIntDriver.addAll(jobObj.value.interestedDrivers!);
+        arrIntDriver.addAll(jobDetailModel.value.interestedDrivers!);
       }
     }
   }

@@ -66,6 +66,7 @@ class TripAppBar extends GetView<TripController> implements PreferredSizeWidget 
                   TripActionType.edit: (edit) async {
                     if (edit != null && edit != false) {
                       await controller.getTripInfo(
+                        methodType: MethodType.api,
                         id: controller.tripInfo.value!.id!,
                       );
                     }
@@ -80,6 +81,7 @@ class TripAppBar extends GetView<TripController> implements PreferredSizeWidget 
                   TripActionType.expense: (expense) async {
                     if (expense != null && expense != false) {
                       await controller.getTripInfo(
+                        methodType: MethodType.api,
                         id: controller.tripInfo.value!.id!,
                       );
                     }
@@ -88,6 +90,13 @@ class TripAppBar extends GetView<TripController> implements PreferredSizeWidget 
                     if (payment != null && payment != false) {
                       await controller.getTripInfo(
                         methodType: MethodType.api,
+                        id: controller.tripInfo.value!.id!,
+                      );
+                    }
+                  },
+                  TripActionType.reassignment: (reAssign) async {
+                    if (reAssign != null && reAssign != false) {
+                      await controller.getTripInfo(
                         id: controller.tripInfo.value!.id!,
                       );
                     }

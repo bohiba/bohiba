@@ -122,9 +122,9 @@ class AuthService {
         }
 
         if (loggedInUser?.roleId == UserRoles.truckOwner) {
-          Get.offAllNamed(AppRoute.truckOwnerNavBar);
+          await Get.offAllNamed(AppRoute.truckOwnerNavBar);
         } else if (loggedInUser?.roleId == UserRoles.driver) {
-          Get.offAllNamed(AppRoute.truckDriverNavBar);
+          await Get.offAllNamed(AppRoute.truckDriverNavBar);
         }
 
         GlobalService.dismissProgress();

@@ -4,6 +4,7 @@ import '/routes/app_route.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
 
+import '/dist/app_enums.dart';
 import '/dist/widget_exports.dart';
 import '/dist/component_exports.dart';
 
@@ -165,11 +166,13 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
             child: AppBarIconBox(
               icon: const Icon(EvaIcons.plus),
               onTap: () {
-                navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
-                  if (value != null && value != false) {
-                    await controller.getAllTrip();
-                  }
-                });
+                navigatorState.pushNamed(AppRoute.addTrip).then(
+                  (value) async {
+                    if (value != null && value != false) {
+                      await controller.getAllTrip();
+                    }
+                  },
+                );
               },
             ),
           ),
@@ -244,7 +247,7 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                                 onClick: () {
                                   navigatorState.pushNamed(AppRoute.trips, arguments: filteredTrips[index]).then((onValue) async {
                                     if (onValue != false) {
-                                      await controller.getAllTrip();
+                                      await controller.getAllTrip(type: MethodType.local, refreshTrip: true);
                                     }
                                   });
                                 },

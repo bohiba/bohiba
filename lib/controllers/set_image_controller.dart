@@ -18,6 +18,7 @@ class SetImageController extends ImageUploadController {
   Rx<UploadStatus> status = UploadStatus.initial.obs;
 
   RxBool canPop = false.obs;
+  RxBool canSkip = false.obs;
 
   Rx<String> route = "".obs;
 
@@ -26,6 +27,7 @@ class SetImageController extends ImageUploadController {
     Map info = Get.arguments as Map;
     route.value = info['route'] ?? 'pop';
     canPop.value = info['canPop'] ?? false;
+    canSkip.value = info['canSkip'] ?? false;
     super.onInit();
   }
 
@@ -33,12 +35,10 @@ class SetImageController extends ImageUploadController {
 
   Future<int> uploadImage() async {
     if (pickedImg != null) {
-      int status =
-          await ProfileService.setImage(imageFile: [File(pickedImg!.path)]);
+      int status = await ProfileService.setImage(imageFile: [File(pickedImg!.path)]);
       return status;
     } else {
-      GlobalService.showSnackBar(
-          status: AlertStatus.warning, desc: 'Please select an image.');
+      GlobalService.showSnackBar(status: AlertStatus.warning, desc: 'Please select an image.');
       return 0;
     }
   }
@@ -51,8 +51,7 @@ class SetImageController extends ImageUploadController {
         GlobalService.showAlertDialog(
           status: AlertStatus.info,
           title: 'Permission',
-          description:
-              'Bohiba need file permission to select image by you! Please `Allow access` to access',
+          description: 'Bohiba need file permission to select image by you! Please `Allow access` to access',
           discardBtnTxt: 'Deny',
           saveBtnTxt: 'Allow',
           onSave: () async {
@@ -86,10 +85,7 @@ class SetImageController extends ImageUploadController {
       simulateUpload();
     } catch (e) {
       status.value = UploadStatus.failure;
-      GlobalService.showSnackBar(
-        status: AlertStatus.failure,
-        desc: 'Failed to upload image',
-      );
+      GlobalService.showSnackBar(status: AlertStatus.failure, desc: 'Failed to upload image');
     }
   }
 

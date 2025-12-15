@@ -39,8 +39,7 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                         'Edit',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
                           color: bohibaTheme.textTheme.bodyMedium!.color,
                         ),
                       ),
@@ -50,11 +49,9 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                       child: Text(
                         'Delete',
                         style: TextStyle(
-                          color: BohibaColors.warningColor,
-                          fontStyle:
-                              bohibaTheme.textTheme.titleMedium!.fontStyle,
-                          fontWeight:
-                              bohibaTheme.textTheme.titleMedium!.fontWeight,
+                          color: bohibaTheme.colorScheme.tertiary,
+                          fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
+                          fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
                         ),
                       ),
                     ),
@@ -74,8 +71,7 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                     GlobalService.showAlertDialog(
                       status: AlertStatus.warning,
                       title: 'DELETE PAYMENT',
-                      description:
-                          'Payment details will be removed permanently! Are you sure you want to delete this driver?',
+                      description: 'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
                       onDiscard: () async => await controller.deletePayment(
                         paymentId: controller.tripPayment.value.id!,

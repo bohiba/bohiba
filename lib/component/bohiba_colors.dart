@@ -20,8 +20,8 @@ class BohibaColors {
   static const white = Color.fromRGBO(255, 255, 255, 1);
   static const black = Color.fromRGBO(37, 37, 37, 1);
 
-  static const errorColor = Color(0xFFFAC638);
-  static const successColor = Color.fromARGB(255, 26, 162, 27);
+  static const errorColor = Color.fromRGBO(250, 198, 56, 1);
+  static const successColor = Color.fromRGBO(26, 162, 27, 1);
   static const warningColor = Color.fromRGBO(210, 10, 10, 1);
 
   static const transparent = Color(0x00000000);
@@ -42,9 +42,9 @@ class DarkColors {
 
   static const black = Color.fromRGBO(28, 28, 28, 1);
 
-  static const errorColor = Color.fromRGBO(252, 206, 81, 1);
-  static const successColor = Color.fromARGB(255, 34, 188, 34);
-  static const warningColor = Color.fromRGBO(182, 7, 7, 1);
+  static const errorColor = Color.fromARGB(255, 235, 179, 25);
+  static const successColor = Color.fromARGB(255, 26, 162, 27);
+  static const warningColor = Color.fromRGBO(181, 15, 15, 1);
 
   static const transparent = Color(0x00000000);
 }
