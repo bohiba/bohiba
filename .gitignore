@@ -25,3 +25,8 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+.metadata
+.DS_Store
+ios/.DS_Store
+lib/.DS_Store
+lib/model/.DS_Store

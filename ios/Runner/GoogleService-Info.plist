@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAMKHMkfiuHTnKvDz3VV-KIocbRrgwuLoY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>449684563968</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.app.bohiba</string>
+	<key>PROJECT_ID</key>
+	<string>bohiba-14d80</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bohiba-14d80.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:449684563968:ios:0a8150a5da6e30c3c6d0e5</string>
+	<key>DATABASE_URL</key>
+	<string>https://bohiba-14d80-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
