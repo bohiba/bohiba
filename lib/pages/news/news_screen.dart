@@ -1,4 +1,3 @@
-import '/component/image_path.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
@@ -42,7 +41,7 @@ class NewsScreen extends GetView<NewsController> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
                       child: CachedNetworkImage(
-                        imageUrl: '${ImagePath.newsImage}/${controller.newsDetail.value.image}',
+                        imageUrl: '${controller.newsDetail.value.image}',
                         fit: BoxFit.cover,
                         placeholder: (context, url) => Container(
                           color: bohibaTheme.cardColor,

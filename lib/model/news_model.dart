@@ -3,7 +3,8 @@ class NewsModel {
   String? title;
   String? description;
   String? image;
-  String? authorUuid;
+  String? authorName;
+  String? redirectUrl;
   String? createdAt;
   String? updatedAt;
 
@@ -12,7 +13,8 @@ class NewsModel {
     this.title,
     this.description,
     this.image,
-    this.authorUuid,
+    this.authorName,
+    this.redirectUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -23,6 +25,8 @@ class NewsModel {
       title: mapObj['title'],
       description: mapObj['description'],
       image: mapObj['image'],
+      authorName: mapObj['authorName'],
+      redirectUrl: mapObj['redirectUrl'],
       updatedAt: mapObj['updatedAt'],
     );
   }
@@ -33,7 +37,9 @@ class NewsModel {
       'title': json['title'],
       'description': json['description'],
       'image': json['news_image'],
-      'updatedAt': json['updated_at']
+      'authorName': json['author_uuid'],
+      'redirectUrl': json['redirect_url'],
+      'updatedAt': json['updated_at'],
     };
   }
 }

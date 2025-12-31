@@ -51,104 +51,107 @@ class DashboardPage extends GetView<DashboardController> {
                     label1: controller.profileModel.value?.name ?? '',
                     label2: controller.profileModel.value?.uuid,
                     label3: controller.profileModel.value?.roleId?.roleName(),
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Row(
-                          children: [
-                            SmallTabComponent(
-                              onTap: () {
-                                navigator.pushNamed(AppRoute.userProfile);
-                              },
-                              label: "Profile",
-                              icon: EvaIcons.personOutline,
-                            ),
-
-                            RoleWidget(
-                              truckOwnerWidget: SmallTabComponent(
+                    child: SizedBox(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        children: [
+                          Row(
+                            children: [
+                              SmallTabComponent(
                                 onTap: () {
-                                  navigator.pushNamed(AppRoute.allOwnerExpense);
+                                  navigator.pushNamed(AppRoute.userProfile);
                                 },
-                                label: "Expense",
-                                icon: EvaIcons.fileTextOutline,
+                                label: "Profile",
+                                icon: EvaIcons.personOutline,
                               ),
-                            ),
 
-                            PermissionWidget(
-                              permission: RolePermissionService.viewDriver,
-                              child: SmallTabComponent(
-                                onTap: () {
-                                  navigator.pushNamed(AppRoute.allDriver);
-                                },
-                                label: "Drivers",
-                                icon: Icons.person_add_alt_1_outlined,
-                              ),
-                            ),
-
-                            SmallTabComponent(
-                              onTap: () {
-                                navigator.pushNamed(AppRoute.allTrip);
-                              },
-                              label: "Trips",
-                              icon: Icons.landscape_outlined,
-                            ),
-
-                            SmallTabComponent(
-                              onTap: () {
-                                navigator.pushNamed(AppRoute.allTruck);
-                              },
-                              label: "Trucks",
-                              icon: EvaIcons.carOutline,
-                            ),
-
-                            RoleWidget(
-                              truckOwnerWidget: SmallTabComponent(
-                                onTap: () {
-                                  navigator.pushNamed(AppRoute.allJobs);
-                                },
-                                label: "Jobs",
-                                icon: EvaIcons.briefcaseOutline,
-                              ),
-                            ),
-
-                            /*SmallTabComponent(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const WalletScreen(),
-                                  ),
-                                );
-                              },
-                              label: "Wallet",
-                              icon: EvaIcons.briefcaseOutline,
-                            ),*/
-
-                            // KYC
-                            SmallTabComponent(
-                              onTap: () {
-                                navigator.pushNamed(AppRoute.kyc);
-                              },
-                              label: "KYC",
-                              icon: Icons.verified_outlined,
-                            ),
-
-                            /*SmallTabComponent(
+                              RoleWidget(
+                                truckOwnerWidget: SmallTabComponent(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const BankAccountsScreen(),
-                                      ),
-                                    );
+                                    navigator.pushNamed(AppRoute.allOwnerExpense);
                                   },
-                                  label: "Bank Accounts",
-                                  icon: EvaIcons.creditCardOutline,
-                                ),*/
-                          ],
-                        ),
-                      ],
+                                  label: "Expense",
+                                  icon: EvaIcons.fileTextOutline,
+                                ),
+                              ),
+
+                              PermissionWidget(
+                                permission: RolePermissionService.viewDriver,
+                                child: SmallTabComponent(
+                                  onTap: () {
+                                    navigator.pushNamed(AppRoute.allDriver);
+                                  },
+                                  label: "Drivers",
+                                  icon: Icons.person_add_alt_1_outlined,
+                                ),
+                              ),
+
+                              SmallTabComponent(
+                                onTap: () {
+                                  navigator.pushNamed(AppRoute.allTrip);
+                                },
+                                label: "Trips",
+                                icon: Icons.landscape_outlined,
+                              ),
+
+                              SmallTabComponent(
+                                onTap: () {
+                                  navigator.pushNamed(AppRoute.allTruck);
+                                },
+                                label: "Trucks",
+                                icon: EvaIcons.carOutline,
+                              ),
+
+                              RoleWidget(
+                                truckOwnerWidget: SmallTabComponent(
+                                  onTap: () {
+                                    navigator.pushNamed(AppRoute.allJobs);
+                                  },
+                                  label: "Jobs",
+                                  icon: EvaIcons.briefcaseOutline,
+                                ),
+                              ),
+
+                              /*SmallTabComponent(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const WalletScreen(),
+                                    ),
+                                  );
+                                },
+                                label: "Wallet",
+                                icon: EvaIcons.briefcaseOutline,
+                              ),*/
+
+                              // KYC
+                              SmallTabComponent(
+                                onTap: () {
+                                  navigator.pushNamed(AppRoute.kyc);
+                                },
+                                label: "KYC",
+                                icon: Icons.verified_outlined,
+                              ),
+
+                              /*SmallTabComponent(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const BankAccountsScreen(),
+                                        ),
+                                      );
+                                    },
+                                    label: "Bank Accounts",
+                                    icon: EvaIcons.creditCardOutline,
+                                  ),*/
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }),

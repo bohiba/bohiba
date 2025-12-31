@@ -6,11 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'global_service.dart';
 
 class LauncherService {
-  static final _appUrl = Platform.isIOS
-      ? 'Not available on App Store'
-      : 'https://play.google.com/store/apps/details?id=com.app.bohiba';
-  static final String _shareMsg =
-      "🚛 *Bohiba – India’s 1 Truck and Trip Management App!*%0A%0A"
+  static final _appUrl = Platform.isIOS ? 'Not available on App Store' : 'https://play.google.com/store/apps/details?id=com.app.bohiba';
+  static final String _shareMsg = "🚛 *Bohiba – India’s 1 Truck and Trip Management App!*%0A%0A"
       "Manage your *Trips*, *Drivers*, and *Expenses* — all in one app.%0A"
       "Track your trucks, hire drivers, and stay updated with *MiningNews*!%0A%0A"
       "💡 Easy to use | 🔒 Secure | 🇮🇳 Made for *Truck Owners and Drivers*%0A%0A"
@@ -27,13 +24,10 @@ class LauncherService {
   }
 
   static Future<void> shareViaSms() async {
-    final smsBody = Uri.encodeComponent(
-        "🚛 Bohiba – India’s #1 Truck & Trip Management App!\n\n"
+    final smsBody = Uri.encodeComponent("🚛 Bohiba – India’s #1 Truck & Trip Management App!\n\n"
         "Manage your #Trips, #Drivers, and #Expenses — all in one app.\n"
         "Download now: $_appUrl");
-    final Uri smsUrl = Platform.isAndroid
-        ? Uri.parse("sms:?body=$smsBody")
-        : Uri.parse("sms:&body=$smsBody");
+    final Uri smsUrl = Platform.isAndroid ? Uri.parse("sms:?body=$smsBody") : Uri.parse("sms:&body=$smsBody");
 
     try {
       await launchUrl(smsUrl);
@@ -43,10 +37,8 @@ class LauncherService {
   }
 
   static Future<void> shareViaEmail() async {
-    final subject =
-        Uri.encodeComponent("Try Bohiba – India’s #1 Truck Management App");
-    final body = Uri.encodeComponent(
-        "🚛 Bohiba – India’s #1 Truck & Trip Management App!\n\n"
+    final subject = Uri.encodeComponent("Try Bohiba – India’s #1 Truck Management App");
+    final body = Uri.encodeComponent("🚛 Bohiba – India’s #1 Truck & Trip Management App!\n\n"
         "Manage your #Trips, #Drivers, and #Expenses — all in one app.\n"
         "Track your trucks, hire drivers, and stay updated with #MiningNews!\n\n"
         "💡 Easy to use | 🔒 Secure | 🇮🇳 Made for Truck Owners & Drivers\n\n"
@@ -72,8 +64,7 @@ class LauncherService {
   }
 
   static Future<void> shareAppOnWhatsApp() async {
-    final launchUri =
-        Uri.parse("https://api.whatsapp.com/send?text=$_shareMsg");
+    final launchUri = Uri.parse("https://api.whatsapp.com/send?text=$_shareMsg");
     try {
       await launchUrl(launchUri, mode: LaunchMode.externalApplication);
     } catch (e) {
@@ -118,6 +109,15 @@ class LauncherService {
 
     try {
       await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      GlobalService.showAppToast(message: 'Could not launch Email');
+      GlobalService.printHandler('$e');
+    }
+  }
+
+  static Future<void> openWebsite(String webUrl) async {
+    try {
+      await launchUrl(Uri(scheme: webUrl), mode: LaunchMode.inAppBrowserView);
     } catch (e) {
       GlobalService.showAppToast(message: 'Could not launch Email');
       GlobalService.printHandler('$e');

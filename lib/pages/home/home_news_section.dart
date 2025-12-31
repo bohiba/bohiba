@@ -1,7 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-
-import '/component/image_path.dart';
+import '/pages/widget/in_app_webview.dart';
 import '/routes/app_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:gap/gap.dart';
+
 import '/theme/bohiba_theme.dart';
 import '/controllers/home_controller.dart';
 import '/dist/component_exports.dart';
@@ -52,63 +53,66 @@ class HomeNewsSection extends GetView<HomeController> {
                 NewsModel news = controller.arrNews[index];
                 return GestureDetector(
                   onTap: () {
-                    navigatorState.pushNamed(AppRoute.newsScreen, arguments: news);
+                    // navigatorState.pushNamed(AppRoute.newsScreen, arguments: news);
+                    String? website = news.redirectUrl;
+                    if (website != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InAppWebViewPage(url: website),
+                        ),
+                      );
+                    }
                   },
                   child: Padding(
                     padding: EdgeInsets.only(bottom: ScreenUtils.height20.h),
                     child: Container(
                       width: ScreenUtils.width,
-                      height: 160.h,
+                      // height: 160.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       alignment: Alignment.center,
-                      child: Stack(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Cached background
-                          Positioned.fill(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12.r),
-                              child: CachedNetworkImage(
-                                imageUrl: '${ImagePath.newsImage}/${news.image}',
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => Container(
-                                  color: bohibaTheme.cardColor,
-                                ),
-                                errorWidget: (context, url, error) => Container(
-                                  color: bohibaTheme.cardColor,
-                                  child: Icon(Icons.broken_image, size: 50, color: bohibaTheme.dividerColor),
-                                ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: CachedNetworkImage(
+                              imageUrl: '${news.image}',
+                              fit: BoxFit.cover,
+                              height: 220,
+                              width: ScreenUtils.width,
+                              placeholder: (context, url) => Container(
+                                color: bohibaTheme.cardColor,
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: bohibaTheme.cardColor,
+                                child: Icon(Icons.broken_image, size: 50, color: bohibaTheme.dividerColor),
                               ),
                             ),
                           ),
+                          Gap(5.h),
 
-                          // Content overlay
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              height: 40.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(12.r),
-                                  bottomRight: Radius.circular(12.r),
-                                ),
-                                color: bohibaTheme.colorScheme.onTertiary.withValues(alpha: 0.5),
-                              ),
-                              padding: EdgeInsets.only(
-                                top: ScreenUtils.height5,
-                                left: ScreenUtils.height10,
-                                right: ScreenUtils.height10,
-                                bottom: ScreenUtils.height5,
-                              ),
-                              child: Text(
-                                news.title ?? '',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: bohibaTheme.textTheme.displayLarge!.color, fontSize: bohibaTheme.textTheme.titleMedium!.fontSize),
-                              ),
+                          Text(
+                            news.title ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
+                              fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
+                            ),
+                          ),
+                          Text(
+                            news.authorName ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                              fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
+                              color: bohibaTheme.textTheme.titleLarge!.color,
                             ),
                           ),
                         ],

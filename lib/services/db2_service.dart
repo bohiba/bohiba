@@ -11,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 8;
+  static int dbversion = 9;
 
   /*================  DB CONFIG  =================== */
 
@@ -544,6 +544,8 @@ class DatabaseService {
   , title TEXT
   , description TEXT
   , image TEXT
+  , redirectUrl TEXT
+  , authorName TEXT
   , updatedAt TEXT
   , UNIQUE(id)
   )''';

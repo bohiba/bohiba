@@ -76,6 +76,9 @@ class DriverPage extends GetView<DriverController> {
                                     : CachedNetworkImage(
                                         imageUrl: "${ImagePath.profileImage}/${controller.driverModel.value?.profile?.image}",
                                         fit: BoxFit.cover,
+                                        errorWidget: (context, url, error) {
+                                          return SizedBox.shrink();
+                                        },
                                       ),
                               ),
                               Padding(

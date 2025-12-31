@@ -61,7 +61,7 @@ class BlueBoxComponent extends StatelessWidget {
               ),
             ),
           ),
-          Spacer(),
+          // Spacer(),
           Divider(),
           Container(
             padding: EdgeInsets.only(left: ScreenUtils.width10),
