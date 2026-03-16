@@ -11,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 9;
+  static int dbversion = 11;
 
   /*================  DB CONFIG  =================== */
 
@@ -271,13 +271,13 @@ class DatabaseService {
   , mobileNumber TEXT
   , roleId INTEGER NOT NULL DEFAULT 9
   , dob TEXT
-  , jobStatus TEXT NOT NULL DEFAULT ''
+  , jobStatus INTEGER NOT NULL DEFAULT 0
   , trucks INTEGER NOT NULL DEFAULT 0
   , driver INTEGER NOT NULL DEFAULT 0
   , panNumber TEXT
   , aadharNumber TEXT
   , dlNumber TEXT
-  , verified TEXT NOT NULL DEFAULT 'unverified'
+  , verified INTEGER NOT NULL DEFAULT 0
   , houseNo TEXT
   , locality TEXT
   , street TEXT
@@ -316,7 +316,7 @@ class DatabaseService {
   , ownerMobileNumber TEXT
   , registrationPlace TEXT
   , registrationDate TEXT
-  , rcStatus TEXT
+  , rcStatus INTEGER
   , rcModel TEXT
   , rcOwnerSr INTEGER
   , vhDesc TEXT

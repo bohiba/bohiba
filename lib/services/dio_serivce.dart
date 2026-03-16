@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:bohiba/services/dio_interceptor.dart';
+
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
@@ -16,79 +18,18 @@ class DioService {
   DioService._internal() {
     dio = Dio(
       BaseOptions(
+        baseUrl: ApiEndPoint.baseUrl,
+        headers: {
+          if (_token != null) 'Authorization': 'Bearer $_token',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
         connectTimeout: const Duration(seconds: 20),
         receiveTimeout: const Duration(seconds: 20),
       ),
     );
 
-    dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          if (options.extra['withToken'] == true && _token != null) {
-            options.headers['Authorization'] = 'Bearer $_token';
-          }
-          return handler.next(options);
-        },
-        onError: (DioException error, handler) {
-          final statusCode = error.response?.statusCode ?? 401;
-          final responseData = error.response?.data;
-
-          if (error.type == DioExceptionType.connectionTimeout || error.type == DioExceptionType.sendTimeout || error.type == DioExceptionType.receiveTimeout) {
-            return handler.resolve(
-              Response(
-                requestOptions: error.requestOptions,
-                statusCode: 408, // Request Timeout
-                data: {
-                  'status': false,
-                  'message': 'Slow internet connection. Please try again.',
-                },
-              ),
-            );
-          }
-
-          // 2️⃣ CHECK FOR NO INTERNET
-          if (error.type == DioExceptionType.unknown && error.error is SocketException) {
-            return handler.resolve(
-              Response(
-                requestOptions: error.requestOptions,
-                statusCode: 0,
-                data: {
-                  'status': false,
-                  'message': 'No internet connection.',
-                },
-              ),
-            );
-          }
-
-          if (statusCode == 498) {
-            handler.resolve(
-              Response(
-                requestOptions: error.requestOptions,
-                statusCode: 498,
-                data: responseData ??
-                    {
-                      'status': false,
-                      'statusCode': 498,
-                      'message': 'Invalid token',
-                    },
-              ),
-            );
-          } else {
-            handler.resolve(
-              Response(
-                requestOptions: error.requestOptions,
-                statusCode: statusCode,
-                data: responseData ??
-                    {
-                      'status': false,
-                      'message': 'Something went wrong',
-                    },
-              ),
-            );
-          }
-        },
-      ),
-    );
+    dio.interceptors.add(ApiInterceptor());
   }
 
   void setToken(String token) {

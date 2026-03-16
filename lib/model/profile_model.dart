@@ -9,13 +9,13 @@ class ProfileModel {
   String? mobileNumber;
   int? roleId;
   String? dob;
-  String? jobStatus;
+  int? jobStatus;
   int? trucks;
   int? driver;
   String? panNumber;
   String? aadharNumber;
   String? dlNumber;
-  String? verified;
+  int? verified;
   String? houseNo;
   String? locality;
   String? street;
@@ -82,7 +82,8 @@ class ProfileModel {
       ratings: verification['ratings'] == null
           ? null
           : List<RatingModel>.from(
-              (json['ratings'] as List).map((x) => RatingModel.fromDB(x))),
+              (json['ratings'] as List).map((x) => RatingModel.fromDB(x)),
+            ),
     );
   }
 
@@ -143,8 +144,9 @@ class ProfileModel {
       pinCode: map['pinCode'],
       ratings: map['ratings'] == null
           ? null
-          : List<RatingModel>.from(
-              (map['ratings'] as List).map((x) => RatingModel.fromDB(x))),
+          : List<RatingModel>.from((map['ratings'] as List).map(
+              (x) => RatingModel.fromDB(x),
+            )),
     );
   }
 }

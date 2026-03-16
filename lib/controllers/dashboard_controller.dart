@@ -60,7 +60,8 @@ class DashboardController extends GetxController {
   }
 
   Future<void> updateUserHiringStatus() async {
-    profileModel.value?.jobStatus = opted.value.replaceAll(' ', '_').toLowerCase();
+    // TODO: Make this functional as eariler it was taking string but now it is taking int
+    // profileModel.value?.jobStatus = opted.value.replaceAll(' ', '_').toLowerCase();
     GlobalService.printHandler(opted.value.replaceAll(' ', '_').toLowerCase());
     ProfileModel? profileInfo = await ProfileService.updateUserProfile(bodyMap: {'job_status': profileModel.value?.jobStatus});
 
@@ -78,10 +79,10 @@ class DashboardController extends GetxController {
       profileModel.value = profile;
       if (profile.roleId == UserRoles.truckOwner) {
         statusOption.value = ['HIRING', 'NOT HIRING'];
-        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ?? 'Not Hiring';
+        opted.value = profile.jobStatus == 1 ? 'HIRING' : 'NOT HIRING';
       } else {
         statusOption.value = ['LOOKING', 'NOT LOOKING'];
-        opted.value = profile.jobStatus?.replaceAll('_', ' ').toUpperCase() ?? 'Not Looking';
+        opted.value = profile.jobStatus == 1 ? 'LOOKING' : 'NOT LOOKING';
       }
       homeController.profile.value = profile;
       return profile;

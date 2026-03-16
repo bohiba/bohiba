@@ -1,6 +1,6 @@
 class TruckModel {
   int? id;
-  int? isFav;
+  bool? isFav;
   String? truckImage;
   String? regdNumber;
 
@@ -18,7 +18,7 @@ class TruckModel {
 
   String? place;
   String? regdDate;
-  String? rcStatus;
+  int? rcStatus;
   String? rcModel;
   int? rcOwnerSr;
   String? rcDesc;
@@ -45,7 +45,7 @@ class TruckModel {
     this.id,
     this.truckImage,
     this.regdNumber,
-    this.isFav = 0,
+    this.isFav = false,
     this.driverId,
     this.driverImage,
     this.driverUuid,
@@ -87,7 +87,7 @@ class TruckModel {
     final valid = json['validity'] ?? {};
     return {
       'id': json['id'],
-      'isFav': json['is_fav'] ?? 0,
+      'isFav': json['is_fav'] == false ? 0 : 1,
       'image': json['truck_image'],
       'vhNumber': json['regd_number'],
       'driverId': driver['id'],
@@ -129,7 +129,7 @@ class TruckModel {
         id: map['id'],
         truckImage: map['image'],
         regdNumber: map['vhNumber'],
-        isFav: map['isFav'],
+        isFav: map['isFav'] == 0 ? false : true,
       )
         ..driverId = map['driverId']
         ..driverUuid = map['driverUuid']
