@@ -26,11 +26,9 @@ class TripPaymentAddController extends GetxController {
     thousandSeparator: ",",
   );
 
-  List<String> get arrPaymentMode =>
-      ['bank_transfer', 'cash', 'cheque', 'discounted', 'upi'];
+  List<String> get arrPaymentMode => ['bank_transfer', 'cash', 'cheque', 'discounted', 'upi'];
   List<String> get arrRecievedBy => ['driver', 'manager', 'self', 'other'];
-  List<String> get arrPaymentType =>
-      ['Discount', 'Disel Advance', 'Final Settelement', 'Other'];
+  List<String> get arrPaymentType => ['Discount', 'Disel Advance', 'Final Settelement', 'Other'];
 
   RxInt countUpdate = 0.obs;
 
@@ -47,12 +45,11 @@ class TripPaymentAddController extends GetxController {
 
   Future<void> addUpdatePayment() async {
     Map<String, dynamic> bodyObj = {
-      'payer_type': paymentTypeController.text.trim(),
-      'payment_mode': paymentModeController.text.trim(),
-      'amount': (paidController.text.replaceAll(RegExp(r'[₹,]'), '').trim())
-          .toDouble(),
-      'paid_by': rcviedController.text.trim(),
-      'received_by': rcviedController.text.trim(),
+      'payer_type': paymentTypeController.text.trim().toLowerCase().replaceAll(' ', '_'),
+      'payment_mode': paymentModeController.text.trim().toLowerCase().replaceAll(' ', '_'),
+      'amount': (paidController.text.replaceAll(RegExp(r'[₹,]'), '').trim()).toDouble(),
+      'paid_by': paidByController.text.trim().toLowerCase().replaceAll(' ', '_'),
+      'received_by': rcviedController.text.trim().toLowerCase().replaceAll(' ', '_'),
       'payment_time': paymentDateController.text.trim(),
     };
 
@@ -101,7 +98,7 @@ class TripPaymentAddController extends GetxController {
     paidByController.text = tripPayment?.paidBy ?? '';
     rcviedController.text = tripPayment?.receivedBy ?? '';
     paymentModeController.text = tripPayment?.paymentMode ?? '';
-    paymentTypeController.text = tripPayment?.payerType ?? '';
+    paymentTypeController.text = tripPayment?.paymentType ?? '';
     paidController = MoneyMaskedTextController(
       initialValue: tripPayment?.amount ?? 0.0,
       precision: 2,
@@ -131,8 +128,7 @@ class TripPaymentAddController extends GetxController {
     GlobalService.showAlertDialog(
       status: AlertStatus.info,
       title: 'Save Changes?',
-      description:
-          'You have unsaved changes. Do you want to save them before exiting?',
+      description: 'You have unsaved changes. Do you want to save them before exiting?',
       onSave: () {},
       onDiscard: () {},
     );

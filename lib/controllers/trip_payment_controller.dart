@@ -13,8 +13,7 @@ class TripPaymentController extends GetxController {
   }
 
   Future<void> getPayment() async {
-    TripModel? trip = await TripService.getTrip(
-        method: MethodType.local, tripId: tripPayment.value.tripId!);
+    TripModel? trip = await TripService.getTrip(method: MethodType.local, tripId: tripPayment.value.tripId!);
     if (trip != null) {
       tripPayment.value = trip.payments!.firstWhere((payment) {
         return payment.id == tripPayment.value.id;
@@ -22,11 +21,8 @@ class TripPaymentController extends GetxController {
     }
   }
 
-  Future<void> deletePayment({required int paymentId}) async {
-    Get.back();
+  Future<int> deletePayment({required int paymentId}) async {
     int deleteSucess = await TripService.deletePayment(paymentId: paymentId);
-    if (deleteSucess > 0) {
-      Get.back(result: true);
-    }
+    return deleteSucess;
   }
 }

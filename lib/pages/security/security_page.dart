@@ -174,58 +174,6 @@ class SecurityPage extends GetView<SecurityController> {
                     ),
                   ),
                   Gap(ScreenUtils.height30),
-                  /*Text('Delete Account', style: bohibaTheme.textTheme.headlineMedium),
-                  GestureDetector(
-                    onTap: () => GlobalService.showAlertDialog(
-                      width: ScreenUtils.width * 0.45,
-                      status: AlertStatus.warning,
-                      title: 'Delete Account?',
-                      description: 'Are you sure? This will remove all your data and can’t be undone.',
-                      discardBtnTxt: 'Yes, Delete my account',
-                      onDiscard: () => controller.deleteAccount(),
-                      saveBtnTxt: 'Keep My Account',
-                      onSave: () => navigateState.pop(),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtils.height10,
-                        horizontal: ScreenUtils.width15,
-                      ),
-                      margin: EdgeInsets.only(
-                        top: ScreenUtils.height5,
-                        bottom: ScreenUtils.width15,
-                      ),
-                      decoration: BoxDecoration(
-                        color: bohibaTheme.cardColor,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Delete account',
-                              style: TextStyle(
-                                fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                                fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                                color: bohibaTheme.colorScheme.error,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 5.w),
-                              child: Icon(
-                                Icons.delete_rounded,
-                                size: ScreenUtils.height15.h,
-                                color: bohibaTheme.colorScheme.error,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Gap(ScreenUtils.height15),*/
                   Text('Manage session', style: bohibaTheme.textTheme.headlineMedium),
                   Container(
                     padding: EdgeInsets.symmetric(

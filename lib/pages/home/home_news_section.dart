@@ -17,6 +17,10 @@ class HomeNewsSection extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final NavigatorState navigatorState = Navigator.of(context);
+
+    if (controller.arrNews.isEmpty) {
+      return SizedBox.shrink();
+    }
     return Padding(
       padding: EdgeInsets.only(
         right: ScreenUtils.width15,

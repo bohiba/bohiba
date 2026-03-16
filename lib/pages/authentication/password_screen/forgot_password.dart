@@ -39,13 +39,11 @@ class ForgotPasswordPage extends GetView<ForgotPasswordController> {
                         'No worries, We will send OTP to reset you password mail.',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleSmall!.color,
                         ),
                       ),
                       EmailInputField(
-                        readOnly: true,
                         hintText: 'Email',
                         controller: controller.emailController,
                       ),

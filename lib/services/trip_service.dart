@@ -129,6 +129,7 @@ class TripService {
       if (!await DeviceInfoService.hasInternet()) return null;
 
       if (reset) {
+        await clearAll();
         _currentPage = 1;
         _lastPage = 1;
       }
@@ -277,7 +278,7 @@ class TripService {
             return TripPayment(
               id: p['id'],
               tripId: p['tripId'],
-              payerType: p['payerType'],
+              paymentType: p['payerType'],
               paymentMode: p['payementMode'],
               paidBy: p['paidBy'],
               receivedBy: p['receivedBy'],
@@ -610,7 +611,7 @@ class TripService {
         ) VALUES (
           ${tripPayment.id}
         , ${tripPayment.tripId}  
-        , '${tripPayment.payerType}'
+        , '${tripPayment.paymentType}'
         , '${tripPayment.paymentMode}'
         , '${tripPayment.amount}'
         , '${tripPayment.paidBy}'
@@ -661,7 +662,7 @@ class TripService {
         TripPayment tripPayment = TripPayment.fromJson(apiResponse.data);
         String strUpdateQuery = '''
           UPDATE $tblTripPayment SET
-            payerType = '${tripPayment.payerType}'
+            payerType = '${tripPayment.paymentType}'
           , payementMode = '${tripPayment.paymentMode}'
           , amount = ${tripPayment.amount ?? 0.0}
           , paidBy = '${tripPayment.paidBy}'
@@ -714,7 +715,7 @@ class TripService {
 
   static Future<int> deletePayment({required int paymentId}) async {
     GlobalService.showProgress();
-    String strQueryDelete = ''' DELETE FROM $tblTripExpense WHERE id = $paymentId; ''';
+    String strQueryDelete = ''' DELETE FROM $tblTripPayment WHERE id = $paymentId; ''';
     int deletePayment = await _databaseService.delete(strQueryDelete);
     if (deletePayment > 0) {
       ApiResponse apiResponse = await _dioService.delete('${ApiEndPoint.apiDeleteTripPayment}/$paymentId');

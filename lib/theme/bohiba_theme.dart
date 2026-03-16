@@ -73,29 +73,15 @@ class BohibaTheme {
       ),
       canvasColor: BohibaColors.bgColor,
       colorScheme: ColorScheme.light(
-        // primary: BohibaColors.primaryColor,
-        // secondary: BohibaColors.secoundaryColor,
-        // tertiary: BohibaColors.white,
-        // onTertiary: BohibaColors.black,
-        // onPrimary: BohibaColors.successColor,
-        // surface: BohibaColors.errorColor,
-        // onSurface: BohibaColors.primaryVariantColor,
-        // error: BohibaColors.warningColor,
-
         brightness: Brightness.light,
-
         primary: BohibaColors.primaryColor,
         onPrimary: BohibaColors.successColor,
-
         secondary: BohibaColors.black,
         onSecondary: BohibaColors.white,
-
-        tertiary: BohibaColors.warningColor, // << your WARNING color
+        tertiary: BohibaColors.warningColor,
         onTertiary: BohibaColors.black,
-
         error: BohibaColors.errorColor,
         onError: Colors.white,
-
         surface: BohibaColors.white,
         onSurface: BohibaColors.primaryVariantColor,
       ),

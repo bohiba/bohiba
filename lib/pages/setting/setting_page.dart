@@ -1,3 +1,10 @@
+import '/component/bohiba_appbar/appbar_icon.dart';
+import '/dist/app_enums.dart';
+import '/pages/widget/icon_text_tile.dart';
+import '/services/global_service.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/routes/app_route.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
@@ -29,8 +36,7 @@ class SettingPage extends GetView<SettingController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Notifications",
-                  style: bohibaTheme.textTheme.headlineMedium),
+              Text("Notifications", style: bohibaTheme.textTheme.headlineMedium),
               LinearBoxWidget(
                 header: 'Push notifications',
                 widget: Switch(
@@ -80,29 +86,6 @@ class SettingPage extends GetView<SettingController> {
                   ),
                 ),
               ),
-              // Gap(ScreenUtils.height30),
-              /*Text("Storage", style: bohibaTheme.textTheme.headlineMedium),
-              LinearBoxWidget(
-                onClick: () {},
-                header: 'Clear Cache',
-                widget: Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtils.height5,
-                      horizontal: ScreenUtils.width10),
-                  decoration: BoxDecoration(
-                    color: bohibaTheme.primaryColor,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Clear',
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                      color: bohibaTheme
-                          .listTileTheme.leadingAndTrailingTextStyle!.color,
-                    ),
-                  ),
-                ),
-              ),*/
               Gap(ScreenUtils.height30),
               Text(
                 "Account",
@@ -127,8 +110,7 @@ class SettingPage extends GetView<SettingController> {
                       ),
                     ],
                     onChanged: (userRole) async {
-                      if (userRole != null &&
-                          controller.roleId.value != userRole) {
+                      if (userRole != null && controller.roleId.value != userRole) {
                         controller.roleId.value = userRole;
                         await controller.switchRole();
                       }
@@ -150,6 +132,39 @@ class SettingPage extends GetView<SettingController> {
                 header: 'Change phone number',
                 showArrow: true,
               ),
+              Gap(ScreenUtils.height30),
+              Padding(
+                padding: EdgeInsets.only(bottom: ScreenUtils.height15),
+                child: Text('Delete Account', style: bohibaTheme.textTheme.headlineMedium),
+              ),
+              IconTextTile(
+                onTap: () {
+                  GlobalService.showAlertDialog(
+                    width: ScreenUtils.width * 0.45,
+                    status: AlertStatus.warning,
+                    title: 'Delete Account?',
+                    description: 'Are you sure? This will remove all your data and can’t be undone.',
+                    discardBtnTxt: 'Yes',
+                    onDiscard: () {
+                      navigation.pop();
+                      controller.deleteAccount();
+                    },
+                    saveBtnTxt: 'Keep',
+                    onSave: () => navigation.pop(),
+                  );
+                },
+                icon: EvaIcons.trash2Outline,
+                text: 'Delete Account',
+                subtitle: 'Permanently remove your data',
+                widget: AppBarIconBox(
+                  icon: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: ScreenUtils.height15.h,
+                    color: bohibaTheme.colorScheme.tertiary,
+                  ),
+                ),
+              ),
+              Gap(ScreenUtils.height15),
             ],
           ),
         );

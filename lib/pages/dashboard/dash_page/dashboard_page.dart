@@ -222,6 +222,13 @@ class DashboardPage extends GetView<DashboardController> {
                 ),
                 SingleTileTabComponent(
                   onTap: () {
+                    navigator.pushNamed(AppRoute.subscriptionPlan);
+                  },
+                  icon: RemixIcons.money_cny_box_fill,
+                  title: 'Subscription Plan',
+                ),
+                SingleTileTabComponent(
+                  onTap: () {
                     navigator.push(MaterialPageRoute(builder: (context) => AboutPage()));
                   },
                   icon: EvaIcons.awardOutline,

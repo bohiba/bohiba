@@ -1,21 +1,20 @@
-import 'package:gap/gap.dart';
-
 import '/model/truck_model.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '/pages/widget/required_label.dart';
-import '/extensions/bohiba_extension.dart';
 import '/dist/component_exports.dart';
-import '/component/bohiba_inputfield/date_inputfield.dart';
-import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
-import '/component/bohiba_inputfield/text_inputfield.dart';
-import '/controllers/trip_add_controller.dart';
 import '/services/global_service.dart';
+import '/extensions/bohiba_extension.dart';
+import '/pages/widget/required_label.dart';
+import '/controllers/trip_add_controller.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_inputfield/text_inputfield.dart';
+import '/component/bohiba_inputfield/date_inputfield.dart';
+import '/component/bohiba_dropdown/app_dropdown_button.dart';
+
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddTripPage extends GetView<TripAddController> {
   const AddTripPage({super.key});

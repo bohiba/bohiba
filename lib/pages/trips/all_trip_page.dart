@@ -1,3 +1,5 @@
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+
 import 'trip_tile.dart';
 
 import '/routes/app_route.dart';
@@ -5,7 +7,6 @@ import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
 
 import '/dist/app_enums.dart';
-import '/dist/widget_exports.dart';
 import '/dist/component_exports.dart';
 
 import '/component/app_skeleton_loader.dart';
@@ -114,7 +115,7 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
             },
             icon: const Icon(EvaIcons.searchOutline),
           ),
-          AppBarIconBox(
+          /*AppBarIconBox(
             onTapDown: (tapDownDetails) => showMenu(
               context: context,
               menuPadding: EdgeInsets.zero,
@@ -140,27 +141,27 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
             ),
             icon: Icon(EvaIcons.funnelOutline),
           ),
-          // AppBarIconBox(
-          //   onTapDown: (tapDownDetails) => showMenu(
-          //     context: context,
-          //     menuPadding: EdgeInsets.zero,
-          //     elevation: 4,
-          //     position: RelativeRect.fromLTRB(
-          //       tapDownDetails.globalPosition.dx,
-          //       tapDownDetails.globalPosition.dy,
-          //       0,
-          //       0,
-          //     ),
-          //     items: [
-          //       PopupMenuItem(
-          //         padding: EdgeInsets.zero,
-          //         enabled: false,
-          //         child: SortMenu(),
-          //       ),
-          //     ],
-          //   ),
-          //   icon: Icon(Icons.sort),
-          // ),
+          AppBarIconBox(
+            onTapDown: (tapDownDetails) => showMenu(
+              context: context,
+              menuPadding: EdgeInsets.zero,
+              elevation: 4,
+              position: RelativeRect.fromLTRB(
+                tapDownDetails.globalPosition.dx,
+                tapDownDetails.globalPosition.dy,
+                0,
+                0,
+              ),
+              items: [
+                PopupMenuItem(
+                  padding: EdgeInsets.zero,
+                  enabled: false,
+                  child: SortMenu(),
+                ),
+              ],
+            ),
+            icon: Icon(Icons.sort),
+          ),*/
           PermissionWidget(
             permission: RolePermissionService.addTrips,
             child: AppBarIconBox(
@@ -180,94 +181,101 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
       ),
       body: SafeArea(
         child: Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              TabBar(
-                controller: tabController,
-                isScrollable: true,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: List.generate(
-                  tabs.length,
-                  (index) {
-                    return Tab(text: tabs[index]);
-                  },
-                ),
-              ),
-              Expanded(
-                child: TabBarView(
+          return SmartRefresher(
+            controller: controller.refreshController,
+            onRefresh: () async {
+              await controller.getAllTrip(type: MethodType.api, refreshTrip: true);
+              controller.refreshController.refreshCompleted();
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TabBar(
                   controller: tabController,
-                  children: controller.convertToSnakeCase(tabs).map(
-                    (status) {
-                      final filteredTrips = controller.getTripsByStatus(status);
-                      if (filteredTrips == null) {
-                        return AppSkeletonLoader(
-                          padding: EdgeInsets.only(top: ScreenUtils.height20),
-                          skeletonLength: 3,
-                        );
-                      } else if (filteredTrips.isEmpty) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'No Trip Found',
-                              style: bohibaTheme.textTheme.displaySmall,
-                            ),
-                            Text(
-                              'No trip found, Press below to add trip.',
-                              style: bohibaTheme.textTheme.titleMedium,
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
-                                  if (value != null) {
-                                    await controller.getAllTrip();
-                                  }
-                                });
-                              },
-                              child: RoleWidget(
-                                truckOwnerWidget: Text('Add Trip'),
+                  isScrollable: true,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  tabs: List.generate(
+                    tabs.length,
+                    (index) {
+                      return Tab(text: tabs[index]);
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    children: controller.convertToSnakeCase(tabs).map(
+                      (status) {
+                        final filteredTrips = controller.getTripsByStatus(status);
+                        if (filteredTrips == null) {
+                          return AppSkeletonLoader(
+                            padding: EdgeInsets.only(top: ScreenUtils.height20),
+                            skeletonLength: 3,
+                          );
+                        } else if (filteredTrips.isEmpty) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'No Trip Found',
+                                style: bohibaTheme.textTheme.displaySmall,
                               ),
-                            )
-                          ],
-                        );
-                      } else {
-                        return ListView.builder(
-                          // controller: controller.scrollController,
-                          itemCount: (filteredTrips.length) + (controller.hasMore.value ? 1 : 0),
-                          padding: EdgeInsets.only(
-                            top: ScreenUtils.height20,
-                            left: ScreenUtils.width15,
-                            right: ScreenUtils.width15,
-                          ),
-                          itemBuilder: (context, index) {
-                            if (index < filteredTrips.length) {
-                              return TripTile(
-                                tripInfo: filteredTrips[index],
-                                onClick: () {
-                                  navigatorState.pushNamed(AppRoute.trips, arguments: filteredTrips[index]).then((onValue) async {
-                                    if (onValue != false) {
-                                      await controller.getAllTrip(type: MethodType.local, refreshTrip: true);
+                              Text(
+                                'No trip found, Press below to add trip.',
+                                style: bohibaTheme.textTheme.titleMedium,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
+                                    if (value != null) {
+                                      await controller.getAllTrip();
                                     }
                                   });
                                 },
-                              );
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
+                                child: RoleWidget(
+                                  truckOwnerWidget: Text('Add Trip'),
                                 ),
-                              );
-                            }
-                          },
-                        );
-                      }
-                    },
-                  ).toList(),
+                              )
+                            ],
+                          );
+                        } else {
+                          return ListView.builder(
+                            // controller: controller.scrollController,
+                            itemCount: (filteredTrips.length) + (controller.hasMore.value ? 1 : 0),
+                            padding: EdgeInsets.only(
+                              top: ScreenUtils.height20,
+                              left: ScreenUtils.width15,
+                              right: ScreenUtils.width15,
+                            ),
+                            itemBuilder: (context, index) {
+                              if (index < filteredTrips.length) {
+                                return TripTile(
+                                  tripInfo: filteredTrips[index],
+                                  onClick: () {
+                                    navigatorState.pushNamed(AppRoute.trips, arguments: filteredTrips[index]).then((onValue) async {
+                                      if (onValue != false) {
+                                        await controller.getAllTrip(type: MethodType.local, refreshTrip: true);
+                                      }
+                                    });
+                                  },
+                                );
+                              } else {
+                                return Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        }
+                      },
+                    ).toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }),
       ),

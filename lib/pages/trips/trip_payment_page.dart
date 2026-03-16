@@ -1,3 +1,4 @@
+import '/extensions/bohiba_extension.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
 import '/dist/app_enums.dart';
@@ -13,6 +14,7 @@ class TripPaymentPage extends GetView<TripPaymentController> {
 
   @override
   Widget build(BuildContext context) {
+    final navigateState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(
         title: 'Payment',
@@ -58,10 +60,12 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                   ]).then((onValue) {
                 switch (onValue) {
                   case ActionType.edit:
-                    Get.toNamed(
+                    navigateState
+                        .pushNamed(
                       AppRoute.addPayment,
                       arguments: controller.tripPayment.value,
-                    )?.then((onValue) async {
+                    )
+                        .then((onValue) async {
                       if (onValue != null && onValue != false) {
                         await controller.getPayment();
                       }
@@ -73,11 +77,17 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                       title: 'DELETE PAYMENT',
                       description: 'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
-                      onDiscard: () async => await controller.deletePayment(
-                        paymentId: controller.tripPayment.value.id!,
-                      ),
+                      onDiscard: () async {
+                        navigateState.pop();
+                        int deleteSuccess = await controller.deletePayment(
+                          paymentId: controller.tripPayment.value.id!,
+                        );
+                        if (deleteSuccess > 0) {
+                          navigateState.pop(true);
+                        }
+                      },
                       saveBtnTxt: 'CLOSE',
-                      onSave: () => Get.back(),
+                      onSave: () => navigateState.pop(),
                     );
                     break;
                   default:
@@ -106,19 +116,19 @@ class TripPaymentPage extends GetView<TripPaymentController> {
               ),
               LinearBoxWidget(
                 header: 'Recevied By',
-                title: controller.tripPayment.value.paidBy,
+                title: controller.tripPayment.value.paidBy?.toDisplayLabel(),
               ),
               LinearBoxWidget(
                 header: 'Payment Mode',
-                title: controller.tripPayment.value.paymentMode,
+                title: controller.tripPayment.value.paymentMode?.toDisplayLabel(),
               ),
               LinearBoxWidget(
                 header: 'Recivied By',
-                title: controller.tripPayment.value.receivedBy,
+                title: controller.tripPayment.value.receivedBy?.toDisplayLabel(),
               ),
               LinearBoxWidget(
                 header: 'Payment Type',
-                title: controller.tripPayment.value.payerType,
+                title: controller.tripPayment.value.paymentType?.toDisplayLabel(),
                 // titleColor: bohibaTheme.colorScheme.onPrimary,
               ),
               LinearBoxWidget(

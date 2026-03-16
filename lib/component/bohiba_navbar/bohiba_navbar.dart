@@ -5,7 +5,8 @@ import '/services/pref_utils.dart';
 import '/services/global_service.dart';
 import '/services/user_role_type.dart';
 import '/pages/home/home_screen.dart';
-import '/pages/trips/trip_all_page.dart';
+import '/pages/trips/all_trip_page.dart';
+import '/pages/mines/all_mines_page.dart';
 import '/pages/explore/explore_page.dart';
 import '/pages/jobs/driver/all_driver_job.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
@@ -68,8 +69,7 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         GlobalService.showAlertDialog(
           status: AlertStatus.info,
           title: 'EXIT',
-          description:
-              'This will close the application. Do you want to continue?',
+          description: 'This will close the application. Do you want to continue?',
           saveBtnTxt: 'No',
           onSave: () => navigator.pop(),
           discardBtnTxt: 'Yes',
@@ -112,8 +112,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
           const BottomNavigationBarItem(
             icon: Icon(EvaIcons.activityOutline),
             activeIcon: Icon(EvaIcons.activityOutline),
-            label: "Trips",
-            tooltip: "Trips",
+            label: "Mines",
+            tooltip: "Mines",
           ),
           const BottomNavigationBarItem(
             icon: Icon(EvaIcons.compassOutline),
@@ -131,7 +131,7 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
 
         navWidgets = [
           const HomePage(),
-          AllTripPage(showLeading: false),
+          AllMinesPage(),
           ExplorePage(),
           const DashboardPage(),
         ];

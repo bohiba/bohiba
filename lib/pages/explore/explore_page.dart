@@ -80,35 +80,35 @@ class ExplorePage extends GetView<OpenDriverListController> {
               ),
             ),
             Expanded(
-              child: controller.arrOpenDriver.value == null
-                  ? AppSkeletonLoader(
-                      skeletonLength: 3,
-                    )
-                  : (controller.arrOpenDriver.value?.isEmpty == true)
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'No Driver Found',
-                              style: bohibaTheme.textTheme.displaySmall,
-                            ),
-                            Text(
-                              'At moment no driver are looking for jobs',
-                              style: bohibaTheme.textTheme.titleLarge,
-                            )
-                          ],
-                        )
-                      : SmartRefresher(
-                          controller: controller.refreshController,
-                          onRefresh: () async {
-                            await controller.getAllOpenDriver(
-                              refresh: true,
-                              showLoading: false,
-                            );
-                            controller.refreshController.refreshCompleted();
-                          },
-                          child: ListView.builder(
+              child: SmartRefresher(
+                controller: controller.refreshController,
+                onRefresh: () async {
+                  await controller.getAllOpenDriver(
+                    refresh: true,
+                    showLoading: false,
+                  );
+                  controller.refreshController.refreshCompleted();
+                },
+                child: controller.arrOpenDriver.value == null
+                    ? AppSkeletonLoader(
+                        skeletonLength: 3,
+                      )
+                    : (controller.arrOpenDriver.value?.isEmpty == true)
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'No Driver Found',
+                                style: bohibaTheme.textTheme.displaySmall,
+                              ),
+                              Text(
+                                'At moment no driver are looking for jobs',
+                                style: bohibaTheme.textTheme.titleLarge,
+                              )
+                            ],
+                          )
+                        : ListView.builder(
                             padding: EdgeInsets.only(
                               left: ScreenUtils.height15,
                               right: ScreenUtils.height15,
@@ -133,7 +133,7 @@ class ExplorePage extends GetView<OpenDriverListController> {
                               }
                             },
                           ),
-                        ),
+              ),
             ),
           ],
         );

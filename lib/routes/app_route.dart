@@ -144,6 +144,10 @@ import '/pages/driver/driver_page.dart';
 import '/bindings/doc_auth_binding.dart';
 import '/pages/user_authentication/screens/user_doc_auth_page.dart';
 import '/pages/user_authentication/screens/address_auth_page.dart';
+import '/bindings/biometric_auth_binding.dart';
+import '/bindings/subscription_plan_binding.dart';
+import '/pages/authentication/biometric_auth_screen.dart';
+import '/pages/subscription/subscription_plan_screen.dart';
 import '/component/bohiba_navbar/bohiba_navbar.dart';
 import '/pages/authentication/password_screen/forgot_password.dart';
 import '/pages/authentication/otp_screen/otp_screen.dart';
@@ -151,7 +155,7 @@ import '/pages/authentication/signin_screen/signin_screen.dart';
 import '/pages/authentication/signup_screen/signup_screen.dart';
 import '/pages/challan/page/challan_screen.dart';
 import '/pages/trips/trip_add_page.dart';
-import '/pages/trips/trip_all_page.dart';
+import '../pages/trips/all_trip_page.dart';
 import '/pages/trips/trip_page.dart';
 
 import '/pages/notification/notify_screen/notification_screen.dart';
@@ -185,6 +189,8 @@ class AppRoute {
   static const String imageAuth = "/image-auth";
   static const String updateContact = "/update-contact";
   static const String roleType = "/role-type";
+  static const String biometricAuth = "/biometric-auth";
+  static const String subscriptionPlan = "/subscription-plan";
 
   // NavBar
   static const String truckOwnerNavBar = "/owner-nav-bar";
@@ -379,13 +385,25 @@ class AppRoute {
       page: () => const AddressAuthPage(),
     ),
 
+    GetPage(
+      name: biometricAuth,
+      binding: BiometricAuthBinding(),
+      page: () => const BiometricAuthScreen(),
+    ),
+
+    GetPage(
+      name: subscriptionPlan,
+      binding: SubscriptionPlanBinding(),
+      page: () => const SubscriptionPlanScreen(),
+    ),
+
     // Main
     GetPage(
       name: truckOwnerNavBar,
       // binding: MasterBinding(),
       bindings: [
         HomeBinding(),
-        AllTripBinding(),
+        MinesBinding(),
         AllOpenDriverBinding(),
         DasboardBinding(),
       ],

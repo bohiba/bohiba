@@ -1,10 +1,10 @@
-import 'package:bohiba/component/image_path.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '/model/rating_model.dart';
 
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
+import '/component/image_path.dart';
 import '/component/screen_utils.dart';
 import '/controllers/dashboard_controller.dart';
 import '/component/bohiba_appbar/title_appbar.dart';

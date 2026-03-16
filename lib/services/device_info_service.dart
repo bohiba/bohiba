@@ -48,23 +48,23 @@ class DeviceInfoService {
       if (Platform.isAndroid) {
         AndroidDeviceInfo androidInfo = await _deviceInfoPlugin.androidInfo;
         return {
+          'device_id': androidInfo.id,
           'platform': 'Android',
           'iconData': 0xf3a9,
           'model': androidInfo.model,
           'manufacturer': androidInfo.manufacturer,
-          'androidVersion': androidInfo.version.release,
-          'sdkInt': androidInfo.version.sdkInt,
+          'systemVersion': androidInfo.version.release,
           'isPhysicalDevice': androidInfo.isPhysicalDevice,
           'extra': androidInfo.model
         };
       } else if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await _deviceInfoPlugin.iosInfo;
         return {
+          'device_id': iosInfo.identifierForVendor,
           'platform': iosInfo.isiOSAppOnMac,
           'iconData': 0xf3a9,
           'model': iosInfo.model,
           'manufacturer': iosInfo.data,
-          'systemName': iosInfo.systemName,
           'systemVersion': iosInfo.systemVersion,
           'isPhysicalDevice': iosInfo.isPhysicalDevice,
         };

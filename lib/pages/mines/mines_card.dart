@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart' as intl;
 
 import '/routes/app_route.dart';
 import '../../services/global_service.dart';
@@ -132,7 +131,6 @@ class MinesVerticalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
-    final intl.DateFormat dateFormat = intl.DateFormat('HH:mm');
     return GestureDetector(
       onTap: () {
         navigator.pushNamed(AppRoute.mines, arguments: minesInfo);
@@ -181,15 +179,15 @@ class MinesVerticalCard extends StatelessWidget {
                       color: bohibaTheme.textTheme.titleMedium!.color,
                     ),
                   ),
-                  Text(
-                    minesInfo.waitingPeriod == null ? '00:00 Hour' : '${dateFormat.format(DateTime.fromMillisecondsSinceEpoch(minesInfo.waitingPeriod ?? 0).toLocal())} Hour',
-                    // minesInfo.waitingPeriod?.toHHMM() ?? '',
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                      color: Colors.green,
-                      fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                    ),
-                  )
+                  // Text(
+                  //   minesInfo.waitingPeriod == null ? '00:00 Hour' : '${dateFormat.format(DateTime.fromMillisecondsSinceEpoch(minesInfo.waitingPeriod ?? 0).toLocal())} Hour',
+                  //   // minesInfo.waitingPeriod?.toHHMM() ?? '',
+                  //   style: TextStyle(
+                  //     fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                  //     color: Colors.green,
+                  //     fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                  //   ),
+                  // )
                 ],
               ),
             )

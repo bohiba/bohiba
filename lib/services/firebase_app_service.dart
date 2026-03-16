@@ -101,7 +101,12 @@ class FirebaseAppService {
   }
 
   static Future<void> registerToken() async {
-    String fcmToken = _prefUtils.getString(PrefUtils.keyFirebaseToken);
+    String strFcmToken = _prefUtils.getString(PrefUtils.keyFirebaseToken);
+    String fcmToken = '';
+    if (strFcmToken.isNotEmpty) {
+      Map fcmTokenObj = jsonDecode(strFcmToken);
+      fcmToken = fcmTokenObj['fcm_token'];
+    }
     if (fcmToken.isEmpty) {
       if (Platform.isIOS) {
         final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
@@ -123,6 +128,7 @@ class FirebaseAppService {
     Map appInfo = await DeviceInfoService.getAppInfo();
 
     Map<String, dynamic> paramObj = {};
+    paramObj['device_id'] = deviceInfo['device_id'];
     paramObj['fcm_token'] = fcmToken;
     paramObj['platform'] = deviceInfo['platform'];
     paramObj['app_version'] = "v${appInfo['version']}.${appInfo['buildNumber']}";
@@ -131,7 +137,7 @@ class FirebaseAppService {
     ApiResponse res = await _dioService.post(ApiEndPoint.firbaseToken, body: paramObj);
     switch (res.statusCode) {
       case 200:
-        GlobalService.printHandler('FCM REGISTER SUCCESS: $paramObj');
+        GlobalService.printHandler('FCM REGISTER SUCCESS: ${res.data}');
         await _prefUtils.saveString(PrefUtils.keyFirebaseToken, jsonEncode(res.data));
         GlobalService.dismissProgress();
         return;

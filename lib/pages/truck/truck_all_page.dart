@@ -51,7 +51,7 @@ class AllTruckPage extends GetView<TruckAllController> {
               await controller.getTruckList(methodType: MethodType.api, resetList: true),
               controller.refreshTruckList.refreshCompleted(),
             },
-            child: controller.arrTruck.value == null || (controller.arrTruck.value?.isEmpty ?? true)
+            child: controller.arrTruck.value == null
                 ? Center(
                     child: SizedBox(
                       width: ScreenUtils.width * 0.65,
@@ -71,77 +71,66 @@ class AllTruckPage extends GetView<TruckAllController> {
                               color: bohibaTheme.textTheme.titleSmall!.color,
                             ),
                           ),
-                          controller.strErrorDes.isEmpty
-                              ? TextButton(
-                                  onPressed: () {
-                                    navState.pushNamed(AppRoute.addTruck).then((onValue) async {
-                                      if (onValue != null) {
-                                        controller.countUpdate++;
-                                        await controller.getTruckList();
-                                      }
-                                    });
-                                  },
-                                  child: Text('Add New Truck'),
-                                )
-                              : SizedBox.shrink()
                         ],
                       ),
                     ),
                   )
-                : ListView.builder(
-                    padding: EdgeInsets.only(
-                      top: ScreenUtils.height10,
-                      bottom: ScreenUtils.height5,
-                      left: ScreenUtils.width15,
-                      right: ScreenUtils.width15,
-                    ),
-                    itemCount: (controller.arrTruck.value?.length ?? 0),
-                    itemBuilder: (context, index) {
-                      if (controller.arrTruck.value != null) {
-                        TruckModel truck = controller.arrTruck.value![index];
-                        return TruckTile(
-                          truckInfo: truck,
-                          allowedActions: [
-                            ActionType.view,
-                            ActionType.add,
-                            ActionType.edit,
-                            ActionType.other,
-                            ActionType.sync,
-                          ],
-                          onActionComplete: {
-                            ActionType.view: (onValue) {},
-                            ActionType.add: (onValue) {},
-                            ActionType.edit: (onValue) async {
-                              if (onValue != null) {
-                                controller.countUpdate++;
-                                await controller.getTruckList();
-                              }
-                            },
-                            ActionType.other: (onValue) {
-                              // Maintainance
-                            },
-                          },
-                          onClick: () {
-                            navState
-                                .pushNamed(
-                              AppRoute.truck,
-                              arguments: truck.regdNumber,
-                            )
-                                .then(
-                              (onValue) async {
-                                if (onValue != null) {
-                                  controller.countUpdate++;
-                                  await controller.getTruckList();
-                                }
+                : (controller.arrTruck.value?.isEmpty ?? true)
+                    ? SizedBox.shrink()
+                    : ListView.builder(
+                        padding: EdgeInsets.only(
+                          top: ScreenUtils.height10,
+                          bottom: ScreenUtils.height5,
+                          left: ScreenUtils.width15,
+                          right: ScreenUtils.width15,
+                        ),
+                        itemCount: (controller.arrTruck.value?.length ?? 0),
+                        itemBuilder: (context, index) {
+                          if (controller.arrTruck.value != null) {
+                            TruckModel truck = controller.arrTruck.value![index];
+                            return TruckTile(
+                              truckInfo: truck,
+                              allowedActions: [
+                                ActionType.view,
+                                ActionType.add,
+                                ActionType.edit,
+                                ActionType.other,
+                                ActionType.sync,
+                              ],
+                              onActionComplete: {
+                                ActionType.view: (onValue) {},
+                                ActionType.add: (onValue) {},
+                                ActionType.edit: (onValue) async {
+                                  if (onValue != null) {
+                                    controller.countUpdate++;
+                                    await controller.getTruckList();
+                                  }
+                                },
+                                ActionType.other: (onValue) {
+                                  // Maintainance
+                                },
+                              },
+                              onClick: () {
+                                navState
+                                    .pushNamed(
+                                  AppRoute.truck,
+                                  arguments: truck.regdNumber,
+                                )
+                                    .then(
+                                  (onValue) async {
+                                    if (onValue != null) {
+                                      controller.countUpdate++;
+                                      await controller.getTruckList();
+                                    }
+                                  },
+                                );
                               },
                             );
-                          },
-                        );
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    },
-                  ),
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                      ),
           ),
         ),
       );

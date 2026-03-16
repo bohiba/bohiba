@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '/routes/app_route.dart';
 import '/services/firebase_app_service.dart';
 import '/services/main_service.dart';
@@ -50,7 +52,14 @@ class AuthService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService.post(ApiEndPoint.apiLogout);
+    String strFirebaseToken = _prefUtils.getString(PrefUtils.keyFirebaseToken);
+    if (strFirebaseToken.isEmpty) {
+      return 0;
+    }
+    Map firebaseTokenInfo = jsonDecode(strFirebaseToken);
+    ApiResponse serviceResponse = await _dioService.post(ApiEndPoint.apiLogout, body: {
+      "device_id": firebaseTokenInfo['device_id'],
+    });
     GlobalService.dismissProgress();
     switch (serviceResponse.statusCode) {
       case 498:

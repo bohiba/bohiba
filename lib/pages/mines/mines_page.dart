@@ -17,8 +17,9 @@ class MinesPage extends GetView<MinesController> {
   Widget build(BuildContext context) {
     controller.minesModel.value = Get.arguments as MinesModel;
     return Scaffold(
-      appBar:
-          CompanyAppBar(title: controller.minesModel.value.mineName ?? 'NA'),
+      appBar: CompanyAppBar(
+        title: controller.minesModel.value.mineName ?? 'NA',
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -39,8 +40,7 @@ class MinesPage extends GetView<MinesController> {
                         radius: ScreenUtils.width25,
                         backgroundColor: bohibaTheme.dividerColor,
                         backgroundImage: NetworkImage(
-                          GlobalService.getAvatarUrl(
-                              controller.minesModel.value.mineName ?? 'UN'),
+                          GlobalService.getAvatarUrl(controller.minesModel.value.mineName ?? 'UN'),
                         ),
                       ),
                       Gap(ScreenUtils.width10),
@@ -55,11 +55,9 @@ class MinesPage extends GetView<MinesController> {
                             Text(
                               controller.minesModel.value.location ?? 'NA',
                               style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodySmall!.fontSize,
+                                fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
                                 color: bohibaTheme.textTheme.titleMedium!.color,
-                                fontWeight:
-                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                               ),
                             ),
                           ],
@@ -95,8 +93,7 @@ class MinesPage extends GetView<MinesController> {
                       ),
                       LinearBoxWidget(
                         header: 'Ownership Type',
-                        title: controller.minesModel.value.ownershipType
-                            ?.toUpperCase(),
+                        title: controller.minesModel.value.ownershipType?.toUpperCase(),
                       ),
                       LinearBoxWidget(
                         header: 'Parent Company',
@@ -104,8 +101,7 @@ class MinesPage extends GetView<MinesController> {
                       ),
                       LinearBoxWidget(
                         header: 'Material Type',
-                        title: controller.minesModel.value.materialType
-                            ?.toUpperCase(),
+                        title: controller.minesModel.value.materialType?.toUpperCase(),
                       ),
                       LinearBoxWidget(
                         header: 'Mine Area',
@@ -125,13 +121,11 @@ class MinesPage extends GetView<MinesController> {
                       ),
                       LinearBoxWidget(
                         header: 'Penalty Risk',
-                        title: controller.minesModel.value.penaltyRisk
-                            ?.toUpperCase(),
+                        title: controller.minesModel.value.penaltyRisk?.toUpperCase(),
                       ),
                       LinearBoxWidget(
                         header: 'Waiting Period',
-                        title: controller.minesModel.value.waitingPeriod
-                            .toString(),
+                        title: controller.minesModel.value.waitingPeriod.toString(),
                       ),
 
                       Padding(
@@ -143,13 +137,10 @@ class MinesPage extends GetView<MinesController> {
                       ),
 
                       Text(
-                        controller.minesModel.value.roadConditions
-                                ?.toUpperCase() ??
-                            'NA',
+                        controller.minesModel.value.roadConditions?.toUpperCase() ?? 'NA',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                       ),
@@ -168,19 +159,15 @@ class MinesPage extends GetView<MinesController> {
                             3,
                             (index) {
                               return Padding(
-                                padding:
-                                    EdgeInsets.only(bottom: ScreenUtils.width5),
+                                padding: EdgeInsets.only(bottom: ScreenUtils.width5),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     "NA",
                                     style: TextStyle(
-                                      fontSize: bohibaTheme
-                                          .textTheme.bodyMedium!.fontSize,
-                                      fontWeight: bohibaTheme
-                                          .textTheme.bodySmall!.fontWeight,
-                                      color: bohibaTheme
-                                          .textTheme.titleMedium!.color,
+                                      fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                      color: bohibaTheme.textTheme.titleMedium!.color,
                                     ),
                                   ),
                                 ),

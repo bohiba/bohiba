@@ -1,7 +1,3 @@
-import '/component/ui/tile_decorative.dart';
-import '/pages/user_authentication/screens/app_biometric_auth_dialog.dart';
-import '/theme/bohiba_theme.dart';
-
 import '/services/firebase_app_service.dart';
 
 import '/dist/app_enums.dart';
@@ -67,11 +63,9 @@ class SplashController extends GetxController {
                 }
               } else {
                 // Navigate to Lock Screen
-                Get.bottomSheet(
-                  AppBiometricAuthDialog(role: userRole),
-                  shape: BottomModalShape(),
-                  backgroundColor: bohibaTheme.scaffoldBackgroundColor,
-                  isDismissible: false,
+                Get.offAllNamed(
+                  AppRoute.biometricAuth,
+                  arguments: profileModel,
                 );
               }
             } else {

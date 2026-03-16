@@ -61,4 +61,11 @@ class SettingController extends GetxController {
   Future<void> enableNotification() async {}
 
   Future<void> enableEmailUpdate() async {}
+
+  Future<void> deleteAccount() async {
+    GlobalService.showSnackBar(
+      status: AlertStatus.info,
+      desc: "Request sent. Account deletion in progress.",
+    );
+  }
 }

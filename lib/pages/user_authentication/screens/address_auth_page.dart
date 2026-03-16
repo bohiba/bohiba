@@ -224,7 +224,7 @@ class AddressAuthPage extends GetView<AddressAuthController> {
                         navigateState.popAndPushNamed(
                           AppRoute.imageAuth,
                           arguments: {
-                            'canPop': true,
+                            'canPop': false,
                             'route': AppRoute.roleType,
                             'canSkip': true,
                           },

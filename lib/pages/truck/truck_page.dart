@@ -131,7 +131,7 @@ class TruckImageSection extends GetView<TruckController> {
                             radius: 20.h,
                             backgroundColor: bohibaTheme.dividerColor,
                             child: Icon(
-                              Icons.camera_alt_outlined,
+                              Icons.camera,
                               size: 20.h,
                               color: bohibaTheme.colorScheme.surface,
                             ),
@@ -215,7 +215,7 @@ class TruckImageSection extends GetView<TruckController> {
                     CircleAvatar(
                       radius: 20.h,
                       child: Icon(
-                        Icons.broken_image,
+                        Icons.camera,
                         size: 20.h,
                       ),
                     ),
@@ -228,6 +228,14 @@ class TruckImageSection extends GetView<TruckController> {
                         style: bohibaTheme.textTheme.titleMedium,
                       ),
                     ),
+                    PrimaryButton(
+                      width: 130.w,
+                      height: 8.h,
+                      label: 'Upload Image',
+                      onPressed: () => controller.pickImage(
+                        pickertype: PickerType.gallery,
+                      ),
+                    )
                   ],
                 ),
               ),

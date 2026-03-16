@@ -422,7 +422,7 @@ class TripExpense {
 class TripPayment {
   int? id;
   int? tripId;
-  String? payerType;
+  String? paymentType;
   String? paymentMode;
   double? amount;
   String? paidBy;
@@ -432,7 +432,7 @@ class TripPayment {
   TripPayment({
     this.id,
     this.tripId,
-    this.payerType,
+    this.paymentType,
     this.paymentMode,
     this.amount,
     this.paidBy,
@@ -446,7 +446,7 @@ class TripPayment {
     return TripPayment(
       id: json["id"],
       tripId: json["trip_id"],
-      payerType: json["payer_type"],
+      paymentType: json["payer_type"],
       paymentMode: json["payment_mode"],
       amount: json["amount"].toDouble(),
       paidBy: json["paid_by"],
@@ -459,7 +459,7 @@ class TripPayment {
     return TripPayment(
       id: map["id"],
       tripId: map["tripId"],
-      payerType: map["payerType"],
+      paymentType: map["payerType"],
       paymentMode: map["payementMode"],
       amount: double.parse(map["amount"].toString()),
       paidBy: map["paidBy"],

@@ -37,7 +37,7 @@ class AllOwnerExpenseScreen extends GetView<AllOwnerExpenseController> {
                     navigateState.pushNamed(AppRoute.addOwnerExpense).then(
                       (value) async {
                         if (value != null && value != false) {
-                          await controller.getOwnerExpenseList();
+                          await controller.getOwnerExpenseList(methodType: MethodType.api);
                         }
                       },
                     );
