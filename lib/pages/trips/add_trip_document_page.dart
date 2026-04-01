@@ -6,7 +6,7 @@ import '/controllers/add_trip_document_controller.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 
 import '/component/image_upload_widget.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 
 import 'package:get/get.dart';

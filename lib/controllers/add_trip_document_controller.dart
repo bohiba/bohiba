@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import '/controllers/image_upload_controller.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/services/global_service.dart';

@@ -1,8 +1,10 @@
-import '/dist/component_exports.dart';
+import 'package:bohiba/component/ui/random_color_picker.dart';
 
+import '/dist/component_exports.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
 import '/extensions/bohiba_extension.dart';
+import '/extensions/ext_trip_status.dart';
 import '/controllers/trip_controller.dart';
 
 import 'package:get/get.dart';
@@ -40,17 +42,16 @@ class TripTile extends GetView<TripController> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: bohibaTheme.colorScheme.surface,
+                  color: RandomColorPicker.getRandomColor(),
                 ),
-                child: Text(
-                  tripInfo.tripStatus?.shortCode ?? '',
-                  // tripInfo.id.toString(),
+                /*child: Text(
+                  tripInfo.id.toString(),
                   style: TextStyle(
                     fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
                     fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
                     color: bohibaTheme.textTheme.bodySmall!.color,
                   ),
-                ),
+                ),*/
               ),
               Gap(ScreenUtils.height15),
               Column(
@@ -65,28 +66,31 @@ class TripTile extends GetView<TripController> {
                       color: bohibaTheme.textTheme.labelLarge!.color,
                     ),
                   ),
-                  BohibaMarqueeText(
-                    width: ScreenUtils.width * 0.45,
-                    text: tripInfo.origin?.toUpperCase(),
-                    overflowText: tripInfo.origin?.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                      letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
-                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: bohibaTheme.textTheme.labelLarge!.color,
+                  if (tripInfo.origin?.name == null)
+                    SizedBox.shrink()
+                  else
+                    BohibaMarqueeText(
+                      width: ScreenUtils.width * 0.45,
+                      text: tripInfo.origin?.name,
+                      overflowText: tripInfo.origin?.nameCode,
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                        letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
+                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                        color: bohibaTheme.textTheme.labelLarge!.color,
+                      ),
+                      marqueeTextStyle: TextStyle(
+                        fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                        letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
+                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                        color: bohibaTheme.textTheme.labelLarge!.color,
+                      ),
+                      preserFontSize: [
+                        bohibaTheme.textTheme.labelMedium!.fontSize!,
+                      ],
                     ),
-                    marqueeTextStyle: TextStyle(
-                      fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                      letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
-                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: bohibaTheme.textTheme.labelLarge!.color,
-                    ),
-                    preserFontSize: [
-                      bohibaTheme.textTheme.labelMedium!.fontSize!,
-                    ],
-                  ),
                   Text(
-                    tripInfo.startDate?.toDDMMYYYY() ?? '',
+                    "${'${tripInfo.startDate?.toDDMMYYYY()} |'} ${tripInfo.tripStatus?.tripStatusName ?? ''}",
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,

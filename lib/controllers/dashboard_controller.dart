@@ -2,7 +2,7 @@ import '/controllers/home_controller.dart';
 import '/services/global_service.dart';
 import '/services/user_role_type.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
 import '../model/logged_in_user_model.dart';
 import '/services/profile_service.dart';

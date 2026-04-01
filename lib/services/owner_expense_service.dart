@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/owner_expenses_model.dart';
 import 'api_end_point.dart';
 import 'db2_service.dart';
@@ -17,26 +17,20 @@ class OwnerExpenseService {
   // static int _currentPage = 1;
   // static int _lastPage = 1;
 
-  static Future<OwnerExpense?> getExpense(
-      {required int id,
-      MethodType type = MethodType.local,
-      bool showProgress = true}) async {
+  static Future<OwnerExpense?> getExpense({required int id, MethodType type = MethodType.local, bool showProgress = true}) async {
     if (type == MethodType.local) {
-      String strGetQuery =
-          ''' SELECT * FROM $tblOwnerExpense WHERE id = $id; ''';
+      String strGetQuery = ''' SELECT * FROM $tblOwnerExpense WHERE id = $id; ''';
 
       List<Map>? dbList = await _databaseService.executeQuery(strGetQuery);
       if (dbList == null) {
         return null;
       }
-      List<OwnerExpense> arrModel =
-          dbList.map((e) => OwnerExpense.fromDB(e)).toList();
+      List<OwnerExpense> arrModel = dbList.map((e) => OwnerExpense.fromDB(e)).toList();
       return arrModel.first;
     } else {
       if (showProgress) GlobalService.showProgress();
       GlobalService.showProgress();
-      ApiResponse res =
-          await _dioService.get("${ApiEndPoint.apiGetOwnerExpense}/$id");
+      ApiResponse res = await _dioService.get("${ApiEndPoint.apiGetOwnerExpense}/$id");
 
       switch (res.statusCode) {
         case 200:
@@ -77,27 +71,22 @@ class OwnerExpenseService {
     }
   }
 
-  static Future<int> addOwnerExpense(
-      {required Map<String, dynamic> bodyMap}) async {
+  static Future<int> addOwnerExpense({required Map<String, dynamic> bodyMap}) async {
     if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();
-    ApiResponse apiResponse =
-        await _dioService.post(ApiEndPoint.addOwnerExpense, body: bodyMap);
+    ApiResponse apiResponse = await _dioService.post(ApiEndPoint.addOwnerExpense, body: bodyMap);
     switch (apiResponse.statusCode) {
       case 201:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.success, desc: apiResponse.message);
+        GlobalService.showSnackBar(status: AlertStatus.success, desc: apiResponse.message);
         return 1;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.warning, desc: apiResponse.message);
+        GlobalService.showSnackBar(status: AlertStatus.warning, desc: apiResponse.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.failure, desc: 'Failed to add trip');
+        GlobalService.showSnackBar(status: AlertStatus.failure, desc: 'Failed to add trip');
         return 0;
     }
   }
@@ -109,10 +98,8 @@ class OwnerExpenseService {
   }) async {
     if (type == MethodType.local) {
       if (showProgress) GlobalService.showProgress();
-      String strQueryOwnerExpenseList =
-          ''' SELECT * FROM $tblOwnerExpense ORDER BY date DESC ''';
-      List<Map<String, dynamic>>? ownerExpenseList =
-          await _databaseService.executeQuery(strQueryOwnerExpenseList);
+      String strQueryOwnerExpenseList = ''' SELECT * FROM $tblOwnerExpense ORDER BY date DESC ''';
+      List<Map<String, dynamic>>? ownerExpenseList = await _databaseService.executeQuery(strQueryOwnerExpenseList);
       if (showProgress) GlobalService.dismissProgress();
       if (ownerExpenseList != null || ownerExpenseList!.isNotEmpty) {
         List<OwnerExpense> arrOwnerExpenseModel = ownerExpenseList.map((db) {
@@ -133,8 +120,7 @@ class OwnerExpenseService {
         return null;
       }
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res = await _dioService
-          .get('${ApiEndPoint.allOwnerExpense}?page=$_currentPage');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.allOwnerExpense}?page=$_currentPage');
       switch (res.statusCode) {
         case 200:
           List<dynamic> expenseList = res.data as List;
@@ -145,8 +131,7 @@ class OwnerExpenseService {
           int insertTruck = await OwnerExpenseService.insertAll(dbOwnerExpList);
           if (showProgress) GlobalService.dismissProgress();
           if (insertTruck > 0) {
-            List<OwnerExpense> arrOwnerExpenseModel =
-                dbOwnerExpList.map((json) {
+            List<OwnerExpense> arrOwnerExpenseModel = dbOwnerExpList.map((json) {
               return OwnerExpense.fromDB(json);
             }).toList();
             arrOwnerExpenseModel.sort((a, b) {
@@ -179,8 +164,7 @@ class OwnerExpenseService {
   }
 
   static Future<int> insertAll(List<Map<String, dynamic>> listExpense) async {
-    int insert =
-        await _databaseService.insertAllData(tblOwnerExpense, listExpense);
+    int insert = await _databaseService.insertAllData(tblOwnerExpense, listExpense);
     return insert;
   }
 
@@ -199,8 +183,7 @@ class OwnerExpenseService {
     String deleteQuery = '''DELETE FROM $tblOwnerExpense WHERE id = $id;''';
     int dbDeleted = await _databaseService.delete(deleteQuery);
     if (dbDeleted > 0) {
-      ApiResponse serviceResponse =
-          await _dioService.delete("${ApiEndPoint.deleteOwnerExpense}/$id");
+      ApiResponse serviceResponse = await _dioService.delete("${ApiEndPoint.deleteOwnerExpense}/$id");
       switch (serviceResponse.statusCode) {
         case 200:
           GlobalService.dismissProgress();
@@ -235,8 +218,7 @@ class OwnerExpenseService {
     }
   }
 
-  static Future<int> updateExpense(
-      {int? id, required Map<String, dynamic> bodyMap}) async {
+  static Future<int> updateExpense({int? id, required Map<String, dynamic> bodyMap}) async {
     if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();
     ApiResponse res = await _dioService.put(

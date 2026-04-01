@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,8 +27,7 @@ class AddTruckPage extends GetView<TruckAllController> {
             GlobalService.showAlertDialog(
               status: AlertStatus.failure,
               title: 'Verification',
-              description:
-                  'Are your sure? You want to discontinue you verification process',
+              description: 'Are your sure? You want to discontinue you verification process',
               discardBtnTxt: 'No',
               saveBtnTxt: 'Yes',
               onSave: () {

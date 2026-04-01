@@ -25,12 +25,11 @@ class OriginDestinationInfoSection extends StatelessWidget {
               children: [
                 BohibaMarqueeText(
                   width: ScreenUtils.width * 0.32,
-                  alwaysScroll: true,
-                  text: tripInfo?.origin?.toUpperCase() ?? '',
+                  text: tripInfo?.origin?.name ?? '',
                   style: bohibaTheme.textTheme.headlineMedium,
                   alignment: Alignment.center,
                   alignText: TextAlign.center,
-                  overflowText: tripInfo?.origin?.toUpperCase() ?? '',
+                  overflowText: tripInfo?.origin?.nameCode ?? '',
                   marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
                   preserFontSize: [
                     bohibaTheme.textTheme.headlineMedium!.fontSize!,
@@ -60,12 +59,11 @@ class OriginDestinationInfoSection extends StatelessWidget {
               children: [
                 BohibaMarqueeText(
                   width: ScreenUtils.width * 0.32,
-                  alwaysScroll: true,
-                  text: tripInfo?.destination?.toUpperCase() ?? '',
+                  text: tripInfo?.destination?.name ?? '',
                   alignment: Alignment.center,
                   alignText: TextAlign.center,
                   style: bohibaTheme.textTheme.headlineMedium,
-                  overflowText: tripInfo?.destination?.toUpperCase() ?? '',
+                  overflowText: tripInfo?.destination?.nameCode ?? '',
                   marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
                   preserFontSize: [
                     bohibaTheme.textTheme.headlineMedium!.fontSize!,

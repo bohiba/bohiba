@@ -10,7 +10,7 @@ import 'global_service.dart';
 import 'main_service.dart';
 import 'db2_service.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
 import '/model/logged_in_user_model.dart';
 
@@ -33,8 +33,7 @@ class ProfileService {
       GlobalService.printHandler("Reset Token: $token");
     }
     ProfileModel? profileModel = await getProfile(type: MethodType.api);
-    Map? mainObj =
-        await MainService.mainApi(type: MethodType.api, showProgress: true);
+    Map? mainObj = await MainService.mainApi(type: MethodType.api, showProgress: true);
 
     return (mainObj != null && profileModel != null) ? 1 : 0;
   }
@@ -46,27 +45,23 @@ class ProfileService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse response =
-        await _dioService.post(ApiEndPoint.apiEditDoc, body: bodyMap);
+    ApiResponse response = await _dioService.post(ApiEndPoint.apiEditDoc, body: bodyMap);
 
     switch (response.statusCode) {
       case 200:
         return 1;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.warning, desc: response.message);
+        GlobalService.showSnackBar(status: AlertStatus.warning, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.failure, desc: 'Failed to add document');
+        GlobalService.showSnackBar(status: AlertStatus.failure, desc: 'Failed to add document');
         return 0;
     }
   }
 
-  static Future<ProfileModel?> updateUserProfile(
-      {required Map<String, dynamic> bodyMap}) async {
+  static Future<ProfileModel?> updateUserProfile({required Map<String, dynamic> bodyMap}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return null;
     }
@@ -91,8 +86,7 @@ class ProfileService {
     }
 
     GlobalService.showProgress();
-    ApiResponse response =
-        await _dioService.post(ApiEndPoint.apiEditUser, body: bodyParam);
+    ApiResponse response = await _dioService.post(ApiEndPoint.apiEditUser, body: bodyParam);
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
@@ -115,8 +109,7 @@ class ProfileService {
     }
   }
 
-  static Future<int> setRole(
-      {required Map<String, dynamic> bodyMap, bool initRole = false}) async {
+  static Future<int> setRole({required Map<String, dynamic> bodyMap, bool initRole = false}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
@@ -132,15 +125,13 @@ class ProfileService {
           return 1;
         }
         Map<dynamic, dynamic> resMap = response.data as Map<dynamic, dynamic>;
-        String updateImgQuery =
-            '''UPDATE $tblProfile SET roleId = ${resMap['role_id']}''';
+        String updateImgQuery = '''UPDATE $tblProfile SET roleId = ${resMap['role_id']}''';
         int success = await _databaseService.updateData(updateImgQuery);
         GlobalService.dismissProgress();
         return success;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.info, desc: response.message);
+        GlobalService.showSnackBar(status: AlertStatus.info, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
@@ -166,24 +157,20 @@ class ProfileService {
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
-        String strQueryUpdate =
-            '''UPDATE $tblProfile SET image = '${response.data}' ''';
+        String strQueryUpdate = '''UPDATE $tblProfile SET image = '${response.data}' ''';
         int updateProfile = await _databaseService.updateData(strQueryUpdate);
         if (updateProfile > 0) {
-          GlobalService.showSnackBar(
-              status: AlertStatus.success, desc: response.message);
+          GlobalService.showSnackBar(status: AlertStatus.success, desc: response.message);
           return 1;
         }
         return 0;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.info, desc: response.message);
+        GlobalService.showSnackBar(status: AlertStatus.info, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.warning, desc: 'Failed to set image');
+        GlobalService.showSnackBar(status: AlertStatus.warning, desc: 'Failed to set image');
         return 0;
     }
   }
@@ -196,8 +183,7 @@ class ProfileService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse response =
-        await _dioService.post(ApiEndPoint.apiAddAddress, body: bodyMap);
+    ApiResponse response = await _dioService.post(ApiEndPoint.apiAddAddress, body: bodyMap);
 
     switch (response.statusCode) {
       case 200 || 201:
@@ -221,13 +207,11 @@ class ProfileService {
         return updateProfile;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.info, desc: response.message);
+        GlobalService.showSnackBar(status: AlertStatus.info, desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.warning, desc: 'Failed to add address');
+        GlobalService.showSnackBar(status: AlertStatus.warning, desc: 'Failed to add address');
         return 0;
     }
   }
@@ -238,16 +222,13 @@ class ProfileService {
   }) async {
     if (type == MethodType.local) {
       String strProfileQuery = ''' SELECT * FROM $tblProfile LIMIT 1''';
-      List<Map<String, dynamic>> arrProfileList =
-          await _databaseService.executeQuery(strProfileQuery) ?? [];
+      List<Map<String, dynamic>> arrProfileList = await _databaseService.executeQuery(strProfileQuery) ?? [];
       if (arrProfileList.isNotEmpty) {
         Map<String, dynamic> profileRow = arrProfileList.first;
         ProfileModel profile = ProfileModel.fromDb(profileRow);
 
-        String strRatingQuery =
-            ''' SELECT * FROM $tblRating WHERE driverUuid = '${profileRow['uuid']}' ''';
-        List<Map<String, dynamic>>? arrRatingList =
-            await _databaseService.executeQuery(strRatingQuery);
+        String strRatingQuery = ''' SELECT * FROM $tblRating WHERE driverUuid = '${profileRow['uuid']}' ''';
+        List<Map<String, dynamic>>? arrRatingList = await _databaseService.executeQuery(strRatingQuery);
         List<RatingModel> arrRatingModel = [];
         if (arrRatingList != null) {
           arrRatingModel = arrRatingList.map((e) {
@@ -270,8 +251,7 @@ class ProfileService {
       switch (res.statusCode) {
         case 401:
           if (showProgress) GlobalService.dismissProgress();
-          GlobalService.showSnackBar(
-              status: AlertStatus.info, desc: res.message);
+          GlobalService.showSnackBar(status: AlertStatus.info, desc: res.message);
           return null;
         case 200:
           if (res.data == null) return null;
@@ -288,24 +268,19 @@ class ProfileService {
           if (dbSuccess > 0) {
             ProfileModel profileModel = ProfileModel.fromDb(resMap);
             await _prefUtils.saveInt(PrefUtils.roleKey, resMap['roleId']);
-            if (resObj.containsKey('ratings') &&
-                resObj['ratings'] != null &&
-                resObj['ratings'] is List &&
-                (resObj['ratings'] as List).isNotEmpty) {
+            if (resObj.containsKey('ratings') && resObj['ratings'] != null && resObj['ratings'] is List && (resObj['ratings'] as List).isNotEmpty) {
               List arrRating = resObj['ratings'];
               List<Map<String, dynamic>> arrMapRating = arrRating.map((e) {
                 e['driverUuid'] = profileModel.uuid;
                 return RatingModel.toDB(e);
               }).toList();
 
-              int successInsert =
-                  await RatingService.insertAll(ratingList: arrMapRating);
+              int successInsert = await RatingService.insertAll(ratingList: arrMapRating);
               if (successInsert > 0) {
                 List<RatingModel> arrRatingModel = arrMapRating.map((e) {
                   return RatingModel.fromDB(e);
                 }).toList();
-                GlobalService.printHandler(
-                    'Insert Rating into DB: $successInsert');
+                GlobalService.printHandler('Insert Rating into DB: $successInsert');
                 profileModel.ratings = [];
                 profileModel.ratings?.addAll(arrRatingModel);
               }
@@ -317,8 +292,7 @@ class ProfileService {
           return null;
         default:
           if (showProgress) GlobalService.dismissProgress();
-          GlobalService.showSnackBar(
-              status: AlertStatus.warning, desc: 'Failed to get profile info');
+          GlobalService.showSnackBar(status: AlertStatus.warning, desc: 'Failed to get profile info');
           return null;
       }
     }
@@ -329,8 +303,7 @@ class ProfileService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse res =
-        await _dioService.post(ApiEndPoint.apiCreateUser, body: bodyMap);
+    ApiResponse res = await _dioService.post(ApiEndPoint.apiCreateUser, body: bodyMap);
     switch (res.statusCode) {
       case 401:
         GlobalService.dismissProgress();
@@ -360,8 +333,7 @@ class ProfileService {
     }
   }
 
-  static Future<int> addLocalProfile(
-      {required Map<String, dynamic> profile}) async {
+  static Future<int> addLocalProfile({required Map<String, dynamic> profile}) async {
     final String insertQuery = '''
     INSERT INTO $tblProfile (
       uuid, image, name, email, mobileNumber, dob, roleId, jobStatus,
@@ -380,8 +352,7 @@ class ProfileService {
     return insertProfile;
   }
 
-  static Future<int> updateLocalProfile(
-      {required Map<String, dynamic> profile}) async {
+  static Future<int> updateLocalProfile({required Map<String, dynamic> profile}) async {
     final String updateQuery = '''
       UPDATE $tblProfile SET
         uuid = '${profile['uuid'] ?? 'NULL'}',
@@ -420,15 +391,12 @@ class ProfileService {
     }
 
     if (deleteTruck) {
-      profile.trucks = (profile.trucks != null && profile.trucks! > 0)
-          ? profile.trucks! - 1
-          : 0;
+      profile.trucks = (profile.trucks != null && profile.trucks! > 0) ? profile.trucks! - 1 : 0;
     } else {
       profile.trucks = (profile.trucks == null) ? 1 : (profile.trucks! + 1);
     }
 
-    final String strUpdateQuery =
-        ''' UPDATE $tblProfile SET trucks = ${profile.trucks ?? 0} WHERE uuid = '${profile.uuid}' ''';
+    final String strUpdateQuery = ''' UPDATE $tblProfile SET trucks = ${profile.trucks ?? 0} WHERE uuid = '${profile.uuid}' ''';
     int updateSuccess = await _databaseService.updateData(strUpdateQuery);
     return updateSuccess;
   }
@@ -439,22 +407,18 @@ class ProfileService {
       return 0;
     }
     if (deleteDriver) {
-      profile.driver = (profile.driver != null && profile.driver! > 0)
-          ? profile.driver! - 1
-          : 0;
+      profile.driver = (profile.driver != null && profile.driver! > 0) ? profile.driver! - 1 : 0;
     } else {
       profile.driver = (profile.driver == null) ? 1 : (profile.driver! + 1);
     }
-    final String strUpdateQuery =
-        ''' UPDATE $tblProfile SET driver = ${profile.driver ?? 0} WHERE uuid = '${profile.uuid}' ''';
+    final String strUpdateQuery = ''' UPDATE $tblProfile SET driver = ${profile.driver ?? 0} WHERE uuid = '${profile.uuid}' ''';
     int updateSuccess = await _databaseService.updateData(strUpdateQuery);
     return updateSuccess;
   }
 
   static Future<List<LoggedInAccountModel>> getLoggedAccount() async {
     String strQueryList = ''' SELECT * FROM $tblLoggedInUserList ''';
-    List<Map<String, dynamic>> arrLoggedInUser =
-        await _databaseService.executeQuery(strQueryList) ?? [];
+    List<Map<String, dynamic>> arrLoggedInUser = await _databaseService.executeQuery(strQueryList) ?? [];
 
     List<LoggedInAccountModel> arrLoggedList = arrLoggedInUser
         .map((user) => LoggedInAccountModel(

@@ -3,8 +3,6 @@ import 'dart:async';
 import 'theme/bohiba_theme.dart';
 import '/controllers/theme_controller.dart';
 import '/services/firebase_app_service.dart';
-import '/services/pref_utils.dart';
-import '/services/db2_service.dart';
 import 'services/global_service.dart';
 import '/component/screen_utils.dart';
 import 'package:get/get.dart';
@@ -20,25 +18,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  // runZonedGuarded(() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-    // MUST BE CALLED FIRST
-    await FirebaseAppService.initFirebase();
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
-    await PrefUtils.init();
-    await DatabaseService().initDB();
-    await FirebaseAppService.initNotification();
-    Get.lazyPut<ThemeController>(() => ThemeController());
-    runApp(MyApp());
-  }, (error, errorstack) {
-    GlobalService.printHandler('\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
-  });
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  runApp(MyApp());
+  // }, (error, errorstack) {
+  //   GlobalService.printHandler('\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
+  // });
 }
 
 class MyApp extends StatelessWidget {

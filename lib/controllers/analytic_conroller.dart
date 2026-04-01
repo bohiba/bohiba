@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';

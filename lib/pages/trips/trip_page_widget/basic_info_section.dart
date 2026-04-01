@@ -1,5 +1,5 @@
+import '/extensions/ext_trip_status.dart';
 import '/component/screen_utils.dart';
-import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/pages/widget/role_widget.dart';
@@ -37,7 +37,7 @@ class BasicInfoSection extends StatelessWidget {
           LinearBoxWidget(
             onClick: () {},
             header: 'Transporter',
-            title: tripInfo?.transporter?.toDisplayLabel(),
+            title: tripInfo?.destination?.name,
           ),
           LinearBoxWidget(
             onClick: () {
@@ -62,7 +62,7 @@ class BasicInfoSection extends StatelessWidget {
           ),
           StatusBoxWidget(
             header: 'Status',
-            title: tripInfo?.tripStatus ?? '',
+            title: tripInfo?.tripStatus?.tripStatusName ?? '',
             statusColor: statusLabelColor,
           ),
         ],

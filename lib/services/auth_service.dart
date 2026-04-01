@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+
 import '/routes/app_route.dart';
 import '/services/firebase_app_service.dart';
 import '/services/main_service.dart';
@@ -7,7 +9,7 @@ import '/services/user_role_type.dart';
 import 'package:get/get.dart';
 
 import '/controllers/role_controller.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
 import '/model/logged_in_user_model.dart';
 import 'profile_service.dart';
@@ -89,6 +91,7 @@ class AuthService {
     GlobalService.showProgress();
     ApiResponse serviceResponse = await _dioService.post(
       ApiEndPoint.apiLogin,
+      contentType: Headers.formUrlEncodedContentType,
       body: {'uuid': uuid, 'password': password},
       withToken: false,
     );

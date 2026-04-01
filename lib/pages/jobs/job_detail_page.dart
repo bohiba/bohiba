@@ -3,7 +3,7 @@ import '/extensions/bohiba_extension.dart';
 import '/model/job_detail_model.dart';
 import '/services/launcher_service.dart';
 import '/services/global_service.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
 import '/controllers/job_controller.dart';

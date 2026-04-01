@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/job_detail_model.dart';
 
 import '/services/global_service.dart';
@@ -9,14 +9,12 @@ import '/services/dio_serivce.dart';
 class OwnerJobService {
   static final DioService _dioService = DioService();
 
-  static Future<List<InterestedDriver>?> allApplicant(
-      {required int jobId, bool showLoading = false}) async {
+  static Future<List<InterestedDriver>?> allApplicant({required int jobId, bool showLoading = false}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return null;
     }
     if (showLoading) GlobalService.showProgress();
-    ApiResponse response =
-        await _dioService.get("${ApiEndPoint.apiApplicants}/$jobId");
+    ApiResponse response = await _dioService.get("${ApiEndPoint.apiApplicants}/$jobId");
     if (showLoading) GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
@@ -46,8 +44,7 @@ class OwnerJobService {
     }
   }
 
-  static Future<void> updateJob(
-      {required Map<dynamic, dynamic> jobInfo}) async {
+  static Future<void> updateJob({required Map<dynamic, dynamic> jobInfo}) async {
     return;
   }
 
@@ -56,8 +53,7 @@ class OwnerJobService {
       return null;
     }
     GlobalService.showProgress();
-    ApiResponse response =
-        await _dioService.get('${ApiEndPoint.apiGetJob}/$jobId');
+    ApiResponse response = await _dioService.get('${ApiEndPoint.apiGetJob}/$jobId');
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200:
@@ -81,8 +77,7 @@ class OwnerJobService {
       return 0;
     }
     GlobalService.showProgress();
-    ApiResponse response =
-        await _dioService.post(ApiEndPoint.apiCreateJobs, body: bodyMap);
+    ApiResponse response = await _dioService.post(ApiEndPoint.apiCreateJobs, body: bodyMap);
     GlobalService.dismissProgress();
     switch (response.statusCode) {
       case 200 || 201:
@@ -131,8 +126,7 @@ class OwnerJobService {
     }
   }
 
-  static Future<int> updateJobPost(
-      {required JobDetailModel jobInfo, required String status}) async {
+  static Future<int> updateJobPost({required JobDetailModel jobInfo, required String status}) async {
     if (!await DeviceInfoService.hasInternet()) {
       return 0;
     }
@@ -148,8 +142,7 @@ class OwnerJobService {
     };
 
     GlobalService.showProgress();
-    ApiResponse response = await _dioService
-        .post("${ApiEndPoint.apiEditJob}/${jobInfo.id}", body: bodyMap);
+    ApiResponse response = await _dioService.post("${ApiEndPoint.apiEditJob}/${jobInfo.id}", body: bodyMap);
     GlobalService.dismissProgress();
 
     switch (response.statusCode) {

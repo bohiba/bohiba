@@ -18,26 +18,22 @@ class HomeDataStepper extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final NavigatorState navigatorState = Navigator.of(context);
     return RoleWidget(
-      truckOwnerWidget: Padding(
-        padding: EdgeInsets.only(bottom: ScreenUtils.height20),
-        child: Obx(() {
-          if (controller.arrDriver.value == null &&
-              controller.arrTruck.value == null &&
-              controller.arrMines.value == null) {
-            return SizedBox.shrink();
-          } else if ((controller.arrDriver.value?.isNotEmpty ?? true) &&
-              (controller.arrTruck.value?.isNotEmpty ?? true) &&
-              (controller.arrTrip.value?.isNotEmpty ?? true)) {
-            return SizedBox.shrink();
+      truckOwnerWidget: Obx(() {
+        if (controller.arrDriver.value == null && controller.arrTruck.value == null && controller.arrMines.value == null) {
+          return SizedBox.shrink();
+        } else if ((controller.arrDriver.value?.isNotEmpty ?? true) && (controller.arrTruck.value?.isNotEmpty ?? true) && (controller.arrTrip.value?.isNotEmpty ?? true)) {
+          return SizedBox.shrink();
+        } else {
+          if (controller.arrDriver.value?.isEmpty ?? true) {
+            controller.currentStep.value = 0;
+          } else if (controller.arrTruck.value?.isEmpty ?? true) {
+            controller.currentStep.value = 1;
           } else {
-            if (controller.arrDriver.value?.isEmpty ?? true) {
-              controller.currentStep.value = 0;
-            } else if (controller.arrTruck.value?.isEmpty ?? true) {
-              controller.currentStep.value = 1;
-            } else {
-              controller.currentStep.value = 2;
-            }
-            return SizedBox(
+            controller.currentStep.value = 2;
+          }
+          return Padding(
+            padding: EdgeInsets.only(bottom: ScreenUtils.height20),
+            child: SizedBox(
               height: ScreenUtils.height * 0.25,
               child: Stepper(
                 elevation: 0,
@@ -68,9 +64,7 @@ class HomeDataStepper extends GetView<HomeController> {
                             height: 25.h,
                             width: ScreenUtils.width * 0.3,
                             onPressed: () {
-                              navigatorState
-                                  .pushNamed(AppRoute.addDriver)
-                                  .then((value) async {
+                              navigatorState.pushNamed(AppRoute.addDriver).then((value) async {
                                 if (value != null) {
                                   await controller.getDriverList();
                                   controller.currentStep.value = 1;
@@ -83,9 +77,7 @@ class HomeDataStepper extends GetView<HomeController> {
                       ),
                     ),
                     isActive: controller.currentStep.value == 0,
-                    state: controller.arrDriver.value?.isEmpty ?? true
-                        ? StepState.indexed
-                        : StepState.complete,
+                    state: controller.arrDriver.value?.isEmpty ?? true ? StepState.indexed : StepState.complete,
                   ),
                   Step(
                     title: const Text("Truck"),
@@ -100,9 +92,7 @@ class HomeDataStepper extends GetView<HomeController> {
                           height: 25.h,
                           width: ScreenUtils.width * 0.3,
                           onPressed: () {
-                            navigatorState
-                                .pushNamed(AppRoute.addTruck)
-                                .then((value) async {
+                            navigatorState.pushNamed(AppRoute.addTruck).then((value) async {
                               if (value != null) {
                                 await controller.getTruckList();
                                 controller.currentStep.value = 2;
@@ -114,9 +104,7 @@ class HomeDataStepper extends GetView<HomeController> {
                       ],
                     ),
                     isActive: controller.currentStep.value == 1,
-                    state: controller.arrTruck.value?.isEmpty ?? true
-                        ? StepState.indexed
-                        : StepState.complete,
+                    state: controller.arrTruck.value?.isEmpty ?? true ? StepState.indexed : StepState.complete,
                   ),
                   Step(
                     title: const Text("Trip"),
@@ -131,9 +119,7 @@ class HomeDataStepper extends GetView<HomeController> {
                           height: 25.h,
                           width: ScreenUtils.width * 0.3,
                           onPressed: () {
-                            navigatorState
-                                .pushNamed(AppRoute.addTrip)
-                                .then((value) async {
+                            navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
                               if (value != null) {
                                 await controller.getTruckList();
                               }
@@ -144,16 +130,14 @@ class HomeDataStepper extends GetView<HomeController> {
                       ],
                     ),
                     isActive: controller.currentStep.value == 2,
-                    state: controller.arrTrip.value?.isEmpty ?? true
-                        ? StepState.indexed
-                        : StepState.complete,
+                    state: controller.arrTrip.value?.isEmpty ?? true ? StepState.indexed : StepState.complete,
                   ),
                 ],
               ),
-            );
-          }
-        }),
-      ),
+            ),
+          );
+        }
+      }),
       driverWidget: Obx(() {
         if (controller.profile.value == null) {
           return SizedBox.shrink();

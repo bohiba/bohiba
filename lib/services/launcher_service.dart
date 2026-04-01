@@ -123,4 +123,24 @@ class LauncherService {
       GlobalService.printHandler('$e');
     }
   }
+
+  static Future<void> openMaps(double lat, double lng) async {
+    Uri uri;
+
+    if (Platform.isAndroid) {
+      uri = Uri.parse(
+        "google.navigation:q=$lat,$lng&mode=d",
+      );
+    } else {
+      uri = Uri.parse(
+        "http://maps.apple.com/?daddr=$lat,$lng&dirflg=d",
+      );
+    }
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not open maps';
+    }
+  }
 }

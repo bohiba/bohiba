@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/screen_utils.dart';
 import '/controllers/all_recieved_request_controller.dart';

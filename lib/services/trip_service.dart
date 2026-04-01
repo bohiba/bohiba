@@ -6,7 +6,7 @@ import 'dio_serivce.dart';
 import 'global_service.dart';
 import 'db2_service.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/truck_model.dart';
 import '/model/trip_model.dart';
 import '/extensions/bohiba_extension.dart';
@@ -21,7 +21,7 @@ class TripService {
   static Future<int> addTrip({required Map<String, dynamic> bodyMap, required TruckModel truckModel}) async {
     if (!await DeviceInfoService.hasInternet()) return 0;
     GlobalService.showProgress();
-    ApiResponse apiResponse = await _dioService.post(ApiEndPoint.apiAddTrip, body: bodyMap);
+    ApiResponse apiResponse = await _dioService.post(ApiEndPoint.apiTrips, body: bodyMap);
     switch (apiResponse.statusCode) {
       case 201:
         GlobalService.dismissProgress();
@@ -65,8 +65,10 @@ class TripService {
         id
       , tripCode
       , tripStatus
-      , origin
-      , destination     
+      , originName
+      , originNameCode
+      , destinationName
+      , destinationNameCode
       , vhNumber
       , dvName
       , startedAt
@@ -140,7 +142,7 @@ class TripService {
       }
 
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res = await _dioService.get('${ApiEndPoint.apiAllTrip}?page=$_currentPage');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.apiTrips}?page=$_currentPage');
       if (showProgress) GlobalService.dismissProgress();
 
       switch (res.statusCode) {
@@ -338,7 +340,7 @@ class TripService {
       }
 
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res = await _dioService.get('${ApiEndPoint.apiGetTrip}/$tripId');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.apiTrips}/$tripId');
 
       switch (res.statusCode) {
         case 200:
@@ -489,7 +491,7 @@ class TripService {
     }
     GlobalService.showProgress();
     ApiResponse apiResponse = await _dioService.post(
-      '${ApiEndPoint.apiEditTrip}/${trip.id}',
+      '${ApiEndPoint.apiTrips}/${trip.id}',
       body: bodyMap,
     );
     switch (apiResponse.statusCode) {
@@ -551,7 +553,7 @@ class TripService {
     String strQueryDelete = ''' DELETE FROM $tblTrips WHERE id = $tripId; ''';
     int deleteSucess = await _databaseService.delete(strQueryDelete);
     if (deleteSucess > 0) {
-      ApiResponse apiResponse = await _dioService.delete('${ApiEndPoint.apiDeleteTrip}/$tripId');
+      ApiResponse apiResponse = await _dioService.delete('${ApiEndPoint.apiTrips}/$tripId');
       GlobalService.dismissProgress();
       switch (apiResponse.statusCode) {
         case 200:
@@ -1188,11 +1190,23 @@ class TripService {
         , isFav
         , tripCode
         , tripStatus
-        , origin
-        , destination
+        , originId
+        , originName
+        , originNameCode
+        , originLat
+        , originLng
+        , originType
+        , originStatus
+        , destinationId
+        , destinationName
+        , destinationNameCode
+        , destinationLat
+        , destinationLng
+        , destinationType
+        , destinationStatus
         , startedAt
         , endedAt
-        , transporter
+        , transporterId
         , materialType
         , loadWeight
         , shortWeight
@@ -1220,11 +1234,23 @@ class TripService {
         , ${sqlValue(trip.isFav)}
         , ${sqlValue(trip.tripCode)}
         , ${sqlValue(trip.tripStatus)}
-        , ${sqlValue(trip.origin)}
-        , ${sqlValue(trip.destination)}
+        , ${sqlValue(trip.origin?.id)}
+        , ${sqlValue(trip.origin?.name)}
+        , ${sqlValue(trip.origin?.nameCode)}
+        , ${sqlValue(trip.origin?.latitude)}
+        , ${sqlValue(trip.origin?.longitude)}
+        , ${sqlValue(trip.origin?.type)}
+        , ${sqlValue(trip.origin?.status)}
+        , ${sqlValue(trip.destination?.id)}
+        , ${sqlValue(trip.destination?.name)}
+        , ${sqlValue(trip.destination?.nameCode)}
+        , ${sqlValue(trip.destination?.latitude)}
+        , ${sqlValue(trip.destination?.longitude)}
+        , ${sqlValue(trip.destination?.type)}
+        , ${sqlValue(trip.destination?.status)}
         , ${sqlValue(trip.startDate)}
         , ${sqlValue(trip.endedDate)}
-        , ${sqlValue(trip.transporter)}
+        , ${sqlValue(trip.transporterId)}
         , ${sqlValue(trip.loadDetail?.materialType)}
         , ${sqlValue(trip.loadDetail?.loadWeight)}
         , ${sqlValue(trip.loadDetail?.shortWeight)}

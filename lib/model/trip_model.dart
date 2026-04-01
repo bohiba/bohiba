@@ -4,21 +4,24 @@ class TripModel {
   int? id;
   int? isFav;
   String? tripCode;
-  String? tripStatus;
-  String? origin;
-  String? destination;
+  int? tripStatus;
+  TripLocation? origin;
+  TripLocation? destination;
   String? startDate;
   String? endedDate;
-  String? transporter;
+  int? transporterId;
+
   LoadDetail? loadDetail;
   TripFinance? finance;
   TripTruck? truck;
   TripDriver? driver;
   TripOwner? owner;
+
   List<Reassignment>? reassignment;
   List<TripExpense>? expenses;
   List<TripPayment>? payments;
   List<TripDocument>? documents;
+
   String? createdAt;
   String? updatedAt;
 
@@ -31,7 +34,7 @@ class TripModel {
     this.destination,
     this.startDate,
     this.endedDate,
-    this.transporter,
+    this.transporterId,
     this.loadDetail,
     this.finance,
     this.truck,
@@ -45,71 +48,215 @@ class TripModel {
     this.updatedAt,
   });
 
-  factory TripModel.fromDb(Map<String, dynamic> mapObj) {
+  // ================== FROM API ==================
+  factory TripModel.fromJson(Map<String, dynamic> json) {
     return TripModel(
-      id: mapObj["id"],
-      isFav: mapObj["isFav"],
-      tripCode: mapObj["tripCode"],
-      tripStatus: mapObj["tripStatus"],
-      origin: mapObj["origin"],
-      destination: mapObj["destination"],
-      startDate: mapObj["startedAt"],
-      endedDate: mapObj["endedAt"],
-      transporter: mapObj['transporter'],
-      loadDetail: LoadDetail.fromDb(mapObj),
-      finance: TripFinance.fromDb(mapObj),
-      truck: TripTruck.fromDb(mapObj),
-      driver: TripDriver.fromDb(mapObj),
-      owner: TripOwner.fromDb(mapObj),
+      id: json["id"],
+      isFav: json["is_fav"] ?? 0,
+      tripCode: json["trip_code"],
+      tripStatus: json["trip_status"],
+      origin: json["origin"] != null ? TripLocation.fromJson(json["origin"]) : null,
+      destination: json["destination"] != null ? TripLocation.fromJson(json["destination"]) : null,
+      startDate: _parseDate(json["started_at"]),
+      endedDate: _parseDate(json["ended_at"]),
+      transporterId: json["transporter_id"],
+      loadDetail: json["load_detail"] != null ? LoadDetail.fromJson(json["load_detail"]) : null,
+      finance: json["finance"] != null ? TripFinance.fromJson(json["finance"]) : null,
+      truck: json["truck"] != null ? TripTruck.fromJson(json["truck"]) : null,
+      driver: json["driver"] != null ? TripDriver.fromJson(json["driver"]) : null,
+      reassignment: (json["reassignment"] as List? ?? []).map((e) => Reassignment.fromJson(e)).toList(),
+      expenses: (json["expenses"] as List? ?? []).map((e) => TripExpense.fromJson(e)).toList(),
+      payments: (json["payments"] as List? ?? []).map((e) => TripPayment.fromJson(e)).toList(),
+      documents: (json["documents"] as List? ?? []).map((e) => TripDocument.fromJson(e)).toList(),
+      createdAt: json["created_at"],
+      updatedAt: json["updated_at"],
     );
   }
 
-  static Map<String, dynamic> toDB(dynamic json) {
-    Map<String, dynamic>? loadInfo = json["load_detail"];
-    Map<String, dynamic>? financeInfo = json["finance"];
-    Map<String, dynamic>? truckInfo = json["truck"];
-    Map<String, dynamic>? driverInfo = json['driver'];
-    Map<String, dynamic>? ownerInfo = json['owner'];
-    DateTime startedDate = DateFormat("dd-MM-yyyy").parse(json["started_at"]);
-    String strStartedDate = DateFormat("yyyy-MM-dd").format(startedDate);
-
-    DateTime endDated = DateFormat("dd-MM-yyyy").parse(json["ended_at"]);
-    String strEndedDate = DateFormat("yyyy-MM-dd").format(endDated);
+  // ================== TO DB ==================
+  static Map<String, dynamic> toDB(Map<dynamic, dynamic> json) {
+    final load = json["load_detail"];
+    final finance = json["finance"];
+    final truck = json["truck"];
+    final driver = json["driver"];
+    final owner = json["owner"];
 
     return {
       'id': json['id'],
       'isFav': json['is_fav'] ?? 0,
       'tripCode': json['trip_code'],
       'tripStatus': json['trip_status'],
-      'origin': json['origin'],
+      'originId': json['origin']?['id'],
+      'originName': json['origin']?['name'],
+      'originNameCode': json['origin']?['name_code'],
+      'originLat': json['origin']?['latitude'],
+      'originLng': json['origin']?['longitude'],
+      'originStatus': json['origin']?['status'],
+      'originType': json['origin']?['type'],
       'destination': json['destination'],
-      'startedAt': strStartedDate,
-      'endedAt': strEndedDate,
-      'transporter': json['transporter'],
-      'materialType': loadInfo == null ? null : loadInfo['material_type'],
-      'loadWeight': loadInfo == null ? null : loadInfo['load_weight'],
-      'shortWeight': loadInfo == null ? null : loadInfo['short_weight'],
-      'rate': loadInfo == null ? null : loadInfo['rate'],
-      'fnId': financeInfo == null ? null : financeInfo['id'],
-      'fnAmount': financeInfo == null ? null : financeInfo['amount'],
-      'fnPayment': financeInfo == null ? null : financeInfo['trip_payment'],
-      'fnExpense': financeInfo == null ? null : financeInfo['trip_profit'],
-      'fnProfit': financeInfo == null ? null : financeInfo['trip_expense'],
-      'vhId': truckInfo == null ? null : truckInfo['id'],
-      'vhNumber': truckInfo == null ? null : truckInfo['regd_number'],
-      'vhModel': truckInfo == null ? null : truckInfo['model'],
-      'vhDesc': truckInfo == null ? null : truckInfo['rc_vh_class_desc'],
-      'dvId': driverInfo == null ? null : driverInfo['id'],
-      'dvUuid': driverInfo == null ? null : driverInfo['uuid'],
-      'dvName': driverInfo == null ? null : driverInfo['name'],
-      'dvMobile': driverInfo == null ? null : driverInfo['mobile'],
-      'ownerId': ownerInfo == null ? null : ownerInfo['id'],
-      'ownerImage': ownerInfo == null ? null : ownerInfo['image'],
-      'ownerUuid': ownerInfo == null ? null : ownerInfo['uuid'],
-      'ownerName': ownerInfo == null ? null : ownerInfo['name'],
-      'ownerMobileNumber': ownerInfo == null ? null : ownerInfo['mobile'],
+      'destinationId': json['destination']?['id'],
+      'destinationName': json['destination']?['name'],
+      'destinationNameCode': json['destination']?['name_code'],
+      'destinationLat': json['destination']?['latitude'],
+      'destinationLng': json['destination']?['longitude'],
+      'destinationStatus': json['destination']?['status'],
+      'destinationType': json['destination']?['type'],
+      'startedAt': _parseDate(json["started_at"]),
+      'endedAt': _parseDate(json["ended_at"]),
+      'transporterId': json['transporter_id'],
+
+      // Load
+      'materialType': load?['material_type'],
+      'loadWeight': (load?['load_weight'] ?? 0).toDouble(),
+      'shortWeight': (load?['short_weight'] ?? 0).toDouble(),
+      'rate': (load?['rate'] ?? 0).toDouble(),
+
+      // Finance
+      'fnId': finance?['id'],
+      'fnAmount': (finance?['amount'] ?? 0).toDouble(),
+      'fnPayment': (finance?['trip_payment'] ?? 0).toDouble(),
+      'fnExpense': (finance?['trip_expense'] ?? 0).toDouble(),
+      'fnProfit': (finance?['trip_profit'] ?? 0).toDouble(),
+
+      // Truck
+      'vhId': truck?['id'],
+      'vhNumber': truck?['regd_number'],
+      'vhModel': truck?['model'],
+      'vhDesc': truck?['rc_vh_class_desc'],
+
+      // Driver
+      'dvId': driver?['id'],
+      'dvUuid': driver?['uuid'],
+      'dvName': driver?['name'],
+      'dvMobile': driver?['mobile'],
+
+      // Owner
+      'ownerId': owner?['id'],
+      'ownerUuid': owner?['uuid'],
+      'ownerName': owner?['name'],
+      'ownerMobile': owner?['mobile'],
     };
   }
+
+  // ================== FROM DB ==================
+  factory TripModel.fromDb(Map<String, dynamic> map) {
+    return TripModel(
+      id: map["id"],
+      isFav: map["isFav"],
+      tripCode: map["tripCode"],
+      tripStatus: map["tripStatus"],
+      origin: TripLocation.originFromDb(map),
+      destination: TripLocation.destinationFromDb(map),
+      startDate: map["startedAt"],
+      endedDate: map["endedAt"],
+      transporterId: map["transporterId"],
+      loadDetail: LoadDetail.fromDb(map),
+      finance: TripFinance.fromDb(map),
+      truck: TripTruck.fromDb(map),
+      driver: map["dvId"] != null ? TripDriver.fromDb(map) : null,
+      owner: map["ownerId"] != null ? TripOwner.fromDb(map) : null,
+    );
+  }
+
+  // ================== HELPERS ==================
+  static String? _parseDate(String? date) {
+    if (date == null) return null;
+    try {
+      return DateTime.parse(date).toString();
+    } catch (e) {
+      try {
+        return DateFormat("yyyy-MM-dd HH:mm:ss a").parse(date).toString();
+      } catch (e) {
+        return null;
+      }
+    }
+  }
+
+  static String? jsonEncodeSafe(dynamic data) {
+    if (data == null) return null;
+    return data.toString();
+  }
+
+  static Map<String, dynamic>? jsonDecodeSafe(dynamic data) {
+    if (data == null) return null;
+    if (data is Map<String, dynamic>) return data;
+    return null;
+  }
+}
+
+class TripLocation {
+  int? id;
+  String? name;
+  String? nameCode;
+  int? type;
+  double? latitude;
+  double? longitude;
+  int? status;
+
+  TripLocation({
+    this.id,
+    this.name,
+    this.nameCode,
+    this.type,
+    this.latitude,
+    this.longitude,
+    this.status,
+  });
+
+  // FROM API
+  factory TripLocation.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return TripLocation();
+
+    return TripLocation(
+      id: json["id"],
+      name: json["name"],
+      nameCode: json["name_code"],
+      type: json["type"],
+      latitude: (json["latitude"] ?? 0).toDouble(),
+      longitude: (json["longitude"] ?? 0).toDouble(),
+      status: json["status"],
+    );
+  }
+
+  // FROM DB
+  factory TripLocation.originFromDb(Map<String, dynamic>? map) {
+    if (map == null) return TripLocation();
+
+    return TripLocation(
+      id: map["originId"],
+      name: map["originName"],
+      nameCode: map["originNameCode"],
+      type: map["originType"],
+      latitude: (map["originLat"] ?? 0).toDouble(),
+      longitude: (map["originLng"] ?? 0).toDouble(),
+      status: map["originStatus"],
+    );
+  }
+
+  factory TripLocation.destinationFromDb(Map<String, dynamic>? map) {
+    if (map == null) return TripLocation();
+
+    return TripLocation(
+      id: map["destinationId"],
+      name: map["destinationName"],
+      nameCode: map["destinationNameCode"],
+      type: map["destinationType"],
+      latitude: (map["destinationLat"] ?? 0).toDouble(),
+      longitude: (map["destinationLng"] ?? 0).toDouble(),
+      status: map["destinationStatus"],
+    );
+  }
+
+  // TO DB (store as JSON string or map)
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "name_code": nameCode,
+        "type": type,
+        "latitude": latitude,
+        "longitude": longitude,
+        "status": status,
+      };
 }
 
 class LoadDetail {
@@ -125,19 +272,21 @@ class LoadDetail {
     this.rate,
   });
 
-  factory LoadDetail.fromJson(Map<String, dynamic> json) => LoadDetail(
-        materialType: json["material_type"],
-        loadWeight: json["load_weight"]?.toDouble() ?? 0.0,
-        shortWeight: json["short_weight"]?.toDouble() ?? 0.0,
-        rate: json["rate"]?.toDouble() ?? 0.0,
-      );
+  factory LoadDetail.fromJson(Map<String, dynamic> json) {
+    return LoadDetail(
+      materialType: json["material_type"]?.toString(),
+      loadWeight: (json["load_weight"] ?? 0).toDouble(),
+      shortWeight: (json["short_weight"] ?? 0).toDouble(),
+      rate: (json["rate"] ?? 0).toDouble(),
+    );
+  }
 
   factory LoadDetail.fromDb(Map<String, dynamic> map) {
     return LoadDetail(
       materialType: map["materialType"],
-      loadWeight: map["loadWeight"]?.toDouble() ?? 0.0,
-      shortWeight: map["shortWeight"]?.toDouble() ?? 0.0,
-      rate: map["rate"]?.toDouble() ?? 0.0,
+      loadWeight: (map["loadWeight"] ?? 0).toDouble(),
+      shortWeight: (map["shortWeight"] ?? 0).toDouble(),
+      rate: (map["rate"] ?? 0).toDouble(),
     );
   }
 
@@ -164,30 +313,32 @@ class TripFinance {
     this.tripProfit,
   });
 
-  factory TripFinance.fromJson(Map<String, dynamic> json) => TripFinance(
-        id: json["id"],
-        amount: json["amount"]?.toDouble(),
-        tripPayment: json["trip_payment"]?.toDouble(),
-        tripExpense: json["trip_expense"]?.toDouble(),
-        tripProfit: json["trip_profit"]?.toDouble(),
-      );
+  factory TripFinance.fromJson(Map<String, dynamic> json) {
+    return TripFinance(
+      id: json["id"],
+      amount: (json["amount"] ?? 0).toDouble(),
+      tripPayment: (json["trip_payment"] ?? 0).toDouble(),
+      tripExpense: (json["trip_expense"] ?? 0).toDouble(),
+      tripProfit: (json["trip_profit"] ?? 0).toDouble(),
+    );
+  }
 
   factory TripFinance.fromDb(Map<String, dynamic> map) {
     return TripFinance(
       id: map["fnId"],
-      amount: map["fnAmount"]?.toDouble() ?? 0.0,
-      tripPayment: map["fnPayment"]?.toDouble() ?? 0.0,
-      tripExpense: map["fnExpense"]?.toDouble() ?? 0.0,
-      tripProfit: map["fnProfit"]?.toDouble() ?? 0.0,
+      amount: (map["fnAmount"] ?? 0).toDouble(),
+      tripPayment: (map["fnPayment"] ?? 0).toDouble(),
+      tripExpense: (map["fnExpense"] ?? 0).toDouble(),
+      tripProfit: (map["fnProfit"] ?? 0).toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "amount": amount?.toDouble(),
-        "trip_payment": tripPayment?.toDouble(),
-        "trip_expense": tripExpense?.toDouble(),
-        "trip_profit": tripProfit?.toDouble(),
+        "amount": amount,
+        "trip_payment": tripPayment,
+        "trip_expense": tripExpense,
+        "trip_profit": tripProfit,
       };
 }
 
@@ -204,12 +355,14 @@ class TripTruck {
     this.rcVhClassDesc,
   });
 
-  factory TripTruck.fromJson(Map<String, dynamic> json) => TripTruck(
-        id: json["id"],
-        regdNumber: json["regd_number"],
-        model: json["model"],
-        rcVhClassDesc: json["rc_vh_class_desc"],
-      );
+  factory TripTruck.fromJson(Map<String, dynamic> json) {
+    return TripTruck(
+      id: json["id"],
+      regdNumber: json["regd_number"],
+      model: json["model"],
+      rcVhClassDesc: json["rc_vh_class_desc"],
+    );
+  }
 
   factory TripTruck.fromDb(Map<String, dynamic> map) {
     return TripTruck(
@@ -241,19 +394,23 @@ class TripDriver {
     this.mobile,
   });
 
-  factory TripDriver.fromJson(Map<String, dynamic> json) => TripDriver(
-        id: json['id'],
-        uuid: json["uuid"],
-        name: json["name"],
-        mobile: json["mobile"],
-      );
+  factory TripDriver.fromJson(Map<String, dynamic> json) {
+    return TripDriver(
+      id: json["id"],
+      uuid: json["uuid"],
+      name: json["name"],
+      mobile: json["mobile"],
+    );
+  }
 
-  factory TripDriver.fromDb(Map<String, dynamic> map) => TripDriver(
-        id: map['dvId'],
-        uuid: map["dvUuid"],
-        name: map["dvName"],
-        mobile: map["dvMobile"],
-      );
+  factory TripDriver.fromDb(Map<String, dynamic> map) {
+    return TripDriver(
+      id: map["dvId"],
+      uuid: map["dvUuid"],
+      name: map["dvName"],
+      mobile: map["dvMobile"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -276,19 +433,21 @@ class TripOwner {
     this.mobile,
   });
 
-  factory TripOwner.fromJson(Map<String, dynamic> json) => TripOwner(
-        id: json["id"],
-        uuid: json["uuid"],
-        name: json["name"],
-        mobile: json["mobile"],
-      );
+  factory TripOwner.fromJson(Map<String, dynamic> json) {
+    return TripOwner(
+      id: json["id"],
+      uuid: json["uuid"],
+      name: json["name"],
+      mobile: json["mobile"],
+    );
+  }
 
   factory TripOwner.fromDb(Map<String, dynamic> map) {
     return TripOwner(
       id: map["ownerId"],
       uuid: map["ownerUuid"],
       name: map["ownerName"],
-      mobile: map["ownerMobileNumber"],
+      mobile: map["ownerMobile"],
     );
   }
 
@@ -307,6 +466,7 @@ class Reassignment {
   String? reason;
   String? date;
   String? reassignVehicle;
+
   Reassignment({
     this.id,
     this.tripId,
@@ -317,35 +477,33 @@ class Reassignment {
   });
 
   factory Reassignment.fromJson(Map<String, dynamic> json) {
-    DateTime reassignDate = DateFormat("dd-MM-yyyy").parse(json["reassigned_at"]);
-    String strReassignDate = DateFormat("yyyy-MM-dd").format(reassignDate);
     return Reassignment(
-      id: json['id'],
-      tripId: json['trip_id'],
+      id: json["id"],
+      tripId: json["trip_id"],
       regdNumber: json["regd_number"],
       reason: json["reason"],
-      date: strReassignDate,
-      reassignVehicle: json['truck_regd_number'],
+      date: _parseDate(json["reassigned_at"]),
+      reassignVehicle: json["truck_regd_number"],
     );
   }
 
   factory Reassignment.fromDb(Map<String, dynamic> map) {
     return Reassignment(
-      id: map['id'],
-      tripId: map['tripId'],
+      id: map["id"],
+      tripId: map["tripId"],
       regdNumber: map["vhNumber"],
       reason: map["reason"],
       date: map["reassignmentAt"],
-      reassignVehicle: map['reAssignVhNumber'],
+      reassignVehicle: map["reAssignVhNumber"],
     );
   }
 
-  static Map<String, dynamic> toDB(dynamic json) {
+  static Map<String, dynamic> toDB(Map<String, dynamic> json) {
     return {
       'id': json['id'],
       'tripId': json['trip_id'],
       'vhNumber': json["regd_number"],
-      'reassignmentAt': json["reassigned_at"],
+      'reassignmentAt': _parseDate(json["reassigned_at"]),
       'reAssignVhNumber': json['truck_regd_number'],
       'reason': json["reason"],
     };
@@ -376,17 +534,15 @@ class TripExpense {
   });
 
   factory TripExpense.fromJson(Map<String, dynamic> json) {
-    DateTime expenseDate = DateFormat("dd-MM-yyyy").parse(json["expense_date"]);
-    String strExpenseDate = DateFormat("yyyy-MM-dd").format(expenseDate);
     return TripExpense(
       id: json["id"],
       tripId: json["trip_id"],
       expenseType: json["expense_type"],
       addedByUuid: json["added_by_uuid"],
       paymentMode: json["payment_mode"],
-      paid: json["paid"]?.toDouble() ?? 0.0,
+      paid: (json["paid"] ?? 0).toDouble(),
       paidTo: json["paid_to"],
-      expenseDate: strExpenseDate,
+      expenseDate: _parseDate(json["expense_date"]),
       remarks: json["remarks"],
     );
   }
@@ -396,9 +552,9 @@ class TripExpense {
       id: map["id"],
       tripId: map["tripId"],
       expenseType: map["expenseType"],
-      addedByUuid: map["added_by_uuid"],
+      addedByUuid: map["addedByUuid"],
       paymentMode: map["paymentMode"],
-      paid: map["paid"].toDouble() ?? 0.0,
+      paid: (map["paid"] ?? 0).toDouble(),
       paidTo: map["paidTo"],
       expenseDate: map["expenseDate"],
       remarks: map["remarks"],
@@ -441,17 +597,15 @@ class TripPayment {
   });
 
   factory TripPayment.fromJson(Map<String, dynamic> json) {
-    DateTime paymentDate = DateFormat("dd-MM-yyyy").parse(json["payment_time"]);
-    String strPaymentDate = DateFormat("yyyy-MM-dd").format(paymentDate);
     return TripPayment(
       id: json["id"],
       tripId: json["trip_id"],
       paymentType: json["payer_type"],
       paymentMode: json["payment_mode"],
-      amount: json["amount"].toDouble(),
+      amount: (json["amount"] ?? 0).toDouble(),
       paidBy: json["paid_by"],
       receivedBy: json["received_by"],
-      paymentTime: strPaymentDate,
+      paymentTime: _parseDate(json["payment_time"]),
     );
   }
 
@@ -460,8 +614,8 @@ class TripPayment {
       id: map["id"],
       tripId: map["tripId"],
       paymentType: map["payerType"],
-      paymentMode: map["payementMode"],
-      amount: double.parse(map["amount"].toString()),
+      paymentMode: map["paymentMode"],
+      amount: (map["amount"] ?? 0).toDouble(),
       paidBy: map["paidBy"],
       receivedBy: map["receivedBy"],
       paymentTime: map["paymentTime"],
@@ -499,17 +653,17 @@ class TripDocument {
     this.updatedAt,
   });
 
-  /// FROM API to TRIP MODEL
-  factory TripDocument.fromJson(Map<String, dynamic> json) => TripDocument(
-        id: json["id"],
-        tripId: json["trip_id"],
-        docType: json["doc_type"],
-        image: json["image"],
-        uploadedBy: json['uploaded_by_uuid'],
-        updatedAt: json["updated_at"],
-      );
+  factory TripDocument.fromJson(Map<String, dynamic> json) {
+    return TripDocument(
+      id: json["id"],
+      tripId: json["trip_id"],
+      docType: json["doc_type"],
+      image: json["doc_image"], // ✅ FIXED
+      uploadedBy: json["uploaded_by_uuid"],
+      updatedAt: json["updated_at"],
+    );
+  }
 
-  // FROM DB to TRIP MODEL
   factory TripDocument.fromDb(Map<String, dynamic> map) {
     return TripDocument(
       id: map["id"],
@@ -520,8 +674,23 @@ class TripDocument {
       updatedAt: map["uploadedAt"],
     );
   }
-
   static Map<String, dynamic> toDB(dynamic json) {
-    return {"id": json["id"], "tripId": json["trip_id"], "docType": json["doc_type"], "image": json["doc_image"], "uploadedBy": json["uploaded_by_uuid"], "uploadedAt": json["updated_at"]};
+    return {
+      "id": json["id"],
+      "tripId": json["trip_id"],
+      "docType": json["doc_type"],
+      "image": json["doc_image"],
+      "uploadedBy": json["uploaded_by_uuid"],
+      "uploadedAt": json["updated_at"],
+    };
+  }
+}
+
+String? _parseDate(String? date) {
+  if (date == null) return null;
+  try {
+    return DateTime.parse(date).toString();
+  } catch (_) {
+    return null;
   }
 }

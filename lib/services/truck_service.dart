@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '../model/user_model.dart';
 import '/model/profile_model.dart';
 import '/model/truck_model.dart';
@@ -24,7 +24,7 @@ class TruckService {
     Map<String, dynamic> bodyObj = {'registration_number': vehicleNumber};
     GlobalService.showProgress();
     ApiResponse serviceResponse = await _dioService.post(
-      ApiEndPoint.apiAddTruck,
+      ApiEndPoint.apiTrucks,
       body: bodyObj,
     );
 
@@ -97,7 +97,7 @@ class TruckService {
         return [];
       }
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res = await _dioService.get('${ApiEndPoint.apiAllTruck}?page=$_currentPage');
+      ApiResponse res = await _dioService.get('${ApiEndPoint.apiTrucks}?page=$_currentPage');
       switch (res.statusCode) {
         case 200:
           List<dynamic> truckList = res.data as List;
@@ -419,7 +419,7 @@ class TruckService {
     int dbDeleted = await _databaseService.delete(deleteQuery);
 
     if (dbDeleted > 0) {
-      ApiResponse serviceResponse = await _dioService.delete("${ApiEndPoint.apiDeleteTruck}/$truckId");
+      ApiResponse serviceResponse = await _dioService.delete("${ApiEndPoint.apiTrucks}/$truckId");
       switch (serviceResponse.statusCode) {
         case 200:
           ProfileModel? profile = await ProfileService.getProfile();

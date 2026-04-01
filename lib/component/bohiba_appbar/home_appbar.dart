@@ -6,7 +6,7 @@ import '/services/role_permission_service.dart';
 import '/controllers/role_controller.dart';
 import '/controllers/home_controller.dart';
 import '/dist/component_exports.dart';
-import '/dist/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
 import 'package:get/get.dart';

@@ -3,7 +3,7 @@ import '/controllers/set_image_controller.dart';
 
 import '/component/image_upload_widget.dart';
 import '/routes/app_route.dart';
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import '/component/bohiba_buttons/primary_button.dart';

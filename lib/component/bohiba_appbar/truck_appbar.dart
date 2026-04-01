@@ -1,7 +1,7 @@
 import '/model/truck_model.dart';
 import '/pages/truck/add_truck_component/truck_menu.dart';
 import '/component/screen_utils.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/controllers/truck_controller.dart';
 import 'package:marquee_text/marquee_text.dart';

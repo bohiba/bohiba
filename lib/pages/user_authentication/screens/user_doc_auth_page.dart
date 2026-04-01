@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/extensions/bohiba_extension.dart';
 import '/controllers/user_doc_auth_controller.dart';
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 
 import '/dist/component_exports.dart';
@@ -30,8 +30,7 @@ class UserDocAuthPage extends GetView<UserDocAuthController> {
             GlobalService.showAlertDialog(
               status: AlertStatus.failure,
               title: 'Verification',
-              description:
-                  'Are your sure? You want to discontinue you verification process',
+              description: 'Are your sure? You want to discontinue you verification process',
               discardBtnTxt: 'No',
               saveBtnTxt: 'Yes',
               onSave: () {
@@ -65,8 +64,7 @@ class UserDocAuthPage extends GetView<UserDocAuthController> {
                           'Fill identification number`s to verify your identity.',
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleSmall!.color,
                           ),
                         ),
@@ -80,8 +78,7 @@ class UserDocAuthPage extends GetView<UserDocAuthController> {
                           validateField: (inputValue) {
                             if (inputValue == null || inputValue.isEmpty) {
                               return 'Aadhar number cannot be empty';
-                            } else if (inputValue.length != 14 ||
-                                !inputValue.isValidAadhaar) {
+                            } else if (inputValue.length != 14 || !inputValue.isValidAadhaar) {
                               return 'Please enter valid Aadhar number';
                             } else {
                               return null;
@@ -94,14 +91,11 @@ class UserDocAuthPage extends GetView<UserDocAuthController> {
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.characters,
                           controller: controller.panNumberController,
-                          nextActionType: controller.isTruckOwner
-                              ? TextInputAction.done
-                              : TextInputAction.next,
+                          nextActionType: controller.isTruckOwner ? TextInputAction.done : TextInputAction.next,
                           validateField: (inputValue) {
                             if (inputValue == null || inputValue.isEmpty) {
                               return 'Pan number cannot be empty';
-                            } else if (inputValue.length != 10 ||
-                                !inputValue.isValidPan) {
+                            } else if (inputValue.length != 10 || !inputValue.isValidPan) {
                               return 'Please enter valid PAN number';
                             } else {
                               return null;
@@ -119,8 +113,7 @@ class UserDocAuthPage extends GetView<UserDocAuthController> {
                             validateField: (inputValue) {
                               if (inputValue == null || inputValue.isEmpty) {
                                 return 'DL number cannot be empty';
-                              } else if (inputValue.length != 15 ||
-                                  !inputValue.isValidDL) {
+                              } else if (inputValue.length != 15 || !inputValue.isValidDL) {
                                 return 'Please enter valid DL number';
                               } else {
                                 return null;

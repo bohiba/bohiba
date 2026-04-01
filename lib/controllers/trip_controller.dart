@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '/model/trip_model.dart';
@@ -56,23 +56,29 @@ class TripController extends GetxController {
 
   Color statusColor() {
     switch (tripInfo.value?.tripStatus) {
-      case 'in_transit':
-        return bohibaTheme.colorScheme.secondary;
+      case 0:
+        return bohibaTheme.colorScheme.secondary.withValues(alpha: 0.85);
 
-      case 'delay':
-        return bohibaTheme.colorScheme.onSurface;
+      case 1:
+        return bohibaTheme.colorScheme.onSurface.withValues(alpha: 0.85);
 
-      case 'completed':
-        return bohibaTheme.colorScheme.onPrimary;
+      case 2:
+        return bohibaTheme.colorScheme.secondary.withValues(alpha: 0.85);
 
-      case 'cancelled':
-        return bohibaTheme.colorScheme.error;
+      case 3:
+        return bohibaTheme.colorScheme.error.withValues(alpha: 0.85);
 
-      case 'delayed':
-        return bohibaTheme.colorScheme.error;
+      case 4:
+        return bohibaTheme.colorScheme.error.withValues(alpha: 0.85);
+
+      case 5:
+        return bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.65);
+
+      case 9:
+        return bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.65);
 
       default:
-        return bohibaTheme.colorScheme.primary;
+        return bohibaTheme.colorScheme.primary.withValues(alpha: 0.85);
     }
   }
 

@@ -5,12 +5,12 @@ import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 import '/services/main_service.dart';
 import '/model/user_fav_model.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 
 import 'package:get/get.dart';
 
 class MasterController extends GetxController {
-  final RxList<UserFavouriteModel> arrFavList = <UserFavouriteModel>[].obs;
+  final RxList<FavouriteModel> arrFavList = <FavouriteModel>[].obs;
   final RxList<TripModel> arrTrip = <TripModel>[].obs;
   final RxList<TruckModel> arrTruck = <TruckModel>[].obs;
   final RxList<MinesModel> arrMines = <MinesModel>[].obs;
@@ -48,8 +48,8 @@ class MasterController extends GetxController {
         arrLookingJob.addAll(mainObj['looking_jobs']);
       }
 
-      if (mainObj.containsKey('favList')) {
-        arrFavList.addAll(mainObj['favList']);
+      if (mainObj.containsKey('favourites')) {
+        arrFavList.addAll(mainObj['favourites']);
       }
 
       if (mainObj.containsKey('promotion')) {

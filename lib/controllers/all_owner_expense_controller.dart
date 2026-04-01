@@ -1,7 +1,7 @@
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '../model/owner_expenses_model.dart';
 import '/services/owner_expense_service.dart';
 import 'package:get/get.dart';

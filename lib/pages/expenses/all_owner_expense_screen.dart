@@ -2,7 +2,7 @@ import 'owner_expense_tile.dart';
 import '/component/screen_utils.dart';
 import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/model/owner_expenses_model.dart';

@@ -2,9 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/routes/app_route.dart';
-import '../../services/global_service.dart';
-import '/controllers/mines_controller.dart';
-import '/extensions/bohiba_extension.dart';
+import '/services/global_service.dart';
+import '../../controllers/all_mines_controller.dart';
 import '/model/mines_model.dart';
 import 'package:get/get.dart';
 import '/dist/component_exports.dart';
@@ -13,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:marquee_text/marquee_text.dart';
 
-class MinesHorizontalCard extends GetView<MinesController> {
+class MinesHorizontalCard extends GetView<AllMinesController> {
   final MinesModel minesInfo;
   const MinesHorizontalCard({super.key, required this.minesInfo});
 
@@ -21,19 +20,19 @@ class MinesHorizontalCard extends GetView<MinesController> {
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
 
-    return InkWell(
-      onTap: () {
-        navigator.pushNamed(AppRoute.mines, arguments: minesInfo);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenUtils.height5,
-          horizontal: ScreenUtils.width15,
-        ),
-        margin: EdgeInsets.only(bottom: 5.h),
-        width: ScreenUtils.width,
-        height: ScreenUtils.height * 0.075,
-        decoration: TileDecorative(),
+    return Container(
+      padding: EdgeInsets.symmetric(
+        vertical: ScreenUtils.height5,
+        horizontal: ScreenUtils.width15,
+      ),
+      margin: EdgeInsets.only(bottom: 5.h),
+      width: ScreenUtils.width,
+      height: ScreenUtils.height * 0.075,
+      decoration: TileDecorative(),
+      child: InkWell(
+        onTap: () {
+          navigator.pushNamed(AppRoute.mines, arguments: minesInfo);
+        },
         child: Row(
           children: [
             Expanded(
@@ -43,7 +42,7 @@ class MinesHorizontalCard extends GetView<MinesController> {
                     radius: 20,
                     backgroundColor: bohibaTheme.colorScheme.surface,
                     // backgroundColor: bohibaTheme.dividerColor,
-                    backgroundImage: NetworkImage(GlobalService.getAvatarUrl(minesInfo.mineName ?? 'NA')),
+                    backgroundImage: NetworkImage(GlobalService.getAvatarUrl(minesInfo.nameCode ?? 'NA')),
                   ),
                   Gap(ScreenUtils.width20),
                   Column(
@@ -52,15 +51,15 @@ class MinesHorizontalCard extends GetView<MinesController> {
                     children: [
                       BohibaMarqueeText(
                         width: ScreenUtils.width * 0.5,
-                        text: minesInfo.mineName ?? 'NA',
-                        overflowText: minesInfo.mineName ?? 'NA',
+                        text: minesInfo.name ?? 'NA',
+                        overflowText: minesInfo.nameCode ?? 'NA',
                         style: bohibaTheme.textTheme.bodyMedium,
                         marqueeTextStyle: bohibaTheme.textTheme.bodyMedium,
                       ),
                       BohibaMarqueeText(
                         width: ScreenUtils.width * 0.3,
-                        text: minesInfo.location ?? 'NA',
-                        overflowText: minesInfo.location ?? 'NA',
+                        text: minesInfo.latitude.toString(),
+                        overflowText: minesInfo.longitude.toString(),
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
                           fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
@@ -147,7 +146,7 @@ class MinesVerticalCard extends StatelessWidget {
               child: CircleAvatar(
                 radius: 35,
                 backgroundColor: bohibaTheme.colorScheme.surface,
-                child: Text(minesInfo.mineName?.shortCode ?? ""),
+                child: Text(minesInfo.nameCode ?? ""),
               ),
             ),
             Padding(
@@ -156,7 +155,7 @@ class MinesVerticalCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AutoSizeText(
-                    minesInfo.mineName ?? "NA",
+                    minesInfo.name ?? "NA",
                     style: bohibaTheme.textTheme.titleMedium,
                     textAlign: TextAlign.center,
                     maxLines: 1,
@@ -166,28 +165,19 @@ class MinesVerticalCard extends StatelessWidget {
                       textDirection: TextDirection.rtl,
                       text: TextSpan(
                         style: bohibaTheme.textTheme.titleMedium,
-                        text: minesInfo.mineName ?? "NA",
+                        text: minesInfo.name ?? "NA",
                       ),
                     ),
                   ),
-                  Text(
-                    minesInfo.location ?? "NA",
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                      color: bohibaTheme.textTheme.titleMedium!.color,
-                    ),
-                  ),
                   // Text(
-                  //   minesInfo.waitingPeriod == null ? '00:00 Hour' : '${dateFormat.format(DateTime.fromMillisecondsSinceEpoch(minesInfo.waitingPeriod ?? 0).toLocal())} Hour',
-                  //   // minesInfo.waitingPeriod?.toHHMM() ?? '',
+                  //   minesInfo.avgWaitingTime.toString(),
+                  //   textAlign: TextAlign.center,
+                  //   maxLines: 1,
                   //   style: TextStyle(
                   //     fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                  //     color: Colors.green,
-                  //     fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                  //     color: bohibaTheme.textTheme.titleMedium!.color,
                   //   ),
-                  // )
+                  // ),
                 ],
               ),
             )

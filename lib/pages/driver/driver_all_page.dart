@@ -1,15 +1,15 @@
 import '/theme/bohiba_theme.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-import '../../model/user_model.dart';
+import '/model/user_model.dart';
 import '/pages/driver/driver_tile.dart';
 import '/routes/app_route.dart';
-import '/dist/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/controllers/driver_all_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DriverAllPage extends GetView<DriverAllController> {
   const DriverAllPage({super.key});
@@ -84,6 +84,7 @@ class DriverAllPage extends GetView<DriverAllController> {
                   ),
                 )
               : ListView.builder(
+                  shrinkWrap: true,
                   itemCount: controller.arrDriver.length > 3 ? 3 : controller.arrDriver.length,
                   padding: EdgeInsets.only(
                     top: ScreenUtils.height10,

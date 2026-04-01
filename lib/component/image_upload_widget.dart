@@ -2,7 +2,7 @@ import '/dist/component_exports.dart';
 import '/controllers/image_upload_controller.dart';
 import '/component/bohiba_buttons/secoundary_button.dart';
 import '/component/bohiba_buttons/primary_button.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/pages/widget/app_divider.dart';
 import '/theme/bohiba_theme.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/truck_model.dart';
 import '../model/user_model.dart';
 import '/services/dio_serivce.dart';

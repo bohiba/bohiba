@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
 import '/services/trip_service.dart';
 import 'package:get/get.dart';

@@ -1,7 +1,10 @@
-import '/dist/app_enums.dart';
+import 'package:bohiba/model/user_fav_model.dart';
+import 'package:bohiba/services/favourite_service.dart';
+
+import '../dist/enums/app_enums.dart';
 import '/model/news_model.dart';
 import '/model/truck_model.dart';
-import '../model/user_model.dart';
+import '/model/user_model.dart';
 import '/model/mines_model.dart';
 import '/model/trip_model.dart';
 import '/model/rating_model.dart';
@@ -11,7 +14,6 @@ import 'db2_service.dart';
 import 'driver_service.dart';
 import 'mines_service.dart';
 import 'news_service.dart';
-import 'open_driver_service.dart';
 import 'trip_service.dart';
 import 'truck_service.dart';
 import 'api_end_point.dart';
@@ -33,17 +35,18 @@ class MainService {
       List<TruckModel> mainTrucks = await TruckService.getTruckList() ?? [];
       List<MinesModel> mainMines = await MinesService.getMinesList() ?? [];
       List<UserModel> mainDrivers = await DriverService.getAllDriver() ?? [];
-      List<UserModel> openToDriverList = await OpenDriverService.getAllOpenDriver(showProgress: false) ?? [];
+      // List<UserModel> openToDriverList = await OpenDriverService.getAllOpenDriver(showProgress: false) ?? [];
       List<NewsModel> mainNews = await NewsService.getAllNews() ?? [];
+      List<FavouriteModel> mainFavourites = await FavouriteService.getFavouriteList();
       if (showProgress) GlobalService.dismissProgress();
       return {
         "trips": mainTrips,
         "trucks": mainTrucks,
         "drivers": mainDrivers,
-        "mines": mainMines,
+        "companies": mainMines,
         "owner_expense": [],
-        "looking_jobs": openToDriverList,
-        "favList": [],
+        "looking_jobs": [],
+        "favourites": mainFavourites,
         "promotion": [],
         "news": mainNews,
       };
@@ -113,6 +116,20 @@ class MainService {
             GlobalService.printHandler("Driver Added in DB: $insertDriver");
           }
 
+          List<FavouriteModel> arrFavourites = [];
+          if (mainObj.containsKey('favourites')) {
+            await FavouriteService.clearAllData();
+            for (Map fav in mainObj['favourites']) {
+              Map<String, dynamic> favMap = FavouriteModel.toDB(fav);
+
+              int successFavInsert = await FavouriteService.addFavourite(favMap);
+
+              if (successFavInsert > 0) {
+                arrFavourites.add(FavouriteModel.fromDB(favMap));
+                GlobalService.printHandler("Favourite Added in DB: $successFavInsert");
+              }
+            }
+          }
           List<TripModel> arrTripModel = [];
           if (mainObj.containsKey('trips')) {
             await TripService.clearAll();
@@ -236,17 +253,17 @@ class MainService {
           }
 
           List<MinesModel> arrMinesModel = [];
-          if (mainObj.containsKey('mines')) {
+          if (mainObj.containsKey('companies')) {
             MinesService.clearAll();
-            List<dynamic> arrMines = mainObj['mines'];
-            List<Map<String, dynamic>> arrMapMines = arrMines.map((mines) {
+            List<dynamic> arrMines = mainObj['companies'];
+            List<Map<String, dynamic>> arrMapCompanies = arrMines.map((mines) {
               return MinesModel.toDB(mines);
             }).toList();
 
-            int successMinesInsert = await MinesService.insertAll(arrMapMines);
-            if (successMinesInsert > 0) {
-              arrMinesModel = arrMapMines.map((mines) {
-                return MinesModel.fromDB(mines);
+            int successCompaniesInsert = await MinesService.insertAll(arrMapCompanies);
+            if (successCompaniesInsert > 0) {
+              arrMinesModel = arrMapCompanies.map((company) {
+                return MinesModel.fromDB(company);
               }).toList();
             }
           }
@@ -280,7 +297,7 @@ class MainService {
             "mines": arrMinesModel,
             "owner_expense": arrOwnerExpenseModel,
             "looking_jobs": arrOpenDriverModel,
-            "favList": [],
+            "favourites": arrFavourites,
             "promotion": [],
             "news": arrNewsModel,
           };

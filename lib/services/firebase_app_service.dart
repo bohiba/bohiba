@@ -101,6 +101,8 @@ class FirebaseAppService {
   }
 
   static Future<void> registerToken() async {
+    if (!await DeviceInfoService.hasInternet()) return;
+
     String strFcmToken = _prefUtils.getString(PrefUtils.keyFirebaseToken);
     String fcmToken = '';
     if (strFcmToken.isNotEmpty) {

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';

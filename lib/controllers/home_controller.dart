@@ -1,4 +1,6 @@
-import '/dist/app_enums.dart';
+import 'package:bohiba/model/user_fav_model.dart';
+
+import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
 import '/services/profile_service.dart';
 import '/services/trip_service.dart';
@@ -21,7 +23,7 @@ class HomeController extends GetxController {
   ScrollController scrollController = ScrollController();
   RxBool isScrolled = false.obs;
 
-  final RxList<dynamic> arrFavList = <dynamic>[].obs;
+  final Rxn<List<FavouriteModel>> arrFavList = Rxn<List<FavouriteModel>>();
   final Rxn<List<TripModel>> arrTrip = Rxn<List<TripModel>>();
   final Rxn<List<TruckModel>> arrTruck = Rxn<List<TruckModel>>();
   final Rxn<List<MinesModel>> arrMines = Rxn<List<MinesModel>>();
@@ -43,7 +45,7 @@ class HomeController extends GetxController {
     });
 
     scrollController.addListener(() {
-      bool scroll = scrollController.offset > 90.h;
+      bool scroll = scrollController.offset > 120.h;
       if (scroll != isScrolled.value) {
         isScrolled.value = scroll;
       }
@@ -182,9 +184,14 @@ class HomeController extends GetxController {
         arrTrip.value = List.from(mainObj['trips']);
       }
 
-      if (mainObj.containsKey('mines')) {
+      if (mainObj.containsKey('companies')) {
         arrMines.value?.clear();
-        arrMines.value = List.from(mainObj['mines']);
+        arrMines.value = List.from(mainObj['companies']);
+      }
+
+      if (mainObj.containsKey('favourites')) {
+        arrFavList.value?.clear();
+        arrFavList.value = List<FavouriteModel>.from(mainObj['favourites']);
       }
 
       if (mainObj.containsKey('owner_expense')) {

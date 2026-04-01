@@ -1,13 +1,14 @@
 import 'dart:async';
+import 'package:bohiba/component/ui/random_color_picker.dart';
+
 import '/component/image_path.dart';
-import '/extensions/bohiba_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/pages/widget/role_widget.dart';
 
 import '/pages/truck/add_truck_component/truck_menu.dart';
-import '/dist/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import '/controllers/truck_all_controller.dart';
@@ -51,23 +52,23 @@ class TruckTile extends GetView<TruckAllController> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: bohibaTheme.colorScheme.surface,
+                            color: RandomColorPicker.getRandomColor(),
                           ),
-                          child: Text(
+                          /*child: Text(
                             truckInfo.regdNumber?.shortCode ?? '',
                             style: TextStyle(
                               fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
                               fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
                               color: bohibaTheme.textTheme.bodySmall!.color,
                             ),
-                          ),
+                          ),*/
                         )
                       : Container(
                           height: 32.h,
                           width: 32.h,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: bohibaTheme.dividerColor,
+                            color: RandomColorPicker.getRandomColor(),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadiusGeometry.circular(35.r),
@@ -77,12 +78,12 @@ class TruckTile extends GetView<TruckAllController> {
                               height: 32.h,
                               width: 32.h,
                               placeholder: (context, url) => Container(
-                                color: bohibaTheme.cardColor,
+                                color: RandomColorPicker.getRandomColor(),
                               ),
                               errorWidget: (context, url, error) => Icon(
                                 Icons.broken_image,
                                 size: 20,
-                                color: bohibaTheme.cardColor,
+                                color: RandomColorPicker.getRandomColor(),
                               ),
                             ),
                           ),
@@ -98,15 +99,17 @@ class TruckTile extends GetView<TruckAllController> {
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
                       RoleWidget(
-                        truckOwnerWidget: Text(
-                          truckInfo.driverName ?? 'Not Assigned',
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                            color: bohibaTheme.textTheme.titleMedium!.color,
-                          ),
-                        ),
+                        truckOwnerWidget: truckInfo.driverName == null
+                            ? null
+                            : Text(
+                                truckInfo.driverName ?? 'Not Assigned',
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                  color: bohibaTheme.textTheme.titleMedium!.color,
+                                ),
+                              ),
                         driverWidget: truckInfo.ownerName != null
                             ? Text(
                                 truckInfo.ownerName ?? '',

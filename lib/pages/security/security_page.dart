@@ -1,6 +1,6 @@
 import '/component/bohiba_appbar/appbar_icon.dart';
 
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 
 import '/pages/widget/icon_text_tile.dart';

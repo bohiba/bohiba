@@ -11,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 11;
+  static int dbversion = 24;
 
   /*================  DB CONFIG  =================== */
 
@@ -46,6 +46,7 @@ class DatabaseService {
   Future<void> _onCreateDB({required Database dbCreate}) async {
     await dbCreate.execute(strTableProfile);
     await dbCreate.execute(strLoggedInUser);
+    await dbCreate.execute(strFavourite);
     await dbCreate.execute(strTruck);
     await dbCreate.execute(strDriver);
     await dbCreate.execute(strTrip);
@@ -65,6 +66,7 @@ class DatabaseService {
       await dbReCreate.transaction((trxcn) async {
         await trxcn.execute('DROP TABLE IF EXISTS $tblProfile');
         await trxcn.execute('DROP TABLE IF EXISTS $tblLoggedInUserList');
+        await trxcn.execute('DROP TABLE IF EXISTS $tblUserFav');
         await trxcn.execute('DROP TABLE IF EXISTS $tblTrucks');
         await trxcn.execute('DROP TABLE IF EXISTS $tblTrips');
         await trxcn.execute('DROP TABLE IF EXISTS $tblDriver');
@@ -80,6 +82,7 @@ class DatabaseService {
 
         await trxcn.execute(strTableProfile);
         await trxcn.execute(strLoggedInUser);
+        await trxcn.execute(strFavourite);
         await trxcn.execute(strTruck);
         await trxcn.execute(strDriver);
         await trxcn.execute(strTrip);
@@ -112,6 +115,7 @@ class DatabaseService {
       await _database!.transaction((Transaction trxcn) async {
         await trxcn.execute('DROP TABLE IF EXISTS $tblProfile');
         await trxcn.execute('DROP TABLE IF EXISTS $tblLoggedInUserList');
+        await trxcn.execute('DROP TABLE IF EXISTS $tblUserFav');
         await trxcn.execute('DROP TABLE IF EXISTS $tblTrucks');
         await trxcn.execute('DROP TABLE IF EXISTS $tblTrips');
         await trxcn.execute('DROP TABLE IF EXISTS $tblDriver');
@@ -127,6 +131,7 @@ class DatabaseService {
 
         await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblProfile' ''');
         await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblLoggedInUserList' ''');
+        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblUserFav' ''');
         await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblTrucks' ''');
         await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblTrips' ''');
         await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblDriver' ''');
@@ -141,6 +146,7 @@ class DatabaseService {
         await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblRating' ''');
         await trxcn.execute(strTableProfile);
         await trxcn.execute(strLoggedInUser);
+        await trxcn.execute(strFavourite);
         await trxcn.execute(strTruck);
         await trxcn.execute(strDriver);
         await trxcn.execute(strTrip);
@@ -298,6 +304,21 @@ class DatabaseService {
   , token TEXT
   )''';
 
+  String strFavourite = '''
+  CREATE TABLE IF NOT EXISTS $tblUserFav (
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+  , userTruckId INTEGER
+  , truckId INTEGER
+  , userDriverId INTEGER
+  , driverId INTEGER
+  , minesId INTEGER
+  , isFav INTEGER NOT NULL DEFAULT 0
+  , name TEXT
+  , image TEXT
+  , nameCode TEXT
+  , type TEXT NOT NULL DEFAULT 'unknown'
+  )''';
+
   String strTruck = '''
   CREATE TABLE IF NOT EXISTS $tblTrucks (
     id INTEGER PRIMARY KEY AUTOINCREMENT
@@ -349,7 +370,7 @@ class DatabaseService {
   , mobileNumber TEXT
   , dob TEXT
   , roleId INTEGER NOT NULL DEFAULT 8
-  , isActive TEXT
+  , isActive INTEGER
   , connect TEXT
   , verified TEXT NOT NULL DEFAULT 'unverified'
   , houseNo TEXT
@@ -374,12 +395,24 @@ class DatabaseService {
     id INTEGER PRIMARY KEY AUTOINCREMENT
   , isFav INTEGER NOT NULL DEFAULT 0
   , tripCode TEXT
-  , tripStatus TEXT
-  , origin TEXT
-  , destination TEXT
+  , tripStatus INTEGER
+  , originId INTEGER
+  , originName TEXT
+  , originNameCode TEXT
+  , originType INTEGER
+  , originLat DOUBLE
+  , originLng DOUBLE
+  , originStatus INTEGER
+  , destinationId INTEGER
+  , destinationName TEXT
+  , destinationNameCode TEXT
+  , destinationType INTEGER
+  , destinationLat DOUBLE
+  , destinationLng DOUBLE
+  , destinationStatus INTEGER
   , startedAt DATE
   , endedAt DATE
-  , transporter TEXT
+  , transporterId INTEGER
   , materialType TEXT
   , loadWeight DOUBLE NOT NULL DEFAULT 0.0
   , shortWeight DOUBLE NOT NULL DEFAULT 0.0
@@ -525,16 +558,14 @@ class DatabaseService {
     id INTEGER PRIMARY KEY AUTOINCREMENT
   , isFav INTEGER NOT NULL DEFAULT 0
   , logo TEXT
-  , mineName TEXT
-  , location TEXT
-  , materialType TEXT
-  , materialGrade TEXT
-  , ownershipType TEXT
-  , penaltyRisk TEXT
-  , gearMandate TEXT
-  , shiftTiming TEXT
-  , waitingPeriod INT
-  , roadConditions TEXT
+  , name TEXT
+  , nameCode TEXT
+  , stateId INTEGER
+  , districtId INTEGER
+  , latitude DOUBLE
+  , longitude DOUBLE
+  , status INTEGER
+  , avgWaitingTime INTEGER
   , UNIQUE(id)
   )''';
 

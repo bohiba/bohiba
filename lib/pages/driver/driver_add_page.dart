@@ -6,7 +6,7 @@ import '/theme/bohiba_theme.dart';
 
 import '/controllers/driver_add_controller.dart';
 
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';

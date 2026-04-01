@@ -24,19 +24,13 @@ class _HomeImageSliderSectionState extends State<HomeImageSliderSection> {
     ImagePath.bannerOwnerThree,
   ];
 
-  List<String> imageDriverData = [
-    ImagePath.bannerDriverOne,
-    ImagePath.bannerDriverTwo,
-    ImagePath.bannerDriverThree,
-    ImagePath.bannerDriverFour
-  ];
+  List<String> imageDriverData = [ImagePath.bannerDriverOne, ImagePath.bannerDriverTwo, ImagePath.bannerDriverThree, ImagePath.bannerDriverFour];
   int ownerActiveIndex = 0;
   int truckActiveIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
-          bottom: ScreenUtils.height30, top: ScreenUtils.height10),
+      padding: EdgeInsets.only(bottom: ScreenUtils.height30, top: ScreenUtils.height20),
       child: Column(
         children: [
           SizedBox(
@@ -46,16 +40,14 @@ class _HomeImageSliderSectionState extends State<HomeImageSliderSection> {
               truckOwnerWidget: CarouselSlider(
                 items: imageOwnerData.map((image) {
                   return Container(
-                    margin:
-                        EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+                    margin: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
                     width: ScreenUtils.width,
                     decoration: BoxDecoration(
                       color: bohibaTheme.cardColor,
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.r),
                       ),
-                      image: DecorationImage(
-                          image: AssetImage(image), fit: BoxFit.fill),
+                      image: DecorationImage(image: AssetImage(image), fit: BoxFit.fill),
                     ),
                   );
                 }).toList(),
@@ -71,16 +63,14 @@ class _HomeImageSliderSectionState extends State<HomeImageSliderSection> {
                 items: imageDriverData.map((image) {
                   return Container(
                     height: 45.h,
-                    margin:
-                        EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+                    margin: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
                     width: ScreenUtils.width,
                     decoration: BoxDecoration(
                       color: bohibaTheme.cardColor,
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.r),
                       ),
-                      image: DecorationImage(
-                          image: AssetImage(image), fit: BoxFit.fill),
+                      image: DecorationImage(image: AssetImage(image), fit: BoxFit.fill),
                     ),
                   );
                 }).toList(),
@@ -103,7 +93,7 @@ class _HomeImageSliderSectionState extends State<HomeImageSliderSection> {
                 dotHeight: 4.h,
                 dotWidth: 4.w,
                 activeDotColor: bohibaTheme.primaryColor,
-                dotColor: bohibaTheme.colorScheme.secondary,
+                dotColor: bohibaTheme.colorScheme.onSurface,
               ),
             ),
             driverWidget: AnimatedSmoothIndicator(

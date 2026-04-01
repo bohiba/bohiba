@@ -28,29 +28,23 @@ class ApiEndPoint {
   static const String apiAddFav = '$baseUrl/add-favourite';
   static const String apiDeleteFav = '$baseUrl//delete-favourite';
 
-  static const String apiAddTruck = '$baseUrl/truck-add';
-  static const String apiAllTruck = '$baseUrl/truck-all';
-  static const String apiGetTruck = '$baseUrl/truck-get';
-  static const String apiSetTruckImage = '$baseUrl/set-truck-image';
-  static const String apiDeleteTruck = '$baseUrl/truck-delete';
+  static const String apiTrucks = '$baseUrl/trucks';
+  static const String apiGetTruck = '$apiTrucks/info';
+  static const String apiSetTruckImage = '$apiTrucks/set-image';
+  static const String apiRemoveTruckImage = '$apiTrucks/remove-image';
+  static const String apiAssignDriver = '$apiTrucks/assign-driver';
+  static const String apiRemoveDriver = '$apiTrucks/remove-driver';
 
   static const String apiAddDriver = '$baseUrl/driver-add';
   static const String apiGetDriver = '$baseUrl/driver-get';
   static const String apiAllDriver = '$baseUrl/driver-all';
   static const String apiDeleteDriver = '$baseUrl/driver-delete';
 
-  static const String apiAssignDriver = '$baseUrl/driver-assign';
-  static const String apiRemoveDriver = '$baseUrl/driver-remove';
-
   static const String apiRateDriver = '$baseUrl/rate-user';
   static const String apiGetRating = '$baseUrl/all-rating';
   static const String apiDeleteRating = '$baseUrl/delete-rating';
 
-  static const String apiAddTrip = '$baseUrl/trip-add';
-  static const String apiAllTrip = '$baseUrl/trip-all';
-  static const String apiGetTrip = '$baseUrl/trip-get';
-  static const String apiEditTrip = '$baseUrl/trip-edit';
-  static const String apiDeleteTrip = '$baseUrl/trip-delete';
+  static const String apiTrips = '$baseUrl/trips';
 
   static const String apiAddTripPayment = '$baseUrl/trip/add-payment';
   static const String apiEditTripPayment = '$baseUrl/trip/update-payment';

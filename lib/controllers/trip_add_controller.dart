@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:bohiba/extensions/ext_trip_status.dart';
+
 import '/extensions/bohiba_extension.dart';
 
 import '/controllers/image_upload_controller.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 
@@ -175,12 +177,12 @@ class TripAddController extends ImageUploadController {
   Future<void> editTripController() async {
     startAtController.text = tripModel.value?.startDate ?? '';
     endedAtController.text = tripModel.value?.endedDate ?? '';
-    transporterController.text = tripModel.value?.transporter?.toCapitalizedLabel() ?? '';
+    // transporterController.text = tripModel.value?.?.toCapitalizedLabel() ?? '';
     truckController.text = tripModel.value?.truck?.regdNumber ?? '';
-    originController.text = tripModel.value?.origin?.toUpperCase() ?? '';
-    destinationController.text = tripModel.value?.destination?.toUpperCase() ?? '';
+    originController.text = tripModel.value?.origin?.name ?? '';
+    destinationController.text = tripModel.value?.destination?.name ?? '';
     materialController.text = tripModel.value?.loadDetail?.materialType?.toCapitalizedLabel() ?? '';
-    statusController.text = tripModel.value?.tripStatus?.toCapitalizedLabel() ?? '';
+    statusController.text = tripModel.value?.tripStatus?.tripStatusName.toString() ?? '';
     totalWeightController.text = tripModel.value?.loadDetail?.loadWeight.toString() ?? '';
     shortWeightController.text = tripModel.value?.loadDetail?.shortWeight.toString() ?? '';
     rateController = MoneyMaskedTextController(

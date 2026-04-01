@@ -30,7 +30,7 @@ class UserModel {
     return UserModel(
       id: mapObj['id'],
       isSynced: mapObj['is_synced'],
-      isFav: json['is_fav'],
+      isFav: json['is_fav'] == true ? 1 : 0,
       profile: mapObj['profile'] != null ? UserProfile.fromJson(mapObj['profile']) : null,
       licenseDetail: mapObj['license_detail'] != null ? LicenseDetail.fromJson(mapObj['license_detail']) : null,
       address: mapObj['address'] != null ? CommonUserAddress.fromJson(mapObj['address']) : null,
@@ -104,7 +104,7 @@ class UserModel {
     }
 
     if (!isOpenDriver) {
-      map['isFav'] = driver['is_fav'] ?? 0;
+      map['isFav'] = driver['is_fav'] == true ? 1 : 0;
     }
 
     return map;
@@ -113,7 +113,7 @@ class UserModel {
   static UserModel fromDB(Map<String, dynamic> dbMap) {
     return UserModel(
       id: dbMap['id'],
-      isFav: dbMap['isFav'],
+      isFav: dbMap['isFav'] == true ? 1 : 0,
       isSynced: dbMap['isSynced'],
       createdAt: dbMap['createdAt'],
       updatedAt: dbMap['updatedAt'],
@@ -134,7 +134,7 @@ class UserProfile {
   String? image;
   String? dob;
   int? roleId;
-  String? isActive;
+  int? isActive;
   String? connect;
 
   UserProfile({

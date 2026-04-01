@@ -6,7 +6,7 @@ import '/services/role_permission_service.dart';
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/model/truck_model.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';

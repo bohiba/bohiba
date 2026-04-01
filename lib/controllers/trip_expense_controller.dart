@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
 import '/services/trip_service.dart';
 import 'package:get/get.dart';
@@ -13,8 +13,7 @@ class TripExpenseController extends GetxController {
   }
 
   Future<void> getExpense() async {
-    TripModel? trip = await TripService.getTrip(
-        method: MethodType.local, tripId: tripExpense.value.tripId!);
+    TripModel? trip = await TripService.getTrip(method: MethodType.local, tripId: tripExpense.value.tripId!);
     if (trip != null) {
       tripExpense.value = trip.expenses!.firstWhere((expense) {
         return expense.id == tripExpense.value.id;

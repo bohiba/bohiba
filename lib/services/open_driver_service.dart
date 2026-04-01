@@ -2,7 +2,7 @@ import 'dio_serivce.dart';
 import 'api_end_point.dart';
 import 'global_service.dart';
 import 'device_info_service.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '../model/user_model.dart';
 
 class OpenDriverService {

@@ -3,7 +3,6 @@ import 'package:bohiba/services/dio_interceptor.dart';
 
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
-import '/services/global_service.dart';
 import '/services/pref_utils.dart';
 import 'package:dio/dio.dart';
 
@@ -21,11 +20,12 @@ class DioService {
         baseUrl: ApiEndPoint.baseUrl,
         headers: {
           if (_token != null) 'Authorization': 'Bearer $_token',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
         connectTimeout: const Duration(seconds: 20),
         receiveTimeout: const Duration(seconds: 20),
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
       ),
     );
 
@@ -46,7 +46,7 @@ class DioService {
     Map<String, dynamic>? queryParams,
     bool withToken = true,
   }) async {
-    final response = await dio.get(
+    final Response response = await dio.get(
       endpoint,
       queryParameters: queryParams,
       options: Options(extra: {'withToken': withToken}),
@@ -58,6 +58,7 @@ class DioService {
     String endpoint, {
     Map<String, dynamic>? body,
     Map<String, dynamic>? headers,
+    String? contentType,
     bool withToken = true,
   }) async {
     final Response response = await dio.post(
@@ -65,6 +66,7 @@ class DioService {
       data: body,
       options: Options(
         headers: headers,
+        contentType: contentType ?? Headers.jsonContentType,
         extra: {'withToken': withToken},
       ),
     );
@@ -143,50 +145,46 @@ class DioService {
   }
 
   Future<bool> refreshToken() async {
-    if (!await DeviceInfoService.hasInternet()) {
-      return false;
-    }
-    GlobalService.showProgress();
-    ApiResponse serviceResponse = await _instance.post(ApiEndPoint.apiRefreshToken);
-    GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 401:
-        return false;
-      case 200:
-        String token = serviceResponse.data['token'];
-        _instance.setToken(token);
-        _prefUtils.clearPreferencesData();
+    if (!await DeviceInfoService.hasInternet()) return false;
+
+    final Dio refreshDio = Dio(BaseOptions(
+      baseUrl: ApiEndPoint.baseUrl,
+    ));
+
+    try {
+      final response = await refreshDio.post(ApiEndPoint.apiRefreshToken);
+
+      if (response.statusCode == 200 && response.data['success'] == true) {
+        String token = response.data['data']['token'];
+
         await _prefUtils.saveString(PrefUtils.token, token);
-        GlobalService.printHandler("Refresh Token: $token");
+
         return true;
-      default:
-        return false;
+      }
+
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 
   ApiResponse _handleResponse(Response<dynamic> response) {
-    dynamic data = response.data;
-    if (response.data == null) {
+    final data = response.data;
+
+    if (data == null) {
       return ApiResponse(
         status: false,
-        statusCode: 401,
-        message: 'Unknown error occurred',
-      );
-    } else if (response.statusCode == 200 && response.data != null || response.statusCode == 201 && data['status'] == true) {
-      return ApiResponse(
-        status: data["status"] ?? true,
-        statusCode: response.statusCode ?? 200,
-        message: data['message'] ?? "Success",
-        data: data['data'],
-        pagination: data['pagination'],
-      );
-    } else {
-      return ApiResponse(
-        status: response.data["status"] ?? false,
-        statusCode: response.statusCode ?? 401,
-        message: response.data['message'] ?? 'An error occurred',
+        statusCode: response.statusCode ?? 500,
+        message: 'No response from server',
       );
     }
+
+    return ApiResponse(
+      status: data["success"] ?? false,
+      statusCode: response.statusCode ?? 500,
+      message: data["message"] ?? "Unknown",
+      data: data["data"],
+    );
   }
 }
 
@@ -205,9 +203,3 @@ class ApiResponse {
     this.pagination,
   });
 }
-
-/*
-   =========================================
-   ||               API                   ||
-   ========================================= 
-  */

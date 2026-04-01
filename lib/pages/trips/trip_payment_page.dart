@@ -1,7 +1,7 @@
 import '/extensions/bohiba_extension.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';

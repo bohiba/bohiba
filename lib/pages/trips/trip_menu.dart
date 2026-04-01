@@ -6,7 +6,7 @@ import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
 import '/controllers/trip_controller.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';

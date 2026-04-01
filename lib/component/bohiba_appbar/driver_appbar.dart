@@ -3,7 +3,7 @@ import '/component/screen_utils.dart';
 import '/pages/driver/driver_modals/driver_menu.dart';
 import '/theme/bohiba_theme.dart';
 import '/controllers/driver_controller.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

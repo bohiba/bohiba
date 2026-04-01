@@ -1,7 +1,7 @@
 import '/services/global_service.dart';
 import '/services/dio_serivce.dart';
 import '/services/truck_service.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/truck_model.dart';
 import '/controllers/master_controller.dart';
 

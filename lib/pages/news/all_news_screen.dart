@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/model/news_model.dart';
 import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';

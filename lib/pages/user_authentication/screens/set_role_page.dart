@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 
 import '/routes/app_route.dart';
@@ -30,8 +30,7 @@ class SetRolePage extends GetView<SetRoleController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.failure,
                 title: 'Verification',
-                description:
-                    'Are your sure? You want to discontinue you verification process',
+                description: 'Are your sure? You want to discontinue you verification process',
                 discardBtnTxt: 'No',
                 saveBtnTxt: 'Yes',
                 onSave: () {
@@ -74,27 +73,20 @@ class SetRolePage extends GetView<SetRoleController> {
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Container(
-                          color: controller.roleObj.containsValue(
-                                  controller.userRoleList[index]['role_id'])
-                              ? bohibaTheme.cardColor
-                              : Colors.transparent,
+                          color: controller.roleObj.containsValue(controller.userRoleList[index]['role_id']) ? bohibaTheme.cardColor : Colors.transparent,
                           child: IconTextTile(
                             padding: EdgeInsets.all(ScreenUtils.width10),
                             onTap: () {
-                              controller.roleObj.value =
-                                  controller.selectAddress(index);
+                              controller.roleObj.value = controller.selectAddress(index);
                             },
-                            text: controller.userRoleList[index]['label']
-                                .toString(),
-                            subtitle: controller.userRoleList[index]['subTitle']
-                                .toString(),
+                            text: controller.userRoleList[index]['label'].toString(),
+                            subtitle: controller.userRoleList[index]['subTitle'].toString(),
                             widget: RadioGroup(
                               groupValue: controller.selectedIndex.value,
                               onChanged: (v) {
                                 if (v == null) {
                                 } else {
-                                  controller.roleObj.value =
-                                      controller.selectAddress(index);
+                                  controller.roleObj.value = controller.selectAddress(index);
                                 }
                               },
                               child: Radio(value: index),
@@ -115,9 +107,7 @@ class SetRolePage extends GetView<SetRoleController> {
                               if (sucess > 0) {
                                 navigateState.popAndPushNamed(
                                   AppRoute.userAuthScreen,
-                                  arguments: {
-                                    "role_id": controller.roleObj['role_id']
-                                  },
+                                  arguments: {"role_id": controller.roleObj['role_id']},
                                 );
                               }
                             },

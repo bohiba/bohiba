@@ -5,9 +5,9 @@ import 'package:gap/gap.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 
-class CompanyTile extends StatelessWidget {
+class MinesTile extends StatelessWidget {
   final Map minesInfo;
-  const CompanyTile({
+  const MinesTile({
     super.key,
     this.minesInfo = const {},
   });

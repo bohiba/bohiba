@@ -26,6 +26,7 @@ class ScreenUtils {
   static late double width15;
   static late double width20;
   static late double width25;
+  static late double width30;
   static late double width40;
   static late double width50;
 
@@ -51,6 +52,7 @@ class ScreenUtils {
     width15 = 0.0347 * width;
     width20 = 0.0462 * width;
     width25 = 0.0579 * width;
+    width30 = 0.0769 * width;
     width40 = 0.0931 * width;
     width50 = 0.1159 * width;
   }
@@ -58,8 +60,7 @@ class ScreenUtils {
 
 // This functions are responsible to make UI responsive across all the mobile devices.
 
-MediaQueryData mediaQuery = MediaQueryData.fromView(
-    WidgetsBinding.instance.platformDispatcher.views.single);
+MediaQueryData mediaQuery = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single);
 
 // These are the Viewport values of your Figma Design.
 // These are used in the code as a reference to create your UI Responsively.
@@ -86,8 +87,7 @@ extension ResponsiveExtension on num {
   double get customWidth => ((this * _width) / figmaDesignWidth);
 
   ///This method is used to set padding/margin (for the top and bottom side) & height of the screen or widget according to the Viewport height.
-  double get customHeight =>
-      (this * _height) / (figmaDesignHeight - figmaDesignStatusBar);
+  double get customHeight => (this * _height) / (figmaDesignHeight - figmaDesignStatusBar);
 
   ///This method is used to set smallest px in image height and width
   double get adaptSize {
@@ -102,8 +102,7 @@ extension ResponsiveExtension on num {
 
 class DeviceType {
   bool isTabletOrPhone() {
-    final String userAgent =
-        uhtml.window.navigator.userAgent.toString().toLowerCase();
+    final String userAgent = uhtml.window.navigator.userAgent.toString().toLowerCase();
     if (kIsWeb) {
       if (userAgent.contains("iphone") || userAgent.contains("android")) {
         return true;
@@ -112,8 +111,7 @@ class DeviceType {
       }
     } else {
       if (Platform.isAndroid) {
-        final data = MediaQueryData.fromView(
-            WidgetsBinding.instance.platformDispatcher.views.first);
+        final data = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first);
 
         return (data.size.shortestSide < 600);
       } else {

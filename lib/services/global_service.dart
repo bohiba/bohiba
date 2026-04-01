@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:remixicon/remixicon.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/pages/widget/app_date_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';

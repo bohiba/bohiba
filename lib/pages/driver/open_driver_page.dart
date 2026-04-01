@@ -168,7 +168,7 @@ class OpenDriverPage extends GetView<OpenDriverController> {
                         ),
                         LinearBoxWidget(
                           header: 'Active Status',
-                          title: controller.openDriver.value.profile?.isActive?.capitalizeFirst ?? '',
+                          title: controller.openDriver.value.profile?.isActive.toString() ?? '',
                         ),
                         LinearBoxWidget(
                           header: 'Last Sync',

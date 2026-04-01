@@ -5,7 +5,7 @@ import 'device_info_service.dart';
 import 'global_service.dart';
 import 'dio_serivce.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/job_detail_model.dart';
 
 class DriverJobService {

@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
 import '/services/profile_service.dart';
 import '/services/rating_service.dart';

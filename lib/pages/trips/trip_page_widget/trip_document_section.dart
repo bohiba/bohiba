@@ -83,7 +83,6 @@ class TripDocumentSection extends StatelessWidget {
                                 ),
                                 errorWidget: (context, url, error) => Container(
                                   color: bohibaTheme.dividerColor,
-                                  child: const Icon(Icons.broken_image, size: 20),
                                 ),
                               ),
                             ),

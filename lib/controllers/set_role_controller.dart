@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 import '/services/user_role_type.dart';
 
@@ -12,14 +12,12 @@ class SetRoleController extends GetxController {
     {
       "role_id": 6,
       "label": "Truck Owner",
-      "subTitle":
-          "Truck Owner will able to manage truck, driver, manager, trip with powerful analytics",
+      "subTitle": "Truck Owner will able to manage truck, driver, manager, trip with powerful analytics",
     },
     {
       "role_id": 8,
       "label": "Driver",
-      "subTitle":
-          "Driver will able to manage their profile with find jobs opportunity.",
+      "subTitle": "Driver will able to manage their profile with find jobs opportunity.",
     },
   ];
 
@@ -40,8 +38,7 @@ class SetRoleController extends GetxController {
     Map<String, dynamic> bodyObj = {
       'role_id': roleObj['role_id'],
     };
-    int updateRole =
-        await ProfileService.setRole(bodyMap: bodyObj, initRole: true);
+    int updateRole = await ProfileService.setRole(bodyMap: bodyObj, initRole: true);
     return updateRole;
   }
 }

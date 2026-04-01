@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
@@ -81,10 +81,7 @@ class FailureStatusWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Spacer(),
-        CircleAvatar(
-            radius: 65,
-            backgroundColor: infoColor.withValues(alpha: 0.25),
-            child: Icon(EvaIcons.alertTriangle, size: 55, color: infoColor)),
+        CircleAvatar(radius: 65, backgroundColor: infoColor.withValues(alpha: 0.25), child: Icon(EvaIcons.alertTriangle, size: 55, color: infoColor)),
         Gap(ScreenUtils.height25),
         Text(
           'Failed',
@@ -134,10 +131,7 @@ class WarningStatusWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Spacer(),
-        CircleAvatar(
-            radius: 65,
-            backgroundColor: infoColor.withValues(alpha: 0.25),
-            child: Icon(EvaIcons.alertTriangle, size: 55, color: infoColor)),
+        CircleAvatar(radius: 65, backgroundColor: infoColor.withValues(alpha: 0.25), child: Icon(EvaIcons.alertTriangle, size: 55, color: infoColor)),
         Gap(ScreenUtils.height25),
         Text(
           "Warning",
@@ -187,11 +181,7 @@ class SuccessStatusWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Spacer(),
-        CircleAvatar(
-            radius: 65,
-            backgroundColor: infoColor.withValues(alpha: 0.25),
-            child:
-                Icon(Remix.checkbox_circle_fill, size: 80, color: infoColor)),
+        CircleAvatar(radius: 65, backgroundColor: infoColor.withValues(alpha: 0.25), child: Icon(Remix.checkbox_circle_fill, size: 80, color: infoColor)),
         Gap(ScreenUtils.height25),
         Text(
           "Success",

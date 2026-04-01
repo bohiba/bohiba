@@ -1,5 +1,5 @@
 import 'dart:io';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/services/truck_service.dart';
 import '/services/global_service.dart';
 import '/services/permission_service.dart';

@@ -1,0 +1,16 @@
+enum TripStatus {
+  draft,
+  pending,
+  assigned,
+  scheduled,
+  inProgress,
+  completed,
+  delayed,
+  onHold,
+  cancelled,
+  aborted,
+  failed,
+  disputed,
+  closed,
+  archived,
+}

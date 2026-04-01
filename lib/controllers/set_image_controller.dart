@@ -5,7 +5,7 @@ import '/services/permission_service.dart';
 import '/services/global_service.dart';
 import '/services/profile_service.dart';
 import '/controllers/image_upload_controller.dart';
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';

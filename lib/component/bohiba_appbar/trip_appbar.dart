@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '/pages/widget/role_widget.dart';
 import '/component/screen_utils.dart';
 import '/controllers/trip_controller.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/pages/trips/trip_menu.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:get/get.dart';

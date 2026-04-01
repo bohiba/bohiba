@@ -4,7 +4,7 @@ import 'device_info_service.dart';
 import 'global_service.dart';
 import 'db2_service.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/news_model.dart';
 
 class NewsService {
@@ -18,8 +18,7 @@ class NewsService {
   }) async {
     if (type == MethodType.local) {
       String strGetQuery = ''' SELECT * FROM $tblNews WHERE id = $id ''';
-      List<Map<String, dynamic>>? newsMapList =
-          await _databaseService.executeQuery(strGetQuery);
+      List<Map<String, dynamic>>? newsMapList = await _databaseService.executeQuery(strGetQuery);
 
       if (newsMapList != null && newsMapList.isNotEmpty) {
         NewsModel newsModel = NewsModel.fromDB(newsMapList.first);
@@ -38,8 +37,7 @@ class NewsService {
         case 200:
           Map<String, dynamic> newsObj = NewsModel.toDB(res.data);
 
-          int insertSuccess = await _databaseService.upsertData(
-              tableName: tblNews, data: newsObj);
+          int insertSuccess = await _databaseService.upsertData(tableName: tblNews, data: newsObj);
           if (insertSuccess > 0) {
             NewsModel newsModel = NewsModel.fromDB(newsObj);
             return newsModel;
@@ -61,8 +59,7 @@ class NewsService {
   }) async {
     if (type == MethodType.local) {
       String strNewsQuery = ''' SELECT * FROM $tblNews ''';
-      List<Map<String, dynamic>> arrNews =
-          await _databaseService.executeQuery(strNewsQuery) ?? [];
+      List<Map<String, dynamic>> arrNews = await _databaseService.executeQuery(strNewsQuery) ?? [];
 
       List<NewsModel> newsModelList = arrNews.map((e) {
         return NewsModel.fromDB(e);

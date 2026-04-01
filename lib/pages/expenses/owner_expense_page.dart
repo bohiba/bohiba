@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/extensions/bohiba_extension.dart';
 import '/pages/expenses/expense_component/expense_menu.dart';

@@ -7,7 +7,7 @@ extension StringFormatExt on String {
   /// Returns short code from status string, e.g.
   /// "in_transit" → "IT", "on_hold" → "OH"
   String get shortCode {
-    final parts = split('_').where((e) => e.isNotEmpty).toList();
+    final parts = split(' ').where((e) => e.isNotEmpty).toList();
     return parts.map((word) => word[0].toUpperCase()).join();
   }
 

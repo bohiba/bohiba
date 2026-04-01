@@ -1,8 +1,11 @@
+import '/dist/enums/enum_favourite_type.dart';
+import '/model/user_fav_model.dart';
+
 import '/pages/mines/mines_tile.dart';
 import '/pages/truck/truck_tile.dart';
 import '/pages/driver/driver_tile.dart';
 
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/controllers/home_controller.dart';
 
 import '/model/user_model.dart';
@@ -23,7 +26,7 @@ class HomeFavListSection extends GetView<HomeController> {
     final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
-        visible: controller.arrFavList.isNotEmpty,
+        visible: controller.arrFavList.value?.isNotEmpty ?? false,
         child: Column(
           children: [
             // Home WishList Header
@@ -62,7 +65,7 @@ class HomeFavListSection extends GetView<HomeController> {
 
             // Home WishList Section
             Container(
-              padding: EdgeInsets.only(bottom: ScreenUtils.height25),
+              padding: EdgeInsets.only(bottom: ScreenUtils.height15),
               alignment: Alignment.center,
               child: ListView.builder(
                 padding: EdgeInsets.only(
@@ -72,15 +75,22 @@ class HomeFavListSection extends GetView<HomeController> {
                 ),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: controller.arrFavList.length > 3 ? 3 : controller.arrFavList.length,
+                itemCount: (controller.arrFavList.value?.length ?? 0) > 3 ? 3 : (controller.arrFavList.value?.length ?? 0),
                 itemBuilder: (context, index) {
-                  Map<String, dynamic> favObj = controller.arrFavList[index];
+                  FavouriteModel favObj = controller.arrFavList.value![index];
 
-                  if (favObj.containsKey('license_detail')) {
+                  if (favObj.type == EnumFavouriteType.driver.name) {
                     return DriverTile(
-                      driver: UserModel.fromJson(favObj),
+                      driver: UserModel(
+                        id: favObj.driverId ?? favObj.userDriverId,
+                        isFav: (favObj.isFav ?? false) ? 1 : 0,
+                        profile: UserProfile(
+                          name: favObj.name,
+                          image: favObj.image,
+                        ),
+                      ),
                       onPressed: () {
-                        navigatorState.pushNamed(AppRoute.driver, arguments: favObj['id']).then((onValue) async {
+                        navigatorState.pushNamed(AppRoute.driver, arguments: favObj.driverId ?? favObj.userDriverId).then((onValue) async {
                           await controller.getDriverList();
                         });
                       },
@@ -93,9 +103,14 @@ class HomeFavListSection extends GetView<HomeController> {
                     );
                   }
 
-                  if (favObj.containsKey('registration')) {
+                  if (favObj.type == EnumFavouriteType.truck.name) {
                     return TruckTile(
-                      truckInfo: TruckModel.fromDB(favObj),
+                      truckInfo: TruckModel(
+                        id: favObj.truckId ?? favObj.userTruckId,
+                        isFav: (favObj.isFav ?? false),
+                        regdNumber: favObj.name,
+                        truckImage: favObj.image,
+                      ),
                       allowedActions: [
                         ActionType.view,
                         ActionType.add,
@@ -103,7 +118,7 @@ class HomeFavListSection extends GetView<HomeController> {
                         ActionType.other,
                       ],
                       onClick: () {
-                        Get.toNamed(AppRoute.truck, arguments: TruckModel.fromDB(favObj).id)?.then(
+                        Get.toNamed(AppRoute.truck, arguments: favObj.truckId ?? favObj.userTruckId)?.then(
                           (onValue) async {
                             if (onValue != null) {
                               await controller.getTruckList();
@@ -115,13 +130,16 @@ class HomeFavListSection extends GetView<HomeController> {
                     );
                   }
 
-                  if (favObj.containsKey('mine_name')) {
-                    return CompanyTile(
-                      minesInfo: favObj,
+                  if (favObj.type == EnumFavouriteType.mines.name) {
+                    return MinesTile(
+                      minesInfo: {
+                        'mine_name': favObj.name ?? '',
+                        'location': '',
+                      },
                     );
                   }
 
-                  if (favObj.containsKey('trip_code')) {
+                  if (favObj.type == EnumFavouriteType.unknown.name) {
                     return SizedBox.fromSize();
                   }
                   return Container();

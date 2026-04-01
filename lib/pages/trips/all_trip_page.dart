@@ -6,7 +6,7 @@ import '/routes/app_route.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
 
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 
 import '/component/app_skeleton_loader.dart';

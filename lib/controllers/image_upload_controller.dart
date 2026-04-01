@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import 'package:get/get.dart';
 
 abstract class ImageUploadController extends GetxController {

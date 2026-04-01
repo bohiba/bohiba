@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 
 import '/routes/app_route.dart';

@@ -1,5 +1,5 @@
 import '/services/pref_utils.dart';
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';

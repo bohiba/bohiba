@@ -5,10 +5,10 @@ import '/extensions/bohiba_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '/dist/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/pages/driver/driver_modals/driver_menu.dart';
 import '/controllers/driver_controller.dart';
-import '../../model/user_model.dart';
+import '/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '/dist/component_exports.dart';
@@ -71,19 +71,30 @@ class DriverTile extends GetView<DriverController> {
                             child: ClipRRect(
                               borderRadius: BorderRadiusGeometry.circular(35.r),
                               child: CachedNetworkImage(
-                                imageUrl: '${ImagePath.profileImage}/${driver.profile?.image}',
-                                fit: BoxFit.cover,
-                                height: 32.h,
-                                width: 32.h,
-                                placeholder: (context, url) => Container(
-                                  color: bohibaTheme.cardColor,
-                                ),
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.broken_image,
-                                  size: 20,
-                                  color: bohibaTheme.cardColor,
-                                ),
-                              ),
+                                  imageUrl: '${ImagePath.profileImage}/${driver.profile?.image}',
+                                  fit: BoxFit.cover,
+                                  height: 32.h,
+                                  width: 32.h,
+                                  placeholder: (context, url) => Container(
+                                        color: bohibaTheme.cardColor,
+                                      ),
+                                  errorWidget: (context, url, error) => Container(
+                                        height: 32.h,
+                                        width: 32.h,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: bohibaTheme.colorScheme.surface,
+                                        ),
+                                        child: Text(
+                                          driver.profile?.name?.shortCode ?? '',
+                                          style: TextStyle(
+                                            fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                                            fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                                            color: bohibaTheme.textTheme.bodySmall!.color,
+                                          ),
+                                        ),
+                                      )),
                             ),
                           ),
                   ),
@@ -97,15 +108,17 @@ class DriverTile extends GetView<DriverController> {
                         maxLines: 1,
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
-                      Text(
-                        driver.licenseDetail?.licenseNumber ?? '',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                          color: bohibaTheme.textTheme.titleMedium!.color,
-                        ),
-                      ),
+                      driver.licenseDetail?.licenseNumber == null || (driver.licenseDetail?.licenseNumber?.isEmpty ?? true)
+                          ? SizedBox.shrink()
+                          : Text(
+                              driver.licenseDetail?.licenseNumber ?? '',
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                color: bohibaTheme.textTheme.titleMedium!.color,
+                              ),
+                            ),
                     ],
                   ),
                 ],

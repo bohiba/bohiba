@@ -3,7 +3,7 @@ import 'dart:async';
 import '/component/ui/tile_decorative.dart';
 import '/controllers/owner_expense_controller.dart';
 import '/controllers/role_controller.dart';
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
 import '/services/role_permission_service.dart';

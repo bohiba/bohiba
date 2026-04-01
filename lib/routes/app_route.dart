@@ -1,15 +1,16 @@
+import 'package:bohiba/bindings/mines_binding.dart';
+
 import '/pages/user/user_profile/manage_account_page.dart';
 
 import '/bindings/add_trip_doc_binding.dart';
 import '/pages/trips/add_trip_document_page.dart';
 import '/pages/user/user_scan/scan_qr_action_page.dart';
 
-import '/bindings/all_open_driver_binding.dart';
 import '/bindings/user_qr_binding.dart';
 import '/bindings/user_scan_qr_binding.dart';
 
-import '../pages/user/user_scan/user_qr_page.dart';
-import '../pages/user/user_scan/user_scan_qr_page.dart';
+import '/pages/user/user_scan/user_qr_page.dart';
+import '/pages/user/user_scan/user_scan_qr_page.dart';
 
 import '/bindings/all_owner_expense_binding.dart';
 import '/bindings/owner_expense_binding.dart';
@@ -110,7 +111,7 @@ import '/pages/driver/rating_all_page.dart';
 import '/pages/driver/work_calender_detail.dart';
 
 import '/bindings/trip_all_binding.dart';
-import '/bindings/mines_binding.dart';
+import '../bindings/all_mines_binding.dart';
 import '/bindings/auth_binding.dart';
 import '/bindings/driver_binding.dart';
 import '/bindings/truck_all_binding.dart';
@@ -126,7 +127,7 @@ import '/pages/user/user_kyc/kyc_screen.dart';
 import '/pages/user/user_profile/edit_user_profile_screen.dart';
 import 'package:get/get.dart';
 import '/pages/mines/mines_page.dart';
-import '/pages/favourite/favourite_page.dart';
+import '../pages/favourite/all_favourite_page.dart';
 import '/pages/manager/add_manager.dart';
 import '/pages/manager/manager.dart';
 import '/pages/truck/truck_page.dart';
@@ -400,11 +401,9 @@ class AppRoute {
     // Main
     GetPage(
       name: truckOwnerNavBar,
-      // binding: MasterBinding(),
       bindings: [
         HomeBinding(),
-        MinesBinding(),
-        AllOpenDriverBinding(),
+        AllMinesBinding(),
         DasboardBinding(),
       ],
       page: () => const BohibaNavBar(),
@@ -412,11 +411,9 @@ class AppRoute {
 
     GetPage(
       name: truckDriverNavBar,
-      // binding: MasterBinding(),
       bindings: [
         HomeBinding(),
-        AllTripBinding(),
-        AllDriverJobBinding(),
+        AllMinesBinding(),
         DasboardBinding(),
       ],
       page: () => const BohibaNavBar(),
@@ -442,7 +439,7 @@ class AppRoute {
     ),
     GetPage(
       name: allMines,
-      binding: MinesBinding(),
+      binding: AllMinesBinding(),
       page: () => const AllMinesPage(),
     ),
     GetPage(
@@ -630,7 +627,7 @@ class AppRoute {
     ),
     GetPage(
       name: favList,
-      page: () => const FavouritePage(),
+      page: () => const AllFavouritePage(),
     ),
 
     // DASHBOARD

@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 import '/services/profile_service.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +21,7 @@ class CreateUserController extends GetxController {
     if (!(createUserFormKey.currentState!.validate())) {
       return 0;
     } else if (vPwdController.text != vCnfrmController.text) {
-      GlobalService.showSnackBar(
-          status: AlertStatus.warning,
-          desc: 'Password does`nt match. Please retry again.');
+      GlobalService.showSnackBar(status: AlertStatus.warning, desc: 'Password does`nt match. Please retry again.');
       return 0;
     }
     Map<String, dynamic> bodyObj = {

@@ -1,12 +1,12 @@
 import '/component/screen_utils.dart';
-import '/controllers/mines_controller.dart';
+import '../../controllers/all_mines_controller.dart';
 import '/model/mines_model.dart';
 import 'package:get/get.dart';
 import '/component/bohiba_appbar/market_appbar.dart';
 import '/pages/mines/mines_card.dart';
 import 'package:flutter/material.dart';
 
-class AllMinesPage extends GetView<MinesController> {
+class AllMinesPage extends GetView<AllMinesController> {
   const AllMinesPage({super.key});
 
   @override

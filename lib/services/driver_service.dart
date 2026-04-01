@@ -2,7 +2,7 @@ import '/model/rating_model.dart';
 import '/services/rating_service.dart';
 import '/services/truck_service.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '../model/user_model.dart';
 import 'api_end_point.dart';
 import 'device_info_service.dart';
@@ -176,7 +176,7 @@ class DriverService {
               mobileNumber = ${driver.profile?.mobileNumber != null ? "'${driver.profile?.mobileNumber}'" : 'NULL'},
               dob = ${driver.profile?.dob != null ? "'${driver.profile?.dob}'" : 'NULL'},
               roleId = ${driver.profile?.roleId ?? 8},
-              isActive = ${driver.profile?.isActive != null ? "'${driver.profile?.isActive}'" : 'NULL'},
+              isActive = ${driver.profile?.isActive ?? 0},
               connect = ${driver.profile?.connect != null ? "'${driver.profile?.connect}'" : 'NULL'},
               verified = ${driver.address?.verified != null ? "'${driver.address?.verified}'" : "'unverified'"},
               houseNo = ${driver.address?.houseNo != null ? "'${driver.address?.houseNo}'" : 'NULL'},

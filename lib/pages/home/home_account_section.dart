@@ -21,7 +21,7 @@ class HomeAccountSection extends StatelessWidget {
           top: ScreenUtils.width5,
           left: ScreenUtils.width15,
           right: ScreenUtils.width15,
-          bottom: ScreenUtils.height10,
+          bottom: ScreenUtils.height15,
         ),
         child: Column(
           children: [

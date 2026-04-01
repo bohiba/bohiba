@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
 import '/extensions/bohiba_extension.dart';

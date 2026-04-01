@@ -1,7 +1,7 @@
 import '/model/truck_model.dart';
 
 import 'truck_tile.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/dist/component_exports.dart';

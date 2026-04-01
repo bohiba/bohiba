@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
 
 import '/controllers/create_user_controller.dart';
@@ -39,8 +39,7 @@ class CreateUserPage extends GetView<CreateUserController> {
             GlobalService.showAlertDialog(
               status: AlertStatus.failure,
               title: 'Verification',
-              description:
-                  'Are your sure? You want to discontinue you verification process',
+              description: 'Are your sure? You want to discontinue you verification process',
               discardBtnTxt: 'No',
               saveBtnTxt: 'Yes',
               onSave: () {
@@ -126,17 +125,14 @@ class CreateUserPage extends GetView<CreateUserController> {
                           DateTime.now().day,
                         );
 
-                        controller.pickedDate =
-                            await GlobalService.datePickerModal(
+                        controller.pickedDate = await GlobalService.datePickerModal(
                           context: context,
                           endTime: endDateTime,
                           title: 'Choose Date of Birth',
                         );
 
                         if (controller.pickedDate != null) {
-                          controller.dateController.text =
-                              DateFormat('dd-MM-yyyy')
-                                  .format(controller.pickedDate!);
+                          controller.dateController.text = DateFormat('dd-MM-yyyy').format(controller.pickedDate!);
                         }
                       },
                       validateField: (inputValue) {
@@ -167,8 +163,7 @@ class CreateUserPage extends GetView<CreateUserController> {
                 label: 'Submit',
                 onPressed: () async {
                   if (email != null) {
-                    int registered =
-                        await controller.registerUser(txtEmail: email);
+                    int registered = await controller.registerUser(txtEmail: email);
                     if (registered > 0) {
                       navigateState.popAndPushNamed(
                         AppRoute.userAddressAuthScreen,

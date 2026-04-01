@@ -3,7 +3,7 @@ import '/services/user_role_type.dart';
 
 import '/routes/app_route.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/services/profile_service.dart';
 import '/services/global_service.dart';
 import '/services/main_service.dart';

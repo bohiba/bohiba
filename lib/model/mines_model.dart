@@ -2,50 +2,42 @@ class MinesModel {
   int? id;
   int? isFav;
   String? logo;
-  String? mineName;
-  String? location;
-  String? materialType;
-  String? materialGrade;
-  String? ownershipType;
-  String? penaltyRisk;
-  String? safetyGearMandate;
-  String? shiftTiming;
-  int? waitingPeriod;
-  String? roadConditions;
-  String? createdAt;
-  String? updatedAt;
+  String? name;
+  String? nameCode;
+  int? stateId;
+  int? districtId;
+  double? latitude;
+  double? longitude;
+  int? status;
+  int? avgWaitingTime;
 
   MinesModel({
     this.id,
     this.isFav = 0,
     this.logo,
-    this.mineName,
-    this.location,
-    this.materialType,
-    this.materialGrade,
-    this.ownershipType,
-    this.penaltyRisk,
-    this.safetyGearMandate,
-    this.shiftTiming,
-    this.waitingPeriod,
-    this.roadConditions,
+    this.name,
+    this.nameCode,
+    this.stateId,
+    this.districtId,
+    this.latitude,
+    this.longitude,
+    this.status,
+    this.avgWaitingTime,
   });
 
   static Map<String, dynamic> toDB(dynamic json) {
     return {
       'id': json['id'],
-      'isFav': json['is_fav'] ?? 0,
+      'isFav': json['is_fav'] == true ? 1 : 0,
       'logo': json['logo'],
-      'mineName': json['mine_name'],
-      'location': json['location'],
-      'materialType': json['material_type'],
-      'materialGrade': json['material_grade'],
-      'ownershipType': json['ownership_type'],
-      'penaltyRisk': json['penalty_risk'],
-      'gearMandate': json['safety_gear_mandate'],
-      'shiftTiming': json['shift_timing'],
-      'waitingPeriod': json['waiting_period'],
-      'roadConditions': json['road_conditions'],
+      'name': json['name'],
+      'nameCode': json['name_code'],
+      'stateId': json['state_id'],
+      'districtId': json['district_id'],
+      'latitude': json['latitude'],
+      'longitude': json['longitude'],
+      'status': json['status'],
+      'avgWaitingTime': json['avg_waiting_time'],
     };
   }
 
@@ -54,16 +46,14 @@ class MinesModel {
       id: mines['id'],
       isFav: mines['isFav'],
       logo: mines['logo'],
-      mineName: mines['mineName'],
-      location: mines['location'],
-      materialType: mines['materialType'],
-      materialGrade: mines['materialGrade'],
-      ownershipType: mines['ownershipType'],
-      penaltyRisk: mines['penaltyRisk'],
-      safetyGearMandate: mines['gearMandate'],
-      shiftTiming: mines['shiftTiming'],
-      waitingPeriod: mines['waitingPeriod'],
-      roadConditions: mines['roadConditions'],
+      name: mines['name'],
+      nameCode: mines['nameCode'],
+      stateId: mines['stateId'],
+      districtId: mines['districtId'],
+      latitude: mines['latitude'],
+      longitude: mines['longitude'],
+      status: mines['status'],
+      avgWaitingTime: mines['avgWaitingTime'],
     );
   }
 }

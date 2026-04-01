@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
 import '/model/rating_model.dart';
@@ -161,7 +161,7 @@ class DriverPage extends GetView<DriverController> {
                                     ),
                                     LinearBoxWidget(
                                       header: 'Status',
-                                      title: controller.driverModel.value?.profile?.isActive?.capitalizeFirst,
+                                      title: controller.driverModel.value?.profile?.isActive?.toString(),
                                     ),
                                     LinearBoxWidget(
                                       header: 'Last Sync',

@@ -1,5 +1,5 @@
 import '/component/bohiba_appbar/appbar_icon.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/pages/widget/icon_text_tile.dart';
 import '/services/global_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';

@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/model/user_model.dart';

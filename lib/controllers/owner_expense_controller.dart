@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/owner_expenses_model.dart';
 import '/services/owner_expense_service.dart';
 import '/theme/bohiba_theme.dart';

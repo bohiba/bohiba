@@ -1,6 +1,6 @@
 import '/component/app_skeleton_loader.dart';
 import '/controllers/home_controller.dart';
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/model/truck_model.dart';
 import '/pages/truck/truck_tile.dart';
 import '/routes/app_route.dart';

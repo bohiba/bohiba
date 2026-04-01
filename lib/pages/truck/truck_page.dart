@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
 import '/services/global_service.dart';
 
@@ -345,6 +345,32 @@ class RelatedPersonSection extends GetView<TruckController> {
                         ],
                       ),
                       Spacer(),
+                      GestureDetector(
+                        onTap: () => GlobalService.showAlertDialog(
+                          status: AlertStatus.warning,
+                          title: 'Remove Driver',
+                          description: 'Are you sure you want to remove driver from this truck?',
+                          discardBtnTxt: 'Remove',
+                          onDiscard: () async => {navigateState.pop(), await controller.removeDriver()},
+                          saveBtnTxt: 'NO',
+                          onSave: () => navigateState.pop(),
+                        ),
+                        child: Container(
+                          height: ScreenUtils.height30.w,
+                          width: ScreenUtils.height30.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.15),
+                          ),
+                          child: Icon(
+                            Icons.remove_circle,
+                            size: 16.w,
+                            color: bohibaTheme.colorScheme.tertiary,
+                          ),
+                        ),
+                      ),
+                      Gap(10.w),
                       Visibility(
                         visible: controller.truckModel.value?.driverMobileNumber != null || controller.truckModel.value?.driverMobileNumber != '',
                         child: GestureDetector(
@@ -364,32 +390,6 @@ class RelatedPersonSection extends GetView<TruckController> {
                               size: 16.w,
                               color: bohibaTheme.colorScheme.onPrimary,
                             ),
-                          ),
-                        ),
-                      ),
-                      Gap(10.w),
-                      GestureDetector(
-                        onTap: () => GlobalService.showAlertDialog(
-                          status: AlertStatus.warning,
-                          title: 'Remove Driver',
-                          description: 'Are you sure you want to remove driver from this truck?',
-                          discardBtnTxt: 'Remove',
-                          onDiscard: () async => {navigateState.pop(), await controller.removeDriver()},
-                          saveBtnTxt: 'NO',
-                          onSave: () => navigateState.pop(),
-                        ),
-                        child: Container(
-                          height: ScreenUtils.height30.w,
-                          width: ScreenUtils.height30.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: bohibaTheme.colorScheme.error.withValues(alpha: 0.15),
-                          ),
-                          child: Icon(
-                            Icons.remove_circle,
-                            size: 16.w,
-                            color: bohibaTheme.colorScheme.error,
                           ),
                         ),
                       ),
@@ -496,7 +496,6 @@ class ImportantDateSection extends GetView<TruckController> {
           Padding(
             padding: EdgeInsets.only(
               top: ScreenUtils.height20,
-              bottom: ScreenUtils.height5,
             ),
             child: Text(
               'Important Date',

@@ -1,8 +1,8 @@
-import '/services/firebase_app_service.dart';
-
-import '/dist/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/model/profile_model.dart';
+import '/services/db2_service.dart';
+import '/services/firebase_app_service.dart';
 import '/services/main_service.dart';
 import '/services/pref_utils.dart';
 import '/services/dio_serivce.dart';
@@ -25,11 +25,16 @@ class SplashController extends GetxController {
   }
 
   Future<void> _initApp() async {
-    String strToken = _prefUtils.getString(PrefUtils.token);
     bool isBioMetricEnabled = DeviceInfoService.isBioMetricEnabled();
     Future.delayed(
       Duration.zero,
       () async {
+        await Future.wait([
+          FirebaseAppService.initFirebase(),
+          PrefUtils.init(),
+          DatabaseService().initDB(),
+        ]);
+        String strToken = _prefUtils.getString(PrefUtils.token);
         if (strToken.isEmpty) {
           Get.offAllNamed(AppRoute.signIn);
         } else if (strToken.isNotEmpty) {
@@ -52,7 +57,10 @@ class SplashController extends GetxController {
           } else if (userRole == UserRoles.guest) {
             Get.offAllNamed(AppRoute.roleType);
           } else {
-            Future.wait([MainService.mainApi(type: methodType, showProgress: false), FirebaseAppService.registerToken()]);
+            Future.wait([
+              MainService.mainApi(type: methodType, showProgress: false),
+              FirebaseAppService.registerToken(),
+            ]);
             if (isBioMetricEnabled == true) {
               bool success = await DeviceInfoService.authenticateUser();
               if (success) {

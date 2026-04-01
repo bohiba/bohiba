@@ -46,10 +46,10 @@ class StatusBoxWidget extends StatelessWidget {
             ),
             Spacer(),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 8.w),
+              padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 10.w),
               decoration: BoxDecoration(
                 color: statusColor ?? bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
-                borderRadius: BorderRadius.circular(20.r),
+                borderRadius: BorderRadius.circular(5.r),
               ),
               child: Text(
                 title?.toCapitalizedLabel() ?? '',
@@ -66,7 +66,7 @@ class StatusBoxWidget extends StatelessWidget {
                 padding: EdgeInsets.only(left: 5.w),
                 child: Icon(
                   Icons.arrow_forward_ios_rounded,
-                  size: ScreenUtils.height20.h,
+                  size: 12.sp,
                   color: bohibaTheme.cardColor,
                 ),
               ),

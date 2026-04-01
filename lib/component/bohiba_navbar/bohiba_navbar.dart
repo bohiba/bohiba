@@ -1,14 +1,12 @@
-import '/dist/app_enums.dart';
+import '../../dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/dist/component_exports.dart';
 import '/services/pref_utils.dart';
 import '/services/global_service.dart';
 import '/services/user_role_type.dart';
 import '/pages/home/home_screen.dart';
-import '/pages/trips/all_trip_page.dart';
 import '/pages/mines/all_mines_page.dart';
-import '/pages/explore/explore_page.dart';
-import '/pages/jobs/driver/all_driver_job.dart';
+import '/pages/favourite/all_favourite_page.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
 
 import 'package:flutter/material.dart';
@@ -133,8 +131,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
 
         navWidgets = [
           const HomePage(),
+          AllFavouritePage(),
           AllMinesPage(),
-          ExplorePage(),
           const DashboardPage(),
         ];
       case UserRoles.driver:
@@ -167,8 +165,10 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
 
         navWidgets = [
           const HomePage(),
-          AllTripPage(showLeading: false),
-          AllDriverJobPage(),
+          // AllTripPage(showLeading: false),
+          // AllDriverJobPage(),
+          AllFavouritePage(),
+          AllMinesPage(),
           const DashboardPage(),
         ];
       default:

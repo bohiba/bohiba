@@ -1,6 +1,6 @@
 import '../services/owner_job_service.dart';
 
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

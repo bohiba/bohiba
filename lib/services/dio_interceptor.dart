@@ -1,3 +1,5 @@
+import 'package:bohiba/services/dio_serivce.dart';
+
 import 'global_service.dart';
 import 'pref_utils.dart';
 import 'package:dio/dio.dart';
@@ -6,11 +8,13 @@ class ApiInterceptor extends Interceptor {
   static final PrefUtils _prefUtils = PrefUtils();
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    // Example: Attach token
-    String? token = await getToken();
+    bool withToken = options.extra['withToken'] ?? true;
 
-    if (token != null) {
-      options.headers["Authorization"] = "Bearer $token";
+    if (withToken) {
+      String? token = await getToken();
+      if (token != null) {
+        options.headers["Authorization"] = "Bearer $token";
+      }
     }
 
     GlobalService.printHandler("REQUEST[${options.method}] => PATH: ${options.path}");
@@ -28,15 +32,19 @@ class ApiInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    GlobalService.printHandler("ERROR[${err.response?.statusCode}] => MESSAGE: ${err.message}");
-
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      // Handle unauthorized
-      logoutUser();
+      bool refreshed = await DioService().refreshToken();
+
+      if (refreshed) {
+        final retryResponse = await Dio().fetch(err.requestOptions);
+        return handler.resolve(retryResponse);
+      } else {
+        logoutUser();
+      }
     }
 
-    super.onError(err, handler);
+    handler.next(err);
   }
 
   Future<String?> getToken() async {

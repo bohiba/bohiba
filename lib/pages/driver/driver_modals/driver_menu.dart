@@ -3,7 +3,7 @@ import 'dart:async';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
 import '/controllers/driver_all_controller.dart';
-import '/dist/app_enums.dart';
+import '../../../dist/enums/app_enums.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/user_model.dart';
 import '/pages/driver/driver_modals/driver_detail_modal.dart';

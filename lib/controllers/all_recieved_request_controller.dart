@@ -1,4 +1,4 @@
-import '/dist/app_enums.dart';
+import '../dist/enums/app_enums.dart';
 import '/model/user_model.dart';
 import '/services/driver_job_service.dart';
 import '/services/global_service.dart';
