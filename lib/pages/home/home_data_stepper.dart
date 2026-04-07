@@ -141,7 +141,7 @@ class HomeDataStepper extends GetView<HomeController> {
       driverWidget: Obx(() {
         if (controller.profile.value == null) {
           return SizedBox.shrink();
-        } else if (controller.profile.value?.verified != 'verified') {
+        } else if (controller.profile.value?.verified != 1) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
             child: Container(
