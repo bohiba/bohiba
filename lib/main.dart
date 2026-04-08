@@ -12,23 +12,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await FirebaseAppService.initFirebase();
-  GlobalService.printHandler('Firebase Background Message: ${message.messageId}');
-}
-
 Future<void> main() async {
-  // runZonedGuarded(() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    FirebaseMessaging.onBackgroundMessage(
+        firebaseMessagingBackgroundHandler);
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-  runApp(MyApp());
-  // }, (error, errorstack) {
-  //   GlobalService.printHandler('\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
-  // });
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    runApp(MyApp());
+  }, (error, errorstack) {
+    GlobalService.printHandler(
+        '\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -37,10 +34,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtils.getDimensions(context);
-    final controller = Get.put<ThemeController>(ThemeController());
+    final controller =
+        Get.put<ThemeController>(ThemeController());
     return Obx(() {
       return AnimatedTheme(
-        data: controller.isDarkMode ? BohibaTheme.lightTheme : BohibaTheme.darkTheme,
+        data: controller.isDarkMode
+            ? BohibaTheme.lightTheme
+            : BohibaTheme.darkTheme,
         duration: const Duration(seconds: 1),
         curve: Curves.easeIn,
         child: ScreenUtilInit(

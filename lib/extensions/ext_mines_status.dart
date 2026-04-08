@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 extension ExtMinesStatus on int {
   String get minesStatusName {
     switch (this) {
@@ -48,6 +50,33 @@ extension EnumMinesStatusExtension on String {
         return 8;
       default:
         return -1;
+    }
+  }
+}
+
+extension MinesStatusColorExtension on int {
+  Color get minesStatusColor {
+    switch (this) {
+      case 0:
+        return Colors.red;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.yellow;
+      case 3:
+        return Colors.orange;
+      case 4:
+        return Colors.purple;
+      case 5:
+        return Colors.pink;
+      case 6:
+        return Colors.brown;
+      case 7:
+        return Colors.grey;
+      case 8:
+        return Colors.blue;
+      default:
+        return Colors.black;
     }
   }
 }

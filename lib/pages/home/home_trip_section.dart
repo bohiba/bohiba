@@ -15,26 +15,33 @@ class HomeTripSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final NavigatorState navigatorState = Navigator.of(context);
+    final NavigatorState navigatorState =
+        Navigator.of(context);
     return Obx(() {
       return Visibility(
-        visible: controller.arrTrip.value?.isNotEmpty ?? true,
+        visible:
+            controller.arrTrip.value?.isNotEmpty ?? true,
         child: Column(
           children: [
             // Home WishList Header
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+              padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtils.width15),
               child: Row(
                 children: [
                   Text(
                     "Trips",
-                    style: bohibaTheme.textTheme.headlineLarge,
+                    style: bohibaTheme
+                        .textTheme.headlineMedium,
                   ),
                   const Spacer(),
-                  if (controller.arrTrip.value?.isNotEmpty ?? true)
+                  if (controller
+                          .arrTrip.value?.isNotEmpty ??
+                      true)
                     GestureDetector(
                       onTap: () {
-                        navigatorState.pushNamed(AppRoute.allTrip);
+                        navigatorState
+                            .pushNamed(AppRoute.allTrip);
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -43,7 +50,8 @@ class HomeTripSection extends GetView<HomeController> {
                         child: Text(
                           "See All",
                           style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                            fontSize: bohibaTheme.textTheme
+                                .headlineSmall!.fontSize,
                             color: bohibaTheme.primaryColor,
                           ),
                         ),
@@ -62,21 +70,30 @@ class HomeTripSection extends GetView<HomeController> {
               Container(
                 alignment: Alignment.center,
                 child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics:
+                      const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.only(
                     left: ScreenUtils.width15,
                     right: ScreenUtils.width15,
                     bottom: ScreenUtils.height15,
                   ),
                   shrinkWrap: true,
-                  itemCount: (controller.arrTrip.value?.length ?? 0) >= 3 ? 3 : controller.arrTrip.value?.length ?? 0,
+                  itemCount: (controller
+                                  .arrTrip.value?.length ??
+                              0) >=
+                          3
+                      ? 3
+                      : controller.arrTrip.value?.length ??
+                          0,
                   itemBuilder: (context, index) {
                     return TripTile(
-                      tripInfo: controller.arrTrip.value![index],
+                      tripInfo:
+                          controller.arrTrip.value![index],
                       onClick: () {
                         navigatorState.pushNamed(
                           AppRoute.trips,
-                          arguments: controller.arrTrip.value![index],
+                          arguments: controller
+                              .arrTrip.value![index],
                         );
                       },
                     );

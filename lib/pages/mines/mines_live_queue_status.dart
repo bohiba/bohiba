@@ -1,5 +1,5 @@
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/extensions/ext_trip_status.dart';
+import 'package:bohiba/extensions/ext_truck_waiting_status.dart';
 import 'package:bohiba/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,21 +21,9 @@ class MinesLiveQueueStatus extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'LIVE QUEUE STATUS',
-                style: bohibaTheme.textTheme.headlineLarge,
-              ),
-              Text(
-                'Live updates',
-                style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
-                  color: bohibaTheme.colorScheme.error,
-                ),
-              )
-            ],
+          Text(
+            'LIVE QUEUE STATUS',
+            style: bohibaTheme.textTheme.headlineLarge,
           ),
           Container(
             // height: 30,
@@ -74,7 +62,10 @@ class MinesLiveQueueStatus extends StatelessWidget {
                 height: 50,
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
                 decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: bohibaTheme.dividerColor)),
+                  color: item.owned == 1 ? bohibaTheme.colorScheme.onPrimary.withAlpha(50) : null,
+                  border: Border(
+                    bottom: BorderSide(color: bohibaTheme.dividerColor),
+                  ),
                 ),
                 alignment: Alignment.center,
                 child: Row(
@@ -101,18 +92,21 @@ class MinesLiveQueueStatus extends StatelessWidget {
                       child: IntrinsicWidth(
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
                           decoration: BoxDecoration(
-                            color: bohibaTheme.colorScheme.error.withAlpha(75),
+                            color: item.status?.truckWaitingStatusColor.withAlpha(35),
                             borderRadius: BorderRadius.circular(5.r),
                             border: Border.all(
-                              color: bohibaTheme.colorScheme.error,
+                              color:
+                                  item.status?.truckWaitingStatusColor.withAlpha(45) ?? bohibaTheme.colorScheme.error,
                             ),
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            item.status?.tripStatusName ?? '',
+                            item.status?.truckWaitingStatusName ?? '',
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
+                              fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
                               fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
                             ),
                           ),
@@ -153,6 +147,7 @@ class QueueStatusList {
   String? exitTime;
   String? watingTime;
   int? status;
+  int? owned;
 
   QueueStatusList({
     this.id,
@@ -162,5 +157,6 @@ class QueueStatusList {
     this.exitTime,
     this.watingTime,
     this.status,
+    this.owned,
   });
 }

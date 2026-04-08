@@ -19,7 +19,9 @@ class DriverTile extends GetView<DriverController> {
   final UserModel driver;
   final Function()? onPressed;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
+  final Map<ActionType,
+          FutureOr<void> Function(dynamic value)?>?
+      onActionComplete;
   const DriverTile({
     super.key,
     required this.driver,
@@ -50,15 +52,28 @@ class DriverTile extends GetView<DriverController> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: bohibaTheme.colorScheme.surface,
+                      color:
+                          bohibaTheme.colorScheme.surface,
                     ),
-                    child: driver.profile?.image == null || (driver.profile?.image?.isEmpty ?? true)
+                    child: driver.profile?.image == null ||
+                            (driver.profile?.image
+                                    ?.isEmpty ??
+                                true)
                         ? Text(
-                            driver.profile?.name?.shortCode ?? '',
+                            driver.profile?.name
+                                    ?.shortCode ??
+                                '',
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                              color: bohibaTheme.textTheme.bodySmall!.color,
+                              fontSize: bohibaTheme
+                                  .textTheme
+                                  .labelLarge!
+                                  .fontSize,
+                              fontWeight: bohibaTheme
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontWeight,
+                              color: bohibaTheme.textTheme
+                                  .bodySmall!.color,
                             ),
                           )
                         : Container(
@@ -66,57 +81,100 @@ class DriverTile extends GetView<DriverController> {
                             width: 32.h,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: bohibaTheme.dividerColor,
+                              color:
+                                  bohibaTheme.dividerColor,
                             ),
                             child: ClipRRect(
-                              borderRadius: BorderRadiusGeometry.circular(35.r),
+                              borderRadius:
+                                  BorderRadiusGeometry
+                                      .circular(35.r),
                               child: CachedNetworkImage(
-                                  imageUrl: '${ImagePath.profileImage}/${driver.profile?.image}',
-                                  fit: BoxFit.cover,
+                                imageUrl:
+                                    '${ImagePath.profileImage}/${driver.profile?.image}',
+                                fit: BoxFit.cover,
+                                height: 32.h,
+                                width: 32.h,
+                                placeholder:
+                                    (context, url) =>
+                                        Container(
+                                  color:
+                                      bohibaTheme.cardColor,
+                                ),
+                                errorWidget:
+                                    (context, url, error) =>
+                                        Container(
                                   height: 32.h,
                                   width: 32.h,
-                                  placeholder: (context, url) => Container(
-                                        color: bohibaTheme.cardColor,
-                                      ),
-                                  errorWidget: (context, url, error) => Container(
-                                        height: 32.h,
-                                        width: 32.h,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: bohibaTheme.colorScheme.surface,
-                                        ),
-                                        child: Text(
-                                          driver.profile?.name?.shortCode ?? '',
-                                          style: TextStyle(
-                                            fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                                            fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                                            color: bohibaTheme.textTheme.bodySmall!.color,
-                                          ),
-                                        ),
-                                      )),
+                                  alignment:
+                                      Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: bohibaTheme
+                                        .colorScheme
+                                        .surface,
+                                  ),
+                                  child: Text(
+                                    driver.profile?.name
+                                            ?.shortCode ??
+                                        '',
+                                    style: TextStyle(
+                                      fontSize: bohibaTheme
+                                          .textTheme
+                                          .labelLarge!
+                                          .fontSize,
+                                      fontWeight:
+                                          bohibaTheme
+                                              .textTheme
+                                              .bodyMedium!
+                                              .fontWeight,
+                                      color: bohibaTheme
+                                          .textTheme
+                                          .bodySmall!
+                                          .color,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                   ),
                   Gap(ScreenUtils.height15),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
                     children: [
                       Text(
                         driver.profile?.name ?? '',
                         maxLines: 1,
-                        style: bohibaTheme.textTheme.bodyMedium,
+                        style: bohibaTheme
+                            .textTheme.bodyMedium,
                       ),
-                      driver.licenseDetail?.licenseNumber == null || (driver.licenseDetail?.licenseNumber?.isEmpty ?? true)
+                      driver.licenseDetail?.licenseNumber ==
+                                  null ||
+                              (driver
+                                      .licenseDetail
+                                      ?.licenseNumber
+                                      ?.isEmpty ??
+                                  true)
                           ? SizedBox.shrink()
                           : Text(
-                              driver.licenseDetail?.licenseNumber ?? '',
+                              driver.licenseDetail
+                                      ?.licenseNumber ??
+                                  '',
                               maxLines: 1,
                               style: TextStyle(
-                                fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                color: bohibaTheme.textTheme.titleMedium!.color,
+                                fontSize: bohibaTheme
+                                    .textTheme
+                                    .titleMedium!
+                                    .fontSize,
+                                fontWeight: bohibaTheme
+                                    .textTheme
+                                    .bodySmall!
+                                    .fontWeight,
+                                color: bohibaTheme.textTheme
+                                    .titleMedium!.color,
                               ),
                             ),
                     ],

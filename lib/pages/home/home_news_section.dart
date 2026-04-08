@@ -16,7 +16,8 @@ class HomeNewsSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final NavigatorState navigatorState = Navigator.of(context);
+    final NavigatorState navigatorState =
+        Navigator.of(context);
 
     if (controller.arrNews.isEmpty) {
       return SizedBox.shrink();
@@ -30,21 +31,28 @@ class HomeNewsSection extends GetView<HomeController> {
         children: [
           // Header
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'News',
-                style: bohibaTheme.textTheme.headlineLarge,
+                style: bohibaTheme.textTheme.headlineMedium,
               ),
               GestureDetector(
                   onTap: () {
-                    navigatorState.pushNamed(AppRoute.allNewsScreen);
+                    navigatorState
+                        .pushNamed(AppRoute.allNewsScreen);
                   },
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
+                    padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtils.height5),
                     child: Text(
                       'See All',
-                      style: TextStyle(fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize, color: bohibaTheme.primaryColor),
+                      style: TextStyle(
+                        fontSize: bohibaTheme.textTheme
+                            .headlineSmall!.fontSize,
+                        color: bohibaTheme.primaryColor,
+                      ),
                     ),
                   ))
             ],
@@ -53,7 +61,10 @@ class HomeNewsSection extends GetView<HomeController> {
           // Home News
           Obx(() {
             return Column(
-              children: List.generate(controller.arrNews.length >= 3 ? 3 : controller.arrNews.length, (index) {
+              children: List.generate(
+                  controller.arrNews.length >= 3
+                      ? 3
+                      : controller.arrNews.length, (index) {
                 NewsModel news = controller.arrNews[index];
                 return GestureDetector(
                   onTap: () {
@@ -63,37 +74,52 @@ class HomeNewsSection extends GetView<HomeController> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => InAppWebViewPage(url: website),
+                          builder: (context) =>
+                              InAppWebViewPage(
+                                  url: website),
                         ),
                       );
                     }
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: ScreenUtils.height20.h),
+                    padding: EdgeInsets.only(
+                        bottom: ScreenUtils.height20.h),
                     child: Container(
                       width: ScreenUtils.width,
                       // height: 160.h,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius:
+                            BorderRadius.circular(12.r),
                       ),
                       alignment: Alignment.center,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
                         children: [
                           // Cached background
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius:
+                                BorderRadius.circular(12.r),
                             child: CachedNetworkImage(
                               imageUrl: '${news.image}',
                               fit: BoxFit.cover,
                               height: 220,
                               width: ScreenUtils.width,
-                              placeholder: (context, url) => Container(
-                                color: bohibaTheme.cardColor,
+                              placeholder: (context, url) =>
+                                  Container(
+                                color:
+                                    bohibaTheme.cardColor,
                               ),
-                              errorWidget: (context, url, error) => Container(
-                                color: bohibaTheme.cardColor,
-                                child: Icon(Icons.broken_image, size: 50, color: bohibaTheme.dividerColor),
+                              errorWidget:
+                                  (context, url, error) =>
+                                      Container(
+                                color:
+                                    bohibaTheme.cardColor,
+                                child: Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                    color: bohibaTheme
+                                        .dividerColor),
                               ),
                             ),
                           ),
@@ -104,8 +130,14 @@ class HomeNewsSection extends GetView<HomeController> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
-                              fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
+                              fontWeight: bohibaTheme
+                                  .textTheme
+                                  .titleMedium!
+                                  .fontWeight,
+                              fontSize: bohibaTheme
+                                  .textTheme
+                                  .titleSmall!
+                                  .fontSize,
                             ),
                           ),
                           Text(
@@ -114,9 +146,16 @@ class HomeNewsSection extends GetView<HomeController> {
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.right,
                             style: TextStyle(
-                              fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                              fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                              color: bohibaTheme.textTheme.titleLarge!.color,
+                              fontWeight: bohibaTheme
+                                  .textTheme
+                                  .labelMedium!
+                                  .fontWeight,
+                              fontSize: bohibaTheme
+                                  .textTheme
+                                  .labelSmall!
+                                  .fontSize,
+                              color: bohibaTheme.textTheme
+                                  .titleLarge!.color,
                             ),
                           ),
                         ],

@@ -1,4 +1,4 @@
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
 import '/model/rating_model.dart';
@@ -68,16 +68,35 @@ class DriverPage extends GetView<DriverController> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              Container(
                                 width: ScreenUtils.width,
                                 height: ScreenUtils.height * 0.3,
-                                child: controller.driverModel.value?.profile?.image == null || (controller.driverModel.value!.profile?.image?.isEmpty ?? true)
-                                    ? SizedBox.shrink()
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(color: bohibaTheme.cardColor),
+                                child: controller.driverModel.value?.profile?.image == null ||
+                                        (controller.driverModel.value!.profile?.image?.isEmpty ?? true)
+                                    ? Text(
+                                        controller.driverModel.value?.profile?.name?.shortCode ?? '',
+                                        style: bohibaTheme.textTheme.displayLarge?.copyWith(
+                                          color: bohibaTheme.textTheme.bodySmall!.color,
+                                        ),
+                                      )
                                     : CachedNetworkImage(
-                                        imageUrl: "${ImagePath.profileImage}/${controller.driverModel.value?.profile?.image}",
+                                        imageUrl:
+                                            "${ImagePath.profileImage}/${controller.driverModel.value?.profile?.image}",
                                         fit: BoxFit.cover,
                                         errorWidget: (context, url, error) {
-                                          return SizedBox.shrink();
+                                          return Container(
+                                            width: ScreenUtils.width,
+                                            height: ScreenUtils.height * 0.3,
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              controller.driverModel.value?.profile?.name?.shortCode ?? '',
+                                              style: bohibaTheme.textTheme.displayLarge?.copyWith(
+                                                color: bohibaTheme.textTheme.bodySmall!.color,
+                                              ),
+                                            ),
+                                          );
                                         },
                                       ),
                               ),
@@ -198,7 +217,10 @@ class DriverPage extends GetView<DriverController> {
                                 ),
                               ),
                               Visibility(
-                                visible: controller.driverModel.value?.rating == null || (controller.driverModel.value?.rating?.isEmpty ?? false) ? false : true,
+                                visible: controller.driverModel.value?.rating == null ||
+                                        (controller.driverModel.value?.rating?.isEmpty ?? false)
+                                    ? false
+                                    : true,
                                 child: Padding(
                                   padding: EdgeInsets.only(
                                     top: ScreenUtils.height25,
@@ -239,7 +261,9 @@ class DriverPage extends GetView<DriverController> {
                                 alignment: Alignment.center,
                                 child: controller.driverModel.value?.rating != null
                                     ? ListView.builder(
-                                        itemCount: (controller.driverModel.value?.rating?.length ?? 0) >= 3 ? 3 : controller.driverModel.value?.rating?.length,
+                                        itemCount: (controller.driverModel.value?.rating?.length ?? 0) >= 3
+                                            ? 3
+                                            : controller.driverModel.value?.rating?.length,
                                         shrinkWrap: true,
                                         physics: const NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, index) {

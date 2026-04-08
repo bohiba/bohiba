@@ -64,6 +64,10 @@ class _CompanyAppBarState extends State<CompanyAppBar> {
                     Radius.circular(10),
                   ),
                 ),
+                constraints: BoxConstraints(
+                  minWidth: ScreenUtils.width * 0.3,
+                  maxWidth: ScreenUtils.width * 0.3,
+                ),
                 items: _buildPopMenuItemList(),
               ).then((value) {
                 switch (value) {

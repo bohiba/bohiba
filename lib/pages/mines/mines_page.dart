@@ -27,13 +27,14 @@ class MinesPage extends GetView<MinesController> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: PrimaryFloatingButton(
           onPressed: () {
+            // SELECT VEHICLE AND SET QUEUE STATUS
             showModalBottomSheet(
               isScrollControlled: true,
               isDismissible: false,
               shape: BottomModalShape(),
               context: context,
               builder: (context) {
-                return MinesQueueStatus();
+                return MinesQueueStatus(currentIndex: 2);
               },
             );
           },
@@ -56,9 +57,19 @@ class MinesPage extends GetView<MinesController> {
                   MinesHeader(minesModel: controller.minesModel.value),
                   MinesStatusGrid(
                     mineOutsideInfo: [
-                      StatusModel(name: "TOTAL TRUCKS", value: "42"),
-                      StatusModel(name: "AVG WAITING", value: "32m"),
-                      StatusModel(name: "STATUS", value: controller.minesModel.value.status?.minesStatusName ?? ''),
+                      StatusModel(
+                        name: "TOTAL TRUCKS",
+                        value: "42",
+                      ),
+                      StatusModel(
+                        name: "AVG WAITING",
+                        value: "32m",
+                      ),
+                      StatusModel(
+                        name: "STATUS",
+                        value: controller.minesModel.value.status?.minesStatusName ?? '',
+                        color: controller.minesModel.value.status?.minesStatusColor,
+                      ),
                     ],
                   ),
                   MinesLocation(),
@@ -69,80 +80,7 @@ class MinesPage extends GetView<MinesController> {
                       QueueHeader(flex: 3, name: "STATUS", textAlign: TextAlign.center),
                       QueueHeader(flex: 2, name: "WAIT", textAlign: TextAlign.center),
                     ],
-                    queueList: [
-                      QueueStatusList(
-                        id: 1,
-                        vechileId: 'OD14AC5857',
-                        status: 4,
-                        watingTime: '43',
-                      ),
-                      QueueStatusList(
-                        id: 2,
-                        vechileId: 'OD14X7724',
-                        status: 1,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 3,
-                        vechileId: 'OD14X7724',
-                        status: 3,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 4,
-                        vechileId: 'OD14X7724',
-                        status: 2,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 5,
-                        vechileId: 'OD14X7724',
-                        status: 1,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 6,
-                        vechileId: 'OD14X7724',
-                        status: 1,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 7,
-                        vechileId: 'OD14X7724',
-                        status: 3,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 8,
-                        vechileId: 'OD14X7724',
-                        status: 2,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 9,
-                        vechileId: 'OD14X7724',
-                        status: 1,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 10,
-                        vechileId: 'OD14X7724',
-                        status: 2,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 11,
-                        vechileId: 'OD14X7724',
-                        status: 3,
-                        watingTime: '42',
-                      ),
-                      QueueStatusList(
-                        id: 12,
-                        vechileId: 'OD14X7724',
-                        status: 3,
-                        watingTime: '42',
-                      ),
-                    ],
+                    queueList: controller.arrQueue,
                   ),
                 ],
               ),
@@ -157,6 +95,6 @@ class MinesPage extends GetView<MinesController> {
 class StatusModel {
   String? name;
   String? value;
-
-  StatusModel({this.name, this.value});
+  Color? color;
+  StatusModel({this.name, this.value, this.color});
 }

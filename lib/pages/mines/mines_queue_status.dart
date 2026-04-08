@@ -7,7 +7,8 @@ import '/component/bohiba_progress_tracker/progress_tracker.dart';
 import 'package:flutter/material.dart';
 
 class MinesQueueStatus extends StatelessWidget {
-  const MinesQueueStatus({super.key});
+  final int currentIndex;
+  const MinesQueueStatus({super.key, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class MinesQueueStatus extends StatelessWidget {
               ProgressTracker(currentIndex: 2, statusList: [
                 Status(name: 'ARRIVED', active: true),
                 Status(name: 'ENTERED', active: true),
-                Status(name: 'LOADING', active: true),
+                Status(name: 'LOADING', active: false),
                 Status(name: 'LOADED', active: false),
                 Status(name: 'EXIT', active: false),
               ]),

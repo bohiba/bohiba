@@ -14,56 +14,65 @@ class MinesLocation extends GetView<MinesController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        String? markerId = controller.minesModel.value.id.toString();
+        String? markerId =
+            controller.minesModel.value.id.toString();
 
-        return Padding(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtils.height15),
-          child: Column(
-            children: [
-              SizedBox(
-                height: ScreenUtils.height * 0.195,
-                width: double.maxFinite,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: GoogleMap(
-                    padding: EdgeInsets.zero,
-                    zoomControlsEnabled: false,
-                    onMapCreated: (mapCtrl) async {
-                      controller.mapController = mapCtrl;
-                      final model = controller.minesModel.value;
+        return Column(
+          children: [
+            SizedBox(
+              height: ScreenUtils.height * 0.195,
+              width: double.maxFinite,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: GoogleMap(
+                  padding: EdgeInsets.zero,
+                  zoomControlsEnabled: false,
+                  onMapCreated: (mapCtrl) async {
+                    controller.mapController = mapCtrl;
+                    final model =
+                        controller.minesModel.value;
 
-                      if (model.latitude != null && model.longitude != null) {
-                        await controller.moveCamera(model.latitude!, model.longitude!);
-                      }
-                    },
-                    // Uncomment if you want to drag map
-                    // scrollGesturesEnabled: false,
-                    /*gestureRecognizers: {
-                      Factory<OneSequenceGestureRecognizer>(
-                        () => EagerGestureRecognizer(),
-                      ),
-                    },*/
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(controller.minesModel.value.latitude!, controller.minesModel.value.longitude!),
-                      zoom: 16,
+                    if (model.latitude != null &&
+                        model.longitude != null) {
+                      await controller.moveCamera(
+                          model.latitude!,
+                          model.longitude!);
+                    }
+                  },
+                  // Uncomment if you want to drag map
+                  // scrollGesturesEnabled: false,
+                  /*gestureRecognizers: {
+                    Factory<OneSequenceGestureRecognizer>(
+                      () => EagerGestureRecognizer(),
                     ),
-                    markers: {
-                      Marker(
-                        markerId: MarkerId(markerId),
-                        position: LatLng(
-                          controller.minesModel.value.latitude!,
-                          controller.minesModel.value.longitude!,
-                        ),
-                        infoWindow: InfoWindow(
-                          title: controller.minesModel.value.name,
-                        ),
-                      ),
-                    },
+                  },*/
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                        controller
+                            .minesModel.value.latitude!,
+                        controller
+                            .minesModel.value.longitude!),
+                    zoom: 16,
                   ),
+                  markers: {
+                    Marker(
+                      markerId: MarkerId(markerId),
+                      position: LatLng(
+                        controller
+                            .minesModel.value.latitude!,
+                        controller
+                            .minesModel.value.longitude!,
+                      ),
+                      infoWindow: InfoWindow(
+                        title: controller
+                            .minesModel.value.name,
+                      ),
+                    ),
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
