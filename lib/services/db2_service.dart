@@ -11,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 24;
+  static int dbversion = 26;
 
   /*================  DB CONFIG  =================== */
 
@@ -560,11 +560,11 @@ class DatabaseService {
   , logo TEXT
   , name TEXT
   , nameCode TEXT
-  , stateId INTEGER
-  , districtId INTEGER
+  , state TEXT
+  , district TEXT
   , latitude DOUBLE
   , longitude DOUBLE
-  , status INTEGER
+  , status TEXT
   , avgWaitingTime INTEGER
   , UNIQUE(id)
   )''';

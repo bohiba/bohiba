@@ -183,8 +183,14 @@ class GlobalService {
     DateTime? chooseDate = DateTime.now();
     DateFormat dateFormat = DateFormat(dateFormatter);
 
-    chooseDate =
-        await showDatePicker(context: context, firstDate: DateTime(1820), lastDate: DateTime.now(), helpText: hintText, fieldHintText: 'DD-MM-YYYY', fieldLabelText: '', keyboardType: TextInputType.numberWithOptions());
+    chooseDate = await showDatePicker(
+        context: context,
+        firstDate: DateTime(1820),
+        lastDate: DateTime.now(),
+        helpText: hintText,
+        fieldHintText: 'DD-MM-YYYY',
+        fieldLabelText: '',
+        keyboardType: TextInputType.numberWithOptions());
     if (chooseDate != null) {
       return dateFormat.format(chooseDate);
     } else {
@@ -266,7 +272,7 @@ class GlobalService {
         iconData = Icons.info;
         break;
       case AlertStatus.warning:
-        color = bohibaTheme.colorScheme.surface;
+        color = bohibaTheme.colorScheme.tertiary;
         iconData = Icons.warning;
         break;
       case AlertStatus.failure:

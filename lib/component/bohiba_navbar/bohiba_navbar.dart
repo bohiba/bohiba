@@ -116,8 +116,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             tooltip: "Mines",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(RemixIcons.compass_3_line),
-            activeIcon: Icon(RemixIcons.compass_3_fill),
+            icon: Icon(EvaIcons.compassOutline),
+            activeIcon: Icon(EvaIcons.compass),
             label: "Explore",
             tooltip: "Explore",
           ),
@@ -144,8 +144,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             tooltip: "Home",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(EvaIcons.activityOutline),
-            activeIcon: Icon(EvaIcons.activityOutline),
+            icon: Icon(EvaIcons.compassOutline),
+            activeIcon: Icon(EvaIcons.compass),
             label: "Trips",
             tooltip: "Trips",
           ),

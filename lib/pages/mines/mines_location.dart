@@ -14,8 +14,7 @@ class MinesLocation extends GetView<MinesController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        String? markerId =
-            controller.minesModel.value.id.toString();
+        String? markerId = controller.minesModel.value.id.toString();
 
         return Column(
           children: [
@@ -27,16 +26,14 @@ class MinesLocation extends GetView<MinesController> {
                 child: GoogleMap(
                   padding: EdgeInsets.zero,
                   zoomControlsEnabled: false,
+                  zoomGesturesEnabled: false,
+                  mapType: MapType.hybrid,
                   onMapCreated: (mapCtrl) async {
                     controller.mapController = mapCtrl;
-                    final model =
-                        controller.minesModel.value;
+                    final model = controller.minesModel.value;
 
-                    if (model.latitude != null &&
-                        model.longitude != null) {
-                      await controller.moveCamera(
-                          model.latitude!,
-                          model.longitude!);
+                    if (model.latitude != null && model.longitude != null) {
+                      await controller.moveCamera(model.latitude!, model.longitude!);
                     }
                   },
                   // Uncomment if you want to drag map
@@ -47,25 +44,18 @@ class MinesLocation extends GetView<MinesController> {
                     ),
                   },*/
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                        controller
-                            .minesModel.value.latitude!,
-                        controller
-                            .minesModel.value.longitude!),
-                    zoom: 16,
+                    target: LatLng(controller.minesModel.value.latitude!, controller.minesModel.value.longitude!),
+                    zoom: 15,
                   ),
                   markers: {
                     Marker(
                       markerId: MarkerId(markerId),
                       position: LatLng(
-                        controller
-                            .minesModel.value.latitude!,
-                        controller
-                            .minesModel.value.longitude!,
+                        controller.minesModel.value.latitude!,
+                        controller.minesModel.value.longitude!,
                       ),
                       infoWindow: InfoWindow(
-                        title: controller
-                            .minesModel.value.name,
+                        title: controller.minesModel.value.name,
                       ),
                     ),
                   },

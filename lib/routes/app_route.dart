@@ -1,4 +1,7 @@
+import 'package:bohiba/bindings/fuel_station_finder_binding.dart';
+import 'package:bohiba/bindings/location_binding.dart';
 import 'package:bohiba/bindings/mines_binding.dart';
+import 'package:bohiba/pages/maps/fuel_station_finder_page.dart';
 
 import '/pages/user/user_profile/manage_account_page.dart';
 
@@ -288,6 +291,8 @@ class AppRoute {
   static const String addOwnerExpense = "/add-owner-expense";
   static const String allOwnerExpense = "/all-owner-expense";
   static const String ownerExpense = "/owner-expense";
+
+  static const String fuelStation = "/fuel-station";
 
   static final List<GetPage> routes = [
     GetPage(
@@ -747,6 +752,15 @@ class AppRoute {
       page: () => AllReceivedRequestPage(),
       transition: _transition,
       transitionDuration: _duration,
+    ),
+
+    GetPage(
+      name: fuelStation,
+      binding: FuelStationFinderBinding(),
+      bindings: [
+        LocationBinding(),
+      ],
+      page: () => FuelStationFinderPage(),
     ),
   ];
 

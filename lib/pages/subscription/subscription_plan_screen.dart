@@ -78,7 +78,7 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
 
   Widget _buildPlanSelector() {
     return SizedBox(
-      height: 50.h,
+      height: 28.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -91,10 +91,10 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
               onTap: () => controller.onPlanSelected(index),
               child: Container(
                 margin: EdgeInsets.only(right: 12.w),
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
                   color: isSelected ? bohibaTheme.primaryColor : Colors.transparent,
-                  borderRadius: BorderRadius.circular(25.r),
+                  borderRadius: BorderRadius.circular(8.r),
                   border: Border.all(
                     color: isSelected ? bohibaTheme.primaryColor : Colors.grey[300]!,
                   ),

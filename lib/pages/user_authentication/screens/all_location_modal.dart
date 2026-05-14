@@ -48,8 +48,7 @@ class AllLocationModal extends StatelessWidget {
                           'Please confirm the most accurate address from the list.',
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleSmall!.color,
                           ),
                         ),
@@ -61,18 +60,15 @@ class AllLocationModal extends StatelessWidget {
                         Get.back(
                             result: controller.selectedIndex.value == -1
                                 ? null
-                                : controller.arrLocation[
-                                    controller.selectedIndex.value]);
+                                : controller.arrLocation[controller.selectedIndex.value]);
                         controller.selectedIndex.value = -1;
                       },
                       child: Text(
                         'CLOSE',
                         style: TextStyle(
-                          fontSize:
-                              bohibaTheme.textTheme.headlineMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                          color: bohibaTheme.colorScheme.error,
+                          fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                          fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                          color: bohibaTheme.colorScheme.tertiary,
                         ),
                       ),
                     )
@@ -106,8 +102,7 @@ class AllLocationModal extends StatelessWidget {
                         itemCount: controller.arrLocation.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          Map<String, dynamic> locObj =
-                              controller.arrLocation[index];
+                          Map<String, dynamic> locObj = controller.arrLocation[index];
                           return Obx(
                             () {
                               return InkWell(
@@ -122,27 +117,22 @@ class AllLocationModal extends StatelessWidget {
                                   ),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color:
-                                          bohibaTheme.listTileTheme.tileColor,
+                                      color: bohibaTheme.listTileTheme.tileColor,
                                       borderRadius: BorderRadius.circular(12.r),
                                     ),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10.h, horizontal: 15.w),
+                                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Flexible(
                                           child: Text(
                                               '${locObj['name']}, ${locObj['locality']}, ${locObj['street']}, ${locObj['city']}, ${locObj['district']}, ${locObj['state']}, ${locObj['pincode']}, ${locObj['country']}'),
                                         ),
                                         RadioGroup(
-                                          groupValue:
-                                              controller.selectedIndex.value,
+                                          groupValue: controller.selectedIndex.value,
                                           onChanged: (v) {
                                             if (v == null) {
-                                              controller.selectedIndex.value =
-                                                  -1;
+                                              controller.selectedIndex.value = -1;
                                               return;
                                             }
                                             controller.selectAddress(v);
@@ -187,15 +177,13 @@ class AllLocationModal extends StatelessWidget {
                         Get.back(
                           result: controller.selectedIndex.value == -1
                               ? null
-                              : controller
-                                  .arrLocation[controller.selectedIndex.value],
+                              : controller.arrLocation[controller.selectedIndex.value],
                         );
                         controller.selectedIndex.value = -1;
                       },
                       label: controller.arrLocation.isEmpty ? 'Close' : 'Save',
-                      color: controller.arrLocation.isEmpty
-                          ? bohibaTheme.colorScheme.error
-                          : bohibaTheme.primaryColor,
+                      color:
+                          controller.arrLocation.isEmpty ? bohibaTheme.colorScheme.tertiary : bohibaTheme.primaryColor,
                       width: ScreenUtils.width / 2.3,
                     ),
                   ],

@@ -57,7 +57,9 @@ class MinesStatusGrid extends StatelessWidget {
                   width: ScreenUtils.width,
                   text: mineOutsideInfo[index].value ?? '',
                   overflowText: mineOutsideInfo[index].value ?? '',
-                  style: bohibaTheme.textTheme.headlineMedium,
+                  style: bohibaTheme.textTheme.headlineMedium?.copyWith(
+                    color: mineOutsideInfo[index].color ?? bohibaTheme.textTheme.headlineMedium!.color,
+                  ),
                   preserFontSize: [bohibaTheme.textTheme.headlineMedium!.fontSize!],
                 ),
               ],

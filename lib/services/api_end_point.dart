@@ -91,4 +91,7 @@ class ApiEndPoint {
   static const String apiNews = '$baseUrl/news';
 
   static const String apiSearchUser = '$baseUrl/search/user';
+
+  // Google Maps
+  static const String apiNearbySearch = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
 }

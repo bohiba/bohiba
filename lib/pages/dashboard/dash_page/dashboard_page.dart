@@ -157,14 +157,13 @@ class DashboardPage extends GetView<DashboardController> {
                 }),
                 Gap(ScreenUtils.height10),
 
-                /*
                 SingleTileTabComponent(
                   onTap: () {
-                    navigator.pushNamed(AppRoute.manageAccount);
+                    navigator.pushNamed(AppRoute.fuelStation);
                   },
-                  icon: Icons.account_circle_outlined,
-                  title: 'Manage Account',
-                ),*/
+                  icon: Icons.local_gas_station,
+                  title: 'Disel Station',
+                ),
                 SingleTileTabComponent(
                   onTap: () {
                     navigator.pushNamed(AppRoute.setting).then((onValue) async {
@@ -211,7 +210,8 @@ class DashboardPage extends GetView<DashboardController> {
                     GlobalService.showDialog(
                       status: AlertStatus.info,
                       title: 'Under Developement',
-                      description: 'This feature is currently under development and will be available in a future release. Stay tuned for updates!',
+                      description:
+                          'This feature is currently under development and will be available in a future release. Stay tuned for updates!',
                       onExit: () {
                         Navigator.pop(context);
                       },

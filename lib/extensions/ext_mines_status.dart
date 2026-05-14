@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
-extension ExtMinesStatus on int {
+extension ExtMinesStatus on String {
   String get minesStatusName {
-    switch (this) {
-      case 0:
+    switch (toLowerCase()) {
+      case 'blocked':
         return 'BLOCKED';
-      case 1:
+      case 'active':
         return 'ACTIVE';
-      case 2:
+      case 'inactive':
         return 'INACTIVE';
-      case 3:
+      case 'under maintenance':
         return 'UNDER MAINTENANCE';
-      case 4:
+      case 'temporarily closed':
         return 'TEMPORARILY CLOSED';
-      case 5:
+      case 'permanently closed':
         return 'PERMANENTLY CLOSED';
-      case 6:
+      case 'suspended':
         return 'SUSPENDED';
-      case 7:
+      case 'archived':
         return 'ARCHIVED';
-      case 8:
+      case 'under verification':
         return 'UNDER VERIFICATION';
       default:
         return 'UNKNOWN';
@@ -54,29 +54,29 @@ extension EnumMinesStatusExtension on String {
   }
 }
 
-extension MinesStatusColorExtension on int {
+extension MinesStatusColorExtension on String? {
   Color get minesStatusColor {
     switch (this) {
-      case 0:
+      case 'BLOCKED':
         return Colors.red;
-      case 1:
+      case 'ACTIVE':
         return Colors.green;
-      case 2:
+      case 'INACTIVE':
         return Colors.yellow;
-      case 3:
+      case 'UNDER MAINTENANCE':
         return Colors.orange;
-      case 4:
+      case 'TEMPORARILY CLOSED':
         return Colors.purple;
-      case 5:
+      case 'PERMANENTLY CLOSED':
         return Colors.pink;
-      case 6:
+      case 'SUSPENDED':
         return Colors.brown;
-      case 7:
+      case 'ARCHIVED':
         return Colors.grey;
-      case 8:
+      case 'UNDER VERIFICATION':
         return Colors.blue;
       default:
-        return Colors.black;
+        return Colors.yellow;
     }
   }
 }

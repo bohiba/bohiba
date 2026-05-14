@@ -62,7 +62,7 @@ class MinesLiveQueueStatus extends StatelessWidget {
                 height: 50,
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
                 decoration: BoxDecoration(
-                  color: item.owned == 1 ? bohibaTheme.colorScheme.onPrimary.withAlpha(50) : null,
+                  color: item.owned == 1 ? Colors.grey.shade200 : null,
                   border: Border(
                     bottom: BorderSide(color: bohibaTheme.dividerColor),
                   ),
@@ -77,7 +77,7 @@ class MinesLiveQueueStatus extends StatelessWidget {
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
                           fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
-                          color: bohibaTheme.textTheme.titleLarge!.color,
+                          color: bohibaTheme.textTheme.headlineLarge!.color,
                         ),
                       ),
                     ),
@@ -89,26 +89,28 @@ class MinesLiveQueueStatus extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 3,
-                      child: IntrinsicWidth(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 4.h),
-                          padding: EdgeInsets.symmetric(horizontal: 15.w),
-                          decoration: BoxDecoration(
-                            color: item.status?.truckWaitingStatusColor.withAlpha(35),
-                            borderRadius: BorderRadius.circular(5.r),
-                            border: Border.all(
-                              color:
-                                  item.status?.truckWaitingStatusColor.withAlpha(45) ?? bohibaTheme.colorScheme.error,
-                            ),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 15.w,
+                          vertical: 4.h,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                        ),
+                        decoration: BoxDecoration(
+                          color: item.status?.truckWaitingStatusColor.withAlpha(10),
+                          borderRadius: BorderRadius.circular(5.r),
+                          border: Border.all(
+                            color: item.status?.truckWaitingStatusColor.withAlpha(70) ?? bohibaTheme.colorScheme.error,
                           ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            item.status?.truckWaitingStatusName ?? '',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
-                            ),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          item.status?.truckWaitingStatusName ?? '',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
+                            fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
                           ),
                         ),
                       ),
@@ -118,6 +120,10 @@ class MinesLiveQueueStatus extends StatelessWidget {
                       child: Center(
                         child: Text(
                           '${item.watingTime ?? ''} min',
+                          style: TextStyle(
+                            fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
+                            fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
+                          ),
                         ),
                       ),
                     ),

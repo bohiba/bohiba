@@ -57,65 +57,26 @@ class MinesHorizontalCard extends GetView<AllMinesController> {
                         marqueeTextStyle: bohibaTheme.textTheme.bodyMedium,
                       ),
                       BohibaMarqueeText(
-                        width: ScreenUtils.width * 0.3,
-                        text: minesInfo.latitude.toString(),
-                        overflowText: minesInfo.longitude.toString(),
+                        width: ScreenUtils.width * 0.5,
+                        text: '${minesInfo.district ?? ''}, ${minesInfo.state ?? ''}',
+                        overflowText: '${minesInfo.district ?? ''}, ${minesInfo.state ?? ''}',
                         style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                          fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
                           fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                         marqueeTextStyle: TextStyle(
-                          fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                          fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
                           fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
+                        preserFontSize: [bohibaTheme.textTheme.titleSmall!.fontSize!],
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            /*GestureDetector(
-              onTapDown: (TapDownDetails tapDownDetails) => {
-                showMenu(
-                  context: context,
-                  position: RelativeRect.fromLTRB(
-                    tapDownDetails.globalPosition.dx,
-                    tapDownDetails.globalPosition.dy,
-                    0,
-                    0,
-                  ),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
-                  items: [
-                    PopupMenuItem(
-                      value: 'add_driver',
-                      child: Text(
-                        'Book',
-                        style: bohibaTheme.textTheme.labelMedium,
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'add_load',
-                      child: Text(
-                        'Remove',
-                        style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                          fontWeight:
-                              bohibaTheme.textTheme.labelMedium!.fontWeight,
-                          color: BohibaColors.warningColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              },
-              child: const Icon(EvaIcons.moreVertical),
-            )*/
           ],
         ),
       ),
@@ -150,7 +111,8 @@ class MinesVerticalCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: ScreenUtils.width10, right: ScreenUtils.width10, top: ScreenUtils.height10),
+              padding:
+                  EdgeInsets.only(left: ScreenUtils.width10, right: ScreenUtils.width10, top: ScreenUtils.height10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

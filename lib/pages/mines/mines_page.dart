@@ -54,7 +54,9 @@ class MinesPage extends GetView<MinesController> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MinesHeader(minesModel: controller.minesModel.value),
+                  MinesHeader(
+                    minesModel: controller.minesModel.value,
+                  ),
                   MinesStatusGrid(
                     mineOutsideInfo: [
                       StatusModel(
@@ -67,7 +69,7 @@ class MinesPage extends GetView<MinesController> {
                       ),
                       StatusModel(
                         name: "STATUS",
-                        value: controller.minesModel.value.status?.minesStatusName ?? '',
+                        value: controller.minesModel.value.status ?? '',
                         color: controller.minesModel.value.status?.minesStatusColor,
                       ),
                     ],

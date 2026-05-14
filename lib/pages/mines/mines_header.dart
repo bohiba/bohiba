@@ -34,7 +34,7 @@ class MinesHeader extends StatelessWidget {
                       style: bohibaTheme.textTheme.headlineSmall,
                     ),
                     Text(
-                      minesModel.stateId == 1 ? 'Odisha' : '',
+                      '${minesModel.district ?? ''}, ${minesModel.state ?? ''}',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
                         color: bohibaTheme.textTheme.titleMedium!.color,

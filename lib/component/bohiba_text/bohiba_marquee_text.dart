@@ -45,6 +45,7 @@ class BohibaMarqueeText extends StatelessWidget {
           speed: 10,
           alwaysScroll: alwaysScroll,
           style: marqueeTextStyle,
+          textAlign: alignText,
           text: TextSpan(
             text: overflowText ?? '',
           ),

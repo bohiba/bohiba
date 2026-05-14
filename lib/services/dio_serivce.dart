@@ -7,8 +7,7 @@ import '/services/pref_utils.dart';
 import 'package:dio/dio.dart';
 
 class DioService {
-  static final DioService _instance =
-      DioService._internal();
+  static final DioService _instance = DioService._internal();
   factory DioService() => _instance;
   final PrefUtils _prefUtils = PrefUtils();
 
@@ -20,8 +19,7 @@ class DioService {
       BaseOptions(
         baseUrl: ApiEndPoint.baseUrl,
         headers: {
-          if (_token != null)
-            'Authorization': 'Bearer $_token',
+          if (_token != null) 'Authorization': 'Bearer $_token',
         },
         connectTimeout: const Duration(seconds: 20),
         receiveTimeout: const Duration(seconds: 20),
@@ -41,6 +39,23 @@ class DioService {
 
   void clearToken() {
     _token = null;
+  }
+
+  Future<MapResponse> getMap(
+    String endpoint, {
+    Map<String, dynamic>? queryParams,
+  }) async {
+    final Response response = await dio.get(
+      endpoint,
+      queryParameters: queryParams,
+      cancelToken: CancelToken(),
+      options: Options(
+        extra: {
+          'withToken': false,
+        },
+      ),
+    );
+    return _handleMapResponse(response);
   }
 
   Future<ApiResponse> get(
@@ -138,8 +153,7 @@ class DioService {
     return _handleResponse(response);
   }
 
-  Future<ApiResponse> handleApiWithRetry(
-      Future<ApiResponse> Function() apiCall) async {
+  Future<ApiResponse> handleApiWithRetry(Future<ApiResponse> Function() apiCall) async {
     ApiResponse response = await apiCall();
 
     if (response.statusCode == 498) {
@@ -161,11 +175,9 @@ class DioService {
     ));
 
     try {
-      final response = await refreshDio
-          .post(ApiEndPoint.apiRefreshToken);
+      final response = await refreshDio.post(ApiEndPoint.apiRefreshToken);
 
-      if (response.statusCode == 200 &&
-          response.data['success'] == true) {
+      if (response.statusCode == 200 && response.data['success'] == true) {
         String token = response.data['data']['token'];
 
         await _prefUtils.saveString(PrefUtils.token, token);
@@ -181,10 +193,7 @@ class DioService {
 
   ApiResponse _handleResponse(Response<dynamic> response) {
     final data = response.data;
-    if (response.data is String &&
-        response.data
-            .toString()
-            .contains('<!DOCTYPE html>')) {
+    if (response.data is String && response.data.toString().contains('<!DOCTYPE html>')) {
       return ApiResponse(
         status: false,
         statusCode: 401,
@@ -205,6 +214,44 @@ class DioService {
       data: data["data"],
     );
   }
+
+  MapResponse _handleMapResponse(Response<dynamic> response) {
+    final data = response.data;
+    if (response.data is String && response.data.toString().contains('<!DOCTYPE html>')) {
+      return MapResponse(
+        status: false,
+        statusCode: 401,
+        message: 'Session expired or unauthorized',
+      );
+    } else if (data == null) {
+      return MapResponse(
+        status: false,
+        statusCode: response.statusCode ?? 500,
+        message: 'No response from server',
+      );
+    }
+
+    return MapResponse(
+      status: data["status"] == "OK" ? true : false,
+      statusCode: response.statusCode ?? 500,
+      message: data["message"] ?? "Unknown",
+      data: data["results"],
+    );
+  }
+}
+
+class MapResponse {
+  final bool status;
+  final int statusCode;
+  final String message;
+  final dynamic data;
+
+  MapResponse({
+    required this.status,
+    required this.statusCode,
+    required this.message,
+    this.data,
+  });
 }
 
 class ApiResponse {

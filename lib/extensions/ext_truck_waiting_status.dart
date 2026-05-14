@@ -4,7 +4,7 @@ extension TruckWaitingStatusExtension on int {
   String get truckWaitingStatusName {
     switch (this) {
       case 0:
-        return 'Arrived Outside';
+        return 'Arrived';
       case 1:
         return 'In Parking';
       case 2:
@@ -33,7 +33,7 @@ extension ExtTruckWaitingStatusColor on int {
       case 1:
         return Colors.green;
       case 2:
-        return Colors.yellow;
+        return Colors.grey;
       case 3:
         return Colors.orange;
       case 4:
