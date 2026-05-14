@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bohiba/services/dio_interceptor.dart';
+import 'package:bohiba/core/network/dio_interceptor.dart';
 
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';

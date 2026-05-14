@@ -18,7 +18,7 @@ import 'trip_service.dart';
 import 'truck_service.dart';
 import 'api_end_point.dart';
 import 'device_info_service.dart';
-import 'dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'global_service.dart';
 import 'owner_expense_service.dart';
 import 'rating_service.dart';
@@ -183,7 +183,9 @@ class MainService {
                 }
               }
 
-              if (trip.containsKey('documents') && trip['documents'] != null && (trip['documents'] as List).isNotEmpty) {
+              if (trip.containsKey('documents') &&
+                  trip['documents'] != null &&
+                  (trip['documents'] as List).isNotEmpty) {
                 List tripDocuments = trip['documents'];
                 List<Map<String, dynamic>> arrMapDoc = tripDocuments.map((doc) {
                   return TripDocument.toDB(doc);
@@ -204,7 +206,9 @@ class MainService {
                 }
               }
 
-              if (trip.containsKey('reassignment') && trip['reassignment'] != null && (trip['reassignment'] as List).isNotEmpty) {
+              if (trip.containsKey('reassignment') &&
+                  trip['reassignment'] != null &&
+                  (trip['reassignment'] as List).isNotEmpty) {
                 List tripReassignment = trip['reassignment'];
                 List<Map<String, dynamic>> arrMapReassign = tripReassignment.map((assign) {
                   return Reassignment.toDB(assign);

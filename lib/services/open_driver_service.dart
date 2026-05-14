@@ -1,4 +1,4 @@
-import 'dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'api_end_point.dart';
 import 'global_service.dart';
 import 'device_info_service.dart';

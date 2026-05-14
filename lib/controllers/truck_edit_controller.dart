@@ -2,7 +2,7 @@ import '../model/user_model.dart';
 import '/model/truck_model.dart';
 import '/services/driver_service.dart';
 import '/services/truck_service.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import '/services/global_service.dart';
 
 import 'package:flutter/material.dart';

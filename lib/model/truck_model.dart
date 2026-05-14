@@ -3,6 +3,7 @@ class TruckModel {
   bool? isFav;
   String? truckImage;
   String? regdNumber;
+  int? trips;
 
   int? driverId;
   String? driverUuid;
@@ -46,6 +47,7 @@ class TruckModel {
     this.truckImage,
     this.regdNumber,
     this.isFav = false,
+    this.trips = 0,
     this.driverId,
     this.driverImage,
     this.driverUuid,
@@ -90,6 +92,7 @@ class TruckModel {
       'isFav': json['is_fav'] == false ? 0 : 1,
       'image': json['truck_image'],
       'vhNumber': json['regd_number'],
+      'trips': json['trips'],
       'driverId': driver['id'],
       'driverImage': driver['image'],
       'driverUuid': driver['uuid'],
@@ -130,6 +133,7 @@ class TruckModel {
         truckImage: map['image'],
         regdNumber: map['vhNumber'],
         isFav: map['isFav'] == 0 ? false : true,
+        trips: map['trips'],
       )
         ..driverId = map['driverId']
         ..driverUuid = map['driverUuid']

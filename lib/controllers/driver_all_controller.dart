@@ -1,7 +1,7 @@
 import '../dist/enums/app_enums.dart';
 import '../model/user_model.dart';
 import '/services/driver_service.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 

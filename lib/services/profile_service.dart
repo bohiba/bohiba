@@ -5,7 +5,7 @@ import '/services/rating_service.dart';
 import 'pref_utils.dart';
 import 'api_end_point.dart';
 import 'device_info_service.dart';
-import 'dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'global_service.dart';
 import 'main_service.dart';
 import 'db2_service.dart';
@@ -268,7 +268,10 @@ class ProfileService {
           if (dbSuccess > 0) {
             ProfileModel profileModel = ProfileModel.fromDb(resMap);
             await _prefUtils.saveInt(PrefUtils.roleKey, resMap['roleId']);
-            if (resObj.containsKey('ratings') && resObj['ratings'] != null && resObj['ratings'] is List && (resObj['ratings'] as List).isNotEmpty) {
+            if (resObj.containsKey('ratings') &&
+                resObj['ratings'] != null &&
+                resObj['ratings'] is List &&
+                (resObj['ratings'] as List).isNotEmpty) {
               List arrRating = resObj['ratings'];
               List<Map<String, dynamic>> arrMapRating = arrRating.map((e) {
                 e['driverUuid'] = profileModel.uuid;
@@ -396,7 +399,8 @@ class ProfileService {
       profile.trucks = (profile.trucks == null) ? 1 : (profile.trucks! + 1);
     }
 
-    final String strUpdateQuery = ''' UPDATE $tblProfile SET trucks = ${profile.trucks ?? 0} WHERE uuid = '${profile.uuid}' ''';
+    final String strUpdateQuery =
+        ''' UPDATE $tblProfile SET trucks = ${profile.trucks ?? 0} WHERE uuid = '${profile.uuid}' ''';
     int updateSuccess = await _databaseService.updateData(strUpdateQuery);
     return updateSuccess;
   }
@@ -411,7 +415,8 @@ class ProfileService {
     } else {
       profile.driver = (profile.driver == null) ? 1 : (profile.driver! + 1);
     }
-    final String strUpdateQuery = ''' UPDATE $tblProfile SET driver = ${profile.driver ?? 0} WHERE uuid = '${profile.uuid}' ''';
+    final String strUpdateQuery =
+        ''' UPDATE $tblProfile SET driver = ${profile.driver ?? 0} WHERE uuid = '${profile.uuid}' ''';
     int updateSuccess = await _databaseService.updateData(strUpdateQuery);
     return updateSuccess;
   }

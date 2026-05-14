@@ -99,10 +99,10 @@ class TruckTile extends GetView<TruckAllController> {
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
                       RoleWidget(
-                        truckOwnerWidget: truckInfo.driverName == null
+                        truckOwnerWidget: truckInfo.trips == null || truckInfo.trips == 0
                             ? null
                             : Text(
-                                truckInfo.driverName ?? 'Not Assigned',
+                                '${truckInfo.trips} ${(truckInfo.trips ?? 0) > 1 ? "Trips" : "Trip"}',
                                 maxLines: 1,
                                 style: TextStyle(
                                   fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,

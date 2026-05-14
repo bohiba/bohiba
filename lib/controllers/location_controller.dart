@@ -4,7 +4,7 @@ import 'package:bohiba/dist/enums/location_enums.dart';
 
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import '/services/global_service.dart';
 
 import 'package:dio/dio.dart';

@@ -1,6 +1,6 @@
 import '/model/user_model.dart';
 import '/services/api_end_point.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 
 class SearchService {
   static final DioService _dioService = DioService();

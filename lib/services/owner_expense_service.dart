@@ -5,7 +5,7 @@ import '/model/owner_expenses_model.dart';
 import 'api_end_point.dart';
 import 'db2_service.dart';
 import 'device_info_service.dart';
-import 'dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'global_service.dart';
 
 class OwnerExpenseService {
@@ -17,7 +17,8 @@ class OwnerExpenseService {
   // static int _currentPage = 1;
   // static int _lastPage = 1;
 
-  static Future<OwnerExpense?> getExpense({required int id, MethodType type = MethodType.local, bool showProgress = true}) async {
+  static Future<OwnerExpense?> getExpense(
+      {required int id, MethodType type = MethodType.local, bool showProgress = true}) async {
     if (type == MethodType.local) {
       String strGetQuery = ''' SELECT * FROM $tblOwnerExpense WHERE id = $id; ''';
 

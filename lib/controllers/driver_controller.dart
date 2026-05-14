@@ -2,7 +2,7 @@ import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
 import '/services/profile_service.dart';
 import '/services/rating_service.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import '/services/driver_service.dart';
 
 import 'package:get/get.dart';
@@ -27,7 +27,14 @@ class DriverController extends GetxController {
   Rx<ProfileModel> profileModel = ProfileModel().obs;
 
   RxList<UserModel> arrDriver = <UserModel>[].obs;
-  final List suggestion = ['Safe Driver', 'Need improvement in Driving', 'Great service', 'Hard working', 'Highly recommend', 'Skillfull'];
+  final List suggestion = [
+    'Safe Driver',
+    'Need improvement in Driving',
+    'Great service',
+    'Hard working',
+    'Highly recommend',
+    'Skillfull'
+  ];
 
   @override
   void onInit() {

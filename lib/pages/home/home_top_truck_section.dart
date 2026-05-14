@@ -15,7 +15,8 @@ class HomeTopTruck extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final NavigatorState navigatorState = Navigator.of(context);
+    final NavigatorState navigatorState =
+        Navigator.of(context);
     return Obx(() {
       if (controller.arrTruck.value?.isEmpty ?? true) {
         return SizedBox.shrink();
@@ -30,12 +31,14 @@ class HomeTopTruck extends GetView<HomeController> {
                 children: [
                   Text(
                     'Truck',
-                    style: bohibaTheme.textTheme.headlineMedium,
+                    style: bohibaTheme
+                        .textTheme.headlineMedium,
                   ),
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      navigatorState.pushNamed(AppRoute.allTruck);
+                      navigatorState
+                          .pushNamed(AppRoute.allTruck);
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -44,7 +47,8 @@ class HomeTopTruck extends GetView<HomeController> {
                       child: Text(
                         'See All',
                         style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.headlineSmall!.fontSize,
+                          fontSize: bohibaTheme.textTheme
+                              .headlineSmall!.fontSize,
                           color: bohibaTheme.primaryColor,
                         ),
                       ),
@@ -64,12 +68,20 @@ class HomeTopTruck extends GetView<HomeController> {
                     right: ScreenUtils.width15,
                     bottom: ScreenUtils.height15,
                   ),
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics:
+                      const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: (controller.arrTruck.value?.length ?? 0) > 3 ? 3 : controller.arrTruck.value?.length ?? 0,
+                  itemCount: (controller
+                                  .arrTruck.value?.length ??
+                              0) >
+                          3
+                      ? 3
+                      : controller.arrTruck.value?.length ??
+                          0,
                   itemBuilder: (context, index) {
                     if (controller.arrTruck.value != null) {
-                      TruckModel truckModel = controller.arrTruck.value![index];
+                      TruckModel truckModel =
+                          controller.arrTruck.value![index];
                       return TruckTile(
                           truckInfo: truckModel,
                           allowedActions: [
@@ -82,11 +94,13 @@ class HomeTopTruck extends GetView<HomeController> {
                             navigatorState
                                 .pushNamed(
                               AppRoute.truck,
-                              arguments: truckModel.regdNumber,
+                              arguments:
+                                  truckModel.regdNumber,
                             )
                                 .then((onValue) async {
                               if (onValue != null) {
-                                await controller.getTruckList();
+                                await controller
+                                    .getTruckList();
                               }
                             });
                           });

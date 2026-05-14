@@ -6,7 +6,7 @@ import '../dist/enums/app_enums.dart';
 import '../model/user_model.dart';
 import 'api_end_point.dart';
 import 'device_info_service.dart';
-import 'dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'db2_service.dart';
 import 'global_service.dart';
 import 'profile_service.dart';

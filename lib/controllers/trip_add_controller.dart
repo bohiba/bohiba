@@ -8,7 +8,7 @@ import '../dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
 
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import '/services/trip_service.dart';
 import '/services/truck_service.dart';
 import '/services/global_service.dart';

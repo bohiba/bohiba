@@ -31,14 +31,14 @@ class OtpController extends GetxController {
     _startCountdown();
   }
 
-  void _cancelTimer() {
-    if (_timer!.isActive) {
-      _timer?.cancel();
-    }
+  void stopTimer() {
+    _timer = null;
+    _timer?.cancel();
+    remainingSeconds.value = 0;
   }
 
   Future<int> resendOtp() async {
-    _cancelTimer();
+    stopTimer();
     int success = await AuthService.resendOtp(email.value);
     if (success > 0) {
       _startCountdown();
@@ -58,14 +58,14 @@ class OtpController extends GetxController {
     );
     otpController.clear();
     if (success != 1) {
-      _cancelTimer();
+      stopTimer();
     }
     return success;
   }
 
   void _startCountdown() {
+    stopTimer();
     remainingSeconds.value = 60;
-    _timer?.cancel();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingSeconds.value > 0) {
@@ -79,7 +79,7 @@ class OtpController extends GetxController {
   @override
   void dispose() {
     otpController.dispose();
-    _cancelTimer();
+    stopTimer();
     super.dispose();
   }
 }

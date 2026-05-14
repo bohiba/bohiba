@@ -5,7 +5,7 @@ import '/services/db2_service.dart';
 import '/services/firebase_app_service.dart';
 import '/services/main_service.dart';
 import '/services/pref_utils.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import '/services/user_role_type.dart';
 import '/services/profile_service.dart';
 import '/services/device_info_service.dart';

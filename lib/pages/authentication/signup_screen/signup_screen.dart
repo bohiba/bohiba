@@ -107,12 +107,6 @@ class SignupScreen extends GetView<SignupController> {
                       ],
                     ),
                   ),
-                  Visibility(
-                    visible: controller.isDisabled.value,
-                    child: Text(
-                      '00:${controller.secondsLeft} secounds',
-                    ),
-                  ),
                   Container(
                     height: ScreenUtils.height30,
                     margin: EdgeInsets.symmetric(vertical: ScreenUtils.height20),

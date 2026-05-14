@@ -11,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 26;
+  static int dbversion = 27;
 
   /*================  DB CONFIG  =================== */
 
@@ -325,6 +325,7 @@ class DatabaseService {
   , isFav INTEGER NOT NULL DEFAULT 0
   , image TEXT
   , vhNumber TEXT
+  , trips INTEGER NOT NULL DEFAULT 0
   , driverId INTEGER
   , driverImage TEXT
   , driverUuid TEXT

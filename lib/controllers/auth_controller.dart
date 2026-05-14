@@ -1,7 +1,7 @@
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import '/services/pref_utils.dart';
 import '/services/auth_service.dart';
 
@@ -40,8 +40,7 @@ class AuthController extends GetxController {
       return false;
     }
     GlobalService.showProgress();
-    ApiResponse serviceResponse =
-        await _dioService.post(ApiEndPoint.apiRefreshToken);
+    ApiResponse serviceResponse = await _dioService.post(ApiEndPoint.apiRefreshToken);
     GlobalService.dismissProgress();
     switch (serviceResponse.statusCode) {
       case 401:

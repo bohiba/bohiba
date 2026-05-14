@@ -1,7 +1,7 @@
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
 import '/services/profile_service.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,8 +51,7 @@ class AddressAuthController extends GetxController {
       'country': aCountryCtrl.text.trim(),
     };
 
-    int verifyAddress = await ProfileService.addOrUpdateAddress(
-        bodyMap: bodyObj, initAddress: true);
+    int verifyAddress = await ProfileService.addOrUpdateAddress(bodyMap: bodyObj, initAddress: true);
     return verifyAddress;
   }
 }

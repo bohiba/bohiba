@@ -448,7 +448,7 @@ class GlobalService {
       isProgressOpen = false;
     }
 
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 35), () {
       if (isProgressOpen) {
         dismissProgress();
       }

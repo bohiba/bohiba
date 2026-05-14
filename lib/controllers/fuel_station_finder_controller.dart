@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 import 'package:bohiba/component/image_path.dart';
 import 'package:bohiba/controllers/location_controller.dart';
 import 'package:bohiba/services/api_end_point.dart';
-import 'package:bohiba/services/dio_serivce.dart';
+import 'package:bohiba/core/network/dio_serivce.dart';
 import 'package:bohiba/services/global_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,6 +51,14 @@ class FuelStationFinderController extends GetxController {
 
       if (position != null) {
         currentPosition.value = LatLng(position.latitude, position.longitude);
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: currentPosition.value!,
+              zoom: 13,
+            ),
+          ),
+        );
         await fetchNearbyPetrolPumps(
           LatLng(position.latitude, position.longitude),
           showProgress: true,
@@ -99,23 +107,13 @@ class FuelStationFinderController extends GetxController {
         }
 
         GlobalService.printHandler("Nearby Petrol Pump : $data");
-        // nearbyMarkers.value = data.map((place) {
-        //   final lat = place['geometry']['location']['lat'];
-        //   final lng = place['geometry']['location']['lng'];
-        //   final name = place['name'];
-        //   final id = place['place_id'];
 
-        //   return Marker(
-        //     markerId: MarkerId(id),
-        //     position: LatLng(lat, lng),
-        //     infoWindow: InfoWindow(
-        //       title: name,
-        //       snippet: place['vicinity'],
-        //     ),
-        //   );
-        // }).toSet();
+        nearbyMarkers.value = data.where((place) {
+          final bool operationalStatus = place['business_status'] == "OPERATIONAL";
+          final bool openNow = place['opening_hours']?['open_now'] ?? false;
 
-        nearbyMarkers.value = data.map((place) {
+          return operationalStatus && openNow;
+        }).map((place) {
           final lat = place['geometry']['location']['lat'];
           final lng = place['geometry']['location']['lng'];
           final name = place['name'];
@@ -123,15 +121,11 @@ class FuelStationFinderController extends GetxController {
 
           return Marker(
             markerId: MarkerId(id),
-
             position: LatLng(lat, lng),
-
-            // CUSTOM SVG ICON
             icon: petrolPumpIcon.value,
-
             infoWindow: InfoWindow(
               title: name,
-              snippet: "${place['rating'].toString()} Star",
+              snippet: "${place['rating']?.toString() ?? '0'} Star",
             ),
           );
         }).toSet();

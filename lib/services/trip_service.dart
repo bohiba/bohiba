@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'api_end_point.dart';
 import 'device_info_service.dart';
-import 'dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'global_service.dart';
 import 'db2_service.dart';
 
@@ -224,7 +224,9 @@ class TripService {
               }
             }
 
-            if (trip.containsKey('reassignment') && trip['reassignment'] != null && (trip['reassignment'] as List).isNotEmpty) {
+            if (trip.containsKey('reassignment') &&
+                trip['reassignment'] != null &&
+                (trip['reassignment'] as List).isNotEmpty) {
               List tripReassignment = trip['reassignment'];
               List<Map<String, dynamic>> arrMapReassign = tripReassignment.map((assign) {
                 return Reassignment.toDB(assign);
@@ -290,7 +292,8 @@ class TripService {
           }).toList() ??
           [];
 
-      final List<Map<String, dynamic>>? arrExpense = await _databaseService.executeQuery("SELECT * FROM tblTripExpense WHERE tripId = $tripId");
+      final List<Map<String, dynamic>>? arrExpense =
+          await _databaseService.executeQuery("SELECT * FROM tblTripExpense WHERE tripId = $tripId");
 
       trip.expenses = arrExpense?.map((e) {
             return TripExpense(
@@ -307,7 +310,8 @@ class TripService {
           [];
 
       // REASSIGNMENT
-      final List<Map<String, dynamic>>? arrReassignment = await _databaseService.executeQuery("SELECT * FROM $tblReassignment WHERE tripId = $tripId");
+      final List<Map<String, dynamic>>? arrReassignment =
+          await _databaseService.executeQuery("SELECT * FROM $tblReassignment WHERE tripId = $tripId");
       trip.reassignment = arrReassignment?.map((r) {
             return Reassignment(
               id: r['id'],
@@ -321,7 +325,8 @@ class TripService {
           [];
 
       // TRIP-DOCUMENT
-      final List<Map<String, dynamic>>? arrTripDoc = await _databaseService.executeQuery("SELECT * FROM $tblDocument WHERE tripId = $tripId");
+      final List<Map<String, dynamic>>? arrTripDoc =
+          await _databaseService.executeQuery("SELECT * FROM $tblDocument WHERE tripId = $tripId");
       trip.documents = arrTripDoc?.map((d) {
             return TripDocument(
               id: d['id'],
@@ -387,9 +392,13 @@ class TripService {
             tripModel = TripModel.fromDb(mapTrip);
             // UPDATE payment
             List<TripPayment> arrPayment = [];
-            if (tripObj.containsKey('payments') && tripObj['payments'] != null && tripObj['payments'] is List && (tripObj['payments'] as List).isNotEmpty) {
+            if (tripObj.containsKey('payments') &&
+                tripObj['payments'] != null &&
+                tripObj['payments'] is List &&
+                (tripObj['payments'] as List).isNotEmpty) {
               List tripPayment = tripObj['payments'];
-              List<Map<String, dynamic>> arrMapPayment = tripPayment.map((payment) => TripPayment.toDB(payment)).toList();
+              List<Map<String, dynamic>> arrMapPayment =
+                  tripPayment.map((payment) => TripPayment.toDB(payment)).toList();
 
               int upsertPayment = await _databaseService.insertAllData(tblTripPayment, arrMapPayment);
               if (upsertPayment > 0) {
@@ -400,7 +409,10 @@ class TripService {
 
             // UPDATE reassignment
             List<Reassignment> arrReassigModel = [];
-            if (tripObj.containsKey('reassignment') && tripObj['reassignment'] != null && tripObj['reassignment'] is List && (tripObj['reassignment'] as List).isNotEmpty) {
+            if (tripObj.containsKey('reassignment') &&
+                tripObj['reassignment'] != null &&
+                tripObj['reassignment'] is List &&
+                (tripObj['reassignment'] as List).isNotEmpty) {
               List tripReassign = tripObj['reassignment'];
               List<Map<String, dynamic>> arrMapReassign = tripReassign.map((r) {
                 return Reassignment.toDB(r);
@@ -420,7 +432,10 @@ class TripService {
 
             // UPDATE expenses
             List<TripExpense> arrExpenseModel = [];
-            if (tripObj.containsKey('expenses') && tripObj['expenses'] != null && tripObj['expenses'] is List && (tripObj['expenses'] as List).isNotEmpty) {
+            if (tripObj.containsKey('expenses') &&
+                tripObj['expenses'] != null &&
+                tripObj['expenses'] is List &&
+                (tripObj['expenses'] as List).isNotEmpty) {
               List tripExpense = tripObj['expenses'];
               List<Map<String, dynamic>> arrMapExpense = tripExpense.map((expense) {
                 return TripExpense.toDB(expense);
@@ -440,7 +455,10 @@ class TripService {
 
             // UPDATE documents
             List<TripDocument> arrDocModel = [];
-            if (tripObj.containsKey('documents') && tripObj['documents'] != null && tripObj['documents'] is List && (tripObj['documents'] as List).isNotEmpty) {
+            if (tripObj.containsKey('documents') &&
+                tripObj['documents'] != null &&
+                tripObj['documents'] is List &&
+                (tripObj['documents'] as List).isNotEmpty) {
               List docList = tripObj['documents'];
               List<Map<String, dynamic>> arrMapDoc = docList.map((r) {
                 return TripDocument.toDB(r);
@@ -1120,7 +1138,8 @@ class TripService {
     if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
-    ApiResponse res = await _dioService.upload(ApiEndPoint.apiAddTripDoc, imageList, fileField: 'doc_image', body: bodyObj);
+    ApiResponse res =
+        await _dioService.upload(ApiEndPoint.apiAddTripDoc, imageList, fileField: 'doc_image', body: bodyObj);
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:

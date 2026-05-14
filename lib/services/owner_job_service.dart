@@ -4,7 +4,7 @@ import '/model/job_detail_model.dart';
 import '/services/global_service.dart';
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
-import '/services/dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 
 class OwnerJobService {
   static final DioService _dioService = DioService();

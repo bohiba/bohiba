@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bohiba/dist/enums/api_status_code.dart';
 import 'package:dio/dio.dart';
 
 import '/routes/app_route.dart';
@@ -15,7 +16,7 @@ import '/model/logged_in_user_model.dart';
 import 'profile_service.dart';
 import 'api_end_point.dart';
 import 'device_info_service.dart';
-import 'dio_serivce.dart';
+import '../core/network/dio_serivce.dart';
 import 'global_service.dart';
 import 'pref_utils.dart';
 import 'db2_service.dart';
@@ -295,23 +296,30 @@ class AuthService {
       withToken: false,
     );
     GlobalService.dismissProgress();
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.showSnackBar(
-          status: AlertStatus.warning,
-          desc: serviceResponse.message,
-        );
-        return 0;
-      case 200:
+    StatusCode statusCode = StatusCode.fromCode(serviceResponse.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
         GlobalService.showSnackBar(
           status: AlertStatus.success,
           desc: serviceResponse.message,
         );
         return 1;
+      case StatusCode.tooManyRequests:
+        GlobalService.showSnackBar(
+          status: AlertStatus.info,
+          desc: serviceResponse.message,
+        );
+        return 0;
+      case StatusCode.unauthorized:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: serviceResponse.message,
+        );
+        return 0;
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
-          desc: 'Failed to send otp',
+          desc: serviceResponse.message,
         );
         return 0;
     }
