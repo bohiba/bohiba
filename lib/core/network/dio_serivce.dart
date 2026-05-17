@@ -198,12 +198,14 @@ class DioService {
         status: false,
         statusCode: 401,
         message: 'Session expired or unauthorized',
+        errorMessage: 'Something went wrong.',
       );
     } else if (data == null) {
       return ApiResponse(
         status: false,
         statusCode: response.statusCode ?? 500,
         message: 'No response from server',
+        errorMessage: 'No response from server',
       );
     }
 
@@ -212,6 +214,7 @@ class DioService {
       statusCode: response.statusCode ?? 500,
       message: data["message"] ?? "Unknown",
       data: data["data"],
+      errorMessage: data["errors"],
     );
   }
 
@@ -259,12 +262,14 @@ class ApiResponse {
   final int statusCode;
   final String message;
   final dynamic data;
+  final String errorMessage;
   final Map<dynamic, dynamic>? pagination;
 
   ApiResponse({
     required this.status,
     required this.statusCode,
     required this.message,
+    required this.errorMessage,
     this.data,
     this.pagination,
   });

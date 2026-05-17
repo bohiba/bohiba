@@ -264,23 +264,23 @@ class GlobalService {
     IconData iconData = Icons.error;
     switch (status) {
       case AlertStatus.success:
-        color = bohibaTheme.colorScheme.onPrimary;
+        color = bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.95);
         iconData = Remix.checkbox_circle_fill;
         break;
       case AlertStatus.info:
-        color = bohibaTheme.colorScheme.primary;
+        color = bohibaTheme.colorScheme.primary.withValues(alpha: 0.95);
         iconData = Icons.info;
         break;
       case AlertStatus.warning:
-        color = bohibaTheme.colorScheme.tertiary;
+        color = bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.95);
         iconData = Icons.warning;
         break;
       case AlertStatus.failure:
-        color = bohibaTheme.colorScheme.tertiary;
+        color = bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.95);
         iconData = Icons.error;
         break;
       case AlertStatus.noInternet:
-        color = bohibaTheme.colorScheme.error;
+        color = bohibaTheme.colorScheme.error.withValues(alpha: 0.95);
         iconData = Icons.wifi_off_rounded;
         break;
     }
@@ -294,8 +294,8 @@ class GlobalService {
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
           style: TextStyle(
-            fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-            fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+            fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+            fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
             color: bohibaTheme.textTheme.displayLarge!.color,
           ),
         ),
@@ -311,23 +311,20 @@ class GlobalService {
         margin: EdgeInsets.symmetric(horizontal: 15.w),
         padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
         duration: const Duration(seconds: 2),
-        mainButton: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: actionButton ??
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(
-                  'CLOSE',
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                    fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                    color: bohibaTheme.textTheme.displayLarge!.color,
-                  ),
+        mainButton: actionButton ??
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(
+                'CLOSE',
+                style: TextStyle(
+                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                  fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                  color: bohibaTheme.textTheme.displayLarge!.color,
                 ),
               ),
-        ),
+            ),
       ),
     );
   }

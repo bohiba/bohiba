@@ -304,22 +304,28 @@ class AuthService {
           desc: serviceResponse.message,
         );
         return 1;
+      case StatusCode.conflict:
+        GlobalService.showSnackBar(
+          status: AlertStatus.info,
+          desc: serviceResponse.errorMessage,
+        );
+        return 0;
       case StatusCode.tooManyRequests:
         GlobalService.showSnackBar(
           status: AlertStatus.info,
-          desc: serviceResponse.message,
+          desc: serviceResponse.errorMessage,
         );
         return 0;
       case StatusCode.unauthorized:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
-          desc: serviceResponse.message,
+          desc: serviceResponse.errorMessage,
         );
         return 0;
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
-          desc: serviceResponse.message,
+          desc: serviceResponse.errorMessage,
         );
         return 0;
     }
