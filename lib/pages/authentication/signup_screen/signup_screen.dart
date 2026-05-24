@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/enums/otp_purpose.dart';
+
 import '../../../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 import 'package:flutter/services.dart';
@@ -96,7 +98,7 @@ class SignupScreen extends GetView<SignupController> {
                                           AppRoute.otpScreen,
                                           arguments: {
                                             "email": strEmail,
-                                            "nxtRoute": AppRoute.createUser,
+                                            "otpPurpose": OtpPurpose.createUser,
                                           },
                                         );
                                       }

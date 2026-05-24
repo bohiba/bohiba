@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
-import '../../controllers/all_mines_controller.dart';
-import '/model/mines_model.dart';
+import '../../controllers/all_company_controller.dart';
+import '../../model/company_model.dart';
 import 'package:get/get.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:marquee_text/marquee_text.dart';
 
-class MinesHorizontalCard extends GetView<AllMinesController> {
-  final MinesModel minesInfo;
-  const MinesHorizontalCard({super.key, required this.minesInfo});
+class CompanyHorizontalCard extends GetView<AllCompanyController> {
+  final CompanyModel minesInfo;
+  const CompanyHorizontalCard({super.key, required this.minesInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,8 @@ class MinesHorizontalCard extends GetView<AllMinesController> {
                     radius: 20,
                     backgroundColor: bohibaTheme.colorScheme.surface,
                     // backgroundColor: bohibaTheme.dividerColor,
-                    backgroundImage: NetworkImage(GlobalService.getAvatarUrl(minesInfo.nameCode ?? 'NA')),
+                    backgroundImage: NetworkImage(
+                        GlobalService.getAvatarUrl(minesInfo.nameCode ?? 'NA')),
                   ),
                   Gap(ScreenUtils.width20),
                   Column(
@@ -58,19 +59,25 @@ class MinesHorizontalCard extends GetView<AllMinesController> {
                       ),
                       BohibaMarqueeText(
                         width: ScreenUtils.width * 0.5,
-                        text: '${minesInfo.district ?? ''}, ${minesInfo.state ?? ''}',
-                        overflowText: '${minesInfo.district ?? ''}, ${minesInfo.state ?? ''}',
+                        text:
+                            '${minesInfo.district ?? ''}, ${minesInfo.state ?? ''}',
+                        overflowText:
+                            '${minesInfo.district ?? ''}, ${minesInfo.state ?? ''}',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
                         marqueeTextStyle: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleMedium!.color,
                         ),
-                        preserFontSize: [bohibaTheme.textTheme.titleSmall!.fontSize!],
+                        preserFontSize: [
+                          bohibaTheme.textTheme.titleSmall!.fontSize!
+                        ],
                       ),
                     ],
                   ),
@@ -84,9 +91,9 @@ class MinesHorizontalCard extends GetView<AllMinesController> {
   }
 }
 
-class MinesVerticalCard extends StatelessWidget {
-  final MinesModel minesInfo;
-  const MinesVerticalCard({super.key, required this.minesInfo});
+class CompanyVerticalCard extends StatelessWidget {
+  final CompanyModel minesInfo;
+  const CompanyVerticalCard({super.key, required this.minesInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +118,10 @@ class MinesVerticalCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding:
-                  EdgeInsets.only(left: ScreenUtils.width10, right: ScreenUtils.width10, top: ScreenUtils.height10),
+              padding: EdgeInsets.only(
+                  left: ScreenUtils.width10,
+                  right: ScreenUtils.width10,
+                  top: ScreenUtils.height10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

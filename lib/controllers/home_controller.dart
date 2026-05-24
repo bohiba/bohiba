@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../model/user_model.dart';
-import '/model/mines_model.dart';
+import '../model/company_model.dart';
 import '/model/news_model.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
@@ -26,7 +26,7 @@ class HomeController extends GetxController {
   final Rxn<List<FavouriteModel>> arrFavList = Rxn<List<FavouriteModel>>();
   final Rxn<List<TripModel>> arrTrip = Rxn<List<TripModel>>();
   final Rxn<List<TruckModel>> arrTruck = Rxn<List<TruckModel>>();
-  final Rxn<List<MinesModel>> arrMines = Rxn<List<MinesModel>>();
+  final Rxn<List<CompanyModel>> arrMines = Rxn<List<CompanyModel>>();
   final Rxn<List<UserModel>> arrDriver = Rxn<List<UserModel>>();
   final RxList arrOwnerExpense = [].obs;
   final RxList arrLookingJob = [].obs;
@@ -57,7 +57,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> getProfile() async {
-    ProfileModel? profileModel = await ProfileService.getProfile(showProgress: false);
+    ProfileModel? profileModel =
+        await ProfileService.getProfile(showProgress: false);
     if (profileModel != null) {
       profile.value = profileModel;
     }
@@ -167,7 +168,8 @@ class HomeController extends GetxController {
     bool refreshPage = false,
     bool showLoading = true,
   }) async {
-    Map<String, dynamic>? mainObj = await MainService.mainApi(type: methodType, showProgress: showLoading);
+    Map<String, dynamic>? mainObj =
+        await MainService.mainApi(type: methodType, showProgress: showLoading);
     if (mainObj != null) {
       if (mainObj.containsKey('drivers')) {
         arrDriver.value?.clear();

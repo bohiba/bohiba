@@ -1,3 +1,4 @@
+import 'package:bohiba/dist/enums/otp_purpose.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,9 @@ class OtpScreen extends GetView<OtpController> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (result == true) {
-          Get.back(closeOverlays: true);
+          WidgetsBinding.instance.addPersistentFrameCallback((duration) {
+            navigateState.pop(true);
+          });
         }
       },
       child: Scaffold(
@@ -39,8 +42,10 @@ class OtpScreen extends GetView<OtpController> {
                       child: Text(
                         'Verify PIN',
                         style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.displayMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.displayMedium!.fontWeight,
+                          fontSize:
+                              bohibaTheme.textTheme.displayMedium!.fontSize,
+                          fontWeight:
+                              bohibaTheme.textTheme.displayMedium!.fontWeight,
                           color: bohibaTheme.textTheme.displayMedium!.color,
                         ),
                       ),
@@ -53,8 +58,10 @@ class OtpScreen extends GetView<OtpController> {
                             child: Text(
                               'Enter 6 digit code you have received in ',
                               style: TextStyle(
-                                fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                fontSize:
+                                    bohibaTheme.textTheme.bodyMedium!.fontSize,
+                                fontWeight:
+                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
                                 color: bohibaTheme.textTheme.titleLarge!.color,
                               ),
                             ),
@@ -63,8 +70,10 @@ class OtpScreen extends GetView<OtpController> {
                             child: Text(
                               controller.email.value,
                               style: TextStyle(
-                                fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                fontSize:
+                                    bohibaTheme.textTheme.bodySmall!.fontSize,
+                                fontWeight:
+                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
                                 color: bohibaTheme.textTheme.bodySmall!.color,
                               ),
                             ),
@@ -79,8 +88,10 @@ class OtpScreen extends GetView<OtpController> {
                               child: Text(
                                 'Edit',
                                 style: TextStyle(
-                                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                                  fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                                  fontSize: bohibaTheme
+                                      .textTheme.bodyMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodyMedium!.fontWeight,
                                   color: bohibaTheme.textTheme.bodySmall!.color,
                                 ),
                               ),
@@ -116,39 +127,60 @@ class OtpScreen extends GetView<OtpController> {
                           borderRadius: BorderRadius.circular(8.0),
                           shape: PinCodeFieldShape.box,
                           fieldWidth: 50,
-                          activeColor: bohibaTheme.inputDecorationTheme.enabledBorder?.borderSide.color,
-                          disabledColor: bohibaTheme.inputDecorationTheme.disabledBorder?.borderSide.color,
-                          selectedFillColor: bohibaTheme.inputDecorationTheme.enabledBorder?.borderSide.color,
-                          inactiveColor: bohibaTheme.inputDecorationTheme.enabledBorder?.borderSide.color,
-                          activeFillColor: bohibaTheme.inputDecorationTheme.enabledBorder?.borderSide.color,
+                          activeColor: bohibaTheme.inputDecorationTheme
+                              .enabledBorder?.borderSide.color,
+                          disabledColor: bohibaTheme.inputDecorationTheme
+                              .disabledBorder?.borderSide.color,
+                          selectedFillColor: bohibaTheme.inputDecorationTheme
+                              .enabledBorder?.borderSide.color,
+                          inactiveColor: bohibaTheme.inputDecorationTheme
+                              .enabledBorder?.borderSide.color,
+                          activeFillColor: bohibaTheme.inputDecorationTheme
+                              .enabledBorder?.borderSide.color,
                         ),
                       ),
                     ),
                     PrimaryButton(
                       label: 'Verify Code',
                       onPressed: () async {
-                        switch (controller.nxtRoute) {
+                        switch (controller.otpPurpose) {
                           // case AppRoute.navBar:
                           //   navigateState.popAndPushNamed(AppRoute.navBar);
                           //   break;
                           // case AppRoute.signIn:
                           //   navigateState.popAndPushNamed(AppRoute.signIn);
-                          case AppRoute.createUser:
+                          case OtpPurpose.createUser:
                             int succesValidate = await controller.verifyOtp();
                             if (succesValidate > 0) {
                               navigateState.pushNamed(
                                 AppRoute.createUser,
-                                arguments: {'email': controller.email.value},
+                                arguments: {
+                                  'email': controller.email.value,
+                                  'otpPurpose': OtpPurpose.createUser,
+                                },
                               );
                             }
-
                             break;
-                          case AppRoute.changePwd:
-                            int succesValidate = await controller.verifyOtp();
-                            if (succesValidate > 0) {
+                          case OtpPurpose.forgotPassword:
+                            String? resetToken =
+                                await controller.verifyForgotOtp();
+                            if (resetToken != null) {
                               navigateState.pop();
-                              navigateState.popAndPushNamed(AppRoute.changePwd);
+                              navigateState.popAndPushNamed(
+                                AppRoute.changePwd,
+                                arguments: {
+                                  'resetToken': resetToken,
+                                  'otpPurpose': OtpPurpose.forgotPassword,
+                                },
+                                result: (route) {
+                                  return false;
+                                },
+                              );
                             }
+                            break;
+                          case OtpPurpose.resetPassword:
+                            // TODO: implement reset password API: /update-password
+                            break;
                           default:
                             break;
                         }
@@ -171,7 +203,8 @@ class OtpScreen extends GetView<OtpController> {
                         Text(
                           '00:${controller.remainingSeconds.value.toString().padLeft(2, '0')} sec',
                           style: TextStyle(
-                            fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                            fontWeight: bohibaTheme
+                                .textTheme.headlineMedium!.fontWeight,
                             color: bohibaTheme.textTheme.titleLarge!.color,
                           ),
                         )
@@ -191,13 +224,17 @@ class OtpScreen extends GetView<OtpController> {
                         style: bohibaTheme.textTheme.titleSmall,
                       ),
                       InkWell(
-                        onTap: controller.canResend == true ? () async => await controller.resendOtp() : null,
+                        onTap: controller.canResend == true
+                            ? () async => await controller.resendOtp()
+                            : null,
                         child: SizedBox(
                           child: Text(
                             ' Re-Send',
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                              fontSize:
+                                  bohibaTheme.textTheme.bodySmall!.fontSize,
+                              fontWeight: bohibaTheme
+                                  .textTheme.headlineMedium!.fontWeight,
                               color: controller.canResend == true
                                   ? bohibaTheme.textTheme.bodySmall!.color
                                   : bohibaTheme.disabledColor,

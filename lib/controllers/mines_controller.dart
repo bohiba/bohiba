@@ -1,16 +1,15 @@
 import '/model/truck_model.dart';
-import '/pages/mines/mines_live_queue_status.dart';
-import '/model/mines_model.dart';
+import '../pages/company/company_live_queue_status.dart';
+import '../model/company_model.dart';
 
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MinesController extends GetxController {
-  Rx<MinesModel> minesModel = MinesModel().obs;
-  RxList<MinesModel> arrMines = <MinesModel>[].obs;
+  Rx<CompanyModel> minesModel = CompanyModel().obs;
+  RxList<CompanyModel> arrMines = <CompanyModel>[].obs;
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;
-  RxList<QueueStatusList> arrQueue =
-      <QueueStatusList>[].obs;
+  RxList<QueueStatusList> arrQueue = <QueueStatusList>[].obs;
 
   GoogleMapController? mapController;
   LatLng? lastPosition;
@@ -18,15 +17,12 @@ class MinesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    minesModel.value = Get.arguments as MinesModel;
+    minesModel.value = Get.arguments as CompanyModel;
     Future.delayed(Duration.zero, () async {
       ever(minesModel, (model) async {
-        if (model.latitude != null &&
-            model.longitude != null) {
-          lastPosition =
-              LatLng(model.latitude!, model.longitude!);
-          await moveCamera(lastPosition!.latitude,
-              lastPosition!.longitude);
+        if (model.latitude != null && model.longitude != null) {
+          lastPosition = LatLng(model.latitude!, model.longitude!);
+          await moveCamera(lastPosition!.latitude, lastPosition!.longitude);
         }
       });
     });

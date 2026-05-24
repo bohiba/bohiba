@@ -8,14 +8,14 @@ import '/component/bohiba_buttons/primary_floating_button.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'mines_status_grid.dart';
-import 'mines_queue_status.dart';
-import 'mines_header.dart';
-import 'mines_live_queue_status.dart';
-import 'mines_location.dart';
+import 'company_queue_status.dart';
+import 'company_status_grid.dart';
+import 'company_header.dart';
+import 'company_live_queue_status.dart';
+import 'company_location.dart';
 
-class MinesPage extends GetView<MinesController> {
-  const MinesPage({super.key});
+class CompanyPage extends GetView<MinesController> {
+  const CompanyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class MinesPage extends GetView<MinesController> {
               shape: BottomModalShape(),
               context: context,
               builder: (context) {
-                return MinesQueueStatus(currentIndex: 2);
+                return CompanyQueueStatus(currentIndex: 2);
               },
             );
           },
@@ -54,10 +54,10 @@ class MinesPage extends GetView<MinesController> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MinesHeader(
+                  CompanyHeader(
                     minesModel: controller.minesModel.value,
                   ),
-                  MinesStatusGrid(
+                  CompanyStatusGrid(
                     mineOutsideInfo: [
                       StatusModel(
                         name: "TOTAL TRUCKS",
@@ -70,17 +70,24 @@ class MinesPage extends GetView<MinesController> {
                       StatusModel(
                         name: "STATUS",
                         value: controller.minesModel.value.status ?? '',
-                        color: controller.minesModel.value.status?.minesStatusColor,
+                        color: controller
+                            .minesModel.value.status?.minesStatusColor,
                       ),
                     ],
                   ),
-                  MinesLocation(),
-                  MinesLiveQueueStatus(
+                  CompanyLocation(),
+                  CompanyLiveQueueStatus(
                     header: [
-                      QueueHeader(flex: 1, name: "#", textAlign: TextAlign.start),
-                      QueueHeader(flex: 3, name: "VEHICLE ID", textAlign: TextAlign.start),
-                      QueueHeader(flex: 3, name: "STATUS", textAlign: TextAlign.center),
-                      QueueHeader(flex: 2, name: "WAIT", textAlign: TextAlign.center),
+                      QueueHeader(
+                          flex: 1, name: "#", textAlign: TextAlign.start),
+                      QueueHeader(
+                          flex: 3,
+                          name: "VEHICLE ID",
+                          textAlign: TextAlign.start),
+                      QueueHeader(
+                          flex: 3, name: "STATUS", textAlign: TextAlign.center),
+                      QueueHeader(
+                          flex: 2, name: "WAIT", textAlign: TextAlign.center),
                     ],
                     queueList: controller.arrQueue,
                   ),

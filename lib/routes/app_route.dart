@@ -114,7 +114,7 @@ import '/pages/driver/rating_all_page.dart';
 import '/pages/driver/work_calender_detail.dart';
 
 import '/bindings/trip_all_binding.dart';
-import '../bindings/all_mines_binding.dart';
+import '../bindings/all_company_binding.dart';
 import '/bindings/auth_binding.dart';
 import '/bindings/driver_binding.dart';
 import '/bindings/truck_all_binding.dart';
@@ -123,13 +123,13 @@ import '/bindings/splash_binding.dart';
 import '../bindings/set_image_binding.dart';
 
 import '/pages/dashboard/dash_page/dashboard_page.dart';
-import '/pages/mines/all_mines_page.dart';
+import '../pages/company/all_company_page.dart';
 import '/pages/truck/truck_edit_page.dart';
 import '/pages/user/user_profile/user_profile_screen/user_profile_page.dart';
 import '/pages/user/user_kyc/kyc_screen.dart';
 import '/pages/user/user_profile/edit_user_profile_screen.dart';
 import 'package:get/get.dart';
-import '/pages/mines/mines_page.dart';
+import '../pages/company/company_page.dart';
 import '../pages/favourite/all_favourite_page.dart';
 import '/pages/manager/add_manager.dart';
 import '/pages/manager/manager.dart';
@@ -263,7 +263,8 @@ class AppRoute {
   // Wallet Screen
   static const String bankAccountScreen = "/bank-account";
   static const String walletDepositScreen = "/wallet-deposit";
-  static const String walletTransactionHistoryScreen = "/wallet-transcation-history";
+  static const String walletTransactionHistoryScreen =
+      "/wallet-transcation-history";
   static const String walletWithdrawScreen = "/wallet-withdraw";
 
   // static const String companyScreen = "/company";
@@ -408,7 +409,7 @@ class AppRoute {
       name: truckOwnerNavBar,
       bindings: [
         HomeBinding(),
-        AllMinesBinding(),
+        AllCompanyBinding(),
         DasboardBinding(),
       ],
       page: () => const BohibaNavBar(),
@@ -418,7 +419,7 @@ class AppRoute {
       name: truckDriverNavBar,
       bindings: [
         HomeBinding(),
-        AllMinesBinding(),
+        AllCompanyBinding(),
         DasboardBinding(),
       ],
       page: () => const BohibaNavBar(),
@@ -444,8 +445,8 @@ class AppRoute {
     ),
     GetPage(
       name: allMines,
-      binding: AllMinesBinding(),
-      page: () => const AllMinesPage(),
+      binding: AllCompanyBinding(),
+      page: () => const AllCompanyPage(),
     ),
     GetPage(
       name: allNewsScreen,
@@ -607,7 +608,7 @@ class AppRoute {
     ),
 
     // Mines
-    GetPage(name: mines, binding: MinesBinding(), page: () => MinesPage()),
+    GetPage(name: mines, binding: MinesBinding(), page: () => CompanyPage()),
     GetPage(name: viewChallan, page: () => const ChallanScreen()),
     GetPage(name: orderScreen, page: () => const OrderScreen()),
 

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MinesLocation extends GetView<MinesController> {
-  const MinesLocation({super.key});
+class CompanyLocation extends GetView<MinesController> {
+  const CompanyLocation({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,8 @@ class MinesLocation extends GetView<MinesController> {
                     final model = controller.minesModel.value;
 
                     if (model.latitude != null && model.longitude != null) {
-                      await controller.moveCamera(model.latitude!, model.longitude!);
+                      await controller.moveCamera(
+                          model.latitude!, model.longitude!);
                     }
                   },
                   // Uncomment if you want to drag map
@@ -44,7 +45,8 @@ class MinesLocation extends GetView<MinesController> {
                     ),
                   },*/
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(controller.minesModel.value.latitude!, controller.minesModel.value.longitude!),
+                    target: LatLng(controller.minesModel.value.latitude!,
+                        controller.minesModel.value.longitude!),
                     zoom: 15,
                   ),
                   markers: {

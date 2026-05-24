@@ -1,6 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '/pages/mines/mines_card.dart';
+import '../company/company_card.dart';
 
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
@@ -15,12 +15,10 @@ class HomeMinesSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final NavigatorState navigatorState =
-        Navigator.of(context);
+    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
-        visible:
-            controller.arrMines.value?.isNotEmpty ?? false,
+        visible: controller.arrMines.value?.isNotEmpty ?? false,
         child: Column(
           children: [
             Padding(
@@ -29,18 +27,15 @@ class HomeMinesSection extends GetView<HomeController> {
                 left: ScreenUtils.width15,
               ),
               child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Mines',
-                    style: bohibaTheme
-                        .textTheme.headlineMedium,
+                    style: bohibaTheme.textTheme.headlineMedium,
                   ),
                   GestureDetector(
                     onTap: () {
-                      navigatorState
-                          .pushNamed(AppRoute.allMines);
+                      navigatorState.pushNamed(AppRoute.allMines);
                     },
                     // onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
                     //     AppRoute.navBar,
@@ -50,13 +45,13 @@ class HomeMinesSection extends GetView<HomeController> {
                     //     },
                     //     (route) => true),
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: ScreenUtils.height5),
+                      padding:
+                          EdgeInsets.symmetric(vertical: ScreenUtils.height5),
                       child: Text(
                         'See All',
                         style: TextStyle(
-                          fontSize: bohibaTheme.textTheme
-                              .headlineSmall!.fontSize,
+                          fontSize:
+                              bohibaTheme.textTheme.headlineSmall!.fontSize,
                           color: bohibaTheme.primaryColor,
                         ),
                       ),
@@ -71,32 +66,25 @@ class HomeMinesSection extends GetView<HomeController> {
             Container(
               height: 130.h,
               margin: EdgeInsets.only(
-                  bottom: ScreenUtils.height25,
-                  left: ScreenUtils.width15),
-              constraints: BoxConstraints(
-                  minHeight: 0.05 * ScreenUtils.width50),
+                  bottom: ScreenUtils.height25, left: ScreenUtils.width15),
+              constraints:
+                  BoxConstraints(minHeight: 0.05 * ScreenUtils.width50),
               child: Obx(
                 () {
-                  return controller
-                              .arrMines.value?.isEmpty ??
-                          true
+                  return controller.arrMines.value?.isEmpty ?? true
                       ? const Center(
                           child: Text('No Mines Available'),
                         )
                       : ListView.builder(
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          itemCount: (controller.arrMines
-                                          .value?.length ??
-                                      0) >=
-                                  10
-                              ? 10
-                              : controller
-                                  .arrMines.value?.length,
+                          itemCount:
+                              (controller.arrMines.value?.length ?? 0) >= 10
+                                  ? 10
+                                  : controller.arrMines.value?.length,
                           itemBuilder: (context, index) {
-                            return MinesVerticalCard(
-                              minesInfo: controller
-                                  .arrMines.value![index],
+                            return CompanyVerticalCard(
+                              minesInfo: controller.arrMines.value![index],
                             );
                           },
                         );

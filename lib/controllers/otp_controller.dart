@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '/routes/app_route.dart';
+import '/dist/enums/otp_purpose.dart';
 import '/services/auth_service.dart';
 import '/services/global_service.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class OtpController extends GetxController {
   GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
 
   RxString email = "".obs;
-  String nxtRoute = AppRoute.signIn;
+  OtpPurpose otpPurpose = OtpPurpose.none;
   RxInt remainingSeconds = 0.obs;
   bool get canResend => remainingSeconds.value == 00;
 
@@ -25,7 +25,7 @@ class OtpController extends GetxController {
     if (route != null) {
       final Map<String, dynamic> argsObj = route;
       email.value = argsObj['email'] ?? "";
-      nxtRoute = argsObj["nxtRoute"] ?? "";
+      otpPurpose = argsObj["otpPurpose"] ?? OtpPurpose.none;
     }
 
     _startCountdown();
@@ -44,6 +44,23 @@ class OtpController extends GetxController {
       _startCountdown();
     }
     return success;
+  }
+
+  Future<String?> verifyForgotOtp() async {
+    GlobalService.closeKeyboard();
+
+    if (!(otpFormKey.currentState!.validate())) {
+      return null;
+    }
+    Map? result = await AuthService.verifyForgotOtp(
+      txtEmail: email.value,
+      txtOtp: otpController.text,
+    );
+    otpController.clear();
+
+    if (result == null || !result.containsKey('reset_token')) return null;
+    stopTimer();
+    return result['reset_token'];
   }
 
   Future<int> verifyOtp() async {

@@ -2,7 +2,7 @@ import 'home_data_stepper.dart';
 import 'home_fav_section.dart';
 import 'home_trip_section.dart';
 import 'home_news_section.dart';
-import 'home_mines_section.dart';
+import 'home_company_section.dart';
 import 'home_driver_section.dart';
 import 'home_account_section.dart';
 import 'home_top_truck_section.dart';

@@ -1,4 +1,5 @@
 enum StatusCode {
+  networkError(0),
   // 2xx Success
   ok(200),
   created(201),
@@ -47,7 +48,7 @@ enum StatusCode {
   /// 429: too many requests
   tooManyRequests(429),
 
-  /// 422: unprocessable entity
+  /// 422: unprocessable entity - Validation failed
   unprocessableEntity(422),
 
   /// 500: internal server error

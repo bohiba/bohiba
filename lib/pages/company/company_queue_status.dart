@@ -6,9 +6,9 @@ import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_progress_tracker/progress_tracker.dart';
 import 'package:flutter/material.dart';
 
-class MinesQueueStatus extends StatelessWidget {
+class CompanyQueueStatus extends StatelessWidget {
   final int currentIndex;
-  const MinesQueueStatus({super.key, required this.currentIndex});
+  const CompanyQueueStatus({super.key, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {

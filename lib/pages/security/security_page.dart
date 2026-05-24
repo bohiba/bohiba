@@ -1,6 +1,6 @@
-import '/component/bohiba_appbar/appbar_icon.dart';
+import '/pages/security/current_password_dialog.dart';
 
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 
 import '/pages/widget/icon_text_tile.dart';
@@ -12,9 +12,8 @@ import '/controllers/security_controller.dart';
 
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
+import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
-import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_inputfield/password_inputfield.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -57,7 +56,8 @@ class SecurityPage extends GetView<SecurityController> {
                     ),
                   ),
                   Gap(ScreenUtils.height30),
-                  Text('Password Management', style: bohibaTheme.textTheme.headlineMedium),
+                  Text('Password Management',
+                      style: bohibaTheme.textTheme.headlineMedium),
                   LinearBoxWidget(
                     header: 'Change Password',
                     showArrow: true,
@@ -67,62 +67,7 @@ class SecurityPage extends GetView<SecurityController> {
                         useRootNavigator: true,
                         shape: BottomModalShape(),
                         backgroundColor: bohibaTheme.scaffoldBackgroundColor,
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: ScreenUtils.height15,
-                            right: ScreenUtils.height15,
-                            top: ScreenUtils.height20,
-                            bottom: MediaQuery.paddingOf(context).bottom,
-                          ),
-                          child: Form(
-                            key: controller.formState,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Current Password',
-                                    style: bohibaTheme.textTheme.displaySmall,
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Please enter your current password to access this feature",
-                                    style: bohibaTheme.textTheme.titleMedium,
-                                  ),
-                                ),
-                                PasswordInputField(
-                                  hintText: 'Password',
-                                  nextActionType: TextInputAction.done,
-                                  controller: controller.pwdController,
-                                ),
-                                PrimaryButton(
-                                  padding: EdgeInsets.only(top: 15.h),
-                                  label: 'Verify',
-                                  onPressed: () {
-                                    if (controller.pwdController.text.isEmpty || controller.pwdController.text.length <= 6) {
-                                      GlobalService.showSnackBar(
-                                        status: AlertStatus.info,
-                                        title: 'Security',
-                                        desc: 'Please enter valid password',
-                                      );
-                                      return;
-                                    }
-                                    navigateState.popAndPushNamed(
-                                      AppRoute.changePwd,
-                                      arguments: controller.pwdController.text,
-                                    );
-
-                                    controller.pwdController.clear();
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                        CurrentPasswordDialog(),
                       );
                     },
                   ),
@@ -134,7 +79,8 @@ class SecurityPage extends GetView<SecurityController> {
                     },
                   ),*/
                   Gap(ScreenUtils.height30),
-                  Text('App Information', style: bohibaTheme.textTheme.headlineMedium),
+                  Text('App Information',
+                      style: bohibaTheme.textTheme.headlineMedium),
                   LinearBoxWidget(
                     header: 'Version',
                     title: controller.appInfo['version'],
@@ -148,7 +94,8 @@ class SecurityPage extends GetView<SecurityController> {
                     title: (controller.appInfo['updateTime'].toString()),
                   ),
                   Gap(ScreenUtils.height30),
-                  Text('Active Session', style: bohibaTheme.textTheme.headlineMedium),
+                  Text('Active Session',
+                      style: bohibaTheme.textTheme.headlineMedium),
                   IconTextTile(
                     icon: Icons.smartphone_outlined,
                     text: 'iPhone 13 Pro',
@@ -174,7 +121,8 @@ class SecurityPage extends GetView<SecurityController> {
                     ),
                   ),
                   Gap(ScreenUtils.height30),
-                  Text('Manage session', style: bohibaTheme.textTheme.headlineMedium),
+                  Text('Manage session',
+                      style: bohibaTheme.textTheme.headlineMedium),
                   Container(
                     padding: EdgeInsets.symmetric(
                       vertical: ScreenUtils.height10,
@@ -191,16 +139,20 @@ class SecurityPage extends GetView<SecurityController> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
+                          padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtils.height5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Log out from all other devices',
                                 style: TextStyle(
-                                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                                  fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                                  color: bohibaTheme.textTheme.bodyMedium!.color,
+                                  fontSize: bohibaTheme
+                                      .textTheme.bodyMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodyLarge!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.bodyMedium!.color,
                                 ),
                               ),
                               Padding(
@@ -220,7 +172,8 @@ class SecurityPage extends GetView<SecurityController> {
                             GlobalService.showAlertDialog(
                               status: AlertStatus.warning,
                               title: 'Logout',
-                              description: 'Are you sure? You want to log out from this account. Press `Log out` to proceed',
+                              description:
+                                  'Are you sure? You want to log out from this account. Press `Log out` to proceed',
                               onSave: () {
                                 navigateState.pop();
                               },
@@ -230,21 +183,26 @@ class SecurityPage extends GetView<SecurityController> {
                                 navigateState.pop();
                                 int loggedOut = await controller.logOut();
                                 if (loggedOut > 0) {
-                                  navigateState.pushNamedAndRemoveUntil(AppRoute.signIn, (Route<dynamic> route) => false);
+                                  navigateState.pushNamedAndRemoveUntil(
+                                      AppRoute.signIn,
+                                      (Route<dynamic> route) => false);
                                 }
                               },
                             );
                           },
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: ScreenUtils.height5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Log out from this device',
                                   style: TextStyle(
-                                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                                    fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                                    fontSize: bohibaTheme
+                                        .textTheme.bodyMedium!.fontSize,
+                                    fontWeight: bohibaTheme
+                                        .textTheme.bodyLarge!.fontWeight,
                                     color: bohibaTheme.colorScheme.tertiary,
                                   ),
                                 ),

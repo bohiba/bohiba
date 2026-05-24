@@ -1,13 +1,13 @@
 import '/component/screen_utils.dart';
-import '../../controllers/all_mines_controller.dart';
-import '/model/mines_model.dart';
+import '../../controllers/all_company_controller.dart';
+import '../../model/company_model.dart';
 import 'package:get/get.dart';
 import '/component/bohiba_appbar/market_appbar.dart';
-import '/pages/mines/mines_card.dart';
+import 'company_card.dart';
 import 'package:flutter/material.dart';
 
-class AllMinesPage extends GetView<AllMinesController> {
-  const AllMinesPage({super.key});
+class AllCompanyPage extends GetView<AllCompanyController> {
+  const AllCompanyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,8 @@ class AllMinesPage extends GetView<AllMinesController> {
           ),
           itemCount: controller.arrMines.length,
           itemBuilder: (context, index) {
-            MinesModel minesModel = controller.arrMines[index];
-            return MinesHorizontalCard(minesInfo: minesModel);
+            CompanyModel minesModel = controller.arrMines[index];
+            return CompanyHorizontalCard(minesInfo: minesModel);
           },
         );
       }),

@@ -5,7 +5,7 @@ import '/services/pref_utils.dart';
 import '/services/global_service.dart';
 import '/services/user_role_type.dart';
 import '/pages/home/home_screen.dart';
-import '/pages/mines/all_mines_page.dart';
+import '../../pages/company/all_company_page.dart';
 import '/pages/favourite/all_favourite_page.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
 
@@ -67,7 +67,8 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         GlobalService.showAlertDialog(
           status: AlertStatus.info,
           title: 'EXIT',
-          description: 'This will close the application. Do you want to continue?',
+          description:
+              'This will close the application. Do you want to continue?',
           saveBtnTxt: 'No',
           onSave: () => navigator.pop(),
           discardBtnTxt: 'Yes',
@@ -132,7 +133,7 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
         navWidgets = [
           const HomePage(),
           AllFavouritePage(),
-          AllMinesPage(),
+          AllCompanyPage(),
           const DashboardPage(),
         ];
       case UserRoles.driver:
@@ -168,7 +169,7 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
           // AllTripPage(showLeading: false),
           // AllDriverJobPage(),
           AllFavouritePage(),
-          AllMinesPage(),
+          AllCompanyPage(),
           const DashboardPage(),
         ];
       default:

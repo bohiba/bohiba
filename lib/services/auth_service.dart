@@ -60,7 +60,8 @@ class AuthService {
       return 0;
     }
     Map firebaseTokenInfo = jsonDecode(strFirebaseToken);
-    ApiResponse serviceResponse = await _dioService.post(ApiEndPoint.apiLogout, body: {
+    ApiResponse serviceResponse =
+        await _dioService.post(ApiEndPoint.apiLogout, body: {
       "device_id": firebaseTokenInfo['device_id'],
     });
     GlobalService.dismissProgress();
@@ -82,32 +83,25 @@ class AuthService {
     }
   }
 
-  static Future<int> signin({
+  static Future<StatusCode> signin({
     required String uuid,
     required String password,
   }) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return 0;
+      return StatusCode.networkError;
     }
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService.post(
+    ApiResponse response = await _dioService.post(
       ApiEndPoint.apiLogin,
       contentType: Headers.formUrlEncodedContentType,
       body: {'uuid': uuid, 'password': password},
       withToken: false,
     );
 
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-          status: AlertStatus.failure,
-          desc: 'Invalid UUID or password. Please retry again.',
-        );
-        return 0;
-
-      case 200:
-        String token = serviceResponse.data['token'];
+    StatusCode statusCode = StatusCode.fromCode(response.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
+        String token = response.data['token'];
         _dioService.setToken(token);
         await _prefUtils.saveString(PrefUtils.token, token);
         GlobalService.printHandler("App Token: $token");
@@ -141,43 +135,128 @@ class AuthService {
         }
 
         GlobalService.dismissProgress();
-        return (loggedInUser != null && mainService != null) ? 1 : 0;
+        return (loggedInUser != null && mainService != null)
+            ? StatusCode.ok
+            : StatusCode.unauthorized;
+      case StatusCode.unauthorized:
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: response.errorMessage,
+        );
+        return statusCode;
+      case StatusCode.notFound:
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: response.errorMessage,
+        );
+        return statusCode;
+      case StatusCode.conflict:
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: response.errorMessage,
+        );
+        return statusCode;
       default:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
           status: AlertStatus.failure,
-          desc: 'Failed to signin',
+          desc: response.errorMessage,
         );
-        return 0;
+        return statusCode;
     }
   }
 
-  static Future<int> resetPassword() async {
+  static Future<Map?> verifyForgotOtp({
+    required String txtEmail,
+    required String txtOtp,
+  }) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return 0;
+      return null;
     }
     GlobalService.showProgress();
-    ApiResponse response = await _dioService.post(ApiEndPoint.apiResetPassword);
-    GlobalService.dismissProgress();
-    switch (response.statusCode) {
-      case 401:
-        GlobalService.showSnackBar(
-          status: AlertStatus.info,
-          desc: response.message,
-        );
-        return 0;
-      case 200:
+    Map<String, dynamic> bodyObj = {'email': txtEmail, 'otp': txtOtp};
+    ApiResponse serviceResponse = await _dioService.post(
+      ApiEndPoint.apiVerifyForgotPasswordOtp,
+      body: bodyObj,
+      withToken: false,
+    );
+    StatusCode statusCode = StatusCode.fromCode(
+      serviceResponse.statusCode,
+    );
+    switch (statusCode) {
+      case StatusCode.ok:
+        GlobalService.dismissProgress();
         GlobalService.showSnackBar(
           status: AlertStatus.success,
-          desc: 'Otp send successfully',
+          desc: serviceResponse.message,
         );
-        return 1;
+        return serviceResponse.data as Map;
+      case StatusCode.unprocessableEntity:
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          desc: serviceResponse.errorMessage,
+        );
+        return null;
+      case StatusCode.notFound:
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          desc: serviceResponse.errorMessage,
+        );
+        return null;
+      case StatusCode.unauthorized:
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          desc: serviceResponse.errorMessage,
+        );
+        return null;
+      default:
+        GlobalService.dismissProgress();
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: serviceResponse.errorMessage,
+        );
+        return null;
+    }
+  }
+
+  static Future<StatusCode> updatePassword(
+      {required Map<String, dynamic> bodyObj}) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return StatusCode.networkError;
+    }
+    GlobalService.showProgress();
+    ApiResponse response = await _dioService.post(
+      ApiEndPoint.apiUpdatePassword,
+      body: bodyObj,
+      withToken: true,
+    );
+    GlobalService.dismissProgress();
+    StatusCode statusCode = StatusCode.fromCode(response.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
+        GlobalService.showSnackBar(
+          status: AlertStatus.success,
+          desc: response.message,
+        );
+        return statusCode;
+      case StatusCode.unauthorized:
+        GlobalService.showSnackBar(
+          status: AlertStatus.info,
+          desc: response.errorMessage,
+        );
+        return statusCode;
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
-          desc: 'Faile to reset password',
+          desc: response.errorMessage,
         );
-        return 0;
+        return statusCode;
     }
   }
 
@@ -249,9 +328,9 @@ class AuthService {
     }
   }
 
-  static Future<int> emailOtp({required String email}) async {
+  static Future<StatusCode> emailOtp({required String email}) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return 0;
+      return StatusCode.networkError;
     }
 
     final Map<String, dynamic> bodyObj = {'email': email};
@@ -262,25 +341,26 @@ class AuthService {
       withToken: false,
     );
     GlobalService.dismissProgress();
-    switch (response.statusCode) {
-      case 200:
+    StatusCode statusCode = StatusCode.fromCode(response.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
         GlobalService.showSnackBar(
           status: AlertStatus.success,
-          desc: 'Otp sent successfully',
+          desc: response.message,
         );
-        return 1;
-      case 401:
+        return statusCode;
+      case StatusCode.unauthorized:
         GlobalService.showSnackBar(
           status: AlertStatus.info,
           desc: response.message,
         );
-        return 0;
+        return statusCode;
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
-          desc: 'Failed to send otp',
+          desc: response.errorMessage,
         );
-        return 0;
+        return statusCode;
     }
   }
 
@@ -331,40 +411,44 @@ class AuthService {
     }
   }
 
-  static Future<int> changePassword({required Map<String, dynamic> bodyObj}) async {
+  static Future<StatusCode> resetPassword(
+      {required Map<String, dynamic> bodyObj}) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return 0;
+      return StatusCode.networkError;
     }
     GlobalService.showProgress();
-    ApiResponse res = await _dioService.post(ApiEndPoint.apiResetPassword, body: bodyObj);
+    ApiResponse res =
+        await _dioService.post(ApiEndPoint.apiResetPassword, body: bodyObj);
     GlobalService.dismissProgress();
-    switch (res.statusCode) {
-      case 200:
+
+    StatusCode statusCode = StatusCode.fromCode(res.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
         _dioService.clearToken();
         Future.wait([
           _prefUtils.clearPreferencesData(),
           _databaseService.clearDBData(),
         ]);
         GlobalService.showSnackBar(
-          status: AlertStatus.warning,
+          status: AlertStatus.success,
           title: 'Security',
           desc: res.message,
         );
-        return 1;
-      case 401:
+        return statusCode;
+      case StatusCode.badRequest:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
           title: 'Security',
-          desc: res.message,
+          desc: res.errorMessage,
         );
-        return 0;
+        return statusCode;
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
           title: 'Security',
-          desc: res.message,
+          desc: res.errorMessage,
         );
-        return 0;
+        return statusCode;
     }
   }
 }

@@ -5,6 +5,7 @@ class ApiEndPoint {
   static const String apiVerifyEmail = '$baseUrl/verify-email';
   static const String apiVerifyOtp = '$baseUrl/verify-otp';
   static const String apiResendOtp = '$baseUrl/resend-otp';
+  static const String apiUpdatePassword = '$baseUrl/update-password';
   static const String apiCreateUser = '$baseUrl/create-user';
   static const String apiAddAddress = '$baseUrl/add-address';
   static const String apiSetProfileImage = '$baseUrl/set-profile-image';
@@ -14,6 +15,8 @@ class ApiEndPoint {
 
   static const String apiForgotPassword = '$baseUrl/forgot-password';
   static const String apiResetPassword = '$baseUrl/reset-password';
+  static const String apiVerifyForgotPasswordOtp =
+      '$baseUrl/verify-forgot-password-otp';
 
   static const String apiLogin = '$baseUrl/login';
   static const String apiLogout = '$baseUrl/logout';
@@ -56,7 +59,8 @@ class ApiEndPoint {
 
   static const String apiAddTripReassign = '$baseUrl/trip/add-reassignment';
   static const String apiEditTripReassign = '$baseUrl/trip/update-reassignment';
-  static const String apiDeleteTripReassign = '$baseUrl/trip/delete-reassignment';
+  static const String apiDeleteTripReassign =
+      '$baseUrl/trip/delete-reassignment';
 
   static const String apiAddTripDoc = '$baseUrl/trip/add-document';
   static const String apiGetAllTripDoc = '$baseUrl/trip/all-document';
@@ -93,5 +97,6 @@ class ApiEndPoint {
   static const String apiSearchUser = '$baseUrl/search/user';
 
   // Google Maps
-  static const String apiNearbySearch = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+  static const String apiNearbySearch =
+      'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
 }

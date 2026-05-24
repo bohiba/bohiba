@@ -209,7 +209,8 @@ class GlobalService {
   }
 
   static Future<void> pickImage() async {
-    XFile? selected = await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? selected =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (selected != null) {
       imageFile = selected;
       decodeBase64ToImage(imageFile!.path);
@@ -272,7 +273,7 @@ class GlobalService {
         iconData = Icons.info;
         break;
       case AlertStatus.warning:
-        color = bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.95);
+        color = bohibaTheme.colorScheme.error.withValues(alpha: 0.95);
         iconData = Icons.warning;
         break;
       case AlertStatus.failure:
@@ -310,7 +311,7 @@ class GlobalService {
         borderWidth: 0.0,
         margin: EdgeInsets.symmetric(horizontal: 15.w),
         padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 3),
         mainButton: actionButton ??
             TextButton(
               onPressed: () {
@@ -351,7 +352,8 @@ class GlobalService {
     );
   }
 
-  static String getAvatarUrl(String fullName, {bool rounded = true, bool isTruck = false}) {
+  static String getAvatarUrl(String fullName,
+      {bool rounded = true, bool isTruck = false}) {
     String username = 'UN';
 
     if (isTruck) {
@@ -368,7 +370,9 @@ class GlobalService {
   }
 
   static bool isEmail(String em) {
-    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(em);
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(em);
 
     return emailValid;
   }

@@ -1,13 +1,13 @@
-import 'mines_page.dart';
+import 'company_page.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 
-class MinesTile extends StatelessWidget {
+class CompanyTile extends StatelessWidget {
   final Map minesInfo;
-  const MinesTile({
+  const CompanyTile({
     super.key,
     this.minesInfo = const {},
   });
@@ -18,7 +18,7 @@ class MinesTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => MinesPage(),
+            builder: (context) => CompanyPage(),
           ),
         );
       },
@@ -91,8 +91,10 @@ class MinesTile extends StatelessWidget {
                         'Report',
                         style: TextStyle(
                           color: bohibaTheme.colorScheme.tertiary,
-                          fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
-                          fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
+                          fontStyle:
+                              bohibaTheme.textTheme.titleMedium!.fontStyle,
+                          fontWeight:
+                              bohibaTheme.textTheme.titleMedium!.fontWeight,
                         ),
                       ),
                     ),

@@ -1,16 +1,16 @@
 import 'db2_service.dart';
 
-import '/model/mines_model.dart';
+import '../model/company_model.dart';
 
-class MinesService {
+class CompanyService {
   static final DatabaseService _databaseService = DatabaseService();
 
-  static Future<List<MinesModel>?> getMinesList() async {
+  static Future<List<CompanyModel>?> getMinesList() async {
     String strQuery = '''SELECT * FROM $tblMines''';
     List<Map>? arrMapMines = await _databaseService.executeQuery(strQuery);
     if (arrMapMines != null) {
-      List<MinesModel> minesModel = arrMapMines.map((e) {
-        return MinesModel.fromDB(e);
+      List<CompanyModel> minesModel = arrMapMines.map((e) {
+        return CompanyModel.fromDB(e);
       }).toList();
       return minesModel;
     }

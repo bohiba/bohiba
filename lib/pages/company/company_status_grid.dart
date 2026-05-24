@@ -1,14 +1,14 @@
 import '/theme/bohiba_theme.dart';
 import '/component/screen_utils.dart';
-import '/pages/mines/mines_page.dart';
+import 'company_page.dart';
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MinesStatusGrid extends StatelessWidget {
+class CompanyStatusGrid extends StatelessWidget {
   final List<StatusModel> mineOutsideInfo;
-  const MinesStatusGrid({super.key, this.mineOutsideInfo = const []});
+  const CompanyStatusGrid({super.key, this.mineOutsideInfo = const []});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,7 +33,9 @@ class MinesStatusGrid extends StatelessWidget {
               ),
               border: Border(
                 top: BorderSide(color: bohibaTheme.dividerColor),
-                left: index == 0 ? BorderSide(color: bohibaTheme.dividerColor) : BorderSide.none,
+                left: index == 0
+                    ? BorderSide(color: bohibaTheme.dividerColor)
+                    : BorderSide.none,
                 right: BorderSide(color: bohibaTheme.dividerColor),
                 bottom: BorderSide(color: bohibaTheme.dividerColor),
               ),
@@ -58,9 +60,12 @@ class MinesStatusGrid extends StatelessWidget {
                   text: mineOutsideInfo[index].value ?? '',
                   overflowText: mineOutsideInfo[index].value ?? '',
                   style: bohibaTheme.textTheme.headlineMedium?.copyWith(
-                    color: mineOutsideInfo[index].color ?? bohibaTheme.textTheme.headlineMedium!.color,
+                    color: mineOutsideInfo[index].color ??
+                        bohibaTheme.textTheme.headlineMedium!.color,
                   ),
-                  preserFontSize: [bohibaTheme.textTheme.headlineMedium!.fontSize!],
+                  preserFontSize: [
+                    bohibaTheme.textTheme.headlineMedium!.fontSize!
+                  ],
                 ),
               ],
             ),

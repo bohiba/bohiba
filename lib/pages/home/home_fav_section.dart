@@ -1,7 +1,7 @@
 import '/dist/enums/enum_favourite_type.dart';
 import '/model/user_fav_model.dart';
 
-import '/pages/mines/mines_tile.dart';
+import '../company/company_tile.dart';
 import '/pages/truck/truck_tile.dart';
 import '/pages/driver/driver_tile.dart';
 
@@ -23,12 +23,10 @@ class HomeFavListSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final NavigatorState navigatorState =
-        Navigator.of(context);
+    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
-        visible: controller.arrFavList.value?.isNotEmpty ??
-            false,
+        visible: controller.arrFavList.value?.isNotEmpty ?? false,
         child: Column(
           children: [
             // Home WishList Header
@@ -40,16 +38,13 @@ class HomeFavListSection extends GetView<HomeController> {
                 children: [
                   Text(
                     "Favourite",
-                    style: bohibaTheme
-                        .textTheme.headlineMedium,
+                    style: bohibaTheme.textTheme.headlineMedium,
                   ),
                   const Spacer(),
                   GestureDetector(
                     onTap: () => navigatorState.pushNamed(
                       AppRoute.favList,
-                      arguments: {
-                        'fav': controller.arrFavList
-                      },
+                      arguments: {'fav': controller.arrFavList},
                     ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -58,8 +53,8 @@ class HomeFavListSection extends GetView<HomeController> {
                       child: Text(
                         "See All",
                         style: TextStyle(
-                          fontSize: bohibaTheme.textTheme
-                              .headlineSmall!.fontSize,
+                          fontSize:
+                              bohibaTheme.textTheme.headlineSmall!.fontSize,
                           color: bohibaTheme.primaryColor,
                         ),
                       ),
@@ -71,8 +66,7 @@ class HomeFavListSection extends GetView<HomeController> {
 
             // Home WishList Section
             Container(
-              padding: EdgeInsets.only(
-                  bottom: ScreenUtils.height15),
+              padding: EdgeInsets.only(bottom: ScreenUtils.height15),
               alignment: Alignment.center,
               child: ListView.builder(
                 padding: EdgeInsets.only(
@@ -80,29 +74,19 @@ class HomeFavListSection extends GetView<HomeController> {
                   right: ScreenUtils.width15,
                   bottom: ScreenUtils.height5,
                 ),
-                physics:
-                    const NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount:
-                    (controller.arrFavList.value?.length ??
-                                0) >
-                            3
-                        ? 3
-                        : (controller
-                                .arrFavList.value?.length ??
-                            0),
+                itemCount: (controller.arrFavList.value?.length ?? 0) > 3
+                    ? 3
+                    : (controller.arrFavList.value?.length ?? 0),
                 itemBuilder: (context, index) {
-                  FavouriteModel favObj =
-                      controller.arrFavList.value![index];
+                  FavouriteModel favObj = controller.arrFavList.value![index];
 
-                  if (favObj.type ==
-                      EnumFavouriteType.driver.name) {
+                  if (favObj.type == EnumFavouriteType.driver.name) {
                     return DriverTile(
                       driver: UserModel(
-                        id: favObj.driverId ??
-                            favObj.userDriverId,
-                        isFav:
-                            (favObj.isFav ?? false) ? 1 : 0,
+                        id: favObj.driverId ?? favObj.userDriverId,
+                        isFav: (favObj.isFav ?? false) ? 1 : 0,
                         profile: UserProfile(
                           name: favObj.name,
                           image: favObj.image,
@@ -112,8 +96,7 @@ class HomeFavListSection extends GetView<HomeController> {
                         navigatorState
                             .pushNamed(AppRoute.driver,
                                 arguments:
-                                    favObj.driverId ??
-                                        favObj.userDriverId)
+                                    favObj.driverId ?? favObj.userDriverId)
                             .then((onValue) async {
                           await controller.getDriverList();
                         });
@@ -127,12 +110,10 @@ class HomeFavListSection extends GetView<HomeController> {
                     );
                   }
 
-                  if (favObj.type ==
-                      EnumFavouriteType.truck.name) {
+                  if (favObj.type == EnumFavouriteType.truck.name) {
                     return TruckTile(
                       truckInfo: TruckModel(
-                        id: favObj.truckId ??
-                            favObj.userTruckId,
+                        id: favObj.truckId ?? favObj.userTruckId,
                         isFav: (favObj.isFav ?? false),
                         regdNumber: favObj.name,
                         truckImage: favObj.image,
@@ -145,13 +126,11 @@ class HomeFavListSection extends GetView<HomeController> {
                       ],
                       onClick: () {
                         Get.toNamed(AppRoute.truck,
-                                arguments: favObj.truckId ??
-                                    favObj.userTruckId)
+                                arguments: favObj.truckId ?? favObj.userTruckId)
                             ?.then(
                           (onValue) async {
                             if (onValue != null) {
-                              await controller
-                                  .getTruckList();
+                              await controller.getTruckList();
                               controller.arrTruck.refresh();
                             }
                           },
@@ -160,9 +139,8 @@ class HomeFavListSection extends GetView<HomeController> {
                     );
                   }
 
-                  if (favObj.type ==
-                      EnumFavouriteType.mines.name) {
-                    return MinesTile(
+                  if (favObj.type == EnumFavouriteType.mines.name) {
+                    return CompanyTile(
                       minesInfo: {
                         'mine_name': favObj.name ?? '',
                         'location': '',
@@ -170,8 +148,7 @@ class HomeFavListSection extends GetView<HomeController> {
                     );
                   }
 
-                  if (favObj.type ==
-                      EnumFavouriteType.unknown.name) {
+                  if (favObj.type == EnumFavouriteType.unknown.name) {
                     return SizedBox.fromSize();
                   }
                   return Container();

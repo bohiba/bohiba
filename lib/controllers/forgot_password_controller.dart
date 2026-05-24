@@ -1,3 +1,5 @@
+import '/dist/enums/api_status_code.dart';
+
 import '/model/profile_model.dart';
 import '/services/profile_service.dart';
 
@@ -29,13 +31,13 @@ class ForgotPasswordController extends GetxController {
     }
   }
 
-  Future<int> sendOtp() async {
+  Future<StatusCode> sendOtp() async {
     GlobalService.closeKeyboard();
     if (!formState.currentState!.validate()) {
-      return 0;
+      return StatusCode.unprocessableEntity;
     }
-    int success = await AuthService.emailOtp(
-      email: emailController.text.toLowerCase(),
+    StatusCode success = await AuthService.emailOtp(
+      email: emailController.text.toLowerCase().trim(),
     );
     return success;
   }

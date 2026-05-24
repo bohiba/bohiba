@@ -1,4 +1,4 @@
-class MinesModel {
+class CompanyModel {
   int? id;
   int? isFav;
   String? uuid;
@@ -15,7 +15,7 @@ class MinesModel {
   int? avgWaitingTime;
   List<Minerals>? minerals;
 
-  MinesModel({
+  CompanyModel({
     this.id,
     this.isFav = 0,
     this.logo,
@@ -45,12 +45,13 @@ class MinesModel {
       'latitude': json['latitude'],
       'longitude': json['longitude'],
       'avgWaitingTime': json['avg_waiting_time'],
-      'minerals': json['minerals'] != null ? Minerals.toList(json['minerals']) : null,
+      'minerals':
+          json['minerals'] != null ? Minerals.toList(json['minerals']) : null,
     };
   }
 
-  static MinesModel fromDB(Map mines) {
-    return MinesModel(
+  static CompanyModel fromDB(Map mines) {
+    return CompanyModel(
       id: mines['id'],
       isFav: mines['isFav'],
       logo: mines['logo'],
@@ -74,11 +75,13 @@ class Minerals {
   Minerals({this.id, this.name, this.nameCode});
 
   factory Minerals.fromJSON(Map json) {
-    return Minerals(id: json['id'], name: json['name'], nameCode: json['name_code']);
+    return Minerals(
+        id: json['id'], name: json['name'], nameCode: json['name_code']);
   }
 
   static Minerals fromDB(Map json) {
-    return Minerals(id: json['id'], name: json['name'], nameCode: json['nameCode']);
+    return Minerals(
+        id: json['id'], name: json['name'], nameCode: json['nameCode']);
   }
 
   static Map<String, dynamic> toDB(dynamic json) {

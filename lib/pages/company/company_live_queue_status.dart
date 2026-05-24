@@ -4,11 +4,11 @@ import 'package:bohiba/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MinesLiveQueueStatus extends StatelessWidget {
+class CompanyLiveQueueStatus extends StatelessWidget {
   final List<QueueStatusList> queueList;
   final List<QueueHeader> header;
 
-  const MinesLiveQueueStatus({
+  const CompanyLiveQueueStatus({
     super.key,
     this.queueList = const [],
     this.header = const [],
@@ -43,7 +43,8 @@ class MinesLiveQueueStatus extends StatelessWidget {
                     textAlign: toElement.textAlign,
                     style: TextStyle(
                       fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
+                      fontWeight:
+                          bohibaTheme.textTheme.headlineLarge!.fontWeight,
                       color: bohibaTheme.textTheme.titleSmall!.color,
                     ),
                   ),
@@ -76,7 +77,8 @@ class MinesLiveQueueStatus extends StatelessWidget {
                         item.id.toString(),
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.headlineLarge!.fontWeight,
                           color: bohibaTheme.textTheme.headlineLarge!.color,
                         ),
                       ),
@@ -98,10 +100,13 @@ class MinesLiveQueueStatus extends StatelessWidget {
                           horizontal: 10.w,
                         ),
                         decoration: BoxDecoration(
-                          color: item.status?.truckWaitingStatusColor.withAlpha(10),
+                          color: item.status?.truckWaitingStatusColor
+                              .withAlpha(10),
                           borderRadius: BorderRadius.circular(5.r),
                           border: Border.all(
-                            color: item.status?.truckWaitingStatusColor.withAlpha(70) ?? bohibaTheme.colorScheme.error,
+                            color: item.status?.truckWaitingStatusColor
+                                    .withAlpha(70) ??
+                                bohibaTheme.colorScheme.error,
                           ),
                         ),
                         alignment: Alignment.center,
@@ -109,8 +114,10 @@ class MinesLiveQueueStatus extends StatelessWidget {
                           item.status?.truckWaitingStatusName ?? '',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
+                            fontSize:
+                                bohibaTheme.textTheme.labelSmall!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.headlineLarge!.fontWeight,
                           ),
                         ),
                       ),
@@ -121,8 +128,10 @@ class MinesLiveQueueStatus extends StatelessWidget {
                         child: Text(
                           '${item.watingTime ?? ''} min',
                           style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
+                            fontSize:
+                                bohibaTheme.textTheme.labelSmall!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.headlineLarge!.fontWeight,
                           ),
                         ),
                       ),

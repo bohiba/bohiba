@@ -1,5 +1,5 @@
 import '../model/user_model.dart';
-import '/model/mines_model.dart';
+import '../model/company_model.dart';
 import '/model/news_model.dart';
 import '/model/trip_model.dart';
 import '/model/truck_model.dart';
@@ -13,15 +13,17 @@ class MasterController extends GetxController {
   final RxList<FavouriteModel> arrFavList = <FavouriteModel>[].obs;
   final RxList<TripModel> arrTrip = <TripModel>[].obs;
   final RxList<TruckModel> arrTruck = <TruckModel>[].obs;
-  final RxList<MinesModel> arrMines = <MinesModel>[].obs;
+  final RxList<CompanyModel> arrMines = <CompanyModel>[].obs;
   final RxList<UserModel> arrDriver = <UserModel>[].obs;
   final RxList arrOwnerExpense = [].obs;
   final RxList arrLookingJob = [].obs;
   final RxList arrPromotion = [].obs;
   final RxList<NewsModel> arrNews = <NewsModel>[].obs;
 
-  Future<Map<String, dynamic>?> mainApi({MethodType type = MethodType.local, bool showLoading = false}) async {
-    Map<String, dynamic>? mainObj = await MainService.mainApi(type: type, showProgress: showLoading);
+  Future<Map<String, dynamic>?> mainApi(
+      {MethodType type = MethodType.local, bool showLoading = false}) async {
+    Map<String, dynamic>? mainObj =
+        await MainService.mainApi(type: type, showProgress: showLoading);
 
     if (mainObj != null) {
       if (mainObj.containsKey('trips')) {

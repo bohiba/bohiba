@@ -1,7 +1,9 @@
+import 'package:bohiba/dist/enums/api_status_code.dart';
+
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
-import '../core/network/dio_serivce.dart';
+import '/core/network/dio_serivce.dart';
 import '/services/pref_utils.dart';
 import '/services/auth_service.dart';
 
@@ -17,17 +19,16 @@ class AuthController extends GetxController {
   final TextEditingController idController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
 
-  Future<int> signin({required String uuid, required String password}) async {
+  Future<StatusCode> signin(
+      {required String uuid, required String password}) async {
     GlobalService.closeKeyboard();
     if (!signInFormKey.currentState!.validate()) {
-      return 0;
+      return StatusCode.unprocessableEntity;
     }
-    if (!await DeviceInfoService.hasInternet()) {
-      return 0;
-    }
-    int successLogin = await AuthService.signin(uuid: uuid, password: password);
+    StatusCode successLogin =
+        await AuthService.signin(uuid: uuid, password: password);
 
-    if (successLogin > 0) {
+    if (successLogin.isSuccess) {
       idController.clear();
       pwdController.clear();
       return successLogin;
@@ -40,7 +41,8 @@ class AuthController extends GetxController {
       return false;
     }
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService.post(ApiEndPoint.apiRefreshToken);
+    ApiResponse serviceResponse =
+        await _dioService.post(ApiEndPoint.apiRefreshToken);
     GlobalService.dismissProgress();
     switch (serviceResponse.statusCode) {
       case 401:

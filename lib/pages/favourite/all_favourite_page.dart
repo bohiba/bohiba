@@ -6,7 +6,7 @@ import '/model/user_fav_model.dart';
 import '/model/user_model.dart';
 import '/model/truck_model.dart';
 import '/pages/driver/driver_tile.dart';
-import '/pages/mines/mines_tile.dart';
+import '../company/company_tile.dart';
 import '/pages/truck/truck_tile.dart';
 import '/routes/app_route.dart';
 import 'package:get/get.dart';
@@ -48,7 +48,10 @@ class AllFavouritePage extends GetView<HomeController> {
                   ),
                 ),
                 onPressed: () {
-                  navigatorState.pushNamed(AppRoute.driver, arguments: favObj.driverId ?? favObj.userDriverId).then((onValue) async {
+                  navigatorState
+                      .pushNamed(AppRoute.driver,
+                          arguments: favObj.driverId ?? favObj.userDriverId)
+                      .then((onValue) async {
                     await controller.getDriverList();
                   });
                 },
@@ -76,7 +79,9 @@ class AllFavouritePage extends GetView<HomeController> {
                   ActionType.other,
                 ],
                 onClick: () {
-                  Get.toNamed(AppRoute.truck, arguments: favObj.truckId ?? favObj.userTruckId)?.then(
+                  Get.toNamed(AppRoute.truck,
+                          arguments: favObj.truckId ?? favObj.userTruckId)
+                      ?.then(
                     (onValue) async {
                       if (onValue != null) {
                         await controller.getTruckList();
@@ -89,7 +94,7 @@ class AllFavouritePage extends GetView<HomeController> {
             }
 
             if (favObj.type == EnumFavouriteType.mines.name) {
-              return MinesTile(
+              return CompanyTile(
                 minesInfo: {
                   'mine_name': favObj.name ?? '',
                   'location': '',

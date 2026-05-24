@@ -8,7 +8,8 @@ class FavouriteService {
 
   static Future<List<FavouriteModel>> getFavouriteList() async {
     String strQuery = ''' SELECT * FROM $tblUserFav ''';
-    List<Map<String, dynamic>> arrFav = await _databaseService.executeQuery(strQuery) ?? [];
+    List<Map<String, dynamic>> arrFav =
+        await _databaseService.executeQuery(strQuery) ?? [];
     List<FavouriteModel> arrFavModel = arrFav.map((e) {
       return FavouriteModel.fromDB(e);
     }).toList();
@@ -24,7 +25,7 @@ class FavouriteService {
     , truckId
     , userDriverId
     , driverId
-    , minesId
+    , companyId
     , isFav
     , name
     , image
@@ -36,7 +37,7 @@ class FavouriteService {
     , ${fav['truckId']}
     , ${fav['userDriverId']}
     , ${fav['driverId']}
-    , ${fav['minesId']}
+    , ${fav['companyId']}
     , ${fav['isFav']}
     , '${fav['name']}'
     , '${fav['image']}'

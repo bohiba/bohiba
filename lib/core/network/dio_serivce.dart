@@ -214,7 +214,7 @@ class DioService {
       statusCode: response.statusCode ?? 500,
       message: data["message"] ?? "Unknown",
       data: data["data"],
-      errorMessage: data["errors"],
+      errorMessage: data["errors"] ?? '',
     );
   }
 

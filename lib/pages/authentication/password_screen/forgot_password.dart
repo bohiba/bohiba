@@ -1,3 +1,6 @@
+import 'package:bohiba/dist/enums/api_status_code.dart';
+
+import '/dist/enums/otp_purpose.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/screen_utils.dart';
 import '/controllers/forgot_password_controller.dart';
@@ -39,7 +42,8 @@ class ForgotPasswordPage extends GetView<ForgotPasswordController> {
                         'No worries, We will send OTP to reset you password mail.',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodySmall!.fontWeight,
                           color: bohibaTheme.textTheme.titleSmall!.color,
                         ),
                       ),
@@ -50,13 +54,13 @@ class ForgotPasswordPage extends GetView<ForgotPasswordController> {
                       PrimaryButton(
                         label: 'SEND OTP',
                         onPressed: () async {
-                          int success = await controller.sendOtp();
-                          if (success > 0) {
+                          StatusCode success = await controller.sendOtp();
+                          if (success.isSuccess) {
                             navigateState.pushNamed(
                               AppRoute.otpScreen,
                               arguments: {
                                 "email": controller.emailController.text.trim(),
-                                "nxtRoute": AppRoute.changePwd,
+                                "otpPurpose": OtpPurpose.forgotPassword,
                               },
                             );
                           }

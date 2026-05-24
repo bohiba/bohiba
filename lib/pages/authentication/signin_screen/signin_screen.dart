@@ -1,4 +1,4 @@
-import '../../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 
 import '/controllers/auth_controller.dart';
@@ -31,7 +31,8 @@ class SignInScreen extends GetView<AuthController> {
             GlobalService.showAlertDialog(
               status: AlertStatus.warning,
               title: 'EXIT',
-              description: 'This will close the application. Do you want to continue?',
+              description:
+                  'This will close the application. Do you want to continue?',
               discardBtnTxt: 'No',
               saveBtnTxt: 'Yes',
               onSave: () {
@@ -65,8 +66,10 @@ class SignInScreen extends GetView<AuthController> {
                           Text(
                             'Login to get Started',
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                              fontSize:
+                                  bohibaTheme.textTheme.bodySmall!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
                               color: bohibaTheme.textTheme.titleSmall!.color,
                             ),
                           ),
@@ -89,7 +92,8 @@ class SignInScreen extends GetView<AuthController> {
                               nextActionType: TextInputAction.next,
                               prefixIcon: Icon(
                                 Icons.person_rounded,
-                                color: bohibaTheme.inputDecorationTheme.prefixIconColor,
+                                color: bohibaTheme
+                                    .inputDecorationTheme.prefixIconColor,
                               ),
                               validateField: (field) {
                                 return controller.validateUUIDField(field);
@@ -118,8 +122,10 @@ class SignInScreen extends GetView<AuthController> {
                               child: Text(
                                 'Forgot UUID?',
                                 style: TextStyle(
-                                  fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                                  fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                                  fontSize: bohibaTheme
+                                      .textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.headlineMedium!.fontWeight,
                                   color: bohibaTheme.textTheme.bodySmall!.color,
                                 ),
                               ),
@@ -136,8 +142,10 @@ class SignInScreen extends GetView<AuthController> {
                               child: Text(
                                 'Forgot Password?',
                                 style: TextStyle(
-                                  fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                                  fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                                  fontSize: bohibaTheme
+                                      .textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.headlineMedium!.fontWeight,
                                   color: bohibaTheme.textTheme.bodySmall!.color,
                                 ),
                               ),
@@ -149,13 +157,6 @@ class SignInScreen extends GetView<AuthController> {
                       PrimaryButton(
                         label: 'Sign In',
                         onPressed: () async {
-                          // Navigator.of(context).pushNamed(
-                          //   AppRoute.navBar,
-                          //   arguments: {
-                          //     "current_index": 0,
-                          //   },
-                          // );
-
                           await controller.signin(
                             uuid: controller.idController.text.trim(),
                             password: controller.pwdController.text.trim(),
@@ -185,7 +186,8 @@ class SignInScreen extends GetView<AuthController> {
                           'Signup',
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
+                            fontWeight: bohibaTheme
+                                .textTheme.headlineMedium!.fontWeight,
                             color: bohibaTheme.textTheme.bodySmall!.color,
                           ),
                         ),

@@ -1,3 +1,6 @@
+import 'package:bohiba/dist/enums/api_status_code.dart';
+import 'package:bohiba/dist/enums/otp_purpose.dart';
+
 import '/controllers/change_password_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,15 +33,17 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                'Set Password',
-                style: bohibaTheme.textTheme.displayMedium,
-              ),
+              child: Obx(() => Text(
+                    controller.otpPurpose.value == OtpPurpose.forgotPassword
+                        ? 'Set Password'
+                        : 'Change Password',
+                    style: bohibaTheme.textTheme.displayMedium,
+                  )),
             ),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Keep Password Safe Always',
+                "Choose a new password that is secure and easy to remember.",
                 style: TextStyle(
                   fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
                   fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
@@ -68,11 +73,30 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
               label: 'Submit',
               onPressed: () async {
                 GlobalService.closeKeyboard();
-                int success = await controller.changePassword();
-                if (success > 0) {
-                  GlobalService.printHandler('Successfully Password changed');
-                  navigateState.pushNamedAndRemoveUntil(
-                      AppRoute.signIn, (Route<dynamic> route) => false);
+
+                StatusCode statusCode = await controller.handleOnSumbit();
+
+                switch (controller.otpPurpose.value) {
+                  case OtpPurpose.forgotPassword:
+                    if (statusCode.isSuccess) {
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => navigateState.popUntil(
+                          (route) => route.settings.name == AppRoute.signIn,
+                        ),
+                      );
+                    }
+                    break;
+                  case OtpPurpose.resetPassword:
+                    if (statusCode.isSuccess) {
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => navigateState.pop(true),
+                      );
+                    }
+                    break;
+                  case OtpPurpose.none:
+                    break;
+                  case OtpPurpose.createUser:
+                    break;
                 }
               },
             )

@@ -1,13 +1,13 @@
 import 'package:bohiba/component/screen_utils.dart';
-import 'package:bohiba/model/mines_model.dart';
+import 'package:bohiba/model/company_model.dart';
 import 'package:bohiba/services/global_service.dart';
 import 'package:bohiba/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class MinesHeader extends StatelessWidget {
-  final MinesModel minesModel;
-  const MinesHeader({super.key, required this.minesModel});
+class CompanyHeader extends StatelessWidget {
+  final CompanyModel minesModel;
+  const CompanyHeader({super.key, required this.minesModel});
 
   @override
   Widget build(BuildContext context) {

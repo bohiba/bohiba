@@ -1,5 +1,5 @@
 import '/component/bohiba_colors.dart';
-import '/pages/mines/all_mines_page.dart';
+import '../../../pages/company/all_company_page.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
 import '/pages/home/home_screen.dart';
 import '/pages/status/status_screen/status_screen.dart';
@@ -26,7 +26,7 @@ class _NavigationBar2State extends State<NavigationBar2> {
     List<Widget> screens = [
       const HomePage(),
       const StatusPage(moveToTab: 0),
-      const AllMinesPage(),
+      const AllCompanyPage(),
       const DashboardPage(),
     ];
 

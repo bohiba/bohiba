@@ -11,7 +11,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 27;
+  static int dbversion = 28;
 
   /*================  DB CONFIG  =================== */
 
@@ -38,8 +38,10 @@ class DatabaseService {
       dbPath,
       version: dbversion,
       onCreate: (db, version) async => await _onCreateDB(dbCreate: db),
-      onDowngrade: (db, oldVersion, newVersion) async => await _recreateDB(dbReCreate: db),
-      onUpgrade: (db, oldVersion, newVersion) async => await _recreateDB(dbReCreate: db),
+      onDowngrade: (db, oldVersion, newVersion) async =>
+          await _recreateDB(dbReCreate: db),
+      onUpgrade: (db, oldVersion, newVersion) async =>
+          await _recreateDB(dbReCreate: db),
     );
   }
 
@@ -129,21 +131,36 @@ class DatabaseService {
         await trxcn.execute('DROP TABLE IF EXISTS $tblNews');
         await trxcn.execute('DROP TABLE IF EXISTS $tblRating');
 
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblProfile' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblLoggedInUserList' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblUserFav' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblTrucks' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblTrips' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblDriver' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblReassignment' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblTripExpense' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblTripPayment' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblDocument' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblOwnerExpense' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblOpenDriver' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblMines' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblNews' ''');
-        await trxcn.execute('''DELETE FROM sqlite_sequence WHERE name = '$tblRating' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblProfile' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblLoggedInUserList' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblUserFav' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblTrucks' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblTrips' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblDriver' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblReassignment' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblTripExpense' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblTripPayment' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblDocument' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblOwnerExpense' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblOpenDriver' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblMines' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblNews' ''');
+        await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblRating' ''');
         await trxcn.execute(strTableProfile);
         await trxcn.execute(strLoggedInUser);
         await trxcn.execute(strFavourite);
@@ -168,7 +185,8 @@ class DatabaseService {
   Future<void> clearTbl(String tblName) async {
     if (_database != null && _database!.isOpen) {
       await _database!.execute('delete from $tblName');
-      await _database!.execute('''delete from sqlite_sequence where name='$tblName';''');
+      await _database!
+          .execute('''delete from sqlite_sequence where name='$tblName';''');
     }
   }
 
@@ -204,7 +222,8 @@ class DatabaseService {
     }
   }
 
-  Future<int> insertAllData(String tableName, List<Map<String, dynamic>> dataList) async {
+  Future<int> insertAllData(
+      String tableName, List<Map<String, dynamic>> dataList) async {
     try {
       if (_database == null || !(_database!.isOpen)) {
         await initDB();
@@ -311,7 +330,7 @@ class DatabaseService {
   , truckId INTEGER
   , userDriverId INTEGER
   , driverId INTEGER
-  , minesId INTEGER
+  , companyId INTEGER
   , isFav INTEGER NOT NULL DEFAULT 0
   , name TEXT
   , image TEXT
