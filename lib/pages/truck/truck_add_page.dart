@@ -1,3 +1,5 @@
+import 'package:bohiba/routes/app_route.dart';
+
 import '../../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,12 +29,12 @@ class AddTruckPage extends GetView<TruckAllController> {
             GlobalService.showAlertDialog(
               status: AlertStatus.failure,
               title: 'Verification',
-              description: 'Are your sure? You want to discontinue you verification process',
+              description:
+                  'Are your sure? You want to discontinue you verification process',
               discardBtnTxt: 'No',
               saveBtnTxt: 'Yes',
               onSave: () {
-                navigateState.pop();
-                navigateState.pop(true);
+                Get.offAllNamed(AppRoute.signIn);
               },
             );
           }
@@ -68,13 +70,28 @@ class AddTruckPage extends GetView<TruckAllController> {
                   ),
                 ),
                 PrimaryButton(
-                    label: "VERIFY",
-                    onPressed: () async {
-                      int success = await controller.addVehicle();
-                      if (success > 0) {
-                        navigateState.pop(true);
-                      }
-                    }),
+                  label: "VERIFY",
+                  onPressed: () async {
+                    int success = await controller.addVehicle();
+                    if (success > 0) {
+                      navigateState.pop(true);
+                    }
+                  },
+                ),
+                CheckboxListTile(
+                  value: false,
+                  onChanged: (value) {},
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    'By continuing, you authorize us to fetch and verify your vehicle registration details from government records.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
+                      fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                      color: bohibaTheme.textTheme.titleSmall!.color,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:logger/web.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../dist/enums/app_enums.dart';
@@ -461,6 +462,17 @@ class GlobalService {
       Get.back();
     }
   }
+
+  static final logger = Logger(
+    printer: PrettyPrinter(
+      methodCount: 0,
+      errorMethodCount: 5,
+      lineLength: 120,
+      colors: true,
+      printEmojis: true,
+      dateTimeFormat: DateTimeFormat.dateAndTime,
+    ),
+  );
 
   static printHandler(String log) {
     debugPrint("\n=================\n$log\n================\n");

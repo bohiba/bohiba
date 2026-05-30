@@ -36,7 +36,7 @@ class HomePage extends GetView<HomeController> {
               HomeImageSliderSection(),
               HomeTopTruck(),
               HomeDriverSection(),
-              HomeMinesSection(),
+              HomeCompanySection(),
               HomeNewsSection(),
             ]),
           )

@@ -32,8 +32,10 @@ class OtpController extends GetxController {
   }
 
   void stopTimer() {
-    _timer = null;
+    // Cancel first, then null — reversed order was a bug that let the timer
+    // run forever because the reference was cleared before cancel() could fire.
     _timer?.cancel();
+    _timer = null;
     remainingSeconds.value = 0;
   }
 
@@ -94,9 +96,9 @@ class OtpController extends GetxController {
   }
 
   @override
-  void dispose() {
+  void onClose() {
     otpController.dispose();
     stopTimer();
-    super.dispose();
+    super.onClose();
   }
 }

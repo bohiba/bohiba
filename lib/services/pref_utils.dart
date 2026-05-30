@@ -116,4 +116,6 @@ class PrefUtils {
   static const String roleKey = 'user_role';
   static const String showConnectDialog = 'show_con_dialog';
   static const String keyFirebaseToken = 'firebase_token';
+  static const String keyLat = 'key_lat';
+  static const String keyLong = 'key_long';
 }

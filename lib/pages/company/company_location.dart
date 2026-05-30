@@ -14,7 +14,8 @@ class CompanyLocation extends GetView<MinesController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        String? markerId = controller.minesModel.value.id.toString();
+        String markerId =
+            controller.minesModel.value?.id?.toString() ?? "marker_Id";
 
         return Column(
           children: [
@@ -27,14 +28,14 @@ class CompanyLocation extends GetView<MinesController> {
                   padding: EdgeInsets.zero,
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: false,
-                  mapType: MapType.hybrid,
+                  mapType: MapType.satellite,
                   onMapCreated: (mapCtrl) async {
                     controller.mapController = mapCtrl;
                     final model = controller.minesModel.value;
 
-                    if (model.latitude != null && model.longitude != null) {
+                    if (model?.latitude != null && model?.longitude != null) {
                       await controller.moveCamera(
-                          model.latitude!, model.longitude!);
+                          model!.latitude!, model.longitude!);
                     }
                   },
                   // Uncomment if you want to drag map
@@ -45,19 +46,22 @@ class CompanyLocation extends GetView<MinesController> {
                     ),
                   },*/
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(controller.minesModel.value.latitude!,
-                        controller.minesModel.value.longitude!),
+                    target: LatLng(
+                      controller.minesModel.value?.latitude ?? 0.0,
+                      controller.minesModel.value?.longitude ?? 0.0,
+                    ),
                     zoom: 15,
                   ),
                   markers: {
                     Marker(
                       markerId: MarkerId(markerId),
                       position: LatLng(
-                        controller.minesModel.value.latitude!,
-                        controller.minesModel.value.longitude!,
+                        controller.minesModel.value?.latitude ?? 0.0,
+                        controller.minesModel.value?.longitude ?? 0.0,
                       ),
                       infoWindow: InfoWindow(
-                        title: controller.minesModel.value.name,
+                        title:
+                            controller.minesModel.value?.name ?? 'Mining Site',
                       ),
                     ),
                   },

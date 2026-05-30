@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'package:bohiba/bindings/app_theme_binding.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 
+import 'bindings/splash_binding.dart';
 import 'theme/bohiba_theme.dart';
 import '/controllers/theme_controller.dart';
 import '/services/firebase_app_service.dart';
@@ -15,14 +19,43 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+    await FirebaseAppService.initFirebase();
+
+    FirebaseMessaging.onBackgroundMessage(
+      firebaseMessagingBackgroundHandler,
+    );
 
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(
+        error,
+        stack,
+        fatal: true,
+      );
+      return true;
+    };
+
+    AppThemeBinding();
+
     runApp(MyApp());
-  }, (error, errorstack) {
-    GlobalService.printHandler('\n=============\n|  App Crashed: ${error.toString()} |\n=============\n');
+  }, (error, stack) async {
+    await FirebaseCrashlytics.instance.recordError(
+      error,
+      stack,
+      fatal: true,
+    );
+
+    GlobalService.printHandler(
+      '\n=============\n'
+      '| App Crashed: ${error.toString()} |\n'
+      '=============\n',
+    );
   });
 }
 
@@ -35,11 +68,14 @@ class MyApp extends StatelessWidget {
     final controller = Get.put<ThemeController>(ThemeController());
     return Obx(() {
       return AnimatedTheme(
-        data: controller.isDarkMode ? BohibaTheme.lightTheme : BohibaTheme.darkTheme,
+        data: controller.isDarkMode
+            ? BohibaTheme.lightTheme
+            : BohibaTheme.darkTheme,
         duration: const Duration(seconds: 1),
         curve: Curves.easeIn,
         child: ScreenUtilInit(
           child: GetMaterialApp(
+            initialBinding: SplashBinding(),
             theme: BohibaTheme.lightTheme,
             darkTheme: BohibaTheme.darkTheme,
             themeMode: controller.themeMode.value,

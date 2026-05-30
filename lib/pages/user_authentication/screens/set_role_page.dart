@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/enums/enum_role_validation.dart';
+
 import '../../../dist/enums/app_enums.dart';
 import '/services/global_service.dart';
 
@@ -30,12 +32,12 @@ class SetRolePage extends GetView<SetRoleController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.failure,
                 title: 'Verification',
-                description: 'Are your sure? You want to discontinue you verification process',
+                description:
+                    'Are your sure? You want to discontinue you verification process',
                 discardBtnTxt: 'No',
                 saveBtnTxt: 'Yes',
                 onSave: () {
-                  navigateState.pop();
-                  navigateState.pop(true);
+                  Get.offAllNamed(AppRoute.signIn);
                 },
               );
             }
@@ -73,20 +75,27 @@ class SetRolePage extends GetView<SetRoleController> {
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Container(
-                          color: controller.roleObj.containsValue(controller.userRoleList[index]['role_id']) ? bohibaTheme.cardColor : Colors.transparent,
+                          color: controller.roleObj.value?.roleId ==
+                                  controller.userRoleList[index].roleId
+                              ? bohibaTheme.cardColor
+                              : Colors.transparent,
                           child: IconTextTile(
                             padding: EdgeInsets.all(ScreenUtils.width10),
                             onTap: () {
-                              controller.roleObj.value = controller.selectAddress(index);
+                              controller.roleObj.value =
+                                  controller.selectRole(index);
                             },
-                            text: controller.userRoleList[index]['label'].toString(),
-                            subtitle: controller.userRoleList[index]['subTitle'].toString(),
+                            text:
+                                controller.userRoleList[index].label.toString(),
+                            subtitle: controller.userRoleList[index].subTitle
+                                .toString(),
                             widget: RadioGroup(
                               groupValue: controller.selectedIndex.value,
                               onChanged: (v) {
                                 if (v == null) {
                                 } else {
-                                  controller.roleObj.value = controller.selectAddress(index);
+                                  controller.roleObj.value =
+                                      controller.selectRole(index);
                                 }
                               },
                               child: Radio(value: index),
@@ -100,15 +109,65 @@ class SetRolePage extends GetView<SetRoleController> {
                   Padding(
                     padding: EdgeInsets.only(bottom: ScreenUtils.height30),
                     child: PrimaryButton(
-                      onPressed: controller.roleObj.isEmpty
+                      onPressed: controller.roleObj.value == null
                           ? null
                           : () async {
                               int sucess = await controller.setRole();
-                              if (sucess > 0) {
-                                navigateState.popAndPushNamed(
-                                  AppRoute.userAuthScreen,
-                                  arguments: {"role_id": controller.roleObj['role_id']},
-                                );
+                              EnumRoleValidation validationType =
+                                  controller.enumRoleValidation.value;
+
+                              UserRoleType role =
+                                  UserRoleType.values.firstWhere(
+                                (e) =>
+                                    e.value == controller.roleObj.value?.roleId,
+                                orElse: () => UserRoleType.guest,
+                              );
+
+                              if (sucess <= 0) return;
+
+                              switch (validationType) {
+                                case EnumRoleValidation.whileSignIn:
+                                  switch (role) {
+                                    case UserRoleType.truckOwner:
+                                      navigateState.pushNamedAndRemoveUntil(
+                                        AppRoute.truckOwnerNavBar,
+                                        (_) => false,
+                                      );
+                                      break;
+                                    case UserRoleType.driver:
+                                      navigateState.pushNamedAndRemoveUntil(
+                                        AppRoute.truckDriverNavBar,
+                                        (_) => false,
+                                      );
+                                      break;
+                                    default:
+                                      navigateState.popUntilWithResult(
+                                        (route) =>
+                                            route.settings.name ==
+                                            AppRoute.signIn,
+                                        null,
+                                      );
+                                  }
+                                  break;
+                                case EnumRoleValidation.whileSignUp:
+                                  navigateState.popAndPushNamed(
+                                    AppRoute.userAuthScreen,
+                                    arguments: {
+                                      "role_id": role.value,
+                                      "token": controller.token.value,
+                                      "canPop": controller.canPop,
+                                    },
+                                  );
+                                  break;
+                                case EnumRoleValidation.whileUpdating:
+                                  navigateState.pop();
+                                  break;
+                                default:
+                                  navigateState.popUntilWithResult(
+                                    (route) =>
+                                        route.settings.name == AppRoute.signIn,
+                                    null,
+                                  );
                               }
                             },
                       label: "Set Role",

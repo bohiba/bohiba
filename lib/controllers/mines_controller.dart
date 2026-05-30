@@ -1,12 +1,14 @@
+import '/services/company_service.dart';
+
 import '/model/truck_model.dart';
-import '../pages/company/company_live_queue_status.dart';
-import '../model/company_model.dart';
+import '/pages/company/company_live_queue_status.dart';
+import '/model/company_model.dart';
 
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MinesController extends GetxController {
-  Rx<CompanyModel> minesModel = CompanyModel().obs;
+  Rx<CompanyModel?> minesModel = CompanyModel().obs;
   RxList<CompanyModel> arrMines = <CompanyModel>[].obs;
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;
   RxList<QueueStatusList> arrQueue = <QueueStatusList>[].obs;
@@ -19,9 +21,11 @@ class MinesController extends GetxController {
     super.onInit();
     minesModel.value = Get.arguments as CompanyModel;
     Future.delayed(Duration.zero, () async {
-      ever(minesModel, (model) async {
-        if (model.latitude != null && model.longitude != null) {
-          lastPosition = LatLng(model.latitude!, model.longitude!);
+      minesModel.value =
+          await CompanyService.getCompany(minesModel.value?.id ?? 0);
+      ever(minesModel, (CompanyModel? model) async {
+        if (model?.latitude != null && model?.longitude != null) {
+          lastPosition = LatLng(model!.latitude!, model.longitude!);
           await moveCamera(lastPosition!.latitude, lastPosition!.longitude);
         }
       });
@@ -68,71 +72,71 @@ class MinesController extends GetxController {
       ),
       QueueStatusList(
         id: 1,
-        vechileId: 'OD14AC5857',
-        status: 0,
+        vechileId: 'MH12KT9045',
+        status: 3,
         watingTime: '43',
         owned: 0,
       ),
       QueueStatusList(
         id: 2,
-        vechileId: 'OD14X7724',
-        status: 1,
+        vechileId: 'KA05PL3321',
+        status: 3,
         watingTime: '42',
         owned: 0,
       ),
       QueueStatusList(
         id: 3,
-        vechileId: 'OD14X7724',
+        vechileId: 'TN09ZX1184',
         status: 3,
         watingTime: '42',
         owned: 0,
       ),
       QueueStatusList(
         id: 4,
-        vechileId: 'OD14X7724',
-        status: 2,
-        watingTime: '42',
-        owned: 0,
-      ),
-      QueueStatusList(
-        id: 5,
-        vechileId: 'OD14X7724',
-        status: 1,
-        watingTime: '42',
-        owned: 0,
-      ),
-      QueueStatusList(
-        id: 6,
-        vechileId: 'OD14X7724',
-        status: 1,
-        watingTime: '42',
-        owned: 0,
-      ),
-      QueueStatusList(
-        id: 7,
-        vechileId: 'OD14X7724',
+        vechileId: 'CG04LM7623',
         status: 3,
         watingTime: '42',
         owned: 0,
       ),
       QueueStatusList(
-        id: 8,
-        vechileId: 'OD14X7724',
+        id: 5,
+        vechileId: 'WB22QR4410',
         status: 2,
         watingTime: '42',
         owned: 0,
       ),
       QueueStatusList(
-        id: 9,
-        vechileId: 'OD14X7724',
+        id: 6,
+        vechileId: 'RJ18DF9032',
+        status: 2,
+        watingTime: '42',
+        owned: 0,
+      ),
+      QueueStatusList(
+        id: 7,
+        vechileId: 'AP16GH7285',
         status: 1,
         watingTime: '42',
         owned: 0,
       ),
       QueueStatusList(
+        id: 8,
+        vechileId: 'BR11TY5541',
+        status: 1,
+        watingTime: '42',
+        owned: 0,
+      ),
+      QueueStatusList(
+        id: 9,
+        vechileId: 'UP32JK6678',
+        status: 0,
+        watingTime: '42',
+        owned: 0,
+      ),
+      QueueStatusList(
         id: 10,
-        vechileId: 'OD14X7724',
-        status: 2,
+        vechileId: 'GJ01MN2456',
+        status: 0,
         watingTime: '42',
         owned: 0,
       ),

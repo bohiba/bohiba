@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:bohiba/core/network/dio_interceptor.dart';
-
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/pref_utils.dart';
 import 'package:dio/dio.dart';
+
+import 'dio_interceptor.dart';
 
 class DioService {
   static final DioService _instance = DioService._internal();
@@ -45,17 +46,33 @@ class DioService {
     String endpoint, {
     Map<String, dynamic>? queryParams,
   }) async {
-    final Response response = await dio.get(
-      endpoint,
-      queryParameters: queryParams,
-      cancelToken: CancelToken(),
-      options: Options(
-        extra: {
-          'withToken': false,
-        },
-      ),
-    );
-    return _handleMapResponse(response);
+    try {
+      final Response response = await dio.get(
+        endpoint,
+        queryParameters: queryParams,
+        cancelToken: CancelToken(),
+        options: Options(
+          extra: {
+            'withToken': false,
+          },
+        ),
+      );
+      return _handleMapResponse(response);
+    } on DioException catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      return MapResponse(
+        status: false,
+        statusCode: e.response?.statusCode ?? 500,
+        message: e.response?.data?['message'] ?? "Unknown",
+      );
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+      return MapResponse(
+        status: false,
+        statusCode: 500,
+        message: "Unknown",
+      );
+    }
   }
 
   Future<ApiResponse> get(
@@ -63,16 +80,34 @@ class DioService {
     Map<String, dynamic>? queryParams,
     bool withToken = true,
   }) async {
-    final Response response = await dio.get(
-      endpoint,
-      queryParameters: queryParams,
-      options: Options(
-        extra: {
-          'withToken': withToken,
-        },
-      ),
-    );
-    return _handleResponse(response);
+    try {
+      final Response response = await dio.get(
+        endpoint,
+        queryParameters: queryParams,
+        options: Options(
+          extra: {
+            'withToken': withToken,
+          },
+        ),
+      );
+      return _handleResponse(response);
+    } on DioException catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      return ApiResponse(
+        status: false,
+        statusCode: e.response?.statusCode ?? 500,
+        message: 'Failure',
+        errorMessage: e.response?.data?['errors'] ?? "Something went wrong",
+      );
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+      return ApiResponse(
+        status: false,
+        statusCode: 500,
+        message: "Failure",
+        errorMessage: "Unknown",
+      );
+    }
   }
 
   Future<ApiResponse> post(
@@ -82,16 +117,34 @@ class DioService {
     String? contentType,
     bool withToken = true,
   }) async {
-    final Response response = await dio.post(
-      endpoint,
-      data: body,
-      options: Options(
-        headers: headers,
-        contentType: contentType ?? Headers.jsonContentType,
-        extra: {'withToken': withToken},
-      ),
-    );
-    return _handleResponse(response);
+    try {
+      final Response response = await dio.post(
+        endpoint,
+        data: body,
+        options: Options(
+          headers: headers,
+          contentType: contentType ?? Headers.jsonContentType,
+          extra: {'withToken': withToken},
+        ),
+      );
+      return _handleResponse(response);
+    } on DioException catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      return ApiResponse(
+        status: false,
+        statusCode: e.response?.statusCode ?? 500,
+        message: 'Failure',
+        errorMessage: e.response?.data?['message'] ?? "Unknown",
+      );
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+      return ApiResponse(
+        status: false,
+        statusCode: 500,
+        message: "Failure",
+        errorMessage: "Unknown",
+      );
+    }
   }
 
   Future<ApiResponse> put(
@@ -99,12 +152,30 @@ class DioService {
     Map<String, dynamic>? body,
     bool withToken = true,
   }) async {
-    final response = await dio.put(
-      endpoint,
-      data: body,
-      options: Options(extra: {'withToken': withToken}),
-    );
-    return _handleResponse(response);
+    try {
+      final response = await dio.put(
+        endpoint,
+        data: body,
+        options: Options(extra: {'withToken': withToken}),
+      );
+      return _handleResponse(response);
+    } on DioException catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      return ApiResponse(
+        status: false,
+        statusCode: e.response?.statusCode ?? 500,
+        message: 'Failure',
+        errorMessage: e.response?.data?['message'] ?? "Unknown",
+      );
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+      return ApiResponse(
+        status: false,
+        statusCode: 500,
+        message: "Failure",
+        errorMessage: "Unknown",
+      );
+    }
   }
 
   Future<ApiResponse> delete(
@@ -112,12 +183,30 @@ class DioService {
     Map<String, dynamic>? data,
     bool withToken = true,
   }) async {
-    final response = await dio.delete(
-      endpoint,
-      data: data,
-      options: Options(extra: {'withToken': withToken}),
-    );
-    return _handleResponse(response);
+    try {
+      final response = await dio.delete(
+        endpoint,
+        data: data,
+        options: Options(extra: {'withToken': withToken}),
+      );
+      return _handleResponse(response);
+    } on DioException catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      return ApiResponse(
+        status: false,
+        statusCode: e.response?.statusCode ?? 500,
+        message: 'Failure',
+        errorMessage: e.response?.data?['message'] ?? "Unknown",
+      );
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+      return ApiResponse(
+        status: false,
+        statusCode: 500,
+        message: "Failure",
+        errorMessage: "Unknown",
+      );
+    }
   }
 
   Future<ApiResponse> upload(
@@ -127,33 +216,51 @@ class DioService {
     required String fileField,
     bool withToken = true,
   }) async {
-    final formData = FormData();
+    try {
+      final formData = FormData();
+      body?.forEach((key, value) {
+        formData.fields.add(MapEntry(key, value.toString()));
+      });
 
-    body?.forEach((key, value) {
-      formData.fields.add(MapEntry(key, value.toString()));
-    });
-
-    for (var file in files) {
-      formData.files.add(
-        MapEntry(
-          fileField,
-          await MultipartFile.fromFile(
-            file.path,
-            filename: file.path.split('/').last,
+      for (var file in files) {
+        formData.files.add(
+          MapEntry(
+            fileField,
+            await MultipartFile.fromFile(
+              file.path,
+              filename: file.path.split('/').last,
+            ),
           ),
-        ),
+        );
+      }
+
+      final response = await dio.post(
+        endpoint,
+        data: formData,
+        options: Options(extra: {'withToken': withToken}),
+      );
+      return _handleResponse(response);
+    } on DioException catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      return ApiResponse(
+        status: false,
+        statusCode: e.response?.statusCode ?? 500,
+        message: 'Failure',
+        errorMessage: e.response?.data?['message'] ?? "Unknown",
+      );
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
+      return ApiResponse(
+        status: false,
+        statusCode: 500,
+        message: "Failure",
+        errorMessage: "Unknown",
       );
     }
-
-    final response = await dio.post(
-      endpoint,
-      data: formData,
-      options: Options(extra: {'withToken': withToken}),
-    );
-    return _handleResponse(response);
   }
 
-  Future<ApiResponse> handleApiWithRetry(Future<ApiResponse> Function() apiCall) async {
+  Future<ApiResponse> handleApiWithRetry(
+      Future<ApiResponse> Function() apiCall) async {
     ApiResponse response = await apiCall();
 
     if (response.statusCode == 498) {
@@ -186,14 +293,19 @@ class DioService {
       }
 
       return false;
-    } catch (e) {
+    } on DioException catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
+      return false;
+    } catch (e, stack) {
+      FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
       return false;
     }
   }
 
   ApiResponse _handleResponse(Response<dynamic> response) {
     final data = response.data;
-    if (response.data is String && response.data.toString().contains('<!DOCTYPE html>')) {
+    if (response.data is String &&
+        response.data.toString().contains('<!DOCTYPE html>')) {
       return ApiResponse(
         status: false,
         statusCode: 401,
@@ -220,7 +332,8 @@ class DioService {
 
   MapResponse _handleMapResponse(Response<dynamic> response) {
     final data = response.data;
-    if (response.data is String && response.data.toString().contains('<!DOCTYPE html>')) {
+    if (response.data is String &&
+        response.data.toString().contains('<!DOCTYPE html>')) {
       return MapResponse(
         status: false,
         statusCode: 401,

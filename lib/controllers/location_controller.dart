@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:bohiba/dist/enums/location_enums.dart';
+import 'package:dio/dio.dart';
 
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
-import '../core/network/dio_serivce.dart';
+import '/core/network/dio_serivce.dart';
 import '/services/global_service.dart';
-
-import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -99,7 +98,7 @@ class LocationController extends GetxController {
         return;
       }
 
-      await getCurrentLocation();
+      await getCurrentLocation(isShowAppLoader: false);
 
       status.value = LocationStateStatus.success;
     } catch (e, stack) {
@@ -111,9 +110,11 @@ class LocationController extends GetxController {
     }
   }
 
-  Future<Position?> getCurrentLocation() async {
+  Future<Position?> getCurrentLocation({bool isShowAppLoader = true}) async {
     try {
-      GlobalService.showProgress();
+      if (isShowAppLoader) {
+        GlobalService.showProgress();
+      }
       status.value = LocationStateStatus.loading;
 
       final position = await Geolocator.getCurrentPosition(
@@ -125,10 +126,14 @@ class LocationController extends GetxController {
       isMockLocation.value = position.isMocked;
 
       status.value = LocationStateStatus.success;
-      GlobalService.dismissProgress();
+      if (isShowAppLoader) {
+        GlobalService.dismissProgress();
+      }
       return position;
     } catch (e, stack) {
-      GlobalService.dismissProgress();
+      if (isShowAppLoader) {
+        GlobalService.dismissProgress();
+      }
       _handleError(
         e,
         stack,
@@ -228,77 +233,136 @@ class LocationController extends GetxController {
     if (!await DeviceInfoService.hasInternet()) {
       return null;
     }
+
     GlobalService.showProgress();
     arrLocation.clear();
-    Position position = currentPosition.value!;
-    List<Placemark> arrPlacemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
+    userTitleMsg.value = '';
+    userSubTitle.value = '';
+    final Position? position = currentPosition.value;
+    if (position == null) {
+      userTitleMsg.value = 'No GPS Position';
+      userSubTitle.value =
+          'Could not read your location. Tap Refresh to try again.';
+      GlobalService.dismissProgress();
+      return null;
+    }
 
-    List locList = [];
-    String? pinResObj;
+    try {
+      final List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
 
-    for (Placemark placemark in arrPlacemarks) {
-      if (placemark.postalCode == null) {
+      if (placemarks.isEmpty) {
         userTitleMsg.value = 'No Location Found';
-        userSubTitle.value = 'Failed while fetching location. Refresh to try again.';
+        userSubTitle.value = 'No address found for your current location.';
         GlobalService.dismissProgress();
         return null;
-      } else {
-        if (placemark.isoCountryCode == 'IN') {
-          try {
-            var response = await Dio().get('${ApiEndPoint.apiPostalCode}/${placemark.postalCode}');
-            if (response.data[0]['PostOffice'] == null) {
-              userTitleMsg.value = 'No Location Found';
-              userSubTitle.value = 'Failed while fetching location. Refresh to try again.';
-              GlobalService.dismissProgress();
-              return null;
-            }
-            pinResObj = response.data[0]['PostOffice'][0]['District'];
-          } catch (e) {
-            GlobalService.dismissProgress();
-            userTitleMsg.value = 'Failed';
-            userSubTitle.value = 'Unstable network connection! Refresh to try again';
-            return null;
-          }
-        } else {
+      }
+
+      final List<Map<String, dynamic>> locList = [];
+
+      for (final Placemark placemark in placemarks) {
+        if (placemark.isoCountryCode != 'IN') {
           userTitleMsg.value = 'No Service';
-          userSubTitle.value = 'Ooop`s currently we are not available on this region.';
+          userSubTitle.value = 'Bohiba is currently available in India only.';
           GlobalService.dismissProgress();
           return null;
         }
-        Map<String, dynamic> placemarkObj = {
+
+        // Skip placemarks that carry no PIN — they add no useful address data.
+        if (placemark.postalCode == null || placemark.postalCode!.isEmpty) {
+          continue;
+        }
+
+        // Prefer the postal API for accurate district name.
+        // If the API is unreachable or its cert is expired, fall back to the
+        // subAdministrativeArea field that the geocoding package already provides.
+        final String district = await _resolveDistrict(
+          postalCode: placemark.postalCode!,
+          fallback: placemark.subAdministrativeArea ?? '',
+        );
+
+        locList.add({
           'name': placemark.name ?? '',
           'locality': placemark.subLocality ?? '',
           'street': placemark.street ?? '',
           'city': placemark.locality ?? '',
-          'district': pinResObj ?? placemark.subAdministrativeArea ?? '',
+          'district': district,
           'state': placemark.administrativeArea ?? '',
           'pincode': placemark.postalCode ?? '',
           'country': placemark.country ?? '',
-        };
-        locList.add(placemarkObj);
+        });
       }
+
+      if (locList.isEmpty) {
+        userTitleMsg.value = 'No Location Found';
+        userSubTitle.value =
+            'Failed while fetching location. Tap Refresh to try again.';
+        GlobalService.dismissProgress();
+        return null;
+      }
+
+      final Map<String, dynamic> locationObj = {
+        'address': locList,
+        'lat_lang': {
+          'latitude': position.latitude,
+          'longitude': position.longitude,
+        },
+      };
+
+      latLang.value = locationObj;
+      arrLocation.value = locList;
+      GlobalService.dismissProgress();
+      return locationObj;
+    } catch (e, stack) {
+      GlobalService.dismissProgress();
+      userTitleMsg.value = 'Failed';
+      userSubTitle.value = 'Unable to fetch address. Tap Refresh to try again.';
+      _handleError(e, stack, customMessage: 'Failed to resolve address');
+      return null;
     }
+  }
 
-    Map<String, dynamic> locationObj = {
-      'address': locList,
-      'lat_lang': {
-        "latitude": position.latitude,
-        "longitude": position.longitude,
-      },
-    };
+  /// Resolves the district name from the India Postal Code API.
+  ///
+  /// Uses the shared [dioService] Dio instance (not a bare `Dio()`) so all
+  /// requests share the app's connection pool and timeout config.
+  ///
+  /// Falls back to [fallback] — the district value from the geocoding
+  /// package — when the postal API is unreachable, returns bad data, or has
+  /// an expired TLS certificate. The address still populates; only the
+  /// district source changes silently.
+  Future<String> _resolveDistrict({
+    required String postalCode,
+    required String fallback,
+  }) async {
+    try {
+      final response = await dioService.dio.get(
+        '${ApiEndPoint.apiPostalCode}/$postalCode',
+        options: Options(extra: {'withToken': false}),
+      );
 
-    if (arrPlacemarks.isEmpty) {
-      throw Exception('No address found for location');
+      final data = response.data;
+      if (data == null || data is! List || data.isEmpty) {
+        return fallback;
+      }
+
+      final postOffices = data[0]['PostOffice'];
+      if (postOffices == null || postOffices is! List || postOffices.isEmpty) {
+        return fallback;
+      }
+
+      return (postOffices[0]['District'] as String?)?.trim().isNotEmpty == true
+          ? postOffices[0]['District'] as String
+          : fallback;
+    } catch (e) {
+      // api.postalpincode.in has intermittent uptime and cert-expiry issues.
+      // Log it but never surface it to the user — the fallback district is good enough.
+      GlobalService.printHandler(
+          'Postal PIN API unavailable for $postalCode — using geocoding fallback. Error: $e');
+      return fallback;
     }
-
-    // final place = arrPlacemarks.first;
-    latLang.value = locationObj;
-    arrLocation.value = (latLang['address'] as List).map((toElement) => Map<String, dynamic>.from(toElement)).toList();
-    GlobalService.dismissProgress();
-    return locationObj;
   }
 
   Map<String, dynamic> selectAddress(int index) {

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
@@ -11,7 +14,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 28;
+  static int dbversion = 31;
 
   /*================  DB CONFIG  =================== */
 
@@ -59,6 +62,7 @@ class DatabaseService {
     await dbCreate.execute(strOwnerExpense);
     await dbCreate.execute(strOpenDriver);
     await dbCreate.execute(strMines);
+    await dbCreate.execute(strMinerals);
     await dbCreate.execute(strNews);
     await dbCreate.execute(strRating);
   }
@@ -79,6 +83,7 @@ class DatabaseService {
         await trxcn.execute('DROP TABLE IF EXISTS $tblOwnerExpense');
         await trxcn.execute('DROP TABLE IF EXISTS $tblOpenDriver');
         await trxcn.execute('DROP TABLE IF EXISTS $tblMines');
+        await trxcn.execute('DROP TABLE IF EXISTS $tblMinerals');
         await trxcn.execute('DROP TABLE IF EXISTS $tblNews');
         await trxcn.execute('DROP TABLE IF EXISTS $tblRating');
 
@@ -95,10 +100,16 @@ class DatabaseService {
         await trxcn.execute(strOwnerExpense);
         await trxcn.execute(strOpenDriver);
         await trxcn.execute(strMines);
+        await trxcn.execute(strMinerals);
         await trxcn.execute(strNews);
         await trxcn.execute(strRating);
       });
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'DB_RECREATE',
+        error: e,
+        stack: stack,
+      );
       GlobalService.printHandler('DB RECREATE ERROR: $e');
     }
   }
@@ -128,6 +139,7 @@ class DatabaseService {
         await trxcn.execute('DROP TABLE IF EXISTS $tblOwnerExpense');
         await trxcn.execute('DROP TABLE IF EXISTS $tblOpenDriver');
         await trxcn.execute('DROP TABLE IF EXISTS $tblMines');
+        await trxcn.execute('DROP TABLE IF EXISTS $tblMinerals');
         await trxcn.execute('DROP TABLE IF EXISTS $tblNews');
         await trxcn.execute('DROP TABLE IF EXISTS $tblRating');
 
@@ -158,6 +170,8 @@ class DatabaseService {
         await trxcn.execute(
             '''DELETE FROM sqlite_sequence WHERE name = '$tblMines' ''');
         await trxcn.execute(
+            '''DELETE FROM sqlite_sequence WHERE name = '$tblMinerals' ''');
+        await trxcn.execute(
             '''DELETE FROM sqlite_sequence WHERE name = '$tblNews' ''');
         await trxcn.execute(
             '''DELETE FROM sqlite_sequence WHERE name = '$tblRating' ''');
@@ -174,10 +188,16 @@ class DatabaseService {
         await trxcn.execute(strOwnerExpense);
         await trxcn.execute(strOpenDriver);
         await trxcn.execute(strMines);
+        await trxcn.execute(strMinerals);
         await trxcn.execute(strNews);
         await trxcn.execute(strRating);
       });
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'DB_RECREATE',
+        error: e,
+        stack: stack,
+      );
       GlobalService.printHandler('CLEAR DB ERROR ${e.toString()}');
     }
   }
@@ -197,7 +217,13 @@ class DatabaseService {
         await initDB();
       }
       return await _database!.rawInsert(query);
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'RAW_INSERT',
+        error: e,
+        stack: stack,
+        query: query,
+      );
       GlobalService.printHandler('DB PUT ERROR: $e');
       return 0;
     }
@@ -216,7 +242,14 @@ class DatabaseService {
         data,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'UPSERT',
+        error: e,
+        stack: stack,
+        query: 'INSERT OR REPLACE',
+        arguments: data,
+      );
       GlobalService.printHandler('DB PUT ERROR: $e');
       return 0;
     }
@@ -243,7 +276,18 @@ class DatabaseService {
         continueOnError: false,
       );
       return bulkInsert.length;
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'BULK_INSERT',
+        error: e,
+        stack: stack,
+        query: 'COMMIT INSERT OR REPLACE',
+        arguments: {
+          'table_name': tableName,
+          'data_count': dataList.length,
+          'first_item': dataList.isNotEmpty ? dataList.first : null,
+        },
+      );
       GlobalService.printHandler('DB UPDATING BULK DATA ERROR: $e');
       return 0;
     }
@@ -255,7 +299,13 @@ class DatabaseService {
         await initDB();
       }
       return await _database!.rawQuery(query);
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'RAW_QUERY',
+        error: e,
+        stack: stack,
+        query: query,
+      );
       GlobalService.printHandler('DB RETRIVE ERROR: $e');
       return null;
     }
@@ -267,7 +317,14 @@ class DatabaseService {
         await initDB();
       }
       return await _database!.rawUpdate(query, argument);
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'RAW_UPDATE',
+        error: e,
+        stack: stack,
+        query: query,
+        arguments: argument,
+      );
       GlobalService.printHandler('DB UPDATE ERROR: $e');
       return 0;
     }
@@ -279,7 +336,13 @@ class DatabaseService {
         await initDB();
       }
       return await _database!.rawDelete(query);
-    } catch (e) {
+    } catch (e, stack) {
+      await _logDatabaseError(
+        operation: 'RAW_DELETE',
+        error: e,
+        stack: stack,
+        query: query,
+      );
       GlobalService.printHandler('DB DELETE ERROR: $e');
       return 0;
     }
@@ -392,7 +455,7 @@ class DatabaseService {
   , roleId INTEGER NOT NULL DEFAULT 8
   , isActive INTEGER
   , connect TEXT
-  , verified TEXT NOT NULL DEFAULT 'unverified'
+  , verified INTEGER NOT NULL DEFAULT 0
   , houseNo TEXT
   , locality TEXT
   , street TEXT
@@ -540,7 +603,7 @@ class DatabaseService {
   , panNumber TEXT
   , aadharNumber TEXT
   , dlNumber TEXT
-  , verified TEXT NOT NULL DEFAULT 'unverified'
+  , verified INTEGER NOT NULL DEFAULT 0
   , houseNo TEXT
   , locality TEXT
   , street TEXT
@@ -574,19 +637,33 @@ class DatabaseService {
   )''';
 
   String strMines = '''
-  CREATE TABLE IF NOT EXISTS $tblMines (
+CREATE TABLE IF NOT EXISTS $tblMines (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  isFav INTEGER NOT NULL DEFAULT 0,
+  uuid TEXT,
+  logo TEXT,
+  name TEXT,
+  nameCode TEXT,
+  website TEXT,
+  type TEXT,
+  status TEXT,
+  mineralId TEXT,
+  address TEXT,
+  state TEXT,
+  district TEXT,
+  country TEXT,
+  pinCode TEXT,
+  latitude REAL,
+  longitude REAL,
+  UNIQUE(id)
+)
+''';
+
+  String strMinerals = '''
+  CREATE TABLE IF NOT EXISTS $tblMinerals (
     id INTEGER PRIMARY KEY AUTOINCREMENT
-  , isFav INTEGER NOT NULL DEFAULT 0
-  , logo TEXT
-  , name TEXT
-  , nameCode TEXT
-  , state TEXT
-  , district TEXT
-  , latitude DOUBLE
-  , longitude DOUBLE
-  , status TEXT
-  , avgWaitingTime INTEGER
-  , UNIQUE(id)
+    , name TEXT
+    , UNIQUE(id)
   )''';
 
   String strNews = '''
@@ -605,6 +682,7 @@ class DatabaseService {
 final String tblProfile = 'tblprofile';
 final String tblNews = 'tblnews';
 final String tblMines = 'tblmines';
+final String tblMinerals = 'tblMinerals';
 final String tblTrips = 'tbltrips';
 final String tblTrucks = 'tbltruck';
 final String tblDriver = 'tbldriver';
@@ -628,4 +706,48 @@ String sqlValue(dynamic value) {
   if (value is DateTime) return "'${value.toIso8601String()}'";
 
   return "'${value.toString().replaceAll("'", "''")}'";
+}
+
+Future<void> _logDatabaseError({
+  required String operation,
+  required dynamic error,
+  required StackTrace stack,
+  String? query,
+  Object? arguments,
+}) async {
+  try {
+    await FirebaseCrashlytics.instance.setCustomKey(
+      'db_operation',
+      operation,
+    );
+
+    if (query != null) {
+      await FirebaseCrashlytics.instance.setCustomKey(
+        'db_query',
+        query,
+      );
+    }
+
+    if (arguments != null) {
+      await FirebaseCrashlytics.instance.log(
+        'Arguments: ${safeCrashlyticsLog(arguments)}',
+      );
+    }
+
+    await FirebaseCrashlytics.instance.recordError(
+      'Crashed In DB Error Logger $operation: ${error.toString()}',
+      stack,
+      fatal: false,
+    );
+  } catch (_) {
+    GlobalService.printHandler('FIREBASE FAILED TO LOG DB ERROR');
+  }
+}
+
+String safeCrashlyticsLog(dynamic value) {
+  try {
+    return jsonEncode(value);
+  } catch (_) {
+    return value.toString();
+  }
 }

@@ -1,4 +1,4 @@
-import 'package:bohiba/dist/enums/api_status_code.dart';
+import '/dist/enums/api_status_code.dart';
 
 import '/core/network/dio_serivce.dart';
 import '/dist/enums/app_enums.dart';
@@ -6,7 +6,7 @@ import '/model/user_fav_model.dart';
 import '/model/news_model.dart';
 import '/model/truck_model.dart';
 import '/model/user_model.dart';
-import '../model/company_model.dart';
+import '/model/company_model.dart';
 import '/model/trip_model.dart';
 import '/model/rating_model.dart';
 import '/model/owner_expenses_model.dart';
@@ -15,6 +15,7 @@ import 'db2_service.dart';
 import 'driver_service.dart';
 import 'favourite_service.dart';
 import 'company_service.dart';
+import 'minerals_service.dart';
 import 'news_service.dart';
 import 'trip_service.dart';
 import 'truck_service.dart';
@@ -129,6 +130,12 @@ class MainService {
             // arrPromotionDB = mainObj['promotion'];
             ///TODO: Insert promotion into Local DB
           }*/
+
+          if (mainObj.containsKey('minerals') &&
+              mainObj['minerals'] != null &&
+              (mainObj['minerals'] is List)) {
+            await syncMineralsLocally(mainObj['minerals'] as List);
+          }
 
           List<NewsModel> arrNewsModel = [];
           if (mainObj.containsKey('news') &&
@@ -304,6 +311,24 @@ class MainService {
     return arrMapOpenDriver.map((json) {
       return UserModel.fromDB(json);
     }).toList();
+  }
+
+  static Future<List<MineralModel>> syncMineralsLocally(
+      List<dynamic> mineralsList) async {
+    List<MineralModel> arrMineralsModel = [];
+    MineralsService.clearAll();
+    List<Map<String, dynamic>> arrMapMinerals = mineralsList.map((minerals) {
+      return MineralModel.toDB(minerals);
+    }).toList();
+
+    int successMineralsInsert = await MineralsService.insertAll(arrMapMinerals);
+    if (successMineralsInsert > 0) {
+      arrMineralsModel = arrMapMinerals.map((minerals) {
+        return MineralModel.fromDB(minerals);
+      }).toList();
+    }
+
+    return arrMineralsModel;
   }
 
   static Future<List<CompanyModel>> syncCompanyLocally(

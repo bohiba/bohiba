@@ -15,14 +15,17 @@ class CreateUserController extends GetxController {
 
   DateTime? pickedDate;
 
-  Future<int> registerUser({required String txtEmail}) async {
+  Future<String?> registerUser({required String txtEmail}) async {
     GlobalService.closeKeyboard();
 
     if (!(createUserFormKey.currentState!.validate())) {
-      return 0;
+      return null;
     } else if (vPwdController.text != vCnfrmController.text) {
-      GlobalService.showSnackBar(status: AlertStatus.warning, desc: 'Password does`nt match. Please retry again.');
-      return 0;
+      GlobalService.showSnackBar(
+        status: AlertStatus.warning,
+        desc: 'Password does`nt match. Please retry again.',
+      );
+      return null;
     }
     Map<String, dynamic> bodyObj = {
       'name': nameController.text.trim().toUpperCase(),
@@ -32,8 +35,8 @@ class CreateUserController extends GetxController {
       'password': vPwdController.text,
     };
 
-    int result = await ProfileService.createUser(bodyMap: bodyObj);
+    String? token = await ProfileService.createUser(bodyMap: bodyObj);
 
-    return result;
+    return token;
   }
 }

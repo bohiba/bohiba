@@ -36,7 +36,8 @@ class FirebaseAppService {
 
   static Future<void> initNotification() async {
     try {
-      NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      NotificationSettings settings =
+          await FirebaseMessaging.instance.requestPermission(
         alert: true,
         announcement: false,
         badge: true,
@@ -45,32 +46,37 @@ class FirebaseAppService {
         provisional: false,
         sound: true,
       );
-      const AndroidNotificationChannel notificationChannel = AndroidNotificationChannel(
-          'bohiba_alerts', 'Bohiba Alerts',
-          description: 'Notifications for trip updates, payments & announcements',
-          importance: Importance.max,
-          playSound: true,
-          enableLights: true,
-          enableVibration: true);
+      const AndroidNotificationChannel notificationChannel =
+          AndroidNotificationChannel('bohiba_alerts', 'Bohiba Alerts',
+              description:
+                  'Notifications for trip updates, payments & announcements',
+              importance: Importance.max,
+              playSound: true,
+              enableLights: true,
+              enableVibration: true);
 
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+          FlutterLocalNotificationsPlugin();
 
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
 
-      const InitializationSettings initializationSettings = InitializationSettings(
+      const InitializationSettings initializationSettings =
+          InitializationSettings(
         android: initializationSettingsAndroid,
       );
 
       await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
       await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(notificationChannel);
 
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         GlobalService.printHandler('Permission Granted');
-      } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      } else if (settings.authorizationStatus ==
+          AuthorizationStatus.provisional) {
         GlobalService.printHandler('Provisional Permission Granted');
       } else {
         GlobalService.printHandler('Perssion is restricted by user');
@@ -141,14 +147,17 @@ class FirebaseAppService {
     paramObj['device_id'] = deviceInfo['device_id'];
     paramObj['fcm_token'] = fcmToken;
     paramObj['platform'] = deviceInfo['platform'];
-    paramObj['app_version'] = "v${appInfo['version']}.${appInfo['buildNumber']}";
+    paramObj['app_version'] =
+        "v${appInfo['version']}.${appInfo['buildNumber']}";
     paramObj['device_name'] = deviceInfo['model'];
 
-    ApiResponse res = await _dioService.post(ApiEndPoint.firbaseToken, body: paramObj);
+    ApiResponse res =
+        await _dioService.post(ApiEndPoint.firbaseToken, body: paramObj);
     switch (res.statusCode) {
       case 200:
         GlobalService.printHandler('FCM REGISTER SUCCESS: ${res.data}');
-        await _prefUtils.saveString(PrefUtils.keyFirebaseToken, jsonEncode(res.data));
+        await _prefUtils.saveString(
+            PrefUtils.keyFirebaseToken, jsonEncode(res.data));
         GlobalService.dismissProgress();
         return;
       case 401:
@@ -162,6 +171,7 @@ class FirebaseAppService {
 }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await FirebaseAppService.initFirebase();
-  GlobalService.printHandler('Firebase Background Message: ${message.messageId}');
+  // await FirebaseAppService.initFirebase();
+  GlobalService.printHandler(
+      'Firebase Background Message: ${message.messageId}');
 }

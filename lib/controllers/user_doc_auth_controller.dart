@@ -10,6 +10,7 @@ class UserDocAuthController extends GetxController {
 
   int role = 9;
   bool get isTruckOwner => role == 6;
+  RxString strtoken = ''.obs;
 
   @override
   void onInit() {
@@ -17,6 +18,7 @@ class UserDocAuthController extends GetxController {
 
     Map<String, dynamic> argument = Get.arguments as Map<String, dynamic>;
     role = argument['role_id'];
+    strtoken.value = argument['token'];
   }
 
   Future<int> validateUserDoc() async {
@@ -28,13 +30,17 @@ class UserDocAuthController extends GetxController {
       "pan_number": panNumberController.text.trim(),
       if (!isTruckOwner) "dl_number": dlNumberController.text.trim(),
     };
-    int success = await ProfileService.addDocument(bodyMap: bodyObj);
+    int success = await ProfileService.addDocument(
+        bodyMap: bodyObj, token: strtoken.value);
     return success;
   }
 
   @override
-  void dispose() {
+  void onClose() {
+    aadharNumberController.dispose();
+    panNumberController.dispose();
+    dlNumberController.dispose();
     verifyDocFormKey = GlobalKey<FormState>();
-    super.dispose();
+    super.onClose();
   }
 }

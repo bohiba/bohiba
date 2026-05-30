@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget {
+class HomeAppBar extends GetView<HomeController>
+    implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
   @override
@@ -58,12 +59,14 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   color: bohibaTheme.cardColor,
                   borderRadius: BorderRadius.circular(6.r),
                 ),
-                child: controller.profile.value?.image == null || (controller.profile.value?.image?.isEmpty ?? true)
+                child: controller.profile.value?.image == null ||
+                        (controller.profile.value?.image?.isEmpty ?? true)
                     ? SizedBox.shrink()
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(6.r),
                         child: CachedNetworkImage(
-                          imageUrl: "${ImagePath.profileImage}/${controller.profile.value!.image}",
+                          imageUrl:
+                              "${ImagePath.profileImage}/${controller.profile.value!.image}",
                           fit: BoxFit.cover,
                           placeholder: (context, child) {
                             return SizedBox.shrink();
@@ -86,7 +89,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               onTapDown: (TapDownDetails tapDownDetails) {
                 final items = <PopupMenuEntry<ServiceType>>[];
 
-                if (RoleService.hasPermission(RolePermissionService.viewTrucks)) {
+                if (RoleService.hasPermission(
+                    RolePermissionService.viewTrucks)) {
                   items.add(
                     PopupMenuItem(
                       value: ServiceType.truck,
@@ -94,7 +98,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         'Truck',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.titleSmall!.fontWeight,
                           color: bohibaTheme.textTheme.bodyMedium!.color,
                         ),
                       ),
@@ -102,7 +107,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   );
                 }
 
-                if (RoleService.hasPermission(RolePermissionService.viewDriver)) {
+                if (RoleService.hasPermission(
+                    RolePermissionService.viewDriver)) {
                   items.add(
                     PopupMenuItem(
                       value: ServiceType.driver,
@@ -111,7 +117,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         'Driver',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.titleSmall!.fontWeight,
                           color: bohibaTheme.textTheme.bodyMedium!.color,
                         ),
                       ),
@@ -119,7 +126,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   );
                 }
 
-                if (RoleService.hasPermission(RolePermissionService.viewTrips)) {
+                if (RoleService.hasPermission(
+                    RolePermissionService.viewTrips)) {
                   items.add(
                     PopupMenuItem(
                       value: ServiceType.trip,
@@ -127,7 +135,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         'Trips',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.titleSmall!.fontWeight,
                           color: bohibaTheme.textTheme.bodyMedium!.color,
                         ),
                       ),
@@ -135,7 +144,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   );
                 }
                 //Expenses Menu
-                if (RoleService.hasPermission(RolePermissionService.viewOwnerExpense)) {
+                if (RoleService.hasPermission(
+                    RolePermissionService.viewOwnerExpense)) {
                   items.add(
                     PopupMenuItem(
                       value: ServiceType.expenses,
@@ -144,7 +154,8 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                         'Expenses',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.titleSmall!.fontWeight,
                           color: bohibaTheme.textTheme.bodyMedium!.color,
                         ),
                       ),
@@ -169,7 +180,9 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                   if (!context.mounted) return value;
                   switch (value) {
                     case ServiceType.driver:
-                      return await navigatState.pushNamed(AppRoute.allDriver).then((onValue) async {
+                      return await navigatState
+                          .pushNamed(AppRoute.allDriver)
+                          .then((onValue) async {
                         if (onValue != null) {
                           await controller.getDriverList();
                           controller.arrDriver.refresh();
@@ -178,7 +191,9 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
                     case ServiceType.trip:
                       return navigatState.pushNamed(AppRoute.allTrip);
                     case ServiceType.truck:
-                      return navigatState.pushNamed(AppRoute.allTruck).then((onValue) async {
+                      return navigatState
+                          .pushNamed(AppRoute.allTruck)
+                          .then((onValue) async {
                         if (onValue != null) {
                           await controller.getTruckList();
                         }
@@ -195,7 +210,9 @@ class HomeAppBar extends GetView<HomeController> implements PreferredSizeWidget 
               },
               icon: Icon(
                 EvaIcons.plus,
-                color: controller.isScrolled.value ? bohibaTheme.iconTheme.color : bohibaTheme.colorScheme.surface,
+                color: controller.isScrolled.value
+                    ? bohibaTheme.iconTheme.color
+                    : bohibaTheme.colorScheme.surface,
               ),
             ),
 

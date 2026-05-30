@@ -16,18 +16,22 @@ class SignupController extends GetxController {
 
   Future<int> verifyEmail({required String email}) async {
     GlobalService.closeKeyboard();
-    if (!(signUpFormKey.currentState!.validate())) {
+    if (!(signUpFormKey.currentState?.validate() ?? false)) {
       return 0;
     }
-    int verfiedEmail = await AuthService.verifyEmail(txtEmail: email);
-    return verfiedEmail;
+    // Disable the button for the duration of the API call to prevent
+    // duplicate requests on slow networks.
+    isDisabled.value = true;
+    final int result = await AuthService.verifyEmail(txtEmail: email);
+    isDisabled.value = false;
+    return result;
   }
 
   @override
-  void dispose() {
+  void onClose() {
     signUpFormKey = GlobalKey<FormState>();
     emailController.dispose();
     isDisabled.value = false;
-    super.dispose();
+    super.onClose();
   }
 }

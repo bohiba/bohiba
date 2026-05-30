@@ -107,48 +107,39 @@ class CompanyVerticalCard extends StatelessWidget {
         margin: EdgeInsets.only(right: ScreenUtils.width10),
         decoration: TileDecorative(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: CircleAvatar(
-                radius: 35,
-                backgroundColor: bohibaTheme.colorScheme.surface,
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.maxFinite,
+                height: 70.h,
+                margin: EdgeInsets.all(3.0),
+                alignment: Alignment.center,
+                decoration: TileDecorative(
+                  color: bohibaTheme.scaffoldBackgroundColor,
+                ),
                 child: Text(minesInfo.nameCode ?? ""),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: ScreenUtils.width10,
-                  right: ScreenUtils.width10,
-                  top: ScreenUtils.height10),
+            Expanded(
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AutoSizeText(
-                    minesInfo.name ?? "NA",
+                    minesInfo.district ?? "",
                     style: bohibaTheme.textTheme.titleMedium,
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflowReplacement: MarqueeText(
-                      alwaysScroll: true,
-                      speed: 5,
-                      textDirection: TextDirection.rtl,
                       text: TextSpan(
                         style: bohibaTheme.textTheme.titleMedium,
-                        text: minesInfo.name ?? "NA",
+                        text: minesInfo.district ?? "",
                       ),
                     ),
                   ),
-                  // Text(
-                  //   minesInfo.avgWaitingTime.toString(),
-                  //   textAlign: TextAlign.center,
-                  //   maxLines: 1,
-                  //   style: TextStyle(
-                  //     fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                  //     color: bohibaTheme.textTheme.titleMedium!.color,
-                  //   ),
-                  // ),
                 ],
               ),
             )

@@ -17,18 +17,21 @@ class DriverService {
   static int _currentPage = 1;
   static int _lastPage = 1;
 
-  static Future<UserModel?> createDriver({required Map<String, dynamic> bodyObj, String? vehcileNumber}) async {
+  static Future<UserModel?> createDriver(
+      {required Map<String, dynamic> bodyObj, String? vehcileNumber}) async {
     if (!await DeviceInfoService.hasInternet()) return null;
     if (bodyObj['type'] == 0) {
       GlobalService.showDialog(
         status: AlertStatus.info,
         title: 'Feature Not Yet Supported',
-        description: 'Currently this feature is not support. We are working on it. Please try using `UUID`.',
+        description:
+            'Currently this feature is not support. We are working on it. Please try using `UUID`.',
       );
       return null;
     }
     GlobalService.showProgress();
-    ApiResponse response = await _dioService.post(ApiEndPoint.apiAddDriver, body: bodyObj);
+    ApiResponse response =
+        await _dioService.post(ApiEndPoint.apiAddDriver, body: bodyObj);
     switch (response.statusCode) {
       case 201 || 200:
         UserModel driver = UserModel.fromJson(response.data);
@@ -37,7 +40,8 @@ class DriverService {
           await ProfileService.updateDriverNo(deleteDriver: false);
         }
         if (vehcileNumber != null) {
-          await TruckService.assignDriver(vhNumber: vehcileNumber, driver: driver);
+          await TruckService.assignDriver(
+              vhNumber: vehcileNumber, driver: driver);
         }
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
@@ -71,8 +75,10 @@ class DriverService {
     MethodType methodType = MethodType.local,
   }) async {
     if (methodType == MethodType.local) {
-      String strGetQuery = ''' SELECT id, image, uuid, name, licenseNumber FROM $tblDriver ORDER BY updatedAt DESC ''';
-      List<Map<String, dynamic>> arrDriver = await _databaseService.executeQuery(strGetQuery) ?? [];
+      String strGetQuery =
+          ''' SELECT id, image, uuid, name, licenseNumber FROM $tblDriver ORDER BY updatedAt DESC ''';
+      List<Map<String, dynamic>> arrDriver =
+          await _databaseService.executeQuery(strGetQuery) ?? [];
       List<UserModel> driverModelList = arrDriver.map((e) {
         return UserModel.fromDB(e);
       }).toList();
@@ -91,7 +97,8 @@ class DriverService {
       }
       if (showProgress) GlobalService.showProgress();
 
-      ApiResponse response = await _dioService.get('${ApiEndPoint.apiAllDriver}?pageNo=$_currentPage');
+      ApiResponse response = await _dioService
+          .get('${ApiEndPoint.apiAllDriver}?pageNo=$_currentPage');
 
       switch (response.statusCode) {
         case 200:
@@ -134,10 +141,13 @@ class DriverService {
     }
   }
 
-  static Future<UserModel?> getDriver({required int id, MethodType type = MethodType.local}) async {
+  static Future<UserModel?> getDriver(
+      {required int id, MethodType type = MethodType.local}) async {
     if (type == MethodType.local) {
-      String strGetDriver = ''' SELECT * FROM $tblDriver WHERE id = $id LIMIT 1 ''';
-      List<Map<String, dynamic>> driverList = await _databaseService.executeQuery(strGetDriver) ?? [];
+      String strGetDriver =
+          ''' SELECT * FROM $tblDriver WHERE id = $id LIMIT 1 ''';
+      List<Map<String, dynamic>> driverList =
+          await _databaseService.executeQuery(strGetDriver) ?? [];
 
       if (driverList.isNotEmpty) {
         UserModel driver = UserModel.fromDB(driverList.first);
@@ -148,7 +158,8 @@ class DriverService {
     } else {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
-      ApiResponse response = await _dioService.get('${ApiEndPoint.apiGetDriver}/$id');
+      ApiResponse response =
+          await _dioService.get('${ApiEndPoint.apiGetDriver}/$id');
 
       switch (response.statusCode) {
         case 200:
@@ -160,7 +171,8 @@ class DriverService {
               return RatingModel.toDB(rating);
             }).toList();
 
-            int insertRating = await RatingService.insertAll(ratingList: arrRatingObj);
+            int insertRating =
+                await RatingService.insertAll(ratingList: arrRatingObj);
             if (insertRating > 0) {
               // Insert Success
             }
@@ -178,7 +190,7 @@ class DriverService {
               roleId = ${driver.profile?.roleId ?? 8},
               isActive = ${driver.profile?.isActive ?? 0},
               connect = ${driver.profile?.connect != null ? "'${driver.profile?.connect}'" : 'NULL'},
-              verified = ${driver.address?.verified != null ? "'${driver.address?.verified}'" : "'unverified'"},
+              verified = ${driver.address?.verified != null ? "'${driver.address?.verified}'" : 0},
               houseNo = ${driver.address?.houseNo != null ? "'${driver.address?.houseNo}'" : 'NULL'},
               locality = ${driver.address?.locality != null ? "'${driver.address?.locality}'" : 'NULL'},
               street = ${driver.address?.street != null ? "'${driver.address?.street}'" : 'NULL'},
@@ -230,7 +242,8 @@ class DriverService {
     int successDel = await _databaseService.delete(strDelQuery);
 
     if (successDel > 0) {
-      ApiResponse serviceResponse = await _dioService.delete("${ApiEndPoint.apiDeleteDriver}/$driverId");
+      ApiResponse serviceResponse =
+          await _dioService.delete("${ApiEndPoint.apiDeleteDriver}/$driverId");
       switch (serviceResponse.statusCode) {
         case 200:
           await ProfileService.updateDriverNo(deleteDriver: true);
@@ -313,7 +326,7 @@ class DriverService {
             ${driver.profile?.roleId ?? 8},
             ${driver.profile?.isActive != null ? "'${driver.profile!.isActive}'" : 'NULL'},
             ${driver.profile?.connect != null ? "'${driver.profile!.connect}'" : 'NULL'},
-            ${driver.address?.verified != null ? "'${driver.address!.verified}'" : "'unverified'"},
+            ${driver.address?.verified != null ? "'${driver.address!.verified}'" : 0},
             ${driver.address?.houseNo != null ? "'${driver.address!.houseNo}'" : 'NULL'},
             ${driver.address?.locality != null ? "'${driver.address!.locality}'" : 'NULL'},
             ${driver.address?.street != null ? "'${driver.address!.street}'" : 'NULL'},
@@ -335,7 +348,8 @@ class DriverService {
     return insertSuccess;
   }
 
-  static Future<int> insertAllDriver(List<Map<String, dynamic>> listDriver) async {
+  static Future<int> insertAllDriver(
+      List<Map<String, dynamic>> listDriver) async {
     int insert = await _databaseService.insertAllData(tblDriver, listDriver);
     return insert;
   }

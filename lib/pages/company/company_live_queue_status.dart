@@ -42,10 +42,10 @@ class CompanyLiveQueueStatus extends StatelessWidget {
                     toElement.name ?? '',
                     textAlign: toElement.textAlign,
                     style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                      fontSize: bohibaTheme.textTheme.titleSmall!.fontSize,
                       fontWeight:
-                          bohibaTheme.textTheme.headlineLarge!.fontWeight,
-                      color: bohibaTheme.textTheme.titleSmall!.color,
+                          bohibaTheme.textTheme.headlineSmall!.fontWeight,
+                      color: bohibaTheme.textTheme.titleMedium!.color,
                     ),
                   ),
                 );

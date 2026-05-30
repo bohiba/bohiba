@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class AddressAuthBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<AddressAuthController>(AddressAuthController());
+    Get.lazyPut<AddressAuthController>(() => AddressAuthController());
   }
 }

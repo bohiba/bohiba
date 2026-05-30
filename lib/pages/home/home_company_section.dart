@@ -10,8 +10,8 @@ import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
-class HomeMinesSection extends GetView<HomeController> {
-  const HomeMinesSection({super.key});
+class HomeCompanySection extends GetView<HomeController> {
+  const HomeCompanySection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class HomeMinesSection extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Mines',
+                    'Company',
                     style: bohibaTheme.textTheme.headlineMedium,
                   ),
                   GestureDetector(

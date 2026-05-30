@@ -40,7 +40,6 @@
             android:windowSoftInputMode="adjustResize"
             android:resizeableActivity="true"
             android:requestLegacyExternalStorage="true"
-            android:usesCleartextTraffic="true"
             tools:targetApi="tiramisu">
 
             <meta-data
@@ -57,6 +56,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCN0tM4lVbUAKsRqHY1Ixu5WdD1BQL7t60" />
     </application>
     <queries>
         <intent>

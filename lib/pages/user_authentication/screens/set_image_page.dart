@@ -42,12 +42,12 @@ class SetImagePage extends GetView<SetImageController> {
             GlobalService.showAlertDialog(
               status: AlertStatus.failure,
               title: 'Verification',
-              description: 'Are your sure? You want to discontinue you verification process',
+              description:
+                  'Are your sure? You want to discontinue you verification process',
               discardBtnTxt: 'No',
               saveBtnTxt: 'Yes',
               onSave: () {
-                navigateState.pop();
-                navigateState.pop(true);
+                Get.offAllNamed(AppRoute.signIn);
               },
             );
           }
@@ -84,9 +84,12 @@ class SetImagePage extends GetView<SetImageController> {
                               child: Text(
                                 'Enhance your visibility with your image',
                                 style: TextStyle(
-                                  fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                  color: bohibaTheme.textTheme.titleLarge!.color,
+                                  fontSize:
+                                      bohibaTheme.textTheme.bodySmall!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleLarge!.color,
                                 ),
                               ),
                             ),
@@ -101,8 +104,10 @@ class SetImagePage extends GetView<SetImageController> {
                             child: Text(
                               'Skip for now',
                               style: TextStyle(
-                                fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
-                                fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                                fontSize:
+                                    bohibaTheme.textTheme.titleLarge!.fontSize,
+                                fontWeight:
+                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
                                 color: bohibaTheme.textTheme.bodySmall!.color,
                               ),
                             ),
@@ -122,8 +127,10 @@ class SetImagePage extends GetView<SetImageController> {
                             if (isUploaded > 0) {
                               if (controller.route.value == "pop") {
                                 navigateState.pop(true);
-                              } else if (controller.route.value == AppRoute.roleType) {
-                                navigateState.popAndPushNamed(AppRoute.roleType);
+                              } else if (controller.route.value ==
+                                  AppRoute.roleType) {
+                                navigateState
+                                    .popAndPushNamed(AppRoute.roleType);
                               } else {}
                             }
                           },

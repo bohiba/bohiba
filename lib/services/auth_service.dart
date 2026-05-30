@@ -26,6 +26,14 @@ class AuthService {
   static final PrefUtils _prefUtils = PrefUtils();
   static final DatabaseService _databaseService = DatabaseService();
 
+  static Future<void> clearApp() async {
+    await Future.wait([
+      _databaseService.clearDBData(),
+      _prefUtils.clearPreferencesData(),
+    ]);
+    _dioService.clearToken();
+  }
+
   static Future<bool> refreshToken() async {
     if (!await DeviceInfoService.hasInternet()) {
       return false;
@@ -74,9 +82,7 @@ class AuthService {
         // Display Issue
         return 0;
       case 200:
-        await _databaseService.clearDBData();
-        _dioService.clearToken();
-        await _prefUtils.clearPreferencesData();
+        await clearApp();
         return 1;
       default:
         return 0;
@@ -308,22 +314,32 @@ class AuthService {
       withToken: false,
     );
 
-    switch (serviceResponse.statusCode) {
-      case 401:
-        GlobalService.dismissProgress();
+    StatusCode statusCode = StatusCode.fromCode(serviceResponse.statusCode);
+    GlobalService.dismissProgress();
+    switch (statusCode) {
+      case StatusCode.noContent:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
-          desc: serviceResponse.message,
+          desc: serviceResponse.errorMessage,
         );
         return 0;
-      case 200:
-        GlobalService.dismissProgress();
+      case StatusCode.notFound:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: serviceResponse.errorMessage,
+        );
+        return 0;
+      case StatusCode.ok:
         GlobalService.showSnackBar(
           status: AlertStatus.success,
           desc: serviceResponse.message,
         );
         return 1;
       default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: serviceResponse.errorMessage,
+        );
         return 0;
     }
   }

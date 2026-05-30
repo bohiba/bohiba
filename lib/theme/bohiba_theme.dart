@@ -306,6 +306,17 @@ class BohibaTheme {
         backgroundColor: WidgetStatePropertyAll(BohibaColors.primaryColor),
       ),
       searchViewTheme: SearchViewThemeData(),
+      tooltipTheme: TooltipThemeData(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: BohibaColors.borderColor,
+        ),
+        textStyle: TextStyle(
+          color: BohibaColors.black,
+          fontSize: 12.adaptSize,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 
@@ -317,6 +328,15 @@ class BohibaTheme {
       splashColor: DarkColors.primaryColor,
       highlightColor: DarkColors.primaryVariantColor,
       disabledColor: DarkColors.primaryVariantColor,
+      tooltipTheme: TooltipThemeData(
+        decoration: BoxDecoration(
+          color: DarkColors.greyColor.withValues(alpha: 0.8),
+        ),
+        textStyle: TextStyle(
+          color: DarkColors.secoundaryColor,
+          fontSize: 12.adaptSize,
+        ),
+      ),
       colorScheme: const ColorScheme.dark(
         brightness: Brightness.dark,
         primary: DarkColors.primaryColor,
@@ -427,7 +447,8 @@ class BohibaTheme {
           ),
           prefixIconColor: DarkColors.secoundaryColor,
           suffixIconColor: DarkColors.secoundaryColor,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
           outlineBorder: BorderSide(color: DarkColors.secoundaryColor),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -555,7 +576,8 @@ class BohibaTheme {
             width: 1.5,
             color: DarkColors.secoundaryColor,
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -581,7 +603,8 @@ class BohibaTheme {
           }
           return DarkColors.white;
         }),
-        overlayColor: WidgetStatePropertyAll(DarkColors.white.withValues(alpha: 0.1)),
+        overlayColor:
+            WidgetStatePropertyAll(DarkColors.white.withValues(alpha: 0.1)),
       ),
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: DarkColors.black),
       dividerTheme: DividerThemeData(

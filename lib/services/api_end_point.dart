@@ -2,23 +2,26 @@ class ApiEndPoint {
   // static const String baseUrl = 'https://bohiba.com/api';
   static const String baseUrl = "https://beta-server-t1.bohiba.com/api";
   static const String apiPostalCode = 'https://api.postalpincode.in/pincode';
-  static const String apiVerifyEmail = '$baseUrl/verify-email';
-  static const String apiVerifyOtp = '$baseUrl/verify-otp';
-  static const String apiResendOtp = '$baseUrl/resend-otp';
-  static const String apiUpdatePassword = '$baseUrl/update-password';
-  static const String apiCreateUser = '$baseUrl/create-user';
+  static const String apiVerifyEmail = '$baseUrl/authentication/verify-email';
+  static const String apiVerifyOtp = '$baseUrl/authentication/verify-otp';
+  static const String apiResendOtp = '$baseUrl/authentication/resend-otp';
+  static const String apiUpdatePassword =
+      '$baseUrl/authentication/update-password';
+  static const String apiCreateUser = '$baseUrl/authentication/create-user';
   static const String apiAddAddress = '$baseUrl/add-address';
   static const String apiSetProfileImage = '$baseUrl/set-profile-image';
   static const String apiSetRole = '$baseUrl/set-role';
   static const String apiEditDoc = '$baseUrl/add-document';
   static const String apiEditUser = '$baseUrl/user-update';
 
-  static const String apiForgotPassword = '$baseUrl/forgot-password';
-  static const String apiResetPassword = '$baseUrl/reset-password';
+  static const String apiForgotPassword =
+      '$baseUrl/authentication/forgot-password';
+  static const String apiResetPassword =
+      '$baseUrl/authentication/reset-password';
   static const String apiVerifyForgotPasswordOtp =
-      '$baseUrl/verify-forgot-password-otp';
+      '$baseUrl/authentication/verify-forgot-password-otp';
 
-  static const String apiLogin = '$baseUrl/login';
+  static const String apiLogin = '$baseUrl/authentication/login';
   static const String apiLogout = '$baseUrl/logout';
   static const String apiRefreshToken = '$baseUrl/refresh-token';
 

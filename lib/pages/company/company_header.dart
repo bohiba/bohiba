@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class CompanyHeader extends StatelessWidget {
-  final CompanyModel minesModel;
+  final CompanyModel? minesModel;
   const CompanyHeader({super.key, required this.minesModel});
 
   @override
@@ -21,7 +21,7 @@ class CompanyHeader extends StatelessWidget {
                 radius: ScreenUtils.width25,
                 backgroundColor: bohibaTheme.dividerColor,
                 backgroundImage: NetworkImage(
-                  GlobalService.getAvatarUrl(minesModel.name ?? 'UN'),
+                  GlobalService.getAvatarUrl(minesModel?.name ?? 'UN'),
                 ),
               ),
               Gap(ScreenUtils.width10),
@@ -30,11 +30,11 @@ class CompanyHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      minesModel.name.toString(),
+                      minesModel?.name.toString() ?? '',
                       style: bohibaTheme.textTheme.headlineSmall,
                     ),
                     Text(
-                      '${minesModel.district ?? ''}, ${minesModel.state ?? ''}',
+                      '${minesModel?.district ?? ''}, ${minesModel?.state ?? ''}',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
                         color: bohibaTheme.textTheme.titleMedium!.color,

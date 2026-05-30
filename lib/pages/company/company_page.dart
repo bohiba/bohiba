@@ -22,7 +22,7 @@ class CompanyPage extends GetView<MinesController> {
     return Obx(() {
       return Scaffold(
         appBar: CompanyAppBar(
-          title: controller.minesModel.value.nameCode ?? 'NA',
+          title: controller.minesModel.value?.nameCode ?? 'NA',
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: PrimaryFloatingButton(
@@ -69,9 +69,9 @@ class CompanyPage extends GetView<MinesController> {
                       ),
                       StatusModel(
                         name: "STATUS",
-                        value: controller.minesModel.value.status ?? '',
+                        value: controller.minesModel.value?.status ?? '',
                         color: controller
-                            .minesModel.value.status?.minesStatusColor,
+                            .minesModel.value?.status?.minesStatusColor,
                       ),
                     ],
                   ),

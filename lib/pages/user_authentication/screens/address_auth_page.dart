@@ -1,3 +1,6 @@
+import 'package:bohiba/dist/enums/api_status_code.dart';
+import 'package:bohiba/dist/enums/enum_role_validation.dart';
+
 import '/dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
@@ -24,221 +27,251 @@ class AddressAuthPage extends GetView<AddressAuthController> {
   Widget build(BuildContext context) {
     final NavigatorState navigateState = Navigator.of(context);
     return Obx(() {
-      return Scaffold(
-        appBar: TitleAppbar(
-          title: 'Add Address',
-          showLeading: controller.enableLeading.value,
-          actions: [
-            AppBarIconBox(
-              onTap: () {
-                GlobalService.closeKeyboard();
-                showModalBottomSheet(
-                    context: context,
-                    shape: BottomModalShape(),
-                    useSafeArea: true,
-                    isScrollControlled: true,
-                    enableDrag: true,
-                    builder: (context) {
-                      return AllLocationModal();
-                    }).then((address) {
-                  if (address == null) {
-                    return;
-                  }
-                  controller.aHouseCtrl.text = address['name'] ?? '';
-                  controller.aLocalityCtrl.text = address['locality'] ?? '';
-                  controller.aStreetCtrl.text =
-                      '${address['street']}, ${address['locality']}';
-                  controller.aCityCtrl.text = address['city'] ?? '';
-                  controller.aDistrictCtrl.text = address['district'] ?? '';
-                  controller.aStateCtrl.text = address['state'] ?? '';
-                  controller.aPincodeCtrl.text = address['pincode'] ?? '';
-                  controller.aCountryCtrl.text = address['country'] ?? '';
-                });
-                /*Get.bottomSheet(
-                  AllLocationModal(),
-                  shape: BottomModalShape(),
-                  ignoreSafeArea: false,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                ).then((address) {
-                  if (address == null) {
-                    return;
-                  }
-                  controller.aHouseCtrl.text = address['name'] ?? '';
-                  controller.aLocalityCtrl.text = address['locality'] ?? '';
-                  controller.aStreetCtrl.text =
-                      '${address['street']}, ${address['locality']}';
-                  controller.aCityCtrl.text = address['city'] ?? '';
-                  controller.aDistrictCtrl.text = address['district'] ?? '';
-                  controller.aStateCtrl.text = address['state'] ?? '';
-                  controller.aPincodeCtrl.text = address['pincode'] ?? '';
-                  controller.aCountryCtrl.text = address['country'] ?? '';
-                });*/
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return;
+          } else {
+            GlobalService.showAlertDialog(
+              status: AlertStatus.failure,
+              title: 'Verification',
+              description:
+                  'Are your sure? You want to discontinue you verification process',
+              discardBtnTxt: 'No',
+              saveBtnTxt: 'Yes',
+              onSave: () {
+                Get.offAllNamed(AppRoute.signIn);
               },
-              icon: Icon(RemixIcons.map_pin_fill),
-            )
-          ],
-        ),
-        body: PopScope(
-          canPop: controller.enableLeading.value,
-          onPopInvokedWithResult: (didPop, result) {
-            if (didPop == true) {
-              return;
-            } else {
-              GlobalService.showAlertDialog(
-                status: AlertStatus.failure,
-                title: 'Verification',
-                description:
-                    'Are your sure? You want to discontinue you verification process',
-                discardBtnTxt: 'No',
-                saveBtnTxt: 'Yes',
-                onSave: () {
-                  navigateState.pop();
-                  navigateState.pop(true);
+            );
+          }
+        },
+        child: Scaffold(
+          appBar: TitleAppbar(
+            title: 'Add Address',
+            showLeading: controller.enableLeading.value,
+            actions: [
+              AppBarIconBox(
+                onTap: () {
+                  GlobalService.closeKeyboard();
+                  showModalBottomSheet(
+                      context: context,
+                      shape: BottomModalShape(),
+                      useSafeArea: true,
+                      isScrollControlled: true,
+                      enableDrag: true,
+                      builder: (context) {
+                        return AllLocationModal();
+                      }).then((address) {
+                    if (address == null) {
+                      return;
+                    }
+                    controller.aHouseCtrl.text = address['name'] ?? '';
+                    controller.aLocalityCtrl.text = address['locality'] ?? '';
+                    controller.aStreetCtrl.text =
+                        '${address['street']}, ${address['locality']}';
+                    controller.aCityCtrl.text = address['city'] ?? '';
+                    controller.aDistrictCtrl.text = address['district'] ?? '';
+                    controller.aStateCtrl.text = address['state'] ?? '';
+                    controller.aPincodeCtrl.text = address['pincode'] ?? '';
+                    controller.aCountryCtrl.text = address['country'] ?? '';
+                  });
+                  /*Get.bottomSheet(
+                    AllLocationModal(),
+                    shape: BottomModalShape(),
+                    ignoreSafeArea: false,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                  ).then((address) {
+                    if (address == null) {
+                      return;
+                    }
+                    controller.aHouseCtrl.text = address['name'] ?? '';
+                    controller.aLocalityCtrl.text = address['locality'] ?? '';
+                    controller.aStreetCtrl.text =
+                        '${address['street']}, ${address['locality']}';
+                    controller.aCityCtrl.text = address['city'] ?? '';
+                    controller.aDistrictCtrl.text = address['district'] ?? '';
+                    controller.aStateCtrl.text = address['state'] ?? '';
+                    controller.aPincodeCtrl.text = address['pincode'] ?? '';
+                    controller.aCountryCtrl.text = address['country'] ?? '';
+                  });*/
                 },
-              );
-            }
-          },
-          child: SafeArea(
-            child: Container(
-              padding: EdgeInsets.only(
-                top: ScreenUtils.height15,
-                left: ScreenUtils.width20,
-                right: ScreenUtils.width20,
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Form(
-                        key: controller.addressAuthKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Verify Address",
-                              style: bohibaTheme.textTheme.headlineLarge,
-                            ),
-                            Text(
-                              'Fill in your information to start getting matched with owners.',
-                              style: TextStyle(
-                                fontSize:
-                                    bohibaTheme.textTheme.bodySmall!.fontSize,
-                                fontWeight:
-                                    bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                color: bohibaTheme.textTheme.titleSmall!.color,
+                icon: Icon(RemixIcons.map_pin_fill),
+              )
+            ],
+          ),
+          body: PopScope(
+            canPop: controller.enableLeading.value,
+            onPopInvokedWithResult: (didPop, result) {
+              if (didPop == true) {
+                return;
+              } else {
+                GlobalService.showAlertDialog(
+                  status: AlertStatus.failure,
+                  title: 'Verification',
+                  description:
+                      'Are your sure? You want to discontinue you verification process',
+                  discardBtnTxt: 'No',
+                  saveBtnTxt: 'Yes',
+                  onSave: () {
+                    Get.offAllNamed(AppRoute.signIn);
+                  },
+                );
+              }
+            },
+            child: SafeArea(
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: ScreenUtils.height15,
+                  left: ScreenUtils.width20,
+                  right: ScreenUtils.width20,
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Form(
+                          key: controller.addressAuthKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Verify Address",
+                                style: bohibaTheme.textTheme.headlineLarge,
                               ),
-                            ),
-                            RequiredLabel(label: 'House No'),
-                            TextInputField(
-                              controller: controller.aHouseCtrl,
-                              nextActionType: TextInputAction.next,
-                            ),
-                            RequiredLabel(
-                                label: 'Colony/Locality', required: true),
-                            TextInputField(
-                              controller: controller.aLocalityCtrl,
-                              nextActionType: TextInputAction.next,
-                              validateField: (inputValue) {
-                                if (inputValue == null || inputValue.isEmpty) {
-                                  return 'Locality cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                            RequiredLabel(label: 'Street Address'),
-                            TextInputField(
-                              controller: controller.aStreetCtrl,
-                              nextActionType: TextInputAction.next,
-                            ),
-                            RequiredLabel(label: 'City/Village'),
-                            TextInputField(
-                              controller: controller.aCityCtrl,
-                              nextActionType: TextInputAction.next,
-                              validateField: (inputValue) {
-                                if (inputValue == null || inputValue.isEmpty) {
-                                  return 'City/Village cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                            RequiredLabel(label: 'Pin Code', required: true),
-                            TextInputField(
-                              hintText: "6-digit",
-                              controller: controller.aPincodeCtrl,
-                              keyboardType: TextInputType.number,
-                              nextActionType: TextInputAction.next,
-                              validateField: (inputValue) {
-                                if (inputValue == null || inputValue.isEmpty) {
-                                  return 'Pin Code cannot be empty';
-                                } else if (inputValue.length != 6) {
-                                  return 'Please enter valid PIN code';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                            RequiredLabel(label: 'District', required: true),
-                            TextInputField(
-                              controller: controller.aDistrictCtrl,
-                              nextActionType: TextInputAction.next,
-                              validateField: (inputValue) {
-                                if (inputValue == null || inputValue.isEmpty) {
-                                  return 'District cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                            RequiredLabel(label: 'State', required: true),
-                            TextInputField(
-                              controller: controller.aStateCtrl,
-                              nextActionType: TextInputAction.next,
-                              validateField: (inputValue) {
-                                if (inputValue == null || inputValue.isEmpty) {
-                                  return 'State cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                            RequiredLabel(label: 'Country', required: true),
-                            TextInputField(
-                              controller: controller.aCountryCtrl,
-                              // hintText: "Country",
-                              validateField: (inputValue) {
-                                if (inputValue == null || inputValue.isEmpty) {
-                                  return 'Country cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ],
+                              Text(
+                                'Fill in your information to start getting matched with owners.',
+                                style: TextStyle(
+                                  fontSize:
+                                      bohibaTheme.textTheme.bodySmall!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleSmall!.color,
+                                ),
+                              ),
+                              RequiredLabel(label: 'House No'),
+                              TextInputField(
+                                controller: controller.aHouseCtrl,
+                                nextActionType: TextInputAction.next,
+                              ),
+                              RequiredLabel(
+                                  label: 'Colony/Locality', required: true),
+                              TextInputField(
+                                controller: controller.aLocalityCtrl,
+                                nextActionType: TextInputAction.next,
+                                validateField: (inputValue) {
+                                  if (inputValue == null ||
+                                      inputValue.isEmpty) {
+                                    return 'Locality cannot be empty';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              RequiredLabel(label: 'Street Address'),
+                              TextInputField(
+                                controller: controller.aStreetCtrl,
+                                nextActionType: TextInputAction.next,
+                              ),
+                              RequiredLabel(label: 'City/Village'),
+                              TextInputField(
+                                controller: controller.aCityCtrl,
+                                nextActionType: TextInputAction.next,
+                                validateField: (inputValue) {
+                                  if (inputValue == null ||
+                                      inputValue.isEmpty) {
+                                    return 'City/Village cannot be empty';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              RequiredLabel(label: 'Pin Code', required: true),
+                              TextInputField(
+                                hintText: "6-digit",
+                                controller: controller.aPincodeCtrl,
+                                keyboardType: TextInputType.number,
+                                nextActionType: TextInputAction.next,
+                                validateField: (inputValue) {
+                                  if (inputValue == null ||
+                                      inputValue.isEmpty) {
+                                    return 'Pin Code cannot be empty';
+                                  } else if (inputValue.length != 6) {
+                                    return 'Please enter valid PIN code';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              RequiredLabel(label: 'District', required: true),
+                              TextInputField(
+                                controller: controller.aDistrictCtrl,
+                                nextActionType: TextInputAction.next,
+                                validateField: (inputValue) {
+                                  if (inputValue == null ||
+                                      inputValue.isEmpty) {
+                                    return 'District cannot be empty';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              RequiredLabel(label: 'State', required: true),
+                              TextInputField(
+                                controller: controller.aStateCtrl,
+                                nextActionType: TextInputAction.next,
+                                validateField: (inputValue) {
+                                  if (inputValue == null ||
+                                      inputValue.isEmpty) {
+                                    return 'State cannot be empty';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              RequiredLabel(label: 'Country', required: true),
+                              TextInputField(
+                                controller: controller.aCountryCtrl,
+                                // hintText: "Country",
+                                validateField: (inputValue) {
+                                  if (inputValue == null ||
+                                      inputValue.isEmpty) {
+                                    return 'Country cannot be empty';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  PrimaryButton(
-                    onPressed: () async {
-                      int success = await controller.addAddress();
-                      if (success > 0) {
-                        navigateState.popAndPushNamed(
-                          AppRoute.imageAuth,
-                          arguments: {
-                            'canPop': false,
-                            'route': AppRoute.roleType,
-                            'canSkip': true,
-                          },
-                        );
-                      }
-                    },
-                    label: "Submit",
-                  ),
-                ],
+                    PrimaryButton(
+                      onPressed: () async {
+                        StatusCode statusCode = await controller.addAddress();
+                        if (statusCode.isSuccess) {
+                          navigateState.popAndPushNamed(
+                            AppRoute.roleType,
+                            arguments: {
+                              'canPop': false,
+                              // Thread the onboarding token so SetRoleController
+                              // can forward it to DocAuth for the addDocument call.
+                              'token': controller.token.value,
+                              // Signal the sign-up flow so SetRolePage routes to
+                              // DocAuth instead of falling through to SignIn.
+                              'validationType': EnumRoleValidation.whileSignUp,
+                            },
+                          );
+                        }
+                      },
+                      label: "Submit",
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

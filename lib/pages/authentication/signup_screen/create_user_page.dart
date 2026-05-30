@@ -39,12 +39,12 @@ class CreateUserPage extends GetView<CreateUserController> {
             GlobalService.showAlertDialog(
               status: AlertStatus.failure,
               title: 'Verification',
-              description: 'Are your sure? You want to discontinue you verification process',
+              description:
+                  'Are your sure? You want to discontinue you verification process',
               discardBtnTxt: 'No',
               saveBtnTxt: 'Yes',
               onSave: () {
-                navigateState.pop();
-                navigateState.pop(true);
+                Get.offAllNamed(AppRoute.signIn);
               },
             );
           }
@@ -125,24 +125,25 @@ class CreateUserPage extends GetView<CreateUserController> {
                           DateTime.now().day,
                         );
 
-                        controller.pickedDate = await GlobalService.datePickerModal(
+                        controller.pickedDate =
+                            await GlobalService.datePickerModal(
                           context: context,
                           endTime: endDateTime,
                           title: 'Choose Date of Birth',
                         );
 
                         if (controller.pickedDate != null) {
-                          controller.dateController.text = DateFormat('dd-MM-yyyy').format(controller.pickedDate!);
+                          controller.dateController.text =
+                              DateFormat('dd-MM-yyyy')
+                                  .format(controller.pickedDate!);
                         }
                       },
                       validateField: (inputValue) {
+                        // DOB is set only via the DatePicker, so non-empty is sufficient.
                         if (inputValue == null || inputValue.isEmpty) {
-                          return 'Please enter your Date of Birth';
-                        } else if (!(inputValue.isPhoneNumber)) {
-                          return 'Please enter valid mobile number';
-                        } else {
-                          return null;
+                          return 'Please select your Date of Birth';
                         }
+                        return null;
                       },
                     ),
                     PasswordInputField(
@@ -163,11 +164,16 @@ class CreateUserPage extends GetView<CreateUserController> {
                 label: 'Submit',
                 onPressed: () async {
                   if (email != null) {
-                    int registered = await controller.registerUser(txtEmail: email);
-                    if (registered > 0) {
+                    String? token =
+                        await controller.registerUser(txtEmail: email);
+                    if (token != null && token.isNotEmpty) {
                       navigateState.popAndPushNamed(
                         AppRoute.userAddressAuthScreen,
-                        arguments: {'email': email, 'showLeading': false},
+                        arguments: {
+                          'email': email,
+                          'token': token,
+                          'showLeading': false,
+                        },
                       );
                     }
                     return;

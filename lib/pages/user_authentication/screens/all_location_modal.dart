@@ -7,12 +7,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class AllLocationModal extends StatelessWidget {
+class AllLocationModal extends StatefulWidget {
   const AllLocationModal({super.key});
 
   @override
+  State<AllLocationModal> createState() => _AllLocationModalState();
+}
+
+class _AllLocationModalState extends State<AllLocationModal> {
+  // Reuse the controller registered by LocationBinding — never create a
+  // second instance with Get.put, which would discard the existing position.
+  final LocationController controller = Get.put(LocationController());
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch on every open so the list is always fresh.
+    Future.delayed(Duration.zero, controller.getCurrentAddress);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final LocationController controller = Get.put(LocationController());
     return Obx(() {
       return SafeArea(
         child: Container(
@@ -37,38 +52,51 @@ class AllLocationModal extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Select matched location',
-                          style: bohibaTheme.textTheme.headlineLarge,
-                        ),
-                        Text(
-                          'Please confirm the most accurate address from the list.',
-                          style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                            color: bohibaTheme.textTheme.titleSmall!.color,
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Select matched location',
+                            style: bohibaTheme.textTheme.headlineLarge,
                           ),
-                        ),
-                      ],
+                          Text(
+                            'Please confirm the most accurate address from the list.',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.bodySmall!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
+                              color: bohibaTheme.textTheme.titleSmall!.color,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Spacer(),
-                    InkWell(
-                      onTap: () {
-                        Get.back(
-                            result: controller.selectedIndex.value == -1
-                                ? null
-                                : controller.arrLocation[controller.selectedIndex.value]);
-                        controller.selectedIndex.value = -1;
-                      },
-                      child: Text(
-                        'CLOSE',
-                        style: TextStyle(
-                          fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                          color: bohibaTheme.colorScheme.tertiary,
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap: () {
+                            Get.back(
+                                result: controller.selectedIndex.value == -1
+                                    ? null
+                                    : controller.arrLocation[
+                                        controller.selectedIndex.value]);
+                            controller.selectedIndex.value = -1;
+                          },
+                          child: Text(
+                            'CLOSE',
+                            style: TextStyle(
+                              fontSize: bohibaTheme
+                                  .textTheme.headlineMedium!.fontSize,
+                              fontWeight: bohibaTheme
+                                  .textTheme.headlineMedium!.fontWeight,
+                              color: bohibaTheme.colorScheme.tertiary,
+                            ),
+                          ),
                         ),
                       ),
                     )
@@ -102,7 +130,8 @@ class AllLocationModal extends StatelessWidget {
                         itemCount: controller.arrLocation.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          Map<String, dynamic> locObj = controller.arrLocation[index];
+                          Map<String, dynamic> locObj =
+                              controller.arrLocation[index];
                           return Obx(
                             () {
                               return InkWell(
@@ -117,22 +146,27 @@ class AllLocationModal extends StatelessWidget {
                                   ),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: bohibaTheme.listTileTheme.tileColor,
+                                      color:
+                                          bohibaTheme.listTileTheme.tileColor,
                                       borderRadius: BorderRadius.circular(12.r),
                                     ),
-                                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10.h, horizontal: 15.w),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Flexible(
                                           child: Text(
                                               '${locObj['name']}, ${locObj['locality']}, ${locObj['street']}, ${locObj['city']}, ${locObj['district']}, ${locObj['state']}, ${locObj['pincode']}, ${locObj['country']}'),
                                         ),
                                         RadioGroup(
-                                          groupValue: controller.selectedIndex.value,
+                                          groupValue:
+                                              controller.selectedIndex.value,
                                           onChanged: (v) {
                                             if (v == null) {
-                                              controller.selectedIndex.value = -1;
+                                              controller.selectedIndex.value =
+                                                  -1;
                                               return;
                                             }
                                             controller.selectAddress(v);
@@ -177,13 +211,16 @@ class AllLocationModal extends StatelessWidget {
                         Get.back(
                           result: controller.selectedIndex.value == -1
                               ? null
-                              : controller.arrLocation[controller.selectedIndex.value],
+                              : controller
+                                  .arrLocation[controller.selectedIndex.value],
                         );
                         controller.selectedIndex.value = -1;
                       },
-                      label: controller.arrLocation.isEmpty ? 'Close' : 'Save',
-                      color:
-                          controller.arrLocation.isEmpty ? bohibaTheme.colorScheme.tertiary : bohibaTheme.primaryColor,
+                      label:
+                          controller.arrLocation.isEmpty ? 'Close' : 'Confirm',
+                      color: controller.arrLocation.isEmpty
+                          ? bohibaTheme.colorScheme.tertiary
+                          : bohibaTheme.primaryColor,
                       width: ScreenUtils.width / 2.3,
                     ),
                   ],

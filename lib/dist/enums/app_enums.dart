@@ -2,7 +2,16 @@ enum AppThemeMode { system, light, dark }
 
 enum ActionType { view, add, edit, delete, route, share, sync, other }
 
-enum UserRoleType { driver, manager, truckowner, unknown }
+enum UserRoleType {
+  superAdmin(1),
+  truckOwner(6),
+  manager(7),
+  driver(8),
+  guest(9);
+
+  final int value;
+  const UserRoleType(this.value);
+}
 
 enum UploadStatus { initial, uploading, editing, success, verified, failure }
 
