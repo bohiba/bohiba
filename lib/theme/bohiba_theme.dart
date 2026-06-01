@@ -206,15 +206,15 @@ class BohibaTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: BohibaColors.secoundaryColor),
+          borderSide: BorderSide(color: BohibaColors.primaryColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: BohibaColors.warningColor),
+          borderSide: BorderSide(color: BohibaColors.secoundaryColor),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: BohibaColors.warningColor),
+          borderSide: BorderSide(color: BohibaColors.secoundaryColor),
         ),
       ),
       checkboxTheme: CheckboxThemeData(

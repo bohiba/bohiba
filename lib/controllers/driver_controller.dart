@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 class DriverController extends GetxController {
   DioService dioService = DioService();
 
+  RxInt driverId = 0.obs;
+
   bool addByDoc = false;
   RxBool didReviewed = false.obs;
   RxBool isSelected = false.obs;
@@ -39,7 +41,12 @@ class DriverController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    driverModel.value = UserModel(id: Get.arguments);
+
+    Map args = Get.arguments as Map;
+    if (args.containsKey('driver_id')) {
+      driverId.value = args['driver_id'];
+    }
+
     Future.delayed(Duration.zero, () async {
       await getDriverInfo();
       isRated();
@@ -47,7 +54,8 @@ class DriverController extends GetxController {
   }
 
   Future<void> getDriverInfo({MethodType methodType = MethodType.local}) async {
-    UserModel? driver = await DriverService.getDriver(id: driverModel.value!.id!, type: methodType);
+    UserModel? driver =
+        await DriverService.getDriver(id: driverId.value, type: methodType);
     if (driver != null) {
       driverModel.value = driver;
     }
@@ -88,7 +96,9 @@ class DriverController extends GetxController {
     await _getProfile();
     if (driverModel.value?.rating == null) return false;
     if (driverModel.value!.rating!.isEmpty) return false;
-    bool isReviewed = driverModel.value!.rating?.any((d) => d.reviewerUuid == profileModel.value.uuid) ?? false;
+    bool isReviewed = driverModel.value!.rating
+            ?.any((d) => d.reviewerUuid == profileModel.value.uuid) ??
+        false;
     didReviewed.value = isReviewed;
     return isReviewed;
   }

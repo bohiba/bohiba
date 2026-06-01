@@ -1,4 +1,4 @@
-import '/controllers/mines_controller.dart';
+import '../../controllers/companies_controller.dart';
 import '/dist/component_exports.dart';
 import '/extensions/ext_mines_status.dart';
 
@@ -14,7 +14,7 @@ import 'company_header.dart';
 import 'company_live_queue_status.dart';
 import 'company_location.dart';
 
-class CompanyPage extends GetView<MinesController> {
+class CompanyPage extends GetView<CompaniesController> {
   const CompanyPage({super.key});
 
   @override

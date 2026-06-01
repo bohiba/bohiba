@@ -114,7 +114,7 @@ class CompanyVerticalCard extends StatelessWidget {
               child: Container(
                 width: double.maxFinite,
                 height: 70.h,
-                margin: EdgeInsets.all(3.0),
+                margin: EdgeInsets.all(0.5),
                 alignment: Alignment.center,
                 decoration: TileDecorative(
                   color: bohibaTheme.scaffoldBackgroundColor,

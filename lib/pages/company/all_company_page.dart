@@ -14,17 +14,20 @@ class AllCompanyPage extends GetView<AllCompanyController> {
     return Scaffold(
       appBar: MinesAppBar(title: 'Mines'),
       body: Obx(() {
-        return ListView.builder(
-          padding: EdgeInsets.only(
-            left: ScreenUtils.height15,
-            right: ScreenUtils.height15,
-            top: ScreenUtils.height10,
+        return RefreshIndicator(
+          onRefresh: () async => await controller.getMinesList(),
+          child: ListView.builder(
+            padding: EdgeInsets.only(
+              left: ScreenUtils.height15,
+              right: ScreenUtils.height15,
+              top: ScreenUtils.height10,
+            ),
+            itemCount: controller.arrMines.length,
+            itemBuilder: (context, index) {
+              CompanyModel minesModel = controller.arrMines[index];
+              return CompanyHorizontalCard(minesInfo: minesModel);
+            },
           ),
-          itemCount: controller.arrMines.length,
-          itemBuilder: (context, index) {
-            CompanyModel minesModel = controller.arrMines[index];
-            return CompanyHorizontalCard(minesInfo: minesModel);
-          },
         );
       }),
     );

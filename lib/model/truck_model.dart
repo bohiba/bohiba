@@ -1,6 +1,8 @@
 class TruckModel {
   int? id;
   bool? isFav;
+
+  int? truckId;
   String? truckImage;
   String? regdNumber;
   int? trips;
@@ -44,6 +46,7 @@ class TruckModel {
 
   TruckModel({
     this.id,
+    this.truckId,
     this.truckImage,
     this.regdNumber,
     this.isFav = false,
@@ -89,6 +92,7 @@ class TruckModel {
     final valid = json['validity'] ?? {};
     return {
       'id': json['id'],
+      'truckId': json['truck_id'],
       'isFav': json['is_fav'] == false ? 0 : 1,
       'image': json['truck_image'],
       'vhNumber': json['regd_number'],
@@ -130,6 +134,7 @@ class TruckModel {
   /// ✅ Convert back from DB Map
   factory TruckModel.fromDB(Map<String, dynamic> map) => TruckModel(
         id: map['id'],
+        truckId: map['truckId'],
         truckImage: map['image'],
         regdNumber: map['vhNumber'],
         isFav: map['isFav'] == 0 ? false : true,

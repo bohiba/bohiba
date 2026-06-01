@@ -90,6 +90,7 @@ class FavouriteModel {
       driverId: map['driverId'],
       minesId: map['companyId'],
       isFav: map['isFav'] == 1 ? true : false,
+      image: map['image'],
       name: map['name'],
       nameCode: map['nameCode'],
       type: map['type'],

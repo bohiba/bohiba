@@ -1,6 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/extensions/bohiba_extension.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
@@ -32,7 +32,8 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
         },
         child: Scaffold(
           appBar: TitleAppbar(
-            title: controller.tripModel == null ? 'Edit Payment' : 'Add Payment',
+            title:
+                controller.tripModel == null ? 'Edit Payment' : 'Add Payment',
             popResult: controller.countUpdate > 0,
           ),
           body: SafeArea(
@@ -50,12 +51,15 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                         DateInputField(
                           width: ScreenUtils.width,
                           onTap: () async {
-                            DateTime? paymentDate = await GlobalService.datePickerModal(
+                            DateTime? paymentDate =
+                                await GlobalService.datePickerModal(
                               context: context,
-                              startTime: DateFormat('yyyy-MM-dd').parse(controller.tripModel?.startDate ?? ''),
+                              startTime: DateFormat('yyyy-MM-dd')
+                                  .parse(controller.tripModel?.startDate ?? ''),
                             );
                             if (paymentDate != null) {
-                              controller.paymentDateController.text = DateFormat('dd-MM-yyyy').format(paymentDate);
+                              controller.paymentDateController.text =
+                                  DateFormat('dd-MM-yyyy').format(paymentDate);
                             }
                           },
                           controller: controller.paymentDateController,
@@ -67,21 +71,21 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                           textCapitalization: TextCapitalization.characters,
                           nextActionType: TextInputAction.next,
                         ),
-                        AppDropdown(
+                        AppDropdownSearch(
                           padding: EdgeInsets.only(bottom: 5.h),
                           hint: 'Recieved by (Manager/Driver/Self)',
                           items: controller.arrRecievedBy,
                           menuController: controller.rcviedController,
                           labelBuilder: (p) => p.toDisplayLabel(),
                         ),
-                        AppDropdown(
+                        AppDropdownSearch(
                           padding: EdgeInsets.only(bottom: 5.h),
                           hint: 'Select Payment Mode',
                           items: controller.arrPaymentMode,
                           menuController: controller.paymentModeController,
                           labelBuilder: (p) => p.toDisplayLabel(),
                         ),
-                        AppDropdown(
+                        AppDropdownSearch(
                           padding: EdgeInsets.only(bottom: 5.h),
                           hint: 'Select Payment Mode',
                           items: controller.arrPaymentType,
@@ -91,7 +95,8 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                         TextInputField(
                           width: ScreenUtils.width,
                           hintText: 'Amount',
-                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
                           controller: controller.paidController,
                         ),
                       ],
@@ -99,7 +104,8 @@ class AddPaymentPage extends GetView<TripPaymentAddController> {
                   ),
                 ),
                 PrimaryButton(
-                  padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
                   onPressed: () async => await controller.addUpdatePayment(),
                   label: controller.tripModel == null ? 'UPDATE' : 'SAVE',
                 ),

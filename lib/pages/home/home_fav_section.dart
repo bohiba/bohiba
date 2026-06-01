@@ -85,7 +85,7 @@ class HomeFavListSection extends GetView<HomeController> {
                   if (favObj.type == EnumFavouriteType.driver.name) {
                     return DriverTile(
                       driver: UserModel(
-                        id: favObj.driverId ?? favObj.userDriverId,
+                        id: favObj.userDriverId,
                         isFav: (favObj.isFav ?? false) ? 1 : 0,
                         profile: UserProfile(
                           name: favObj.name,
@@ -93,11 +93,12 @@ class HomeFavListSection extends GetView<HomeController> {
                         ),
                       ),
                       onPressed: () {
-                        navigatorState
-                            .pushNamed(AppRoute.driver,
-                                arguments:
-                                    favObj.driverId ?? favObj.userDriverId)
-                            .then((onValue) async {
+                        navigatorState.pushNamed(
+                          AppRoute.driver,
+                          arguments: {
+                            'driver_id': favObj.userDriverId,
+                          },
+                        ).then((onValue) async {
                           await controller.getDriverList();
                         });
                       },
@@ -125,9 +126,12 @@ class HomeFavListSection extends GetView<HomeController> {
                         ActionType.other,
                       ],
                       onClick: () {
-                        Get.toNamed(AppRoute.truck,
-                                arguments: favObj.truckId ?? favObj.userTruckId)
-                            ?.then(
+                        Get.toNamed(
+                          AppRoute.truck,
+                          arguments: {
+                            "truck_id": favObj.userTruckId,
+                          },
+                        )?.then(
                           (onValue) async {
                             if (onValue != null) {
                               await controller.getTruckList();

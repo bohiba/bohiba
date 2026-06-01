@@ -1,4 +1,5 @@
 import '/model/truck_model.dart';
+import '/model/company_model.dart';
 import '/dist/component_exports.dart';
 import '/services/global_service.dart';
 import '/extensions/bohiba_extension.dart';
@@ -7,7 +8,7 @@ import '/controllers/trip_add_controller.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '/component/bohiba_dropdown/app_search_dropdown_button.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,7 @@ class AddTripPage extends GetView<TripAddController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // ── Start / End dates ──────────────────────────────────
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,17 +50,15 @@ class AddTripPage extends GetView<TripAddController> {
                           width: ScreenUtils.width * 0.45,
                           hintText: 'Start Date',
                           controller: controller.startAtController,
-                          validateField: (inputValue) {
-                            if (inputValue == null || inputValue.isEmpty) {
-                              return 'Date is required';
-                            } else {
-                              return null;
-                            }
-                          },
+                          validateField: (v) => (v == null || v.isEmpty)
+                              ? 'Date is required'
+                              : null,
                           onTap: () async {
-                            DateTime? pickedDate = await GlobalService.datePickerModal(context: context);
-                            if (pickedDate != null) {
-                              controller.startAtController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+                            final picked = await GlobalService.datePickerModal(
+                                title: 'Trip Start Date', context: context);
+                            if (picked != null) {
+                              controller.startAtController.text =
+                                  DateFormat('dd-MM-yyyy').format(picked);
                             }
                           },
                         ),
@@ -66,132 +66,145 @@ class AddTripPage extends GetView<TripAddController> {
                           width: ScreenUtils.width * 0.45,
                           hintText: 'End Date',
                           controller: controller.endedAtController,
-                          validateField: (inputValue) {
-                            if (inputValue == null || inputValue.isEmpty) {
-                              return 'Date is required';
-                            } else {
-                              return null;
-                            }
-                          },
+                          validateField: (v) => (v == null || v.isEmpty)
+                              ? 'Date is required'
+                              : null,
                           onTap: () async {
                             if (controller.startAtController.text.isEmpty) {
-                              GlobalService.showAppToast(message: 'Please select start date');
+                              GlobalService.showAppToast(
+                                  message: 'Please select start date');
                             } else {
-                              DateTime? pickedDate = await GlobalService.datePickerModal(
+                              final picked =
+                                  await GlobalService.datePickerModal(
+                                title: 'Trip End Date',
                                 context: context,
-                                startTime: DateFormat('dd-MM-yyyy').parse(controller.startAtController.text),
+                                startTime: DateFormat('dd-MM-yyyy')
+                                    .parse(controller.startAtController.text),
                               );
-                              if (pickedDate != null) {
-                                controller.endedAtController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+                              if (picked != null) {
+                                controller.endedAtController.text =
+                                    DateFormat('dd-MM-yyyy').format(picked);
                               }
                             }
                           },
                         ),
                       ],
                     ),
-                    RequiredLabel(
-                      label: 'Truck Number',
-                      required: true,
-                    ),
-                    AppDropdown<TruckModel>(
+
+                    // ── Truck ─────────────────────────────────────────────
+                    RequiredLabel(label: 'Truck Number', required: true),
+                    AppDropdownSearch<TruckModel>(
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       menuHeight: ScreenUtils.height * 0.45,
                       hint: 'Select Truck',
-                      items: controller.arrTruck.value,
+                      items: controller.arrTruck.toList(),
                       initialValue: controller.truckModel.value,
-                      labelBuilder: (truck) {
-                        return truck.regdNumber!;
-                      },
+                      labelBuilder: (truck) => truck.regdNumber!,
                       menuController: controller.truckController,
                       onChanged: (t1) {
                         if (t1?.driverUuid == null) return;
-
                         controller.truckModel.value.driverUuid = t1?.driverUuid;
                       },
                       validator: (value) {
                         if (value == null || value.regdNumber == null) {
                           return 'Please select your truck.';
-                        } else {
-                          return null;
                         }
+                        return null;
                       },
                     ),
+
+                    // ── Origin company search ─────────────────────────────
                     RequiredLabel(label: 'Origin', required: true),
-                    TextInputField(
-                      hintText: 'Company Name',
-                      controller: controller.originController,
-                      textCapitalization: TextCapitalization.characters,
-                      nextActionType: TextInputAction.next,
-                      validateField: (inputValue) {
-                        if (inputValue == null || inputValue.isEmpty) {
-                          return 'Please enter origin';
-                        } else {
-                          return null;
+                    // Obx is not needed here — the outer Obx already rebuilds
+                    // the whole tree when any controller Rx changes.
+                    AppDropdownSearch<CompanyModel>(
+                      hint: 'Search origin company…',
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
+                      width: ScreenUtils.width,
+                      menuHeight: 90,
+                      items: controller.originSearchResults.toList(),
+                      initialValue: controller.selectedOriginCompany.value,
+                      searchState: controller.originSearchState.value,
+                      labelBuilder: (company) => company.name ?? '',
+                      onSearchChanged: (input) =>
+                          controller.onOriginQueryChanged(input),
+                      onChanged: (company) =>
+                          controller.onOriginSelected(company),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select origin company.';
                         }
+                        return null;
                       },
                     ),
+
+                    // ── Destination company search ─────────────────────────
                     RequiredLabel(label: 'Destination', required: true),
-                    TextInputField(
-                      hintText: 'Company Name',
-                      controller: controller.destinationController,
-                      textCapitalization: TextCapitalization.characters,
-                      nextActionType: TextInputAction.next,
-                      validateField: (inputValue) {
-                        if (inputValue == null || inputValue.isEmpty) {
-                          return 'Please enter destination';
-                        } else {
-                          return null;
+                    AppDropdownSearch<CompanyModel>(
+                      hint: 'Search destination company…',
+                      items: controller.destinationSearchResults.toList(),
+                      initialValue: controller.selectedDestinationCompany.value,
+                      searchState: controller.destinationSearchState.value,
+                      labelBuilder: (company) => company.name ?? '',
+                      onSearchChanged: controller.onDestinationQueryChanged,
+                      onChanged: (company) =>
+                          controller.onDestinationSelected(company),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select destination company.';
                         }
+                        return null;
                       },
                     ),
+
+                    // ── Transporter ───────────────────────────────────────
                     RequiredLabel(label: 'Transporter', required: true),
                     TextInputField(
                       controller: controller.transporterController,
                       textCapitalization: TextCapitalization.characters,
                       nextActionType: TextInputAction.next,
-                      validateField: (inputValue) {
-                        if (inputValue == null || inputValue.isEmpty) {
-                          return 'Please enter Transporter Name';
-                        } else {
-                          return null;
-                        }
-                      },
+                      validateField: (v) => (v == null || v.isEmpty)
+                          ? 'Please enter Transporter Name'
+                          : null,
                     ),
-                    AppDropdown(
+
+                    // ── Material type (minerals from origin company) ───────
+                    RequiredLabel(label: 'Material Type', required: true),
+                    AppDropdownSearch<MineralModel>(
                       padding: EdgeInsets.symmetric(vertical: 5.h),
-                      hint: 'Material Type*',
-                      initialValue: controller.strOre.value,
-                      items: controller.ironOreTypes,
-                      menuController: controller.materialController,
-                      labelBuilder: (String p1) {
-                        return p1.toCapitalizedLabel();
-                      },
+                      hint: controller.availableMinerals.isEmpty
+                          ? 'No material found for selected origin'
+                          : 'Select material...',
+                      enableSearch: controller.availableMinerals.isNotEmpty,
+                      requestFocusOnTap:
+                          controller.availableMinerals.isNotEmpty,
+                      items: controller.availableMinerals.toList(),
+                      initialValue: controller.selectedMineral.value,
+                      labelBuilder: (m) => (m.name ?? '').toCapitalizedLabel(),
+                      onChanged: (m) => controller.selectedMineral.value = m,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select material';
-                        } else {
-                          return null;
+                        if (value == null) {
+                          return 'Please select material type.';
                         }
+                        return null;
                       },
                     ),
-                    AppDropdown(
+
+                    // ── Trip status ───────────────────────────────────────
+                    AppDropdownSearch<String>(
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       hint: 'Trip Status',
-                      initialValue: controller.strStatus.value,
-                      items: controller.tripStatus,
+                      initialValue: controller.strStatus.value.name,
+                      items: controller.tripStatus.map((e) => e.name).toList(),
                       enableSearch: false,
-                      labelBuilder: (String p1) {
-                        return p1.toCapitalizedLabel();
-                      },
+                      labelBuilder: (s) => s.toCapitalizedLabel(),
                       menuController: controller.statusController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select trip status';
-                        } else {
-                          return null;
-                        }
-                      },
+                      validator: (value) => (value == null || value.isEmpty)
+                          ? 'Please select trip status'
+                          : null,
                     ),
+
+                    // ── Weights ───────────────────────────────────────────
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,21 +212,23 @@ class AddTripPage extends GetView<TripAddController> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            RequiredLabel(label: 'Total Weight', required: true),
+                            RequiredLabel(
+                                label: 'Total Weight', required: true),
                             TextInputField(
                               width: ScreenUtils.width * 0.44,
                               hintText: '00.00 in Tonne',
-                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)'))],
-                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'(^\d*\.?\d*)'))
+                              ],
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
                               nextActionType: TextInputAction.next,
                               controller: controller.totalWeightController,
-                              validateField: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select weight';
-                                } else {
-                                  return null;
-                                }
-                              },
+                              validateField: (v) => (v == null || v.isEmpty)
+                                  ? 'Please select weight'
+                                  : null,
                             ),
                           ],
                         ),
@@ -224,14 +239,18 @@ class AddTripPage extends GetView<TripAddController> {
                             TextInputField(
                               width: ScreenUtils.width * 0.44,
                               hintText: '00.00 in Tonne',
-                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
                               nextActionType: TextInputAction.next,
                               controller: controller.shortWeightController,
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
+
+                    // ── Rate ─────────────────────────────────────────────
                     RequiredLabel(label: 'Trip Price /Tonne', required: true),
                     TextInputField(
                       hintText: 'Rate/Tonne',

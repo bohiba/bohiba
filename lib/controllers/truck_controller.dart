@@ -11,12 +11,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class TruckController extends ImageUploadController {
-  final RefreshController refreshTruckPage = RefreshController(initialRefresh: false);
+  final RefreshController refreshTruckPage =
+      RefreshController(initialRefresh: false);
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImg;
 
   Rx<UploadStatus> status = UploadStatus.initial.obs;
   Rxn<TruckModel> truckModel = Rxn<TruckModel>();
+
+  RxInt truckId = 0.obs;
 
   RxBool isDriverAssigned = false.obs;
 
@@ -26,16 +29,19 @@ class TruckController extends ImageUploadController {
   @override
   void onInit() {
     super.onInit();
-    var truckId = Get.arguments;
+    Map? args = Get.arguments;
+    if (args != null && args.containsKey("truck_id")) {
+      truckId.value = args["truck_id"];
+    }
     Future.delayed(Duration.zero, () async {
-      await getTruckInfo(truckFetchValue: truckId);
+      await getTruckInfo(truckFetchValue: truckId.value);
     });
   }
 
   Future<void> onRefreshTruckPage() async {
-    if (truckModel.value?.id != null) {
+    if (truckId.value != 0) {
       await getTruckInfo(
-        truckFetchValue: truckModel.value!.regdNumber!,
+        truckFetchValue: truckId.value,
         methodType: MethodType.api,
       );
       refreshTruckPage.refreshCompleted();
@@ -44,7 +50,7 @@ class TruckController extends ImageUploadController {
 
   Future<int> setImage() async {
     TruckModel? model;
-    if (selectedImg.value != null) {
+    if (selectedImg.value != null && truckModel.value?.truckId != null) {
       model = await TruckService.setTruckImage(
         oldTruck: truckModel.value,
         imageFile: [File(pickedImg!.path)],
@@ -59,26 +65,30 @@ class TruckController extends ImageUploadController {
   }
 
   Future<TruckModel?> getTruckInfo({
-    required var truckFetchValue,
+    required int truckFetchValue,
     MethodType methodType = MethodType.local,
-    int fetchType = 0,
+    int fetchType = 1,
   }) async {
-    TruckModel? truck = await TruckService.getTruck(value: truckFetchValue, methodType: methodType, type: fetchType);
+    TruckModel? truck = await TruckService.getTruck(
+        value: truckFetchValue, methodType: methodType, type: fetchType);
     if (truck != null) {
       truckModel.value = truck;
       update();
     } else {
       strErrorTitle.value = 'Truck Not Found';
-      strErrorDes.value = 'Sorry we unable to find your truck, Make sure truck is added with your account.';
+      strErrorDes.value =
+          'Sorry we unable to find your truck, Make sure truck is added with your account.';
     }
-    isDriverAssigned.value = truckModel.value?.driverUuid == null ? false : true;
+    isDriverAssigned.value =
+        truckModel.value?.driverUuid == null ? false : true;
     return truck;
   }
 
   Future<int> removeDriver() async {
     int success = await TruckService.removeDriver(oldTruck: truckModel.value!);
     if (success > 0) {
-      TruckModel? updatedTruck = await TruckService.getTruck(value: truckModel.value?.id!);
+      TruckModel? updatedTruck =
+          await TruckService.getTruck(value: truckModel.value?.id!);
       if (updatedTruck != null) {
         truckModel.value = updatedTruck;
         isDriverAssigned.value = false;
@@ -117,7 +127,8 @@ class TruckController extends ImageUploadController {
         GlobalService.showAlertDialog(
           status: AlertStatus.info,
           title: 'Permission',
-          description: 'Bohiba need file permission to select image by you! Please `Allow access` to access',
+          description:
+              'Bohiba need file permission to select image by you! Please `Allow access` to access',
           discardBtnTxt: 'Deny',
           saveBtnTxt: 'Allow',
           onSave: () async {

@@ -20,6 +20,31 @@ class CompanyModel {
 
   List<MineralModel>? minerals;
 
+  factory CompanyModel.fromJSON(Map<String, dynamic> json) {
+    return CompanyModel(
+      id: json['id'],
+      uuid: json['uuid'],
+      logo: json['logo'],
+      name: json['name'],
+      nameCode: json['name_code'],
+      website: json['website'],
+      type: json['type']?.toString(),
+      status: json['status']?.toString(),
+      state: json['state'],
+      district: json['district'],
+      address: json['address'],
+      country: json['country'],
+      pinCode: json['pin_code'],
+      latitude: json['latitude'] != null
+          ? double.tryParse(json['latitude'].toString())
+          : null,
+      longitude: json['longitude'] != null
+          ? double.tryParse(json['longitude'].toString())
+          : null,
+      mineralId: json['mineral_id']?.toString(),
+    );
+  }
+
   CompanyModel({
     this.id,
     this.isFav = 0,

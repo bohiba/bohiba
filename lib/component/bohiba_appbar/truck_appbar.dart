@@ -9,7 +9,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TruckAppbar extends GetView<TruckController> implements PreferredSizeWidget {
+class TruckAppbar extends GetView<TruckController>
+    implements PreferredSizeWidget {
   final TruckModel? truck;
   final bool popResult;
   const TruckAppbar({super.key, required this.truck, this.popResult = false});
@@ -86,7 +87,7 @@ class TruckAppbar extends GetView<TruckController> implements PreferredSizeWidge
               onActionComplete: {
                 ActionType.edit: (value) async {
                   await controller.getTruckInfo(
-                    truckFetchValue: controller.truckModel.value!.regdNumber!,
+                    truckFetchValue: controller.truckId.value,
                   );
                 },
                 ActionType.delete: (delete) async {

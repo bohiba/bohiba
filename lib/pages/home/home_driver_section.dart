@@ -15,30 +15,25 @@ class HomeDriverSection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final NavigatorState navigatorState =
-        Navigator.of(context);
+    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(
       () {
         return Visibility(
-          visible: controller.arrDriver.value?.isNotEmpty ??
-              false,
+          visible: controller.arrDriver.value?.isNotEmpty ?? false,
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtils.width15),
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width15),
                 child: Row(
                   children: [
                     Text(
                       'Driver',
-                      style: bohibaTheme
-                          .textTheme.headlineMedium,
+                      style: bohibaTheme.textTheme.headlineMedium,
                     ),
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        navigatorState
-                            .pushNamed(AppRoute.allDriver);
+                        navigatorState.pushNamed(AppRoute.allDriver);
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -47,8 +42,8 @@ class HomeDriverSection extends GetView<HomeController> {
                         child: Text(
                           'See All',
                           style: TextStyle(
-                            fontSize: bohibaTheme.textTheme
-                                .headlineSmall!.fontSize,
+                            fontSize:
+                                bohibaTheme.textTheme.headlineSmall!.fontSize,
                             color: bohibaTheme.primaryColor,
                           ),
                         ),
@@ -68,15 +63,12 @@ class HomeDriverSection extends GetView<HomeController> {
                       right: ScreenUtils.width15,
                       bottom: ScreenUtils.height25,
                     ),
-                    physics:
-                        const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: controller
-                            .arrDriver.value?.length ??
-                        0,
+                    itemCount: controller.arrDriver.value?.length ?? 0,
                     itemBuilder: (context, index) {
-                      UserModel driverModel = controller
-                          .arrDriver.value![index];
+                      UserModel driverModel =
+                          controller.arrDriver.value![index];
                       return DriverTile(
                         driver: driverModel,
                         allowedActions: [
@@ -86,16 +78,16 @@ class HomeDriverSection extends GetView<HomeController> {
                           ActionType.other,
                         ],
                         onPressed: () {
-                          navigatorState
-                              .pushNamed(AppRoute.driver,
-                                  arguments: driverModel.id)
-                              .then(
+                          navigatorState.pushNamed(
+                            AppRoute.driver,
+                            arguments: {
+                              'driver_id': driverModel.id,
+                            },
+                          ).then(
                             (onValue) async {
                               if (onValue != null) {
-                                await controller
-                                    .getDriverList();
-                                controller.arrDriver
-                                    .refresh();
+                                await controller.getDriverList();
+                                controller.arrDriver.refresh();
                               }
                             },
                           );

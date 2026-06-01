@@ -30,6 +30,9 @@ class ApiEndPoint {
   static const String apiProfile = '$baseUrl/profile';
   static const String apiMain = '$baseUrl/main';
 
+  static const String apiCompanies = '$baseUrl/companies';
+  static const String apiSearchCompany = '$apiCompanies/search';
+
   static const String apiAllFav = '$baseUrl/all-favourite';
   static const String apiAddFav = '$baseUrl/add-favourite';
   static const String apiDeleteFav = '$baseUrl//delete-favourite';
@@ -41,10 +44,7 @@ class ApiEndPoint {
   static const String apiAssignDriver = '$apiTrucks/assign-driver';
   static const String apiRemoveDriver = '$apiTrucks/remove-driver';
 
-  static const String apiAddDriver = '$baseUrl/driver-add';
-  static const String apiGetDriver = '$baseUrl/driver-get';
-  static const String apiAllDriver = '$baseUrl/driver-all';
-  static const String apiDeleteDriver = '$baseUrl/driver-delete';
+  static const String apiDriver = '$baseUrl/drivers';
 
   static const String apiRateDriver = '$baseUrl/rate-user';
   static const String apiGetRating = '$baseUrl/all-rating';

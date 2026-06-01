@@ -103,7 +103,8 @@ class TruckImageSection extends GetView<TruckController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.truckModel.value?.truckImage == null || (controller.truckModel.value?.truckImage?.isEmpty ?? true)) {
+        if (controller.truckModel.value?.truckImage == null ||
+            (controller.truckModel.value?.truckImage?.isEmpty ?? true)) {
           return Container(
             width: ScreenUtils.width,
             height: ScreenUtils.width * 0.5,
@@ -154,31 +155,37 @@ class TruckImageSection extends GetView<TruckController> {
                     ),
                   )
                 else
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SecoundaryButton(
                         height: 8.h,
-                        onPressed: () => controller.deleteImageFile(controller.selectedImg.value!),
+                        onPressed: () => controller
+                            .deleteImageFile(controller.selectedImg.value!),
                         label: 'Remove',
                         textStyle: TextStyle(
-                          fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
+                          fontFamily:
+                              bohibaTheme.textTheme.labelLarge!.fontFamily,
                           color: bohibaTheme.textTheme.displayLarge!.color,
                           fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                         ),
-                        color: bohibaTheme.colorScheme.error,
+                        color: bohibaTheme.colorScheme.tertiary,
                       ),
                       PrimaryButton(
                         width: 120.w,
                         height: 8.h,
-                        onPressed: () async => await controller.setImage().then((onValue) async {
+                        onPressed: () async =>
+                            await controller.setImage().then((onValue) async {
                           if (onValue > 0) {
-                            await controller.getTruckInfo(truckFetchValue: controller.truckModel.value!.id);
+                            await controller.getTruckInfo(
+                              truckFetchValue: controller.truckId.value,
+                            );
                           }
                         }),
                         label: 'Upload',
                         textStyle: TextStyle(
-                          fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
+                          fontFamily:
+                              bohibaTheme.textTheme.labelLarge!.fontFamily,
                           color: bohibaTheme.textTheme.displayLarge!.color,
                           fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                         ),
@@ -194,7 +201,8 @@ class TruckImageSection extends GetView<TruckController> {
               GlobalService.showAppToast(message: 'message');
             },
             child: CachedNetworkImage(
-              imageUrl: '${ImagePath.truckImage}/${controller.truckModel.value?.truckImage}',
+              imageUrl:
+                  '${ImagePath.truckImage}/${controller.truckModel.value?.truckImage}',
               fit: BoxFit.cover,
               width: ScreenUtils.width,
               height: ScreenUtils.width * 0.5,
@@ -275,11 +283,14 @@ class RelatedPersonSection extends GetView<TruckController> {
                       width: ScreenUtils.width,
                       label: 'Assign Driver',
                       onPressed: () {
-                        navigateState.pushNamed(AppRoute.editTruck, arguments: controller.truckModel.value!).then(
+                        navigateState
+                            .pushNamed(AppRoute.editTruck,
+                                arguments: controller.truckModel.value!)
+                            .then(
                           (onValue) async {
                             if (onValue != null) {
                               await controller.getTruckInfo(
-                                truckFetchValue: controller.truckModel.value!.regdNumber!,
+                                truckFetchValue: controller.truckId.value,
                               );
                             }
                           },
@@ -303,9 +314,11 @@ class RelatedPersonSection extends GetView<TruckController> {
                                 ),
                               )
                             : ClipRRect(
-                                borderRadius: BorderRadiusGeometry.circular(35.r),
+                                borderRadius:
+                                    BorderRadiusGeometry.circular(35.r),
                                 child: CachedNetworkImage(
-                                  imageUrl: '${ImagePath.profileImage}/${controller.truckModel.value!.driverImage}',
+                                  imageUrl:
+                                      '${ImagePath.profileImage}/${controller.truckModel.value!.driverImage}',
                                   fit: BoxFit.cover,
                                   height: 32.h,
                                   width: 32.h,
@@ -327,18 +340,27 @@ class RelatedPersonSection extends GetView<TruckController> {
                         children: [
                           BohibaMarqueeText(
                             width: ScreenUtils.width * 0.35,
-                            text: controller.truckModel.value?.driverName?.toCapitalizedLabel() ?? '',
-                            overflowText: controller.truckModel.value?.driverName?.toCapitalizedLabel() ?? '',
+                            text: controller.truckModel.value?.driverName
+                                    ?.toCapitalizedLabel() ??
+                                '',
+                            overflowText: controller
+                                    .truckModel.value?.driverName
+                                    ?.toCapitalizedLabel() ??
+                                '',
                             style: bohibaTheme.textTheme.bodyLarge,
                             marqueeTextStyle: bohibaTheme.textTheme.bodyLarge,
-                            preserFontSize: [bohibaTheme.textTheme.bodyLarge!.fontSize!],
+                            preserFontSize: [
+                              bohibaTheme.textTheme.bodyLarge!.fontSize!
+                            ],
                           ),
                           Text(
                             controller.truckModel.value?.driverUuid ?? '',
                             maxLines: 1,
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                              fontSize:
+                                  bohibaTheme.textTheme.titleMedium!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
                               color: bohibaTheme.textTheme.titleMedium!.color,
                             ),
                           ),
@@ -349,9 +371,13 @@ class RelatedPersonSection extends GetView<TruckController> {
                         onTap: () => GlobalService.showAlertDialog(
                           status: AlertStatus.warning,
                           title: 'Remove Driver',
-                          description: 'Are you sure you want to remove driver from this truck?',
+                          description:
+                              'Are you sure you want to remove driver from this truck?',
                           discardBtnTxt: 'Remove',
-                          onDiscard: () async => {navigateState.pop(), await controller.removeDriver()},
+                          onDiscard: () async => {
+                            navigateState.pop(),
+                            await controller.removeDriver()
+                          },
                           saveBtnTxt: 'NO',
                           onSave: () => navigateState.pop(),
                         ),
@@ -361,7 +387,8 @@ class RelatedPersonSection extends GetView<TruckController> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.15),
+                            color: bohibaTheme.colorScheme.tertiary
+                                .withValues(alpha: 0.15),
                           ),
                           child: Icon(
                             Icons.remove_circle,
@@ -372,9 +399,14 @@ class RelatedPersonSection extends GetView<TruckController> {
                       ),
                       Gap(10.w),
                       Visibility(
-                        visible: controller.truckModel.value?.driverMobileNumber != null || controller.truckModel.value?.driverMobileNumber != '',
+                        visible: controller
+                                    .truckModel.value?.driverMobileNumber !=
+                                null ||
+                            controller.truckModel.value?.driverMobileNumber !=
+                                '',
                         child: GestureDetector(
-                          onTap: () async => await LauncherService.makePhoneCall(
+                          onTap: () async =>
+                              await LauncherService.makePhoneCall(
                             controller.truckModel.value!.driverMobileNumber!,
                           ),
                           child: Container(
@@ -383,7 +415,8 @@ class RelatedPersonSection extends GetView<TruckController> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.15),
+                              color: bohibaTheme.colorScheme.onPrimary
+                                  .withValues(alpha: 0.15),
                             ),
                             child: Icon(
                               Icons.phone_sharp,
@@ -413,7 +446,8 @@ class RelatedPersonSection extends GetView<TruckController> {
                       : ClipRRect(
                           borderRadius: BorderRadiusGeometry.circular(35.r),
                           child: CachedNetworkImage(
-                            imageUrl: '${ImagePath.profileImage}/${controller.truckModel.value!.ownerImage}',
+                            imageUrl:
+                                '${ImagePath.profileImage}/${controller.truckModel.value!.ownerImage}',
                             fit: BoxFit.cover,
                             height: 32.h,
                             width: 32.h,
@@ -439,7 +473,9 @@ class RelatedPersonSection extends GetView<TruckController> {
                       overflowText: controller.truckModel.value?.ownerName,
                       style: bohibaTheme.textTheme.bodyLarge,
                       marqueeTextStyle: bohibaTheme.textTheme.bodyLarge,
-                      preserFontSize: [bohibaTheme.textTheme.bodyLarge!.fontSize!],
+                      preserFontSize: [
+                        bohibaTheme.textTheme.bodyLarge!.fontSize!
+                      ],
                     ),
                     Text(
                       controller.truckModel.value?.ownerUuid ?? '',
@@ -454,7 +490,9 @@ class RelatedPersonSection extends GetView<TruckController> {
                 ),
                 Spacer(),
                 Visibility(
-                  visible: controller.truckModel.value?.ownerMobileNumber != null || controller.truckModel.value?.ownerMobileNumber != '',
+                  visible:
+                      controller.truckModel.value?.ownerMobileNumber != null ||
+                          controller.truckModel.value?.ownerMobileNumber != '',
                   child: GestureDetector(
                     onTap: () async => LauncherService.makePhoneCall(
                       controller.truckModel.value!.ownerMobileNumber!,
@@ -465,7 +503,8 @@ class RelatedPersonSection extends GetView<TruckController> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
+                        color: bohibaTheme.colorScheme.onPrimary
+                            .withValues(alpha: 0.25),
                       ),
                       child: Icon(
                         Icons.phone_sharp,

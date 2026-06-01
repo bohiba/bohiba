@@ -1,10 +1,33 @@
 import 'db2_service.dart';
 
 import '/model/company_model.dart';
+import '/services/api_end_point.dart';
+import '/core/network/dio_serivce.dart';
 import 'minerals_service.dart';
 
 class CompanyService {
   static final DatabaseService _databaseService = DatabaseService();
+  static final DioService _dioService = DioService();
+
+  /// Searches companies via the remote API.
+  /// Endpoint: GET /companies/search — query param: search=QUERY
+  /// Returns an empty list on any error (silent fallback — see §4.3 coding standards).
+  static Future<List<CompanyModel>> searchCompanies(String query) async {
+    try {
+      final ApiResponse response = await _dioService.get(
+        ApiEndPoint.apiSearchCompany,
+        queryParams: {'search': query},
+      );
+      if (response.status && response.data != null) {
+        return (response.data as List)
+            .map((e) => CompanyModel.fromJSON(e as Map<String, dynamic>))
+            .toList();
+      }
+      return [];
+    } catch (_) {
+      return [];
+    }
+  }
 
   static Future<CompanyModel?> getCompany(int id) async {
     String companyQuery = '''

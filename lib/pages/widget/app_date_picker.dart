@@ -1,7 +1,7 @@
 import '/component/bohiba_buttons/primary_button.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/dist/component_exports.dart';
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
@@ -37,6 +37,8 @@ class _AppDatePickerState extends State<AppDatePicker> {
 
   int startMonth = 1;
   int endMonth = 12;
+
+  int _daysInMonth(int year, int month) => DateTime(year, month + 1, 0).day;
 
   @override
   void initState() {
@@ -98,7 +100,7 @@ class _AppDatePickerState extends State<AppDatePicker> {
               ),
               child: Row(
                 children: [
-                  AppDropdown<int>(
+                  AppDropdownSearch<int>(
                     width: ScreenUtils.width * 0.45,
                     menuHeight: ScreenUtils.height * 0.3,
                     initialValue: pickedDate.month,
@@ -109,22 +111,21 @@ class _AppDatePickerState extends State<AppDatePicker> {
                         DateFormat.MMMM().format(DateTime(0, m)),
                     onChanged: (m) {
                       if (m == null) return;
-
-                      DateTime newDate =
-                          DateTime(selectedYear, m, pickedDate.day);
+                      // Clamp day so e.g. Jan-31 → Feb doesn't overflow to Mar
+                      final clampedDay = pickedDate.day
+                          .clamp(1, _daysInMonth(selectedYear, m));
+                      final newDate = DateTime(selectedYear, m, clampedDay);
                       if (newDate.isBefore(lastDate) ||
                           isSameDay(newDate, lastDate)) {
                         setState(() {
                           pickedDate = newDate;
                           dTFocusedDate = newDate;
                         });
-                      } else {
-                        return;
                       }
                     },
                   ),
                   Gap(10.w),
-                  AppDropdown<int>(
+                  AppDropdownSearch<int>(
                     width: ScreenUtils.width * 0.275,
                     menuHeight: ScreenUtils.height * 0.3,
                     initialValue: selectedYear,
@@ -135,22 +136,19 @@ class _AppDatePickerState extends State<AppDatePicker> {
                     },
                     onChanged: (y) {
                       if (y == null) return;
-
                       getMonthList(y);
-
+                      // Resolve month and day for the new year before setState
+                      final newMonth = _monthList.contains(pickedDate.month)
+                          ? pickedDate.month
+                          : _monthList.first;
+                      final clampedDay =
+                          pickedDate.day.clamp(1, _daysInMonth(y, newMonth));
+                      final newDate = DateTime(y, newMonth, clampedDay);
                       setState(() {
                         selectedYear = y;
-                        dTFocusedDate = DateTime(
-                          selectedYear,
-                          pickedDate.month,
-                          pickedDate.day,
-                        );
+                        pickedDate = newDate;
+                        dTFocusedDate = newDate;
                       });
-
-                      if (!_monthList.contains(pickedDate.month)) {
-                        pickedDate =
-                            DateTime(selectedYear, _monthList.first, 1);
-                      }
                     },
                   ),
                 ],
@@ -229,13 +227,11 @@ class _AppDatePickerState extends State<AppDatePicker> {
   }
 
   List<int> getMonthList(int year) {
-    if (year == startDate.year) {
-      // show only future months from the "from date"
-      startMonth = startDate.month;
-    } else if (year > startDate.year) {
-      // show all months for future years
-      startMonth = 1;
-    }
+    startMonth = (year == startDate.year) ? startDate.month : 1;
+    // Cap at lastDate.month so the dropdown never offers months beyond the
+    // allowed range — selecting them would fail the isBefore guard and the
+    // calendar would silently refuse to scroll.
+    endMonth = (year == lastDate.year) ? lastDate.month : 12;
 
     _monthList = List.generate(
       (endMonth - startMonth) + 1,

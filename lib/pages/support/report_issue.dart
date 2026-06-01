@@ -1,6 +1,6 @@
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/screen_utils.dart';
 import '/pages/widget/icon_text_tile.dart';
@@ -58,7 +58,7 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
                       style: bohibaTheme.textTheme.headlineMedium,
                     ),
                     Gap(ScreenUtils.height5),
-                    AppDropdown(
+                    AppDropdownSearch(
                       padding:
                           EdgeInsets.symmetric(vertical: ScreenUtils.height10),
                       items: bohibaIssues,

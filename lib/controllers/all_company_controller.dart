@@ -10,11 +10,11 @@ class AllCompanyController extends GetxController {
   void onInit() {
     super.onInit();
     Future.delayed(Duration.zero, () async {
-      await _getMinesList();
+      await getMinesList();
     });
   }
 
-  Future<List<CompanyModel>?> _getMinesList() async {
+  Future<List<CompanyModel>?> getMinesList() async {
     List<CompanyModel>? minesList = await CompanyService.getMinesList();
     if (minesList != null) {
       arrMines.clear();

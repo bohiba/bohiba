@@ -4,7 +4,7 @@ import '/pages/widget/required_label.dart';
 
 import '/controllers/trip_expense_add_controller.dart';
 import 'package:get/get.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/services/global_service.dart';
@@ -38,19 +38,23 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                   DateInputField(
                     width: ScreenUtils.width,
                     onTap: () async {
-                      DateTime? expenseDate = await GlobalService.datePickerModal(
+                      DateTime? expenseDate =
+                          await GlobalService.datePickerModal(
                         context: context,
-                        startTime: DateFormat('yyyy-MM-dd').parse(controller.tripModel?.startDate ?? ''),
-                        endTime: DateFormat('yyyy-MM-dd').parse(controller.tripModel?.endedDate ?? ''),
+                        startTime: DateFormat('yyyy-MM-dd')
+                            .parse(controller.tripModel?.startDate ?? ''),
+                        endTime: DateFormat('yyyy-MM-dd')
+                            .parse(controller.tripModel?.endedDate ?? ''),
                       );
                       if (expenseDate != null) {
-                        controller.expensedateController.text = DateFormat('dd-MM-yyyy').format(expenseDate);
+                        controller.expensedateController.text =
+                            DateFormat('dd-MM-yyyy').format(expenseDate);
                       }
                     },
                     controller: controller.expensedateController,
                     hintText: 'Expense Date',
                   ),
-                  AppDropdown(
+                  AppDropdownSearch(
                     menuHeight: ScreenUtils.height * 0.5,
                     items: controller.arrExpenseTypes,
                     labelBuilder: (type) => type.toCapitalizedLabel(),
@@ -60,7 +64,7 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                     hint: 'Select Expense Type',
                     menuController: controller.typeController,
                   ),
-                  AppDropdown(
+                  AppDropdownSearch(
                     hint: 'Select Payment Mode',
                     padding: EdgeInsets.only(top: ScreenUtils.height5),
                     items: controller.arrPaymentMode,
@@ -70,7 +74,8 @@ class AddExpensePage extends GetView<AddTripExpenseController> {
                   RequiredLabel(label: 'Expense', required: true),
                   TextInputField(
                     hintText: 'Amount',
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
                     controller: controller.paidController,
                   ),
                 ],

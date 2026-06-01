@@ -1,4 +1,4 @@
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/extensions/bohiba_extension.dart';
 
 import '/dist/component_exports.dart';
@@ -52,7 +52,7 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
                     controller: controller.expensedateController,
                     hintText: 'Expense Date',
                   ),
-                  AppDropdown<String>(
+                  AppDropdownSearch<String>(
                     items: controller.arrTruck
                         .map((vehicle) => vehicle.regdNumber!)
                         .toList(),
@@ -61,7 +61,7 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
                     labelBuilder: (String p1) => p1,
                   ),
                   RequiredLabel(label: 'Critical', required: true),
-                  AppDropdown<String>(
+                  AppDropdownSearch<String>(
                     hint: 'Select Service Type',
                     items: controller.arrSeverity,
                     menuController: controller.severityController,
@@ -77,7 +77,7 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
                     controller: controller.amountController,
                   ),
                   RequiredLabel(label: 'Service Type', required: true),
-                  AppDropdown<String>(
+                  AppDropdownSearch<String>(
                     hint: 'Tyre Replacement',
                     enableSearch: true,
                     requestFocusOnTap: true,

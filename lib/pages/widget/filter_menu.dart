@@ -1,5 +1,5 @@
 import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
 import '/extensions/bohiba_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +42,10 @@ class FilterMenu extends StatefulWidget {
     this.statusHint,
     this.statusList,
   }) : assert(
-          status == false || (statusList != null && statusList.isNotEmpty) || (statusText != null && statusText.isNotEmpty) || (statusHint != null && statusHint.isNotEmpty),
+          status == false ||
+              (statusList != null && statusList.isNotEmpty) ||
+              (statusText != null && statusText.isNotEmpty) ||
+              (statusHint != null && statusHint.isNotEmpty),
           'If status is true, statusList and statusHint cannot be null or empty',
         );
 
@@ -121,12 +124,14 @@ class _FilterMenuState extends State<FilterMenu> {
                           child: DateInputField(
                             showPrefixIcon: false,
                             onTap: () async {
-                              DateTime? dateTime = await GlobalService.datePickerModal(
+                              DateTime? dateTime =
+                                  await GlobalService.datePickerModal(
                                 context: context,
                               );
 
                               if (dateTime != null) {
-                                _dateFromController.text = DateFormat('dd-MM-yyyy').format(dateTime);
+                                _dateFromController.text =
+                                    DateFormat('dd-MM-yyyy').format(dateTime);
                               }
                             },
                             controller: _dateFromController,
@@ -138,9 +143,14 @@ class _FilterMenuState extends State<FilterMenu> {
                           child: DateInputField(
                             showPrefixIcon: false,
                             onTap: () async {
-                              DateTime? dateTime = await GlobalService.datePickerModal(context: context, startTime: DateFormat('dd-MM-yyyy').parse(_dateFromController.text));
+                              DateTime? dateTime =
+                                  await GlobalService.datePickerModal(
+                                      context: context,
+                                      startTime: DateFormat('dd-MM-yyyy')
+                                          .parse(_dateFromController.text));
                               if (dateTime != null) {
-                                _dateToController.text = DateFormat('dd-MM-yyyy').format(dateTime);
+                                _dateToController.text =
+                                    DateFormat('dd-MM-yyyy').format(dateTime);
                               }
                             },
                             controller: _dateToController,
@@ -158,7 +168,8 @@ class _FilterMenuState extends State<FilterMenu> {
                 visible: false,
                 child: Column(
                   children: [
-                    FilterHeaderWidget(onPressTrailing: () {}, title: 'Activity Type'),
+                    FilterHeaderWidget(
+                        onPressTrailing: () {}, title: 'Activity Type'),
                     DropdownButtonFormField<String>(
                       initialValue: 'All warehouses',
                       items: ['All warehouses', 'Warehouse 1', 'Warehouse 2']
@@ -188,8 +199,9 @@ class _FilterMenuState extends State<FilterMenu> {
                       title: widget.statusText ?? '',
                     ),
                     if (widget.status)
-                      if (widget.statusList != null || (widget.statusList?.isNotEmpty ?? false))
-                        AppDropdown(
+                      if (widget.statusList != null ||
+                          (widget.statusList?.isNotEmpty ?? false))
+                        AppDropdownSearch(
                           menuController: _menuController,
                           items: widget.statusList!,
                           initialValue: widget.statusHint?.toCapitalizedLabel(),

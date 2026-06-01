@@ -7,7 +7,8 @@ import '../../dist/enums/app_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DriverAppbar extends GetView<DriverController> implements PreferredSizeWidget {
+class DriverAppbar extends GetView<DriverController>
+    implements PreferredSizeWidget {
   const DriverAppbar({super.key});
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class DriverAppbar extends GetView<DriverController> implements PreferredSizeWid
         titleSpacing: 0,
         title: BohibaMarqueeText(
           width: ScreenUtils.width * 0.5,
-          text: controller.driverModel.value?.profile?.name,
+          text: controller.driverModel.value?.profile?.name ?? "Driver",
           style: bohibaTheme.appBarTheme.titleTextStyle,
           overflowText: controller.driverModel.value?.profile?.name,
           marqueeTextStyle: bohibaTheme.appBarTheme.titleTextStyle,

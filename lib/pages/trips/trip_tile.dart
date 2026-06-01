@@ -66,29 +66,6 @@ class TripTile extends GetView<TripController> {
                       color: bohibaTheme.textTheme.labelLarge!.color,
                     ),
                   ),
-                  if (tripInfo.origin?.name == null)
-                    SizedBox.shrink()
-                  else
-                    BohibaMarqueeText(
-                      width: ScreenUtils.width * 0.45,
-                      text: tripInfo.origin?.name,
-                      overflowText: tripInfo.origin?.nameCode,
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                        letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
-                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                        color: bohibaTheme.textTheme.labelLarge!.color,
-                      ),
-                      marqueeTextStyle: TextStyle(
-                        fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                        letterSpacing: bohibaTheme.textTheme.labelMedium!.letterSpacing,
-                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                        color: bohibaTheme.textTheme.labelLarge!.color,
-                      ),
-                      preserFontSize: [
-                        bohibaTheme.textTheme.labelMedium!.fontSize!,
-                      ],
-                    ),
                   Text(
                     "${'${tripInfo.startDate?.toDDMMYYYY()} |'} ${tripInfo.tripStatus?.tripStatusName ?? ''}",
                     maxLines: 1,
@@ -100,19 +77,17 @@ class TripTile extends GetView<TripController> {
                   ),
                 ],
               ),
-              const Spacer(),
-              GestureDetector(
-                child: Container(
-                  height: ScreenUtils.height * 0.075,
-                  width: ScreenUtils.width50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(12.0),
-                      bottomRight: Radius.circular(12),
-                    ),
+              Spacer(),
+              Container(
+                height: ScreenUtils.height * 0.075,
+                width: ScreenUtils.width50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(12.0),
+                    bottomRight: Radius.circular(12),
                   ),
-                  child: Icon(EvaIcons.arrowIosForwardOutline),
                 ),
+                child: Icon(EvaIcons.arrowIosForwardOutline),
               )
             ],
           ),

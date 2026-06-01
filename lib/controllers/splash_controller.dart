@@ -71,10 +71,8 @@ class SplashController extends GetxController {
       }
 
       // Kick off background sync without blocking navigation.
-      unawaited(Future.wait([
-        MainService.mainApi(type: method, showProgress: false),
-        FirebaseAppService.registerToken(),
-      ]));
+      await MainService.mainApi(type: method, showProgress: false);
+      await FirebaseAppService.registerToken();
 
       await _navigateAuthenticated(role: userRole, profile: profile);
     } catch (e, stack) {

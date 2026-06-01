@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:bohiba/component/ui/random_color_picker.dart';
-
+import '/component/ui/random_color_picker.dart';
 import '/component/image_path.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,7 +21,8 @@ class TruckTile extends GetView<TruckAllController> {
   final VoidCallback? onClick;
   final TruckModel truckInfo;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
+  final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
+      onActionComplete;
   const TruckTile({
     super.key,
     this.onClick,
@@ -45,7 +46,8 @@ class TruckTile extends GetView<TruckAllController> {
               onTap: onClick,
               child: Row(
                 children: [
-                  truckInfo.truckImage == null || (truckInfo.truckImage?.isEmpty ?? true)
+                  truckInfo.truckImage == null ||
+                          (truckInfo.truckImage?.isEmpty ?? true)
                       ? Container(
                           height: 32.h,
                           width: 32.h,
@@ -73,7 +75,8 @@ class TruckTile extends GetView<TruckAllController> {
                           child: ClipRRect(
                             borderRadius: BorderRadiusGeometry.circular(35.r),
                             child: CachedNetworkImage(
-                              imageUrl: '${ImagePath.truckImage}/${truckInfo.truckImage}',
+                              imageUrl:
+                                  '${ImagePath.truckImage}/${truckInfo.truckImage}',
                               fit: BoxFit.cover,
                               height: 32.h,
                               width: 32.h,
@@ -99,15 +102,19 @@ class TruckTile extends GetView<TruckAllController> {
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
                       RoleWidget(
-                        truckOwnerWidget: truckInfo.trips == null || truckInfo.trips == 0
+                        truckOwnerWidget: truckInfo.trips == null ||
+                                truckInfo.trips == 0
                             ? null
                             : Text(
                                 '${truckInfo.trips} ${(truckInfo.trips ?? 0) > 1 ? "Trips" : "Trip"}',
                                 maxLines: 1,
                                 style: TextStyle(
-                                  fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                  color: bohibaTheme.textTheme.titleMedium!.color,
+                                  fontSize: bohibaTheme
+                                      .textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleMedium!.color,
                                 ),
                               ),
                         driverWidget: truckInfo.ownerName != null
@@ -115,9 +122,12 @@ class TruckTile extends GetView<TruckAllController> {
                                 truckInfo.ownerName ?? '',
                                 maxLines: 1,
                                 style: TextStyle(
-                                  fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                                  color: bohibaTheme.textTheme.titleMedium!.color,
+                                  fontSize: bohibaTheme
+                                      .textTheme.titleMedium!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleMedium!.color,
                                 ),
                               )
                             : SizedBox.shrink(),

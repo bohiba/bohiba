@@ -31,7 +31,7 @@ class DriverService {
     }
     GlobalService.showProgress();
     ApiResponse response =
-        await _dioService.post(ApiEndPoint.apiAddDriver, body: bodyObj);
+        await _dioService.post(ApiEndPoint.apiDriver, body: bodyObj);
     switch (response.statusCode) {
       case 201 || 200:
         UserModel driver = UserModel.fromJson(response.data);
@@ -98,7 +98,7 @@ class DriverService {
       if (showProgress) GlobalService.showProgress();
 
       ApiResponse response = await _dioService
-          .get('${ApiEndPoint.apiAllDriver}?pageNo=$_currentPage');
+          .get('${ApiEndPoint.apiDriver}?pageNo=$_currentPage');
 
       switch (response.statusCode) {
         case 200:
@@ -159,7 +159,7 @@ class DriverService {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
       ApiResponse response =
-          await _dioService.get('${ApiEndPoint.apiGetDriver}/$id');
+          await _dioService.get('${ApiEndPoint.apiDriver}/$id');
 
       switch (response.statusCode) {
         case 200:
@@ -243,7 +243,7 @@ class DriverService {
 
     if (successDel > 0) {
       ApiResponse serviceResponse =
-          await _dioService.delete("${ApiEndPoint.apiDeleteDriver}/$driverId");
+          await _dioService.delete("${ApiEndPoint.apiDriver}/$driverId");
       switch (serviceResponse.statusCode) {
         case 200:
           await ProfileService.updateDriverNo(deleteDriver: true);

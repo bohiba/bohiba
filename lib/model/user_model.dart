@@ -31,10 +31,19 @@ class UserModel {
       id: mapObj['id'],
       isSynced: mapObj['is_synced'],
       isFav: json['is_fav'] == true ? 1 : 0,
-      profile: mapObj['profile'] != null ? UserProfile.fromJson(mapObj['profile']) : null,
-      licenseDetail: mapObj['license_detail'] != null ? LicenseDetail.fromJson(mapObj['license_detail']) : null,
-      address: mapObj['address'] != null ? CommonUserAddress.fromJson(mapObj['address']) : null,
-      rating: mapObj['rating'] != null ? List<RatingModel>.from((mapObj['rating'] as List).map((x) => RatingModel.fromJson(x))) : [],
+      profile: mapObj['profile'] != null
+          ? UserProfile.fromJson(mapObj['profile'])
+          : null,
+      licenseDetail: mapObj['license_detail'] != null
+          ? LicenseDetail.fromJson(mapObj['license_detail'])
+          : null,
+      address: mapObj['address'] != null
+          ? CommonUserAddress.fromJson(mapObj['address'])
+          : null,
+      rating: mapObj['rating'] != null
+          ? List<RatingModel>.from(
+              (mapObj['rating'] as List).map((x) => RatingModel.fromJson(x)))
+          : [],
       trips: mapObj['trips'],
       createdAt: mapObj['created_at'],
       updatedAt: mapObj['updated_at'],
@@ -194,7 +203,7 @@ class UserProfile {
 
 class CommonUserAddress {
   int? id;
-  String? verified;
+  int? verified;
   String? houseNo;
   String? locality;
   String? street;
@@ -217,7 +226,8 @@ class CommonUserAddress {
     this.pinCode,
   });
 
-  factory CommonUserAddress.fromJson(Map<String, dynamic> json) => CommonUserAddress(
+  factory CommonUserAddress.fromJson(Map<String, dynamic> json) =>
+      CommonUserAddress(
         id: json['id'],
         verified: json['verified'],
         houseNo: json['house_no'],

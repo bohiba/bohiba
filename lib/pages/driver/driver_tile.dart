@@ -19,7 +19,8 @@ class DriverTile extends GetView<DriverController> {
   final UserModel driver;
   final Function()? onPressed;
   final List<ActionType> allowedActions;
-  final Map<ActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
+  final Map<ActionType, FutureOr<void> Function(dynamic value)?>?
+      onActionComplete;
   const DriverTile({
     super.key,
     required this.driver,
@@ -52,12 +53,15 @@ class DriverTile extends GetView<DriverController> {
                       shape: BoxShape.circle,
                       color: bohibaTheme.colorScheme.surface,
                     ),
-                    child: driver.profile?.image == null || (driver.profile?.image?.isEmpty ?? true)
+                    child: driver.profile?.image == null ||
+                            (driver.profile?.image?.isEmpty ?? true)
                         ? Text(
                             driver.profile?.name?.shortCode ?? '',
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                              fontSize:
+                                  bohibaTheme.textTheme.labelLarge!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodyMedium!.fontWeight,
                               color: bohibaTheme.textTheme.bodySmall!.color,
                             ),
                           )
@@ -71,7 +75,8 @@ class DriverTile extends GetView<DriverController> {
                             child: ClipRRect(
                               borderRadius: BorderRadiusGeometry.circular(35.r),
                               child: CachedNetworkImage(
-                                imageUrl: '${ImagePath.profileImage}/${driver.profile?.image}',
+                                imageUrl:
+                                    '${ImagePath.profileImage}/${driver.profile?.image}',
                                 fit: BoxFit.cover,
                                 height: 32.h,
                                 width: 32.h,
@@ -89,9 +94,12 @@ class DriverTile extends GetView<DriverController> {
                                   child: Text(
                                     driver.profile?.name?.shortCode ?? '',
                                     style: TextStyle(
-                                      fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                                      fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                                      color: bohibaTheme.textTheme.bodySmall!.color,
+                                      fontSize: bohibaTheme
+                                          .textTheme.labelLarge!.fontSize,
+                                      fontWeight: bohibaTheme
+                                          .textTheme.bodyMedium!.fontWeight,
+                                      color: bohibaTheme
+                                          .textTheme.bodySmall!.color,
                                     ),
                                   ),
                                 ),

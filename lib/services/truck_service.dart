@@ -76,7 +76,8 @@ class TruckService {
           , ownerUuid
           , ownerName
            FROM $tblTrucks ORDER BY createdAt DESC ''';
-      List<Map<String, dynamic>> truckList = await _databaseService.executeQuery(strQueryTruckList) ?? [];
+      List<Map<String, dynamic>> truckList =
+          await _databaseService.executeQuery(strQueryTruckList) ?? [];
       if (showProgress) GlobalService.dismissProgress();
       if (truckList.isNotEmpty) {
         List<TruckModel> arrTruckModel = truckList.map((db) {
@@ -97,7 +98,8 @@ class TruckService {
         return [];
       }
       if (showProgress) GlobalService.showProgress();
-      ApiResponse res = await _dioService.get('${ApiEndPoint.apiTrucks}?page=$_currentPage');
+      ApiResponse res =
+          await _dioService.get('${ApiEndPoint.apiTrucks}?page=$_currentPage');
       switch (res.statusCode) {
         case 200:
           List<dynamic> truckList = res.data as List;
@@ -144,10 +146,12 @@ class TruckService {
       if (type == 1) {
         strGetQuery = ''' SELECT * FROM $tblTrucks WHERE id = $value; ''';
       } else {
-        strGetQuery = ''' SELECT * FROM $tblTrucks WHERE vhNumber = '$value'; ''';
+        strGetQuery =
+            ''' SELECT * FROM $tblTrucks WHERE vhNumber = '$value'; ''';
       }
       GlobalService.showProgress();
-      List<Map<String, dynamic>> arrTruckList = await _databaseService.executeQuery(strGetQuery) ?? [];
+      List<Map<String, dynamic>> arrTruckList =
+          await _databaseService.executeQuery(strGetQuery) ?? [];
       GlobalService.dismissProgress();
       if (arrTruckList.isNotEmpty) {
         TruckModel truckModel = TruckModel.fromDB(arrTruckList.first);
@@ -158,7 +162,8 @@ class TruckService {
     } else {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
-      ApiResponse apiRes = await _dioService.get("${ApiEndPoint.apiGetTruck}?value=$value&type=$type");
+      ApiResponse apiRes = await _dioService
+          .get("${ApiEndPoint.apiGetTruck}?value=$value&type=$type");
 
       switch (apiRes.statusCode) {
         case 200:
@@ -219,23 +224,19 @@ class TruckService {
   }) async {
     if (oldTruck == null || !await DeviceInfoService.hasInternet()) return null;
     GlobalService.showProgress();
-    Map<String, dynamic> bodyObj = {
-      "regd_number": oldTruck.regdNumber,
-    };
+
     ApiResponse apiRes = await _dioService.upload(
-      ApiEndPoint.apiSetTruckImage,
+      "${ApiEndPoint.apiSetTruckImage}/${oldTruck.truckId}",
       imageFile,
       fileField: 'truck_image',
-      body: bodyObj,
     );
 
     switch (apiRes.statusCode) {
       case 200:
         oldTruck.truckImage = apiRes.data['truck_image'];
-        String strUpdateQuery = ''' UPDATE $tblTrucks SET image = '${oldTruck.truckImage}' WHERE vhNumber = ?''';
-        int updateTruck = await _databaseService.updateData(strUpdateQuery, argument: [
-          {oldTruck.regdNumber}
-        ]);
+        String strUpdateQuery =
+            ''' UPDATE $tblTrucks SET image = '${oldTruck.truckImage}' WHERE truckId = '${oldTruck.truckId}' ''';
+        int updateTruck = await _databaseService.updateData(strUpdateQuery);
         GlobalService.dismissProgress();
         if (updateTruck <= 0) return null;
         GlobalService.showSnackBar(
@@ -303,7 +304,8 @@ class TruckService {
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(status: AlertStatus.failure, desc: 'Failed to assign driver.');
+        GlobalService.showSnackBar(
+            status: AlertStatus.failure, desc: 'Failed to assign driver.');
         return 0;
     }
   }
@@ -312,7 +314,8 @@ class TruckService {
     if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService.post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.regdNumber}');
+    ApiResponse serviceResponse = await _dioService
+        .post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.regdNumber}');
 
     switch (serviceResponse.statusCode) {
       case 200:
@@ -330,12 +333,14 @@ class TruckService {
         );
         GlobalService.dismissProgress();
         if (updateSuccess > 0) {
-          GlobalService.showSnackBar(status: AlertStatus.success, desc: serviceResponse.message);
+          GlobalService.showSnackBar(
+              status: AlertStatus.success, desc: serviceResponse.message);
         }
         return updateSuccess;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(status: AlertStatus.info, desc: serviceResponse.message);
+        GlobalService.showSnackBar(
+            status: AlertStatus.info, desc: serviceResponse.message);
         return 0;
       default:
         GlobalService.dismissProgress();
@@ -419,14 +424,18 @@ class TruckService {
     int dbDeleted = await _databaseService.delete(deleteQuery);
 
     if (dbDeleted > 0) {
-      ApiResponse serviceResponse = await _dioService.delete("${ApiEndPoint.apiTrucks}/$truckId");
+      ApiResponse serviceResponse =
+          await _dioService.delete("${ApiEndPoint.apiTrucks}/$truckId");
       switch (serviceResponse.statusCode) {
         case 200:
           ProfileModel? profile = await ProfileService.getProfile();
-          if (profile != null && profile.trucks != null && profile.trucks! > 0) {
+          if (profile != null &&
+              profile.trucks != null &&
+              profile.trucks! > 0) {
             profile.trucks = profile.trucks! - 1;
           }
-          int profileUpdated = await ProfileService.updateTruckNo(deleteTruck: true);
+          int profileUpdated =
+              await ProfileService.updateTruckNo(deleteTruck: true);
           if (profileUpdated > 0) {
             // Update Profile
           }

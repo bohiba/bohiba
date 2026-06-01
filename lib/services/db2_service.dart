@@ -14,7 +14,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 31;
+  static int dbversion = 33;
 
   /*================  DB CONFIG  =================== */
 
@@ -405,6 +405,7 @@ class DatabaseService {
   CREATE TABLE IF NOT EXISTS $tblTrucks (
     id INTEGER PRIMARY KEY AUTOINCREMENT
   , isFav INTEGER NOT NULL DEFAULT 0
+  , truckId INTEGER NOT NULL DEFAULT 0
   , image TEXT
   , vhNumber TEXT
   , trips INTEGER NOT NULL DEFAULT 0

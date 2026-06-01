@@ -7,7 +7,7 @@ import '/model/company_model.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MinesController extends GetxController {
+class CompaniesController extends GetxController {
   Rx<CompanyModel?> minesModel = CompanyModel().obs;
   RxList<CompanyModel> arrMines = <CompanyModel>[].obs;
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;

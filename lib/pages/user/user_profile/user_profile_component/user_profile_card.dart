@@ -46,16 +46,20 @@ class UserProfileCard extends GetView<DashboardController> {
                         shape: BoxShape.circle, color: bohibaTheme.cardColor),
                     child: Icon(Icons.file_upload_rounded),
                   )
-                : CachedNetworkImage(
-                    imageUrl: "${ImagePath.profileImage}/$userImage",
-                    httpHeaders: {
-                      'Authorization': 'Bearer $token',
-                    },
-                    errorWidget: (context, url, error) {
-                      debugPrint('URL: $url');
-                      debugPrint('ERROR: $error');
-                      return const Icon(Icons.error);
-                    },
+                : RepaintBoundary(
+                    child: CachedNetworkImage(
+                      imageUrl: "${ImagePath.profileImage}/$userImage",
+                      width: ScreenUtils.width * 0.25,
+                      height: ScreenUtils.width * 0.25,
+                      httpHeaders: {
+                        'Authorization': 'Bearer $token',
+                      },
+                      errorWidget: (context, url, error) {
+                        debugPrint('URL: $url');
+                        debugPrint('ERROR: $error');
+                        return const Icon(Icons.error);
+                      },
+                    ),
                   ),
           ),
 

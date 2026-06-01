@@ -1,5 +1,5 @@
 import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_dropdown/app_dropdown_button.dart';
+import '../../../component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/controllers/add_job_controller.dart';
@@ -68,7 +68,7 @@ class AddJobsPage extends GetView<AddJobController> {
                         label: 'Location',
                         required: true,
                       ),
-                      AppDropdown(
+                      AppDropdownSearch(
                         hint: 'Select Location',
                         // dropDownValue: controller.selectedLoc,
                         items: controller.odishaDistricts,
@@ -87,7 +87,7 @@ class AddJobsPage extends GetView<AddJobController> {
                         label: 'Job Type',
                         required: true,
                       ),
-                      AppDropdown(
+                      AppDropdownSearch(
                         hint: 'Select job type',
                         items: controller.arrJobType,
                         labelBuilder: (p0) => p0,
