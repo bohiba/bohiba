@@ -12,7 +12,7 @@ class CompanyModel {
   String? district;
   String? address;
   String? country;
-  String? pinCode;
+  int? pinCode;
 
   double? latitude;
   double? longitude;
@@ -84,7 +84,7 @@ class CompanyModel {
       'mineralId': json['mineral_id'],
       'address': json['address'],
       'country': json['country'],
-      'pinCode': json['pin_code'],
+      'pinCode': int.tryParse(json['pin_code'].toString()),
     };
   }
 
@@ -103,7 +103,7 @@ class CompanyModel {
       district: mines['district'],
       address: mines['address'],
       country: mines['country'],
-      pinCode: mines['pinCode'],
+      pinCode: int.tryParse(mines['pinCode'].toString()),
       latitude: mines['latitude']?.toDouble(),
       longitude: mines['longitude']?.toDouble(),
       mineralId: mines['mineralId'],

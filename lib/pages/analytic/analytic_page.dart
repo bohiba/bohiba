@@ -1,493 +1,888 @@
+import '/component/app_skeleton_loader.dart';
 import '/controllers/analytic_conroller.dart';
-import 'package:get/get.dart';
-
 import '/dist/component_exports.dart';
-import '/theme/bohiba_theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+
+// =============================================================================
+//  Main Page
+// =============================================================================
 
 class AnalyticPage extends GetView<AnalyticConroller> {
   const AnalyticPage({super.key});
 
+  static const _periods = ['Week', '1M', '3M', 'YTD'];
+  static const _sectionLabels = ['Trip', 'Fuel', 'Driver', 'Truck', 'Finance'];
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Scaffold(
-        appBar: TitleAppbar(
-          title: 'Analytic',
-          actions: [
-            Container(
-              padding: EdgeInsetsGeometry.only(right: ScreenUtils.height15),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: controller.selectedRange.value,
-                  borderRadius: BorderRadius.circular(12),
-                  items: const [
-                    DropdownMenuItem(
-                      value: "Week",
-                      child: Text("Week"),
-                    ),
-                    DropdownMenuItem(
-                      value: "1 Month",
-                      child: Text("1 Month"),
-                    ),
-                    DropdownMenuItem(
-                      value: "3 Months",
-                      child: Text("3 Months"),
+    return DefaultTabController(
+      length: _sectionLabels.length,
+      child: Scaffold(
+        backgroundColor: BohibaColors.bgColor,
+        appBar: TitleAppbar(title: 'Analytics'),
+        body: Obx(() {
+          if (controller.isLoading.value) return const _AnalyticSkeleton();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Period filter pills — always visible below AppBar
+              _PeriodFilter(
+                selected: controller.selectedRange.value,
+                periods: _periods,
+                onSelect: controller.onPeriodChanged,
+              ),
+              Expanded(
+                child: NestedScrollView(
+                  headerSliverBuilder: (ctx, _) => [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _HeroKpiCard(
+                            title: controller.heroTitle.value,
+                            value: controller.heroValue.value,
+                            trendPct: controller.heroTrend.value,
+                            period: controller.selectedRange.value,
+                          ),
+                          _QuickStatStrip(stats: controller.quickStats),
+                          _OnTimeDeliveryBanner(
+                              rate: controller.onTimeRate.value),
+                        ],
+                      ),
                     ),
                   ],
-                  onChanged: (val) {
-                    controller.selectedRange.value = val!;
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              // Scrollable Content
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                    top: ScreenUtils.height20,
-                    left: ScreenUtils.width15,
-                    right: ScreenUtils.width15,
-                    bottom: 70,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  body: Column(
                     children: [
-                      sectionTitle("Trip Analytics"),
-                      Row(
-                        children: List.generate(
-                          controller.arrTripAnalytic.length,
-                          (index) {
-                            Map tripAnalytic = controller.arrTripAnalytic[index];
-                            if (tripAnalytic['enable']) {
-                              return Expanded(
-                                child: Container(
-                                  height: ScreenUtils.width / 4,
-                                  padding: EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: index % 2 == 0 ? bohibaTheme.cardColor : bohibaTheme.dividerColor,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        tripAnalytic['name'],
-                                        maxLines: 2,
-                                        style: bohibaTheme.textTheme.titleMedium,
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          '$index',
-                                          style: bohibaTheme.textTheme.headlineLarge,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return SizedBox.shrink();
-                            }
-                          },
-                        ),
-                      ),
-
+                      // Pinned section tab bar
                       Container(
-                        height: 25.h,
-                        width: ScreenUtils.width,
-                        margin: EdgeInsets.symmetric(vertical: 10.h),
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(width: 0.8, color: bohibaTheme.colorScheme.onPrimary),
-                          color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.2),
+                        color: BohibaColors.bgColor,
+                        child: TabBar(
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start,
+                          labelColor: BohibaColors.primaryColor,
+                          unselectedLabelColor: BohibaColors.greyColor,
+                          indicatorColor: BohibaColors.primaryColor,
+                          indicatorWeight: 2.5,
+                          labelStyle: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Poppins',
+                          ),
+                          tabs:
+                              _sectionLabels.map((s) => Tab(text: s)).toList(),
                         ),
-                        child: Row(
+                      ),
+                      Expanded(
+                        child: TabBarView(
                           children: [
-                            Text('On-Time Delivery Rate'),
-                            Spacer(),
-                            Text('100%'),
-                            Icon(Icons.arrow_forward_ios_rounded, size: 18.adaptSize),
+                            _SectionScrollView(
+                                child: _TripContent(c: controller)),
+                            _SectionScrollView(
+                                child: _FuelContent(c: controller)),
+                            _SectionScrollView(
+                                child: _DriverContent(c: controller)),
+                            _SectionScrollView(
+                                child: _TruckContent(c: controller)),
+                            _SectionScrollView(
+                                child: _FinanceContent(c: controller)),
                           ],
                         ),
                       ),
-                      chartSection(
-                        title: "Trips Over Time",
-                        value: "1,250",
-                        subLabel: "Last 30 Days",
-                        subValue: "+12%",
-                        subColor: bohibaTheme.colorScheme.onPrimary,
-                        child: ReusableLineChart(
-                          bottomTitlesBuilder: controller.bottomTitleWidget,
-                          spots: [
-                            FlSpot(1.5, 4.2),
-                            FlSpot(2.6, 2.8),
-                            FlSpot(4.9, 5),
-                            FlSpot(6.8, 3),
-                            FlSpot(8.2, 4),
-                            FlSpot(9.5, 3),
-                            FlSpot(10.5, 4),
-                          ],
-                        ),
-                      ),
-                      sectionTitle("Fuel & Expense Analytics"),
-                      Wrap(
-                        spacing: 5.w,
-                        runSpacing: 5.h,
-                        children: [
-                          metricCard("Total Fuel Cost", "₹ 50,000"),
-                          metricCard("Average Fuel Efficiency", "6.5 MPG"),
-                          metricCard("Maintenance Expenses", "₹ 10,000"),
-                        ],
-                      ),
-                      chartSection(
-                        title: "Fuel Costs by Month",
-                        value: "₹ 50,000",
-                        subLabel: "Last 6 Months",
-                        subValue: "-5%",
-                        subColor: Color(0xFFFA6238),
-                        child: ReusableLineChart(
-                          bottomTitlesBuilder: controller.bottomTitleWidget,
-                          spots: [
-                            FlSpot(1.5, 4.2),
-                            FlSpot(2.6, 2.8),
-                            FlSpot(4.9, 5),
-                            FlSpot(6.8, 3),
-                            FlSpot(8.2, 4),
-                            FlSpot(9.5, 3),
-                            FlSpot(10.5, 4),
-                          ],
-                        ),
-                      ),
-                      sectionTitle("Driver Analytics"),
-                      Wrap(
-                        spacing: 5.w,
-                        runSpacing: 5.h,
-                        children: [
-                          metricCard("Average Driver Rating", "4.8/5"),
-                          metricCard("Driver Retention Rate", "90%"),
-                          metricCard("Safety Incidents", "5"),
-                        ],
-                      ),
-                      chartSection(
-                        title: "Driver Performance",
-                        value: "4.8/5",
-                        subLabel: "Last Quarter",
-                        subValue: "+2%",
-                        subColor: bohibaTheme.colorScheme.surface,
-                        child: ReusableBarChart(
-                          height: 250,
-                          showBorder: true,
-                          borderColor: bohibaTheme.dividerColor,
-                          showGrid: false,
-                          barGroups: [
-                            BarChartGroupData(
-                              x: 0,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: 8,
-                                  color: bohibaTheme.primaryColor,
-                                  width: 20,
-                                  borderRadius: BorderRadius.zero,
-                                ),
-                              ],
-                            ),
-                            BarChartGroupData(
-                              x: 1,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: 5,
-                                  color: bohibaTheme.primaryColor,
-                                  width: 20,
-                                  borderRadius: BorderRadius.zero,
-                                ),
-                              ],
-                            ),
-                            BarChartGroupData(
-                              x: 2,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: 10,
-                                  color: bohibaTheme.primaryColor,
-                                  width: 20,
-                                  borderRadius: BorderRadius.zero,
-                                ),
-                              ],
-                            ),
-                            BarChartGroupData(
-                              x: 3,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: 7,
-                                  color: bohibaTheme.primaryColor,
-                                  width: 20,
-                                  borderRadius: BorderRadius.zero,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      sectionTitle("Truck Analytics"),
-                      Wrap(
-                        spacing: 5.w,
-                        runSpacing: 5.h,
-                        children: [
-                          metricCard("Average Truck Utilization", "85%"),
-                          metricCard("Truck Downtime", "10 days"),
-                          metricCard("Maintenance Costs per Truck", "₹ 2,000"),
-                        ],
-                      ),
-                      chartSection(
-                        title: "Truck Utilization",
-                        value: "85%",
-                        subLabel: "Last Month",
-                        subValue: "+3%",
-                        subColor: bohibaTheme.colorScheme.onPrimary,
-                        child: ReusableLineChart(
-                          bottomTitlesBuilder: controller.bottomTitleWidget,
-                          spots: [
-                            FlSpot(0, 3),
-                            FlSpot(2.6, 2),
-                            FlSpot(4.9, 5),
-                            FlSpot(6.8, 2.5),
-                            FlSpot(8, 4),
-                            FlSpot(9.5, 3),
-                            FlSpot(11, 4),
-                          ],
-                        ),
-                      ),
-                      sectionTitle("Finance Analytics"),
-                      Wrap(
-                        spacing: 5.w,
-                        runSpacing: 5.h,
-                        children: [
-                          metricCard("Total Revenue", "₹ 200,000"),
-                          metricCard("Profit Margin", "20%"),
-                          metricCard("Outstanding Invoices", "₹ 15,000"),
-                        ],
-                      ),
-                      chartSection(
-                        title: "Revenue Over Time",
-                        value: "₹ 200,000",
-                        subLabel: "Last Year",
-                        subValue: "+15%",
-                        subColor: Color(0xFF0BDA5B),
-                        child: ReusableLineChart(
-                          bottomTitlesBuilder: controller.bottomTitleWidget,
-                          spots: [
-                            FlSpot(0, 3),
-                            FlSpot(2.6, 2),
-                            FlSpot(4.9, 5),
-                            FlSpot(6.8, 2.5),
-                            FlSpot(8, 4),
-                            FlSpot(9.5, 3),
-                            FlSpot(11, 4),
-                          ],
-                        ),
-                      ),
-                      sectionTitle("Business Insights"),
-                      sectionText("Note: The given data are just used for demo reperesentation to show you what feature are upcoming up next to enhance your business"),
-                      // sectionText(
-                      //     "Key trends and insights based on your data, including areas for improvement and opportunities for growth."),
                     ],
                   ),
                 ),
               ),
             ],
-          ),
-        ),
-      );
-    });
+          );
+        }),
+      ),
+    );
   }
+}
 
-  // ======= UI helper widgets =======
+// =============================================================================
+//  Period Filter Pills
+// =============================================================================
 
-  static Widget sectionTitle(String title) => Padding(
-        padding: EdgeInsets.only(top: 15.h, bottom: 5.0.h),
-        child: Text(title, style: bohibaTheme.textTheme.headlineLarge),
-      );
+class _PeriodFilter extends StatelessWidget {
+  final String selected;
+  final List<String> periods;
+  final void Function(String) onSelect;
 
-  static Widget sectionText(String text) => Text(
-        text,
-        style: TextStyle(
-          color: bohibaTheme.textTheme.titleMedium!.color,
-          fontSize: 14,
-          height: 1.4,
-        ),
-      );
+  const _PeriodFilter({
+    required this.selected,
+    required this.periods,
+    required this.onSelect,
+  });
 
-  static Widget metricRow(List<Widget> children) => Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: children.map((w) => Expanded(child: Padding(padding: const EdgeInsets.all(6), child: w))).toList(),
-        ),
-      );
-
-  static Widget metricCard(String label, String value) => Container(
-        width: ScreenUtils.width * 0.45,
-        constraints: BoxConstraints(
-          maxHeight: ScreenUtils.height * 0.15,
-          minWidth: ScreenUtils.width * 0.45,
-        ),
-        padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1.5, color: bohibaTheme.dividerColor),
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                fontWeight: bohibaTheme.textTheme.headlineMedium!.fontWeight,
-                color: bohibaTheme.textTheme.titleMedium!.color,
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40.h,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+        itemCount: periods.length,
+        separatorBuilder: (_, __) => Gap(8.w),
+        itemBuilder: (_, i) {
+          final isSelected = periods[i] == selected;
+          return GestureDetector(
+            onTap: () => onSelect(periods[i]),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.symmetric(horizontal: 18.w),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? BohibaColors.primaryColor
+                    : BohibaColors.tileColor,
+                borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(
+                  color: isSelected
+                      ? BohibaColors.primaryColor
+                      : BohibaColors.borderColor,
+                ),
+              ),
+              child: Text(
+                periods[i],
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  color: isSelected ? Colors.white : BohibaColors.greyColor,
+                ),
               ),
             ),
-            Text(
-              value,
-              style: TextStyle(
-                color: bohibaTheme.textTheme.labelLarge!.color,
-                fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      );
+          );
+        },
+      ),
+    );
+  }
+}
 
-  static Widget chartSection({
-    required String title,
-    required String value,
-    required String subLabel,
-    required String subValue,
-    required Color subColor,
-    required Widget child,
-  }) {
-    return Padding(
-      padding: EdgeInsets.only(top: 25.h, bottom: 20.h),
+// =============================================================================
+//  Hero KPI Card
+// =============================================================================
+
+class _HeroKpiCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final double trendPct;
+  final String period;
+
+  const _HeroKpiCard({
+    required this.title,
+    required this.value,
+    required this.trendPct,
+    required this.period,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.fromLTRB(20.w, 18.h, 20.w, 14.h),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF047BFC), Color(0xFF2F96FF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: BohibaColors.primaryColor.withValues(alpha: 0.28),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: bohibaTheme.textTheme.headlineMedium),
-          Text(
-            value,
-            style: bohibaTheme.textTheme.displaySmall,
-          ),
+          // Title row with trend badge
           Row(
             children: [
               Text(
-                subLabel,
-                style: bohibaTheme.textTheme.titleMedium,
-              ),
-              Gap(5.h),
-              Text(
-                subValue,
+                title,
                 style: TextStyle(
-                  color: subColor,
-                  fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                  color: Colors.white70,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
+              const Spacer(),
+              _TrendBadge(trendPct: trendPct, onDark: true),
             ],
           ),
-          Gap(10.h),
-          child,
+          Gap(6.h),
+          // Hero value
+          Text(
+            value,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 28.sp,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -0.5,
+            ),
+          ),
+          Gap(2.h),
+          Text(
+            'vs previous $period',
+            style: TextStyle(color: Colors.white54, fontSize: 10.sp),
+          ),
+          Gap(14.h),
+          // Mini sparkline
+          SizedBox(
+            height: 48.h,
+            child: LineChart(
+              LineChartData(
+                lineTouchData: const LineTouchData(enabled: false),
+                borderData: FlBorderData(show: false),
+                gridData: const FlGridData(show: false),
+                titlesData: const FlTitlesData(
+                  bottomTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                ),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: const [
+                      FlSpot(0, 1.4),
+                      FlSpot(1, 1.6),
+                      FlSpot(2, 1.55),
+                      FlSpot(3, 1.75),
+                      FlSpot(4, 1.68),
+                      FlSpot(5, 2.0),
+                    ],
+                    isCurved: true,
+                    color: Colors.white70,
+                    barWidth: 2,
+                    dotData: const FlDotData(show: false),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withValues(alpha: 0.18),
+                          Colors.white.withValues(alpha: 0.0),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class ReusableLineChart extends StatelessWidget {
+// =============================================================================
+//  Quick Stat Strip
+// =============================================================================
+
+class _QuickStatStrip extends StatelessWidget {
+  final List<AnalyticQuickStat> stats;
+
+  const _QuickStatStrip({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 82.h,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        itemCount: stats.length,
+        separatorBuilder: (_, __) => Gap(10.w),
+        itemBuilder: (_, i) => _QuickStatChip(stat: stats[i]),
+      ),
+    );
+  }
+}
+
+class _QuickStatChip extends StatelessWidget {
+  final AnalyticQuickStat stat;
+
+  const _QuickStatChip({required this.stat});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 108.w,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        color: stat.color.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: stat.color.withValues(alpha: 0.18), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(stat.icon, color: stat.color, size: 18.r),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                stat.value,
+                style: TextStyle(
+                  color: BohibaColors.black,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                stat.label,
+                style: TextStyle(color: BohibaColors.greyColor, fontSize: 9.sp),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+//  On-Time Delivery Banner
+// =============================================================================
+
+class _OnTimeDeliveryBanner extends StatelessWidget {
+  final double rate;
+
+  const _OnTimeDeliveryBanner({required this.rate});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
+      decoration: BoxDecoration(
+        color: BohibaColors.successColor.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(
+            color: BohibaColors.successColor.withValues(alpha: 0.28), width: 1),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.check_circle_outline_rounded,
+              color: BohibaColors.successColor, size: 20.r),
+          Gap(10.w),
+          Expanded(
+            child: Text(
+              'On-Time Delivery Rate',
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: BohibaColors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Text(
+            '${rate.toStringAsFixed(1)}%',
+            style: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.bold,
+              color: BohibaColors.successColor,
+            ),
+          ),
+          Gap(4.w),
+          Icon(Icons.arrow_forward_ios_rounded,
+              size: 13.r, color: BohibaColors.greyColor),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+//  Loading skeleton
+// =============================================================================
+
+class _AnalyticSkeleton extends StatelessWidget {
+  const _AnalyticSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(vertical: 12.h),
+      child: Column(
+        children: [
+          AppSkeletonLoader(height: 36.h, skeletonLength: 1),
+          Gap(4.h),
+          AppSkeletonLoader(height: 160.h, skeletonLength: 1),
+          Gap(4.h),
+          AppSkeletonLoader(height: 74.h, skeletonLength: 1),
+          Gap(4.h),
+          AppSkeletonLoader(height: 52.h, skeletonLength: 1),
+          Gap(4.h),
+          AppSkeletonLoader(height: 90.h, skeletonLength: 4),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+//  Scroll wrapper for each tab
+// =============================================================================
+
+class _SectionScrollView extends StatelessWidget {
+  final Widget child;
+
+  const _SectionScrollView({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(bottom: 80.h),
+      child: child,
+    );
+  }
+}
+
+// =============================================================================
+//  Shared: 2-column metric grid
+// =============================================================================
+
+Widget _metricGrid(List<AnalyticMetric> metrics) {
+  return GridView.builder(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      crossAxisSpacing: 10.w,
+      mainAxisSpacing: 10.h,
+      childAspectRatio: 1.7,
+    ),
+    itemCount: metrics.length,
+    itemBuilder: (_, i) => _MetricCard(metric: metrics[i]),
+  );
+}
+
+class _MetricCard extends StatelessWidget {
+  final AnalyticMetric metric;
+
+  const _MetricCard({required this.metric});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        color: BohibaColors.bgColor,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: BohibaColors.borderColor, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Icon + trend badge row
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(metric.icon, size: 16.r, color: BohibaColors.primaryColor),
+              const Spacer(),
+              _TrendBadge(trendPct: metric.trendPct),
+            ],
+          ),
+          // Value + label
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                metric.value,
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.bold,
+                  color: BohibaColors.black,
+                ),
+              ),
+              Text(
+                metric.label,
+                style:
+                    TextStyle(fontSize: 10.sp, color: BohibaColors.greyColor),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+//  Trend badge
+// =============================================================================
+
+class _TrendBadge extends StatelessWidget {
+  final double trendPct;
+  final bool onDark;
+
+  const _TrendBadge({required this.trendPct, this.onDark = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final isPositive = trendPct >= 0;
+    final Color trendColor;
+    final Color bgColor;
+
+    if (onDark) {
+      trendColor = Colors.white;
+      bgColor = Colors.white.withValues(alpha: 0.2);
+    } else {
+      trendColor =
+          isPositive ? BohibaColors.successColor : BohibaColors.warningColor;
+      bgColor = trendColor.withValues(alpha: 0.1);
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(6.r),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isPositive
+                ? Icons.arrow_upward_rounded
+                : Icons.arrow_downward_rounded,
+            size: 9.r,
+            color: trendColor,
+          ),
+          Gap(1.w),
+          Text(
+            '${trendPct.abs().toStringAsFixed(0)}%',
+            style: TextStyle(
+              fontSize: 9.sp,
+              fontWeight: FontWeight.w600,
+              color: trendColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+//  Chart section header
+// =============================================================================
+
+Widget _chartHeader({
+  required String title,
+  required String value,
+  required String trendLabel,
+  required double trendPct,
+}) {
+  return Padding(
+    padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 12.h),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title,
+                style:
+                    TextStyle(fontSize: 12.sp, color: BohibaColors.greyColor)),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: BohibaColors.black,
+              ),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _TrendBadge(trendPct: trendPct),
+            Gap(2.h),
+            Text(trendLabel,
+                style:
+                    TextStyle(fontSize: 9.sp, color: BohibaColors.greyColor)),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+// =============================================================================
+//  Section content widgets
+// =============================================================================
+
+class _TripContent extends StatelessWidget {
+  final AnalyticConroller c;
+
+  const _TripContent({required this.c});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _metricGrid(c.tripMetrics),
+        _chartHeader(
+          title: 'Trips Over Time',
+          value: '124 trips',
+          trendLabel: 'vs prev period',
+          trendPct: 12.0,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: _BohibaLineChart(
+            spots: c.tripSpots,
+            bottomTitlesBuilder: c.bottomTitleWidget,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FuelContent extends StatelessWidget {
+  final AnalyticConroller c;
+
+  const _FuelContent({required this.c});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _metricGrid(c.fuelMetrics),
+        _chartHeader(
+          title: 'Fuel Costs Over Time',
+          value: '₹ 50,000',
+          trendLabel: 'vs prev period',
+          trendPct: -5.0,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: _BohibaLineChart(
+            spots: c.fuelSpots,
+            bottomTitlesBuilder: c.bottomTitleWidget,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DriverContent extends StatelessWidget {
+  final AnalyticConroller c;
+
+  const _DriverContent({required this.c});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _metricGrid(c.driverMetrics),
+        _chartHeader(
+          title: 'Driver Performance',
+          value: '4.8 / 5',
+          trendLabel: 'last quarter',
+          trendPct: 2.0,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: _BohibaBarChart(
+            barGroups: c.driverBarGroups,
+            bottomLabels: const ['D1', 'D2', 'D3', 'D4', 'D5'],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TruckContent extends StatelessWidget {
+  final AnalyticConroller c;
+
+  const _TruckContent({required this.c});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _metricGrid(c.truckMetrics),
+        _chartHeader(
+          title: 'Truck Utilization',
+          value: '85%',
+          trendLabel: 'vs last month',
+          trendPct: 3.0,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: _BohibaLineChart(
+            spots: c.truckSpots,
+            bottomTitlesBuilder: c.bottomTitleWidget,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FinanceContent extends StatelessWidget {
+  final AnalyticConroller c;
+
+  const _FinanceContent({required this.c});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _metricGrid(c.financeMetrics),
+        _chartHeader(
+          title: 'Revenue Over Time',
+          value: '₹ 2,00,000',
+          trendLabel: 'vs last year',
+          trendPct: 15.0,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: _BohibaLineChart(
+            spots: c.revenueSpots,
+            bottomTitlesBuilder: c.bottomTitleWidget,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// =============================================================================
+//  Chart widgets
+// =============================================================================
+
+class _BohibaLineChart extends StatelessWidget {
   final List<FlSpot> spots;
-  final double lineWidth;
-  final bool showBorder;
-  final bool showGrid;
-  final bool showTitles;
-  final Color? borderColor;
-  final double? height;
   final Widget Function(double, TitleMeta) bottomTitlesBuilder;
 
-  const ReusableLineChart({
+  const _BohibaLineChart({
     required this.spots,
-    this.lineWidth = 2.5,
-    this.showBorder = true,
-    this.showGrid = false,
-    this.showTitles = true,
-    this.borderColor,
-    this.height,
-    super.key,
     required this.bottomTitlesBuilder,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? ScreenUtils.height * 0.23,
+      height: ScreenUtils.height * 0.22,
       child: LineChart(
         LineChartData(
           minX: spots.first.x,
-          maxX: spots.last.x >= 7 ? 7 : spots.last.x,
-          lineTouchData: LineTouchData(enabled: false),
-          borderData: FlBorderData(
-            show: showBorder,
-            border: Border(
-              left: BorderSide(color: bohibaTheme.dividerColor, width: 2),
-              bottom: BorderSide(color: bohibaTheme.dividerColor, width: 2),
+          maxX: spots.last.x,
+          lineTouchData: LineTouchData(
+            enabled: true,
+            touchTooltipData: LineTouchTooltipData(
+              getTooltipColor: (_) =>
+                  BohibaColors.black.withValues(alpha: 0.85),
+              getTooltipItems: (touchedSpots) => touchedSpots
+                  .map((s) => LineTooltipItem(
+                        s.y > 999
+                            ? '₹ ${s.y.toStringAsFixed(0)}'
+                            : s.y.toStringAsFixed(1),
+                        const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ))
+                  .toList(),
             ),
           ),
-          gridData: FlGridData(show: showGrid),
+          borderData: FlBorderData(
+            show: true,
+            border: Border(
+              left: BorderSide(color: BohibaColors.borderColor, width: 1),
+              bottom: BorderSide(color: BohibaColors.borderColor, width: 1),
+            ),
+          ),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            getDrawingHorizontalLine: (_) =>
+                const FlLine(color: Color(0xFFEDEDED), strokeWidth: 0.5),
+          ),
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
-                showTitles: showTitles,
-                reservedSize: 15,
+                showTitles: true,
+                reservedSize: 20,
                 interval: 1.0,
                 getTitlesWidget: bottomTitlesBuilder,
               ),
             ),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 15,
-                interval: 1,
-                getTitlesWidget: (value, meta) => Text(value.toInt().toString()),
-              ),
-            ),
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
+            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
           lineBarsData: [
             LineChartBarData(
               spots: spots,
               isCurved: true,
               isStrokeCapRound: true,
-              color: bohibaTheme.primaryColor,
-              barWidth: lineWidth,
-              dotData: FlDotData(show: false),
+              color: BohibaColors.primaryColor,
+              barWidth: 2.5,
+              dotData: FlDotData(
+                show: true,
+                getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
+                  radius: 3,
+                  color: Colors.white,
+                  strokeWidth: 2,
+                  strokeColor: BohibaColors.primaryColor,
+                ),
+              ),
               belowBarData: BarAreaData(
                 show: true,
                 gradient: LinearGradient(
                   colors: [
-                    bohibaTheme.primaryColor.withValues(alpha: 0.2),
-                    bohibaTheme.primaryColor.withValues(alpha: 0.0),
+                    BohibaColors.primaryColor.withValues(alpha: 0.14),
+                    BohibaColors.primaryColor.withValues(alpha: 0.0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -501,79 +896,88 @@ class ReusableLineChart extends StatelessWidget {
   }
 }
 
-class ReusableBarChart extends StatelessWidget {
+class _BohibaBarChart extends StatelessWidget {
   final List<BarChartGroupData> barGroups;
-  final bool showBorder;
-  final bool showGrid;
-  final bool showTitles;
-  final Color? borderColor;
-  final double? height;
-  final Color? barColor;
+  final List<String> bottomLabels;
 
-  const ReusableBarChart({
+  const _BohibaBarChart({
     required this.barGroups,
-    this.showBorder = false,
-    this.showGrid = false,
-    this.showTitles = true,
-    this.borderColor,
-    this.height,
-    this.barColor,
-    super.key,
+    required this.bottomLabels,
   });
+
+  double get _maxY {
+    double max = 0;
+    for (final g in barGroups) {
+      for (final r in g.barRods) {
+        if (r.toY > max) max = r.toY;
+      }
+    }
+    return max * 1.25;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final color = borderColor ?? bohibaTheme.dividerColor;
-
     return SizedBox(
-      height: height ?? 200,
+      height: 200.h,
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: _getMaxY(),
-          borderData: FlBorderData(
-            show: showBorder,
-            border: Border(
-              left: BorderSide(color: color, width: 1),
-              bottom: BorderSide(color: color, width: 1),
+          maxY: _maxY,
+          barTouchData: BarTouchData(
+            enabled: true,
+            touchTooltipData: BarTouchTooltipData(
+              getTooltipColor: (_) =>
+                  BohibaColors.black.withValues(alpha: 0.85),
+              getTooltipItem: (_, __, rod, ___) => BarTooltipItem(
+                rod.toY.toStringAsFixed(1),
+                const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
-          gridData: FlGridData(show: showGrid),
-          titlesData: FlTitlesData(
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: showTitles,
-                reservedSize: 28,
-                getTitlesWidget: (value, meta) => Text(value.toInt().toString()),
-              ),
+          borderData: FlBorderData(
+            show: true,
+            border: Border(
+              left: BorderSide(color: BohibaColors.borderColor, width: 1),
+              bottom: BorderSide(color: BohibaColors.borderColor, width: 1),
             ),
+          ),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            getDrawingHorizontalLine: (_) =>
+                const FlLine(color: Color(0xFFEDEDED), strokeWidth: 0.5),
+          ),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
-                showTitles: showTitles,
-                reservedSize: 28,
-                getTitlesWidget: (value, meta) => Text(value.toInt().toString()),
+                showTitles: true,
+                reservedSize: 22,
+                getTitlesWidget: (value, _) {
+                  final i = value.toInt();
+                  if (i >= 0 && i < bottomLabels.length) {
+                    return Text(
+                      bottomLabels[i],
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: BohibaColors.greyColor,
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
               ),
-            ),
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
             ),
           ),
           barGroups: barGroups,
         ),
       ),
     );
-  }
-
-  double _getMaxY() {
-    double maxY = 0;
-    for (var group in barGroups) {
-      for (var rod in group.barRods) {
-        if (rod.toY > maxY) maxY = rod.toY;
-      }
-    }
-    return maxY * 1.2; // add 20% padding on top
   }
 }
