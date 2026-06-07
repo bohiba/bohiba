@@ -44,6 +44,14 @@ class ApiEndPoint {
   static const String apiAssignDriver = '$apiTrucks/assign-driver';
   static const String apiRemoveDriver = '$apiTrucks/remove-driver';
 
+  static const String apiAnalytic = '$baseUrl/analytics';
+  static const String apiAnalyticSummary = '$apiAnalytic/summary';
+  static const String apiAnalyticTrips = '$apiAnalytic/trips';
+  static const String apiAnalyticFuel = '$apiAnalytic/fuel';
+  static const String apiAnalyticDriver = '$apiAnalytic/drivers';
+  static const String apiAnalyticTruck = '$apiAnalytic/trucks';
+  static const String apiAnalyticFinance = '$apiAnalytic/finance';
+
   static const String apiDriver = '$baseUrl/drivers';
 
   static const String apiRateDriver = '$baseUrl/rate-user';

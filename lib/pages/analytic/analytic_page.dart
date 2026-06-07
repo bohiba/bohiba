@@ -1,3 +1,4 @@
+import '/theme/bohiba_theme.dart';
 import '/component/app_skeleton_loader.dart';
 import '/controllers/analytic_conroller.dart';
 import '/dist/component_exports.dart';
@@ -48,7 +49,8 @@ class AnalyticPage extends GetView<AnalyticConroller> {
                             trendPct: controller.heroTrend.value,
                             period: controller.selectedRange.value,
                           ),
-                          _QuickStatStrip(stats: controller.quickStats),
+                          _QuickStatStrip(
+                              stats: controller.quickStats.toList()),
                           _OnTimeDeliveryBanner(
                               rate: controller.onTimeRate.value),
                         ],
@@ -377,17 +379,18 @@ class _OnTimeDeliveryBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
+      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: BohibaColors.successColor.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(12.r),
+        color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(6.r),
         border: Border.all(
-            color: BohibaColors.successColor.withValues(alpha: 0.28), width: 1),
+            color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.28),
+            width: 1),
       ),
       child: Row(
         children: [
           Icon(Icons.check_circle_outline_rounded,
-              color: BohibaColors.successColor, size: 20.r),
+              color: bohibaTheme.colorScheme.onPrimary, size: 20.r),
           Gap(10.w),
           Expanded(
             child: Text(
@@ -404,7 +407,7 @@ class _OnTimeDeliveryBanner extends StatelessWidget {
             style: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.bold,
-              color: BohibaColors.successColor,
+              color: bohibaTheme.colorScheme.onPrimary,
             ),
           ),
           Gap(4.w),
@@ -429,13 +432,74 @@ class _AnalyticSkeleton extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 12.h),
       child: Column(
         children: [
-          AppSkeletonLoader(height: 36.h, skeletonLength: 1),
+          Padding(
+            padding: EdgeInsets.only(left: 15.0.w, bottom: 10.h),
+            child: Row(
+              children: List.generate(
+                4,
+                (index) => Container(
+                  width: 55.w,
+                  height: 25.h,
+                  margin: EdgeInsets.only(right: 5.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.h, horizontal: 35.w),
+                  decoration: BoxDecoration(
+                    color: bohibaTheme.cardColor,
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                ),
+              ),
+            ),
+          ),
           Gap(4.h),
-          AppSkeletonLoader(height: 160.h, skeletonLength: 1),
+          Container(
+            height: 160.h,
+            margin: EdgeInsets.symmetric(horizontal: 15.w),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            decoration: BoxDecoration(
+              color: bohibaTheme.cardColor,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 75.w,
+                      height: 20.h,
+                      decoration: BoxDecoration(
+                        color: bohibaTheme.dividerColor,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                    ),
+                    Container(
+                      width: 35.w,
+                      height: 20.h,
+                      decoration: BoxDecoration(
+                        color: bohibaTheme.dividerColor,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
           Gap(4.h),
-          AppSkeletonLoader(height: 74.h, skeletonLength: 1),
+          Container(
+            height: 160.h,
+            margin: EdgeInsets.symmetric(horizontal: 15.w),
+            decoration: BoxDecoration(
+              color: bohibaTheme.cardColor,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+          ),
           Gap(4.h),
-          AppSkeletonLoader(height: 52.h, skeletonLength: 1),
+          AppSkeletonLoader(height: 90.h, skeletonLength: 4),
+          Gap(4.h),
+          AppSkeletonLoader(height: 90.h, skeletonLength: 4),
           Gap(4.h),
           AppSkeletonLoader(height: 90.h, skeletonLength: 4),
         ],
@@ -562,10 +626,15 @@ class _TrendBadge extends StatelessWidget {
     if (onDark) {
       trendColor = Colors.white;
       bgColor = Colors.white.withValues(alpha: 0.2);
+    } else if (trendPct == 0) {
+      trendColor = bohibaTheme.textTheme.headlineSmall!.color!;
+      bgColor = bohibaTheme.cardColor.withValues(alpha: 0.5);
+    } else if (isPositive) {
+      trendColor = bohibaTheme.colorScheme.onPrimary;
+      bgColor = bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.1);
     } else {
-      trendColor =
-          isPositive ? BohibaColors.successColor : BohibaColors.warningColor;
-      bgColor = trendColor.withValues(alpha: 0.1);
+      trendColor = bohibaTheme.colorScheme.onTertiary;
+      bgColor = bohibaTheme.colorScheme.onTertiary.withValues(alpha: 0.1);
     }
 
     return Container(
@@ -657,21 +726,27 @@ class _TripContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Reading RxList via .toList() is tracked by the parent Obx so this
+    // widget rebuilds whenever tripMetrics / tripSpots / tripChartLabels change.
+    final metrics = c.tripMetrics.toList();
+    final spots = c.tripSpots.toList();
+    final labels = c.tripChartLabels.toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _metricGrid(c.tripMetrics),
+        _metricGrid(metrics),
         _chartHeader(
           title: 'Trips Over Time',
-          value: '124 trips',
+          value: c.tripChartHeaderValue.value,
           trendLabel: 'vs prev period',
-          trendPct: 12.0,
+          trendPct: c.tripChartHeaderTrend.value,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: _BohibaLineChart(
-            spots: c.tripSpots,
-            bottomTitlesBuilder: c.bottomTitleWidget,
+            spots: spots,
+            bottomTitlesBuilder: c.bottomTitleBuilder(labels),
           ),
         ),
       ],
@@ -686,21 +761,25 @@ class _FuelContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metrics = c.fuelMetrics.toList();
+    final spots = c.fuelSpots.toList();
+    final labels = c.fuelChartLabels.toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _metricGrid(c.fuelMetrics),
+        _metricGrid(metrics),
         _chartHeader(
           title: 'Fuel Costs Over Time',
-          value: '₹ 50,000',
+          value: c.fuelChartHeaderValue.value,
           trendLabel: 'vs prev period',
-          trendPct: -5.0,
+          trendPct: c.fuelChartHeaderTrend.value,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: _BohibaLineChart(
-            spots: c.fuelSpots,
-            bottomTitlesBuilder: c.bottomTitleWidget,
+            spots: spots,
+            bottomTitlesBuilder: c.bottomTitleBuilder(labels),
           ),
         ),
       ],
@@ -715,21 +794,25 @@ class _DriverContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metrics = c.driverMetrics.toList();
+    final barGroups = c.driverBarGroups.toList();
+    final barLabels = c.driverBarLabels.toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _metricGrid(c.driverMetrics),
+        _metricGrid(metrics),
         _chartHeader(
           title: 'Driver Performance',
-          value: '4.8 / 5',
-          trendLabel: 'last quarter',
-          trendPct: 2.0,
+          value: c.driverChartHeaderValue.value,
+          trendLabel: 'vs prev period',
+          trendPct: c.driverChartHeaderTrend.value,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: _BohibaBarChart(
-            barGroups: c.driverBarGroups,
-            bottomLabels: const ['D1', 'D2', 'D3', 'D4', 'D5'],
+            barGroups: barGroups,
+            bottomLabels: barLabels,
           ),
         ),
       ],
@@ -744,21 +827,25 @@ class _TruckContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metrics = c.truckMetrics.toList();
+    final spots = c.truckSpots.toList();
+    final labels = c.truckChartLabels.toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _metricGrid(c.truckMetrics),
+        _metricGrid(metrics),
         _chartHeader(
           title: 'Truck Utilization',
-          value: '85%',
-          trendLabel: 'vs last month',
-          trendPct: 3.0,
+          value: c.truckChartHeaderValue.value,
+          trendLabel: 'vs prev period',
+          trendPct: c.truckChartHeaderTrend.value,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: _BohibaLineChart(
-            spots: c.truckSpots,
-            bottomTitlesBuilder: c.bottomTitleWidget,
+            spots: spots,
+            bottomTitlesBuilder: c.bottomTitleBuilder(labels),
           ),
         ),
       ],
@@ -773,21 +860,25 @@ class _FinanceContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metrics = c.financeMetrics.toList();
+    final spots = c.revenueSpots.toList();
+    final labels = c.revenueChartLabels.toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _metricGrid(c.financeMetrics),
+        _metricGrid(metrics),
         _chartHeader(
           title: 'Revenue Over Time',
-          value: '₹ 2,00,000',
-          trendLabel: 'vs last year',
-          trendPct: 15.0,
+          value: c.financeChartHeaderValue.value,
+          trendLabel: 'vs prev period',
+          trendPct: c.financeChartHeaderTrend.value,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: _BohibaLineChart(
-            spots: c.revenueSpots,
-            bottomTitlesBuilder: c.bottomTitleWidget,
+            spots: spots,
+            bottomTitlesBuilder: c.bottomTitleBuilder(labels),
           ),
         ),
       ],
@@ -810,6 +901,21 @@ class _BohibaLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Guard: chart crashes with 0 or 1 point — show placeholder instead.
+    if (spots.length < 2) {
+      return SizedBox(
+        height: ScreenUtils.height * 0.22,
+        child: Center(
+          child: Text(
+            'No data for this period',
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: BohibaColors.greyColor,
+            ),
+          ),
+        ),
+      );
+    }
     return SizedBox(
       height: ScreenUtils.height * 0.22,
       child: LineChart(
@@ -905,6 +1011,9 @@ class _BohibaBarChart extends StatelessWidget {
     required this.bottomLabels,
   });
 
+  // Guard: show placeholder when API returns empty driver series.
+  bool get _isEmpty => barGroups.isEmpty;
+
   double get _maxY {
     double max = 0;
     for (final g in barGroups) {
@@ -912,11 +1021,23 @@ class _BohibaBarChart extends StatelessWidget {
         if (r.toY > max) max = r.toY;
       }
     }
-    return max * 1.25;
+    // Minimum maxY of 5.0 prevents a zero-height chart when all values are 0.
+    return max == 0 ? 5.0 : max * 1.25;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isEmpty) {
+      return SizedBox(
+        height: 200.h,
+        child: Center(
+          child: Text(
+            'No data for this period',
+            style: TextStyle(fontSize: 12.sp, color: BohibaColors.greyColor),
+          ),
+        ),
+      );
+    }
     return SizedBox(
       height: 200.h,
       child: BarChart(

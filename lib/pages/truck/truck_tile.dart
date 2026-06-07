@@ -83,9 +83,7 @@ class TruckTile extends GetView<TruckAllController> {
                               placeholder: (context, url) => Container(
                                 color: RandomColorPicker.getRandomColor(),
                               ),
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.broken_image,
-                                size: 20,
+                              errorWidget: (context, url, error) => Container(
                                 color: RandomColorPicker.getRandomColor(),
                               ),
                             ),

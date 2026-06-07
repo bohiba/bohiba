@@ -5,13 +5,13 @@ class RandomColorPicker {
   /// ✅ Method 1: All colors
   static List<Color> getAllColors() {
     return [
-      Color(0xff64b5f6),
-      Color(0xff42a5f5),
-      Color(0xff2196f3),
-      Color(0xff1e88e5),
-      Color(0xff1976d2),
-      Color(0xff1565c0),
-      Color(0xff0d47a1),
+      Color(0xFF264653),
+      Color(0xFF2A9D8F),
+      Color(0xFF8AB17D),
+      Color(0xFFE9C46A),
+      Color(0xFFF4A261),
+      Color(0xFFE76F51),
+      Color(0xFFB56576),
     ];
   }
 
