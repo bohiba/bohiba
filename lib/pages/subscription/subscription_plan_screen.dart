@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '/controllers/subscription_plan_controller.dart';
 import '/theme/bohiba_theme.dart';
@@ -49,7 +49,8 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
           Row(
             children: [
               IconButton(
-                icon: Icon(Icons.close, color: bohibaTheme.colorScheme.onSurface),
+                icon:
+                    Icon(Icons.close, color: bohibaTheme.colorScheme.onSurface),
                 onPressed: () => Get.back(),
               ),
             ],
@@ -93,10 +94,14 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
                 margin: EdgeInsets.only(right: 12.w),
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
-                  color: isSelected ? bohibaTheme.primaryColor : Colors.transparent,
+                  color: isSelected
+                      ? bohibaTheme.primaryColor
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(8.r),
                   border: Border.all(
-                    color: isSelected ? bohibaTheme.primaryColor : Colors.grey[300]!,
+                    color: isSelected
+                        ? bohibaTheme.primaryColor
+                        : Colors.grey[300]!,
                   ),
                 ),
                 alignment: Alignment.center,
@@ -104,7 +109,8 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
                   plan.name.split(' ').first, // Short name for tabs
                   style: TextStyle(
                     color: isSelected ? Colors.white : Colors.grey[700],
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
@@ -187,14 +193,16 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
             Gap(8.h),
             Text(
               plan.audienceDescription,
-              style: TextStyle(color: Colors.grey[600], fontStyle: FontStyle.italic),
+              style: TextStyle(
+                  color: Colors.grey[600], fontStyle: FontStyle.italic),
             ),
             Divider(height: 30.h),
             ...plan.limits.map((limit) => Padding(
                   padding: EdgeInsets.only(bottom: 12.h),
                   child: Row(
                     children: [
-                      Icon(limit.icon, size: 20.sp, color: bohibaTheme.primaryColor),
+                      Icon(limit.icon,
+                          size: 20.sp, color: bohibaTheme.primaryColor),
                       Gap(12.w),
                       Text(limit.text, style: TextStyle(fontSize: 14.sp)),
                     ],
@@ -220,9 +228,13 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
                         child: Row(
                           children: [
                             Icon(
-                              feature.isIncluded ? Icons.check_circle : Icons.lock_outline,
+                              feature.isIncluded
+                                  ? Icons.check_circle
+                                  : Icons.lock_outline,
                               size: 18.sp,
-                              color: feature.isIncluded ? Colors.green : Colors.grey[400],
+                              color: feature.isIncluded
+                                  ? Colors.green
+                                  : Colors.grey[400],
                             ),
                             Gap(12.w),
                             Expanded(
@@ -232,14 +244,17 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
                                     child: Text(
                                       feature.text,
                                       style: TextStyle(
-                                        color: feature.isIncluded ? Colors.black : Colors.grey[500],
+                                        color: feature.isIncluded
+                                            ? Colors.black
+                                            : Colors.grey[500],
                                       ),
                                     ),
                                   ),
                                   if (feature.tooltip != null)
                                     Padding(
                                       padding: EdgeInsets.only(left: 6.w),
-                                      child: Icon(Icons.info_outline, size: 14.sp, color: Colors.grey[400]),
+                                      child: Icon(Icons.info_outline,
+                                          size: 14.sp, color: Colors.grey[400]),
                                     ),
                                 ],
                               ),
@@ -266,7 +281,8 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
                     Expanded(
                       child: Text(
                         'Reports include watermark. Some advanced features are locked.',
-                        style: TextStyle(color: Colors.blue[800], fontSize: 12.sp),
+                        style:
+                            TextStyle(color: Colors.blue[800], fontSize: 12.sp),
                       ),
                     ),
                   ],
@@ -314,18 +330,22 @@ class SubscriptionPlanScreen extends GetView<SubscriptionPlanController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(EvaIcons.shieldOutline, size: 16.sp, color: Colors.grey[600]),
+            FaIcon(FontAwesomeIcons.shield,
+                size: 16.sp, color: Colors.grey[600]),
             Gap(8.w),
-            Text('No auto-deduction without confirmation', style: TextStyle(color: Colors.grey[600], fontSize: 12.sp)),
+            Text('No auto-deduction without confirmation',
+                style: TextStyle(color: Colors.grey[600], fontSize: 12.sp)),
           ],
         ),
         Gap(4.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(EvaIcons.refreshOutline, size: 16.sp, color: Colors.grey[600]),
+            FaIcon(FontAwesomeIcons.arrowsRotate,
+                size: 16.sp, color: Colors.grey[600]),
             Gap(8.w),
-            Text('Cancel or downgrade anytime', style: TextStyle(color: Colors.grey[600], fontSize: 12.sp)),
+            Text('Cancel or downgrade anytime',
+                style: TextStyle(color: Colors.grey[600], fontSize: 12.sp)),
           ],
         ),
       ],

@@ -2,7 +2,6 @@ import 'package:bohiba/dist/component_exports.dart';
 import 'package:bohiba/dist/enums/enum_search_state.dart';
 
 import '/theme/bohiba_theme.dart';
-import '/component/bohiba_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

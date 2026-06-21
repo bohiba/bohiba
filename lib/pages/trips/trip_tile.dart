@@ -1,4 +1,5 @@
 import 'package:bohiba/component/ui/random_color_picker.dart';
+import 'package:remixicon/remixicon.dart';
 
 import '/dist/component_exports.dart';
 import '/model/trip_model.dart';
@@ -9,7 +10,6 @@ import '/controllers/trip_controller.dart';
 
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -87,7 +87,7 @@ class TripTile extends GetView<TripController> {
                     bottomRight: Radius.circular(12),
                   ),
                 ),
-                child: Icon(EvaIcons.arrowIosForwardOutline),
+                child: Icon(Remix.arrow_right_s_line),
               )
             ],
           ),

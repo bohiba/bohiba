@@ -24,7 +24,7 @@ class MinesAppBar extends StatelessWidget implements PreferredSizeWidget {
           //     //   delegate: BohibaCompanySearchDelegate(),
           //     // );
           //   },
-          //   icon: const Icon(EvaIcons.searchOutline),
+          //   icon: const Icon(RemixIcons.search_line),
           // ),
         ],
       ),

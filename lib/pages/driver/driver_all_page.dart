@@ -8,7 +8,7 @@ import '/dist/component_exports.dart';
 import '/controllers/driver_all_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DriverAllPage extends GetView<DriverAllController> {
@@ -24,7 +24,7 @@ class DriverAllPage extends GetView<DriverAllController> {
           title: 'Drivers',
           actions: [
             AppBarIconBox(
-              icon: const Icon(EvaIcons.plus),
+              icon: const Icon(RemixIcons.add_line),
               onTap: () {
                 navState.pushNamed(AppRoute.addDriver).then((onValue) async {
                   if (onValue != null && onValue != false) {
@@ -60,14 +60,17 @@ class DriverAllPage extends GetView<DriverAllController> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleSmall!.color,
                           ),
                         ),
                         if (controller.strErrorDes.isEmpty)
                           TextButton(
                             onPressed: () {
-                              navState.pushNamed(AppRoute.addDriver).then((onValue) async {
+                              navState
+                                  .pushNamed(AppRoute.addDriver)
+                                  .then((onValue) async {
                                 if (onValue != null) {
                                   await controller.getDriverList(
                                     type: MethodType.api,
@@ -85,7 +88,9 @@ class DriverAllPage extends GetView<DriverAllController> {
                 )
               : ListView.builder(
                   shrinkWrap: true,
-                  itemCount: controller.arrDriver.length > 3 ? 3 : controller.arrDriver.length,
+                  itemCount: controller.arrDriver.length > 3
+                      ? 3
+                      : controller.arrDriver.length,
                   padding: EdgeInsets.only(
                     top: ScreenUtils.height10,
                     bottom: ScreenUtils.height5,
@@ -96,9 +101,15 @@ class DriverAllPage extends GetView<DriverAllController> {
                     UserModel driver = controller.arrDriver[index];
                     return DriverTile(
                       driver: driver,
-                      allowedActions: [ActionType.view, ActionType.share, ActionType.other],
+                      allowedActions: [
+                        ActionType.view,
+                        ActionType.share,
+                        ActionType.other
+                      ],
                       onPressed: () {
-                        navState.pushNamed(AppRoute.driver, arguments: driver.id).then(
+                        navState
+                            .pushNamed(AppRoute.driver, arguments: driver.id)
+                            .then(
                           (onValue) async {
                             if (onValue != null) {
                               await controller.getDriverList();

@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import 'trip_tile.dart';
@@ -18,7 +19,6 @@ import '/services/role_permission_service.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class AllTripPage extends StatefulWidget {
   final bool showLeading;
@@ -31,7 +31,8 @@ class AllTripPage extends StatefulWidget {
   State<AllTripPage> createState() => _AllTripPageState();
 }
 
-class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStateMixin {
+class _AllTripPageState extends State<AllTripPage>
+    with SingleTickerProviderStateMixin {
   late TabController tabController;
   final controller = Get.find<AllTripController>();
 
@@ -70,15 +71,19 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                   searchPredicate: (TripModel item, String query) {
                     final q = query.toLowerCase();
                     final tripCode = item.tripCode?.toLowerCase() ?? '';
-                    final truckNumber = item.truck?.regdNumber?.toLowerCase() ?? '';
+                    final truckNumber =
+                        item.truck?.regdNumber?.toLowerCase() ?? '';
                     final driverName = item.driver?.name?.toLowerCase() ?? '';
-                    return tripCode.contains(q) || truckNumber.contains(q) || driverName.contains(q);
+                    return tripCode.contains(q) ||
+                        truckNumber.contains(q) ||
+                        driverName.contains(q);
                   },
                   itemBuilder: (BuildContext context, TripModel item) {
                     return GestureDetector(
                       onTap: () {
                         navigatorState.pop();
-                        Get.toNamed(AppRoute.trips, arguments: item)!.then((onValue) async {
+                        Get.toNamed(AppRoute.trips, arguments: item)!
+                            .then((onValue) async {
                           if (onValue) {
                             await controller.getAllTrip();
                           }
@@ -113,7 +118,7 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                 ),
               );
             },
-            icon: const Icon(EvaIcons.searchOutline),
+            icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
           ),
           /*AppBarIconBox(
             onTapDown: (tapDownDetails) => showMenu(
@@ -139,7 +144,7 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                 ),
               ],
             ),
-            icon: Icon(EvaIcons.funnelOutline),
+            icon: Icon(RemixIcons.filter_line),
           ),
           AppBarIconBox(
             onTapDown: (tapDownDetails) => showMenu(
@@ -165,7 +170,7 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
           PermissionWidget(
             permission: RolePermissionService.addTrips,
             child: AppBarIconBox(
-              icon: const Icon(EvaIcons.plus),
+              icon: const FaIcon(FontAwesomeIcons.plus),
               onTap: () {
                 navigatorState.pushNamed(AppRoute.addTrip).then(
                   (value) async {
@@ -184,7 +189,8 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
           return SmartRefresher(
             controller: controller.refreshController,
             onRefresh: () async {
-              await controller.getAllTrip(type: MethodType.api, refreshTrip: true);
+              await controller.getAllTrip(
+                  type: MethodType.api, refreshTrip: true);
               controller.refreshController.refreshCompleted();
             },
             child: Column(
@@ -206,7 +212,8 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                     controller: tabController,
                     children: controller.convertToSnakeCase(tabs).map(
                       (status) {
-                        final filteredTrips = controller.getTripsByStatus(status);
+                        final filteredTrips =
+                            controller.getTripsByStatus(status);
                         if (filteredTrips == null) {
                           return AppSkeletonLoader(
                             padding: EdgeInsets.only(top: ScreenUtils.height20),
@@ -226,7 +233,9 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                               ),
                               TextButton(
                                 onPressed: () {
-                                  navigatorState.pushNamed(AppRoute.addTrip).then((value) async {
+                                  navigatorState
+                                      .pushNamed(AppRoute.addTrip)
+                                      .then((value) async {
                                     if (value != null) {
                                       await controller.getAllTrip();
                                     }
@@ -241,7 +250,8 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                         } else {
                           return ListView.builder(
                             // controller: controller.scrollController,
-                            itemCount: (filteredTrips.length) + (controller.hasMore.value ? 1 : 0),
+                            itemCount: (filteredTrips.length) +
+                                (controller.hasMore.value ? 1 : 0),
                             padding: EdgeInsets.only(
                               top: ScreenUtils.height20,
                               left: ScreenUtils.width15,
@@ -252,9 +262,14 @@ class _AllTripPageState extends State<AllTripPage> with SingleTickerProviderStat
                                 return TripTile(
                                   tripInfo: filteredTrips[index],
                                   onClick: () {
-                                    navigatorState.pushNamed(AppRoute.trips, arguments: filteredTrips[index]).then((onValue) async {
+                                    navigatorState
+                                        .pushNamed(AppRoute.trips,
+                                            arguments: filteredTrips[index])
+                                        .then((onValue) async {
                                       if (onValue != false) {
-                                        await controller.getAllTrip(type: MethodType.local, refreshTrip: true);
+                                        await controller.getAllTrip(
+                                            type: MethodType.local,
+                                            refreshTrip: true);
                                       }
                                     });
                                   },

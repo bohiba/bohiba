@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class ShareEarnPage extends GetView<ShareController> {
   const ShareEarnPage({super.key});
@@ -84,7 +83,7 @@ class ShareEarnPage extends GetView<ShareController> {
                   },
                 ),
                 IconTextTile(
-                  icon: EvaIcons.emailOutline,
+                  icon: Remix.mail_line,
                   text: 'Mail',
                   onTap: () async {
                     await LauncherService.shareViaEmail();
@@ -124,13 +123,13 @@ class ShareEarnPage extends GetView<ShareController> {
                       'Invite your fellow truck owners and drivers to join Bohiba.',
                 ),
                 IconTextTile(
-                  icon: EvaIcons.personAddOutline,
+                  icon: Remix.user_add_line,
                   text: '2. Grow the Community',
                   subtitle:
                       'The more users join, the stronger and more connected our trucking network becomes.',
                 ),
                 IconTextTile(
-                  icon: EvaIcons.giftOutline,
+                  icon: Remix.gift_line,
                   text: '3. Benefit Together',
                   subtitle:
                       'A bigger community means better updates, more opportunities, and easier access to trips and resources for everyone.',

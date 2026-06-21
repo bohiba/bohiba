@@ -1,5 +1,5 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_colors.dart';
 import '/pages/wallet/wallet_string/wallet_string.dart';
@@ -30,8 +30,8 @@ class WalletTransactionHistoryScreen extends StatelessWidget {
                         backgroundColor: Colors.white54,
                         child: Icon(
                           index % 2 == 0
-                              ? EvaIcons.arrowUp
-                              : EvaIcons.arrowDown,
+                              ? Remix.arrow_up_line
+                              : Remix.arrow_down_line,
                           color: Colors.grey.shade300,
                         ),
                       ),

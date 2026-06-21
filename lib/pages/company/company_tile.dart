@@ -1,5 +1,6 @@
+import 'package:remixicon/remixicon.dart';
+
 import 'company_page.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '/dist/component_exports.dart';
@@ -121,7 +122,7 @@ class CompanyTile extends StatelessWidget {
                       bottomRight: Radius.circular(12),
                     ),
                   ),
-                  child: Icon(EvaIcons.moreVertical),
+                  child: Icon(Remix.menu_3_fill),
                 ),
               ),
             )

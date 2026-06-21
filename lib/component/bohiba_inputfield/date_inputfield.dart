@@ -1,6 +1,7 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class DateInputField extends StatefulWidget {
@@ -49,12 +50,14 @@ class _DateInputFieldState extends State<DateInputField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: bohibaTheme.inputDecorationTheme.hintStyle,
-          prefixIcon: widget.showPrefixIcon ? Icon(EvaIcons.calendarOutline) : null,
+          prefixIcon:
+              widget.showPrefixIcon ? FaIcon(FontAwesomeIcons.calendar) : null,
           border: bohibaTheme.inputDecorationTheme.border,
           prefixIconColor: bohibaTheme.inputDecorationTheme.prefixIconColor,
           enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
           focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
-          focusedErrorBorder: bohibaTheme.inputDecorationTheme.focusedErrorBorder,
+          focusedErrorBorder:
+              bohibaTheme.inputDecorationTheme.focusedErrorBorder,
           errorBorder: bohibaTheme.inputDecorationTheme.focusedErrorBorder,
         ),
       ),

@@ -1,8 +1,9 @@
+import 'package:remixicon/remixicon.dart';
+
 import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -59,7 +60,7 @@ class TripExpenseSection extends StatelessWidget {
                       radius: 20,
                       backgroundColor: bohibaTheme.cardColor,
                       child: Icon(
-                        EvaIcons.diagonalArrowRightUpOutline,
+                        Remix.arrow_up_circle_line,
                         color: bohibaTheme.colorScheme.tertiary,
                       ),
                     ),
@@ -78,7 +79,8 @@ class TripExpenseSection extends StatelessWidget {
                           maxLines: 1,
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleMedium!.color,
                           ),
                         ),
@@ -102,8 +104,10 @@ class TripExpenseSection extends StatelessWidget {
                           child: Text(
                             '${expense.paymentMode}',
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                              fontSize:
+                                  bohibaTheme.textTheme.bodySmall!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
                               color: bohibaTheme.textTheme.titleMedium!.color,
                             ),
                           ),
@@ -111,7 +115,7 @@ class TripExpenseSection extends StatelessWidget {
                       ],
                     ),
                     Gap(10.w),
-                    Icon(EvaIcons.arrowIosForwardOutline),
+                    Icon(Remix.arrow_right_s_line),
                   ],
                 ),
               ),

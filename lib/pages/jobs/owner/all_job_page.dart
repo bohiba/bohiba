@@ -1,10 +1,12 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:remixicon/remixicon.dart';
+
 import '/model/job_detail_model.dart';
 import '/controllers/all_job_controller.dart';
 import '/dist/component_exports.dart';
 import '/pages/widget/role_widget.dart';
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -37,7 +39,7 @@ class AllJobPage extends GetView<AllJobController> {
                   }
                 });
               },
-              icon: const Icon(EvaIcons.plus),
+              icon: const FaIcon(FontAwesomeIcons.plus),
             ),
           )
         ],
@@ -115,7 +117,8 @@ class AllJobPage extends GetView<AllJobController> {
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Icon(EvaIcons.pin, size: 14.w),
+                                            Icon(Remix.map_pin_fill,
+                                                size: 14.w),
                                             Text(
                                               " ${job.location?.toString().toUpperCase() ?? ''}",
                                               style: TextStyle(
@@ -130,7 +133,7 @@ class AllJobPage extends GetView<AllJobController> {
                                               ),
                                             ),
                                             Gap(10.w),
-                                            Icon(EvaIcons.briefcase,
+                                            Icon(Remix.briefcase_2_fill,
                                                 size: 14.w),
                                             Text(
                                               ' ${job.jobType?.toString().toUpperCase() ?? ''}',

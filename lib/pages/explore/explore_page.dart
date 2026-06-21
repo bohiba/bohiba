@@ -11,7 +11,7 @@ import '/component/bohiba_appbar/explore_appbar.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -34,7 +34,7 @@ class ExplorePage extends GetView<OpenDriverListController> {
                   delegate: SearchDriverDelegate(),
                 );
               },
-              icon: const Icon(EvaIcons.searchOutline),
+              icon: const Icon(RemixIcons.search_line),
             ),
           ),
         ],
@@ -66,7 +66,8 @@ class ExplorePage extends GetView<OpenDriverListController> {
                         'Sent Connect Request',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.bodyLarge!.fontWeight,
                           color: bohibaTheme.textTheme.bodyLarge!.color,
                         ),
                       ),
@@ -113,9 +114,11 @@ class ExplorePage extends GetView<OpenDriverListController> {
                               left: ScreenUtils.height15,
                               right: ScreenUtils.height15,
                             ),
-                            itemCount: (controller.arrOpenDriver.value?.length ?? 0),
+                            itemCount:
+                                (controller.arrOpenDriver.value?.length ?? 0),
                             itemBuilder: (context, index) {
-                              UserModel? openDriver = controller.arrOpenDriver.value?[index];
+                              UserModel? openDriver =
+                                  controller.arrOpenDriver.value?[index];
                               if (openDriver == null) {
                                 return SizedBox.shrink();
                               } else {
@@ -127,7 +130,8 @@ class ExplorePage extends GetView<OpenDriverListController> {
                                     arguments: openDriver,
                                   )
                                       .then((onValue) async {
-                                    if (onValue != null && onValue != false) await controller.getAllOpenDriver();
+                                    if (onValue != null && onValue != false)
+                                      await controller.getAllOpenDriver();
                                   }),
                                 );
                               }

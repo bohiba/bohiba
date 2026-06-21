@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '/services/global_service.dart';
 
 import '/component/bohiba_buttons/primary_button.dart';
@@ -7,7 +9,6 @@ import '/dist/component_exports.dart';
 import '/pages/truck/add_truck_widget/add_vehicle_input_field.dart';
 import '/pages/truck/vechile_dash_string/vehicle_dash_string.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:remixicon/remixicon.dart';
@@ -65,7 +66,7 @@ class _AddNewDriverModalSheetState extends State<AddNewDriverModalSheet> {
                 child: Column(
               children: [
                 TextInputField(
-                  prefixIcon: const Icon(EvaIcons.creditCardOutline),
+                  prefixIcon: const FaIcon(FontAwesomeIcons.idCard),
                   hintText: VehicleDashString.driverLicense,
                   controller: driverLicenseController,
                   textCapitalization: TextCapitalization.characters,
@@ -87,13 +88,13 @@ class _AddNewDriverModalSheetState extends State<AddNewDriverModalSheet> {
                   ],
                 ),
                 TextInputField(
-                  prefixIcon: const Icon(EvaIcons.personOutline),
+                  prefixIcon: const FaIcon(FontAwesomeIcons.person),
                   hintText: VehicleDashString.driverName,
                   controller: driverNameController,
                   textCapitalization: TextCapitalization.characters,
                 ),
                 TextInputField(
-                  prefixIcon: const Icon(EvaIcons.hashOutline),
+                  prefixIcon: const FaIcon(FontAwesomeIcons.hashtag),
                   maxLength: 10,
                   keyboardType: TextInputType.number,
                   hintText: VehicleDashString.driverMobileNumber,

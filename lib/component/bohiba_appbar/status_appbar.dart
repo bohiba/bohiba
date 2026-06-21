@@ -28,7 +28,7 @@ class StatusAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               );
             },
-            icon: const Icon(EvaIcons.plus),
+            icon: const Icon(RemixIcons.add_line),
           ),*/
         ],
       ),

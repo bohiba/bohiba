@@ -2,7 +2,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/component/bohiba_colors.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -50,7 +49,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
         keyboardType: TextInputType.visiblePassword,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          prefixIcon: Icon(EvaIcons.lock),
+          prefixIcon: Icon(Remix.lock_fill),
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {

@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DashboardPage extends GetView<DashboardController> {
@@ -63,16 +63,17 @@ class DashboardPage extends GetView<DashboardController> {
                                   navigator.pushNamed(AppRoute.userProfile);
                                 },
                                 label: "Profile",
-                                icon: EvaIcons.personOutline,
+                                icon: RemixIcons.user_line,
                               ),
 
                               RoleWidget(
                                 truckOwnerWidget: SmallTabComponent(
                                   onTap: () {
-                                    navigator.pushNamed(AppRoute.allOwnerExpense);
+                                    navigator
+                                        .pushNamed(AppRoute.allOwnerExpense);
                                   },
                                   label: "Expense",
-                                  icon: EvaIcons.fileTextOutline,
+                                  icon: RemixIcons.file_text_line,
                                 ),
                               ),
 
@@ -100,7 +101,7 @@ class DashboardPage extends GetView<DashboardController> {
                                   navigator.pushNamed(AppRoute.allTruck);
                                 },
                                 label: "Trucks",
-                                icon: EvaIcons.carOutline,
+                                icon: RemixIcons.car_line,
                               ),
 
                               RoleWidget(
@@ -109,7 +110,7 @@ class DashboardPage extends GetView<DashboardController> {
                                     navigator.pushNamed(AppRoute.allJobs);
                                   },
                                   label: "Jobs",
-                                  icon: EvaIcons.briefcaseOutline,
+                                  icon: RemixIcons.briefcase_line,
                                 ),
                               ),
 
@@ -123,7 +124,7 @@ class DashboardPage extends GetView<DashboardController> {
                                   );
                                 },
                                 label: "Wallet",
-                                icon: EvaIcons.briefcaseOutline,
+                                icon: RemixIcons.briefcase_line,
                               ),*/
 
                               // KYC
@@ -146,7 +147,7 @@ class DashboardPage extends GetView<DashboardController> {
                                       );
                                     },
                                     label: "Bank Accounts",
-                                    icon: EvaIcons.creditCardOutline,
+                                    icon: RemixIcons.bank_card_line,
                                   ),*/
                             ],
                           ),
@@ -172,7 +173,7 @@ class DashboardPage extends GetView<DashboardController> {
                       }
                     });
                   },
-                  icon: EvaIcons.settingsOutline,
+                  icon: RemixIcons.settings_line,
                   title: 'Settings',
                 ),
                 SingleTileTabComponent(
@@ -186,7 +187,7 @@ class DashboardPage extends GetView<DashboardController> {
                   onTap: () {
                     navigator.pushNamed(AppRoute.shareEarn);
                   },
-                  icon: EvaIcons.shareOutline,
+                  icon: RemixIcons.share_line,
                   title: 'Share App',
                 ),
 
@@ -194,14 +195,14 @@ class DashboardPage extends GetView<DashboardController> {
                   onTap: () {
                     navigator.pushNamed(AppRoute.policy);
                   },
-                  icon: EvaIcons.lock,
+                  icon: RemixIcons.lock_fill,
                   title: 'Privacy & Policy',
                 ),
                 SingleTileTabComponent(
                   onTap: () {
                     navigator.pushNamed(AppRoute.contact);
                   },
-                  icon: EvaIcons.questionMarkCircleOutline,
+                  icon: RemixIcons.question_line,
                   title: 'Contact & Support',
                 ),
                 SingleTileTabComponent(
@@ -229,9 +230,10 @@ class DashboardPage extends GetView<DashboardController> {
                 ),
                 SingleTileTabComponent(
                   onTap: () {
-                    navigator.push(MaterialPageRoute(builder: (context) => AboutPage()));
+                    navigator.push(
+                        MaterialPageRoute(builder: (context) => AboutPage()));
                   },
-                  icon: EvaIcons.awardOutline,
+                  icon: RemixIcons.award_line,
                   title: 'About App',
                 ),
               ],

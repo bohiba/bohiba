@@ -17,7 +17,7 @@ dependencies:
   flutter_device_type: ^0.4.0
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.0.15
-  eva_icons_flutter:
+  font_awesome_flutter: ^11.0.0
   remixicon: ^1.0.0
   marquee_text: ^2.5.0+1
   auto_size_text: ^3.0.0
@@ -61,7 +61,7 @@ dependencies:
   webview_flutter: ^4.13.0
 
   firebase_core: ^4.0.0
-  firebase_messaging: ^16.0.4
+  firebase_messaging: ^16.4.0
   flutter_local_notifications: ^19.5.0
 
   google_maps_flutter: ^2.16.0
@@ -69,7 +69,7 @@ dependencies:
 
   flutter_svg: ^2.3.0
   firebase_crashlytics: ^5.2.2
-  firebase_analytics: ^12.4.1
+  firebase_analytics: ^12.4.3
 
   # DEVELOPMENT
   logger: ^2.7.0

@@ -1,6 +1,6 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:remixicon/remixicon.dart';
 
 import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
@@ -198,7 +198,7 @@ class AllManagerPage extends StatelessWidget {
                       bottomRight: Radius.circular(12),
                     ),
                   ),
-                  child: Icon(EvaIcons.moreVertical),
+                  child: Icon(Remix.more_2_fill),
                 ),
               ),
             )

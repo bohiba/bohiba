@@ -1,8 +1,9 @@
+import 'package:remixicon/remixicon.dart';
+
 import '/component/bohiba_appbar/appbar_icon.dart';
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/pages/widget/icon_text_tile.dart';
 import '/services/global_service.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/routes/app_route.dart';
@@ -36,7 +37,8 @@ class SettingPage extends GetView<SettingController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Notifications", style: bohibaTheme.textTheme.headlineMedium),
+              Text("Notifications",
+                  style: bohibaTheme.textTheme.headlineMedium),
               LinearBoxWidget(
                 header: 'Push notifications',
                 widget: Switch(
@@ -110,7 +112,8 @@ class SettingPage extends GetView<SettingController> {
                       ),
                     ],
                     onChanged: (userRole) async {
-                      if (userRole != null && controller.roleId.value != userRole) {
+                      if (userRole != null &&
+                          controller.roleId.value != userRole) {
                         controller.roleId.value = userRole;
                         await controller.switchRole();
                       }
@@ -135,7 +138,8 @@ class SettingPage extends GetView<SettingController> {
               Gap(ScreenUtils.height30),
               Padding(
                 padding: EdgeInsets.only(bottom: ScreenUtils.height15),
-                child: Text('Delete Account', style: bohibaTheme.textTheme.headlineMedium),
+                child: Text('Delete Account',
+                    style: bohibaTheme.textTheme.headlineMedium),
               ),
               IconTextTile(
                 onTap: () {
@@ -143,7 +147,8 @@ class SettingPage extends GetView<SettingController> {
                     width: ScreenUtils.width * 0.45,
                     status: AlertStatus.warning,
                     title: 'Delete Account?',
-                    description: 'Are you sure? This will remove all your data and can’t be undone.',
+                    description:
+                        'Are you sure? This will remove all your data and can’t be undone.',
                     discardBtnTxt: 'Yes',
                     onDiscard: () {
                       navigation.pop();
@@ -153,7 +158,7 @@ class SettingPage extends GetView<SettingController> {
                     onSave: () => navigation.pop(),
                   );
                 },
-                icon: EvaIcons.trash2Outline,
+                icon: Remix.delete_bin_4_fill,
                 text: 'Delete Account',
                 subtitle: 'Permanently remove your data',
                 widget: AppBarIconBox(

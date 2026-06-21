@@ -1,4 +1,3 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 import 'package:remixicon/remixicon.dart';
@@ -111,8 +110,8 @@ class _Walletpagestate extends State<WalletScreen> {
                         backgroundColor: BohibaColors.white,
                         child: Icon(
                           index % 2 == 0
-                              ? EvaIcons.arrowUp
-                              : EvaIcons.arrowDown,
+                              ? Remix.arrow_up_line
+                              : Remix.arrow_down_line,
                           color: index % 2 == 0
                               ? BohibaColors.successColor
                               : BohibaColors.warningColor,
@@ -201,7 +200,7 @@ class _Walletpagestate extends State<WalletScreen> {
                                           const WalletWithdrawScreen()));
                             },
                             label: WalletWithdrawString.withdraw,
-                            icon: const Icon(EvaIcons.diagonalArrowRightUp),
+                            icon: const Icon(RemixIcons.arrow_right_up_fill),
                             fixedSize: Size(width * 0.45, 40),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -249,7 +248,7 @@ Padding(
                   leading: CircleAvatar(
                     backgroundColor: BohibaColors.white,
                     child: Icon(
-                      index % 2 == 0 ? EvaIcons.arrowUp : EvaIcons.arrowDown,
+                      index % 2 == 0 ? RemixIcons.arrow_up_line : RemixIcons.arrow_down_line,
                       color: index % 2 == 0
                           ? BohibaColors.successColor
                           : BohibaColors.warningColor,

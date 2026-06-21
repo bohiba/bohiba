@@ -2,10 +2,10 @@ import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TripPaymentSection extends StatelessWidget {
   final List<TripPayment>? payments;
@@ -60,7 +60,7 @@ class TripPaymentSection extends StatelessWidget {
                       radius: 20,
                       backgroundColor: bohibaTheme.cardColor,
                       child: Icon(
-                        EvaIcons.diagonalArrowLeftDownOutline,
+                        Remix.expand_diagonal_2_line,
                         color: bohibaTheme.colorScheme.onPrimary,
                       ),
                     ),
@@ -79,7 +79,8 @@ class TripPaymentSection extends StatelessWidget {
                           maxLines: 1,
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleMedium!.color,
                           ),
                         ),
@@ -91,7 +92,9 @@ class TripPaymentSection extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          payment.amount == null ? '' : '₹ ${payment.amount ?? ''}',
+                          payment.amount == null
+                              ? ''
+                              : '₹ ${payment.amount ?? ''}',
                           style: TextStyle(
                             color: bohibaTheme.colorScheme.onPrimary,
                           ),
@@ -100,14 +103,15 @@ class TripPaymentSection extends StatelessWidget {
                           payment.paymentType?.toDisplayLabel() ?? '',
                           style: TextStyle(
                             fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                            fontWeight:
+                                bohibaTheme.textTheme.bodySmall!.fontWeight,
                             color: bohibaTheme.textTheme.titleMedium!.color,
                           ),
                         ),
                       ],
                     ),
                     Gap(10.w),
-                    Icon(EvaIcons.arrowIosForwardOutline),
+                    Icon(Remix.arrow_right_s_line),
                   ],
                 ),
               ),

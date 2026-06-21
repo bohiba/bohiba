@@ -163,7 +163,6 @@ import '../pages/trips/all_trip_page.dart';
 import '/pages/trips/trip_page.dart';
 
 import '/pages/notification/notify_screen/notification_screen.dart';
-import '/pages/order/screens/order_screen/order_screen.dart';
 import '/pages/splashscreen.dart';
 import '/pages/truck/truck_all_page.dart';
 import '/pages/wallet/wallet_deposit/wallet_deposit_screen.dart';
@@ -610,7 +609,6 @@ class AppRoute {
     // Mines
     GetPage(name: mines, binding: MinesBinding(), page: () => CompanyPage()),
     GetPage(name: viewChallan, page: () => const ChallanScreen()),
-    GetPage(name: orderScreen, page: () => const OrderScreen()),
 
     // Wallet
     GetPage(

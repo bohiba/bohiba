@@ -1,4 +1,4 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter/material.dart';
 import '/component/screen_utils.dart';
 import '/component/bohiba_buttons/secoundary_button.dart';
@@ -34,7 +34,7 @@ class HomeAccountSection extends StatelessWidget {
                   },
                   label: 'Analytic',
                   widget: const Icon(
-                    EvaIcons.pieChart,
+                    RemixIcons.pie_chart_line,
                   ),
                   width: ScreenUtils.width * 0.45,
                   height: ScreenUtils.height * 0.043,

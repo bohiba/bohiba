@@ -1,18 +1,18 @@
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/dist/component_exports.dart';
 import '/services/pref_utils.dart';
 import '/services/global_service.dart';
 import '/services/user_role_type.dart';
 import '/pages/home/home_screen.dart';
-import '../../pages/company/all_company_page.dart';
+import '/pages/company/all_company_page.dart';
 import '/pages/favourite/all_favourite_page.dart';
 import '/pages/dashboard/dash_page/dashboard_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BohibaNavBar extends StatefulWidget {
   const BohibaNavBar({super.key});
@@ -117,14 +117,14 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             tooltip: "Mines",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(EvaIcons.compassOutline),
-            activeIcon: Icon(EvaIcons.compass),
+            icon: FaIcon(FontAwesomeIcons.compassDrafting),
+            activeIcon: FaIcon(FontAwesomeIcons.compass),
             label: "Explore",
             tooltip: "Explore",
           ),
           BottomNavigationBarItem(
-            icon: Icon(EvaIcons.gridOutline),
-            activeIcon: Icon(EvaIcons.grid),
+            icon: FaIcon(FontAwesomeIcons.gaugeSimple),
+            activeIcon: FaIcon(FontAwesomeIcons.gauge),
             label: "Dashboard",
             tooltip: "Dashboard",
           )
@@ -145,20 +145,20 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             tooltip: "Home",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(EvaIcons.compassOutline),
-            activeIcon: Icon(EvaIcons.compass),
+            icon: FaIcon(FontAwesomeIcons.compassDrafting),
+            activeIcon: FaIcon(FontAwesomeIcons.compass),
             label: "Trips",
             tooltip: "Trips",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(EvaIcons.briefcaseOutline),
-            activeIcon: Icon(EvaIcons.briefcase),
+            icon: FaIcon(FontAwesomeIcons.suitcase),
+            activeIcon: FaIcon(FontAwesomeIcons.suitcase),
             label: "Jobs",
             tooltip: "Jobs",
           ),
           BottomNavigationBarItem(
-            icon: Icon(EvaIcons.gridOutline),
-            activeIcon: Icon(EvaIcons.grid),
+            icon: FaIcon(FontAwesomeIcons.gaugeSimple),
+            activeIcon: FaIcon(FontAwesomeIcons.gauge),
             label: "Dashboard",
             tooltip: "Dashboard",
           )

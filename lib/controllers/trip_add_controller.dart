@@ -229,7 +229,7 @@ class TripAddController extends ImageUploadController {
       'rate': rateTrip,
     };
 
-    return 0;
+    // return 0;
 
     int addOrUpdateSuccess = 0;
     if (tripModel.value == null) {

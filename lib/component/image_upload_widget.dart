@@ -11,11 +11,12 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets_easier/widgets_easier.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// ------------------- Initial Upload State -------------------
-class InitialImageUploadWidget<T extends ImageUploadController> extends GetView<T> {
+class InitialImageUploadWidget<T extends ImageUploadController>
+    extends GetView<T> {
   const InitialImageUploadWidget({super.key});
 
   @override
@@ -55,13 +56,14 @@ class InitialImageUploadWidget<T extends ImageUploadController> extends GetView<
                     CircleAvatar(
                       radius: 25,
                       backgroundColor: bohibaTheme.dividerColor,
-                      child: const Icon(EvaIcons.cloudUploadOutline),
+                      child: const Icon(Remix.upload_2_fill),
                     ),
                     Gap(ScreenUtils.height10),
                     Text(
                       'Tap to upload photo',
                       style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                        fontSize:
+                            bohibaTheme.textTheme.headlineMedium!.fontSize,
                         fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
                         color: bohibaTheme.textTheme.bodySmall!.color,
                       ),
@@ -115,7 +117,8 @@ class InitialImageUploadWidget<T extends ImageUploadController> extends GetView<
 }
 
 /// ------------------- Uploading State -------------------
-class OnUploadingImageWidget<T extends ImageUploadController> extends GetView<T> {
+class OnUploadingImageWidget<T extends ImageUploadController>
+    extends GetView<T> {
   const OnUploadingImageWidget({super.key});
 
   @override
@@ -170,7 +173,8 @@ class OnUploadingImageWidget<T extends ImageUploadController> extends GetView<T>
                 value: controller.uploadPrgs.value,
                 minHeight: 6,
                 borderRadius: BorderRadius.circular(15.0),
-                valueColor: AlwaysStoppedAnimation<Color>(BohibaColors.primaryColor),
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(BohibaColors.primaryColor),
               ),
             ),
             Text(
@@ -198,7 +202,8 @@ class OnUploadingImageWidget<T extends ImageUploadController> extends GetView<T>
 }
 
 /// ------------------- Success State -------------------
-class OnFetchingImageSuccessWidget<T extends ImageUploadController> extends GetView<T> {
+class OnFetchingImageSuccessWidget<T extends ImageUploadController>
+    extends GetView<T> {
   const OnFetchingImageSuccessWidget({super.key});
 
   @override
@@ -238,7 +243,7 @@ class OnFetchingImageSuccessWidget<T extends ImageUploadController> extends GetV
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                EvaIcons.trash2Outline,
+                RemixIcons.delete_bin_5_fill,
                 color: bohibaTheme.colorScheme.error,
               ),
               Gap(10.w),
@@ -259,7 +264,8 @@ class OnFetchingImageSuccessWidget<T extends ImageUploadController> extends GetV
 }
 
 /// ------------------- Error State -------------------
-class OnFetchingImageErrorWidget<T extends ImageUploadController> extends GetView<T> {
+class OnFetchingImageErrorWidget<T extends ImageUploadController>
+    extends GetView<T> {
   const OnFetchingImageErrorWidget({super.key});
 
   @override
@@ -310,7 +316,8 @@ class OnFetchingImageErrorWidget<T extends ImageUploadController> extends GetVie
                     Text(
                       'Retry Again, Tap to re-upload',
                       style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                        fontSize:
+                            bohibaTheme.textTheme.headlineMedium!.fontSize,
                         fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
                         color: BohibaColors.warningColor,
                       ),
@@ -363,14 +370,16 @@ class OnFetchingImageErrorWidget<T extends ImageUploadController> extends GetVie
   }
 }
 
-class OnDocumentVerifiedWidget<T extends ImageUploadController> extends GetView<T> {
+class OnDocumentVerifiedWidget<T extends ImageUploadController>
+    extends GetView<T> {
   final String title;
   final String description;
   final String? docPath;
   const OnDocumentVerifiedWidget({
     super.key,
     this.title = 'Document verified successfully',
-    this.description = 'Your document has been successfully verified by Bohiba and found to be authentic',
+    this.description =
+        'Your document has been successfully verified by Bohiba and found to be authentic',
     this.docPath,
   });
 
@@ -453,7 +462,8 @@ class EditImageWidget<T extends ImageUploadController> extends GetView<T> {
               minHeight: ScreenUtils.height * 0.35,
               maxHeight: ScreenUtils.height * 0.55,
             ),
-            margin: EdgeInsets.only(top: ScreenUtils.height30, bottom: ScreenUtils.height15),
+            margin: EdgeInsets.only(
+                top: ScreenUtils.height30, bottom: ScreenUtils.height15),
             decoration: ShapeDecoration(
               shape: DashedBorder(
                 radius: 12.0,
@@ -471,14 +481,16 @@ class EditImageWidget<T extends ImageUploadController> extends GetView<T> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SecoundaryButton(
-                onPressed: () => controller.deleteImageFile(controller.selectedImg.value!),
+                onPressed: () =>
+                    controller.deleteImageFile(controller.selectedImg.value!),
                 label: 'Delete Image',
                 textColor: bohibaTheme.colorScheme.surface,
                 color: bohibaTheme.colorScheme.error,
               ),
               PrimaryButton(
                 width: 120.w,
-                onPressed: () => controller.pickImage(pickertype: PickerType.gallery),
+                onPressed: () =>
+                    controller.pickImage(pickertype: PickerType.gallery),
                 label: 'Upload other',
               )
             ],

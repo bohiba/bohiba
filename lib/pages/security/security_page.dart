@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '/pages/security/current_password_dialog.dart';
 
 import '/dist/enums/app_enums.dart';
@@ -18,7 +20,6 @@ import '/component/bohiba_appbar/title_appbar.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SecurityPage extends GetView<SecurityController> {
@@ -101,8 +102,8 @@ class SecurityPage extends GetView<SecurityController> {
                     text: 'iPhone 13 Pro',
                     subtitle: 'Last Active: Fri 19 Sep 11:01 pm',
                     widget: AppBarIconBox(
-                      icon: Icon(
-                        EvaIcons.logOutOutline,
+                      icon: FaIcon(
+                        FontAwesomeIcons.arrowRightFromBracket,
                         size: ScreenUtils.height15.h,
                         color: bohibaTheme.colorScheme.tertiary,
                       ),
@@ -113,8 +114,8 @@ class SecurityPage extends GetView<SecurityController> {
                     text: 'Macbook Pro',
                     subtitle: 'Last Active: Fri 19 Sep 11:01 pm',
                     widget: AppBarIconBox(
-                      icon: Icon(
-                        EvaIcons.logOutOutline,
+                      icon: FaIcon(
+                        FontAwesomeIcons.arrowRightFromBracket,
                         size: ScreenUtils.height15.h,
                         color: bohibaTheme.colorScheme.tertiary,
                       ),
@@ -206,8 +207,8 @@ class SecurityPage extends GetView<SecurityController> {
                                     color: bohibaTheme.colorScheme.tertiary,
                                   ),
                                 ),
-                                Icon(
-                                  EvaIcons.logOutOutline,
+                                FaIcon(
+                                  FontAwesomeIcons.arrowRightFromBracket,
                                   size: ScreenUtils.height15.h,
                                   color: bohibaTheme.colorScheme.tertiary,
                                 ),

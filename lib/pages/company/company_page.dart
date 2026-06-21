@@ -1,14 +1,11 @@
-import '../../controllers/companies_controller.dart';
+import '/controllers/companies_controller.dart';
 import '/dist/component_exports.dart';
 import '/extensions/ext_mines_status.dart';
 
 import '/component/bohiba_appbar/company_appbar.dart';
-import '/component/bohiba_buttons/primary_floating_button.dart';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'company_queue_status.dart';
 import 'company_status_grid.dart';
 import 'company_header.dart';
 import 'company_live_queue_status.dart';

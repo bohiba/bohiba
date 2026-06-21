@@ -12,7 +12,7 @@ import '/pages/driver/driver_modals/connection_request_modal.dart';
 
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -67,12 +67,15 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                 shape: BoxShape.circle,
                 color: bohibaTheme.colorScheme.surface,
               ),
-              child: (user.profile == null || user.profile?.image == null || (user.profile?.image?.isEmpty ?? true))
+              child: (user.profile == null ||
+                      user.profile?.image == null ||
+                      (user.profile?.image?.isEmpty ?? true))
                   ? Text(
                       user.profile?.name?.shortCode ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                        fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                        fontWeight:
+                            bohibaTheme.textTheme.bodyMedium!.fontWeight,
                         color: bohibaTheme.textTheme.bodySmall!.color,
                       ),
                     )
@@ -86,7 +89,8 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                       child: ClipRRect(
                         borderRadius: BorderRadiusGeometry.circular(35.r),
                         child: CachedNetworkImage(
-                          imageUrl: '${ImagePath.profileImage}/${user.profile?.image}',
+                          imageUrl:
+                              '${ImagePath.profileImage}/${user.profile?.image}',
                           fit: BoxFit.cover,
                           height: 32.h,
                           width: 32.h,
@@ -129,7 +133,8 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                       "${user.address?.district ?? ''} ",
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelMedium!.fontWeight,
                         color: bohibaTheme.textTheme.bodyLarge!.color,
                       ),
                     ),
@@ -138,7 +143,8 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                       user.address?.state ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelMedium!.fontWeight,
                         color: bohibaTheme.textTheme.bodyLarge!.color,
                       ),
                     ),
@@ -153,17 +159,20 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                       user.profile?.connect?.toCapitalizedLabel() ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelLarge!.fontWeight,
                         color: bohibaTheme.colorScheme.onPrimary,
                       ),
                     )
                   : SizedBox.shrink(),
-              driverWidget: (user.profile?.connect == ConnectionType.accept.name)
+              driverWidget: (user.profile?.connect ==
+                      ConnectionType.accept.name)
                   ? Text(
                       user.profile?.connect?.toCapitalizedLabel() ?? '',
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                        fontWeight: bohibaTheme.textTheme.labelLarge!.fontWeight,
+                        fontWeight:
+                            bohibaTheme.textTheme.labelLarge!.fontWeight,
                         color: bohibaTheme.colorScheme.onPrimary,
                       ),
                     )
@@ -189,7 +198,8 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: bohibaTheme.colorScheme.error.withValues(alpha: 0.25),
+                              color: bohibaTheme.colorScheme.error
+                                  .withValues(alpha: 0.25),
                             ),
                             child: Icon(
                               Icons.close,
@@ -219,10 +229,11 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
+                              color: bohibaTheme.colorScheme.onPrimary
+                                  .withValues(alpha: 0.25),
                             ),
                             child: Icon(
-                              EvaIcons.checkmark,
+                              RemixIcons.check_line,
                               size: 22.w,
                               color: bohibaTheme.colorScheme.onPrimary,
                             ),

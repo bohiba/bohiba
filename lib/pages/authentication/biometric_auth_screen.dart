@@ -1,6 +1,6 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/dist/component_exports.dart';
@@ -18,8 +18,8 @@ class BiometricAuthScreen extends GetView<BiometricAuthController> {
         showLeading: false,
         actions: [
           IconButton(
-            icon: Icon(
-              EvaIcons.logOutOutline,
+            icon: FaIcon(
+              FontAwesomeIcons.arrowRightFromBracket,
               size: ScreenUtils.height15.h,
               color: bohibaTheme.colorScheme.tertiary,
             ),
@@ -51,7 +51,8 @@ class BiometricAuthScreen extends GetView<BiometricAuthController> {
                         size: 50,
                         color: bohibaTheme.colorScheme.onSurface,
                       ),
-                      placeholder: (context, url) => CircularProgressIndicator(),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
                     ),
                   ),
                 )),
@@ -79,17 +80,20 @@ class BiometricAuthScreen extends GetView<BiometricAuthController> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () async => await controller.authenticateWithBiometrics(),
+                  onTap: () async =>
+                      await controller.authenticateWithBiometrics(),
                   borderRadius: BorderRadius.circular(8.r),
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
                     decoration: BoxDecoration(
                       border: Border.all(color: bohibaTheme.primaryColor),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.fingerprint, color: bohibaTheme.primaryColor),
+                        Icon(Icons.fingerprint,
+                            color: bohibaTheme.primaryColor),
                         SizedBox(width: 16.w),
                         Expanded(
                           child: Text(
@@ -101,7 +105,8 @@ class BiometricAuthScreen extends GetView<BiometricAuthController> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Icon(Icons.arrow_forward_ios, size: 16, color: bohibaTheme.primaryColor),
+                        Icon(Icons.arrow_forward_ios,
+                            size: 16, color: bohibaTheme.primaryColor),
                       ],
                     ),
                   ),
@@ -115,21 +120,27 @@ class BiometricAuthScreen extends GetView<BiometricAuthController> {
             Column(
               children: [
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(Icons.security, size: 16, color: bohibaTheme.primaryColor),
+                  Icon(Icons.security,
+                      size: 16, color: bohibaTheme.primaryColor),
                   SizedBox(width: 5.w),
                   Text(
                     "ZERODHA",
-                    style: TextStyle(color: bohibaTheme.primaryColor, fontWeight: FontWeight.bold, fontSize: 16.sp),
+                    style: TextStyle(
+                        color: bohibaTheme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp),
                   ),
                 ]),
                 SizedBox(height: 8.h),
                 Text(
                   "SEBI Registration: INZ000031633",
-                  style: bohibaTheme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                  style: bohibaTheme.textTheme.bodySmall
+                      ?.copyWith(color: Colors.grey),
                 ),
                 Text(
                   "CDSL - SEBI Registration: IN-DP-431-2019",
-                  style: bohibaTheme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                  style: bohibaTheme.textTheme.bodySmall
+                      ?.copyWith(color: Colors.grey),
                 ),
                 SizedBox(height: 20.h),
               ],

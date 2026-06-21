@@ -1,3 +1,5 @@
+import 'package:remixicon/remixicon.dart';
+
 import '/routes/app_route.dart';
 import '/theme/bohiba_theme.dart';
 import '/model/job_detail_model.dart';
@@ -14,7 +16,6 @@ import '/controllers/all_driver_job_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -30,7 +31,7 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
         title: 'Jobs',
         actions: [
           AppBarIconBox(
-            icon: Icon(EvaIcons.personAddOutline),
+            icon: Icon(Remix.user_add_fill),
             onTap: () {
               navigateState.pushNamed(AppRoute.allRcvdRequest);
             },
@@ -81,7 +82,8 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
                   : SmartRefresher(
                       controller: controller.refreshController,
                       onRefresh: () {
-                        controller.getAllJobs(refresh: true, showLoading: false);
+                        controller.getAllJobs(
+                            refresh: true, showLoading: false);
                         controller.refreshController.refreshCompleted();
                       },
                       child: (controller.arrJobDetail.value?.isEmpty ?? true)
@@ -105,9 +107,11 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
                                 left: ScreenUtils.height15,
                                 right: ScreenUtils.height15,
                               ),
-                              itemCount: (controller.arrJobDetail.value?.length ?? 0),
+                              itemCount:
+                                  (controller.arrJobDetail.value?.length ?? 0),
                               itemBuilder: (context, index) {
-                                JobDetailModel? jobDetail = controller.arrJobDetail.value?[index];
+                                JobDetailModel? jobDetail =
+                                    controller.arrJobDetail.value?[index];
                                 return GestureDetector(
                                   onTap: () {
                                     navigateState.pushNamed(
@@ -117,48 +121,78 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
                                   },
                                   child: Container(
                                     width: ScreenUtils.width,
-                                    padding: EdgeInsets.all(ScreenUtils.height15),
-                                    margin: EdgeInsets.only(bottom: ScreenUtils.width5),
+                                    padding:
+                                        EdgeInsets.all(ScreenUtils.height15),
+                                    margin: EdgeInsets.only(
+                                        bottom: ScreenUtils.width5),
                                     decoration: TileDecorative(),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 SizedBox(
-                                                  width: ScreenUtils.width * 0.7,
+                                                  width:
+                                                      ScreenUtils.width * 0.7,
                                                   child: Text(
                                                     jobDetail?.jobTitle ?? '',
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: bohibaTheme.textTheme.headlineMedium,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: bohibaTheme.textTheme
+                                                        .headlineMedium,
                                                   ),
                                                 ),
                                                 Row(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
-                                                    Icon(EvaIcons.pin, size: 14.w),
+                                                    Icon(Remix.map_2_fill,
+                                                        size: 14.w),
                                                     Text(
                                                       ' ${jobDetail?.location?.toCapitalizedLabel() ?? ''} ',
                                                       style: TextStyle(
-                                                        fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                                                        fontWeight: bohibaTheme.textTheme.titleLarge!.fontWeight,
-                                                        color: bohibaTheme.textTheme.titleLarge!.color,
+                                                        fontSize: bohibaTheme
+                                                            .textTheme
+                                                            .labelLarge!
+                                                            .fontSize,
+                                                        fontWeight: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .fontWeight,
+                                                        color: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .color,
                                                       ),
                                                     ),
                                                     Gap(10.w),
-                                                    Icon(EvaIcons.briefcase, size: 14.w),
+                                                    Icon(Remix.briefcase_2_fill,
+                                                        size: 14.w),
                                                     Text(
                                                       ' ${jobDetail?.jobType?.toCapitalizedLabel() ?? ''}',
                                                       style: TextStyle(
-                                                        fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                                                        fontWeight: bohibaTheme.textTheme.titleLarge!.fontWeight,
-                                                        color: bohibaTheme.textTheme.titleLarge!.color,
+                                                        fontSize: bohibaTheme
+                                                            .textTheme
+                                                            .labelLarge!
+                                                            .fontSize,
+                                                        fontWeight: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .fontWeight,
+                                                        color: bohibaTheme
+                                                            .textTheme
+                                                            .titleLarge!
+                                                            .color,
                                                       ),
                                                     ),
                                                   ],
@@ -167,10 +201,16 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
                                             ),
                                             Spacer(),
                                             Text(
-                                              jobDetail?.status?.toCapitalizedLabel() ?? '',
+                                              jobDetail?.status
+                                                      ?.toCapitalizedLabel() ??
+                                                  '',
                                               style: TextStyle(
-                                                fontFamily: bohibaTheme.textTheme.labelLarge!.fontFamily,
-                                                fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                                                fontFamily: bohibaTheme
+                                                    .textTheme
+                                                    .labelLarge!
+                                                    .fontFamily,
+                                                fontSize: bohibaTheme.textTheme
+                                                    .labelLarge!.fontSize,
                                                 color: Colors.blue,
                                               ),
                                             ),
@@ -180,8 +220,10 @@ class AllDriverJobPage extends GetView<AllDriverJobController> {
                                         Text(
                                           jobDetail?.createdAt ?? '',
                                           style: TextStyle(
-                                            color: bohibaTheme.textTheme.titleMedium!.color,
-                                            fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                                            color: bohibaTheme
+                                                .textTheme.titleMedium!.color,
+                                            fontSize: bohibaTheme.textTheme
+                                                .labelMedium!.fontSize,
                                           ),
                                         )
                                       ],

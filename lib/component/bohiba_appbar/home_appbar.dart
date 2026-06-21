@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '/pages/widget/role_widget.dart';
 import '/component/image_path.dart';
@@ -11,7 +12,6 @@ import '/theme/bohiba_theme.dart';
 import '/routes/app_route.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeAppBar extends GetView<HomeController>
@@ -208,8 +208,8 @@ class HomeAppBar extends GetView<HomeController>
                   }
                 });
               },
-              icon: Icon(
-                EvaIcons.plus,
+              icon: FaIcon(
+                FontAwesomeIcons.plus,
                 color: controller.isScrolled.value
                     ? bohibaTheme.iconTheme.color
                     : bohibaTheme.colorScheme.surface,
@@ -222,7 +222,7 @@ class HomeAppBar extends GetView<HomeController>
                   navigatState.pushNamed(AppRoute.notifyScreen);
                 },
                 icon: const Icon(
-                  EvaIcons.bellOutline,
+                  RemixIcons.bell_line,
                 ),
               ),
         
