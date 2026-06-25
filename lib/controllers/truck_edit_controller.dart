@@ -8,7 +8,8 @@ import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditTruckController extends GetxController with GetSingleTickerProviderStateMixin {
+class EditTruckController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   DioService dioService = DioService();
 
   final TextEditingController assignDriverCtlr = TextEditingController();
@@ -62,12 +63,13 @@ class EditTruckController extends GetxController with GetSingleTickerProviderSta
       return 0;
     }
     int assigned = await TruckService.assignDriver(
-      vhNumber: truck.value.regdNumber!,
+      truckId: truck.value.id!,
       driver: driverInfo,
     );
 
     if (assigned > 0) {
-      TruckModel? updatedTruck = await TruckService.getTruck(value: truck.value.id!);
+      TruckModel? updatedTruck =
+          await TruckService.getTruck(value: truck.value.id!);
       if (updatedTruck != null) {
         truck.value = updatedTruck;
         isDriverAssigned.value = true;
@@ -79,7 +81,8 @@ class EditTruckController extends GetxController with GetSingleTickerProviderSta
   Future<int> removeDriver({required TruckModel truckInfo}) async {
     int success = await TruckService.removeDriver(oldTruck: truckInfo);
     if (success > 0) {
-      TruckModel? updatedTruck = await TruckService.getTruck(value: truck.value.id!);
+      TruckModel? updatedTruck =
+          await TruckService.getTruck(value: truck.value.id!);
       if (updatedTruck != null) {
         truck.value = updatedTruck;
         isDriverAssigned.value = false;

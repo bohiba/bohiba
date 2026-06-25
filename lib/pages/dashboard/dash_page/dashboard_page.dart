@@ -1,4 +1,4 @@
-import '../../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
 import '/extensions/bohiba_extension.dart';
@@ -19,7 +19,6 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:remixicon/remixicon.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DashboardPage extends GetView<DashboardController> {
@@ -38,7 +37,7 @@ class DashboardPage extends GetView<DashboardController> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              top: ScreenUtils.height20,
+              top: ScreenUtils.height5,
               left: ScreenUtils.width15,
               right: ScreenUtils.width15,
             ),

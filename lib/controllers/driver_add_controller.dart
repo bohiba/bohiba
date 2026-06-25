@@ -108,7 +108,8 @@ class DriverAddController extends ImageUploadController {
     }
 
     if (bodyObj.isNotEmpty) {
-      UserModel? driver = await DriverService.createDriver(bodyObj: bodyObj, vehcileNumber: truckNo);
+      UserModel? driver = await DriverService.createDriver(
+          bodyObj: bodyObj, truckId: truck.value.id);
       if (driver != null) {
         truckNo = null;
         licenseCtrl.clear();

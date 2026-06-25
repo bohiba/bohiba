@@ -74,6 +74,7 @@ class MyApp extends StatelessWidget {
         duration: const Duration(seconds: 1),
         curve: Curves.easeIn,
         child: ScreenUtilInit(
+          minTextAdapt: true,
           child: GetMaterialApp(
             initialBinding: SplashBinding(),
             theme: BohibaTheme.lightTheme,

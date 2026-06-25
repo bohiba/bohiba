@@ -9,12 +9,14 @@ class EmailInputField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
   final bool readOnly;
+  final bool showIcon;
 
   const EmailInputField({
     super.key,
     required this.hintText,
     this.controller,
     this.readOnly = false,
+    this.showIcon = true,
   });
 
   @override
@@ -44,10 +46,12 @@ class EmailInputField extends StatelessWidget {
         cursorColor: BohibaColors.primaryColor,
         decoration: InputDecoration(
           hintText: hintText,
-          prefixIcon: Icon(
-            Icons.email_rounded,
-            color: BohibaColors.borderColor,
-          ),
+          prefixIcon: showIcon
+              ? Icon(
+                  Icons.email_rounded,
+                  color: BohibaColors.borderColor,
+                )
+              : null,
         ),
       ),
     );

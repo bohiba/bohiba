@@ -13,6 +13,9 @@
 | **1** | Security audit + core bug fixes — splash, location, entire sign-up flow | ~50 files | ✅ Done |
 | **2** | `AppDatePicker` month-navigation — 3 nested bugs fixed | 1 file | ✅ Done |
 | **3** | `AddTripPage` company/mineral search — API, async dropdown, controller, UI | 5 files | ✅ Done |
+| **4** | Analytics page — full UI redesign + backend API spec document | 3 files | ✅ Done |
+| **5** | Analytics API integration — 6 live endpoints, reactive data, error handling | 3 files | ✅ Done |
+| **6** | Build fixes (new system) — KGP warning, `eva_icons_flutter` removed, Forgot UUID reactive button | ~40 files | ✅ Done |
 
 ### What works now (that didn't before)
 
@@ -40,6 +43,42 @@
 - Edit mode pre-populates company names and attempts to re-select the saved mineral
 - API body now sends `origin: company_id` and `destination: company_id` (integers) — was free text
 - All 15+ other `AppDropdownSearch` call-sites are **unaffected** (async mode is strictly opt-in)
+
+**Analytics Dashboard (live data)**
+- All 6 API endpoints integrated: `/analytics/summary`, `/trips`, `/fuel`, `/drivers`, `/trucks`, `/finance`
+- Period filter pill (Week/1M/3M/YTD) → maps to API values (week/1m/3m/ytd) → fires all 6 in parallel
+- `AnalyticService` (new file) — thin wrapper over shared `DioService`, returns `null` on any failure
+- All metrics, spots, chart labels, chart headers are now reactive `RxList` / `Rx` fields
+- `_applySummary` → hero card + quick stats + on-time rate; all 5 `_apply*` methods parse respective payloads
+- Driver bar chart built from `chart.series[].avg_rating`; labels from month abbreviations of `x` dates
+- Line chart x-axis: index-based `FlSpot`; date labels formatted per period in `bottomTitleBuilder(labels)`
+- Empty-spots guard: `< 2` spots shows "No data for this period" instead of crashing
+- Bar chart zero-maxY guard: minimum `maxY = 5.0` prevents zero-height chart
+- Error handling: if ALL 6 endpoints return null → `GlobalService.showDialog` warning; individual null → keeps prior data
+- `flutter analyze` → **0 issues**
+
+**Build / icon system (new machine)**
+- `android.builtInKotlin=true` + `android.newDsl=true` in `gradle.properties` — eliminates KGP warning for all 7 plugins
+- `eva_icons_flutter` removed from `pubspec.yaml` (package subclasses `final IconData`, breaks Flutter 3.27+)
+- All 38 files migrated from `EvaIcons.*` → `RemixIcons.*` (already a dependency, no new package)
+- No shim or compat layer remains — direct `RemixIcons` references throughout
+
+**Forgot UUID**
+- `isButtonEnabled` (`RxBool`) in `ForgotUuidController` — driven by `TextEditingController` listeners added in `onInit`; enabled only when email passes `isEmail` AND PAN is exactly 10 chars + valid PAN regex
+- Button wrapped in `Obx` in `ForgotUuidPage` — reacts instantly to every keystroke, no manual `setState`
+
+**Analytics Dashboard (original design)**
+- Period filter is now animated pill tabs (Week / 1M / 3M / YTD) — replaced the AppBar dropdown
+- Hero KPI card (blue gradient) shows Total Revenue + trend % + mini sparkline
+- Quick-stat strip: 4 horizontally scrollable chips (Trips Done, Active Trucks, Driver Rating, On-Time %)
+- On-Time Delivery banner with green accent and live percentage
+- Five section tabs (Trip / Fuel / Driver / Truck / Finance) via `NestedScrollView` + sticky `TabBar`
+- Each section: 2×2 `GridView` of metric cards (icon + value + label + colour-coded trend badge ↑↓)
+- Line charts: touch-enabled with tooltips, dot markers, subtle grid, area fill
+- Bar chart (Driver section): rounded bars, touch tooltips, proper axis labels
+- Shimmer skeleton via existing `AppSkeletonLoader` while `isLoading` is true
+- All data is still demo; `onPeriodChanged()` stub is wired and ready for the API
+- API requirements fully documented in `docs/analytics_api_requirements.md` (6 endpoints)
 
 ### Outstanding before production
 
@@ -165,6 +204,7 @@ onInit → defer →
 | `firebase_messaging ^16.0.4` | Push notifications | Token registered via `ApiEndPoint.firbaseToken` |
 | `firebase_crashlytics ^5.2.2` | Crash reporting | PII must be scrubbed before sending |
 | `table_calendar ^3.2.0` | Date picker calendar | See fix notes in §5, Session 2 |
+| `remixicon ^1.4.1` | Icon set | Replaces removed `eva_icons_flutter`; use `RemixIcons.*` |
 | `local_auth ^2.1.6` | Biometrics | |
 | `permission_handler ^11.3.1` | Runtime permissions | |
 | `flutter_screenutil ^5.9.0` | Responsive sizing | Use `.r`, `.w`, `.h`, `.sp` suffixes |
@@ -221,7 +261,21 @@ onInit → defer →
 - **Debounce timers must be cancelled in `onClose()`** — always store the `Timer?` as a
   field and cancel it before nulling.
 
-### 4.6 Async Search Dropdowns
+### 4.6 Analytics / Data Display Patterns
+
+- **`_TrendBadge` pattern** — Create a dedicated widget for any positive/negative trend indicator.
+  Pass `trendPct: double` and `onDark: bool`. Never inline trend colour logic in the parent widget.
+- **Model classes in controller file** — For screen-specific data shapes (e.g. `AnalyticMetric`),
+  define them in the same file as the controller, not in `lib/model/`. Move to `lib/model/` only
+  when the model is shared across two or more features.
+- **Top-level helper functions for grid/chart headers** — `_metricGrid(List<M>)` and
+  `_chartHeader(...)` are top-level functions (not methods) so they are stateless and
+  don't pull in controller state — keeps widget tree flat.
+- **`NestedScrollView` + sticky `TabBar`** — the correct Flutter pattern for a scrollable header
+  above tabbed content. Put header widgets in `headerSliverBuilder`, TabBar + `TabBarView` in `body`.
+  Each tab's content must be wrapped in its own `SingleChildScrollView` (via `_SectionScrollView`).
+
+### 4.7 Async Search Dropdowns
 
 - Use `AppDropdownSearch<T>` with `searchState: AppDropdownSearchState.xxx` to enter async
   mode — the controller owns the state machine, the widget just renders it.
@@ -405,6 +459,171 @@ New search machinery:
 
 ---
 
+### Session 4 — Analytics Page Full UI Redesign + API Spec
+
+**Files changed:** 3
+
+| File | Change |
+|------|--------|
+| `lib/pages/analytic/analytic_page.dart` | Full redesign — all old widgets replaced |
+| `lib/controllers/analytic_conroller.dart` | New model classes + reactive data fields |
+| `docs/analytics_api_requirements.md` | **New file** — backend API specification |
+
+#### 4a. Controller changes — `lib/controllers/analytic_conroller.dart`
+
+Two new model classes (defined in the controller file, not separate model files):
+
+```dart
+class AnalyticQuickStat { label, value, icon, color }
+class AnalyticMetric    { label, value, trendPct, icon }
+```
+
+New reactive fields:
+- `isLoading` — `false.obs` — drives skeleton vs content
+- `heroTitle`, `heroValue`, `heroTrend` — `Rx<String/double>` — feeds hero KPI card
+- `onTimeRate` — `Rx<double>` — feeds the delivery banner
+- Per-section metric lists: `tripMetrics`, `fuelMetrics`, `driverMetrics`, `truckMetrics`, `financeMetrics` — `List<AnalyticMetric>`
+- Per-section chart spots: `tripSpots`, `fuelSpots`, `truckSpots`, `revenueSpots` — `List<FlSpot>`
+- `driverBarGroups` — `List<BarChartGroupData>` (rounded-corner bars)
+- `onPeriodChanged(String)` — stub wired to `selectedRange.value`; API call goes here
+- `bottomTitleWidget` extended: added `YTD` case (month names), week uses day names correctly
+
+#### 4b. Page redesign — `lib/pages/analytic/analytic_page.dart`
+
+Layout structure:
+```
+Scaffold
+ └─ AppBar (TitleAppbar — no actions)
+ └─ Column
+     ├─ _PeriodFilter       ← animated pill chips (Week/1M/3M/YTD)
+     └─ Expanded
+         └─ NestedScrollView
+             ├─ SliverToBoxAdapter
+             │   ├─ _HeroKpiCard        ← blue gradient, sparkline, trend badge
+             │   ├─ _QuickStatStrip     ← horizontal ListView, 4 chips
+             │   └─ _OnTimeDeliveryBanner ← green-accented row
+             └─ body: Column
+                 ├─ TabBar (sticky, isScrollable, 5 tabs)
+                 └─ Expanded → TabBarView
+                     ├─ Trip    → _metricGrid + _BohibaLineChart
+                     ├─ Fuel    → _metricGrid + _BohibaLineChart
+                     ├─ Driver  → _metricGrid + _BohibaBarChart
+                     ├─ Truck   → _metricGrid + _BohibaLineChart
+                     └─ Finance → _metricGrid + _BohibaBarChart
+```
+
+Key widget patterns:
+- `_TrendBadge(trendPct, onDark)` — reusable; green ↑ / red ↓; white when `onDark: true` (hero card)
+- `_metricGrid(List<AnalyticMetric>)` — top-level function returning a 2-column `GridView`
+- `_chartHeader(...)` — top-level function returning the title/value/trend row above each chart
+- `_BohibaLineChart` — touch-enabled, dot markers, subtle horizontal grid, area fill gradient
+- `_BohibaBarChart` — rounded bars (`BorderRadius.circular(4)`), touch tooltips, proper `bottomLabels`
+- `_AnalyticSkeleton` — uses existing `AppSkeletonLoader`; shown while `controller.isLoading`
+- `_SectionScrollView` — wraps each tab content in `SingleChildScrollView` with `bottom: 80.h` padding
+
+`flutter analyze` result: **0 issues**.
+
+#### 4c. Backend API spec — `docs/analytics_api_requirements.md`
+
+Six `GET` endpoints documented with full request/response JSON:
+
+| Endpoint | Returns |
+|----------|---------|
+| `GET /analytics/summary?period=` | Hero KPI, on-time rate, quick stats |
+| `GET /analytics/trips?period=` | Trip metrics + time-series chart data |
+| `GET /analytics/fuel?period=` | Fuel/maintenance metrics + cost chart |
+| `GET /analytics/drivers?period=` | Driver metrics + top-5 bar chart |
+| `GET /analytics/trucks?period=` | Truck utilization metrics + utilization chart |
+| `GET /analytics/finance?period=` | Revenue/margin/outstanding + revenue chart |
+
+Document also includes: DB source-table mapping, SQL scoping pattern, period boundary formulas, Redis caching strategy (15-min TTL, keyed by `owner_id + period`), and a 3-phase delivery plan (MVP = summary + trips + finance first).
+
+---
+
+### Session 6 — New-System Build Fixes + Forgot UUID Reactive Button
+
+**Context:** Codebase transferred to new development machine; two build-blocking errors appeared.
+
+#### 6a. Android KGP warning — `android/gradle.properties`
+
+| Before | After |
+|--------|-------|
+| `android.builtInKotlin=false` | `android.builtInKotlin=true` |
+| `android.newDsl=false` | `android.newDsl=true` |
+
+Flutter now owns the Kotlin Gradle Plugin; plugins no longer apply their own KGP, eliminating the warning for `device_info_plus`, `firebase_analytics`, `fluttertoast`, `package_info_plus`, `qr_bar_code`, `qr_code_scanner_plus`, `share_plus`, `widgets_easier`.
+
+#### 6b. `eva_icons_flutter` removed — 38 files
+
+`eva_icons_flutter 3.1.0` subclasses `IconData` which became `final` in Flutter 3.27+, causing a compile error. Fix:
+
+1. Removed `eva_icons_flutter` from `pubspec.yaml`.
+2. All 38 dart files: import replaced from `package:eva_icons_flutter/eva_icons_flutter.dart` → `package:remixicon/remixicon.dart` (already a project dependency).
+3. All `EvaIcons.xxx` call-sites replaced with `RemixIcons.yyy` equivalents (full mapping below).
+4. No shim or compat layer — direct `RemixIcons` references only.
+
+| EvaIcons | RemixIcons |
+|----------|-----------|
+| `activityOutline` | `pulse_line` |
+| `alertTriangle` | `alert_line` |
+| `arrowDown` | `arrow_down_line` |
+| `arrowIosForwardOutline` | `arrow_right_s_line` |
+| `arrowUp` | `arrow_up_line` |
+| `arrowheadRightOutline` | `arrow_right_s_line` |
+| `awardOutline` | `award_line` |
+| `barChart` | `bar_chart_line` |
+| `bellOutline` | `bell_line` |
+| `briefcase` | `briefcase_fill` |
+| `briefcaseOutline` | `briefcase_line` |
+| `calendarOutline` | `calendar_line` |
+| `carOutline` | `car_line` |
+| `checkmark` | `check_line` |
+| `cloudUploadOutline` | `upload_cloud_line` |
+| `compass` | `compass_fill` |
+| `compassOutline` | `compass_line` |
+| `creditCardOutline` | `bank_card_line` |
+| `diagonalArrowLeftDownOutline` | `arrow_left_down_line` |
+| `diagonalArrowRightUp` | `arrow_right_up_fill` |
+| `diagonalArrowRightUpOutline` | `arrow_right_up_line` |
+| `emailOutline` | `mail_line` |
+| `fileTextOutline` | `file_text_line` |
+| `funnelOutline` | `filter_line` |
+| `giftOutline` | `gift_line` |
+| `grid` | `grid_fill` |
+| `gridOutline` | `grid_line` |
+| `hashOutline` | `hashtag` |
+| `lock` | `lock_fill` |
+| `logOutOutline` | `logout_box_r_line` |
+| `moreVertical` | `more_2_fill` |
+| `people` | `team_fill` |
+| `personAddOutline` | `user_add_line` |
+| `personOutline` | `user_line` |
+| `pieChart` | `pie_chart_line` |
+| `pin` | `map_pin_fill` |
+| `plus` | `add_line` |
+| `questionMarkCircleOutline` | `question_line` |
+| `refreshOutline` | `refresh_line` |
+| `searchOutline` | `search_line` |
+| `settingsOutline` | `settings_line` |
+| `shareOutline` | `share_line` |
+| `shieldOutline` | `shield_line` |
+| `trash` | `delete_bin_line` |
+
+#### 6c. Forgot UUID reactive button — 2 files
+
+**Files:** `lib/controllers/forgot_uuid_controller.dart`, `lib/pages/authentication/password_screen/forgot_uuid_page.dart`
+
+| Before | After |
+|--------|-------|
+| `isButtonEnable()` sync method — button state evaluated once at build time only | `isButtonEnabled` (`RxBool`) — driven by `TextEditingController` listeners in `onInit` |
+| Button called `isButtonEnable()` directly, never re-evaluated on keystroke | Button wrapped in `Obx(() => PrimaryButton(...))` — rebuilds on every keystroke |
+| Validation: non-empty check only | Validation: `isEmail` (GetX) for email + `length == 10 && isValidPan` for PAN |
+| Old `isButtonEnable()` sync method | Removed |
+
+`_validateInputs()` is the single listener attached to both controllers. Fires on every keystroke, sets `isButtonEnabled.value`. Listeners are added in `onInit`, controllers disposed in `onClose`.
+
+---
+
 ## 6. Open Security Findings (Not Yet Fixed)
 
 Identified in Session 1 security audit. **Address before production release.**
@@ -455,6 +674,16 @@ Identified in Session 1 security audit. **Address before production release.**
 - [ ] **S4** — Add SSL/SPKI pinning (`network_security_config.xml` + Dio interceptor)
 - [ ] **S5** — Restrict Google Maps API key; rotate current key
 - [ ] **S7** — Fix `decryptText` to use the IV embedded in ciphertext, not a zero IV
+
+### 8.1b Analytics API Integration ✅ COMPLETE (Session 5)
+
+
+- [x] Backend implemented all 6 endpoints per `docs/analytics_api_requirements.md`
+- [x] `AnalyticService` (new) — 6 static methods via shared `DioService`
+- [x] `onPeriodChanged()` maps UI label → API period → fires all 6 in parallel with `Future.wait`
+- [x] All reactive fields (`RxList<AnalyticMetric>`, `RxList<FlSpot>`, etc.) populated from API
+- [x] `isLoading = true` before calls; `false` in `finally` — skeleton auto-renders during fetch
+- [x] Empty-spot and zero-maxY guards prevent chart crash on all-zero data
 
 ### 8.2 Short-term (Compliance & Stability)
 
@@ -507,7 +736,30 @@ A `FormField<T>` that operates in two modes:
 - Clear `✕` button resets form value and fires `onSearchChanged('')`
 - Edit-mode pre-population: set `initialValue` from reactive state; `didUpdateWidget` syncs text
 
-### 9.2 `AppDropdownSearchState` enum
+### 9.2 Analytics Page — `lib/pages/analytic/analytic_page.dart`
+
+Key private widgets and top-level helpers (all in one file):
+
+| Symbol | Type | Role |
+|--------|------|------|
+| `_PeriodFilter` | `StatelessWidget` | Animated pill chips — drives `controller.onPeriodChanged` |
+| `_HeroKpiCard` | `StatelessWidget` | Blue gradient card with sparkline + `_TrendBadge` |
+| `_QuickStatStrip` | `StatelessWidget` | Horizontal `ListView` of `_QuickStatChip` |
+| `_OnTimeDeliveryBanner` | `StatelessWidget` | Green-accented rate row |
+| `_MetricCard` | `StatelessWidget` | Icon + value + label + `_TrendBadge` in a bordered card |
+| `_TrendBadge` | `StatelessWidget` | Reusable ↑↓ badge; `onDark: true` flips to white for dark backgrounds |
+| `_metricGrid` | top-level fn | `GridView(crossAxisCount: 2)` of `_MetricCard` |
+| `_chartHeader` | top-level fn | Title / value / trend row above each chart |
+| `_BohibaLineChart` | `StatelessWidget` | Touch-enabled `LineChart` with tooltips, dots, gradient fill |
+| `_BohibaBarChart` | `StatelessWidget` | Touch-enabled `BarChart` with rounded bars and tooltips |
+| `_AnalyticSkeleton` | `StatelessWidget` | `AppSkeletonLoader` rows; shown while `isLoading` |
+| `_SectionScrollView` | `StatelessWidget` | Thin wrapper adding `bottom: 80.h` padding to each tab |
+
+Data model classes (defined in `analytic_conroller.dart`):
+- `AnalyticQuickStat` — `{ label, value, icon, color }`
+- `AnalyticMetric` — `{ label, value, trendPct, icon }`
+
+### 9.3 `AppDropdownSearchState` enum
 
 ```dart
 enum AppDropdownSearchState { idle, searching, success, noDataFound, error }
@@ -517,7 +769,7 @@ State machine owned by the controller. Rendered by the widget. Never drive state
 
 ---
 
-*Last updated: Session 3 — Company/Mineral search in AddTripPage*
-*Sessions completed: 3*
+*Last updated: Session 6 — Build fixes (KGP, eva_icons → RemixIcons) + Forgot UUID reactive button*
+*Sessions completed: 6*
 *Active branch: `developement`*
-*Last commit on branch: `05d1c8f` (Session 1 — 50 files; Sessions 2 & 3 not yet committed)*
+*Last commit on branch: `05d1c8f` (Session 1 — 50 files; Sessions 2–6 not yet committed)*

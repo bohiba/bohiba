@@ -1,3 +1,5 @@
+import 'package:bohiba/dist/enums/api_status_code.dart';
+
 import '/model/rating_model.dart';
 import '/services/rating_service.dart';
 import '/services/truck_service.dart';
@@ -18,7 +20,7 @@ class DriverService {
   static int _lastPage = 1;
 
   static Future<UserModel?> createDriver(
-      {required Map<String, dynamic> bodyObj, String? vehcileNumber}) async {
+      {required Map<String, dynamic> bodyObj, int? truckId}) async {
     if (!await DeviceInfoService.hasInternet()) return null;
     if (bodyObj['type'] == 0) {
       GlobalService.showDialog(
@@ -32,16 +34,17 @@ class DriverService {
     GlobalService.showProgress();
     ApiResponse response =
         await _dioService.post(ApiEndPoint.apiDriver, body: bodyObj);
-    switch (response.statusCode) {
-      case 201 || 200:
+    StatusCode statusCode = StatusCode.fromCode(response.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
+      case StatusCode.created:
         UserModel driver = UserModel.fromJson(response.data);
         int insertSuccess = await insertDriver(driver: driver);
         if (insertSuccess > 0) {
           await ProfileService.updateDriverNo(deleteDriver: false);
         }
-        if (vehcileNumber != null) {
-          await TruckService.assignDriver(
-              vhNumber: vehcileNumber, driver: driver);
+        if (truckId != null) {
+          await TruckService.assignDriver(truckId: truckId, driver: driver);
         }
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
@@ -50,12 +53,13 @@ class DriverService {
           desc: response.message,
         );
         return driver;
-      case 401:
+      case StatusCode.badRequest:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
           title: 'Driver',
-          desc: response.message,
+          desc: response.errorMessage,
+          showTimer: 10,
         );
         return null;
       default:
@@ -100,15 +104,16 @@ class DriverService {
       ApiResponse response = await _dioService
           .get('${ApiEndPoint.apiDriver}?pageNo=$_currentPage');
 
-      switch (response.statusCode) {
-        case 200:
+      StatusCode statusCode = StatusCode.fromCode(response.statusCode);
+      switch (statusCode) {
+        case StatusCode.ok:
           if (response.pagination != null) {
             Map<dynamic, dynamic> paginate = response.pagination!;
             _currentPage = paginate['current_page'] + 1;
             _lastPage = paginate['last_page'];
           }
 
-          List<dynamic> driverList = response.data as List;
+          List<dynamic> driverList = response.data as List<dynamic>;
           List<Map<String, dynamic>> dbDriverList = driverList.map((json) {
             return UserModel.toDB(json);
           }).toList();
@@ -121,7 +126,7 @@ class DriverService {
             return UserModel.fromDB(json);
           }).toList();
           return model;
-        case 401:
+        case StatusCode.unauthorized:
           if (showProgress) GlobalService.dismissProgress();
           GlobalService.showSnackBar(
             status: AlertStatus.warning,

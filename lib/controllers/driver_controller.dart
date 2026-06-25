@@ -53,6 +53,14 @@ class DriverController extends GetxController {
     });
   }
 
+  Future<int> deleteDriver({required int id}) async {
+    int success = await DriverService.deleteDriver(driverId: id);
+    if (success > 0) {
+      // Success
+    }
+    return success;
+  }
+
   Future<void> getDriverInfo({MethodType methodType = MethodType.local}) async {
     UserModel? driver =
         await DriverService.getDriver(id: driverId.value, type: methodType);

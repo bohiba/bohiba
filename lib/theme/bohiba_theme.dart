@@ -77,7 +77,7 @@ class BohibaTheme {
         primary: BohibaColors.primaryColor,
         onPrimary: BohibaColors.successColor,
         secondary: BohibaColors.black,
-        onSecondary: BohibaColors.white,
+        onSecondary: BohibaColors.secoundaryColor,
         tertiary: BohibaColors.warningColor,
         onTertiary: BohibaColors.black,
         error: BohibaColors.errorColor,

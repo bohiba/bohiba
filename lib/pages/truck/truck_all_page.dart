@@ -1,5 +1,3 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '/model/truck_model.dart';
 
 import 'truck_tile.dart';
@@ -33,7 +31,7 @@ class AllTruckPage extends GetView<TruckAllController> {
             PermissionWidget(
               permission: RolePermissionService.addTrucks,
               child: AppBarIconBox(
-                icon: const FaIcon(FontAwesomeIcons.plus),
+                icon: const Icon(Icons.add_outlined),
                 onTap: () {
                   navState.pushNamed(AppRoute.addTruck).then((value) async {
                     if (value != null) {
@@ -83,7 +81,7 @@ class AllTruckPage extends GetView<TruckAllController> {
                     ? SizedBox.shrink()
                     : ListView.builder(
                         padding: EdgeInsets.only(
-                          top: ScreenUtils.height10,
+                          top: ScreenUtils.height5,
                           bottom: ScreenUtils.height5,
                           left: ScreenUtils.width15,
                           right: ScreenUtils.width15,
@@ -116,12 +114,12 @@ class AllTruckPage extends GetView<TruckAllController> {
                                 },
                               },
                               onClick: () {
-                                navState
-                                    .pushNamed(
+                                navState.pushNamed(
                                   AppRoute.truck,
-                                  arguments: truck.regdNumber,
-                                )
-                                    .then(
+                                  arguments: {
+                                    "truck_id": truck.id,
+                                  },
+                                ).then(
                                   (onValue) async {
                                     if (onValue != null) {
                                       controller.countUpdate++;

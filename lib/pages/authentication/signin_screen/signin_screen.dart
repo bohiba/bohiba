@@ -154,15 +154,20 @@ class SignInScreen extends GetView<AuthController> {
                         ],
                       ),
 
-                      PrimaryButton(
-                        label: 'Sign In',
-                        onPressed: () async {
-                          await controller.signin(
-                            uuid: controller.idController.text.trim(),
-                            password: controller.pwdController.text.trim(),
-                          );
-                        },
-                      ),
+                      Obx(() {
+                        return PrimaryButton(
+                          label: 'Sign In',
+                          onPressed: controller.isButtonEnabled.value
+                              ? () async {
+                                  await controller.signin(
+                                    uuid: controller.idController.text.trim(),
+                                    password:
+                                        controller.pwdController.text.trim(),
+                                  );
+                                }
+                              : null,
+                        );
+                      }),
                     ],
                   ),
                 ),

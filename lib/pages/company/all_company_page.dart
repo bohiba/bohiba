@@ -20,7 +20,7 @@ class AllCompanyPage extends GetView<AllCompanyController> {
             padding: EdgeInsets.only(
               left: ScreenUtils.height15,
               right: ScreenUtils.height15,
-              top: ScreenUtils.height10,
+              top: ScreenUtils.height5,
             ),
             itemCount: controller.arrMines.length,
             itemBuilder: (context, index) {

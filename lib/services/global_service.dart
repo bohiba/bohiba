@@ -261,28 +261,29 @@ class GlobalService {
     String title = 'Bohiba',
     String desc = 'Something went wrong',
     Widget? actionButton,
+    int? showTimer,
   }) {
     Color color = bohibaTheme.primaryColor;
     IconData iconData = Icons.error;
     switch (status) {
       case AlertStatus.success:
-        color = bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.95);
+        color = bohibaTheme.colorScheme.onPrimary;
         iconData = Remix.checkbox_circle_fill;
         break;
       case AlertStatus.info:
-        color = bohibaTheme.colorScheme.primary.withValues(alpha: 0.95);
+        color = bohibaTheme.colorScheme.primary;
         iconData = Icons.info;
         break;
       case AlertStatus.warning:
-        color = bohibaTheme.colorScheme.error.withValues(alpha: 0.95);
+        color = bohibaTheme.colorScheme.error;
         iconData = Icons.warning;
         break;
       case AlertStatus.failure:
-        color = bohibaTheme.colorScheme.tertiary.withValues(alpha: 0.95);
+        color = bohibaTheme.colorScheme.tertiary;
         iconData = Icons.error;
         break;
       case AlertStatus.noInternet:
-        color = bohibaTheme.colorScheme.error.withValues(alpha: 0.95);
+        color = bohibaTheme.colorScheme.error;
         iconData = Icons.wifi_off_rounded;
         break;
     }
@@ -312,7 +313,7 @@ class GlobalService {
         borderWidth: 0.0,
         margin: EdgeInsets.symmetric(horizontal: 15.w),
         padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-        duration: const Duration(seconds: 3),
+        duration: Duration(seconds: showTimer ?? 3),
         mainButton: actionButton ??
             TextButton(
               onPressed: () {

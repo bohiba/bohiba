@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:bohiba/dist/enums/api_status_code.dart';
+
 import '../dist/enums/app_enums.dart';
 import '../model/user_model.dart';
 import '/model/profile_model.dart';
@@ -28,8 +30,9 @@ class TruckService {
       body: bodyObj,
     );
 
-    switch (serviceResponse.statusCode) {
-      case 201:
+    StatusCode statusCode = StatusCode.fromCode(serviceResponse.statusCode);
+    switch (statusCode) {
+      case StatusCode.created:
         Map<String, dynamic> resObj = TruckModel.toDB(serviceResponse.data);
         int insert = await insertTruck(dbMap: resObj);
         await ProfileService.updateTruckNo(deleteTruck: false);
@@ -42,12 +45,20 @@ class TruckService {
           );
         }
         return insert;
-      case 401:
+      case StatusCode.badRequest:
         GlobalService.dismissProgress();
         GlobalService.showDialog(
           status: AlertStatus.info,
-          title: 'Truck',
-          description: serviceResponse.message,
+          title: 'Failure',
+          description: serviceResponse.errorMessage,
+        );
+        return 0;
+      case StatusCode.unprocessableEntity:
+        GlobalService.dismissProgress();
+        GlobalService.showDialog(
+          status: AlertStatus.info,
+          title: 'Failure',
+          description: serviceResponse.errorMessage,
         );
         return 0;
       default:
@@ -262,7 +273,7 @@ class TruckService {
   }
 
   static Future<int> assignDriver({
-    required String vhNumber,
+    required int truckId,
     required UserModel driver,
   }) async {
     if (!await DeviceInfoService.hasInternet()) return 0;
@@ -270,26 +281,26 @@ class TruckService {
     Map<String, dynamic> bodyObj = {
       'driver_uuid': driver.profile?.driverUuid,
     };
-    ApiResponse apiResponse = await _dioService.post(
-      '${ApiEndPoint.apiAssignDriver}/$vhNumber',
+    ApiResponse apiResponse = await _dioService.put(
+      '${ApiEndPoint.apiAssignDriver}/$truckId',
       body: bodyObj,
     );
 
     GlobalService.printHandler(apiResponse.message);
-
-    switch (apiResponse.statusCode) {
-      case 200:
+    StatusCode statusCode = StatusCode.fromCode(apiResponse.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
         String queryUpdate = ''' UPDATE $tblTrucks SET
           driverId = ${driver.id}
         , driverImage = ${driver.profile?.image != null ? "'${driver.profile?.image}'" : 'NULL'}
         , driverUuid = ${driver.profile?.driverUuid != null ? "'${driver.profile?.driverUuid}'" : 'NULL'}
         , driverName = ${driver.profile?.name != null ? "'${driver.profile?.name}'" : 'NULL'}
         , driverMobileNumber = ${driver.profile?.mobileNumber != null ? "'${driver.profile?.mobileNumber}'" : 'NULL'}
-        WHERE vhNumber = ?
+        WHERE id = ?
          ''';
         int updateSuccess = await _databaseService.updateData(
           queryUpdate,
-          argument: [vhNumber],
+          argument: [truckId],
         );
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
@@ -298,14 +309,18 @@ class TruckService {
           desc: apiResponse.message,
         );
         return updateSuccess;
-      case 401:
+      case StatusCode.badRequest:
         GlobalService.dismissProgress();
-        GlobalService.showAppToast(message: apiResponse.message);
+        GlobalService.showAppToast(message: apiResponse.errorMessage);
+        return 0;
+      case StatusCode.internalServerError:
+        GlobalService.dismissProgress();
+        GlobalService.showAppToast(
+            message: 'Something went wrong. Please try again.');
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(
-            status: AlertStatus.failure, desc: 'Failed to assign driver.');
+        GlobalService.showAppToast(message: apiResponse.errorMessage);
         return 0;
     }
   }
@@ -314,8 +329,8 @@ class TruckService {
     if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
-    ApiResponse serviceResponse = await _dioService
-        .post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.regdNumber}');
+    ApiResponse serviceResponse =
+        await _dioService.post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.id}');
 
     switch (serviceResponse.statusCode) {
       case 200:

@@ -26,7 +26,7 @@ class SmallTabComponent extends StatelessWidget {
         height: ScreenUtils.height47,
         width: ScreenUtils.width * 0.25,
         margin: EdgeInsets.only(right: ScreenUtils.height10),
-        decoration: TileDecorative(color: bohibaTheme.colorScheme.onSecondary),
+        decoration: TileDecorative(color: bohibaTheme.colorScheme.surface),
         child: Row(
           children: [
             Container(
@@ -36,7 +36,7 @@ class SmallTabComponent extends StatelessWidget {
               decoration: TileDecorative(color: bohibaTheme.primaryColor),
               child: Icon(
                 icon,
-                color: bohibaTheme.colorScheme.onSecondary,
+                color: bohibaTheme.colorScheme.surface,
               ),
             ),
             Expanded(

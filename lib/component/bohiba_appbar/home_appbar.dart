@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '/pages/widget/role_widget.dart';
 import '/component/image_path.dart';
@@ -208,8 +207,8 @@ class HomeAppBar extends GetView<HomeController>
                   }
                 });
               },
-              icon: FaIcon(
-                FontAwesomeIcons.plus,
+              icon: Icon(
+                Icons.add_rounded,
                 color: controller.isScrolled.value
                     ? bohibaTheme.iconTheme.color
                     : bohibaTheme.colorScheme.surface,

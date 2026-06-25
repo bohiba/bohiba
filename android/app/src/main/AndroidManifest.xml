@@ -60,6 +60,24 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCN0tM4lVbUAKsRqHY1Ixu5WdD1BQL7t60" />
+
+        <!--
+          Tell FCM which channel to use when the OS shows a background/terminated
+          notification automatically (i.e. when the message has a `notification`
+          block). Must match _kChannelId in firebase_app_service.dart.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="bohiba_alerts" />
+
+        <!--
+          Default notification icon for FCM-generated banners (background/terminated).
+          Without this the icon defaults to the app icon, which may appear as a
+          plain white square on Android 5+.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
     </application>
     <queries>
         <intent>

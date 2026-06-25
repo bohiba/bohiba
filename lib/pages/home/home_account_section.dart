@@ -1,3 +1,4 @@
+import 'package:bohiba/pages/widget/role_widget.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:flutter/material.dart';
 import '/component/screen_utils.dart';
@@ -12,11 +13,8 @@ class HomeAccountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NavigatorState navigate = Navigator.of(context);
-    return GestureDetector(
-      onTap: () {
-        navigate.pushNamed(AppRoute.walletScreen);
-      },
-      child: Padding(
+    return RoleWidget(
+      truckOwnerWidget: Padding(
         padding: EdgeInsets.only(
           top: ScreenUtils.width5,
           left: ScreenUtils.width15,
@@ -34,7 +32,7 @@ class HomeAccountSection extends StatelessWidget {
                   },
                   label: 'Analytic',
                   widget: const Icon(
-                    RemixIcons.pie_chart_line,
+                    RemixIcons.pie_chart_fill,
                   ),
                   width: ScreenUtils.width * 0.45,
                   height: ScreenUtils.height * 0.043,

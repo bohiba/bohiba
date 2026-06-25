@@ -107,9 +107,8 @@ class DriverAllPage extends GetView<DriverAllController> {
                         ActionType.other
                       ],
                       onPressed: () {
-                        navState
-                            .pushNamed(AppRoute.driver, arguments: driver.id)
-                            .then(
+                        navState.pushNamed(AppRoute.driver,
+                            arguments: {"driver_id": driver.id}).then(
                           (onValue) async {
                             if (onValue != null) {
                               await controller.getDriverList();

@@ -49,7 +49,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
         keyboardType: TextInputType.visiblePassword,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          prefixIcon: Icon(Remix.lock_fill),
+          prefixIcon: Icon(Icons.lock_rounded),
           suffixIcon: GestureDetector(
             onTap: () {
               setState(() {
@@ -59,7 +59,7 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
             child: CircleAvatar(
               backgroundColor: BohibaColors.transparent,
               child: Icon(
-                showPassword ? Remix.eye_close_line : Remix.eye_line,
+                showPassword ? Icons.visibility_off_rounded : Remix.eye_fill,
                 size: 16,
                 color: bohibaTheme.primaryIconTheme.color,
               ),

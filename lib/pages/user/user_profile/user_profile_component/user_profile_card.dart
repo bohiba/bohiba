@@ -48,6 +48,7 @@ class UserProfileCard extends GetView<DashboardController> {
                   )
                 : RepaintBoundary(
                     child: CachedNetworkImage(
+                      fit: BoxFit.cover,
                       imageUrl: "${ImagePath.profileImage}/$userImage",
                       width: ScreenUtils.width * 0.25,
                       height: ScreenUtils.width * 0.25,

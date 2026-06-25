@@ -12,7 +12,15 @@ class PrimaryButton extends StatelessWidget {
   final Color? color;
   final EdgeInsetsGeometry? padding;
   final TextStyle? textStyle;
-  const PrimaryButton({super.key, this.label = "Label", this.onPressed, this.width, this.height, this.color, this.padding, this.textStyle});
+  const PrimaryButton(
+      {super.key,
+      this.label = "Label",
+      this.onPressed,
+      this.width,
+      this.height,
+      this.color,
+      this.padding,
+      this.textStyle});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +29,10 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            fixedSize: Size(width ?? ScreenUtils.width, height ?? 32.h), backgroundColor: color ?? bohibaTheme.primaryColor, disabledBackgroundColor: color?.withValues(alpha: 0.25) ?? bohibaTheme.colorScheme.onSurface),
+          fixedSize: Size(width ?? ScreenUtils.width, height ?? 32.h),
+          backgroundColor: color ?? bohibaTheme.primaryColor,
+          disabledBackgroundColor: bohibaTheme.colorScheme.onSecondary,
+        ),
         child: Text(
           label.toUpperCase(),
           maxLines: 1,

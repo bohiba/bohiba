@@ -467,4 +467,59 @@ class AuthService {
         return statusCode;
     }
   }
+
+  static Future<StatusCode> forgotUUID({
+    required Map<String, dynamic> bodyObj,
+  }) async {
+    if (!await DeviceInfoService.hasInternet()) {
+      return StatusCode.networkError;
+    }
+    GlobalService.showProgress();
+    ApiResponse serviceResponse = await _dioService.post(
+      ApiEndPoint.apiForgotUUID,
+      body: bodyObj,
+      withToken: false,
+    );
+    await clearApp();
+    GlobalService.dismissProgress();
+    StatusCode statusCode = StatusCode.fromCode(serviceResponse.statusCode);
+    switch (statusCode) {
+      case StatusCode.ok:
+        GlobalService.showSnackBar(
+          status: AlertStatus.success,
+          desc: serviceResponse.message,
+        );
+        return statusCode;
+      case StatusCode.notFound:
+        GlobalService.showSnackBar(
+          status: AlertStatus.info,
+          desc: serviceResponse.errorMessage,
+        );
+        return statusCode;
+      case StatusCode.conflict:
+        GlobalService.showSnackBar(
+          status: AlertStatus.info,
+          desc: serviceResponse.errorMessage,
+        );
+        return statusCode;
+      case StatusCode.tooManyRequests:
+        GlobalService.showSnackBar(
+          status: AlertStatus.info,
+          desc: serviceResponse.errorMessage,
+        );
+        return statusCode;
+      case StatusCode.unprocessableEntity:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          desc: serviceResponse.errorMessage,
+        );
+        return statusCode;
+      default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          desc: serviceResponse.errorMessage,
+        );
+        return statusCode;
+    }
+  }
 }

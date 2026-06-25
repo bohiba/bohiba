@@ -1,7 +1,8 @@
+import 'package:bohiba/component/bohiba_inputfield/email_inputfield.dart';
+
 import '/controllers/forgot_uuid_controller.dart';
 
 import '/extensions/bohiba_extension.dart';
-import '/component/bohiba_inputfield/input_formatters/aadhar_number_formatter.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 
@@ -15,6 +16,7 @@ class ForgotUuidPage extends GetView<ForgotUuidController> {
 
   @override
   Widget build(BuildContext context) {
+    final navigateState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(),
       body: Padding(
@@ -38,9 +40,15 @@ class ForgotUuidPage extends GetView<ForgotUuidController> {
                   color: bohibaTheme.textTheme.titleSmall!.color,
                 ),
               ),
+              EmailInputField(
+                hintText: 'Email',
+                controller: controller.emailController,
+                showIcon: false,
+              ),
               TextInputField(
                 hintText: 'PAN Number',
                 maxLength: 10,
+                controller: controller.panController,
                 keyboardType: TextInputType.text,
                 textCapitalization: TextCapitalization.characters,
                 nextActionType: TextInputAction.next,
@@ -55,26 +63,19 @@ class ForgotUuidPage extends GetView<ForgotUuidController> {
                   }
                 },
               ),
-              TextInputField(
-                hintText: 'Aadhar Number',
-                maxLength: 14,
-                inputFormatters: [AadhaarNumberFormatter()],
-                keyboardType: TextInputType.number,
-                nextActionType: TextInputAction.next,
-                validateField: (inputValue) {
-                  if (inputValue == null || inputValue.isEmpty) {
-                    return 'Aadhar number cannot be empty';
-                  } else if (inputValue.length != 14 ||
-                      !inputValue.isValidAadhaar) {
-                    return 'Please enter valid Aadhar number';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              PrimaryButton(
-                onPressed: () {},
-                label: 'Verify',
+              Obx(
+                () => PrimaryButton(
+                  onPressed: controller.isButtonEnabled.value
+                      ? () async {
+                          await controller.forgotUUID().then((onValue) {
+                            if (onValue != null && onValue == true) {
+                              navigateState.pop();
+                            }
+                          });
+                        }
+                      : null,
+                  label: 'Verify',
+                ),
               )
             ],
           ),

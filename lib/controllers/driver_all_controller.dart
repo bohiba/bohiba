@@ -23,26 +23,20 @@ class DriverAllController extends GetxController {
     });
   }
 
-  Future<int> deleteDriver({required int id}) async {
-    int success = await DriverService.deleteDriver(driverId: id);
-    if (success > 0) {
-      // Success
-    }
-    return success;
-  }
-
   Future<List<UserModel>?> getDriverList({
     MethodType type = MethodType.local,
     bool resetList = false,
   }) async {
-    List<UserModel>? driverList = await DriverService.getAllDriver(methodType: type, reset: resetList);
+    List<UserModel>? driverList =
+        await DriverService.getAllDriver(methodType: type, reset: resetList);
     if (driverList != null) {
       arrDriver.clear();
       arrDriver.addAll(driverList);
       return driverList;
     } else {
       strErrorTitle.value = 'Driver Not Found';
-      strErrorDes.value = 'Add a driver and assign them driver and start trips quickly';
+      strErrorDes.value =
+          'Add a driver and assign them driver and start trips quickly';
     }
     return null;
   }

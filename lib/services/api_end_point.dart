@@ -20,6 +20,7 @@ class ApiEndPoint {
       '$baseUrl/authentication/reset-password';
   static const String apiVerifyForgotPasswordOtp =
       '$baseUrl/authentication/verify-forgot-password-otp';
+  static const String apiForgotUUID = '$baseUrl/authentication/forgot-uuid';
 
   static const String apiLogin = '$baseUrl/authentication/login';
   static const String apiLogout = '$baseUrl/logout';

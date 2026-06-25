@@ -1,5 +1,3 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +49,7 @@ class _DateInputFieldState extends State<DateInputField> {
           hintText: widget.hintText,
           hintStyle: bohibaTheme.inputDecorationTheme.hintStyle,
           prefixIcon:
-              widget.showPrefixIcon ? FaIcon(FontAwesomeIcons.calendar) : null,
+              widget.showPrefixIcon ? Icon(Icons.calendar_month_rounded) : null,
           border: bohibaTheme.inputDecorationTheme.border,
           prefixIconColor: bohibaTheme.inputDecorationTheme.prefixIconColor,
           enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,

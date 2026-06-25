@@ -117,14 +117,14 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             tooltip: "Mines",
           ),
           const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.compassDrafting),
-            activeIcon: FaIcon(FontAwesomeIcons.compass),
+            icon: Icon(Remix.compass_discover_line),
+            activeIcon: Icon(Remix.compass_discover_fill),
             label: "Explore",
             tooltip: "Explore",
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.gaugeSimple),
-            activeIcon: FaIcon(FontAwesomeIcons.gauge),
+            icon: Icon(Remix.dashboard_line),
+            activeIcon: Icon(Remix.dashboard_horizontal_fill),
             label: "Dashboard",
             tooltip: "Dashboard",
           )
@@ -145,20 +145,20 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             tooltip: "Home",
           ),
           const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.compassDrafting),
-            activeIcon: FaIcon(FontAwesomeIcons.compass),
+            icon: Icon(Remix.compass_discover_line),
+            activeIcon: Icon(Remix.compass_discover_fill),
             label: "Trips",
             tooltip: "Trips",
           ),
           const BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.suitcase),
-            activeIcon: FaIcon(FontAwesomeIcons.suitcase),
+            icon: Icon(Remix.briefcase_line),
+            activeIcon: Icon(Remix.briefcase_fill),
             label: "Jobs",
             tooltip: "Jobs",
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.gaugeSimple),
-            activeIcon: FaIcon(FontAwesomeIcons.gauge),
+            icon: Icon(Remix.dashboard_line),
+            activeIcon: Icon(Remix.dashboard_horizontal_fill),
             label: "Dashboard",
             tooltip: "Dashboard",
           )

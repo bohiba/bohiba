@@ -12,6 +12,16 @@ class AuthController extends GetxController {
   final TextEditingController idController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
 
+  final RxBool isButtonEnabled = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    idController.addListener(listener);
+    pwdController.addListener(listener);
+  }
+
   Future<StatusCode> signin({
     required String uuid,
     required String password,
@@ -39,11 +49,19 @@ class AuthController extends GetxController {
     return null;
   }
 
+  void listener() {
+    isButtonEnabled.value = idController.text.isNotEmpty &&
+        idController.text.trim().length == 6 &&
+        pwdController.text.isNotEmpty &&
+        pwdController.text.length >= 4;
+  }
+
   @override
   void onClose() {
     signInFormKey = GlobalKey<FormState>();
     idController.dispose();
     pwdController.dispose();
+    isButtonEnabled.close();
     super.onClose();
   }
 }
