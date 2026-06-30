@@ -1,7 +1,6 @@
 import '/model/user_model.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
-import '/services/global_service.dart';
 import '/controllers/truck_edit_controller.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
@@ -43,8 +42,6 @@ class TruckEditPage extends GetView<EditTruckController> {
                           UserProfile(name: controller.truck.value.driverName)),
                   onChanged: (p0) {
                     if (p0 != null) controller.driverModel.value = p0;
-                    GlobalService.printHandler(
-                        'Name: ${controller.driverModel.value.profile?.name.toString()}');
                   },
                   menuController: controller.assignDriverCtlr,
                 ),
@@ -69,34 +66,41 @@ class TruckEditPage extends GetView<EditTruckController> {
                   ),
                 ),*/
                 Spacer(),
-                PrimaryButton(
-                  onPressed: () async {
-                    int updated = await controller.assignDriver(
-                      driverInfo: controller.driverModel.value,
-                    );
-                    if (updated > 0) {
-                      navigatorState.pop(true);
-                    }
-                  },
-                  label: 'Assign Driver',
-                ),
-                PrimaryButton(
-                  label: 'Remove Driver',
-                  color: BohibaColors.warningColor,
-                  onPressed: controller.isDriverAssigned.isFalse
-                      ? null
-                      : () async {
-                          if (controller.truck.value.regdNumber == null) {
-                            return;
-                          } else {
-                            int removed = await controller.removeDriver(
-                              truckInfo: controller.truck.value,
-                            );
-                            if (removed > 0) {
-                              navigatorState.pop(true);
-                            }
-                          }
-                        },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    PrimaryButton(
+                      width: ScreenUtils.width * 0.45,
+                      label: 'Remove Driver',
+                      color: BohibaColors.warningColor,
+                      onPressed: controller.isDriverAssigned.isFalse
+                          ? null
+                          : () async {
+                              if (controller.truck.value.regdNumber == null) {
+                                return;
+                              } else {
+                                int removed = await controller.removeDriver(
+                                  truckInfo: controller.truck.value,
+                                );
+                                if (removed > 0) {
+                                  navigatorState.pop(true);
+                                }
+                              }
+                            },
+                    ),
+                    PrimaryButton(
+                      width: ScreenUtils.width * 0.45,
+                      onPressed: () async {
+                        int updated = await controller.assignDriver(
+                          driverInfo: controller.driverModel.value,
+                        );
+                        if (updated > 0) {
+                          navigatorState.pop(true);
+                        }
+                      },
+                      label: 'Assign Driver',
+                    ),
+                  ],
                 ),
               ],
             ),

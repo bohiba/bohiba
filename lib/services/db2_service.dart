@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bohiba/config/app_config.dart';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -35,7 +37,7 @@ class DatabaseService {
       filePath = await getDatabasesPath();
     }
 
-    String dbPath = '$filePath/bohiba.db';
+    String dbPath = '$filePath/${AppConfig.dbName}';
     GlobalService.printHandler('DB Path: $dbPath');
     return openDatabase(
       dbPath,

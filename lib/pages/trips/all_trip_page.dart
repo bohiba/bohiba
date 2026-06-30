@@ -1,5 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:remixicon/remixicon.dart';
 
 import 'trip_tile.dart';
 
@@ -118,7 +119,10 @@ class _AllTripPageState extends State<AllTripPage>
                 ),
               );
             },
-            icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+            icon: Icon(
+              Icons.search_sharp,
+              size: 22,
+            ),
           ),
           /*AppBarIconBox(
             onTapDown: (tapDownDetails) => showMenu(
@@ -170,7 +174,7 @@ class _AllTripPageState extends State<AllTripPage>
           PermissionWidget(
             permission: RolePermissionService.addTrips,
             child: AppBarIconBox(
-              icon: const FaIcon(FontAwesomeIcons.plus),
+              icon: Icon(RemixIcons.add_fill),
               onTap: () {
                 navigatorState.pushNamed(AppRoute.addTrip).then(
                   (value) async {

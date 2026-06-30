@@ -1,3 +1,5 @@
+import 'package:bohiba/config/app_config.dart';
+
 import '/dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
@@ -203,6 +205,16 @@ class DashboardPage extends GetView<DashboardController> {
                   },
                   icon: RemixIcons.question_line,
                   title: 'Contact & Support',
+                ),
+                Visibility(
+                  visible: AppConfig.isBeta,
+                  child: SingleTileTabComponent(
+                    onTap: () {
+                      navigator.pushNamed(AppRoute.flavorConfig);
+                    },
+                    icon: Icons.manage_accounts,
+                    title: 'Flavor Configs',
+                  ),
                 ),
                 SingleTileTabComponent(
                   onTap: () {

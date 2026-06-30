@@ -1,8 +1,7 @@
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
-import 'package:remixicon/remixicon.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import '/component/bohiba_buttons/primary_button.dart';

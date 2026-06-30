@@ -15,6 +15,8 @@ class DriverAllController extends GetxController {
   RxString strErrorDes = ''.obs;
   RxString strErrorTitle = ''.obs;
 
+  RxBool popResult = false.obs;
+
   @override
   void onInit() {
     super.onInit();

@@ -332,27 +332,18 @@ class TruckService {
     ApiResponse serviceResponse =
         await _dioService.post('${ApiEndPoint.apiRemoveDriver}/${oldTruck.id}');
 
-    switch (serviceResponse.statusCode) {
-      case 200:
-        String queryUpdate = ''' UPDATE $tblTrucks SET
-          driverId = NULL
-        , driverImage = NULL
-        , driverUuid = NULL
-        , driverName = NULL
-        , driverMobileNumber = NULL
-        WHERE vhNumber = ?
-         ''';
-        int updateSuccess = await _databaseService.updateData(
-          queryUpdate,
-          argument: ['${oldTruck.regdNumber}'],
-        );
+    StatusCode statusCode = StatusCode.fromCode(serviceResponse.statusCode);
+
+    switch (statusCode) {
+      case StatusCode.ok:
+        int updateSuccess = await updateDriverDetail(oldTruck.id!);
         GlobalService.dismissProgress();
         if (updateSuccess > 0) {
           GlobalService.showSnackBar(
               status: AlertStatus.success, desc: serviceResponse.message);
         }
         return updateSuccess;
-      case 401:
+      case StatusCode.badRequest:
         GlobalService.dismissProgress();
         GlobalService.showSnackBar(
             status: AlertStatus.info, desc: serviceResponse.message);
@@ -441,8 +432,10 @@ class TruckService {
     if (dbDeleted > 0) {
       ApiResponse serviceResponse =
           await _dioService.delete("${ApiEndPoint.apiTrucks}/$truckId");
-      switch (serviceResponse.statusCode) {
-        case 200:
+
+      StatusCode statusCode = StatusCode.fromCode(serviceResponse.statusCode);
+      switch (statusCode) {
+        case StatusCode.ok:
           ProfileModel? profile = await ProfileService.getProfile();
           if (profile != null &&
               profile.trucks != null &&
@@ -462,12 +455,12 @@ class TruckService {
           );
 
           return 1;
-        case 401:
+        case StatusCode.badRequest:
           GlobalService.dismissProgress();
           GlobalService.showSnackBar(
             status: AlertStatus.warning,
             title: 'Truck',
-            desc: serviceResponse.message,
+            desc: serviceResponse.errorMessage,
           );
           return 0;
         default:
@@ -484,6 +477,24 @@ class TruckService {
       GlobalService.showAppToast(message: 'Failed to delete truck.');
       return 0;
     }
+  }
+
+  /*======================  SQL INJECTION VULNERABILITY  =============================*/
+
+  static Future<int> updateDriverDetail(int truckId) async {
+    String queryUpdate = ''' UPDATE $tblTrucks SET
+          driverId = NULL
+        , driverImage = NULL
+        , driverUuid = NULL
+        , driverName = NULL
+        , driverMobileNumber = NULL
+        WHERE id = ?
+         ''';
+    int updateSuccess = await _databaseService.updateData(
+      queryUpdate,
+      argument: [truckId],
+    );
+    return updateSuccess;
   }
 
   static Future<int> insertAll(List<Map<String, dynamic>> listTruck) async {

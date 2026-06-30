@@ -33,7 +33,13 @@ class HomeDriverSection extends GetView<HomeController> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        navigatorState.pushNamed(AppRoute.allDriver);
+                        navigatorState
+                            .pushNamed(AppRoute.allDriver)
+                            .then((onValue) {
+                          if (onValue != null && onValue == true) {
+                            controller.getDriverList();
+                          }
+                        });
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -87,7 +93,7 @@ class HomeDriverSection extends GetView<HomeController> {
                             (onValue) async {
                               if (onValue != null) {
                                 await controller.getDriverList();
-                                controller.arrDriver.refresh();
+                                // controller.arrDriver.refresh();
                               }
                             },
                           );

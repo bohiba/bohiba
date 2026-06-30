@@ -57,26 +57,42 @@ extension EnumMinesStatusExtension on String {
 extension MinesStatusColorExtension on String? {
   Color get minesStatusColor {
     switch (this) {
-      case 'BLOCKED':
-        return Colors.red;
-      case 'ACTIVE':
+      case 'OPERATING':
         return Colors.green;
+      case 'UNDER REVIEW':
+        return Colors.indigo;
       case 'INACTIVE':
-        return Colors.yellow;
+        return Colors.amber;
       case 'UNDER MAINTENANCE':
         return Colors.orange;
+      case 'LIMITED OPERATION':
+        return Colors.lightGreen;
       case 'TEMPORARILY CLOSED':
-        return Colors.purple;
+        return Colors.deepOrange;
+      case 'PROPOSED':
+        return Colors.cyan;
       case 'PERMANENTLY CLOSED':
-        return Colors.pink;
-      case 'SUSPENDED':
-        return Colors.brown;
+        return Colors.red;
+      case 'COMPLIANCE HOLD':
+        return Colors.deepPurple;
+      case 'BLACKLISTED':
+        return Colors.black87;
       case 'ARCHIVED':
         return Colors.grey;
-      case 'UNDER VERIFICATION':
-        return Colors.blue;
+      case 'REJECTED':
+        return Colors.redAccent;
+      case 'SUSPENDED':
+        return Colors.brown;
+      case 'RETIRED':
+        return Colors.blueGrey;
+      case 'SHELVED':
+        return Colors.teal;
+      case 'BLOCKED':
+        return Colors.red.shade900;
+      case 'NON':
+        return Colors.grey.shade400;
       default:
-        return Colors.yellow;
+        return Colors.grey;
     }
   }
 }

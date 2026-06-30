@@ -29,11 +29,13 @@ class DriverAllPage extends GetView<DriverAllController> {
                 navState.pushNamed(AppRoute.addDriver).then((onValue) async {
                   if (onValue != null && onValue != false) {
                     await controller.getDriverList();
+                    controller.popResult.value = true;
                   }
                 });
               },
             )
           ],
+          popResult: controller.popResult.value,
         ),
         body: SmartRefresher(
           onRefresh: () async {
@@ -110,8 +112,9 @@ class DriverAllPage extends GetView<DriverAllController> {
                         navState.pushNamed(AppRoute.driver,
                             arguments: {"driver_id": driver.id}).then(
                           (onValue) async {
-                            if (onValue != null) {
+                            if (onValue != null && onValue != false) {
                               await controller.getDriverList();
+                              controller.popResult.value = true;
                             }
                           },
                         );

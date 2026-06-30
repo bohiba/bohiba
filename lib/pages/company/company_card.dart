@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bohiba/component/image_path.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/routes/app_route.dart';
-import '/services/global_service.dart';
-import '../../controllers/all_company_controller.dart';
-import '../../model/company_model.dart';
+import '/controllers/all_company_controller.dart';
+import '/model/company_model.dart';
 import 'package:get/get.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
@@ -38,13 +39,48 @@ class CompanyHorizontalCard extends GetView<AllCompanyController> {
             Expanded(
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: bohibaTheme.colorScheme.surface,
-                    // backgroundColor: bohibaTheme.dividerColor,
-                    backgroundImage: NetworkImage(
-                        GlobalService.getAvatarUrl(minesInfo.nameCode ?? 'NA')),
-                  ),
+                  if (minesInfo.logo == null || minesInfo.logo!.isEmpty)
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: bohibaTheme.colorScheme.surface,
+                      child: AutoSizeText(
+                        minesInfo.nameCode ?? 'NA',
+                        style: bohibaTheme.textTheme.titleSmall,
+                        maxLines: 1,
+                      ),
+                    )
+                  else
+                    CachedNetworkImage(
+                      imageUrl: "${ImagePath.companyLogo}/${minesInfo.logo}",
+                      imageBuilder: (context, imageProvider) {
+                        return CircleAvatar(
+                          radius: 20,
+                          backgroundColor: bohibaTheme.colorScheme.surface,
+                          backgroundImage: imageProvider,
+                        );
+                      },
+                      placeholder: (context, url) {
+                        return CircleAvatar(
+                          radius: 20,
+                          backgroundColor: bohibaTheme.colorScheme.surface,
+                          child: AutoSizeText(
+                            minesInfo.nameCode ?? 'NA',
+                            style: bohibaTheme.textTheme.bodyMedium,
+                            maxLines: 1,
+                          ),
+                        );
+                      },
+                      errorWidget: (context, url, error) {
+                        return CircleAvatar(
+                          radius: 20,
+                          backgroundColor: bohibaTheme.colorScheme.surface,
+                          child: Icon(
+                            Icons.image,
+                            color: bohibaTheme.colorScheme.primary,
+                          ),
+                        );
+                      },
+                    ),
                   Gap(ScreenUtils.width20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

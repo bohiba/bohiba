@@ -12,7 +12,7 @@ class AllCompanyPage extends GetView<AllCompanyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MinesAppBar(title: 'Mines'),
+      appBar: MinesAppBar(title: 'Companies'),
       body: Obx(() {
         return RefreshIndicator(
           onRefresh: () async => await controller.getMinesList(),

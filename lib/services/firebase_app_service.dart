@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../core/network/dio_serivce.dart';
+import 'package:bohiba/config/app_config.dart';
+import '/core/network/dio_serivce.dart';
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
 import '/services/global_service.dart';
@@ -39,22 +40,31 @@ class FirebaseAppService {
   static final DioService _dioService = DioService();
 
   // ── Firebase init ─────────────────────────────────────────────────────────
+  // _initFuture caches the in-flight init so concurrent callers (main isolate
+  // + background handler) share one operation instead of racing into
+  // duplicate-app crash.
 
-  static Future<void> initFirebase() async {
+  static Future<void>? _initFuture;
+
+  static Future<void> initFirebase() {
+    _initFuture ??= _doInit();
+    return _initFuture!;
+  }
+
+  static Future<void> _doInit() async {
     if (Firebase.apps.isNotEmpty) return;
-
-    if (Platform.isIOS) {
-      await Firebase.initializeApp();
-    } else {
-      await Firebase.initializeApp(
-        options: const FirebaseOptions(
-          apiKey: "AIzaSyCN0tM4lVbUAKsRqHY1Ixu5WdD1BQL7t60",
-          appId: "1:449684563968:android:e510d9c11349ec3dc6d0e5",
-          messagingSenderId: "449684563968",
-          projectId: "bohiba-14d80",
-        ),
-      );
-    }
+    GlobalService.printHandler(
+        "Firebase API Key : ${AppConfig.current.firebaseApiKey}");
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: AppConfig.firebaseApiKey,
+        appId: AppConfig.firebaseAppId,
+        messagingSenderId: AppConfig.firebaseMessagingSenderId,
+        projectId: AppConfig.firebaseProjectId,
+        databaseURL: AppConfig.firebaseDatabaseUrl,
+        storageBucket: AppConfig.firebaseStorageBucket,
+      ),
+    );
   }
 
   // ── Local notifications init ──────────────────────────────────────────────
@@ -217,8 +227,6 @@ class FirebaseAppService {
   static Future<void> registerToken() async {
     if (!await DeviceInfoService.hasInternet()) return;
 
-    initNotification();
-
     String strFcmToken = _prefUtils.getString(PrefUtils.keyFirebaseToken);
     String fcmToken = '';
     if (strFcmToken.isNotEmpty) {
@@ -285,7 +293,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //   background → Firebase.apps.isNotEmpty (main isolate already initialised it)
   final bool appWasKilled = Firebase.apps.isEmpty;
 
-  await FirebaseAppService.initFirebase();
   await FirebaseAppService._initLocalNotifications();
 
   // When the app is killed and the message has a `notification` block, the FCM

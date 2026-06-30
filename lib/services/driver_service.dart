@@ -249,8 +249,11 @@ class DriverService {
     if (successDel > 0) {
       ApiResponse serviceResponse =
           await _dioService.delete("${ApiEndPoint.apiDriver}/$driverId");
-      switch (serviceResponse.statusCode) {
-        case 200:
+
+      StatusCode code = StatusCode.fromCode(serviceResponse.statusCode);
+      switch (code) {
+        case StatusCode.ok:
+          await removeDriverFromTruck(driverId: driverId);
           await ProfileService.updateDriverNo(deleteDriver: true);
           GlobalService.dismissProgress();
           GlobalService.showSnackBar(
@@ -259,12 +262,12 @@ class DriverService {
             desc: serviceResponse.message,
           );
           return successDel;
-        case 401:
+        case StatusCode.badRequest:
           GlobalService.dismissProgress();
           GlobalService.showSnackBar(
             status: AlertStatus.warning,
             title: 'Driver',
-            desc: serviceResponse.message,
+            desc: serviceResponse.errorMessage,
           );
           return 0;
         default:
@@ -272,7 +275,7 @@ class DriverService {
           GlobalService.showSnackBar(
             status: AlertStatus.failure,
             title: 'Driver',
-            desc: 'Failed driverete driver.',
+            desc: serviceResponse.errorMessage,
           );
           return 0;
       }
@@ -281,10 +284,23 @@ class DriverService {
       GlobalService.showSnackBar(
         status: AlertStatus.failure,
         title: 'Driver',
-        desc: 'Failed to delete driver.',
+        desc: 'Unable to delete. Driver doesn\'t exist',
       );
       return 0;
     }
+  }
+
+  static Future<int> removeDriverFromTruck({required int driverId}) async {
+    String strUpdateQuery = ''' UPDATE $tblTrucks SET 
+      driverId = NULL
+    , driverImage = NULL
+    , driverUuid = NULL
+    , driverName = NULL
+    , driverMobileNumber = NULL
+    WHERE driverId = ? ''';
+
+    return await _databaseService
+        .updateData(strUpdateQuery, argument: [driverId]);
   }
 
   static Future<int> insertDriver({required UserModel driver}) async {

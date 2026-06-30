@@ -168,6 +168,7 @@ import '/pages/truck/truck_all_page.dart';
 import '/pages/wallet/wallet_deposit/wallet_deposit_screen.dart';
 import '/pages/wallet/wallet_screen/wallet_screen.dart';
 import '/pages/info/info_screen.dart';
+import '/pages/info/flavor_config_page.dart';
 import '/pages/truck/truck_add_page.dart';
 
 class AppRoute {
@@ -268,6 +269,7 @@ class AppRoute {
 
   // static const String companyScreen = "/company";
   static const String infoScreen = "/info-screen";
+  static const String flavorConfig = "/flavor-config";
   static const String allMines = "/all-mines";
   static const String mines = '/mines';
 
@@ -628,6 +630,10 @@ class AppRoute {
     GetPage(
       name: infoScreen,
       page: () => const InfoScreen(),
+    ),
+    GetPage(
+      name: flavorConfig,
+      page: () => const FlavorConfigPage(),
     ),
     GetPage(
       name: favList,

@@ -1,4 +1,7 @@
-import '../../model/user_model.dart';
+import 'driver_uuid_verification.dart';
+import 'driver_verification_manual_mode.dart';
+
+import '/model/user_model.dart';
 
 import '/pages/widget/required_label.dart';
 import '/services/global_service.dart';
@@ -6,17 +9,13 @@ import '/theme/bohiba_theme.dart';
 
 import '/controllers/driver_add_controller.dart';
 
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
-import '/component/bohiba_inputfield/text_inputfield.dart';
-import '/component/bohiba_inputfield/date_inputfield.dart';
 import '/component/bohiba_buttons/primary_button.dart';
 import '/component/bohiba_dropdown/primary_dropdown_menu.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:remixicon/remixicon.dart';
 import 'package:widgets_easier/widgets_easier.dart';
 
 class DriverAddPage extends GetView<DriverAddController> {
@@ -56,13 +55,15 @@ class DriverAddPage extends GetView<DriverAddController> {
                                 RadioGroup(
                                   groupValue: controller.addAsset.value,
                                   onChanged: (AddAssetUsing? change) {
-                                    controller.addAsset.value = change ?? AddAssetUsing.uuid;
+                                    controller.addAsset.value =
+                                        change ?? AddAssetUsing.uuid;
                                   },
                                   child: Radio<AddAssetUsing>(
                                     value: AddAssetUsing.uuid,
                                   ),
                                 ),
-                                Text("UUID", style: bohibaTheme.textTheme.titleLarge),
+                                Text("UUID",
+                                    style: bohibaTheme.textTheme.titleLarge),
                               ],
                             ),
                             Row(
@@ -70,19 +71,24 @@ class DriverAddPage extends GetView<DriverAddController> {
                                 RadioGroup(
                                   groupValue: controller.addAsset.value,
                                   onChanged: (AddAssetUsing? change) {
-                                    controller.addAsset.value = change ?? AddAssetUsing.doc;
+                                    controller.addAsset.value =
+                                        change ?? AddAssetUsing.doc;
                                   },
                                   child: Radio<AddAssetUsing>(
                                     value: AddAssetUsing.doc,
                                   ),
                                 ),
-                                Text("Manual", style: bohibaTheme.textTheme.titleLarge),
+                                Text("Manual",
+                                    style: bohibaTheme.textTheme.titleLarge),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      if (controller.addAsset.value == AddAssetUsing.uuid) UUIDDriverVerification() else ManualModeDriverVerification(),
+                      if (controller.addAsset.value == AddAssetUsing.uuid)
+                        UUIDDriverVerification()
+                      else
+                        ManualModeDriverVerification(),
                       Visibility(
                         visible: controller.arrTruck.isNotEmpty,
                         child: Column(
@@ -93,13 +99,17 @@ class DriverAddPage extends GetView<DriverAddController> {
                               padding: EdgeInsets.symmetric(
                                 vertical: ScreenUtils.height10,
                               ),
-                              hint: controller.truck.value.driverName ?? 'Registration Number',
-                              items: controller.arrTruck.map((f) => f.regdNumber.toString()).toList(),
+                              hint: controller.truck.value.driverName ??
+                                  'Registration Number',
+                              items: controller.arrTruck
+                                  .map((f) => f.regdNumber.toString())
+                                  .toList(),
                               enableSearch: true,
                               focusOnTap: true,
                               onChanged: (p0) {
                                 controller.strTruckRegdNo.value = p0 ?? '';
-                                GlobalService.printHandler('ID: ${controller.strTruckRegdNo.value}');
+                                GlobalService.printHandler(
+                                    'ID: ${controller.strTruckRegdNo.value}');
                                 GlobalService.closeKeyboard();
                               },
                               menuController: controller.assignTruckCtlr,
@@ -172,91 +182,3 @@ class ScanModeDLVerification extends GetView<DriverAddController> {
     );
   }
 }
-
-class UUIDDriverVerification extends GetView<DriverAddController> {
-  const UUIDDriverVerification({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        RequiredLabel(label: 'UUID', required: true),
-        TextInputField(
-          prefixIcon: const Icon(
-            Remix.user_3_fill,
-            size: 20,
-          ),
-          maxLength: 6,
-          hintText: "6-digit UUID",
-          textCapitalization: TextCapitalization.characters,
-          controller: controller.uuidCtlr,
-        ),
-      ],
-    );
-  }
-}
-
-class ManualModeDriverVerification extends GetView<DriverAddController> {
-  const ManualModeDriverVerification({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        RequiredLabel(label: 'Driving License', required: true),
-        Text(
-          'Enter 10-digit unique number.',
-          style: TextStyle(
-            fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-            fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-            color: bohibaTheme.textTheme.titleSmall!.color,
-          ),
-        ),
-        TextInputField(
-          prefixIcon: const Icon(
-            Remix.user_3_fill,
-            size: 20,
-          ),
-          hintText: "License Number",
-          textCapitalization: TextCapitalization.characters,
-          maxLength: 16,
-        ),
-        RequiredLabel(label: 'D.O.B', required: true),
-        DateInputField(
-          width: ScreenUtils.width,
-          controller: controller.dateController,
-          onTap: () async {
-            DateTime? pickedDate = await GlobalService.datePickerModal(context: context);
-            if (pickedDate != null) {
-              controller.dateController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
-            }
-          },
-          hintText: "D.O.B",
-        ),
-      ],
-    );
-  }
-}
-
-/*Widget content;
-          switch (controller.status.value) {
-            case UploadStatus.initial:
-              content = InitialImageUploadWidget<DriverAddController>();
-              break;
-            case UploadStatus.uploading:
-              content = OnUploadingImageWidget<DriverAddController>();
-              break;
-            case UploadStatus.success:
-              content = OnFetchingImageSuccessWidget<DriverAddController>();
-              break;
-            case UploadStatus.failure:
-              content = OnFetchingImageErrorWidget<DriverAddController>();
-              break;
-            case UploadStatus.verified:
-              content = OnDocumentVerifiedWidget(
-                title: 'Driving Liecense Verified Successfully',
-                docPath: controller.imagePath.value,
-              );
-          }*/

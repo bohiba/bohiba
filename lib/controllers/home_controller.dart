@@ -91,15 +91,16 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<List<UserModel>> getDriverList() async {
-    List<UserModel> arrTucks = await DriverService.getAllDriver() ?? [];
-    arrDriver.value?.clear();
-    arrDriver.value?.addAll(arrTucks);
-    return arrTucks;
+  Future<void> getDriverList() async {
+    List<UserModel>? arrTucks = await DriverService.getAllDriver();
+    if (arrTucks != null) {
+      arrDriver.value = List<UserModel>.from(arrTucks);
+    } else {
+      arrDriver.value = [];
+    }
   }
 
   Future<void> getTruckList() async {
-    arrTruck.value = null;
     List<TruckModel>? truckList = await TruckService.getTruckList();
     if (truckList != null) {
       arrTruck.value = List<TruckModel>.from(truckList);

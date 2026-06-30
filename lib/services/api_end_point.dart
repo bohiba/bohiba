@@ -1,112 +1,109 @@
+import 'package:bohiba/config/app_config.dart';
+
 class ApiEndPoint {
-  // static const String baseUrl = 'https://bohiba.com/api';
-  static const String baseUrl = "https://beta-server-t1.bohiba.com/api";
+  static String get baseUrl => AppConfig.baseUrl;
+
   static const String apiPostalCode = 'https://api.postalpincode.in/pincode';
-  static const String apiVerifyEmail = '$baseUrl/authentication/verify-email';
-  static const String apiVerifyOtp = '$baseUrl/authentication/verify-otp';
-  static const String apiResendOtp = '$baseUrl/authentication/resend-otp';
-  static const String apiUpdatePassword =
-      '$baseUrl/authentication/update-password';
-  static const String apiCreateUser = '$baseUrl/authentication/create-user';
-  static const String apiAddAddress = '$baseUrl/add-address';
-  static const String apiSetProfileImage = '$baseUrl/set-profile-image';
-  static const String apiSetRole = '$baseUrl/set-role';
-  static const String apiEditDoc = '$baseUrl/add-document';
-  static const String apiEditUser = '$baseUrl/user-update';
 
-  static const String apiForgotPassword =
-      '$baseUrl/authentication/forgot-password';
-  static const String apiResetPassword =
-      '$baseUrl/authentication/reset-password';
-  static const String apiVerifyForgotPasswordOtp =
-      '$baseUrl/authentication/verify-forgot-password-otp';
-  static const String apiForgotUUID = '$baseUrl/authentication/forgot-uuid';
+  static String get apiVerifyEmail => '$baseUrl/authentication/verify-email';
+  static String get apiVerifyOtp => '$baseUrl/authentication/verify-otp';
+  static String get apiResendOtp => '$baseUrl/authentication/resend-otp';
+  static String get apiUpdatePassword => '$baseUrl/authentication/update-password';
+  static String get apiCreateUser => '$baseUrl/authentication/create-user';
+  static String get apiAddAddress => '$baseUrl/add-address';
+  static String get apiSetProfileImage => '$baseUrl/set-profile-image';
+  static String get apiSetRole => '$baseUrl/set-role';
+  static String get apiEditDoc => '$baseUrl/add-document';
+  static String get apiEditUser => '$baseUrl/user-update';
 
-  static const String apiLogin = '$baseUrl/authentication/login';
-  static const String apiLogout = '$baseUrl/logout';
-  static const String apiRefreshToken = '$baseUrl/refresh-token';
+  static String get apiForgotPassword => '$baseUrl/authentication/forgot-password';
+  static String get apiResetPassword => '$baseUrl/authentication/reset-password';
+  static String get apiVerifyForgotPasswordOtp => '$baseUrl/authentication/verify-forgot-password-otp';
+  static String get apiForgotUUID => '$baseUrl/authentication/forgot-uuid';
 
-  static const String firbaseToken = '$baseUrl/firebase/register-token';
+  static String get apiLogin => '$baseUrl/authentication/login';
+  static String get apiLogout => '$baseUrl/logout';
+  static String get apiRefreshToken => '$baseUrl/refresh-token';
 
-  static const String apiProfile = '$baseUrl/profile';
-  static const String apiMain = '$baseUrl/main';
+  static String get firbaseToken => '$baseUrl/firebase/register-token';
 
-  static const String apiCompanies = '$baseUrl/companies';
-  static const String apiSearchCompany = '$apiCompanies/search';
+  static String get apiProfile => '$baseUrl/profile';
+  static String get apiMain => '$baseUrl/main';
 
-  static const String apiAllFav = '$baseUrl/all-favourite';
-  static const String apiAddFav = '$baseUrl/add-favourite';
-  static const String apiDeleteFav = '$baseUrl//delete-favourite';
+  static String get apiCompanies => '$baseUrl/companies';
+  static String get apiSearchCompany => '$apiCompanies/search';
 
-  static const String apiTrucks = '$baseUrl/trucks';
-  static const String apiGetTruck = '$apiTrucks/info';
-  static const String apiSetTruckImage = '$apiTrucks/set-image';
-  static const String apiRemoveTruckImage = '$apiTrucks/remove-image';
-  static const String apiAssignDriver = '$apiTrucks/assign-driver';
-  static const String apiRemoveDriver = '$apiTrucks/remove-driver';
+  static String get apiAllFav => '$baseUrl/all-favourite';
+  static String get apiAddFav => '$baseUrl/add-favourite';
+  static String get apiDeleteFav => '$baseUrl//delete-favourite';
 
-  static const String apiAnalytic = '$baseUrl/analytics';
-  static const String apiAnalyticSummary = '$apiAnalytic/summary';
-  static const String apiAnalyticTrips = '$apiAnalytic/trips';
-  static const String apiAnalyticFuel = '$apiAnalytic/fuel';
-  static const String apiAnalyticDriver = '$apiAnalytic/drivers';
-  static const String apiAnalyticTruck = '$apiAnalytic/trucks';
-  static const String apiAnalyticFinance = '$apiAnalytic/finance';
+  static String get apiTrucks => '$baseUrl/trucks';
+  static String get apiGetTruck => '$apiTrucks/info';
+  static String get apiSetTruckImage => '$apiTrucks/set-image';
+  static String get apiRemoveTruckImage => '$apiTrucks/remove-image';
+  static String get apiAssignDriver => '$apiTrucks/assign-driver';
+  static String get apiRemoveDriver => '$apiTrucks/remove-driver';
 
-  static const String apiDriver = '$baseUrl/drivers';
+  static String get apiAnalytic => '$baseUrl/analytics';
+  static String get apiAnalyticSummary => '$apiAnalytic/summary';
+  static String get apiAnalyticTrips => '$apiAnalytic/trips';
+  static String get apiAnalyticFuel => '$apiAnalytic/fuel';
+  static String get apiAnalyticDriver => '$apiAnalytic/drivers';
+  static String get apiAnalyticTruck => '$apiAnalytic/trucks';
+  static String get apiAnalyticFinance => '$apiAnalytic/finance';
 
-  static const String apiRateDriver = '$baseUrl/rate-user';
-  static const String apiGetRating = '$baseUrl/all-rating';
-  static const String apiDeleteRating = '$baseUrl/delete-rating';
+  static String get apiDriver => '$baseUrl/drivers';
 
-  static const String apiTrips = '$baseUrl/trips';
+  static String get apiRateDriver => '$baseUrl/rate-user';
+  static String get apiGetRating => '$baseUrl/all-rating';
+  static String get apiDeleteRating => '$baseUrl/delete-rating';
 
-  static const String apiAddTripPayment = '$baseUrl/trip/add-payment';
-  static const String apiEditTripPayment = '$baseUrl/trip/update-payment';
-  static const String apiDeleteTripPayment = '$baseUrl/trip/delete-payment';
+  static String get apiTrips => '$baseUrl/trips';
 
-  static const String apiAddTripExpense = '$baseUrl/trip/add-expenses';
-  static const String apiEditTripExpense = '$baseUrl/trip/update-expenses';
-  static const String apiDeleteTripExpense = '$baseUrl/trip/delete-expenses';
+  static String get apiAddTripPayment => '$baseUrl/trip/add-payment';
+  static String get apiEditTripPayment => '$baseUrl/trip/update-payment';
+  static String get apiDeleteTripPayment => '$baseUrl/trip/delete-payment';
 
-  static const String apiAddTripReassign = '$baseUrl/trip/add-reassignment';
-  static const String apiEditTripReassign = '$baseUrl/trip/update-reassignment';
-  static const String apiDeleteTripReassign =
-      '$baseUrl/trip/delete-reassignment';
+  static String get apiAddTripExpense => '$baseUrl/trip/add-expenses';
+  static String get apiEditTripExpense => '$baseUrl/trip/update-expenses';
+  static String get apiDeleteTripExpense => '$baseUrl/trip/delete-expenses';
 
-  static const String apiAddTripDoc = '$baseUrl/trip/add-document';
-  static const String apiGetAllTripDoc = '$baseUrl/trip/all-document';
-  static const String apiGetTripDoc = '$baseUrl/trip/get-document';
+  static String get apiAddTripReassign => '$baseUrl/trip/add-reassignment';
+  static String get apiEditTripReassign => '$baseUrl/trip/update-reassignment';
+  static String get apiDeleteTripReassign => '$baseUrl/trip/delete-reassignment';
 
-  static const String addOwnerExpense = '$baseUrl/add-expense';
-  static const String allOwnerExpense = '$baseUrl/all-expense';
-  static const String apiGetOwnerExpense = '$baseUrl/get-expense';
-  static const String editOwnerExpense = '$baseUrl/post-expense';
-  static const String deleteOwnerExpense = '$baseUrl/delete-expense';
+  static String get apiAddTripDoc => '$baseUrl/trip/add-document';
+  static String get apiGetAllTripDoc => '$baseUrl/trip/all-document';
+  static String get apiGetTripDoc => '$baseUrl/trip/get-document';
 
-  static const String apiAllJobs = '$baseUrl/owner/job-posted';
-  static const String apiCreateJobs = '$baseUrl/owner/job-create';
-  static const String apiGetJob = '$baseUrl/owner/job-detail';
-  static const String apiApplicants = '$baseUrl/owner/job-applicants';
-  static const String apiEditJob = '$baseUrl/owner/job-update';
-  // static const String apiUpdateJobStatus = '$baseUrl/owner/status-update';
-  static const String apiDeleteJob = '$baseUrl/owner/job-delete';
+  static String get addOwnerExpense => '$baseUrl/add-expense';
+  static String get allOwnerExpense => '$baseUrl/all-expense';
+  static String get apiGetOwnerExpense => '$baseUrl/get-expense';
+  static String get editOwnerExpense => '$baseUrl/post-expense';
+  static String get deleteOwnerExpense => '$baseUrl/delete-expense';
 
-  static const String apiOpenDriver = '$baseUrl/owner/open';
-  static const String apiViewDriver = '$baseUrl/owner/view-driver';
-  static const String apiSendConnectReq = '$baseUrl/owner/send';
-  static const String apiAllSentReq = '$baseUrl/owner/all-requests';
+  static String get apiAllJobs => '$baseUrl/owner/job-posted';
+  static String get apiCreateJobs => '$baseUrl/owner/job-create';
+  static String get apiGetJob => '$baseUrl/owner/job-detail';
+  static String get apiApplicants => '$baseUrl/owner/job-applicants';
+  static String get apiEditJob => '$baseUrl/owner/job-update';
+  static String get apiDeleteJob => '$baseUrl/owner/job-delete';
 
-  static const String apiDriverJob = '$baseUrl/driver/get-jobs';
-  static const String apiAppliedJob = '$baseUrl/driver/applied-job';
-  static const String apiApplyToJob = '$baseUrl/driver/apply-to-job';
-  static const String apiAllRecvdReq = '$baseUrl/driver/requests';
-  static const String apiAllRespond = '$baseUrl/driver/respond';
+  static String get apiOpenDriver => '$baseUrl/owner/open';
+  static String get apiViewDriver => '$baseUrl/owner/view-driver';
+  static String get apiSendConnectReq => '$baseUrl/owner/send';
+  static String get apiAllSentReq => '$baseUrl/owner/all-requests';
 
-  static const String apiNewsAll = '$baseUrl/news-all';
-  static const String apiNews = '$baseUrl/news';
+  static String get apiDriverJob => '$baseUrl/driver/get-jobs';
+  static String get apiAppliedJob => '$baseUrl/driver/applied-job';
+  static String get apiApplyToJob => '$baseUrl/driver/apply-to-job';
+  static String get apiAllRecvdReq => '$baseUrl/driver/requests';
+  static String get apiAllRespond => '$baseUrl/driver/respond';
 
-  static const String apiSearchUser = '$baseUrl/search/user';
+  static String get apiNewsAll => '$baseUrl/news-all';
+  static String get apiNews => '$baseUrl/news';
+
+  static String get apiSearchUser => '$baseUrl/search/user';
 
   // Google Maps
   static const String apiNearbySearch =

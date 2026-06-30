@@ -35,7 +35,11 @@ class HomeTopTruck extends GetView<HomeController> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      navigatorState.pushNamed(AppRoute.allTruck);
+                      navigatorState
+                          .pushNamed(AppRoute.allTruck)
+                          .then((onValue) {
+                        controller.getTruckList();
+                      });
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(

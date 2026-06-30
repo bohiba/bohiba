@@ -1,10 +1,14 @@
+import 'package:bohiba/config/app_config.dart';
+
 class ImagePath {
+  static String basePath = AppConfig.imageUrl;
+
   // Icons
   static String wheel = "assets/icons/wheel.png";
   static String twoWheel = "assets/icons/two_wheel.png";
   static String bohibaIcon = "assets/icons/bohiba_logo.png";
   static String userIcon = "assets/icons/user.png";
-  static String companyLogo = "assets/icons/omc_logo.png";
+  // static String companyLogo = "assets/icons/omc_logo.png";
 
   // Image
   static String bannerOwnerOne = "assets/images/banner_owner_1.png";
@@ -22,11 +26,10 @@ class ImagePath {
   static String driverBanner = "assets/images/driver_banner_1.png";
   static String petrolPump = "assets/images/petrol_pump.svg";
 
-  static String basePath = "https://beta-server-t1.bohiba.com/storage/images";
-  // static String basePath = 'https://bohiba.com/storage/images';
   static String profileImage = "$basePath/profile";
   static String truckImage = "$basePath/truck";
   static String newsImage = "$basePath/news";
   static String tripImage = "$basePath/trip";
   static String docImage = "$basePath/documents";
+  static String companyLogo = "$basePath/company";
 }

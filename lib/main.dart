@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:bohiba/bindings/app_theme_binding.dart';
+import 'package:bohiba/config/app_config.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 import 'bindings/splash_binding.dart';
+import 'component/flavor_banner.dart';
 import 'theme/bohiba_theme.dart';
 import '/controllers/theme_controller.dart';
 import '/services/firebase_app_service.dart';
@@ -20,6 +22,8 @@ Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    // initFirebase resolves flavor from package name before initializing Firebase.
+    await AppConfig.initAppFlavor();
     await FirebaseAppService.initFirebase();
 
     FirebaseMessaging.onBackgroundMessage(
@@ -84,6 +88,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             getPages: AppRoute.routes,
             initialRoute: AppRoute.splashScreen,
+            // builder: (context, child) {
+            //   return FlavorBanner(
+            //     child: child!,
+            //   );
+            // },
           ),
         ),
       );

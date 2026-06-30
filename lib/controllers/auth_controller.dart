@@ -1,4 +1,5 @@
-import 'package:bohiba/dist/enums/api_status_code.dart';
+import '/dist/enums/api_status_code.dart';
+import '/services/firebase_app_service.dart';
 
 import '/services/global_service.dart';
 import '/services/auth_service.dart';
@@ -20,6 +21,15 @@ class AuthController extends GetxController {
 
     idController.addListener(listener);
     pwdController.addListener(listener);
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+
+    Future.delayed(Duration.zero, () async {
+      await FirebaseAppService.initNotification();
+    });
   }
 
   Future<StatusCode> signin({

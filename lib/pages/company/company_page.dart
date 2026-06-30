@@ -1,3 +1,5 @@
+import 'package:bohiba/theme/bohiba_theme.dart';
+
 import '/controllers/companies_controller.dart';
 import '/dist/component_exports.dart';
 import '/extensions/ext_mines_status.dart';
@@ -39,57 +41,62 @@ class CompanyPage extends GetView<CompaniesController> {
         //   label: 'SET YOUR QUEUE',
         // ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: ScreenUtils.height20,
-                right: ScreenUtils.width15,
-                left: ScreenUtils.width15,
-                bottom: ScreenUtils.height * 0.1,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CompanyHeader(
-                    minesModel: controller.minesModel.value,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: ScreenUtils.height20,
+              right: ScreenUtils.width15,
+              left: ScreenUtils.width15,
+              bottom: ScreenUtils.height * 0.1,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CompanyHeader(
+                  minesModel: controller.minesModel.value,
+                ),
+                CompanyStatusGrid(
+                  mineOutsideInfo: [
+                    StatusModel(
+                      name: "TOTAL LOADS",
+                      value: "Coming Soon",
+                    ),
+                    StatusModel(
+                      name: "STATE",
+                      value: controller.minesModel.value?.district ?? '',
+                    ),
+                    StatusModel(
+                      name: "STATUS",
+                      value: controller.minesModel.value?.status ?? '',
+                      color:
+                          controller.minesModel.value?.status?.minesStatusColor,
+                    ),
+                  ],
+                ),
+                CompanyLocation(),
+                // CompanyLiveQueueStatus(
+                //   header: [
+                //     QueueHeader(flex: 1, name: "#", textAlign: TextAlign.start),
+                //     QueueHeader(
+                //         flex: 3,
+                //         name: "VEHICLE ID",
+                //         textAlign: TextAlign.start),
+                //     QueueHeader(
+                //         flex: 3, name: "STATUS", textAlign: TextAlign.center),
+                //     QueueHeader(
+                //         flex: 2, name: "WAIT", textAlign: TextAlign.center),
+                //   ],
+                //   queueList: controller.arrQueue,
+                // ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "More features coming soon...",
+                      style: bohibaTheme.textTheme.bodyLarge,
+                    ),
                   ),
-                  CompanyStatusGrid(
-                    mineOutsideInfo: [
-                      StatusModel(
-                        name: "TOTAL TRUCKS",
-                        value: "42",
-                      ),
-                      StatusModel(
-                        name: "AVG WAITING",
-                        value: "32m",
-                      ),
-                      StatusModel(
-                        name: "STATUS",
-                        value: controller.minesModel.value?.status ?? '',
-                        color: controller
-                            .minesModel.value?.status?.minesStatusColor,
-                      ),
-                    ],
-                  ),
-                  CompanyLocation(),
-                  CompanyLiveQueueStatus(
-                    header: [
-                      QueueHeader(
-                          flex: 1, name: "#", textAlign: TextAlign.start),
-                      QueueHeader(
-                          flex: 3,
-                          name: "VEHICLE ID",
-                          textAlign: TextAlign.start),
-                      QueueHeader(
-                          flex: 3, name: "STATUS", textAlign: TextAlign.center),
-                      QueueHeader(
-                          flex: 2, name: "WAIT", textAlign: TextAlign.center),
-                    ],
-                    queueList: controller.arrQueue,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
