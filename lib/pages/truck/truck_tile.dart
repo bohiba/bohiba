@@ -1,8 +1,6 @@
 import 'dart:async';
-import '/component/ui/random_color_picker.dart';
+import '/component/bohiba_network_image.dart';
 import '/component/image_path.dart';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/pages/widget/role_widget.dart';
@@ -36,7 +34,7 @@ class TruckTile extends GetView<TruckAllController> {
     return Container(
       padding: EdgeInsets.only(left: ScreenUtils.width15),
       width: ScreenUtils.width,
-      height: ScreenUtils.height * 0.075,
+      height: ScreenUtils.tileHeight,
       margin: EdgeInsets.only(bottom: ScreenUtils.width5),
       decoration: TileDecorative(),
       child: Row(
@@ -46,49 +44,10 @@ class TruckTile extends GetView<TruckAllController> {
               onTap: onClick,
               child: Row(
                 children: [
-                  truckInfo.truckImage == null ||
-                          (truckInfo.truckImage?.isEmpty ?? true)
-                      ? Container(
-                          height: 32.h,
-                          width: 32.h,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: RandomColorPicker.getRandomColor(),
-                          ),
-                          /*child: Text(
-                            truckInfo.regdNumber?.shortCode ?? '',
-                            style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                              color: bohibaTheme.textTheme.bodySmall!.color,
-                            ),
-                          ),*/
-                        )
-                      : Container(
-                          height: 32.h,
-                          width: 32.h,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: RandomColorPicker.getRandomColor(),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadiusGeometry.circular(35.r),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  '${ImagePath.truckImage}/${truckInfo.truckImage}',
-                              fit: BoxFit.cover,
-                              height: 32.h,
-                              width: 32.h,
-                              placeholder: (context, url) => Container(
-                                color: RandomColorPicker.getRandomColor(),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                color: RandomColorPicker.getRandomColor(),
-                              ),
-                            ),
-                          ),
-                        ),
+                  BohibaNetworkImage.circle(
+                    imageUrl: '${ImagePath.truckImage}/${truckInfo.truckImage}',
+                    size: 32.h,
+                  ),
                   Gap(ScreenUtils.height15),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +63,7 @@ class TruckTile extends GetView<TruckAllController> {
                                 truckInfo.trips == 0
                             ? null
                             : Text(
-                                '${truckInfo.trips} ${(truckInfo.trips ?? 0) > 1 ? "Trips" : "Trip"}',
+                                '${truckInfo.trips} Trip${(truckInfo.trips ?? 0) > 1 ? "s" : ""}',
                                 maxLines: 1,
                                 style: TextStyle(
                                   fontSize: bohibaTheme

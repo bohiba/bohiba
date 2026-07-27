@@ -24,7 +24,8 @@ class RatingModel {
   });
 
   factory RatingModel.fromJson(Map<dynamic, dynamic> json) {
-    Map<String, dynamic> reviewer = json['reviewer'];
+    final Map<String, dynamic> reviewer =
+        (json['reviewer'] as Map?)?.cast<String, dynamic>() ?? {};
     return RatingModel(
       id: json['id'],
       driverUuid: json['driverUuid'],
@@ -40,7 +41,8 @@ class RatingModel {
   }
 
   static Map<String, dynamic> toDB(dynamic json) {
-    Map<String, dynamic> reviewer = json['reviewer'];
+    final Map<String, dynamic> reviewer =
+        (json['reviewer'] as Map?)?.cast<String, dynamic>() ?? {};
     return {
       'id': json['id'],
       'driverUuid': json['driverUuid'],

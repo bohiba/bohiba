@@ -21,6 +21,7 @@ import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class TripAddController extends ImageUploadController {
   DioService dioService = DioService();
@@ -36,10 +37,9 @@ class TripAddController extends ImageUploadController {
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;
   TextEditingController truckController = TextEditingController();
 
-  // ── Date / basic fields ──────────────────────────────────────────────────
+  // ── Date / basic fields
   TextEditingController startAtController = TextEditingController();
   TextEditingController endedAtController = TextEditingController();
-  TextEditingController transporterController = TextEditingController();
   TextEditingController statusController = TextEditingController();
   TextEditingController totalWeightController = TextEditingController();
   TextEditingController shortWeightController = TextEditingController();
@@ -51,14 +51,13 @@ class TripAddController extends ImageUploadController {
     thousandSeparator: ",",
   );
 
-  // ── Trip status ───────────────────────────────────────────────────────────
   final List<EnumTripStatus> tripStatus =
       EnumTripStatus.values.where((e) => e != EnumTripStatus.archived).toList();
   Rx<EnumTripStatus> strStatus = EnumTripStatus.draft.obs;
 
-  // ── Origin company search ─────────────────────────────────────────────────
   /// The currently selected origin company (shown in Origin field).
   Rxn<CompanyModel> selectedOriginCompany = Rxn<CompanyModel>();
+  TextEditingController originController = TextEditingController();
 
   /// Live search results for origin.
   RxList<CompanyModel> originSearchResults = <CompanyModel>[].obs;
@@ -69,27 +68,32 @@ class TripAddController extends ImageUploadController {
   Timer? _originSearchDebounce;
 
   // ── Destination company search ────────────────────────────────────────────
-  /// The currently selected destination company.
   Rxn<CompanyModel> selectedDestinationCompany = Rxn<CompanyModel>();
-
-  /// Live search results for destination.
   RxList<CompanyModel> destinationSearchResults = <CompanyModel>[].obs;
-
-  /// Current overlay state for the destination search dropdown.
   Rx<EnumSearchState> destinationSearchState = EnumSearchState.idle.obs;
-
+  TextEditingController destinationController = TextEditingController();
   Timer? _destinationSearchDebounce;
 
-  // ── Mineral (material type) ───────────────────────────────────────────────
+  // ── Transporter search ────────────────────────────────────────────────────
+  Rxn<CompanyModel> selectedTransporter = Rxn<CompanyModel>();
+  RxList<CompanyModel> transporterSearchResults = <CompanyModel>[].obs;
+  Rx<EnumSearchState> transporterSearchState = EnumSearchState.idle.obs;
+  TextEditingController transporterController = TextEditingController();
+  Timer? _transporterSearchDebounce;
+
   /// Minerals available for selection — loaded from the selected origin
   /// company's [mineralId] via MineralsService.getMineralsByIds.
+  /// The [selectedMineral] mineral selected as the trip's material type.
   RxList<MineralModel> availableMinerals = <MineralModel>[].obs;
-
-  /// The mineral selected as the trip's material type.
   Rxn<MineralModel> selectedMineral = Rxn<MineralModel>();
+  TextEditingController mineralController = TextEditingController();
 
   DateTime pickedDate = DateTime.now();
+
   RxInt countUpdate = 0.obs;
+
+  static final _displayFmt = DateFormat('dd-MM-yyyy');
+  static final _apiFmt = DateFormat('yyyy-MM-dd');
 
   @override
   void onInit() {
@@ -111,19 +115,15 @@ class TripAddController extends ImageUploadController {
   /// Called by the Origin [AppDropdownSearch] on every keystroke.
   /// Debounces 500 ms then fires the API search.
   void onOriginQueryChanged(String query) {
-    if (query.length < 3) return;
-
     _originSearchDebounce?.cancel();
-
-    if (query.trim().isEmpty) {
+    if (query.trim().isEmpty || query.length < 3) {
       originSearchState.value = EnumSearchState.idle;
       originSearchResults.clear();
       return;
     }
-
     originSearchState.value = EnumSearchState.searching;
     _originSearchDebounce = Timer(const Duration(milliseconds: 500), () async {
-      await _fetchCompanies(query.trim(), isOrigin: true);
+      await _fetchMines(query.trim());
     });
   }
 
@@ -131,7 +131,9 @@ class TripAddController extends ImageUploadController {
   /// Immediately loads the associated minerals from the local DB.
   Future<void> onOriginSelected(CompanyModel? company) async {
     selectedOriginCompany.value = company;
+    originController.text = company?.name ?? '';
     selectedMineral.value = null;
+    mineralController.clear();
     availableMinerals.clear();
 
     if (company?.mineralId != null &&
@@ -141,50 +143,79 @@ class TripAddController extends ImageUploadController {
   }
 
   void onDestinationQueryChanged(String query) {
-    if (query.length < 3) return;
     _destinationSearchDebounce?.cancel();
-
-    if (query.trim().isEmpty) {
+    if (query.trim().isEmpty || query.length < 3) {
       destinationSearchState.value = EnumSearchState.idle;
       destinationSearchResults.clear();
       return;
     }
-
     destinationSearchState.value = EnumSearchState.searching;
     _destinationSearchDebounce =
         Timer(const Duration(milliseconds: 500), () async {
-      await _fetchCompanies(query.trim(), isOrigin: false);
+      await _fetchPlants(query.trim());
     });
   }
 
   void onDestinationSelected(CompanyModel? company) {
     selectedDestinationCompany.value = company;
+    destinationController.text = company?.name ?? '';
   }
 
-  // ── Private helpers ───────────────────────────────────────────────────────
+  void onTransporterQueryChanged(String query) {
+    _transporterSearchDebounce?.cancel();
+    if (query.trim().isEmpty || query.length < 2) {
+      transporterSearchState.value = EnumSearchState.idle;
+      transporterSearchResults.clear();
+      return;
+    }
+    transporterSearchState.value = EnumSearchState.searching;
+    _transporterSearchDebounce =
+        Timer(const Duration(milliseconds: 500), () async {
+      await _fetchTransporters(query.trim());
+    });
+  }
 
-  Future<void> _fetchCompanies(String query, {required bool isOrigin}) async {
+  void onTransporterSelected(CompanyModel? company) {
+    selectedTransporter.value = company;
+    transporterController.text = company?.name ?? '';
+  }
+
+  Future<void> _fetchMines(String query) async {
     try {
-      final results = await CompanyService.searchCompanies(query);
-
-      if (isOrigin) {
-        originSearchResults.assignAll(results);
-        originSearchState.value = results.isEmpty
-            ? EnumSearchState.noDataFound
-            : EnumSearchState.success;
-      } else {
-        destinationSearchResults.assignAll(results);
-        destinationSearchState.value = results.isEmpty
-            ? EnumSearchState.noDataFound
-            : EnumSearchState.success;
-      }
+      final results = await CompanyService.searchMines(query);
+      originSearchResults.assignAll(results);
+      originSearchState.value = results.isEmpty
+          ? EnumSearchState.noDataFound
+          : EnumSearchState.success;
     } catch (e) {
-      GlobalService.printHandler('Company search error: $e');
-      if (isOrigin) {
-        originSearchState.value = EnumSearchState.error;
-      } else {
-        destinationSearchState.value = EnumSearchState.error;
-      }
+      GlobalService.printHandler('Mine search error: $e');
+      originSearchState.value = EnumSearchState.error;
+    }
+  }
+
+  Future<void> _fetchPlants(String query) async {
+    try {
+      final results = await CompanyService.searchPlants(query);
+      destinationSearchResults.assignAll(results);
+      destinationSearchState.value = results.isEmpty
+          ? EnumSearchState.noDataFound
+          : EnumSearchState.success;
+    } catch (e) {
+      GlobalService.printHandler('Plant search error: $e');
+      destinationSearchState.value = EnumSearchState.error;
+    }
+  }
+
+  Future<void> _fetchTransporters(String query) async {
+    try {
+      final results = await CompanyService.searchTransporters(query);
+      transporterSearchResults.assignAll(results);
+      transporterSearchState.value = results.isEmpty
+          ? EnumSearchState.noDataFound
+          : EnumSearchState.success;
+    } catch (e) {
+      GlobalService.printHandler('Transporter search error: $e');
+      transporterSearchState.value = EnumSearchState.error;
     }
   }
 
@@ -193,50 +224,35 @@ class TripAddController extends ImageUploadController {
     availableMinerals.assignAll(minerals ?? []);
   }
 
-  // ═════════════════════════════════════════════════════════════════════════
-  // Add / update trip
-  // ═════════════════════════════════════════════════════════════════════════
-
   Future<int> addUpdateTrip() async {
     if (!globalKey.currentState!.validate()) return 0;
-
-    final String tripCode1 = truckController.text
-        .trim()
-        .substring(2, truckController.text.length - 4);
-    final String tripCode2 = startAtController.text.trim().replaceAll('-', '');
     final String rateTrip =
         rateController.text.replaceAll(RegExp(r'[₹,]'), '').trim();
-    final String statusTrip =
-        statusController.text.trim().toLowerCase().replaceAll(' ', '_');
-
+    final int statusTrip = strStatus.value.value;
+    final String? startedAt = _toApiDate(startAtController.text);
+    final String? endedAt = _toApiDate(endedAtController.text);
     final Map<String, dynamic> bodyObj = {
-      'trip_code': tripCode1 + tripCode2,
-      'started_at': startAtController.text.trim(),
-      'ended_at': endedAtController.text.trim(),
-      'transporter':
-          transporterController.text.trim().replaceAll(' ', '_').toLowerCase(),
+      'started_at': startedAt,
+      'ended_at': endedAt,
+      'transporter_id': selectedTransporter.value?.id,
       'regd_number': truckController.text.trim(),
       'driver_uuid': truckModel.value.driverUuid,
-      // Send company IDs (integers) instead of free-text strings.
       'origin_id': selectedOriginCompany.value?.id,
       'destination_id': selectedDestinationCompany.value?.id,
-      // Material type as snake_case mineral name.
-      'material_type':
-          selectedMineral.value?.name?.toLowerCase().replaceAll(' ', '_'),
+      'material_id': selectedMineral.value?.id,
       'trip_status': statusTrip,
       'load_weight': totalWeightController.text.trim(),
       'short_weight': shortWeightController.text.trim(),
       'rate': rateTrip,
     };
-
-    // return 0;
-
     int addOrUpdateSuccess = 0;
     if (tripModel.value == null) {
       addOrUpdateSuccess = await TripService.addTrip(
           bodyMap: bodyObj, truckModel: truckModel.value);
       if (addOrUpdateSuccess > 0) {
         countUpdate++;
+        strStatus.value = EnumTripStatus.draft;
+        truckModel.value = TruckModel();
         clearController();
       }
     } else {
@@ -271,22 +287,29 @@ class TripAddController extends ImageUploadController {
   void clearController() {
     startAtController.clear();
     endedAtController.clear();
-    transporterController.clear();
     truckController.clear();
+    originController.clear();
+    destinationController.clear();
+    transporterController.clear();
+    mineralController.clear();
     statusController.clear();
     totalWeightController.clear();
     shortWeightController.clear();
     rateController.updateValue(0.0);
 
-    // Reset company / mineral selections.
     selectedOriginCompany.value = null;
     selectedDestinationCompany.value = null;
+    selectedTransporter.value = null;
     selectedMineral.value = null;
+    strStatus.value = EnumTripStatus.draft;
     availableMinerals.clear();
+
     originSearchResults.clear();
     destinationSearchResults.clear();
+    transporterSearchResults.clear();
     originSearchState.value = EnumSearchState.idle;
     destinationSearchState.value = EnumSearchState.idle;
+    transporterSearchState.value = EnumSearchState.idle;
   }
 
   // ═════════════════════════════════════════════════════════════════════════
@@ -297,8 +320,11 @@ class TripAddController extends ImageUploadController {
     final trip = tripModel.value!;
 
     // ── Basic fields ───────────────────────────────────────────────────────
-    startAtController.text = trip.startDate ?? '';
-    endedAtController.text = trip.endedDate ?? '';
+    // trip.startDate comes from _parseDate() → DateTime.toString() →
+    // "2026-07-25 00:00:00.000". Convert to display format so the date
+    // picker parses it correctly and the user sees dd-MM-yyyy.
+    startAtController.text = _toDisplayDate(trip.startDate) ?? '';
+    endedAtController.text = _toDisplayDate(trip.endedDate) ?? '';
     statusController.text = trip.tripStatus?.tripStatusName.toString() ?? '';
     totalWeightController.text = trip.loadDetail?.loadWeight.toString() ?? '';
     shortWeightController.text = trip.loadDetail?.shortWeight.toString() ?? '';
@@ -370,17 +396,43 @@ class TripAddController extends ImageUploadController {
     }
   }
 
+  /// UI display format (dd-MM-yyyy) → API format (yyyy-MM-dd).
+  /// Returns null when the input is blank or unparseable.
+  static String? _toApiDate(String raw) {
+    final s = raw.trim();
+    if (s.isEmpty) return null;
+    try {
+      return _apiFmt.format(_displayFmt.parseStrict(s));
+    } catch (_) {}
+    try {
+      // Fallback: DateTime.toString() e.g. "2026-07-25 00:00:00.000"
+      return _apiFmt.format(DateTime.parse(s));
+    } catch (_) {}
+    return null;
+  }
+
+  /// Any raw date string → display format (dd-MM-yyyy) for the UI.
+  /// Returns null when the input is blank or unparseable.
+  static String? _toDisplayDate(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return null;
+    try {
+      return _displayFmt.format(DateTime.parse(raw.trim()));
+    } catch (_) {}
+    try {
+      return _displayFmt.format(_displayFmt.parseStrict(raw.trim()));
+    } catch (_) {}
+    return null;
+  }
+
   @override
   void onClose() {
-    // Cancel any in-flight debounce timers.
     _originSearchDebounce?.cancel();
     _destinationSearchDebounce?.cancel();
+    _transporterSearchDebounce?.cancel();
 
-    // Dispose all TextEditingControllers.
     startAtController.dispose();
     endedAtController.dispose();
     truckController.dispose();
-    transporterController.dispose();
     statusController.dispose();
     totalWeightController.dispose();
     shortWeightController.dispose();

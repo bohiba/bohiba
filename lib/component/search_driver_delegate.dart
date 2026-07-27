@@ -1,8 +1,6 @@
+import '/component/bohiba_network_image.dart';
 import '/component/image_path.dart';
-import '/extensions/bohiba_extension.dart';
 import '/routes/app_route.dart';
-import '/services/global_service.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
@@ -80,40 +78,10 @@ class SearchDriverDelegate extends SearchDelegate {
               padding: const EdgeInsets.all(15.0),
               child: Row(
                 children: [
-                  Container(
-                    height: 32.h,
-                    width: 32.h,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: bohibaTheme.cardColor,
-                    ),
-                    child: user.profile?.image == null || (user.profile?.image?.isEmpty ?? true)
-                        ? Text(
-                            user.profile?.name?.toString().shortCode ?? '',
-                            style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                              color: bohibaTheme.textTheme.bodySmall!.color,
-                            ),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(6.r),
-                            child: CachedNetworkImage(
-                              imageUrl: "${ImagePath.profileImage}/${user.profile?.image}",
-                              fit: BoxFit.cover,
-                              placeholder: (context, child) {
-                                return Image.network(
-                                  GlobalService.getAvatarUrl(user.profile?.image ?? ''),
-                                );
-                              },
-                              errorWidget: (context, child, obj) {
-                                return Image.network(
-                                  GlobalService.getAvatarUrl(user.profile?.image ?? ''),
-                                );
-                              },
-                            ),
-                          ),
+                  BohibaNetworkImage.circle(
+                    imageUrl: '${ImagePath.profileImage}/${user.profile?.image}',
+                    size: 32.h,
+                    fallbackText: user.profile?.name,
                   ),
                   Gap(10.w),
                   Column(

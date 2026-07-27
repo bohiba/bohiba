@@ -1,8 +1,7 @@
 import 'dart:async';
 
+import '/component/bohiba_network_image.dart';
 import '/component/image_path.dart';
-import '/extensions/bohiba_extension.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/dist/enums/app_enums.dart';
@@ -45,67 +44,10 @@ class DriverTile extends GetView<DriverController> {
               onTap: onPressed,
               child: Row(
                 children: [
-                  Container(
-                    height: 32.h,
-                    width: 32.h,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: bohibaTheme.colorScheme.surface,
-                    ),
-                    child: driver.profile?.image == null ||
-                            (driver.profile?.image?.isEmpty ?? true)
-                        ? Text(
-                            driver.profile?.name?.shortCode ?? '',
-                            style: TextStyle(
-                              fontSize:
-                                  bohibaTheme.textTheme.labelLarge!.fontSize,
-                              fontWeight:
-                                  bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                              color: bohibaTheme.textTheme.bodySmall!.color,
-                            ),
-                          )
-                        : Container(
-                            height: 32.h,
-                            width: 32.h,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: bohibaTheme.dividerColor,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadiusGeometry.circular(35.r),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    '${ImagePath.profileImage}/${driver.profile?.image}',
-                                fit: BoxFit.cover,
-                                height: 32.h,
-                                width: 32.h,
-                                placeholder: (context, url) => Container(
-                                  color: bohibaTheme.cardColor,
-                                ),
-                                errorWidget: (context, url, error) => Container(
-                                  height: 32.h,
-                                  width: 32.h,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: bohibaTheme.colorScheme.surface,
-                                  ),
-                                  child: Text(
-                                    driver.profile?.name?.shortCode ?? '',
-                                    style: TextStyle(
-                                      fontSize: bohibaTheme
-                                          .textTheme.labelLarge!.fontSize,
-                                      fontWeight: bohibaTheme
-                                          .textTheme.bodyMedium!.fontWeight,
-                                      color: bohibaTheme
-                                          .textTheme.bodySmall!.color,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                  BohibaNetworkImage.circle(
+                    imageUrl: '${ImagePath.profileImage}/${driver.profile?.image}',
+                    size: 32.h,
+                    fallbackText: driver.profile?.name,
                   ),
                   Gap(ScreenUtils.height15),
                   Column(
@@ -116,6 +58,11 @@ class DriverTile extends GetView<DriverController> {
                         driver.profile?.name ?? '',
                         maxLines: 1,
                         style: bohibaTheme.textTheme.bodyMedium,
+                      ),
+                      Text(
+                        driver.profile?.driverUuid ?? '',
+                        maxLines: 1,
+                        style: bohibaTheme.textTheme.labelMedium,
                       ),
                     ],
                   ),

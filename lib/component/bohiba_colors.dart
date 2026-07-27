@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 // Colors
 class ColorSchemes {
-  static final bohibaColorsScheme = ColorScheme.fromSeed(seedColor: Colors.transparent);
+  static final bohibaColorsScheme =
+      ColorScheme.fromSeed(seedColor: Colors.transparent);
 }
 
 class BohibaColors {
@@ -19,6 +20,7 @@ class BohibaColors {
 
   static const white = Color.fromRGBO(255, 255, 255, 1);
   static const black = Color.fromRGBO(37, 37, 37, 1);
+  static const orange = Color.fromRGBO(250, 146, 56, 1);
 
   static const errorColor = Color.fromRGBO(250, 198, 56, 1);
   static const successColor = Color.fromRGBO(26, 162, 27, 1);

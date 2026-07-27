@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 
 import '/component/bohiba_appbar/title_appbar.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -35,23 +35,12 @@ class NewsScreen extends GetView<NewsController> {
               ),
               child: Column(
                 children: [
-                  SizedBox(
+                  BohibaNetworkImage.rounded(
+                    imageUrl: controller.newsDetail.value.image,
                     width: ScreenUtils.width,
                     height: 160.h,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: CachedNetworkImage(
-                        imageUrl: '${controller.newsDetail.value.image}',
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: bohibaTheme.cardColor,
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: bohibaTheme.cardColor,
-                          child: Icon(Icons.broken_image, size: 50, color: bohibaTheme.dividerColor),
-                        ),
-                      ),
-                    ),
+                    radius: 12,
+                    fallbackText: controller.newsDetail.value.title,
                   ),
                   Gap(5.h),
                   Align(

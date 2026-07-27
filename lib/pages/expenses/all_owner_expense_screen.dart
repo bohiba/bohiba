@@ -57,12 +57,13 @@ class AllOwnerExpenseScreen extends GetView<AllOwnerExpenseController> {
             child: controller.arrOwnerExp.isEmpty
                 ? Center(
                     child: SizedBox(
-                      width: ScreenUtils.width * 0.65,
+                      width: ScreenUtils.width * 0.7,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'No Expense Found',
+                            textAlign: TextAlign.center,
                             style: bohibaTheme.textTheme.displaySmall,
                           ),
                           Text(

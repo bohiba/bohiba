@@ -2,6 +2,20 @@
 
 CMD + SHIFT + V
 
+# Flavor
+
+## Test flavor
+flutter run --flavor test -t lib/main_test.dart
+
+## Prod flavor
+flutter run --flavor prod -t lib/main_prod.dart
+
+## Release APK for prod
+flutter build apk --flavor prod -t lib/main_prod.dart --release
+
+## Release APK for test
+flutter build apk --flavor test -t lib/main_test.dart --release
+
 # User Role
 
 | Role        | Value |

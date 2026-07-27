@@ -36,10 +36,12 @@ class TruckEditPage extends GetView<EditTruckController> {
                 AppDropdownSearch<UserModel>(
                   hint: controller.truck.value.driverName ?? 'Select Driver',
                   items: controller.arrDriver.value,
-                  labelBuilder: (UserModel driver) => driver.profile!.name!,
+                  labelBuilder: (UserModel driver) =>
+                      driver.profile?.name ?? 'NA',
                   initialValue: UserModel(
-                      profile:
-                          UserProfile(name: controller.truck.value.driverName)),
+                    profile:
+                        UserProfile(name: controller.truck.value.driverName),
+                  ),
                   onChanged: (p0) {
                     if (p0 != null) controller.driverModel.value = p0;
                   },

@@ -16,7 +16,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 33;
+  static int dbversion = 35;
 
   /*================  DB CONFIG  =================== */
 
@@ -485,20 +485,26 @@ class DatabaseService {
   , originId INTEGER
   , originName TEXT
   , originNameCode TEXT
-  , originType INTEGER
+  , originType TEXT
   , originLat DOUBLE
   , originLng DOUBLE
-  , originStatus INTEGER
+  , originStatus TEXT
   , destinationId INTEGER
   , destinationName TEXT
   , destinationNameCode TEXT
-  , destinationType INTEGER
+  , destinationType TEXT
   , destinationLat DOUBLE
   , destinationLng DOUBLE
-  , destinationStatus INTEGER
+  , destinationStatus TEXT
+  , transporterId INTEGER
+  , transporterName TEXT
+  , transporterNameCode TEXT
+  , transporterType TEXT
+  , transporterLat DOUBLE
+  , transporterLng DOUBLE
+  , transporterStatus TEXT
   , startedAt DATE
   , endedAt DATE
-  , transporterId INTEGER
   , materialType TEXT
   , loadWeight DOUBLE NOT NULL DEFAULT 0.0
   , shortWeight DOUBLE NOT NULL DEFAULT 0.0
@@ -554,11 +560,11 @@ class DatabaseService {
     CREATE TABLE IF NOT EXISTS $tblTripPayment (
       id INTEGER PRIMARY KEY AUTOINCREMENT
     , tripId INTEGER NOT NULL DEFAULT 0
-    , payerType TEXT
-    , payementMode TEXT
+    , paymentType INTERGER
+    , payementMode INTERGER
     , amount DOUBLE NOT NULL DEFAULT 0.0
     , paidBy TEXT
-    , receivedBy TEXT
+    , receivedBy INTERGER
     , paymentTime TEXT
     , UNIQUE(id)
     , FOREIGN KEY (tripId) REFERENCES $tblTrips(id) ON DELETE CASCADE

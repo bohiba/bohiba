@@ -299,12 +299,12 @@ class AuthService {
     }
   }
 
-  static Future<int> verifyOtp({
+  static Future<String> verifyOtp({
     required String txtEmail,
     required String txtOtp,
   }) async {
     if (!await DeviceInfoService.hasInternet()) {
-      return 0;
+      return 'FAILED';
     }
     GlobalService.showProgress();
     Map<String, dynamic> bodyObj = {'email': txtEmail, 'otp': txtOtp};
@@ -322,25 +322,26 @@ class AuthService {
           status: AlertStatus.warning,
           desc: serviceResponse.errorMessage,
         );
-        return 0;
+        return 'FAILED';
       case StatusCode.notFound:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
           desc: serviceResponse.errorMessage,
         );
-        return 0;
+        return 'FAILED';
       case StatusCode.ok:
         GlobalService.showSnackBar(
           status: AlertStatus.success,
           desc: serviceResponse.message,
         );
-        return 1;
+        Map<String, dynamic> mapData = serviceResponse.data;
+        return mapData['status'];
       default:
         GlobalService.showSnackBar(
           status: AlertStatus.warning,
           desc: serviceResponse.errorMessage,
         );
-        return 0;
+        return 'FAILED';
     }
   }
 

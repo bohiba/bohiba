@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 
 import '/model/rating_model.dart';
 
@@ -179,48 +179,10 @@ class UserProfilePage extends GetView<DashboardController> {
                                     child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          height: 32.h,
-                                          width: 32.h,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: bohibaTheme.colorScheme.surface,
-                                          ),
-                                          child: rating.reviewerImage == null || (rating.reviewerImage?.isEmpty ?? true)
-                                              ? Text(
-                                                  rating.reviewerImage?.shortCode ?? '',
-                                                  style: TextStyle(
-                                                    fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                                                    fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                                                    color: bohibaTheme.textTheme.bodySmall!.color,
-                                                  ),
-                                                )
-                                              : Container(
-                                                  height: 32.h,
-                                                  width: 32.h,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: bohibaTheme.dividerColor,
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius: BorderRadiusGeometry.circular(35.r),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: '${ImagePath.profileImage}/${rating.reviewerImage}',
-                                                      fit: BoxFit.cover,
-                                                      height: 32.h,
-                                                      width: 32.h,
-                                                      placeholder: (context, url) => Container(
-                                                        color: bohibaTheme.cardColor,
-                                                      ),
-                                                      errorWidget: (context, url, error) => Icon(
-                                                        Icons.broken_image,
-                                                        size: 20,
-                                                        color: bohibaTheme.cardColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
+                                        BohibaNetworkImage.circle(
+                                          imageUrl: '${ImagePath.profileImage}/${rating.reviewerImage}',
+                                          size: 32.h,
+                                          fallbackText: rating.reviewerName,
                                         ),
                                         Gap(8.w),
                                         SizedBox(

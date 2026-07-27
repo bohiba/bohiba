@@ -60,33 +60,19 @@ class SettingPage extends GetView<SettingController> {
               Gap(ScreenUtils.height30),
               Text("Appearance", style: bohibaTheme.textTheme.headlineMedium),
               LinearBoxWidget(
+                onClick: () => navigation.pushNamed(AppRoute.themeSetting),
                 header: 'Theme',
-                widget: DropdownButtonHideUnderline(
-                  child: DropdownButton<ThemeMode>(
-                    value: controller.themeMode.value,
-                    isDense: true,
-                    borderRadius: BorderRadius.circular(8.0),
-                    items: const [
-                      DropdownMenuItem(
-                        value: ThemeMode.light,
-                        child: Text("Light"),
-                      ),
-                      DropdownMenuItem(
-                        value: ThemeMode.dark,
-                        child: Text("Dark"),
-                      ),
-                      // DropdownMenuItem(
-                      //   value: ThemeMode.system,
-                      //   child: Text("System"),
-                      // ),
-                    ],
-                    onChanged: (ThemeMode? newMode) async {
-                      if (newMode != null) {
-                        await controller.themeController.changeTheme(newMode);
-                      }
-                    },
-                  ),
-                ),
+                showArrow: true,
+                widget: Obx(() {
+                  final label =
+                      switch (controller.themeController.appThemeMode.value) {
+                    AppThemeMode.light => 'Light',
+                    AppThemeMode.dark => 'Dark',
+                    AppThemeMode.system => 'System',
+                    AppThemeMode.timeBased => 'Time Based',
+                  };
+                  return Text(label, style: bohibaTheme.textTheme.bodySmall);
+                }),
               ),
               Gap(ScreenUtils.height30),
               Text(

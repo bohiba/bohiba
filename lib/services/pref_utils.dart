@@ -30,6 +30,7 @@ class PrefUtils {
     return getBool(biometricKey);
   }
 
+  // Legacy — kept for any callers that still use ThemeMode directly.
   static ThemeMode getAppThemeMode() {
     final stored = _preferences?.getString(themeKey);
     return ThemeMode.values.firstWhere(
@@ -37,6 +38,12 @@ class PrefUtils {
       orElse: () => ThemeMode.light,
     );
   }
+
+  static String? getStoredThemeMode() =>
+      _preferences?.getString(themeKey);
+
+  static Future<void> setStoredThemeMode(String value) async =>
+      await _preferences?.setString(themeKey, value);
 
   Future<void> setThemeData(String value) {
     return _preferences!.setString(themeKey, value);
@@ -111,11 +118,64 @@ class PrefUtils {
   }
 
   static const String token = 'app_token';
-  static const String themeKey = 'theme_mode';
+  static const String themeKey = 'app_theme_mode';
+  static const String darkStartHourKey = 'dark_start_hour';
+  static const String darkStartMinuteKey = 'dark_start_minute';
+  static const String darkEndHourKey = 'dark_end_hour';
+  static const String darkEndMinuteKey = 'dark_end_minute';
   static const String biometricKey = 'biometric_enabled';
   static const String roleKey = 'user_role';
   static const String showConnectDialog = 'show_con_dialog';
   static const String keyFirebaseToken = 'firebase_token';
   static const String keyLat = 'key_lat';
   static const String keyLong = 'key_long';
+
+  // Returns null when the user has never set a time-based schedule.
+  static TimeOfDay? getDarkStartTime() {
+    final h = _preferences?.getInt(darkStartHourKey);
+    final m = _preferences?.getInt(darkStartMinuteKey);
+    if (h == null || m == null) return null;
+    return TimeOfDay(hour: h, minute: m);
+  }
+
+  static TimeOfDay? getDarkEndTime() {
+    final h = _preferences?.getInt(darkEndHourKey);
+    final m = _preferences?.getInt(darkEndMinuteKey);
+    if (h == null || m == null) return null;
+    return TimeOfDay(hour: h, minute: m);
+  }
+
+  Future<void> setDarkStartTime(TimeOfDay t) async {
+    await _preferences!.setInt(darkStartHourKey, t.hour);
+    await _preferences!.setInt(darkStartMinuteKey, t.minute);
+  }
+
+  Future<void> setDarkEndTime(TimeOfDay t) async {
+    await _preferences!.setInt(darkEndHourKey, t.hour);
+    await _preferences!.setInt(darkEndMinuteKey, t.minute);
+  }
+
+  Future<void> clearDarkSchedule() async {
+    await _preferences?.remove(darkStartHourKey);
+    await _preferences?.remove(darkStartMinuteKey);
+    await _preferences?.remove(darkEndHourKey);
+    await _preferences?.remove(darkEndMinuteKey);
+  }
+
+  static Future<void> setDarkStartTimeStatic(TimeOfDay t) async {
+    await _preferences?.setInt(darkStartHourKey, t.hour);
+    await _preferences?.setInt(darkStartMinuteKey, t.minute);
+  }
+
+  static Future<void> setDarkEndTimeStatic(TimeOfDay t) async {
+    await _preferences?.setInt(darkEndHourKey, t.hour);
+    await _preferences?.setInt(darkEndMinuteKey, t.minute);
+  }
+
+  static Future<void> clearDarkScheduleStatic() async {
+    await _preferences?.remove(darkStartHourKey);
+    await _preferences?.remove(darkStartMinuteKey);
+    await _preferences?.remove(darkEndHourKey);
+    await _preferences?.remove(darkEndMinuteKey);
+  }
 }

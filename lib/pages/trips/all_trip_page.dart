@@ -1,6 +1,7 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:gap/gap.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import 'trip_tile.dart';
 
@@ -8,14 +9,17 @@ import '/routes/app_route.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
 
-import '../../dist/enums/app_enums.dart';
+import '/dist/widget_exports.dart';
+import '/dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
-
+import '/extensions/ext_trip_status.dart';
 import '/component/app_skeleton_loader.dart';
+import '/component/bohiba_buttons/utility_action_button.dart';
 
+import '/pages/widget/filter_menu.dart';
 import '/pages/widget/role_widget.dart';
 import '/pages/widget/permission_widget.dart';
-import '/controllers/trip_all_controller.dart';
+import '/controllers/all_trip_controller.dart';
 import '/services/role_permission_service.dart';
 
 import 'package:get/get.dart';
@@ -32,27 +36,8 @@ class AllTripPage extends StatefulWidget {
   State<AllTripPage> createState() => _AllTripPageState();
 }
 
-class _AllTripPageState extends State<AllTripPage>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
+class _AllTripPageState extends State<AllTripPage> {
   final controller = Get.find<AllTripController>();
-
-  final List<String> tabs = [
-    'All',
-    'In Transit',
-    'Completed',
-    'Unloading',
-    'Delayed',
-    'Cancelled',
-    'On Hold',
-    'Reassigned',
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: tabs.length, vsync: this);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,58 +104,8 @@ class _AllTripPageState extends State<AllTripPage>
                 ),
               );
             },
-            icon: Icon(
-              Icons.search_sharp,
-              size: 22,
-            ),
+            icon: const Icon(Icons.search_sharp, size: 22),
           ),
-          /*AppBarIconBox(
-            onTapDown: (tapDownDetails) => showMenu(
-              context: context,
-              menuPadding: EdgeInsets.zero,
-              elevation: 4,
-              position: RelativeRect.fromLTRB(
-                tapDownDetails.globalPosition.dx,
-                tapDownDetails.globalPosition.dy,
-                0,
-                0,
-              ),
-              items: [
-                PopupMenuItem(
-                  padding: EdgeInsets.zero,
-                  enabled: false,
-                  child: FilterMenu(
-                    status: true,
-                    statusText: 'Trip Status',
-                    statusHint: controller.tripStatus.first,
-                    statusList: controller.tripStatus,
-                  ),
-                ),
-              ],
-            ),
-            icon: Icon(RemixIcons.filter_line),
-          ),
-          AppBarIconBox(
-            onTapDown: (tapDownDetails) => showMenu(
-              context: context,
-              menuPadding: EdgeInsets.zero,
-              elevation: 4,
-              position: RelativeRect.fromLTRB(
-                tapDownDetails.globalPosition.dx,
-                tapDownDetails.globalPosition.dy,
-                0,
-                0,
-              ),
-              items: [
-                PopupMenuItem(
-                  padding: EdgeInsets.zero,
-                  enabled: false,
-                  child: SortMenu(),
-                ),
-              ],
-            ),
-            icon: Icon(Icons.sort),
-          ),*/
           PermissionWidget(
             permission: RolePermissionService.addTrips,
             child: AppBarIconBox(
@@ -190,120 +125,233 @@ class _AllTripPageState extends State<AllTripPage>
       ),
       body: SafeArea(
         child: Obx(() {
-          return SmartRefresher(
-            controller: controller.refreshController,
-            onRefresh: () async {
-              await controller.getAllTrip(
-                  type: MethodType.api, refreshTrip: true);
-              controller.refreshController.refreshCompleted();
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                TabBar(
-                  controller: tabController,
-                  isScrollable: true,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  tabs: List.generate(
-                    tabs.length,
-                    (index) {
-                      return Tab(text: tabs[index]);
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    children: controller.convertToSnakeCase(tabs).map(
-                      (status) {
-                        final filteredTrips =
-                            controller.getTripsByStatus(status);
-                        if (filteredTrips == null) {
-                          return AppSkeletonLoader(
-                            padding: EdgeInsets.only(top: ScreenUtils.height20),
-                            skeletonLength: 3,
-                          );
-                        } else if (filteredTrips.isEmpty) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'No Trip Found',
-                                style: bohibaTheme.textTheme.displaySmall,
-                              ),
-                              Text(
-                                'No trip found, Press below to add trip.',
-                                style: bohibaTheme.textTheme.titleMedium,
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  navigatorState
-                                      .pushNamed(AppRoute.addTrip)
-                                      .then((value) async {
-                                    if (value != null) {
-                                      await controller.getAllTrip();
-                                    }
-                                  });
-                                },
-                                child: RoleWidget(
-                                  truckOwnerWidget: Text('Add Trip'),
-                                ),
-                              )
-                            ],
-                          );
-                        } else {
-                          return ListView.builder(
-                            // controller: controller.scrollController,
-                            itemCount: (filteredTrips.length) +
-                                (controller.hasMore.value ? 1 : 0),
-                            padding: EdgeInsets.only(
-                              top: ScreenUtils.height20,
-                              left: ScreenUtils.width15,
-                              right: ScreenUtils.width15,
-                            ),
-                            itemBuilder: (context, index) {
-                              if (index < filteredTrips.length) {
-                                return TripTile(
-                                  tripInfo: filteredTrips[index],
-                                  onClick: () {
-                                    navigatorState
-                                        .pushNamed(AppRoute.trips,
-                                            arguments: filteredTrips[index])
-                                        .then((onValue) async {
-                                      if (onValue != false) {
-                                        await controller.getAllTrip(
-                                            type: MethodType.local,
-                                            refreshTrip: true);
-                                      }
-                                    });
-                                  },
-                                );
-                              } else {
-                                return Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
+          final source = controller.arrTrip.value;
+          final displayed = controller.displayedTrips;
+
+          return Column(
+            children: [
+              _FilterActionRow(controller: controller),
+              Expanded(
+                child: source == null
+                    ? AppSkeletonLoader(
+                        padding: EdgeInsets.only(top: ScreenUtils.height20),
+                        skeletonLength: 10,
+                      )
+                    : displayed.isEmpty
+                        ? _EmptyState(
+                            noTripsAtAll: source.isEmpty,
+                            hasActiveFilter: controller.hasActiveFilter,
+                            onAdd: () => navigatorState
+                                .pushNamed(AppRoute.addTrip)
+                                .then((value) async {
+                              if (value != null) {
+                                await controller.fetchTrips(refresh: true);
                               }
+                            }),
+                            onClearFilter: controller.clearFilters,
+                          )
+                        : SmartRefresher(
+                            controller: controller.refreshController,
+                            onRefresh: () async {
+                              await controller.fetchTrips(refresh: true);
+                              controller.refreshController.refreshCompleted();
                             },
-                          );
-                        }
-                      },
-                    ).toList(),
-                  ),
-                ),
-              ],
-            ),
+                            child: ListView.separated(
+                              controller: controller.scrollController,
+                              itemCount: displayed.length +
+                                  (controller.isLoading.value ? 1 : 0),
+                              padding: EdgeInsets.only(
+                                top: ScreenUtils.height5,
+                                left: ScreenUtils.width15,
+                                right: ScreenUtils.width15,
+                                bottom: 16.h,
+                              ),
+                              separatorBuilder: (_, __) => Gap(2.h),
+                              itemBuilder: (context, index) {
+                                if (index < displayed.length) {
+                                  return TripTile(
+                                    tripInfo: displayed[index],
+                                    onClick: () {
+                                      navigatorState
+                                          .pushNamed(AppRoute.trips,
+                                              arguments: displayed[index])
+                                          .then((onValue) async {
+                                        if (onValue != false) {
+                                          await controller.getAllTrip(
+                                              type: MethodType.local,
+                                              refreshTrip: true);
+                                        }
+                                      });
+                                    },
+                                  );
+                                }
+                                return AppSkeletonLoader(
+                                  skeletonLength: 2,
+                                );
+                              },
+                            ),
+                          ),
+              ),
+            ],
           );
         }),
       ),
     );
   }
+}
+
+// ---------------------------------------------------------------------------
+// Filter action row — trip count + clear badge + FilterMenu popup trigger
+// ---------------------------------------------------------------------------
+
+class _FilterActionRow extends StatelessWidget {
+  final AllTripController controller;
+  const _FilterActionRow({required this.controller});
+
+  static List<String> get _statusNames =>
+      AllTripController.allStatusCodes.map((c) => c.tripStatusName).toList();
 
   @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final hasFilter = controller.hasActiveFilter;
+      final count = controller.displayedTrips.length;
+
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: ScreenUtils.width15,
+          vertical: ScreenUtils.height5,
+        ),
+        child: Row(
+          children: [
+            Text(
+              '$count Trip${count == 1 ? '' : 's'}',
+              style: bohibaTheme.textTheme.bodyMedium,
+            ),
+            if (hasFilter) ...[
+              Gap(8.w),
+              GestureDetector(
+                onTap: controller.clearFilters,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(RemixIcons.close_circle_line,
+                        size: 14.sp, color: bohibaTheme.colorScheme.tertiary),
+                    Gap(2.w),
+                    Text(
+                      'Clear',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: bohibaTheme.colorScheme.tertiary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            const Spacer(),
+            UtilityActionButton(
+              icon: Remix.equalizer_2_line,
+              buttonName: 'Filter',
+              onPanDown: (details) => showMenu(
+                context: context,
+                menuPadding: EdgeInsets.zero,
+                elevation: 4,
+                position: RelativeRect.fromLTRB(
+                  details.globalPosition.dx - ScreenUtils.width * 0.5,
+                  details.globalPosition.dy + ScreenUtils.height * 0.02,
+                  details.globalPosition.dx,
+                  0,
+                ),
+                items: [
+                  PopupMenuItem(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    enabled: false,
+                    child: SizedBox(
+                      width: ScreenUtils.width * 0.95,
+                      child: FilterMenu(
+                        dateRange: true,
+                        status: true,
+                        statusText: 'Trip Status',
+                        statusHint: 'Select trip status',
+                        statusList: _statusNames,
+                        onApply: controller.applyFilterMenu,
+                        onReset: controller.clearFilters,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Empty state — distinguishes "no trips" from "filter removed all results"
+// ---------------------------------------------------------------------------
+
+class _EmptyState extends StatelessWidget {
+  final bool noTripsAtAll;
+  final bool hasActiveFilter;
+  final VoidCallback onAdd;
+  final VoidCallback onClearFilter;
+
+  const _EmptyState({
+    required this.noTripsAtAll,
+    required this.hasActiveFilter,
+    required this.onAdd,
+    required this.onClearFilter,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            hasActiveFilter
+                ? RemixIcons.filter_off_line
+                : RemixIcons.truck_line,
+            size: 48.sp,
+            color: bohibaTheme.textTheme.titleMedium!.color,
+          ),
+          Gap(12.h),
+          Text(
+            hasActiveFilter
+                ? 'No trips match the selected filters'
+                : 'No Trips Found',
+            style: bohibaTheme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          Gap(4.h),
+          Text(
+            hasActiveFilter
+                ? 'Try adjusting or clearing your filters.'
+                : 'Press below to add your first trip.',
+            style: bohibaTheme.textTheme.titleSmall,
+            textAlign: TextAlign.center,
+          ),
+          Gap(16.h),
+          if (hasActiveFilter)
+            TextButton.icon(
+              label: Text('Clear Filters'),
+              icon: Icon(RemixIcons.close_line, size: 16.sp),
+              onPressed: onClearFilter,
+            )
+          else
+            RoleWidget(
+              truckOwnerWidget: TextButton(
+                onPressed: onAdd,
+                child: const Text('Add Trip'),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

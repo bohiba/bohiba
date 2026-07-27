@@ -156,6 +156,10 @@ class DriverService {
 
       if (driverList.isNotEmpty) {
         UserModel driver = UserModel.fromDB(driverList.first);
+        final String? uuid = driver.profile?.driverUuid;
+        if (uuid != null && uuid.isNotEmpty) {
+          driver.rating = await RatingService.getLatestRatingsForDriver(driverUuid: uuid);
+        }
         return driver;
       } else {
         return null;
@@ -170,17 +174,16 @@ class DriverService {
         case 200:
           UserModel driver = UserModel.fromJson(response.data);
           Map driverObj = response.data;
+          final String? uuid = driver.profile?.driverUuid;
           if (driverObj.containsKey('rating')) {
             List<dynamic> ratingList = driverObj['rating'];
             List<Map<String, dynamic>> arrRatingObj = ratingList.map((rating) {
-              return RatingModel.toDB(rating);
+              final Map<String, dynamic> r = Map<String, dynamic>.from(rating as Map);
+              r['driverUuid'] = uuid;
+              return RatingModel.toDB(r);
             }).toList();
 
-            int insertRating =
-                await RatingService.insertAll(ratingList: arrRatingObj);
-            if (insertRating > 0) {
-              // Insert Success
-            }
+            await RatingService.insertAll(ratingList: arrRatingObj);
           }
           String strUpdateQuery = '''
             UPDATE $tblDriver SET

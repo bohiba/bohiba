@@ -2,7 +2,7 @@ import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 
 class SingleTileTabComponent extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final IconData icon;
   final String title;
   final Color? iconColor;
@@ -10,7 +10,7 @@ class SingleTileTabComponent extends StatelessWidget {
 
   const SingleTileTabComponent(
       {super.key,
-      required this.onTap,
+      this.onTap,
       this.icon = Icons.add,
       this.trailing = const SizedBox(),
       this.iconColor,

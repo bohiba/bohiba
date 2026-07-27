@@ -1,5 +1,5 @@
 import '/component/bohiba_buttons/primary_button.dart';
-import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
+import '/component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/component/bohiba_inputfield/date_inputfield.dart';
 import '/extensions/bohiba_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +19,16 @@ class FilterMenu extends StatefulWidget {
   final String? statusText;
   final String? statusHint;
   final List<String>? statusList;
+
+  /// Called when the user taps Apply.
+  /// [status]   — selected status label, or null if none chosen.
+  /// [fromDate] — from-date string in `dd-MM-yyyy`, or null.
+  /// [toDate]   — to-date string in `dd-MM-yyyy`, or null.
+  final void Function(String? status, String? fromDate, String? toDate)?
+      onApply;
+
+  /// Called when the user taps Reset All.
+  final VoidCallback? onReset;
 
   /// Creates a customizable filter menu.
   ///
@@ -41,6 +51,8 @@ class FilterMenu extends StatefulWidget {
     this.statusText,
     this.statusHint,
     this.statusList,
+    this.onApply,
+    this.onReset,
   }) : assert(
           status == false ||
               (statusList != null && statusList.isNotEmpty) ||
@@ -69,10 +81,8 @@ class _FilterMenuState extends State<FilterMenu> {
         // Title
         Padding(
           padding: EdgeInsets.only(
-            top: ScreenUtils.height15,
-            left: ScreenUtils.width15,
-            right: ScreenUtils.width15,
-            bottom: ScreenUtils.height15,
+            top: ScreenUtils.height5,
+            bottom: ScreenUtils.height5,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,9 +108,7 @@ class _FilterMenuState extends State<FilterMenu> {
 
         Padding(
           padding: EdgeInsets.only(
-            // top: BohibaResponsiveScreen.height5,
-            left: ScreenUtils.width15,
-            right: ScreenUtils.width15,
+            // top: BohibaResponsiveScreen.height5
             bottom: ScreenUtils.height10,
           ),
           child: Column(
@@ -113,11 +121,12 @@ class _FilterMenuState extends State<FilterMenu> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FilterHeaderWidget(
-                        onPressTrailing: () {
-                          _dateFromController.clear();
-                          _dateToController.clear();
-                        },
-                        title: 'Date Range'),
+                      onPressTrailing: () {
+                        _dateFromController.clear();
+                        _dateToController.clear();
+                      },
+                      title: 'Date Range',
+                    ),
                     Row(
                       children: [
                         Expanded(
@@ -250,10 +259,13 @@ class _FilterMenuState extends State<FilterMenu> {
                         _searchController.clear();
                         _menuController.clear();
                         setState(() {});
+                        widget.onReset?.call();
+                        navigatorState.pop();
                       },
                       child: Text(
                         'Reset All',
-                        style: TextStyle(color: bohibaTheme.colorScheme.error),
+                        style:
+                            TextStyle(color: bohibaTheme.colorScheme.tertiary),
                       ),
                     ),
                   ),
@@ -263,7 +275,20 @@ class _FilterMenuState extends State<FilterMenu> {
                       height: 15.h,
                       width: ScreenUtils.width / 5,
                       label: 'Apply',
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.onApply?.call(
+                          _menuController.text.isEmpty
+                              ? null
+                              : _menuController.text,
+                          _dateFromController.text.isEmpty
+                              ? null
+                              : _dateFromController.text,
+                          _dateToController.text.isEmpty
+                              ? null
+                              : _dateToController.text,
+                        );
+                        navigatorState.pop();
+                      },
                     ),
                   )
                 ],

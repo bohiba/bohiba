@@ -7,12 +7,14 @@ import 'package:marquee_text/marquee_text.dart';
 
 class SmallTabComponent extends StatelessWidget {
   final VoidCallback onTap;
+  final void Function(TapDownDetails tapDetails)? onTapDown;
   final String label;
   final IconData icon;
   // final bool alwaysScroll;
   const SmallTabComponent({
     super.key,
     required this.onTap,
+    this.onTapDown,
     this.label = "Label",
     this.icon = Icons.add,
     // this.alwaysScroll = false,
@@ -22,6 +24,7 @@ class SmallTabComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onTapDown: onTapDown,
       child: Container(
         height: ScreenUtils.height47,
         width: ScreenUtils.width * 0.25,

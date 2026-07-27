@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bohiba/component/image_path.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/image_path.dart';
+import '/component/bohiba_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '/routes/app_route.dart';
@@ -20,7 +20,6 @@ class CompanyHorizontalCard extends GetView<AllCompanyController> {
   @override
   Widget build(BuildContext context) {
     final navigator = Navigator.of(context);
-
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: ScreenUtils.height5,
@@ -39,48 +38,12 @@ class CompanyHorizontalCard extends GetView<AllCompanyController> {
             Expanded(
               child: Row(
                 children: [
-                  if (minesInfo.logo == null || minesInfo.logo!.isEmpty)
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: bohibaTheme.colorScheme.surface,
-                      child: AutoSizeText(
-                        minesInfo.nameCode ?? 'NA',
-                        style: bohibaTheme.textTheme.titleSmall,
-                        maxLines: 1,
-                      ),
-                    )
-                  else
-                    CachedNetworkImage(
-                      imageUrl: "${ImagePath.companyLogo}/${minesInfo.logo}",
-                      imageBuilder: (context, imageProvider) {
-                        return CircleAvatar(
-                          radius: 20,
-                          backgroundColor: bohibaTheme.colorScheme.surface,
-                          backgroundImage: imageProvider,
-                        );
-                      },
-                      placeholder: (context, url) {
-                        return CircleAvatar(
-                          radius: 20,
-                          backgroundColor: bohibaTheme.colorScheme.surface,
-                          child: AutoSizeText(
-                            minesInfo.nameCode ?? 'NA',
-                            style: bohibaTheme.textTheme.bodyMedium,
-                            maxLines: 1,
-                          ),
-                        );
-                      },
-                      errorWidget: (context, url, error) {
-                        return CircleAvatar(
-                          radius: 20,
-                          backgroundColor: bohibaTheme.colorScheme.surface,
-                          child: Icon(
-                            Icons.image,
-                            color: bohibaTheme.colorScheme.primary,
-                          ),
-                        );
-                      },
-                    ),
+                  BohibaNetworkImage.circle(
+                    imageUrl: '${ImagePath.companyLogo}/${minesInfo.logo}',
+                    size: 40,
+                    fallbackText: minesInfo.nameCode ?? minesInfo.name,
+                    applyShortCode: false,
+                  ),
                   Gap(ScreenUtils.width20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -133,6 +133,7 @@ class SignInScreen extends GetView<AuthController> {
                           ),
                           InkWell(
                             onTap: () {
+                              controller.clearController();
                               navigateState.pushNamed(AppRoute.forgotPwd);
                             },
                             child: Padding(
@@ -185,6 +186,7 @@ class SignInScreen extends GetView<AuthController> {
                       ),
                       TextButton(
                         onPressed: () {
+                          controller.clearController();
                           navigateState.popAndPushNamed(AppRoute.signUp);
                         },
                         child: Text(

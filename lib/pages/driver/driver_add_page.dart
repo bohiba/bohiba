@@ -1,3 +1,5 @@
+import 'package:bohiba/component/bohiba_dropdown/app_search_dropdown_button.dart';
+
 import 'driver_uuid_verification.dart';
 import 'driver_verification_manual_mode.dart';
 
@@ -12,7 +14,6 @@ import '/controllers/driver_add_controller.dart';
 import '/dist/enums/app_enums.dart';
 import '/dist/component_exports.dart';
 import '/component/bohiba_buttons/primary_button.dart';
-import '/component/bohiba_dropdown/primary_dropdown_menu.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,7 @@ class DriverAddPage extends GetView<DriverAddController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             RequiredLabel(label: 'Assign Truck'),
-                            PrimaryDropDownMenu(
+                            AppDropdownSearch<String>(
                               padding: EdgeInsets.symmetric(
                                 vertical: ScreenUtils.height10,
                               ),
@@ -105,7 +106,9 @@ class DriverAddPage extends GetView<DriverAddController> {
                                   .map((f) => f.regdNumber.toString())
                                   .toList(),
                               enableSearch: true,
-                              focusOnTap: true,
+                              labelBuilder: (p1) {
+                                return p1;
+                              },
                               onChanged: (p0) {
                                 controller.strTruckRegdNo.value = p0 ?? '';
                                 GlobalService.printHandler(

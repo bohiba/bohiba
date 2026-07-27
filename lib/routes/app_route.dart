@@ -77,6 +77,7 @@ import '/bindings/security_binding.dart';
 import '/bindings/setting_binding.dart';
 import '/pages/security/security_page.dart';
 import '/pages/setting/setting_page.dart';
+import '/pages/setting/theme_setting_page.dart';
 
 import '/bindings/share_binding.dart';
 import '/pages/share/share_earn_page.dart';
@@ -167,6 +168,15 @@ import '/pages/splashscreen.dart';
 import '/pages/truck/truck_all_page.dart';
 import '/pages/wallet/wallet_deposit/wallet_deposit_screen.dart';
 import '/pages/wallet/wallet_screen/wallet_screen.dart';
+import '/pages/wallet/bank_account_screen/bank_accounts_screen.dart';
+import '/bindings/bank_account_binding.dart';
+import '/bindings/owner_company_binding.dart';
+import '/pages/company/owner_company_page.dart';
+import '/pages/reports/reports_home_screen.dart';
+import '/pages/reports/trip_filter_screen.dart';
+import '/pages/reports/trip_list_screen.dart';
+import '/pages/reports/pdf_generate_screen.dart';
+import '/bindings/trip_report_binding.dart';
 import '/pages/info/info_screen.dart';
 import '/pages/info/flavor_config_page.dart';
 import '/pages/truck/truck_add_page.dart';
@@ -246,6 +256,7 @@ class AppRoute {
   static const String analytics = "/analytics";
   static const String manageAccount = "/manage-account";
   static const String setting = "/setting";
+  static const String themeSetting = "/theme-setting";
   static const String security = "/security";
   static const String shareEarn = "/shareEarn";
   static const String policy = "/policy";
@@ -295,6 +306,15 @@ class AppRoute {
   static const String ownerExpense = "/owner-expense";
 
   static const String fuelStation = "/fuel-station";
+
+  // Owner Company
+  static const String ownerCompany = "/owner-company";
+
+  // Reports
+  static const String reports = "/reports";
+  static const String tripReportFilter = "/reports/trip/filter";
+  static const String tripReportList = "/reports/trip/list";
+  static const String tripReportGenerate = "/reports/trip/generate";
 
   static final List<GetPage> routes = [
     GetPage(
@@ -621,6 +641,11 @@ class AppRoute {
       name: walletDepositScreen,
       page: () => const WalletDepositScreen(),
     ),
+    GetPage(
+      name: bankAccountScreen,
+      page: () => const BankAccountsScreen(),
+      binding: BankAccountBinding(),
+    ),
 
     // Others
     GetPage(
@@ -682,6 +707,12 @@ class AppRoute {
       name: setting,
       binding: SettingBinding(),
       page: () => SettingPage(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+    GetPage(
+      name: themeSetting,
+      page: () => ThemeSettingPage(),
       transition: _transition,
       transitionDuration: _duration,
     ),
@@ -766,6 +797,42 @@ class AppRoute {
         LocationBinding(),
       ],
       page: () => FuelStationFinderPage(),
+    ),
+
+    // Owner Company
+    GetPage(
+      name: ownerCompany,
+      binding: OwnerCompanyBinding(),
+      page: () => const OwnerCompanyPage(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+
+    // Reports
+    GetPage(
+      name: reports,
+      page: () => const ReportsHomeScreen(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+    GetPage(
+      name: tripReportFilter,
+      binding: TripReportBinding(),
+      page: () => const TripFilterScreen(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+    GetPage(
+      name: tripReportList,
+      page: () => const TripListScreen(),
+      transition: _transition,
+      transitionDuration: _duration,
+    ),
+    GetPage(
+      name: tripReportGenerate,
+      page: () => const PdfGenerateScreen(),
+      transition: _transition,
+      transitionDuration: _duration,
     ),
   ];
 

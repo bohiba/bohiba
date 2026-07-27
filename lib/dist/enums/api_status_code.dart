@@ -1,7 +1,10 @@
 enum StatusCode {
   networkError(0),
-  // 2xx Success
+
+  /// 2xx Success
   ok(200),
+
+  /// 201 Created new record
   created(201),
   accepted(202),
   noContent(204),

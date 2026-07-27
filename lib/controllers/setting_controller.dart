@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 class SettingController extends GetxController {
   // Controller
-  final ThemeController themeController = Get.put(ThemeController());
+  final ThemeController themeController = Get.find<ThemeController>();
   Rx<int> roleId = 9.obs;
 
   Rx<ThemeMode> themeMode = ThemeMode.light.obs;

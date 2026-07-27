@@ -1,3 +1,4 @@
+import '/dist/enums/enum_trip_status.dart';
 import '/model/truck_model.dart';
 import '/model/company_model.dart';
 import '/dist/component_exports.dart';
@@ -34,7 +35,7 @@ class AddTripPage extends GetView<TripAddController> {
               padding: EdgeInsets.only(
                 left: ScreenUtils.height15,
                 right: ScreenUtils.height15,
-                top: ScreenUtils.height10,
+                top: ScreenUtils.height15,
               ),
               child: Form(
                 key: controller.globalKey,
@@ -122,6 +123,7 @@ class AddTripPage extends GetView<TripAddController> {
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       width: ScreenUtils.width,
                       menuHeight: 90,
+                      menuController: controller.originController,
                       items: controller.originSearchResults.toList(),
                       initialValue: controller.selectedOriginCompany.value,
                       searchState: controller.originSearchState.value,
@@ -142,6 +144,7 @@ class AddTripPage extends GetView<TripAddController> {
                     RequiredLabel(label: 'Destination', required: true),
                     AppDropdownSearch<CompanyModel>(
                       hint: 'Search destination company…',
+                      menuController: controller.destinationController,
                       items: controller.destinationSearchResults.toList(),
                       initialValue: controller.selectedDestinationCompany.value,
                       searchState: controller.destinationSearchState.value,
@@ -157,27 +160,28 @@ class AddTripPage extends GetView<TripAddController> {
                       },
                     ),
 
-                    // ── Transporter ───────────────────────────────────────
                     RequiredLabel(label: 'Transporter', required: true),
-                    TextInputField(
-                      controller: controller.transporterController,
-                      textCapitalization: TextCapitalization.characters,
-                      nextActionType: TextInputAction.next,
-                      validateField: (v) => (v == null || v.isEmpty)
-                          ? 'Please enter Transporter Name'
-                          : null,
+                    AppDropdownSearch<CompanyModel>(
+                      menuController: controller.transporterController,
+                      hint: 'Search transporter…',
+                      items: controller.transporterSearchResults.toList(),
+                      initialValue: controller.selectedTransporter.value,
+                      searchState: controller.transporterSearchState.value,
+                      labelBuilder: (company) => company.name ?? '',
+                      onSearchChanged: controller.onTransporterQueryChanged,
+                      onChanged: controller.onTransporterSelected,
+                      validator: (value) =>
+                          value == null ? 'Please select a transporter.' : null,
                     ),
 
-                    // ── Material type (minerals from origin company) ───────
                     RequiredLabel(label: 'Material Type', required: true),
                     AppDropdownSearch<MineralModel>(
+                      menuController: controller.mineralController,
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       hint: controller.availableMinerals.isEmpty
                           ? 'No material found for selected origin'
                           : 'Select material...',
                       enableSearch: controller.availableMinerals.isNotEmpty,
-                      requestFocusOnTap:
-                          controller.availableMinerals.isNotEmpty,
                       items: controller.availableMinerals.toList(),
                       initialValue: controller.selectedMineral.value,
                       labelBuilder: (m) => (m.name ?? '').toCapitalizedLabel(),
@@ -190,7 +194,6 @@ class AddTripPage extends GetView<TripAddController> {
                       },
                     ),
 
-                    // ── Trip status ───────────────────────────────────────
                     AppDropdownSearch<String>(
                       padding: EdgeInsets.symmetric(vertical: 5.h),
                       hint: 'Trip Status',
@@ -199,12 +202,17 @@ class AddTripPage extends GetView<TripAddController> {
                       enableSearch: false,
                       labelBuilder: (s) => s.toCapitalizedLabel(),
                       menuController: controller.statusController,
+                      onChanged: (name) {
+                        if (name == null) return;
+                        final status = EnumTripStatus.values
+                            .firstWhereOrNull((e) => e.name == name);
+                        if (status != null) controller.strStatus.value = status;
+                      },
                       validator: (value) => (value == null || value.isEmpty)
                           ? 'Please select trip status'
                           : null,
                     ),
 
-                    // ── Weights ───────────────────────────────────────────
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +227,8 @@ class AddTripPage extends GetView<TripAddController> {
                               hintText: '00.00 in Tonne',
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
-                                    RegExp(r'(^\d*\.?\d*)'))
+                                  RegExp(r'(^\d*\.?\d*)'),
+                                )
                               ],
                               keyboardType:
                                   const TextInputType.numberWithOptions(

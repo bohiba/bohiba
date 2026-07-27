@@ -14,7 +14,6 @@ import '/controllers/security_controller.dart';
 
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
-import '/component/bohiba_appbar/appbar_icon.dart';
 import '/component/bohiba_appbar/title_appbar.dart';
 
 import 'package:gap/gap.dart';
@@ -95,33 +94,42 @@ class SecurityPage extends GetView<SecurityController> {
                     title: (controller.appInfo['updateTime'].toString()),
                   ),
                   Gap(ScreenUtils.height30),
-                  Text('Active Session',
-                      style: bohibaTheme.textTheme.headlineMedium),
-                  IconTextTile(
-                    icon: Icons.smartphone_outlined,
-                    text: 'iPhone 13 Pro',
-                    subtitle: 'Last Active: Fri 19 Sep 11:01 pm',
-                    widget: AppBarIconBox(
-                      icon: FaIcon(
-                        FontAwesomeIcons.arrowRightFromBracket,
-                        size: ScreenUtils.height15.h,
-                        color: bohibaTheme.colorScheme.tertiary,
-                      ),
-                    ),
-                  ),
-                  IconTextTile(
-                    icon: Icons.laptop_outlined,
-                    text: 'Macbook Pro',
-                    subtitle: 'Last Active: Fri 19 Sep 11:01 pm',
-                    widget: AppBarIconBox(
-                      icon: FaIcon(
-                        FontAwesomeIcons.arrowRightFromBracket,
-                        size: ScreenUtils.height15.h,
-                        color: bohibaTheme.colorScheme.tertiary,
-                      ),
-                    ),
-                  ),
-                  Gap(ScreenUtils.height30),
+                  // Text('Active Session',
+                  //     style: bohibaTheme.textTheme.headlineMedium),
+                  // Container(
+                  //   height: ScreenUtils.height * 0.1,
+                  //   width: ScreenUtils.width,
+                  //   alignment: Alignment.center,
+                  //   decoration: BoxDecoration(
+                  //     color: bohibaTheme.cardColor,
+                  //   ),
+                  //   child: Text('Coming Soon'),
+                  // ),
+                  // IconTextTile(
+                  //   icon: Icons.smartphone_outlined,
+                  //   text: 'iPhone 13 Pro',
+                  //   subtitle: 'Last Active: Fri 19 Sep 11:01 pm',
+                  //   widget: AppBarIconBox(
+                  //     icon: FaIcon(
+                  //       FontAwesomeIcons.arrowRightFromBracket,
+                  //       size: ScreenUtils.height15.h,
+                  //       color: bohibaTheme.colorScheme.tertiary,
+                  //     ),
+                  //   ),
+                  // ),
+                  // IconTextTile(
+                  //   icon: Icons.laptop_outlined,
+                  //   text: 'Macbook Pro',
+                  //   subtitle: 'Last Active: Fri 19 Sep 11:01 pm',
+                  //   widget: AppBarIconBox(
+                  //     icon: FaIcon(
+                  //       FontAwesomeIcons.arrowRightFromBracket,
+                  //       size: ScreenUtils.height15.h,
+                  //       color: bohibaTheme.colorScheme.tertiary,
+                  //     ),
+                  //   ),
+                  // ),
+                  // Gap(ScreenUtils.height30),
                   Text('Manage session',
                       style: bohibaTheme.textTheme.headlineMedium),
                   Container(
@@ -139,36 +147,36 @@ class SecurityPage extends GetView<SecurityController> {
                     ),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtils.height5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Log out from all other devices',
-                                style: TextStyle(
-                                  fontSize: bohibaTheme
-                                      .textTheme.bodyMedium!.fontSize,
-                                  fontWeight: bohibaTheme
-                                      .textTheme.bodyLarge!.fontWeight,
-                                  color:
-                                      bohibaTheme.textTheme.bodyMedium!.color,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 5.w),
-                                child: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  size: ScreenUtils.height15.h,
-                                  color: bohibaTheme.primaryColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        InkWell(
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(
+                        //       vertical: ScreenUtils.height5),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Text(
+                        //         'Log out from all other devices',
+                        //         style: TextStyle(
+                        //           fontSize: bohibaTheme
+                        //               .textTheme.bodyMedium!.fontSize,
+                        //           fontWeight: bohibaTheme
+                        //               .textTheme.bodyLarge!.fontWeight,
+                        //           color:
+                        //               bohibaTheme.textTheme.bodyMedium!.color,
+                        //         ),
+                        //       ),
+                        //       Padding(
+                        //         padding: EdgeInsets.only(left: 5.w),
+                        //         child: Icon(
+                        //           Icons.arrow_forward_ios_rounded,
+                        //           size: ScreenUtils.height15.h,
+                        //           color: bohibaTheme.primaryColor,
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Divider(),
+                        GestureDetector(
                           onTap: () async {
                             GlobalService.showAlertDialog(
                               status: AlertStatus.warning,

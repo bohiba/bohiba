@@ -1,6 +1,6 @@
 import '/pages/widget/in_app_webview.dart';
 import '/routes/app_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 import 'package:gap/gap.dart';
 
 import '/theme/bohiba_theme.dart';
@@ -83,21 +83,12 @@ class HomeNewsSection extends GetView<HomeController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Cached background
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
-                            child: CachedNetworkImage(
-                              imageUrl: '${news.image}',
-                              fit: BoxFit.cover,
-                              height: 220,
-                              width: ScreenUtils.width,
-                              placeholder: (context, url) => Container(
-                                color: bohibaTheme.cardColor,
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                color: bohibaTheme.cardColor,
-                                child: Icon(Icons.broken_image, size: 50, color: bohibaTheme.dividerColor),
-                              ),
-                            ),
+                          BohibaNetworkImage.rounded(
+                            imageUrl: news.image,
+                            width: ScreenUtils.width,
+                            height: 220,
+                            radius: 12,
+                            fallbackText: news.title,
                           ),
                           Gap(5.h),
 

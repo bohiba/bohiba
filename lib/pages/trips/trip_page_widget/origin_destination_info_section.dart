@@ -1,4 +1,5 @@
-import '/component/bohiba_text/bohiba_marquee_text.dart';
+import 'package:gap/gap.dart';
+
 import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
@@ -16,27 +17,45 @@ class OriginDestinationInfoSection extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
         top: ScreenUtils.height15,
-        bottom: ScreenUtils.height10,
+        left: ScreenUtils.width8,
+        right: ScreenUtils.width8,
       ),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                BohibaMarqueeText(
-                  width: ScreenUtils.width * 0.32,
-                  text: tripInfo?.origin?.name ?? '',
-                  style: bohibaTheme.textTheme.headlineMedium,
-                  alignment: Alignment.center,
-                  alignText: TextAlign.center,
-                  overflowText: tripInfo?.origin?.nameCode ?? '',
-                  marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
-                  preserFontSize: [
-                    bohibaTheme.textTheme.headlineMedium!.fontSize!,
-                  ],
-                  minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  tripInfo?.origin?.name ?? '',
+                  textAlign: TextAlign.center,
+                  style: bohibaTheme.textTheme.labelLarge,
                 ),
-                Text(
+              ),
+              SizedBox(
+                width: 32.w,
+                height: 32.w,
+                child: Icon(
+                  RemixIcons.arrow_right_double_line,
+                  color: bohibaTheme.primaryColor,
+                  size: 32.w,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  tripInfo?.destination?.name ?? '',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: bohibaTheme.textTheme.labelLarge,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
                   tripInfo?.startDate?.toDDMMYYYY() ?? '',
                   textAlign: TextAlign.center,
                   maxLines: 1,
@@ -46,41 +65,21 @@ class OriginDestinationInfoSection extends StatelessWidget {
                     color: bohibaTheme.textTheme.titleMedium!.color,
                   ),
                 ),
-              ],
-            ),
-          ),
-          Icon(
-            RemixIcons.arrow_right_double_line,
-            color: bohibaTheme.primaryColor,
-            size: 32.w,
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                BohibaMarqueeText(
-                  width: ScreenUtils.width * 0.32,
-                  text: tripInfo?.destination?.name ?? '',
-                  alignment: Alignment.center,
-                  alignText: TextAlign.center,
-                  style: bohibaTheme.textTheme.headlineMedium,
-                  overflowText: tripInfo?.destination?.nameCode ?? '',
-                  marqueeTextStyle: bohibaTheme.textTheme.headlineMedium,
-                  preserFontSize: [
-                    bohibaTheme.textTheme.headlineMedium!.fontSize!,
-                  ],
-                  minFontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                ),
-                Text(
+              ),
+              Gap(32.w),
+              Expanded(
+                child: Text(
                   tripInfo?.endedDate?.toDDMMYYYY() ?? '',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                     fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
                     color: bohibaTheme.textTheme.titleMedium!.color,
                   ),
                 ),
-              ],
-            ),
-          ),
+              )
+            ],
+          )
         ],
       ),
     );

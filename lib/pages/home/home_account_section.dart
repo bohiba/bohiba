@@ -1,4 +1,5 @@
 import 'package:bohiba/pages/widget/role_widget.dart';
+import 'package:bohiba/theme/bohiba_theme.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:flutter/material.dart';
 import '/component/screen_utils.dart';
@@ -41,9 +42,8 @@ class HomeAccountSection extends StatelessWidget {
                   onPressed: () {
                     navigate.pushNamed(AppRoute.addTrip);
                   },
-                  // label: 'Deposit INR',
                   label: 'Add Trip',
-                  textColor: BohibaColors.primaryColor,
+                  textColor: bohibaTheme.primaryColor,
                   width: ScreenUtils.width * 0.45,
                   height: ScreenUtils.height * 0.043,
                 )

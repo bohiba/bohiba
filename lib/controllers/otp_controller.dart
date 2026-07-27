@@ -65,13 +65,13 @@ class OtpController extends GetxController {
     return result['reset_token'];
   }
 
-  Future<int> verifyOtp() async {
+  Future<String> verifyOtp() async {
     GlobalService.closeKeyboard();
 
     if (!(otpFormKey.currentState!.validate())) {
-      return 0;
+      return "FAILED";
     }
-    int success = await AuthService.verifyOtp(
+    String success = await AuthService.verifyOtp(
       txtEmail: email.value,
       txtOtp: otpController.text,
     );

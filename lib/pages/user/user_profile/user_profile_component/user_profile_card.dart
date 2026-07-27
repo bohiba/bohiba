@@ -1,12 +1,10 @@
-import 'package:bohiba/services/pref_utils.dart';
-
 import '/routes/app_route.dart';
 import '/component/image_path.dart';
 import '/controllers/dashboard_controller.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -30,38 +28,15 @@ class UserProfileCard extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     final navigatorState = Navigator.of(context);
-    final token = PrefUtils().getString(PrefUtils.token);
     return Container(
       padding: EdgeInsets.only(bottom: ScreenUtils.height10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(60.r),
-            child: userImage == null
-                ? Container(
-                    width: 60.h,
-                    height: 60.h,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: bohibaTheme.cardColor),
-                    child: Icon(Icons.file_upload_rounded),
-                  )
-                : RepaintBoundary(
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: "${ImagePath.profileImage}/$userImage",
-                      width: ScreenUtils.width * 0.25,
-                      height: ScreenUtils.width * 0.25,
-                      httpHeaders: {
-                        'Authorization': 'Bearer $token',
-                      },
-                      errorWidget: (context, url, error) {
-                        debugPrint('URL: $url');
-                        debugPrint('ERROR: $error');
-                        return const Icon(Icons.error);
-                      },
-                    ),
-                  ),
+          BohibaNetworkImage.circle(
+            imageUrl: '${ImagePath.profileImage}/$userImage',
+            size: 60.h,
+            fallbackText: userName,
           ),
 
           // Gap(ScreenUtils.width15),

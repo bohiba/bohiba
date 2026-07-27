@@ -1,6 +1,5 @@
 import 'package:bohiba/config/app_config.dart';
 
-import '/dist/enums/app_enums.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
 import '/extensions/bohiba_extension.dart';
@@ -105,13 +104,16 @@ class DashboardPage extends GetView<DashboardController> {
                                 icon: RemixIcons.car_line,
                               ),
 
-                              RoleWidget(
-                                truckOwnerWidget: SmallTabComponent(
-                                  onTap: () {
-                                    navigator.pushNamed(AppRoute.allJobs);
-                                  },
-                                  label: "Jobs",
-                                  icon: RemixIcons.briefcase_line,
+                              Visibility(
+                                visible: AppConfig.isBeta,
+                                child: RoleWidget(
+                                  truckOwnerWidget: SmallTabComponent(
+                                    onTap: () {
+                                      navigator.pushNamed(AppRoute.allJobs);
+                                    },
+                                    label: "Jobs",
+                                    icon: RemixIcons.briefcase_line,
+                                  ),
                                 ),
                               ),
 
@@ -137,19 +139,32 @@ class DashboardPage extends GetView<DashboardController> {
                                 icon: Icons.verified_outlined,
                               ),
 
-                              /*SmallTabComponent(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const BankAccountsScreen(),
-                                        ),
-                                      );
-                                    },
-                                    label: "Bank Accounts",
-                                    icon: RemixIcons.bank_card_line,
-                                  ),*/
+                              RoleWidget(
+                                truckOwnerWidget: SmallTabComponent(
+                                  onTap: () => Get.toNamed(
+                                    AppRoute.bankAccountScreen,
+                                  ),
+                                  label: "Bank Accounts",
+                                  icon: RemixIcons.bank_card_line,
+                                ),
+                              ),
+
+                              RoleWidget(
+                                truckOwnerWidget: SmallTabComponent(
+                                  onTap: () => Get.toNamed(AppRoute.reports),
+                                  label: "Reports",
+                                  icon: RemixIcons.file_chart_line,
+                                ),
+                              ),
+
+                              RoleWidget(
+                                truckOwnerWidget: SmallTabComponent(
+                                  onTap: () =>
+                                      Get.toNamed(AppRoute.ownerCompany),
+                                  label: "My Company",
+                                  icon: RemixIcons.building_2_line,
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -218,26 +233,22 @@ class DashboardPage extends GetView<DashboardController> {
                 ),
                 SingleTileTabComponent(
                   onTap: () {
-                    // navigator.pushNamed(AppRoute.reportIssue);
-                    GlobalService.showDialog(
-                      status: AlertStatus.info,
-                      title: 'Under Developement',
-                      description:
-                          'This feature is currently under development and will be available in a future release. Stay tuned for updates!',
-                      onExit: () {
-                        Navigator.pop(context);
-                      },
-                    );
+                    navigator.pushNamed(AppRoute.reportIssue);
                   },
                   icon: RemixIcons.bug_2_line,
                   title: 'Report an Issue',
                 ),
-                SingleTileTabComponent(
-                  onTap: () {
-                    navigator.pushNamed(AppRoute.subscriptionPlan);
-                  },
-                  icon: RemixIcons.money_cny_box_fill,
-                  title: 'Subscription Plan',
+                Visibility(
+                  visible: AppConfig.isBeta,
+                  child: RoleWidget(
+                    truckOwnerWidget: SingleTileTabComponent(
+                      onTap: () {
+                        navigator.pushNamed(AppRoute.subscriptionPlan);
+                      },
+                      icon: RemixIcons.money_cny_box_fill,
+                      title: 'Subscription Plan',
+                    ),
+                  ),
                 ),
                 SingleTileTabComponent(
                   onTap: () {

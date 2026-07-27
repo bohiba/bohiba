@@ -9,6 +9,7 @@ class StatusBoxWidget extends StatelessWidget {
   final VoidCallback? onClick;
   final String header;
   final String? title;
+  final Widget? widget;
   final Color? statusColor;
   final bool showArrow;
   const StatusBoxWidget({
@@ -16,6 +17,7 @@ class StatusBoxWidget extends StatelessWidget {
     this.onClick,
     this.header = 'NA',
     this.title,
+    this.widget,
     this.statusColor,
     this.showArrow = false,
   });
@@ -45,21 +47,24 @@ class StatusBoxWidget extends StatelessWidget {
               ),
             ),
             Spacer(),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 10.w),
-              decoration: BoxDecoration(
-                color: statusColor ?? bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
-                borderRadius: BorderRadius.circular(5.r),
-              ),
-              child: Text(
-                title?.toCapitalizedLabel() ?? '',
-                style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                  color: bohibaTheme.textTheme.displayLarge!.color,
+            if (widget == null)
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 10.w),
+                decoration: BoxDecoration(
+                  color: statusColor ??
+                      bohibaTheme.colorScheme.onPrimary.withValues(alpha: 0.25),
+                  borderRadius: BorderRadius.circular(5.r),
+                ),
+                child: Text(
+                  title?.toCapitalizedLabel() ?? '',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                    color: bohibaTheme.textTheme.displayLarge!.color,
+                  ),
                 ),
               ),
-            ),
+            widget ?? SizedBox.shrink(),
             Visibility(
               visible: showArrow,
               child: Padding(
@@ -70,7 +75,7 @@ class StatusBoxWidget extends StatelessWidget {
                   color: bohibaTheme.cardColor,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

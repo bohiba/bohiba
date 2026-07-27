@@ -378,9 +378,12 @@ class MainService {
 
     for (Map driver in driverList) {
       if (driver.containsKey('rating')) {
+        final String? driverUuid = driver['profile']?['driver_uuid'] as String?;
         List<dynamic> ratingList = driver['rating'];
         List<Map<String, dynamic>> arrRatingObj = ratingList.map((rating) {
-          return RatingModel.toDB(rating);
+          final Map<String, dynamic> r = Map<String, dynamic>.from(rating as Map);
+          r['driverUuid'] = driverUuid;
+          return RatingModel.toDB(r);
         }).toList();
 
         int insertRating =

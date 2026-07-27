@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import '/services/global_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '/services/api_end_point.dart';
 import '/services/device_info_service.dart';
@@ -58,19 +60,31 @@ class DioService {
         ),
       );
       return _handleMapResponse(response);
+    } on TimeoutException catch (e, stack) {
+      GlobalService.printHandler(
+          'Error On TimeoutException: ${stack.toString()}');
+      return MapResponse(
+        status: false,
+        statusCode: 504,
+        message: "Internet is slow please try again",
+      );
     } on DioException catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack, fatal: false);
       return MapResponse(
         status: false,
         statusCode: e.response?.statusCode ?? 500,
-        message: e.response?.data?['message'] ?? "Unknown",
+        message: e.response?.data?['message'] ??
+            e.response?.data?['errors'] ??
+            e.response?.statusMessage.toString() ??
+            "Something went to wrong",
       );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
       return MapResponse(
         status: false,
         statusCode: 500,
-        message: "Unknown",
+        message:
+            e.toString().isNotEmpty ? e.toString() : "Something went to wrong",
       );
     }
   }
@@ -97,7 +111,9 @@ class DioService {
         status: false,
         statusCode: e.response?.statusCode ?? 500,
         message: 'Failure',
-        errorMessage: e.response?.data?['errors'] ?? "Something went wrong",
+        errorMessage: e.response?.data?['errors'] ??
+            e.response?.data?['message'] ??
+            "Something went wrong",
       );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
@@ -105,7 +121,8 @@ class DioService {
         status: false,
         statusCode: 500,
         message: "Failure",
-        errorMessage: "Unknown",
+        errorMessage:
+            e.toString().isNotEmpty ? e.toString() : "Something went to wrong",
       );
     }
   }
@@ -134,7 +151,8 @@ class DioService {
         status: false,
         statusCode: e.response?.statusCode ?? 500,
         message: 'Failure',
-        errorMessage: e.response?.data?['message'] ?? "Unknown",
+        errorMessage:
+            e.response?.data?['message'] ?? "Something went to wrong $endpoint",
       );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
@@ -142,7 +160,7 @@ class DioService {
         status: false,
         statusCode: 500,
         message: "Failure",
-        errorMessage: "Unknown",
+        errorMessage: "Something went to wrong $endpoint",
       );
     }
   }
@@ -165,7 +183,8 @@ class DioService {
         status: false,
         statusCode: e.response?.statusCode ?? 500,
         message: 'Failure',
-        errorMessage: e.response?.data?['message'] ?? "Unknown",
+        errorMessage:
+            e.response?.data?['message'] ?? "Something went to wrong $endpoint",
       );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
@@ -173,7 +192,7 @@ class DioService {
         status: false,
         statusCode: 500,
         message: "Failure",
-        errorMessage: "Unknown",
+        errorMessage: "Something went to wrong $endpoint",
       );
     }
   }
@@ -196,7 +215,8 @@ class DioService {
         status: false,
         statusCode: e.response?.statusCode ?? 500,
         message: 'Failure',
-        errorMessage: e.response?.data?['message'] ?? "Unknown",
+        errorMessage:
+            e.response?.data?['message'] ?? "Something went to wrong $endpoint",
       );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
@@ -204,7 +224,7 @@ class DioService {
         status: false,
         statusCode: 500,
         message: "Failure",
-        errorMessage: "Unknown",
+        errorMessage: "Something went to wrong $endpoint",
       );
     }
   }
@@ -246,7 +266,7 @@ class DioService {
         status: false,
         statusCode: e.response?.statusCode ?? 500,
         message: 'Failure',
-        errorMessage: e.response?.data?['message'] ?? "Unknown",
+        errorMessage: e.response?.data?['message'] ?? "Something went to wrong",
       );
     } catch (e, stack) {
       FirebaseCrashlytics.instance.recordError(e, stack, fatal: true);
@@ -254,7 +274,7 @@ class DioService {
         status: false,
         statusCode: 500,
         message: "Failure",
-        errorMessage: "Unknown",
+        errorMessage: "Something went to wrong",
       );
     }
   }
@@ -324,7 +344,7 @@ class DioService {
     return ApiResponse(
       status: data["success"] ?? false,
       statusCode: response.statusCode ?? 500,
-      message: data["message"] ?? "Unknown",
+      message: data["message"] ?? data['errors'] ?? "Something went wrong",
       data: data["data"],
       errorMessage: data["errors"] ?? '',
     );
@@ -350,7 +370,7 @@ class DioService {
     return MapResponse(
       status: data["status"] == "OK" ? true : false,
       statusCode: response.statusCode ?? 500,
-      message: data["message"] ?? "Unknown",
+      message: data["message"] ?? "Something went to wrong",
       data: data["results"],
     );
   }

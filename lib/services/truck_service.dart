@@ -86,6 +86,7 @@ class TruckService {
           , driverName
           , ownerUuid
           , ownerName
+          , trips
            FROM $tblTrucks ORDER BY createdAt DESC ''';
       List<Map<String, dynamic>> truckList =
           await _databaseService.executeQuery(strQueryTruckList) ?? [];

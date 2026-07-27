@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 
 import '/pages/widget/role_widget.dart';
 import '/component/image_path.dart';
@@ -58,23 +58,13 @@ class HomeAppBar extends GetView<HomeController>
                   color: bohibaTheme.cardColor,
                   borderRadius: BorderRadius.circular(6.r),
                 ),
-                child: controller.profile.value?.image == null ||
-                        (controller.profile.value?.image?.isEmpty ?? true)
-                    ? SizedBox.shrink()
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(6.r),
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              "${ImagePath.profileImage}/${controller.profile.value!.image}",
-                          fit: BoxFit.cover,
-                          placeholder: (context, child) {
-                            return SizedBox.shrink();
-                          },
-                          errorWidget: (context, child, obj) {
-                            return SizedBox.shrink();
-                          },
-                        ),
-                      ),
+                child: BohibaNetworkImage.rounded(
+                  imageUrl: '${ImagePath.profileImage}/${controller.profile.value?.image}',
+                  width: 25.h,
+                  height: 25.h,
+                  radius: 6,
+                  fallbackText: controller.profile.value?.name,
+                ),
               ),
             ),
           ),

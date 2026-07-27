@@ -46,8 +46,7 @@ class AuthController extends GetxController {
       password: password,
     );
     if (result.isSuccess) {
-      idController.clear();
-      pwdController.clear();
+      clearController();
     }
     return result;
   }
@@ -57,6 +56,11 @@ class AuthController extends GetxController {
       return 'Please enter your User ID';
     }
     return null;
+  }
+
+  void clearController() {
+    idController.clear();
+    pwdController.clear();
   }
 
   void listener() {

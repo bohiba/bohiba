@@ -1,7 +1,7 @@
 import '/controllers/all_job_controller.dart';
 
 import '/controllers/driver_all_controller.dart';
-import '/controllers/trip_all_controller.dart';
+import '../controllers/all_trip_controller.dart';
 import '/controllers/home_controller.dart';
 import '/controllers/dashboard_controller.dart';
 import '/controllers/master_controller.dart';

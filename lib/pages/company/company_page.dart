@@ -1,3 +1,4 @@
+import 'package:bohiba/pages/company/company_minerals_list.dart';
 import 'package:bohiba/theme/bohiba_theme.dart';
 
 import '/controllers/companies_controller.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/material.dart';
 
 import 'company_status_grid.dart';
 import 'company_header.dart';
-import 'company_live_queue_status.dart';
 import 'company_location.dart';
 
 class CompanyPage extends GetView<CompaniesController> {
@@ -74,6 +74,9 @@ class CompanyPage extends GetView<CompaniesController> {
                   ],
                 ),
                 CompanyLocation(),
+                CompanyMineralsList(
+                  minerals: controller.minesModel.value?.minerals ?? [],
+                ),
                 // CompanyLiveQueueStatus(
                 //   header: [
                 //     QueueHeader(flex: 1, name: "#", textAlign: TextAlign.start),

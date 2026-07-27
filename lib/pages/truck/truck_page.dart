@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class TruckPage extends GetView<TruckController> {
@@ -200,53 +200,11 @@ class TruckImageSection extends GetView<TruckController> {
             onLongPress: () {
               GlobalService.showAppToast(message: 'message');
             },
-            child: CachedNetworkImage(
+            child: BohibaNetworkImage(
               imageUrl:
                   '${ImagePath.truckImage}/${controller.truckModel.value?.truckImage}',
-              fit: BoxFit.cover,
               width: ScreenUtils.width,
               height: ScreenUtils.width * 0.5,
-              alignment: Alignment.center,
-              placeholder: (context, url) => Container(
-                color: bohibaTheme.cardColor,
-              ),
-              errorWidget: (context, url, error) => Container(
-                width: ScreenUtils.width,
-                height: ScreenUtils.width * 0.5,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: bohibaTheme.cardColor,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 20.h,
-                      child: Icon(
-                        Icons.camera,
-                        size: 20.h,
-                      ),
-                    ),
-                    Gap(5.h),
-                    SizedBox(
-                      width: ScreenUtils.width * 0.75,
-                      child: Text(
-                        'Unable to find your image. Please upload your truck image again',
-                        textAlign: TextAlign.center,
-                        style: bohibaTheme.textTheme.titleMedium,
-                      ),
-                    ),
-                    PrimaryButton(
-                      width: 130.w,
-                      height: 8.h,
-                      label: 'Upload Image',
-                      onPressed: () => controller.pickImage(
-                        pickertype: PickerType.gallery,
-                      ),
-                    )
-                  ],
-                ),
-              ),
             ),
           );
         }
@@ -307,31 +265,12 @@ class RelatedPersonSection extends GetView<TruckController> {
                           shape: BoxShape.circle,
                           color: bohibaTheme.dividerColor,
                         ),
-                        child: controller.truckModel.value!.driverImage == null
-                            ? Image.network(
-                                GlobalService.getAvatarUrl(
-                                  controller.truckModel.value?.driverName ?? '',
-                                ),
-                              )
-                            : ClipRRect(
-                                borderRadius:
-                                    BorderRadiusGeometry.circular(35.r),
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      '${ImagePath.profileImage}/${controller.truckModel.value!.driverImage}',
-                                  fit: BoxFit.cover,
-                                  height: 32.h,
-                                  width: 32.h,
-                                  placeholder: (context, url) => Container(
-                                    color: bohibaTheme.cardColor,
-                                  ),
-                                  errorWidget: (context, url, error) => Icon(
-                                    Icons.broken_image,
-                                    size: 20,
-                                    color: bohibaTheme.cardColor,
-                                  ),
-                                ),
-                              ),
+                        child: BohibaNetworkImage.circle(
+                          imageUrl:
+                              '${ImagePath.profileImage}/${controller.truckModel.value?.driverImage}',
+                          size: 32.h,
+                          fallbackText: controller.truckModel.value?.driverName,
+                        ),
                       ),
                       Gap(ScreenUtils.height15),
                       Column(
@@ -437,30 +376,12 @@ class RelatedPersonSection extends GetView<TruckController> {
                     shape: BoxShape.circle,
                     color: bohibaTheme.dividerColor,
                   ),
-                  child: controller.truckModel.value!.ownerImage == null
-                      ? Image.network(
-                          GlobalService.getAvatarUrl(
-                            controller.truckModel.value?.ownerImage ?? '',
-                          ),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(35.r),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                '${ImagePath.profileImage}/${controller.truckModel.value!.ownerImage}',
-                            fit: BoxFit.cover,
-                            height: 32.h,
-                            width: 32.h,
-                            placeholder: (context, url) => Container(
-                              color: bohibaTheme.cardColor,
-                            ),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.broken_image,
-                              size: 20,
-                              color: bohibaTheme.cardColor,
-                            ),
-                          ),
-                        ),
+                  child: BohibaNetworkImage.circle(
+                    imageUrl:
+                        '${ImagePath.profileImage}/${controller.truckModel.value?.ownerImage}',
+                    size: 32.h,
+                    fallbackText: controller.truckModel.value?.ownerName,
+                  ),
                 ),
                 Gap(ScreenUtils.height15),
                 Column(

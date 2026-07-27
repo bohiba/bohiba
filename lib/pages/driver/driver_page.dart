@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DriverPage extends GetView<DriverController> {
@@ -68,57 +68,6 @@ class DriverPage extends GetView<DriverController> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: ScreenUtils.width,
-                                height: ScreenUtils.height * 0.3,
-                                alignment: Alignment.center,
-                                decoration:
-                                    BoxDecoration(color: bohibaTheme.cardColor),
-                                child: controller.driverModel.value?.profile
-                                                ?.image ==
-                                            null ||
-                                        (controller.driverModel.value!.profile
-                                                ?.image?.isEmpty ??
-                                            true)
-                                    ? Text(
-                                        controller.driverModel.value?.profile
-                                                ?.name?.shortCode ??
-                                            '',
-                                        style: bohibaTheme
-                                            .textTheme.displayLarge
-                                            ?.copyWith(
-                                          color: bohibaTheme
-                                              .textTheme.bodySmall!.color,
-                                        ),
-                                      )
-                                    : CachedNetworkImage(
-                                        imageUrl:
-                                            "${ImagePath.profileImage}/${controller.driverModel.value?.profile?.image}",
-                                        fit: BoxFit.cover,
-                                        errorWidget: (context, url, error) {
-                                          return Container(
-                                            width: ScreenUtils.width,
-                                            height: ScreenUtils.height * 0.3,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              controller
-                                                      .driverModel
-                                                      .value
-                                                      ?.profile
-                                                      ?.name
-                                                      ?.shortCode ??
-                                                  '',
-                                              style: bohibaTheme
-                                                  .textTheme.displayLarge
-                                                  ?.copyWith(
-                                                color: bohibaTheme
-                                                    .textTheme.bodySmall!.color,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                              ),
                               Padding(
                                 padding: EdgeInsets.only(
                                   top: ScreenUtils.height15,
@@ -130,6 +79,14 @@ class DriverPage extends GetView<DriverController> {
                                   children: [
                                     Row(
                                       children: [
+                                        BohibaNetworkImage.circle(
+                                          imageUrl:
+                                              '${ImagePath.profileImage}/${controller.driverModel.value?.profile?.image}',
+                                          size: 60.h,
+                                          fallbackText: controller
+                                              .driverModel.value?.profile?.name,
+                                        ),
+                                        Gap(15.w),
                                         Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -235,12 +192,12 @@ class DriverPage extends GetView<DriverController> {
                                       title: controller
                                           .driverModel.value?.profile?.dob,
                                     ),
-                                    LinearBoxWidget(
-                                      header: 'Status',
-                                      title: controller
-                                          .driverModel.value?.profile?.isActive
-                                          ?.toString(),
-                                    ),
+                                    // LinearBoxWidget(
+                                    //   header: 'Status',
+                                    //   title: controller
+                                    //       .driverModel.value?.profile?.isActive
+                                    //       ?.toString(),
+                                    // ),
                                     Padding(
                                       padding: EdgeInsets.only(
                                           top: ScreenUtils.height30),
@@ -332,137 +289,119 @@ class DriverPage extends GetView<DriverController> {
                                 padding: EdgeInsets.only(
                                     bottom: ScreenUtils.height25),
                                 alignment: Alignment.center,
-                                child: controller.driverModel.value?.rating !=
-                                        null
-                                    ? ListView.builder(
-                                        itemCount: (controller.driverModel.value
-                                                        ?.rating?.length ??
-                                                    0) >=
-                                                3
-                                            ? 3
-                                            : controller.driverModel.value
-                                                ?.rating?.length,
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          if (controller
-                                                  .driverModel.value?.rating !=
-                                              null) {
-                                            return SizedBox.shrink();
-                                          }
-                                          RatingModel? ratingModel = controller
-                                              .driverModel
-                                              .value
-                                              ?.rating![index];
-                                          return Container(
-                                            margin: EdgeInsets.only(
-                                                bottom: ScreenUtils.height10),
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: ScreenUtils.width15,
-                                            ),
-                                            child: Row(
+                                child: ListView.builder(
+                                  itemCount: (controller.driverModel.value
+                                                  ?.rating?.length ??
+                                              0) >=
+                                          3
+                                      ? 3
+                                      : controller
+                                          .driverModel.value?.rating?.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    if (controller.driverModel.value?.rating
+                                            ?.isEmpty ??
+                                        true) {
+                                      return SizedBox.shrink();
+                                    }
+                                    RatingModel? ratingModel = controller
+                                        .driverModel.value?.rating?[index];
+                                    return Container(
+                                      margin: EdgeInsets.only(
+                                          bottom: ScreenUtils.height10),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: ScreenUtils.width15,
+                                      ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 15.w,
+                                            backgroundColor:
+                                                bohibaTheme.dividerColor,
+                                          ),
+                                          Gap(8.w),
+                                          SizedBox(
+                                            width: ScreenUtils.width * 0.55.w,
+                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
-                                                CircleAvatar(
-                                                  radius: 15.w,
-                                                  backgroundColor:
-                                                      bohibaTheme.dividerColor,
+                                                Text(
+                                                  ratingModel?.reviewerName ??
+                                                      '',
+                                                  style: bohibaTheme
+                                                      .textTheme.labelLarge,
                                                 ),
-                                                Gap(8.w),
-                                                SizedBox(
-                                                  width: ScreenUtils.width *
-                                                      0.55.w,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        ratingModel
-                                                                ?.reviewerName ??
-                                                            '',
-                                                        style: bohibaTheme
-                                                            .textTheme
-                                                            .labelLarge,
-                                                      ),
-                                                      ReadMoreText(
-                                                        ratingModel?.feedback ??
-                                                            '',
-                                                        trimLines: 2,
-                                                        trimMode: TrimMode.Line,
-                                                        trimCollapsedText:
-                                                            ' Read more',
-                                                        trimExpandedText:
-                                                            ' Show less',
-                                                        style: TextStyle(
-                                                          fontSize: bohibaTheme
-                                                              .textTheme
-                                                              .labelMedium!
-                                                              .fontSize,
-                                                          color: bohibaTheme
-                                                              .textTheme
-                                                              .titleMedium!
-                                                              .color,
-                                                        ),
-                                                        moreStyle: TextStyle(
-                                                          fontSize: bohibaTheme
-                                                              .textTheme
-                                                              .labelMedium!
-                                                              .fontSize,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: bohibaTheme
-                                                              .primaryColor,
-                                                        ),
-                                                        lessStyle: TextStyle(
-                                                          fontSize: bohibaTheme
-                                                              .textTheme
-                                                              .labelMedium!
-                                                              .fontSize,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: bohibaTheme
-                                                              .primaryColor,
-                                                        ),
-                                                      ),
-                                                    ],
+                                                ReadMoreText(
+                                                  ratingModel?.feedback ?? '',
+                                                  trimLines: 2,
+                                                  trimMode: TrimMode.Line,
+                                                  trimCollapsedText:
+                                                      ' Read more',
+                                                  trimExpandedText:
+                                                      ' Show less',
+                                                  style: TextStyle(
+                                                    fontSize: bohibaTheme
+                                                        .textTheme
+                                                        .labelMedium!
+                                                        .fontSize,
+                                                    color: bohibaTheme.textTheme
+                                                        .titleMedium!.color,
                                                   ),
-                                                ),
-                                                const Spacer(),
-                                                Container(
-                                                  height: 35.h,
-                                                  alignment: Alignment.center,
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        ratingModel?.rating
-                                                                ?.toString() ??
-                                                            '0',
-                                                        style: bohibaTheme
-                                                            .textTheme
-                                                            .labelLarge,
-                                                      ),
-                                                      const Icon(
-                                                        Icons.star_rounded,
-                                                        color: Colors.amber,
-                                                      ),
-                                                    ],
+                                                  moreStyle: TextStyle(
+                                                    fontSize: bohibaTheme
+                                                        .textTheme
+                                                        .labelMedium!
+                                                        .fontSize,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: bohibaTheme
+                                                        .primaryColor,
+                                                  ),
+                                                  lessStyle: TextStyle(
+                                                    fontSize: bohibaTheme
+                                                        .textTheme
+                                                        .labelMedium!
+                                                        .fontSize,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: bohibaTheme
+                                                        .primaryColor,
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                          );
-                                        },
-                                      )
-                                    : Container(),
+                                          ),
+                                          const Spacer(),
+                                          Container(
+                                            height: 35.h,
+                                            alignment: Alignment.center,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  ratingModel?.rating
+                                                          ?.toString() ??
+                                                      '0',
+                                                  style: bohibaTheme
+                                                      .textTheme.labelLarge,
+                                                ),
+                                                const Icon(
+                                                  Icons.star_rounded,
+                                                  color: Colors.amber,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ],
                           ),

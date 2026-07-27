@@ -28,7 +28,7 @@ dependencies:
   persistent_bottom_nav_bar: ^6.2.1
   http: ^1.0.0
   equatable: ^2.0.5
-  image_picker: ^1.1.2
+  image_picker: ^1.2.2
   path_provider: ^2.0.14
   flutter_masked_text2: ^0.9.1
   intl: ^0.20.2
@@ -59,9 +59,12 @@ dependencies:
   qr_code_scanner_plus: ^2.0.14
   encrypt: ^5.0.3
   webview_flutter: ^4.13.0
+  pdf: ^3.11.1
+  printing: ^5.13.2
+  open_filex: ^4.7.0
 
   firebase_core: ^4.0.0
-  firebase_messaging: ^16.4.0
+  firebase_messaging: ^16.4.1
   flutter_local_notifications: ^19.5.0
 
   google_maps_flutter: ^2.16.0

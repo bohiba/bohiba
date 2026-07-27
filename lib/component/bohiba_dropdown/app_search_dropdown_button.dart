@@ -1,5 +1,5 @@
-import 'package:bohiba/dist/component_exports.dart';
-import 'package:bohiba/dist/enums/enum_search_state.dart';
+import '/dist/component_exports.dart';
+import '/dist/enums/enum_search_state.dart';
 
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class AppDropdownSearch<T> extends FormField<T> {
     AutovalidateMode super.autovalidateMode = AutovalidateMode.disabled,
     String? hint,
     bool enableSearch = false,
-    bool requestFocusOnTap = false,
+    // bool requestFocusOnTap = false,
     TextEditingController? menuController,
     bool showIcon = true,
     double? width,
@@ -53,14 +53,14 @@ class AppDropdownSearch<T> extends FormField<T> {
                 width: width,
                 initialSelection: state.value,
                 controller: menuController,
-                requestFocusOnTap: requestFocusOnTap,
+                requestFocusOnTap: enableSearch,
                 enableFilter: enableSearch,
                 hintText: hint,
                 errorText: errorText,
                 menuHeight: menuHeight ?? 250,
                 textStyle: TextStyle(
                   fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-                  color: bohibaTheme.textTheme.bodyLarge!.color,
+                  color: bohibaTheme.textTheme.headlineSmall!.color,
                   letterSpacing: 1.2,
                 ),
                 trailingIcon: showIcon == true
@@ -100,7 +100,7 @@ class AppDropdownSearch<T> extends FormField<T> {
                       style: TextStyle(
                         fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
                         fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                        color: bohibaTheme.textTheme.titleLarge!.color,
+                        color: bohibaTheme.textTheme.headlineSmall!.color,
                         letterSpacing: 1.2,
                       ),
                     ),
@@ -169,6 +169,11 @@ class _AsyncSearchDropdownContentState<T>
   late final FocusNode _focusNode;
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
+  OverlayEntry? _barrierEntry; // transparent full-screen tap target
+
+  // True while _clearAndClose is executing. Suppresses the text-restoration
+  // in _handleFocusChange and didUpdateWidget so unfocus() can't undo the clear.
+  bool _isClearing = false;
 
   double _overlayWidth = 300;
 
@@ -210,24 +215,11 @@ class _AsyncSearchDropdownContentState<T>
                     ? IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(Icons.close,
-                            size: 18.r, color: BohibaColors.greyColor),
-                        onPressed: () {
-                          _inputController.clear();
-                          widget.menuController?.clear();
-
-                          widget.fieldState.didChange(null);
-                          widget.onChanged?.call(null);
-                          widget.onSearchChanged?.call('');
-
-                          _removeOverlay();
-                          _focusNode.unfocus();
-
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
+                            size: 16.r, color: bohibaTheme.primaryColor),
+                        onPressed: _clearAndClose,
                       )
-                    : Icon(Icons.search),
+                    : Icon(Icons.search,
+                        size: 16.r, color: BohibaColors.greyColor),
                 border: bohibaTheme.inputDecorationTheme.border,
                 enabledBorder: bohibaTheme.inputDecorationTheme.enabledBorder,
                 focusedBorder: bohibaTheme.inputDecorationTheme.focusedBorder,
@@ -239,7 +231,6 @@ class _AsyncSearchDropdownContentState<T>
               ),
               onChanged: (value) {
                 widget.onSearchChanged?.call(value);
-                setState(() {});
               },
             ),
           ),
@@ -261,12 +252,15 @@ class _AsyncSearchDropdownContentState<T>
       });
     }
 
-    final newValue = widget.fieldState.value;
-    if (newValue != null && !_focusNode.hasFocus) {
-      final newLabel = widget.labelBuilder(newValue);
-
-      if (_inputController.text != newLabel) {
-        _inputController.text = newLabel;
+    // Don't restore during a clear — the GetX reactive update can trigger
+    // didUpdateWidget before the clear sequence finishes.
+    if (!_isClearing) {
+      final newValue = widget.fieldState.value;
+      if (newValue != null && !_focusNode.hasFocus) {
+        final newLabel = widget.labelBuilder(newValue);
+        if (_inputController.text != newLabel) {
+          _inputController.text = newLabel;
+        }
       }
     }
   }
@@ -276,23 +270,57 @@ class _AsyncSearchDropdownContentState<T>
       _showOverlay();
     } else {
       Future.delayed(const Duration(milliseconds: 150), _removeOverlay);
+      // Skip restoration when _clearAndClose triggered the unfocus — the
+      // intent is to empty the field, not restore the previous selection.
+      if (!_isClearing) {
+        final selected = widget.fieldState.value;
+        if (selected != null) {
+          _inputController.text = widget.labelBuilder(selected);
+        }
+      }
     }
     setState(() {});
   }
 
   void _showOverlay() {
     _removeOverlay();
-    // Capture the current widget width for the overlay panel.
     final renderBox = context.findRenderObject() as RenderBox;
-
     _overlayWidth = renderBox.size.width;
+
+    _barrierEntry = OverlayEntry(
+      builder: (_) => Positioned.fill(
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => _focusNode.unfocus(),
+        ),
+      ),
+    );
     _overlayEntry = _buildOverlayEntry();
-    Overlay.of(context).insert(_overlayEntry!);
+    final overlay = Overlay.of(context);
+    overlay.insert(_barrierEntry!);
+    overlay.insert(_overlayEntry!);
   }
 
   void _removeOverlay() {
     _overlayEntry?.remove();
     _overlayEntry = null;
+    _barrierEntry?.remove();
+    _barrierEntry = null;
+  }
+
+  // Wipes input text, clears the FormField value, and notifies the controller.
+  void _clearAndClose() {
+    _isClearing = true;
+    _inputController.text = '';
+    _inputController.clear();
+    widget.fieldState.didChange(null);
+    widget.onChanged?.call(null);
+    widget.onSearchChanged?.call('');
+    _removeOverlay();
+    _focusNode.unfocus();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _isClearing = false;
+    });
   }
 
   OverlayEntry _buildOverlayEntry() {
@@ -306,8 +334,11 @@ class _AsyncSearchDropdownContentState<T>
           targetAnchor: Alignment.bottomLeft,
           followerAnchor: Alignment.topLeft,
           child: Material(
-            elevation: 0.85,
-            borderRadius: BorderRadius.circular(8.r),
+            elevation: 1,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(8.r),
+              bottomRight: Radius.circular(8.r),
+            ),
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: 250.h,
@@ -339,11 +370,9 @@ class _AsyncSearchDropdownContentState<T>
     return Padding(
       padding: EdgeInsets.all(10.h),
       child: Text(
-        'Type to search…',
-        style: TextStyle(
-          fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-          color: BohibaColors.greyColor,
-        ),
+        'Type to search...',
+        style: bohibaTheme.textTheme.titleSmall
+            ?.copyWith(color: bohibaTheme.primaryColor),
       ),
     );
   }
@@ -388,7 +417,7 @@ class _AsyncSearchDropdownContentState<T>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-            color: BohibaColors.warningColor,
+            color: bohibaTheme.textTheme.bodyMedium!.color,
           ),
         ),
       ),
@@ -398,7 +427,6 @@ class _AsyncSearchDropdownContentState<T>
   Widget _buildResults() {
     if (widget.items.isEmpty) return _buildNoData();
 
-    // Use label-based equality so we don't require T to override ==.
     final selectedLabel = widget.fieldState.value != null
         ? widget.labelBuilder(widget.fieldState.value as T)
         : null;
@@ -422,24 +450,37 @@ class _AsyncSearchDropdownContentState<T>
             widget.fieldState.didChange(item);
             // 4. Notify the parent (controller).
             widget.onChanged?.call(item);
-            // 5. Close the overlay.
-            _focusNode.unfocus();
+            _overlayEntry?.markNeedsBuild();
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
             color: isSelected
                 ? bohibaTheme.primaryColor.withValues(alpha: 0.08)
                 : null,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                color: isSelected
-                    ? bohibaTheme.primaryColor
-                    : bohibaTheme.textTheme.titleLarge!.color,
-                letterSpacing: 1.2,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                      fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                      color: isSelected
+                          ? bohibaTheme.primaryColor
+                          : bohibaTheme.textTheme.titleLarge!.color,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+                if (isSelected)
+                  Icon(
+                    Icons.check_circle,
+                    size: 16.r,
+                    color: bohibaTheme.primaryColor,
+                  )
+              ],
             ),
           ),
         );

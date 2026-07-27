@@ -1,4 +1,5 @@
 import '/component/screen_utils.dart';
+import '/dist/enums/enum_trip_payment.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
 import '/theme/bohiba_theme.dart';
@@ -60,7 +61,7 @@ class TripPaymentSection extends StatelessWidget {
                       radius: 20,
                       backgroundColor: bohibaTheme.cardColor,
                       child: Icon(
-                        Remix.expand_diagonal_2_line,
+                        Remix.money_rupee_circle_line,
                         color: bohibaTheme.colorScheme.onPrimary,
                       ),
                     ),
@@ -88,8 +89,8 @@ class TripPaymentSection extends StatelessWidget {
                     ),
                     const Spacer(),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           payment.amount == null
@@ -99,15 +100,22 @@ class TripPaymentSection extends StatelessWidget {
                             color: bohibaTheme.colorScheme.onPrimary,
                           ),
                         ),
-                        Text(
-                          payment.paymentType?.toDisplayLabel() ?? '',
-                          style: TextStyle(
-                            fontSize: bohibaTheme.textTheme.bodySmall!.fontSize,
-                            fontWeight:
-                                bohibaTheme.textTheme.bodySmall!.fontWeight,
-                            color: bohibaTheme.textTheme.titleMedium!.color,
-                          ),
-                        ),
+                        payment.paymentType == null
+                            ? const SizedBox.shrink()
+                            : Text(
+                                EnumTripPaymentTypeExt.fromIndex(
+                                      payment.paymentType!,
+                                    )?.displayName ??
+                                    '',
+                                style: TextStyle(
+                                  fontSize:
+                                      bohibaTheme.textTheme.bodySmall!.fontSize,
+                                  fontWeight: bohibaTheme
+                                      .textTheme.bodySmall!.fontWeight,
+                                  color:
+                                      bohibaTheme.textTheme.titleMedium!.color,
+                                ),
+                              ),
                       ],
                     ),
                     Gap(10.w),

@@ -2,11 +2,10 @@ import 'dart:async';
 
 import '/routes/app_route.dart';
 
-import '/component/bohiba_colors.dart';
 import '/component/screen_utils.dart';
 import '/component/ui/tile_decorative.dart';
 import '/controllers/trip_controller.dart';
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
 import '/services/global_service.dart';
 import '/theme/bohiba_theme.dart';
@@ -17,7 +16,8 @@ class TripMenu extends GetView<TripController> {
   final Icon? icon;
   final TripModel? trip;
   final List<TripActionType> allowedActions;
-  final Map<TripActionType, FutureOr<void> Function(dynamic value)?>? onActionComplete;
+  final Map<TripActionType, FutureOr<void> Function(dynamic value)?>?
+      onActionComplete;
   const TripMenu({
     super.key,
     this.icon,
@@ -94,11 +94,8 @@ class TripMenu extends GetView<TripController> {
               value: TripActionType.delete,
               child: Text(
                 'Delete',
-                style: TextStyle(
-                  color: BohibaColors.warningColor,
-                  fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
-                  fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
-                ),
+                style: bohibaTheme.textTheme.labelMedium
+                    ?.copyWith(color: bohibaTheme.colorScheme.tertiary),
               ),
             ),
           );
@@ -123,12 +120,19 @@ class TripMenu extends GetView<TripController> {
           ),
           shape: AppMenuShape(),
           items: menuItems,
+          popUpAnimationStyle: AnimationStyle(
+            curve: Curves.linear,
+            duration: Duration(milliseconds: 350),
+            reverseDuration: Duration(milliseconds: 300),
+          ),
         ).then((actionType) {
           if (!context.mounted) return;
 
           switch (actionType) {
             case TripActionType.edit:
-              navigatorState.pushNamed(AppRoute.addTrip, arguments: trip).then((result) {
+              navigatorState
+                  .pushNamed(AppRoute.addTrip, arguments: trip)
+                  .then((result) {
                 if (onActionComplete?[TripActionType.edit] != null) {
                   onActionComplete![TripActionType.edit]!(result);
                 }
@@ -136,30 +140,40 @@ class TripMenu extends GetView<TripController> {
               break;
 
             case TripActionType.expense:
-              navigatorState.pushNamed(AppRoute.addExpense, arguments: trip).then((result) {
-                if (onActionComplete?[TripActionType.expense] != null) {
-                  onActionComplete![TripActionType.expense]!(result);
-                }
-              });
+              // navigatorState
+              //     .pushNamed(AppRoute.addExpense, arguments: trip)
+              //     .then((result) {
+              //   if (onActionComplete?[TripActionType.expense] != null) {
+              //     onActionComplete![TripActionType.expense]!(result);
+              //   }
+              // });
+              GlobalService.showAppToast(message: 'Coming Soon');
               break;
 
             case TripActionType.payment:
-              navigatorState.pushNamed(AppRoute.addPayment, arguments: trip).then((result) {
+              navigatorState
+                  .pushNamed(AppRoute.addPayment, arguments: trip)
+                  .then((result) {
                 if (onActionComplete?[TripActionType.payment] != null) {
                   onActionComplete![TripActionType.payment]!(result);
                 }
               });
               break;
             case TripActionType.reassignment:
-              navigatorState.pushNamed(AppRoute.addReassignment, arguments: trip).then((result) {
-                if (onActionComplete?[TripActionType.reassignment] != null) {
-                  onActionComplete![TripActionType.reassignment]!(result);
-                }
-              });
+              // navigatorState
+              //     .pushNamed(AppRoute.addReassignment, arguments: trip)
+              //     .then((result) {
+              //   if (onActionComplete?[TripActionType.reassignment] != null) {
+              //     onActionComplete![TripActionType.reassignment]!(result);
+              //   }
+              // });
+              GlobalService.showAppToast(message: 'Coming Soon');
               break;
 
             case TripActionType.document:
-              navigatorState.pushNamed(AppRoute.addTripDocument, arguments: trip).then((result) {
+              navigatorState
+                  .pushNamed(AppRoute.addTripDocument, arguments: trip)
+                  .then((result) {
                 if (onActionComplete?[TripActionType.document] != null) {
                   onActionComplete![TripActionType.document]!(result);
                 }
@@ -172,7 +186,8 @@ class TripMenu extends GetView<TripController> {
               GlobalService.showAlertDialog(
                 status: AlertStatus.warning,
                 title: 'DELETE',
-                description: 'Trip and related data will be deleted permanently? Are you sure',
+                description:
+                    'Trip and related data will be deleted permanently? Are you sure',
                 discardBtnTxt: 'DELETE',
                 onDiscard: () async {
                   navigatorState.pop();

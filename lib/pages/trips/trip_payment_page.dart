@@ -1,3 +1,4 @@
+import '/dist/enums/enum_trip_payment.dart';
 import '/extensions/bohiba_extension.dart';
 import '/routes/app_route.dart';
 import '/services/global_service.dart';
@@ -25,7 +26,7 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                   context: context,
                   position: RelativeRect.fromLTRB(
                     tapDownDetails.globalPosition.dx,
-                    tapDownDetails.globalPosition.dy + 15,
+                    tapDownDetails.globalPosition.dy + 10,
                     0,
                     0,
                   ),
@@ -41,7 +42,8 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                         'Edit',
                         style: TextStyle(
                           fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                          fontWeight: bohibaTheme.textTheme.titleSmall!.fontWeight,
+                          fontWeight:
+                              bohibaTheme.textTheme.titleSmall!.fontWeight,
                           color: bohibaTheme.textTheme.bodyMedium!.color,
                         ),
                       ),
@@ -52,8 +54,10 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                         'Delete',
                         style: TextStyle(
                           color: bohibaTheme.colorScheme.tertiary,
-                          fontStyle: bohibaTheme.textTheme.titleMedium!.fontStyle,
-                          fontWeight: bohibaTheme.textTheme.titleMedium!.fontWeight,
+                          fontStyle:
+                              bohibaTheme.textTheme.titleMedium!.fontStyle,
+                          fontWeight:
+                              bohibaTheme.textTheme.titleMedium!.fontWeight,
                         ),
                       ),
                     ),
@@ -75,7 +79,8 @@ class TripPaymentPage extends GetView<TripPaymentController> {
                     GlobalService.showAlertDialog(
                       status: AlertStatus.warning,
                       title: 'DELETE PAYMENT',
-                      description: 'Payment details will be removed permanently! Are you sure you want to delete this driver?',
+                      description:
+                          'Payment details will be removed permanently! Are you sure you want to delete this driver?',
                       discardBtnTxt: 'DELETE',
                       onDiscard: () async {
                         navigateState.pop();
@@ -120,15 +125,21 @@ class TripPaymentPage extends GetView<TripPaymentController> {
               ),
               LinearBoxWidget(
                 header: 'Payment Mode',
-                title: controller.tripPayment.value.paymentMode?.toDisplayLabel(),
+                title: EnumTripPaymentModeExt.fromIndex(
+                        controller.tripPayment.value.paymentMode)
+                    ?.displayName,
               ),
               LinearBoxWidget(
                 header: 'Recivied By',
-                title: controller.tripPayment.value.receivedBy?.toDisplayLabel(),
+                title: EnumTripPaymentReceiverExt.fromIndex(
+                        controller.tripPayment.value.receivedBy)
+                    ?.displayName,
               ),
               LinearBoxWidget(
                 header: 'Payment Type',
-                title: controller.tripPayment.value.paymentType?.toDisplayLabel(),
+                title: EnumTripPaymentTypeExt.fromIndex(
+                        controller.tripPayment.value.paymentType)
+                    ?.displayName,
                 // titleColor: bohibaTheme.colorScheme.onPrimary,
               ),
               LinearBoxWidget(

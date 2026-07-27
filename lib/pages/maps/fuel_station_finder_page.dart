@@ -11,7 +11,7 @@ class FuelStationFinderPage extends GetView<FuelStationFinderController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TitleAppbar(
-        title: "Fuel Station Finder",
+        title: "Diesel Station",
         showLeading: true,
       ),
       body: Obx(() {
@@ -22,7 +22,8 @@ class FuelStationFinderPage extends GetView<FuelStationFinderController> {
           clusterManagers: {controller.myCluster.value},
           markers: controller.nearbyMarkers.value,
           initialCameraPosition: CameraPosition(
-            target: controller.currentPosition.value ?? LatLng(21.8787089, 84.91837679999999),
+            target: controller.currentPosition.value ??
+                LatLng(21.8787089, 84.91837679999999),
             zoom: 13,
           ),
           onMapCreated: controller.onMapCreated,

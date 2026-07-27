@@ -22,7 +22,7 @@ class LinearBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onClick,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: ScreenUtils.height15),
@@ -36,6 +36,7 @@ class LinearBoxWidget extends StatelessWidget {
           ),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               header,
@@ -45,28 +46,34 @@ class LinearBoxWidget extends StatelessWidget {
                 color: bohibaTheme.textTheme.titleMedium!.color,
               ),
             ),
-            Spacer(),
-            if (title != null)
+            if (title != null) ...[
+              Spacer(),
               BohibaMarqueeText(
-                  width: 160.w,
-                  text: title ?? '',
-                  overflowText: title ?? '',
-                  alignment: Alignment.centerRight,
-                  marqueeTextStyle: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                    fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
-                    color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
-                  ),
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                    fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
-                    color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
-                  ),
-                  preserFontSize: [
-                    bohibaTheme.textTheme.bodyMedium!.fontSize!,
-                  ])
-            else
+                width: 160.w,
+                text: title ?? '',
+                overflowText: title ?? '',
+                alignment: Alignment.centerRight,
+                marqueeTextStyle: TextStyle(
+                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                  fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                  color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
+                ),
+                style: TextStyle(
+                  fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                  fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
+                  color: titleColor ?? bohibaTheme.textTheme.bodyLarge!.color,
+                ),
+                preserFontSize: [
+                  bohibaTheme.textTheme.bodyMedium!.fontSize!,
+                ],
+              )
+            ] else ...[
+              SizedBox.shrink(),
+            ],
+            if (widget != null) ...[
+              Spacer(),
               widget ?? SizedBox.shrink(),
+            ],
             if (showArrow == true)
               Padding(
                 padding: EdgeInsets.only(left: 5.w),

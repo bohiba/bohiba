@@ -23,7 +23,8 @@ class AppSkeletonLoader extends StatefulWidget {
   State<AppSkeletonLoader> createState() => _AppSkeletonLoaderState();
 }
 
-class _AppSkeletonLoaderState extends State<AppSkeletonLoader> with SingleTickerProviderStateMixin {
+class _AppSkeletonLoaderState extends State<AppSkeletonLoader>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late CurvedAnimation _animation;
 
@@ -57,83 +58,82 @@ class _AppSkeletonLoaderState extends State<AppSkeletonLoader> with SingleTicker
       padding: widget.padding ?? EdgeInsets.zero,
       child: Column(
         children: List.generate(widget.skeletonLength, (index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.w),
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 5.h),
-                  child: ClipRRect(
-                    borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-                    child: ShaderMask(
-                      shaderCallback: (bounds) {
-                        final shimmerWidth = bounds.width * 0.95;
-                        final dx = bounds.width * _animation.value;
+          return AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: 5.h),
+                child: ClipRRect(
+                  borderRadius:
+                      widget.borderRadius ?? BorderRadius.circular(12.r),
+                  child: ShaderMask(
+                    shaderCallback: (bounds) {
+                      final shimmerWidth = bounds.width * 0.95;
+                      final dx = bounds.width * _animation.value;
 
-                        return LinearGradient(
-                          begin: const Alignment(-2.2, -1.2),
-                          end: const Alignment(1.2, 1.2),
-                          colors: [
-                            baseColor,
-                            highlightColor,
-                            baseColor,
-                          ],
-                          stops: [
-                            ((dx - shimmerWidth) / bounds.width).clamp(0.0, 1.0),
-                            (dx / bounds.width).clamp(0.0, 1.0),
-                            ((dx + shimmerWidth) / bounds.width).clamp(0.0, 1.0),
-                          ],
-                        ).createShader(bounds);
-                      },
-                      blendMode: BlendMode.lighten,
-                      child: Container(
-                        width: widget.width ?? ScreenUtils.width,
-                        height: widget.height ?? ScreenUtils.height * 0.075,
-                        decoration: BoxDecoration(
-                          color: bohibaTheme.listTileTheme.tileColor,
-                          borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(10.w),
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundColor: Colors.grey.shade800,
-                              ),
+                      return LinearGradient(
+                        begin: const Alignment(-2.2, -1.2),
+                        end: const Alignment(1.2, 1.2),
+                        colors: [
+                          baseColor,
+                          highlightColor,
+                          baseColor,
+                        ],
+                        stops: [
+                          ((dx - shimmerWidth) / bounds.width).clamp(0.0, 1.0),
+                          (dx / bounds.width).clamp(0.0, 1.0),
+                          ((dx + shimmerWidth) / bounds.width).clamp(0.0, 1.0),
+                        ],
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.lighten,
+                    child: Container(
+                      width: widget.width ?? ScreenUtils.width,
+                      height: widget.height ?? ScreenUtils.height * 0.075,
+                      decoration: BoxDecoration(
+                        color: bohibaTheme.listTileTheme.tileColor,
+                        borderRadius:
+                            widget.borderRadius ?? BorderRadius.circular(12.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10.w),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.grey.shade800,
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 5.h,
-                                  width: 115.w,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade800,
-                                    borderRadius: BorderRadius.circular(4.r),
-                                  ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 5.h,
+                                width: 115.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade800,
+                                  borderRadius: BorderRadius.circular(4.r),
                                 ),
-                                SizedBox(height: 5.h),
-                                Container(
-                                  height: 5.h,
-                                  width: 65.w,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade800,
-                                    borderRadius: BorderRadius.circular(4.r),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                              SizedBox(height: 5.h),
+                              Container(
+                                height: 5.h,
+                                width: 65.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade800,
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           );
         }),
       ),

@@ -22,7 +22,12 @@ extension StringFormatExt on String {
 
   /// Optional: Capitalized format → "Not Looking"
   String toCapitalizedLabel() {
-    return replaceAll('_', ' ').split(' ').map((word) => word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1).toLowerCase()).join(' ');
+    return replaceAll('_', ' ')
+        .split(' ')
+        .map((word) => word.isEmpty
+            ? ''
+            : word[0].toUpperCase() + word.substring(1).toLowerCase())
+        .join(' ');
   }
 
   String toAcronym() {
@@ -41,6 +46,15 @@ extension StringFormatExt on String {
     }
   }
 
+  String toYMD({String defaultFormat = "yyyy-MM-dd"}) {
+    try {
+      final dt = DateFormat("MM-dd-yyyy").parse(this);
+      return DateFormat(defaultFormat).format(dt);
+    } catch (e) {
+      return this;
+    }
+  }
+
   bool get isValidDL {
     final regex = RegExp(r'^[A-Z]{2}[0-9]{13}$');
     return regex.hasMatch(this);
@@ -52,7 +66,8 @@ extension StringFormatExt on String {
   }
 
   bool get isValidAadhaar {
-    final regex = RegExp(r'^(?:[2-9][0-9]{11}|[2-9][0-9]{3}-[0-9]{4}-[0-9]{4})$');
+    final regex =
+        RegExp(r'^(?:[2-9][0-9]{11}|[2-9][0-9]{3}-[0-9]{4}-[0-9]{4})$');
     return regex.hasMatch(trim());
   }
 

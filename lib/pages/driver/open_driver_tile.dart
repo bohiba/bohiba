@@ -14,7 +14,7 @@ import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 
 class OpenDriverTile extends StatefulWidget {
   final UserModel openDriver;
@@ -59,52 +59,10 @@ class _OpenDriverTileState extends State<OpenDriverTile> {
         decoration: TileDecorative(),
         child: Row(
           children: [
-            Container(
-              height: 32.h,
-              width: 32.h,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: bohibaTheme.colorScheme.surface,
-              ),
-              child: (user.profile == null ||
-                      user.profile?.image == null ||
-                      (user.profile?.image?.isEmpty ?? true))
-                  ? Text(
-                      user.profile?.name?.shortCode ?? '',
-                      style: TextStyle(
-                        fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                        fontWeight:
-                            bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                        color: bohibaTheme.textTheme.bodySmall!.color,
-                      ),
-                    )
-                  : Container(
-                      height: 32.h,
-                      width: 32.h,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: bohibaTheme.dividerColor,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadiusGeometry.circular(35.r),
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              '${ImagePath.profileImage}/${user.profile?.image}',
-                          fit: BoxFit.cover,
-                          height: 32.h,
-                          width: 32.h,
-                          placeholder: (context, url) => Container(
-                            color: bohibaTheme.cardColor,
-                          ),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.broken_image,
-                            size: 20,
-                            color: bohibaTheme.cardColor,
-                          ),
-                        ),
-                      ),
-                    ),
+            BohibaNetworkImage.circle(
+              imageUrl: '${ImagePath.profileImage}/${user.profile?.image}',
+              size: 32.h,
+              fallbackText: user.profile?.name,
             ),
             Gap(10.w),
             Column(

@@ -1,4 +1,5 @@
 import '../dist/enums/app_enums.dart';
+import '../dist/enums/enum_trip_payment.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
 import '/services/global_service.dart';
@@ -14,9 +15,6 @@ class TripPaymentAddController extends GetxController {
   DateTime paymentDate = DateTime.now();
   TextEditingController paymentDateController = TextEditingController();
   TextEditingController paidByController = TextEditingController();
-  TextEditingController rcviedController = TextEditingController();
-  TextEditingController paymentTypeController = TextEditingController();
-  TextEditingController paymentModeController = TextEditingController();
 
   MoneyMaskedTextController paidController = MoneyMaskedTextController(
     initialValue: 0,
@@ -26,9 +24,14 @@ class TripPaymentAddController extends GetxController {
     thousandSeparator: ",",
   );
 
-  List<String> get arrPaymentMode => ['bank_transfer', 'cash', 'cheque', 'discounted', 'upi'];
-  List<String> get arrRecievedBy => ['driver', 'manager', 'self', 'other'];
-  List<String> get arrPaymentType => ['Discount', 'Disel Advance', 'Final Settelement', 'Other'];
+  Rxn<EnumTripPaymentReceiver> selectedReceivedBy = Rxn();
+  Rxn<EnumTripPaymentMode> selectedPaymentMode = Rxn();
+  Rxn<EnumTripPaymentType> selectedPaymentType = Rxn();
+
+  List<EnumTripPaymentReceiver> get arrRecievedBy =>
+      EnumTripPaymentReceiver.values;
+  List<EnumTripPaymentMode> get arrPaymentMode => EnumTripPaymentMode.values;
+  List<EnumTripPaymentType> get arrPaymentType => EnumTripPaymentType.values;
 
   RxInt countUpdate = 0.obs;
 
@@ -45,21 +48,20 @@ class TripPaymentAddController extends GetxController {
 
   Future<void> addUpdatePayment() async {
     Map<String, dynamic> bodyObj = {
-      'payer_type': paymentTypeController.text.trim().toLowerCase().replaceAll(' ', '_'),
-      'payment_mode': paymentModeController.text.trim().toLowerCase().replaceAll(' ', '_'),
-      'amount': (paidController.text.replaceAll(RegExp(r'[₹,]'), '').trim()).toDouble(),
-      'paid_by': paidByController.text.trim().toLowerCase().replaceAll(' ', '_'),
-      'received_by': rcviedController.text.trim().toLowerCase().replaceAll(' ', '_'),
-      'payment_time': paymentDateController.text.trim(),
+      'payment_time': (paymentDateController.text.trim()).toYMD(),
+      'paid_by': paidByController.text.trim(),
+      'received_by': selectedReceivedBy.value?.index,
+      'payment_mode': selectedPaymentMode.value?.index,
+      'payment_type': selectedPaymentType.value?.index,
+      'amount': (paidController.text.replaceAll(RegExp(r'[₹,]'), '').trim())
+          .toDouble(),
     };
-
     if (tripModel == null && tripPayment != null) {
       int editPayment = await TripService.editPayment(
         paymentId: tripPayment!.id!,
         bodyMap: bodyObj,
       );
       if (editPayment > 0) {
-        // Get.back();
         countUpdate++;
         Get.back(result: true);
       } else {
@@ -85,20 +87,22 @@ class TripPaymentAddController extends GetxController {
 
   void clearController() {
     paymentDateController.clear();
-    paymentTypeController.clear();
     paidByController.clear();
-    rcviedController.clear();
-    paymentTypeController.clear();
-    paymentModeController.clear();
+    selectedReceivedBy.value = null;
+    selectedPaymentMode.value = null;
+    selectedPaymentType.value = null;
     paidController.updateValue(0.0);
   }
 
   void editPayment() {
     paymentDateController.text = tripPayment?.paymentTime ?? '';
     paidByController.text = tripPayment?.paidBy ?? '';
-    rcviedController.text = tripPayment?.receivedBy ?? '';
-    paymentModeController.text = tripPayment?.paymentMode ?? '';
-    paymentTypeController.text = tripPayment?.paymentType ?? '';
+    selectedReceivedBy.value =
+        EnumTripPaymentReceiverExt.fromIndex(tripPayment?.receivedBy);
+    selectedPaymentMode.value =
+        EnumTripPaymentModeExt.fromIndex(tripPayment?.paymentMode);
+    selectedPaymentType.value =
+        EnumTripPaymentTypeExt.fromIndex(tripPayment?.paymentType);
     paidController = MoneyMaskedTextController(
       initialValue: tripPayment?.amount ?? 0.0,
       precision: 2,
@@ -108,27 +112,20 @@ class TripPaymentAddController extends GetxController {
     );
   }
 
-  void disposeController() {
-    paymentDateController.dispose();
-    paymentTypeController.dispose();
-    paidByController.dispose();
-    rcviedController.dispose();
-    paymentTypeController.dispose();
-    paymentModeController.dispose();
-    paidController.dispose();
-  }
-
   @override
-  void dispose() {
-    disposeController();
-    super.dispose();
+  void onClose() {
+    paymentDateController.dispose();
+    paidByController.dispose();
+    paidController.dispose();
+    super.onClose();
   }
 
   onExit() {
     GlobalService.showAlertDialog(
       status: AlertStatus.info,
       title: 'Save Changes?',
-      description: 'You have unsaved changes. Do you want to save them before exiting?',
+      description:
+          'You have unsaved changes. Do you want to save them before exiting?',
       onSave: () {},
       onDiscard: () {},
     );

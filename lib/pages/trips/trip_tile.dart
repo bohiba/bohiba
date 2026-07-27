@@ -29,7 +29,7 @@ class TripTile extends GetView<TripController> {
       child: Container(
         padding: EdgeInsets.only(left: ScreenUtils.width15),
         width: ScreenUtils.width,
-        height: ScreenUtils.height * 0.075,
+        // height: ScreenUtils.height * 0.075,
         decoration: TileDecorative(),
         child: InkWell(
           onTap: onClick,
@@ -44,40 +44,74 @@ class TripTile extends GetView<TripController> {
                   shape: BoxShape.circle,
                   color: RandomColorPicker.getRandomColor(),
                 ),
-                /*child: Text(
-                  tripInfo.id.toString(),
-                  style: TextStyle(
-                    fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
-                    fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
-                    color: bohibaTheme.textTheme.bodySmall!.color,
-                  ),
-                ),*/
+                // child: Text(
+                //   tripInfo.id.toString(),
+                //   style: TextStyle(
+                //     fontSize: bohibaTheme.textTheme.labelLarge!.fontSize,
+                //     fontWeight: bohibaTheme.textTheme.bodyMedium!.fontWeight,
+                //     color: bohibaTheme.textTheme.bodySmall!.color,
+                //   ),
+                // ),
               ),
               Gap(ScreenUtils.height15),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    tripInfo.truck?.regdNumber ?? '',
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
-                      color: bohibaTheme.textTheme.labelLarge!.color,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      tripInfo.origin?.name ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: bohibaTheme.textTheme.bodyMedium,
                     ),
-                  ),
-                  Text(
-                    "${'${tripInfo.startDate?.toDDMMYYYY()} |'} ${tripInfo.tripStatus?.tripStatusName ?? ''}",
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: bohibaTheme.textTheme.labelSmall!.fontSize,
-                      fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
-                      color: bohibaTheme.textTheme.titleLarge!.color,
+                    Text(
+                      tripInfo.destination?.name ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: bohibaTheme.textTheme.bodyMedium,
                     ),
-                  ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${tripInfo.startDate?.toDDMMYYYY()}',
+                          style: TextStyle(
+                            fontSize:
+                                bohibaTheme.textTheme.labelSmall!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.labelMedium!.fontWeight,
+                            color: bohibaTheme.textTheme.titleLarge!.color,
+                          ),
+                        ),
+                        Text(
+                          tripInfo.tripStatus?.tripStatusName ?? '',
+                          style: TextStyle(
+                            fontSize:
+                                bohibaTheme.textTheme.labelSmall!.fontSize,
+                            fontWeight:
+                                bohibaTheme.textTheme.labelMedium!.fontWeight,
+                            color: bohibaTheme.textTheme.titleLarge!.color,
+                          ),
+                        ),
+                        if (tripInfo.truck?.regdNumber?.isEmpty ?? true)
+                          SizedBox.fromSize()
+                        else
+                          Text(
+                            tripInfo.truck?.regdNumber ?? '',
+                            style: TextStyle(
+                              fontSize:
+                                  bohibaTheme.textTheme.labelSmall!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.labelMedium!.fontWeight,
+                              color: bohibaTheme.textTheme.titleLarge!.color,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Spacer(),
               Container(
                 height: ScreenUtils.height * 0.075,
                 width: ScreenUtils.width50,

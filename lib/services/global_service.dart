@@ -20,6 +20,105 @@ import 'package:intl/intl.dart';
 bool isProgressOpen = false;
 
 class GlobalService {
+  static OverlayEntry? _activeTooltip;
+
+  /// Shows a speech-bubble tooltip anchored to [tapPosition] — the exact
+  /// global coordinates of the user's tap (from [TapDownDetails.globalPosition]
+  /// or [LongPressStartDetails.globalPosition]).
+  ///
+  /// Direction is chosen automatically:
+  ///   • enough space below the tap → tooltip appears **below**, arrow points ↑
+  ///   • cramped below               → tooltip appears **above**, arrow points ↓
+  ///
+  /// Usage:
+  /// ```dart
+  /// GestureDetector(
+  ///   onTapDown: (d) => GlobalService.showTooltip(
+  ///     context: context,
+  ///     tapPosition: d.globalPosition,
+  ///     message: 'Coming Soon',
+  ///   ),
+  ///   child: myWidget,
+  /// )
+  /// ```
+  static void showTooltip({
+    required BuildContext context,
+    required Offset tapPosition,
+    required String message,
+    Duration duration = const Duration(seconds: 3),
+  }) {
+    _dismissActiveTooltip();
+
+    final Size screen = MediaQuery.sizeOf(context);
+
+    const double arrowH = 9.0;
+    const double hPad = 14.0;
+    const double vPad = 8.0;
+    const double gap = 8.0;
+    const double estimatedHeight = arrowH + vPad * 2 + 25.0;
+
+    // ── Direction based on available space at the tap point ─────────────────
+    final bool showBelow =
+        (screen.height - tapPosition.dy) >= estimatedHeight + gap;
+
+    // ── Vertical: just below or above the tap point ──────────────────────────
+    final double top = showBelow
+        ? tapPosition.dy + gap + 10
+        : tapPosition.dy + estimatedHeight + gap;
+
+    _activeTooltip = OverlayEntry(
+      builder: (_) => Positioned(
+        left: 0,
+        right: 0,
+        top: top,
+        child: Align(
+          alignment: Alignment(
+            ((tapPosition.dx / screen.width) * 2 - 1).clamp(-1.0, 1.0),
+            10,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: IntrinsicWidth(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: screen.width - 48),
+                child: CustomPaint(
+                  painter: _TooltipBubblePainter(
+                    color: bohibaTheme.cardColor,
+                    shadowColor: bohibaTheme.dividerColor,
+                    arrowHeight: arrowH,
+                    borderRadius: 8.r,
+                    arrowAtTop: showBelow,
+                  ),
+                  child: Padding(
+                    padding: showBelow
+                        ? const EdgeInsets.fromLTRB(
+                            hPad, arrowH + vPad, hPad, vPad)
+                        : const EdgeInsets.fromLTRB(
+                            hPad, vPad, hPad, arrowH + vPad),
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: bohibaTheme.textTheme.labelSmall?.copyWith(
+                          color: bohibaTheme.textTheme.bodySmall!.color),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(_activeTooltip!);
+    Future.delayed(duration, _dismissActiveTooltip);
+  }
+
+  static void _dismissActiveTooltip() {
+    _activeTooltip?.remove();
+    _activeTooltip = null;
+  }
+
   static XFile? imageFile;
   // DateTime eighteenYearsAgo = DateTime(today.year - 18, today.month, today.day);
 
@@ -344,13 +443,13 @@ class GlobalService {
     }
     return Fluttertoast.showToast(
       msg: message,
-      fontAsset: ImagePath.companyLogo,
       toastLength: Toast.LENGTH_LONG,
       gravity: gravity ?? ToastGravity.BOTTOM,
       timeInSecForIosWeb: 5,
       backgroundColor: bohibaTheme.colorScheme.secondary,
       textColor: bohibaTheme.textTheme.displayLarge!.color,
       fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+      fontAsset: ImagePath.bohibaIcon,
     );
   }
 
@@ -478,4 +577,77 @@ class GlobalService {
   static printHandler(String log) {
     debugPrint("\n=================\n$log\n================\n");
   }
+}
+
+/// Draws a speech-bubble shape with an arrow that points toward the widget.
+/// [arrowAtTop] = true  → arrow at top,    tooltip is **below** the widget.
+/// [arrowAtTop] = false → arrow at bottom, tooltip is **above** the widget.
+class _TooltipBubblePainter extends CustomPainter {
+  final Color color;
+  final Color shadowColor;
+  final double arrowHeight;
+  final double borderRadius;
+  final bool arrowAtTop;
+
+  const _TooltipBubblePainter({
+    required this.color,
+    required this.shadowColor,
+    this.arrowHeight = 9.0,
+    this.borderRadius = 10.0,
+    this.arrowAtTop = true,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double w = size.width;
+    final double h = size.height;
+    final double r = borderRadius;
+    final double ah = arrowHeight;
+    const double aw = 14.0;
+    final double mid = w / 2;
+
+    final Path path;
+
+    if (arrowAtTop) {
+      // Arrow points UP — tooltip sits below the widget
+      path = Path()
+        ..moveTo(mid, 0) // arrow tip
+        ..lineTo(mid - aw / 2, ah) // arrow left foot
+        ..lineTo(r, ah)
+        ..quadraticBezierTo(0, ah, 0, ah + r) // top-left corner
+        ..lineTo(0, h - r)
+        ..quadraticBezierTo(0, h, r, h) // bottom-left corner
+        ..lineTo(w - r, h)
+        ..quadraticBezierTo(w, h, w, h - r) // bottom-right corner
+        ..lineTo(w, ah + r)
+        ..quadraticBezierTo(w, ah, w - r, ah) // top-right corner
+        ..lineTo(mid + aw / 2, ah) // arrow right foot
+        ..close();
+    } else {
+      // Arrow points DOWN — tooltip sits above the widget
+      final double bodyH = h - ah;
+      path = Path()
+        ..moveTo(r, 0)
+        ..quadraticBezierTo(0, 0, 0, r) // top-left corner
+        ..lineTo(0, bodyH - r)
+        ..quadraticBezierTo(0, bodyH, r, bodyH) // bottom-left corner
+        ..lineTo(mid - aw / 2, bodyH) // arrow left foot
+        ..lineTo(mid, h) // arrow tip
+        ..lineTo(mid + aw / 2, bodyH) // arrow right foot
+        ..lineTo(w - r, bodyH)
+        ..quadraticBezierTo(w, bodyH, w, bodyH - r) // bottom-right corner
+        ..lineTo(w, r)
+        ..quadraticBezierTo(w, 0, w - r, 0) // top-right corner
+        ..close();
+    }
+
+    canvas.drawShadow(path, shadowColor, 4, false);
+    canvas.drawPath(path, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(_TooltipBubblePainter old) =>
+      old.color != color ||
+      old.shadowColor != shadowColor ||
+      old.arrowAtTop != arrowAtTop;
 }

@@ -69,33 +69,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtils.getDimensions(context);
-    final controller = Get.put<ThemeController>(ThemeController());
-    return Obx(() {
-      return AnimatedTheme(
-        data: controller.isDarkMode
-            ? BohibaTheme.lightTheme
-            : BohibaTheme.darkTheme,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeIn,
-        child: ScreenUtilInit(
-          minTextAdapt: true,
-          child: GetMaterialApp(
+    // Use Get.find — AppThemeBinding already put the singleton via permanent:true.
+    final controller = Get.isRegistered<ThemeController>()
+        ? Get.find<ThemeController>()
+        : Get.put(ThemeController(), permanent: true);
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      child: Obx(() => GetMaterialApp(
             initialBinding: SplashBinding(),
             theme: BohibaTheme.lightTheme,
             darkTheme: BohibaTheme.darkTheme,
             themeMode: controller.themeMode.value,
-            // debugShowMaterialGrid: true,
             debugShowCheckedModeBanner: false,
             getPages: AppRoute.routes,
             initialRoute: AppRoute.splashScreen,
-            // builder: (context, child) {
-            //   return FlavorBanner(
-            //     child: child!,
-            //   );
-            // },
-          ),
-        ),
-      );
-    });
+            builder: (context, child) => FlavorBanner(child: child!),
+          )),
+    );
   }
 }

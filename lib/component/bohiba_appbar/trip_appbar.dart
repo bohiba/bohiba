@@ -10,7 +10,8 @@ import 'package:marquee_text/marquee_text.dart';
 
 import 'package:flutter/material.dart';
 
-class TripAppBar extends GetView<TripController> implements PreferredSizeWidget {
+class TripAppBar extends GetView<TripController>
+    implements PreferredSizeWidget {
   final String title;
 
   const TripAppBar({

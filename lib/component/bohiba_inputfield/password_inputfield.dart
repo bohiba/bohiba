@@ -44,7 +44,6 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
         cursorColor: bohibaTheme.primaryColor,
         cursorRadius: const Radius.circular(10.0),
         obscureText: showPassword,
-        enableInteractiveSelection: false,
         textInputAction: widget.nextActionType,
         keyboardType: TextInputType.visiblePassword,
         decoration: InputDecoration(

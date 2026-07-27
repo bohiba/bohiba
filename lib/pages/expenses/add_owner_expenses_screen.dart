@@ -1,4 +1,4 @@
-import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
+import '/component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/extensions/bohiba_extension.dart';
 
 import '/dist/component_exports.dart';
@@ -80,7 +80,6 @@ class AddOwnerExpensesScreen extends GetView<AddOwnerExpenseController> {
                   AppDropdownSearch<String>(
                     hint: 'Tyre Replacement',
                     enableSearch: true,
-                    requestFocusOnTap: true,
                     items: controller.arrExpenseType,
                     menuController: controller.expenseTypeController,
                     labelBuilder: (String p1) =>

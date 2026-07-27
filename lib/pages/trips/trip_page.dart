@@ -6,10 +6,10 @@ import '/theme/bohiba_theme.dart';
 
 import '/controllers/trip_controller.dart';
 import '/component/bohiba_appbar/trip_appbar.dart';
+import '/services/global_service.dart';
 
 import 'trip_page_widget/basic_info_section.dart';
 import 'trip_page_widget/trip_expense_section.dart';
-import 'trip_page_widget/load_finance_section.dart';
 import 'trip_page_widget/trip_document_section.dart';
 import 'trip_page_widget/trip_payment_section.dart';
 import 'trip_page_widget/trip_reassignement_section.dart';
@@ -69,12 +69,27 @@ class TripPage extends GetView<TripController> {
 
                           // Basic Info
                           BasicInfoSection(
-                            tripInfo: controller.tripInfo.value,
-                            statusLabelColor: controller.statusColor(),
+                            controller: controller,
                           ),
 
-                          // Load Info and Finance Info
-                          LoadAndFinanceSection(trip: controller.tripInfo.value),
+                          // MATERIAL | REVENUE | PAYMENT
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 15.h, horizontal: 8.h),
+                            child: Row(
+                              children: controller.tripCardClassifications
+                                  .map(
+                                    (c) => Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w),
+                                        child: TripCard(classification: c),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
 
                           // Trip Payment
                           TripPaymentSection(
@@ -122,29 +137,20 @@ class TripPage extends GetView<TripController> {
 
                           // Trip Reassignment
                           TripReassignmentSection(
-                            reassignments: controller.tripInfo.value?.reassignment,
+                            reassignments:
+                                controller.tripInfo.value?.reassignment,
                             onReassignTap: (reassignment) {
-                              navigatorState
-                                  .pushNamed(
-                                AppRoute.reassignment,
-                                arguments: reassignment,
-                              )
-                                  .then(
-                                (onValue) async {
-                                  if (onValue != null && (onValue != false)) {
-                                    await controller.getTripInfo(
-                                      methodType: MethodType.api,
-                                      id: controller.tripInfo.value!.id!,
-                                    );
-                                  }
-                                },
-                              );
+                              GlobalService.showAppToast(
+                                  message: 'Coming Soon');
                             },
                           ),
 
                           TripDocumentSection(
                             documents: controller.tripInfo.value?.documents,
-                            onDocumentTap: (document) {},
+                            onDocumentTap: (document) {
+                              GlobalService.showAppToast(
+                                  message: 'Coming Soon');
+                            },
                           ),
                           Gap(ScreenUtils.height65)
                         ],
@@ -154,6 +160,64 @@ class TripPage extends GetView<TripController> {
           ),
         );
       },
+    );
+  }
+}
+
+class TripCard extends StatelessWidget {
+  final TripCardClassification classification;
+  const TripCard({super.key, required this.classification});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 90.h,
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        color: classification.color.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(
+            color: classification.color.withValues(alpha: 0.30), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(classification.icon,
+                  color: classification.color, size: 18.r),
+              Visibility(
+                visible: classification.indicatorIcon != null,
+                child: Icon(classification.indicatorIcon,
+                    color: classification.color, size: 18.r),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                classification.header,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: bohibaTheme.textTheme.headlineMedium,
+              ),
+              Text(
+                classification.subHeader,
+                style: bohibaTheme.textTheme.bodyMedium?.copyWith(
+                  fontSize: 9.sp,
+                  color: bohibaTheme.textTheme.titleMedium!.color,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

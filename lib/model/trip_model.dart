@@ -9,7 +9,7 @@ class TripModel {
   TripLocation? destination;
   String? startDate;
   String? endedDate;
-  int? transporterId;
+  TripLocation? transporter;
 
   LoadDetail? loadDetail;
   TripFinance? finance;
@@ -34,7 +34,7 @@ class TripModel {
     this.destination,
     this.startDate,
     this.endedDate,
-    this.transporterId,
+    this.transporter,
     this.loadDetail,
     this.finance,
     this.truck,
@@ -55,19 +55,37 @@ class TripModel {
       isFav: json["is_fav"] ?? 0,
       tripCode: json["trip_code"],
       tripStatus: json["trip_status"],
-      origin: json["origin"] != null ? TripLocation.fromJson(json["origin"]) : null,
-      destination: json["destination"] != null ? TripLocation.fromJson(json["destination"]) : null,
+      origin:
+          json["origin"] != null ? TripLocation.fromJson(json["origin"]) : null,
+      destination: json["destination"] != null
+          ? TripLocation.fromJson(json["destination"])
+          : null,
+      transporter: json["transporter"] != null
+          ? TripLocation.fromJson(json["transporter"])
+          : null,
       startDate: _parseDate(json["started_at"]),
       endedDate: _parseDate(json["ended_at"]),
-      transporterId: json["transporter_id"],
-      loadDetail: json["load_detail"] != null ? LoadDetail.fromJson(json["load_detail"]) : null,
-      finance: json["finance"] != null ? TripFinance.fromJson(json["finance"]) : null,
+      loadDetail: json["load_detail"] != null
+          ? LoadDetail.fromJson(json["load_detail"])
+          : null,
+      finance: json["finance"] != null
+          ? TripFinance.fromJson(json["finance"])
+          : null,
       truck: json["truck"] != null ? TripTruck.fromJson(json["truck"]) : null,
-      driver: json["driver"] != null ? TripDriver.fromJson(json["driver"]) : null,
-      reassignment: (json["reassignment"] as List? ?? []).map((e) => Reassignment.fromJson(e)).toList(),
-      expenses: (json["expenses"] as List? ?? []).map((e) => TripExpense.fromJson(e)).toList(),
-      payments: (json["payments"] as List? ?? []).map((e) => TripPayment.fromJson(e)).toList(),
-      documents: (json["documents"] as List? ?? []).map((e) => TripDocument.fromJson(e)).toList(),
+      driver:
+          json["driver"] != null ? TripDriver.fromJson(json["driver"]) : null,
+      reassignment: (json["reassignment"] as List? ?? [])
+          .map((e) => Reassignment.fromJson(e))
+          .toList(),
+      expenses: (json["expenses"] as List? ?? [])
+          .map((e) => TripExpense.fromJson(e))
+          .toList(),
+      payments: (json["payments"] as List? ?? [])
+          .map((e) => TripPayment.fromJson(e))
+          .toList(),
+      documents: (json["documents"] as List? ?? [])
+          .map((e) => TripDocument.fromJson(e))
+          .toList(),
       createdAt: json["created_at"],
       updatedAt: json["updated_at"],
     );
@@ -80,33 +98,41 @@ class TripModel {
     final truck = json["truck"];
     final driver = json["driver"];
     final owner = json["owner"];
+    final origin = json['origin'];
+    final destination = json['destination'];
+    final transporter = json['transporter'];
 
     return {
       'id': json['id'],
       'isFav': json['is_fav'] ?? 0,
       'tripCode': json['trip_code'],
       'tripStatus': json['trip_status'],
-      'originId': json['origin']?['id'],
-      'originName': json['origin']?['name'],
-      'originNameCode': json['origin']?['name_code'],
-      'originLat': json['origin']?['latitude'],
-      'originLng': json['origin']?['longitude'],
-      'originStatus': json['origin']?['status'],
-      'originType': json['origin']?['type'],
-      'destination': json['destination'],
-      'destinationId': json['destination']?['id'],
-      'destinationName': json['destination']?['name'],
-      'destinationNameCode': json['destination']?['name_code'],
-      'destinationLat': json['destination']?['latitude'],
-      'destinationLng': json['destination']?['longitude'],
-      'destinationStatus': json['destination']?['status'],
-      'destinationType': json['destination']?['type'],
+      'originId': origin?['id'],
+      'originName': origin?['name'],
+      'originNameCode': origin?['name_code'],
+      'originLat': origin?['latitude'],
+      'originLng': origin?['longitude'],
+      'originStatus': origin?['status'],
+      'originType': origin?['type'],
+      'destinationId': destination?['id'],
+      'destinationName': destination?['name'],
+      'destinationNameCode': destination?['name_code'],
+      'destinationLat': destination?['latitude'],
+      'destinationLng': destination?['longitude'],
+      'destinationStatus': destination?['status'],
+      'destinationType': destination?['type'],
+      'transporterId': transporter?['id'],
+      'transporterName': transporter?['name'],
+      'transporterNameCode': transporter?['name_code'],
+      'transporterType': transporter?['type'],
+      'transporterLat': transporter?['latitude'],
+      'transporterLng': transporter?['longitude'],
+      'transporterStatus': transporter?['status'],
       'startedAt': _parseDate(json["started_at"]),
       'endedAt': _parseDate(json["ended_at"]),
-      'transporterId': json['transporter_id'],
 
       // Load
-      'materialType': load?['material_type'],
+      'materialType': load?['material_name'],
       'loadWeight': (load?['load_weight'] ?? 0).toDouble(),
       'shortWeight': (load?['short_weight'] ?? 0).toDouble(),
       'rate': (load?['rate'] ?? 0).toDouble(),
@@ -147,9 +173,9 @@ class TripModel {
       tripStatus: map["tripStatus"],
       origin: TripLocation.originFromDb(map),
       destination: TripLocation.destinationFromDb(map),
+      transporter: TripLocation.transporterFromDb(map),
       startDate: map["startedAt"],
       endedDate: map["endedAt"],
-      transporterId: map["transporterId"],
       loadDetail: LoadDetail.fromDb(map),
       finance: TripFinance.fromDb(map),
       truck: TripTruck.fromDb(map),
@@ -188,10 +214,10 @@ class TripLocation {
   int? id;
   String? name;
   String? nameCode;
-  int? type;
+  String? type;
   double? latitude;
   double? longitude;
-  int? status;
+  String? status;
 
   TripLocation({
     this.id,
@@ -226,10 +252,10 @@ class TripLocation {
       id: map["originId"],
       name: map["originName"],
       nameCode: map["originNameCode"],
-      type: map["originType"],
+      type: map["originType"].toString(),
       latitude: (map["originLat"] ?? 0).toDouble(),
       longitude: (map["originLng"] ?? 0).toDouble(),
-      status: map["originStatus"],
+      status: map["originStatus"].toString(),
     );
   }
 
@@ -240,10 +266,24 @@ class TripLocation {
       id: map["destinationId"],
       name: map["destinationName"],
       nameCode: map["destinationNameCode"],
-      type: map["destinationType"],
+      type: map["destinationType"].toString(),
       latitude: (map["destinationLat"] ?? 0).toDouble(),
       longitude: (map["destinationLng"] ?? 0).toDouble(),
-      status: map["destinationStatus"],
+      status: map["destinationStatus"].toString(),
+    );
+  }
+
+  factory TripLocation.transporterFromDb(Map<String, dynamic>? map) {
+    if (map == null) return TripLocation();
+
+    return TripLocation(
+      id: map["transporterId"],
+      name: map["transporterName"],
+      nameCode: map["transporterNameCode"],
+      type: map["transporterType"],
+      latitude: (map["transporterLat"] ?? 0).toDouble(),
+      longitude: (map["transporterLng"] ?? 0).toDouble(),
+      status: map["transporterStatus"],
     );
   }
 
@@ -578,11 +618,11 @@ class TripExpense {
 class TripPayment {
   int? id;
   int? tripId;
-  String? paymentType;
-  String? paymentMode;
+  int? paymentType;
+  int? paymentMode;
   double? amount;
   String? paidBy;
-  String? receivedBy;
+  int? receivedBy;
   String? paymentTime;
 
   TripPayment({
@@ -600,11 +640,11 @@ class TripPayment {
     return TripPayment(
       id: json["id"],
       tripId: json["trip_id"],
-      paymentType: json["payer_type"],
-      paymentMode: json["payment_mode"],
+      paymentType: json["payment_type"] is int ? json["payment_type"] : null,
+      paymentMode: json["payment_mode"] is int ? json["payment_mode"] : null,
       amount: (json["amount"] ?? 0).toDouble(),
       paidBy: json["paid_by"],
-      receivedBy: json["received_by"],
+      receivedBy: json["received_by"] is int ? json["received_by"] : null,
       paymentTime: _parseDate(json["payment_time"]),
     );
   }
@@ -613,11 +653,13 @@ class TripPayment {
     return TripPayment(
       id: map["id"],
       tripId: map["tripId"],
-      paymentType: map["payerType"],
-      paymentMode: map["paymentMode"],
+      // toDB writes "paymentType" (not "payerType") — must match DB column name.
+      paymentType: map["paymentType"] is int ? map["paymentType"] : null,
+      // toDB writes "payementMode" (typo preserved from schema) — must match.
+      paymentMode: map["payementMode"] is int ? map["payementMode"] : null,
       amount: (map["amount"] ?? 0).toDouble(),
       paidBy: map["paidBy"],
-      receivedBy: map["receivedBy"],
+      receivedBy: map["receivedBy"] is int ? map["receivedBy"] : null,
       paymentTime: map["paymentTime"],
     );
   }
@@ -626,7 +668,7 @@ class TripPayment {
     return {
       "id": db['id'],
       "tripId": db["trip_id"],
-      "payerType": db["payer_type"],
+      "paymentType": db["payment_type"],
       "payementMode": db["payment_mode"],
       "amount": double.parse(db["amount"]?.toString() ?? "0.0"),
       "paidBy": db["paid_by"],

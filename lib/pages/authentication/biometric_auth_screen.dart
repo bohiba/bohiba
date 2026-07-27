@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 import '/dist/component_exports.dart';
 import '/controllers/biometric_auth_controller.dart';
 import '/theme/bohiba_theme.dart';
@@ -35,25 +35,10 @@ class BiometricAuthScreen extends GetView<BiometricAuthController> {
             SizedBox(height: 50.h),
             // Profile Image
             Obx(() => Container(
-                  decoration: BoxDecoration(
-                    color: bohibaTheme.colorScheme.secondary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(55.r),
-                    child: CachedNetworkImage(
-                      imageUrl: controller.userImage.value,
-                      height: 110.r,
-                      width: 110.r,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.person,
-                        size: 50,
-                        color: bohibaTheme.colorScheme.onSurface,
-                      ),
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                    ),
+                  child: BohibaNetworkImage.circle(
+                    imageUrl: controller.userImage.value,
+                    size: 110.r,
+                    fallbackText: controller.userName.value,
                   ),
                 )),
             SizedBox(height: 20.h),

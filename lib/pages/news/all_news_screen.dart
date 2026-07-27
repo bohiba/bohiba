@@ -9,7 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '/component/bohiba_network_image.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class AllNewsScreen extends GetView<AllNewsController> {
@@ -88,25 +88,12 @@ class AllNewsScreen extends GetView<AllNewsController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Cached background
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  child: CachedNetworkImage(
-                                    imageUrl: '${news.image}',
-                                    fit: BoxFit.cover,
-                                    height: 220,
-                                    width: ScreenUtils.width,
-                                    placeholder: (context, url) => Container(
-                                      color: bohibaTheme.cardColor,
-                                    ),
-                                    errorWidget: (context, url, error) => Container(
-                                      color: bohibaTheme.cardColor,
-                                      child: Icon(
-                                        Icons.broken_image,
-                                        size: 50,
-                                        color: bohibaTheme.dividerColor,
-                                      ),
-                                    ),
-                                  ),
+                                BohibaNetworkImage.rounded(
+                                  imageUrl: news.image,
+                                  width: ScreenUtils.width,
+                                  height: 220,
+                                  radius: 12,
+                                  fallbackText: news.title,
                                 ),
                                 Gap(5.h),
 

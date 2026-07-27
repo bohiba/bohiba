@@ -59,7 +59,8 @@ class RatingService {
     }
 
     GlobalService.showProgress();
-    ApiResponse res = await _dioService.delete('${ApiEndPoint.apiDeleteRating}/$ratingId');
+    ApiResponse res =
+        await _dioService.delete('${ApiEndPoint.apiDeleteRating}/$ratingId');
     switch (res.statusCode) {
       case 200:
         String strDelQuery = '''DELETE $tblRating WHERE id = $ratingId''';
@@ -116,7 +117,8 @@ class RatingService {
       'rating': rating,
       'feedback': feedback,
     };
-    ApiResponse response = await _dioService.post(ApiEndPoint.apiRateDriver, body: bodyObj);
+    ApiResponse response =
+        await _dioService.post(ApiEndPoint.apiRateDriver, body: bodyObj);
 
     switch (response.statusCode) {
       case 201:
@@ -134,19 +136,42 @@ class RatingService {
         return 1;
       case 401:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(status: AlertStatus.warning, title: 'Rate Driver', desc: response.message);
+        GlobalService.showSnackBar(
+            status: AlertStatus.warning,
+            title: 'Rate Driver',
+            desc: response.message);
         return 0;
       default:
         GlobalService.dismissProgress();
-        GlobalService.showSnackBar(status: AlertStatus.failure, title: 'Rate Driver', desc: 'Failed to rate driver');
+        GlobalService.showSnackBar(
+            status: AlertStatus.failure,
+            title: 'Rate Driver',
+            desc: 'Failed to rate driver');
         return 0;
     }
   }
 
-  static Future<int> insertAll({required List<Map<String, dynamic>> ratingList}) async {
-    int successInsert = await _databaseService.insertAllData(tblRating, ratingList);
+  static Future<int> insertAll(
+      {required List<Map<String, dynamic>> ratingList}) async {
+    int successInsert =
+        await _databaseService.insertAllData(tblRating, ratingList);
 
     return successInsert;
+  }
+
+  static Future<List<RatingModel>> getLatestRatingsForDriver({
+    required String driverUuid,
+    int limit = 3,
+  }) async {
+    final String query = '''
+      SELECT * FROM $tblRating
+      WHERE driverUuid = '$driverUuid'
+      ORDER BY createdAt DESC
+      LIMIT $limit
+    ''';
+    final List<Map<String, dynamic>> rows =
+        await _databaseService.executeQuery(query) ?? [];
+    return rows.map((r) => RatingModel.fromDB(r)).toList();
   }
 
   static Future<int> clearAllRating() async {

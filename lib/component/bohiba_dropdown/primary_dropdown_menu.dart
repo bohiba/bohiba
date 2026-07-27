@@ -1,3 +1,5 @@
+import 'package:bohiba/extensions/bohiba_extension.dart';
+
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +8,13 @@ class PrimaryDropDownMenu extends StatefulWidget {
   final double? width;
   final double height;
   final EdgeInsets padding;
+  final EdgeInsets? contentPadding;
   final List<String> items;
   final String? hint;
   final String? dropDownValue;
   final double? menuHeight;
+  final Color? filledColor;
+  final Color? fontColor;
   final TextEditingController? menuController;
   final void Function(String?)? onChanged;
   final bool showIcon;
@@ -21,10 +26,13 @@ class PrimaryDropDownMenu extends StatefulWidget {
     this.width,
     this.height = 47,
     this.padding = const EdgeInsets.symmetric(vertical: 5.0),
+    this.contentPadding,
     this.hint,
     this.items = const [],
     this.dropDownValue,
     this.menuHeight,
+    this.filledColor,
+    this.fontColor,
     this.menuController,
     this.onChanged,
     this.showIcon = true,
@@ -41,7 +49,7 @@ class _PrimaryDropDownMenuState extends State<PrimaryDropDownMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 47,
+      height: widget.height,
       width: widget.width ?? ScreenUtils.width,
       margin: EdgeInsets.symmetric(vertical: ScreenUtils.height5),
       child: DropdownMenu<String?>(
@@ -53,23 +61,25 @@ class _PrimaryDropDownMenuState extends State<PrimaryDropDownMenu> {
         textInputAction: widget.nextActionType,
         hintText: widget.hint,
         menuHeight: widget.menuHeight ?? ScreenUtils.height * 0.4,
-        trailingIcon: widget.showIcon == true
-            ? Icon(
-                Icons.keyboard_arrow_down,
-                size: 24,
-                color: BohibaColors.greyColor,
-              )
-            : Container(),
+        showTrailingIcon: widget.showIcon,
+        trailingIcon: Icon(
+          Icons.keyboard_arrow_down,
+          size: 10,
+          color: BohibaColors.greyColor,
+        ),
         textStyle: TextStyle(
-          fontSize: bohibaTheme.textTheme.bodyLarge!.fontSize,
-          color: bohibaTheme.textTheme.bodyLarge!.color,
+          fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+          color: widget.fontColor ?? bohibaTheme.textTheme.bodyLarge!.color,
           letterSpacing: 1.2,
         ),
         selectedTrailingIcon: Icon(Icons.keyboard_arrow_up),
         expandedInsets: widget.padding,
         inputDecorationTheme: InputDecorationTheme(
+          filled: widget.filledColor != null ? true : false,
+          fillColor: widget.filledColor,
           suffixIconColor: bohibaTheme.primaryColor,
-          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 15.0),
+          contentPadding: widget.contentPadding ??
+              EdgeInsets.symmetric(vertical: 0, horizontal: 15.0),
         ),
         searchCallback: (entries, query) {
           if (query.isEmpty) {
@@ -85,9 +95,9 @@ class _PrimaryDropDownMenuState extends State<PrimaryDropDownMenu> {
             value: item,
             label: item,
             labelWidget: Text(
-              item,
+              item.toCapitalizedLabel(),
               style: TextStyle(
-                fontSize: bohibaTheme.textTheme.bodyMedium!.fontSize,
+                fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
                 fontWeight: bohibaTheme.textTheme.bodyLarge!.fontWeight,
                 color: bohibaTheme.textTheme.titleLarge!.color,
                 letterSpacing: 1.2,

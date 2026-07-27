@@ -1,4 +1,4 @@
-enum AppThemeMode { system, light, dark }
+enum AppThemeMode { light, dark, system, timeBased }
 
 enum ActionType { view, add, edit, delete, route, share, sync, other }
 

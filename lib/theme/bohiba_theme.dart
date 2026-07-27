@@ -1,7 +1,8 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
 import '/component/bohiba_colors.dart';
-import '/component/screen_utils.dart';
 
 class BohibaTheme {
   final _appTheme = PrefUtils.getAppThemeMode();
@@ -64,7 +65,7 @@ class BohibaTheme {
             color: BohibaColors.primaryColor,
           ),
           hintStyle: TextStyle(
-            fontSize: 12.adaptSize,
+            fontSize: 12.sp,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             color: BohibaColors.black,
@@ -100,6 +101,16 @@ class BohibaTheme {
         iconColor: BohibaColors.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
+        ),
+        textStyle: TextStyle(
+          color: BohibaColors.black,
+          fontSize: 12.sp,
+        ),
+        labelTextStyle: WidgetStatePropertyAll(
+          TextStyle(
+            color: BohibaColors.black,
+            fontSize: 12.sp,
+          ),
         ),
       ),
       menuTheme: MenuThemeData(
@@ -148,7 +159,7 @@ class BohibaTheme {
           color: BohibaColors.primaryColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
-          fontSize: 24.adaptSize,
+          fontSize: 24.sp,
           // fontStyle: FontStyle.italic
         ),
         iconTheme: IconThemeData(
@@ -161,13 +172,13 @@ class BohibaTheme {
       listTileTheme: ListTileThemeData(
         titleTextStyle: TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 14.adaptSize,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w700,
           color: BohibaColors.black,
         ),
         subtitleTextStyle: TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 12.adaptSize,
+          fontSize: 12.sp,
           letterSpacing: 1.5,
           color: BohibaColors.secoundaryColor,
           fontWeight: FontWeight.w500,
@@ -176,7 +187,7 @@ class BohibaTheme {
           color: BohibaColors.white,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500,
-          fontSize: 12.adaptSize,
+          fontSize: 12.sp,
         ),
         iconColor: BohibaColors.primaryColor,
         tileColor: BohibaColors.lightGreyColor,
@@ -195,7 +206,7 @@ class BohibaTheme {
         hintStyle: TextStyle(
           color: Colors.grey,
           fontWeight: FontWeight.w400,
-          fontSize: 13.0.adaptSize,
+          fontSize: 13.0.sp,
         ),
         prefixIconColor: BohibaColors.primaryColor,
         suffixIconColor: BohibaColors.primaryColor,
@@ -262,7 +273,7 @@ class BohibaTheme {
           foregroundColor: BohibaColors.primaryColor,
           iconColor: BohibaColors.primaryColor,
           textStyle: TextStyle(
-            fontSize: 14.adaptSize,
+            fontSize: 14.sp,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             color: BohibaColors.black,
@@ -313,7 +324,7 @@ class BohibaTheme {
         ),
         textStyle: TextStyle(
           color: BohibaColors.black,
-          fontSize: 12.adaptSize,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -334,7 +345,7 @@ class BohibaTheme {
         ),
         textStyle: TextStyle(
           color: DarkColors.secoundaryColor,
-          fontSize: 12.adaptSize,
+          fontSize: 12.sp,
         ),
       ),
       colorScheme: const ColorScheme.dark(
@@ -366,7 +377,7 @@ class BohibaTheme {
           color: DarkColors.secoundaryColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
-          fontSize: 24.adaptSize,
+          fontSize: 24.sp,
         ),
         iconTheme: IconThemeData(
           color: DarkColors.secoundaryColor,
@@ -378,13 +389,13 @@ class BohibaTheme {
       listTileTheme: ListTileThemeData(
         titleTextStyle: TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 14.adaptSize,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w700,
           color: DarkColors.secoundaryColor,
         ),
         subtitleTextStyle: TextStyle(
           fontFamily: 'Poppins',
-          fontSize: 12.adaptSize,
+          fontSize: 12.sp,
           letterSpacing: 1.5,
           color: DarkColors.secoundaryColor,
           fontWeight: FontWeight.w500,
@@ -393,7 +404,7 @@ class BohibaTheme {
           color: DarkColors.white,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w500,
-          fontSize: 12.adaptSize,
+          fontSize: 12.sp,
         ),
         iconColor: DarkColors.white,
         tileColor: DarkColors.tileColor,
@@ -440,7 +451,7 @@ class BohibaTheme {
             color: DarkColors.primaryColor,
           ),
           hintStyle: TextStyle(
-            fontSize: 12.adaptSize,
+            fontSize: 12.sp,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             color: DarkColors.greyColor,
@@ -484,6 +495,18 @@ class BohibaTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
+        textStyle: TextStyle(
+          color: DarkColors.black,
+          fontSize: 12.sp,
+          fontFamily: 'Poppins',
+        ),
+        labelTextStyle: WidgetStatePropertyAll(
+          TextStyle(
+            color: DarkColors.black,
+            fontSize: 12.sp,
+            fontFamily: 'Poppins',
+          ),
+        ),
       ),
       menuTheme: MenuThemeData(
         style: MenuStyle(
@@ -516,7 +539,7 @@ class BohibaTheme {
         hintStyle: TextStyle(
           color: DarkColors.greyColor,
           fontWeight: FontWeight.w400,
-          fontSize: 13.0.adaptSize,
+          fontSize: 13.0.sp,
         ),
         prefixIconColor: DarkColors.secoundaryColor,
         suffixIconColor: DarkColors.secoundaryColor,
@@ -585,7 +608,7 @@ class BohibaTheme {
           foregroundColor: DarkColors.primaryColor,
           iconColor: DarkColors.primaryColor,
           textStyle: TextStyle(
-            fontSize: 14.adaptSize,
+            fontSize: 14.sp,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             color: DarkColors.primaryColor,
@@ -625,92 +648,92 @@ TextTheme lightTextTheme() {
   return TextTheme(
     displayLarge: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 32.adaptSize,
+      fontSize: 32.sp,
       fontWeight: FontWeight.w700,
       color: BohibaColors.white,
     ),
     displayMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 28.adaptSize,
+      fontSize: 28.sp,
       fontWeight: FontWeight.w700,
       color: BohibaColors.black,
     ),
     displaySmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 26.adaptSize,
+      fontSize: 26.sp,
       fontWeight: FontWeight.w700,
       color: BohibaColors.black,
     ),
     headlineLarge: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 22.adaptSize,
+      fontSize: 22.sp,
       fontWeight: FontWeight.w700,
       color: BohibaColors.black,
     ),
     headlineMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 18.adaptSize,
+      fontSize: 18.sp,
       fontWeight: FontWeight.w600,
       color: BohibaColors.black,
     ),
     headlineSmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 16.adaptSize,
+      fontSize: 16.sp,
       fontWeight: FontWeight.w600,
       color: BohibaColors.black,
     ),
     titleLarge: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 16.adaptSize,
+      fontSize: 16.sp,
       fontWeight: FontWeight.w400,
       color: const Color.fromARGB(255, 132, 132, 132),
     ),
     titleMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 14.adaptSize,
+      fontSize: 14.sp,
       fontWeight: FontWeight.w400,
       color: const Color.fromARGB(255, 117, 117, 117),
     ),
     titleSmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 12.adaptSize,
+      fontSize: 12.sp,
       fontWeight: FontWeight.w400,
       color: const Color.fromRGBO(189, 189, 189, 1),
     ),
     bodyLarge: TextStyle(
-      fontSize: 16.adaptSize,
+      fontSize: 16.sp,
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w500,
       color: BohibaColors.black,
     ),
     bodyMedium: TextStyle(
-      fontSize: 14.adaptSize,
+      fontSize: 14.sp,
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w600,
       color: BohibaColors.black,
     ),
     bodySmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 12.adaptSize,
+      fontSize: 12.sp,
       fontWeight: FontWeight.w400,
       color: BohibaColors.primaryColor,
     ),
     labelLarge: TextStyle(
       fontFamily: 'Poppins',
       color: BohibaColors.black,
-      fontSize: 15.adaptSize,
+      fontSize: 15.sp,
       fontWeight: FontWeight.w600,
     ),
     labelMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 12.adaptSize,
+      fontSize: 12.sp,
       letterSpacing: 1.15,
       fontWeight: FontWeight.w500,
       color: BohibaColors.black,
     ),
     labelSmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 9.5.adaptSize,
+      fontSize: 9.5.sp,
       letterSpacing: 1.0,
       fontWeight: FontWeight.w700,
       color: BohibaColors.black,
@@ -722,92 +745,92 @@ TextTheme darkTextTheme() {
   return TextTheme(
     displayLarge: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 32.adaptSize,
+      fontSize: 32.sp,
       fontWeight: FontWeight.w700,
       color: DarkColors.white,
     ),
     displayMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 28.adaptSize,
+      fontSize: 28.sp,
       fontWeight: FontWeight.w700,
       color: DarkColors.white,
     ),
     displaySmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 26.adaptSize,
+      fontSize: 26.sp,
       fontWeight: FontWeight.w700,
       color: DarkColors.white,
     ),
     headlineLarge: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 22.adaptSize,
+      fontSize: 22.sp,
       fontWeight: FontWeight.w700,
       color: DarkColors.white,
     ),
     headlineMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 18.adaptSize,
+      fontSize: 18.sp,
       fontWeight: FontWeight.w600,
       color: DarkColors.white,
     ),
     headlineSmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 16.adaptSize,
+      fontSize: 16.sp,
       fontWeight: FontWeight.w600,
       color: DarkColors.white,
     ),
     titleLarge: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 16.adaptSize,
+      fontSize: 16.sp,
       fontWeight: FontWeight.w400,
       color: DarkColors.white,
     ),
     titleMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 14.adaptSize,
+      fontSize: 14.sp,
       fontWeight: FontWeight.w400,
       color: const Color.fromARGB(255, 180, 180, 180),
     ),
     titleSmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 12.adaptSize,
+      fontSize: 12.sp,
       fontWeight: FontWeight.w400,
       color: const Color.fromRGBO(160, 160, 160, 1),
     ),
     bodyLarge: TextStyle(
-      fontSize: 16.adaptSize,
+      fontSize: 16.sp,
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w500,
       color: DarkColors.white,
     ),
     bodyMedium: TextStyle(
-      fontSize: 14.adaptSize,
+      fontSize: 14.sp,
       fontFamily: 'Poppins',
       fontWeight: FontWeight.w600,
       color: DarkColors.white,
     ),
     bodySmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 12.adaptSize,
+      fontSize: 12.sp,
       fontWeight: FontWeight.w400,
       color: DarkColors.primaryColor, // accent
     ),
     labelLarge: TextStyle(
       fontFamily: 'Poppins',
       color: DarkColors.greyColor,
-      fontSize: 15.adaptSize,
+      fontSize: 15.sp,
       fontWeight: FontWeight.w600,
     ),
     labelMedium: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 12.adaptSize,
+      fontSize: 12.sp,
       letterSpacing: 1.15,
       fontWeight: FontWeight.w500,
       color: DarkColors.lightGreyColor,
     ),
     labelSmall: TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 9.5.adaptSize,
+      fontSize: 9.5.sp,
       letterSpacing: 1.0,
       fontWeight: FontWeight.w700,
       color: DarkColors.white,

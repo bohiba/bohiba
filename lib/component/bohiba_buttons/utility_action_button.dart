@@ -7,11 +7,14 @@ class UtilityActionButton extends StatelessWidget {
   final Function(DragDownDetails)? onPanDown;
   final IconData icon;
   final String buttonName;
-  const UtilityActionButton(
-      {super.key,
-      required this.onPanDown,
-      required this.icon,
-      required this.buttonName});
+  final EdgeInsetsGeometry? margin;
+  const UtilityActionButton({
+    super.key,
+    this.margin,
+    required this.onPanDown,
+    required this.icon,
+    required this.buttonName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +23,7 @@ class UtilityActionButton extends StatelessWidget {
       child: Container(
         height: 30,
         width: ScreenUtils.width * 0.175,
-        margin: EdgeInsets.only(
-          left: ScreenUtils.width5,
-          right: ScreenUtils.width5,
-        ),
+        margin: margin,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: BohibaColors.primaryColor,
