@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "449684563968",
+    "firebase_url": "https://bohiba-14d80-default-rtdb.firebaseio.com",
+    "project_id": "bohiba-14d80",
+    "storage_bucket": "bohiba-14d80.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449684563968:android:e510d9c11349ec3dc6d0e5",
+        "android_client_info": {
+          "package_name": "com.app.bohiba"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN0tM4lVbUAKsRqHY1Ixu5WdD1BQL7t60"
+        },
+        {
+          "current_key": "AIzaSyBqowhw2vaXA_ZRI6Mh-fLtfxc1Qv-qCFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449684563968:android:5ae73d29d52c040dc6d0e5",
+        "android_client_info": {
+          "package_name": "com.app.bohiba.test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN0tM4lVbUAKsRqHY1Ixu5WdD1BQL7t60"
+        },
+        {
+          "current_key": "AIzaSyBqowhw2vaXA_ZRI6Mh-fLtfxc1Qv-qCFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
