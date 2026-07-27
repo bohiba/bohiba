@@ -25,33 +25,12 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    buildFeatures {
-        buildConfig = true
-    }
-
-    flavorDimensions "env"
-
-    productFlavors {
-        prod {
-            dimension "env"
-            applicationId "com.app.bohiba"
-            resValue "string", "app_name", "Bohiba"
-            buildConfigField "String", "FLAVOR", '"prod"'
-        }
-        beta {
-            dimension "env"
-            applicationId "com.app.bohiba.test"
-            versionNameSuffix "-BETA"
-            resValue "string", "app_name", "Bohiba Beta"
-            buildConfigField "String", "FLAVOR", '"beta"'
-        }
-    }
-
     defaultConfig {
+        applicationId = "com.app.bohiba"
         minSdk = 24
         targetSdk = 36
-        versionCode 38
-        versionName "1.2.32"
+        versionCode 23
+        versionName "1.2.23- BETA"
         multiDexEnabled true
     }
 
