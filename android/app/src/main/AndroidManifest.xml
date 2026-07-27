@@ -9,13 +9,19 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
-
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!--
+      WRITE_EXTERNAL_STORAGE is only enforced on Android 9 (API 28) and below.
+      On Android 10+ scoped storage applies; writes go through MediaStore which
+      needs no permission. maxSdkVersion=28 ensures the permission is not
+      granted on modern Android where it would be a no-op anyway.
+    -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28"/>
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
@@ -24,7 +30,7 @@
     <uses-feature android:name="android.hardware.fingerprint" android:required="false"/>
 
     <application
-        android:label="Bohiba"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -39,7 +45,6 @@
             android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustResize"
             android:resizeableActivity="true"
-            android:requestLegacyExternalStorage="true"
             tools:targetApi="tiramisu">
 
             <meta-data
