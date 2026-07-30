@@ -9,32 +9,24 @@ class CompanyService {
   static final DatabaseService _databaseService = DatabaseService();
   static final DioService _dioService = DioService();
 
-  /// Generic company search — all entity types.
-  /// Endpoint: GET /companies/search?search=QUERY
   static Future<List<CompanyModel>> searchCompanies(String query) async {
     return _search(ApiEndPoint.apiSearchCompany, query);
   }
 
-  /// Mines-only search (entity_type = MINE) — use for trip origin.
-  /// Endpoint: GET /companies/search/mines?search=QUERY
   static Future<List<CompanyModel>> searchMines(String query) async {
     return _search(ApiEndPoint.apiSearchMines, query);
   }
 
-  /// Plants-only search (entity_type = PLANT) — use for trip destination.
-  /// Endpoint: GET /companies/search/plants?search=QUERY
   static Future<List<CompanyModel>> searchPlants(String query) async {
     return _search(ApiEndPoint.apiSearchPlants, query);
   }
 
-  /// Transporters-only search (entity_type = TRANSPORTER).
-  /// Endpoint: GET /companies/search/transporter?search=QUERY
   static Future<List<CompanyModel>> searchTransporters(String query) async {
     return _search(ApiEndPoint.apiSearchTransporters, query);
   }
 
-  // API requires minimum 2 chars; returns [] on any error (silent fallback).
-  static Future<List<CompanyModel>> _search(String endpoint, String query) async {
+  static Future<List<CompanyModel>> _search(
+      String endpoint, String query) async {
     if (query.length < 2) return [];
     try {
       final ApiResponse response = await _dioService.get(
@@ -77,10 +69,8 @@ class CompanyService {
     return companyModel;
   }
 
-  /// Server-side paginated companies list.
-  /// Returns (items, hasMore). Returns null on network error so callers can
-  /// distinguish "empty page" (items=[], hasMore=false) from failure.
-  static Future<({List<CompanyModel> items, bool hasMore})?> getCompaniesPaginated({
+  static Future<({List<CompanyModel> items, bool hasMore})?>
+      getCompaniesPaginated({
     required int page,
     int perPage = 10,
   }) async {

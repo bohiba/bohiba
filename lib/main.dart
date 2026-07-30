@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:bohiba/bindings/app_theme_binding.dart';
 import 'package:bohiba/config/app_config.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -45,7 +44,9 @@ Future<void> main() async {
       return true;
     };
 
-    AppThemeBinding();
+    // Register ThemeController as a permanent singleton before the widget tree
+    // is built. permanent:true ensures it is never deleted by route changes.
+    Get.put(ThemeController(), permanent: true);
 
     runApp(MyApp());
   }, (error, stack) async {
@@ -69,10 +70,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtils.getDimensions(context);
-    // Use Get.find — AppThemeBinding already put the singleton via permanent:true.
-    final controller = Get.isRegistered<ThemeController>()
-        ? Get.find<ThemeController>()
-        : Get.put(ThemeController(), permanent: true);
+    final controller = Get.find<ThemeController>();
     return ScreenUtilInit(
       minTextAdapt: true,
       child: Obx(() => GetMaterialApp(

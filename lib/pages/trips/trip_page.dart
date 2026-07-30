@@ -31,7 +31,7 @@ class TripPage extends GetView<TripController> {
       () {
         return Scaffold(
           appBar: TripAppBar(
-            title: controller.tripInfo.value?.tripCode ?? '',
+            title: controller.tripInfo.value?.truck?.regdNumber ?? '',
           ),
           body: SmartRefresher(
             onRefresh: () async => await controller.refreshTripPage(),

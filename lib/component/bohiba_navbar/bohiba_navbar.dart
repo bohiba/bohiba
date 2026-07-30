@@ -1,8 +1,6 @@
-import '/dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/dist/component_exports.dart';
 import '/services/pref_utils.dart';
-import '/services/global_service.dart';
 import '/services/user_role_type.dart';
 import '/pages/home/home_screen.dart';
 import '/pages/company/all_company_page.dart';
@@ -11,6 +9,7 @@ import '/pages/dashboard/dash_page/dashboard_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:remixicon/remixicon.dart';
 
 class BohibaNavBar extends StatefulWidget {
@@ -24,6 +23,7 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
   int currentIndex = 0;
   int marketScreenIndex = 0;
   int userRole = UserRoles.guest;
+  DateTime? _lastBackPressed;
 
   final PrefUtils _prefUtils = PrefUtils();
 
@@ -56,26 +56,24 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final navigator = Navigator.of(context);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
-          return;
+        if (didPop) return;
+        final now = DateTime.now();
+        if (_lastBackPressed != null &&
+            now.difference(_lastBackPressed!) < const Duration(seconds: 2)) {
+          SystemNavigator.pop();
+        } else {
+          _lastBackPressed = now;
+          // No backgroundColor so Android uses its native toast layout,
+          // which includes the app icon on Android 12+.
+          Fluttertoast.showToast(
+            msg: 'Please press Back again to exit',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+          );
         }
-        GlobalService.showAlertDialog(
-          status: AlertStatus.info,
-          title: 'EXIT',
-          description:
-              'This will close the application. Do you want to continue?',
-          saveBtnTxt: 'No',
-          onSave: () => navigator.pop(),
-          discardBtnTxt: 'Yes',
-          onDiscard: () {
-            navigator.pop(true);
-            SystemNavigator.pop();
-          },
-        );
       },
       child: Scaffold(
         body: IndexedStack(

@@ -1,4 +1,3 @@
-import '/theme/bohiba_theme.dart';
 import '/component/ui/tile_decorative.dart';
 import '/component/screen_utils.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +18,12 @@ class BlueBoxComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: ScreenUtils.width,
       height: ScreenUtils.height * 0.233,
       margin: EdgeInsets.only(bottom: ScreenUtils.height15),
-      decoration: TileDecorative(color: bohibaTheme.primaryColor),
+      decoration: TileDecorative(color: theme.primaryColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,10 +34,8 @@ class BlueBoxComponent extends StatelessWidget {
             ),
             child: Text(
               label1,
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.headlineLarge!.fontSize,
-                fontWeight: bohibaTheme.textTheme.headlineLarge!.fontWeight,
-                color: bohibaTheme.textTheme.displayLarge!.color,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                color: theme.textTheme.displayLarge?.color,
               ),
             ),
           ),
@@ -45,9 +43,8 @@ class BlueBoxComponent extends StatelessWidget {
             padding: EdgeInsets.only(left: ScreenUtils.width10),
             child: Text(
               label2 ?? 'NA',
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.titleLarge!.fontSize,
-                color: bohibaTheme.textTheme.displayLarge!.color,
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.textTheme.displayLarge?.color,
               ),
             ),
           ),
@@ -55,14 +52,13 @@ class BlueBoxComponent extends StatelessWidget {
             padding: EdgeInsets.only(left: ScreenUtils.width10),
             child: Text(
               label3 ?? 'NA',
-              style: TextStyle(
-                fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-                color: bohibaTheme.textTheme.displayLarge!.color,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.textTheme.displayLarge?.color,
               ),
             ),
           ),
-          Spacer(),
-          Divider(),
+          const Spacer(),
+          const Divider(),
           Container(
             padding: EdgeInsets.only(left: ScreenUtils.width10),
             width: ScreenUtils.width,

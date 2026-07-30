@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bohiba/controllers/companies_controller.dart';
+import 'package:get/get.dart';
 import 'package:marquee_text/marquee_text.dart';
 
 import '/theme/bohiba_theme.dart';
@@ -9,23 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:remixicon/remixicon.dart';
 
-class CompanyAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final String title;
+import 'appbar_icon.dart';
 
-  const CompanyAppBar({super.key, this.title = 'NA'});
+class CompanyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final CompaniesController controller;
 
-  @override
-  State<CompanyAppBar> createState() => _CompanyAppBarState();
+  const CompanyAppBar({super.key, required this.controller});
 
-  @override
-  Size get preferredSize => const Size.fromHeight(55.0);
-}
-
-class _CompanyAppBarState extends State<CompanyAppBar> {
   @override
   Widget build(BuildContext context) {
     return PreferredSize(
-      preferredSize: widget.preferredSize,
+      preferredSize: preferredSize,
       child: AppBar(
         // centerTitle: true,
         leading: InkWell(
@@ -35,7 +31,7 @@ class _CompanyAppBarState extends State<CompanyAppBar> {
           child: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         title: AutoSizeText(
-          widget.title,
+          controller.minesModel.value?.name ?? 'NA',
           maxLines: 1,
           style: bohibaTheme.appBarTheme.titleTextStyle,
           overflowReplacement: MarqueeText(
@@ -43,12 +39,26 @@ class _CompanyAppBarState extends State<CompanyAppBar> {
             alwaysScroll: true,
             style: bohibaTheme.appBarTheme.titleTextStyle,
             text: TextSpan(
-              text: widget.title,
+              text: controller.minesModel.value?.nameCode ?? '',
             ),
           ),
         ),
         titleSpacing: 0,
         actions: [
+          Obx(
+            () {
+              return AppBarIconBox(
+                padding: EdgeInsets.symmetric(horizontal: ScreenUtils.width5),
+                onTap: () async => controller.syncFavourite(),
+                icon: (controller.minesModel.value?.isFav ?? false)
+                    ? Icon(
+                        Icons.favorite_rounded,
+                        color: bohibaTheme.colorScheme.tertiary,
+                      )
+                    : Icon(Remix.heart_3_line),
+              );
+            },
+          ),
           GestureDetector(
             onTapDown: (TapDownDetails tapDownDetails) {
               showMenu(
@@ -93,6 +103,9 @@ class _CompanyAppBarState extends State<CompanyAppBar> {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(55.0);
 }
 
 class CompanyNameLogo extends StatelessWidget {

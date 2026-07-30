@@ -282,7 +282,7 @@ class AppRoute {
   static const String infoScreen = "/info-screen";
   static const String flavorConfig = "/flavor-config";
   static const String allMines = "/all-mines";
-  static const String mines = '/mines';
+  static const String company = '/mines';
 
   // DASHBOARD
   static const String userProfile = '/user-profile';
@@ -629,7 +629,8 @@ class AppRoute {
     ),
 
     // Mines
-    GetPage(name: mines, binding: MinesBinding(), page: () => CompanyPage()),
+    GetPage(
+        name: company, binding: CompanyBinding(), page: () => CompanyPage()),
     GetPage(name: viewChallan, page: () => const ChallanScreen()),
 
     // Wallet

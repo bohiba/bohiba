@@ -106,6 +106,7 @@ class TripModel {
       'id': json['id'],
       'isFav': json['is_fav'] ?? 0,
       'tripCode': json['trip_code'],
+      'tpNo': load['tp_no'],
       'tripStatus': json['trip_status'],
       'originId': origin?['id'],
       'originName': origin?['name'],
@@ -160,7 +161,7 @@ class TripModel {
       'ownerId': owner?['id'],
       'ownerUuid': owner?['uuid'],
       'ownerName': owner?['name'],
-      'ownerMobile': owner?['mobile'],
+      'ownerMobileNumber': owner?['mobile'],
     };
   }
 
@@ -300,12 +301,14 @@ class TripLocation {
 }
 
 class LoadDetail {
+  int? tpNo;
   String? materialType;
   double? loadWeight;
   double? shortWeight;
   double? rate;
 
   LoadDetail({
+    this.tpNo,
     this.materialType,
     this.loadWeight,
     this.shortWeight,
@@ -314,6 +317,7 @@ class LoadDetail {
 
   factory LoadDetail.fromJson(Map<String, dynamic> json) {
     return LoadDetail(
+      tpNo: json["tp_no"],
       materialType: json["material_type"]?.toString(),
       loadWeight: (json["load_weight"] ?? 0).toDouble(),
       shortWeight: (json["short_weight"] ?? 0).toDouble(),
@@ -323,6 +327,7 @@ class LoadDetail {
 
   factory LoadDetail.fromDb(Map<String, dynamic> map) {
     return LoadDetail(
+      tpNo: map["tpNo"],
       materialType: map["materialType"],
       loadWeight: (map["loadWeight"] ?? 0).toDouble(),
       shortWeight: (map["shortWeight"] ?? 0).toDouble(),
@@ -331,6 +336,7 @@ class LoadDetail {
   }
 
   Map<String, dynamic> toJson() => {
+        "tp_no": tpNo,
         "material_type": materialType,
         "load_weight": loadWeight,
         "short_weight": shortWeight,

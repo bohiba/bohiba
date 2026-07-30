@@ -1,7 +1,9 @@
+import 'package:bohiba/dist/component_exports.dart';
+import 'package:remixicon/remixicon.dart';
+
 import '/model/truck_model.dart';
 import '/pages/truck/add_truck_component/truck_menu.dart';
-import '/component/screen_utils.dart';
-import '../../dist/enums/app_enums.dart';
+import '/dist/enums/app_enums.dart';
 import '/theme/bohiba_theme.dart';
 import '/controllers/truck_controller.dart';
 import 'package:marquee_text/marquee_text.dart';
@@ -46,25 +48,11 @@ class TruckAppbar extends GetView<TruckController>
           },
         ),
         actions: [
-          /*Obx(
+          Obx(
             () {
               return AppBarIconBox(
-                onTap: () async => await controller
-                    .handleFav(
-                  assetId: controller.truckModel.value.id!,
-                  truckModel: controller.truckModel.value,
-                )
-                    .then(
-                  (onValue) async {
-                    await controller.getTruckInfo(
-                      id: controller.truckModel.value.id!.toString(),
-                    );
-                    controller.truckModel.refresh();
-                    GlobalService.printHandler(
-                        'Is marked fav: ${controller.truckModel.value.isFav}');
-                  },
-                ),
-                icon: controller.truckModel.value.isFav == true
+                onTap: () async => controller.syncFavourite(),
+                icon: (controller.truckModel.value?.isFav ?? false)
                     ? Icon(
                         Icons.favorite_rounded,
                         color: BohibaColors.warningColor,
@@ -72,7 +60,7 @@ class TruckAppbar extends GetView<TruckController>
                     : Icon(Remix.heart_3_line),
               );
             },
-          ),*/
+          ),
           Visibility(
             visible: controller.truckModel.value != null,
             child: TruckMenu(

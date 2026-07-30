@@ -16,7 +16,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 35;
+  static int dbversion = 38;
 
   /*================  DB CONFIG  =================== */
 
@@ -391,16 +391,16 @@ class DatabaseService {
   String strFavourite = '''
   CREATE TABLE IF NOT EXISTS $tblUserFav (
     id INTEGER PRIMARY KEY AUTOINCREMENT
-  , userTruckId INTEGER
+  , userTruckId INTEGER UNIQUE
   , truckId INTEGER
-  , userDriverId INTEGER
+  , userDriverId INTEGER UNIQUE
   , driverId INTEGER
-  , companyId INTEGER
+  , companyId INTEGER UNIQUE
   , isFav INTEGER NOT NULL DEFAULT 0
   , name TEXT
   , image TEXT
   , nameCode TEXT
-  , type TEXT NOT NULL DEFAULT 'unknown'
+  , type INTEGER
   )''';
 
   String strTruck = '''
@@ -481,6 +481,7 @@ class DatabaseService {
     id INTEGER PRIMARY KEY AUTOINCREMENT
   , isFav INTEGER NOT NULL DEFAULT 0
   , tripCode TEXT
+  , tpNo INTEGER
   , tripStatus INTEGER
   , originId INTEGER
   , originName TEXT

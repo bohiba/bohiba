@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:bohiba/controllers/home_controller.dart';
+import 'package:bohiba/dist/enums/enum_favourite_type.dart';
+import 'package:bohiba/services/favourite_service.dart';
+
 import '../dist/enums/app_enums.dart';
 import '/services/truck_service.dart';
 import '/services/global_service.dart';
@@ -45,6 +49,21 @@ class TruckController extends ImageUploadController {
         methodType: MethodType.api,
       );
       refreshTruckPage.refreshCompleted();
+    }
+  }
+
+  Future<void> syncFavourite() async {
+    Map<String, dynamic> favObj = {
+      'asset_type': EnumFavouriteType.truck.index,
+      'asset_id': truckModel.value?.id,
+    };
+
+    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    truckModel.value?.isFav = success;
+    truckModel.refresh();
+
+    if (Get.isRegistered<HomeController>()) {
+      await Get.find<HomeController>().refreshFavouriteList();
     }
   }
 

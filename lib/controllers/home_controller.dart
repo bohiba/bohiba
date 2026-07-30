@@ -1,4 +1,5 @@
 import 'package:bohiba/model/user_fav_model.dart';
+import 'package:bohiba/services/favourite_service.dart';
 
 import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
@@ -54,6 +55,11 @@ class HomeController extends GetxController {
 
   Future<void> onRefreshPage() async {
     await mainApi(methodType: MethodType.api, showLoading: true);
+  }
+
+  Future<void> refreshFavouriteList() async {
+    List<FavouriteModel> favList = await FavouriteService.getFavouriteList();
+    arrFavList.value = favList;
   }
 
   Future<void> getProfile() async {

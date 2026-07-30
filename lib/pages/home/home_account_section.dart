@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '/component/screen_utils.dart';
 import '/component/bohiba_buttons/secoundary_button.dart';
 import '/component/bohiba_buttons/primary_icon_button.dart';
-import '/component/bohiba_colors.dart';
 import '/routes/app_route.dart';
 
 class HomeAccountSection extends StatelessWidget {

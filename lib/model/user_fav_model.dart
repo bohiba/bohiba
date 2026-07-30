@@ -16,7 +16,7 @@ class FavouriteModel {
 
   String? nameCode;
 
-  String? type;
+  int? type;
 
   FavouriteModel({
     this.id,
@@ -45,7 +45,7 @@ class FavouriteModel {
       name: json['name'],
       image: json['image'],
       nameCode: json['name_code'],
-      type: json['type'],
+      type: json['asset_type'],
     );
   }
 
@@ -66,6 +66,7 @@ class FavouriteModel {
   }
 
   static Map<String, dynamic> toDB(Map<dynamic, dynamic> json) {
+    int type = _detectType(json);
     return {
       'id': json['id'],
       'userTruckId': json['user_truck_id'],
@@ -77,7 +78,7 @@ class FavouriteModel {
       'name': json['name'],
       'image': json['image'],
       'nameCode': json['name_code'],
-      'type': _detectType(json),
+      'type': type,
     };
   }
 
@@ -93,20 +94,26 @@ class FavouriteModel {
       image: map['image'],
       name: map['name'],
       nameCode: map['nameCode'],
-      type: map['type'],
+      type: int.tryParse(map['type'].toString()) ?? 0,
     );
   }
 
-  /// 🔥 Type Detection Logic
-  static String _detectType(Map<dynamic, dynamic> json) {
-    if (json.containsKey('truck_id')) {
-      return EnumFavouriteType.truck.name;
-    } else if (json.containsKey('driver_id')) {
-      return EnumFavouriteType.driver.name;
-    } else if (json.containsKey('mines_id')) {
-      return EnumFavouriteType.mines.name;
-    } else {
-      return EnumFavouriteType.unknown.name;
+  /// Type detection: prefer explicit asset_type from server; fall back to
+  /// non-null ID field inspection. containsKey alone is wrong — the server
+  /// may return all keys with null values.
+  static int _detectType(Map<dynamic, dynamic> json) {
+    if (json['asset_type'] != null) {
+      return json['asset_type'] as int;
     }
+    if (json['truck_id'] != null || json['user_truck_id'] != null) {
+      return EnumFavouriteType.truck.index;
+    }
+    if (json['driver_id'] != null || json['user_driver_id'] != null) {
+      return EnumFavouriteType.driver.index;
+    }
+    if (json['company_id'] != null || json['mines_id'] != null) {
+      return EnumFavouriteType.mines.index;
+    }
+    return EnumFavouriteType.unknown.index;
   }
 }

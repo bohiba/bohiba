@@ -84,14 +84,12 @@ class OwnerCompanyService {
     if (res.statusCode == 200) {
       GlobalService.showSnackBar(
         status: AlertStatus.success,
-        title: 'Company',
         desc: res.message,
       );
       return true;
     }
     GlobalService.showSnackBar(
       status: AlertStatus.failure,
-      title: 'Company',
       desc: res.message,
     );
     return false;

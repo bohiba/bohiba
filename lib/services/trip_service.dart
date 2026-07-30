@@ -569,13 +569,9 @@ class TripService {
       '${ApiEndPoint.apiTrips}/${trip.id}',
       body: bodyMap,
     );
+    GlobalService.dismissProgress();
     switch (apiResponse.statusCode) {
       case 200:
-        GlobalService.dismissProgress();
-        // Parse the server response to get the full updated trip (including
-        // company names, driver info, etc.) so the local DB stays consistent.
-        // upsertData uses INSERT OR REPLACE so it correctly overwrites the
-        // existing row without a UNIQUE constraint violation.
         Map<String, dynamic> tripMap = TripModel.toDB(apiResponse.data);
         int updateTrip = await _databaseService.upsertData(
           tableName: tblTrips,
@@ -1285,6 +1281,7 @@ class TripService {
           id
         , isFav
         , tripCode
+        , tpNo
         , tripStatus
         , originId
         , originName
@@ -1335,6 +1332,7 @@ class TripService {
           ${sqlValue(trip.id)}
         , ${sqlValue(trip.isFav)}
         , ${sqlValue(trip.tripCode)}
+        , ${sqlValue(trip.loadDetail?.tpNo)}
         , ${sqlValue(trip.tripStatus)}
         , ${sqlValue(trip.origin?.id)}
         , ${sqlValue(trip.origin?.name)}

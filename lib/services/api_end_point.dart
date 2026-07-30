@@ -44,9 +44,7 @@ class ApiEndPoint {
   static String get apiSearchPlants => '$apiCompanies/search/plants';
   static String get apiSearchTransporters => '$apiCompanies/search/transporter';
 
-  static String get apiAllFav => '$baseUrl/all-favourite';
-  static String get apiAddFav => '$baseUrl/add-favourite';
-  static String get apiDeleteFav => '$baseUrl//delete-favourite';
+  static String get apiFavourite => '$baseUrl/favourite';
 
   static String get apiTrucks => '$baseUrl/trucks';
   static String get apiGetTruck => '$apiTrucks/info';

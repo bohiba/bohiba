@@ -15,12 +15,12 @@ const Map<int, String> kDesignationLabels = {
 };
 
 // Status codes per business-logic §3.3 — integer values from the DB smallint column
-const int kStatusPending = 101;
-const int kStatusOperating = 200;
-const int kStatusShelved = 300;
-const int kStatusRetired = 400;
+const String kStatusPending = "PENDING";
+const String kStatusOperating = "OPERATING";
+const String kStatusShelved = "SHELVED";
+const String kStatusRetired = "RETIRED";
 
-String companyStatusLabel(int? status) {
+String companyStatusLabel(String? status) {
   switch (status) {
     case kStatusPending:
       return 'Pending Approval';
@@ -42,15 +42,13 @@ class OwnerCompanyModel {
   final String? nameCode;
   final String? type;
   final int? entityType;
-  final int?
-      status; // DB smallint: 101=PENDING, 200=OPERATING, 300=SHELVED, 400=RETIRED
+  final String? status;
   final String? logo;
   final String? email;
   final String? phone;
   final String? website;
   final CompanyAddress? address;
   final List<CompanyContact>? contacts;
-  // BR-09: write-once; null until first POST /legal succeeds
   final CompanyLegal? legal;
 
   const OwnerCompanyModel({
@@ -78,9 +76,7 @@ class OwnerCompanyModel {
       nameCode: json['name_code'],
       type: json['type']?.toString(),
       entityType: json['entity_type'],
-      status: json['status'] is int
-          ? json['status'] as int
-          : int.tryParse(json['status']?.toString() ?? ''),
+      status: json['status'],
       logo: json['logo'],
       email: json['email'],
       phone: json['phone'],
@@ -112,7 +108,7 @@ class OwnerCompanyModel {
     String? logo,
     CompanyAddress? address,
     List<CompanyContact>? contacts,
-    int? status,
+    String? status,
     CompanyLegal? legal,
   }) {
     return OwnerCompanyModel(
@@ -134,8 +130,6 @@ class OwnerCompanyModel {
   }
 }
 
-// BR-09: Write-once — no edit/delete after first submission.
-// BR-10: Deleted only when the company is deleted (CASCADE on company_legal.company_id).
 class CompanyLegal {
   final int? id;
   final String? gstNo;

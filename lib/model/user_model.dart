@@ -3,7 +3,7 @@ import '/model/rating_model.dart';
 class UserModel {
   int? id;
   int? isSynced;
-  int? isFav;
+  bool? isFav;
   UserProfile? profile;
   LicenseDetail? licenseDetail;
   List<RatingModel>? rating;
@@ -30,7 +30,7 @@ class UserModel {
     return UserModel(
       id: mapObj['id'],
       isSynced: mapObj['is_synced'],
-      isFav: json['is_fav'] == true ? 1 : 0,
+      isFav: json['is_fav'],
       profile: mapObj['profile'] != null
           ? UserProfile.fromJson(mapObj['profile'])
           : null,
@@ -77,6 +77,7 @@ class UserModel {
     final Map<String, dynamic> licenseDetail = driver['license_detail'] ?? {};
     final Map<String, dynamic> map = <String, dynamic>{
       'id': driver['id'],
+      'isFav': driver['is_fav'] == true ? 1 : 0,
       'isSynced': driver['is_synced'],
       'image': profile['profile_image'],
       'uuid': profile['driver_uuid'],
@@ -122,7 +123,7 @@ class UserModel {
   static UserModel fromDB(Map<String, dynamic> dbMap) {
     return UserModel(
       id: dbMap['id'],
-      isFav: dbMap['isFav'] == true ? 1 : 0,
+      isFav: dbMap['isFav'] == 1 ? true : false,
       isSynced: dbMap['isSynced'],
       createdAt: dbMap['createdAt'],
       updatedAt: dbMap['updatedAt'],

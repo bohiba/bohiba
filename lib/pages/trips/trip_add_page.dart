@@ -163,7 +163,7 @@ class AddTripPage extends GetView<TripAddController> {
                     RequiredLabel(label: 'Transporter', required: true),
                     AppDropdownSearch<CompanyModel>(
                       menuController: controller.transporterController,
-                      hint: 'Search transporter…',
+                      hint: 'Search transporter...',
                       items: controller.transporterSearchResults.toList(),
                       initialValue: controller.selectedTransporter.value,
                       searchState: controller.transporterSearchState.value,
@@ -194,23 +194,59 @@ class AddTripPage extends GetView<TripAddController> {
                       },
                     ),
 
-                    AppDropdownSearch<String>(
-                      padding: EdgeInsets.symmetric(vertical: 5.h),
-                      hint: 'Trip Status',
-                      initialValue: controller.strStatus.value.name,
-                      items: controller.tripStatus.map((e) => e.name).toList(),
-                      enableSearch: false,
-                      labelBuilder: (s) => s.toCapitalizedLabel(),
-                      menuController: controller.statusController,
-                      onChanged: (name) {
-                        if (name == null) return;
-                        final status = EnumTripStatus.values
-                            .firstWhereOrNull((e) => e.name == name);
-                        if (status != null) controller.strStatus.value = status;
-                      },
-                      validator: (value) => (value == null || value.isEmpty)
-                          ? 'Please select trip status'
-                          : null,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RequiredLabel(label: 'Trip Status', required: true),
+                            AppDropdownSearch<String>(
+                              width: ScreenUtils.width * 0.45,
+                              padding: EdgeInsets.symmetric(vertical: 5.h),
+                              hint: 'Trip Status',
+                              initialValue: controller.strStatus.value?.name,
+                              items: controller.tripStatus
+                                  .map((e) => e.name)
+                                  .toList(),
+                              enableSearch: false,
+                              labelBuilder: (s) => s.toCapitalizedLabel(),
+                              menuController: controller.statusController,
+                              onChanged: (name) {
+                                if (name == null) return;
+                                final status = EnumTripStatus.values
+                                    .firstWhereOrNull((e) => e.name == name);
+                                if (status != null) {
+                                  controller.strStatus.value = status;
+                                }
+                              },
+                              validator: (value) =>
+                                  (value == null || value.isEmpty)
+                                      ? 'Please select trip status'
+                                      : null,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RequiredLabel(label: 'TP No', required: true),
+                            TextInputField(
+                              width: ScreenUtils.width * 0.44,
+                              inputFormatters: [],
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              nextActionType: TextInputAction.next,
+                              controller: controller.tpNoController,
+                              validateField: (v) => (v == null || v.isEmpty)
+                                  ? 'Enter your TP No'
+                                  : null,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
 
                     Row(

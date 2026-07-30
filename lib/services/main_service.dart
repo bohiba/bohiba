@@ -357,7 +357,7 @@ class MainService {
     for (Map fav in favList) {
       Map<String, dynamic> favMap = FavouriteModel.toDB(fav);
 
-      int successFavInsert = await FavouriteService.addFavourite(favMap);
+      int successFavInsert = await FavouriteService.syncFavLocally(favMap);
 
       if (successFavInsert > 0) {
         arrFavourites.add(FavouriteModel.fromDB(favMap));
@@ -381,7 +381,8 @@ class MainService {
         final String? driverUuid = driver['profile']?['driver_uuid'] as String?;
         List<dynamic> ratingList = driver['rating'];
         List<Map<String, dynamic>> arrRatingObj = ratingList.map((rating) {
-          final Map<String, dynamic> r = Map<String, dynamic>.from(rating as Map);
+          final Map<String, dynamic> r =
+              Map<String, dynamic>.from(rating as Map);
           r['driverUuid'] = driverUuid;
           return RatingModel.toDB(r);
         }).toList();

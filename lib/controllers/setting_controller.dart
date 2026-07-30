@@ -45,7 +45,10 @@ class SettingController extends GetxController {
       }
       await MainService.mainApi(type: MethodType.api);
       Get.deleteAll();
-      Get.put(() => ThemeController());
+      // Re-register ThemeController as permanent immediately after deleteAll so
+      // the widget tree and all controllers that Get.find<ThemeController>() can
+      // always resolve it. It reads the persisted mode from prefs in onInit.
+      Get.put(ThemeController(), permanent: true);
       if (roleId.value == UserRoles.truckOwner) {
         Get.offAllNamed(AppRoute.truckOwnerNavBar);
       } else {

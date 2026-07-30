@@ -1,7 +1,7 @@
-import 'package:bohiba/component/bohiba_buttons/bottom_button.dart';
-import 'package:bohiba/component/bohiba_inputfield/date_inputfield.dart';
-import 'package:bohiba/pages/widget/required_label.dart';
-import 'package:bohiba/services/global_service.dart';
+import '/component/bohiba_buttons/primary_button.dart';
+import '/component/bohiba_inputfield/date_inputfield.dart';
+import '/pages/widget/required_label.dart';
+import '/services/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -41,7 +41,6 @@ class TripFilterScreen extends GetView<TripReportController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── Transport ────────────────────────────────────────────
               RequiredLabel(label: 'Transport', required: true),
               AppDropdownSearch<CompanyModel>(
                 hint: 'Search transporter...',
@@ -185,9 +184,9 @@ class TripFilterScreen extends GetView<TripReportController> {
         bottomNavigationBar: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-            child: BottomButton(
-              labelPrice: 'SEARCH TRIPS',
-              onTap: () {
+            child: PrimaryButton(
+              label: 'SEARCH TRIPS',
+              onPressed: () {
                 Get.toNamed(AppRoute.tripReportList);
                 controller.searchTrips();
               },

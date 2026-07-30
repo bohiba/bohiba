@@ -61,6 +61,11 @@ class _BasicInfoSectionState extends State<BasicInfoSection> {
           ),
           LinearBoxWidget(
             onClick: null,
+            header: 'Trip Code',
+            title: c.tripInfo.value?.tripCode,
+          ),
+          LinearBoxWidget(
+            onClick: null,
             header: 'Transporter',
             widget: Expanded(
               child: Text(
@@ -76,10 +81,12 @@ class _BasicInfoSectionState extends State<BasicInfoSection> {
               ),
             ),
           ),
-          LinearBoxWidget(
-            onClick: null,
-            header: 'Truck',
-            title: c.tripInfo.value?.truck?.regdNumber,
+          RoleWidget(
+            truckOwnerWidget: LinearBoxWidget(
+              onClick: null,
+              header: 'TP No',
+              title: c.tripInfo.value?.loadDetail?.tpNo?.toString() ?? '',
+            ),
           ),
           RoleWidget(
             truckOwnerWidget: LinearBoxWidget(

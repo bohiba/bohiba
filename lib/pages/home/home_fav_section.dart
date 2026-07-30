@@ -1,4 +1,5 @@
 import '/dist/enums/enum_favourite_type.dart';
+import '/model/company_model.dart';
 import '/model/user_fav_model.dart';
 
 import '../company/company_tile.dart';
@@ -82,11 +83,11 @@ class HomeFavListSection extends GetView<HomeController> {
                 itemBuilder: (context, index) {
                   FavouriteModel favObj = controller.arrFavList.value![index];
 
-                  if (favObj.type == EnumFavouriteType.driver.name) {
+                  if (favObj.type == EnumFavouriteType.driver.index) {
                     return DriverTile(
                       driver: UserModel(
                         id: favObj.userDriverId,
-                        isFav: (favObj.isFav ?? false) ? 1 : 0,
+                        isFav: favObj.isFav ?? false,
                         profile: UserProfile(
                           name: favObj.name,
                           image: favObj.image,
@@ -111,7 +112,7 @@ class HomeFavListSection extends GetView<HomeController> {
                     );
                   }
 
-                  if (favObj.type == EnumFavouriteType.truck.name) {
+                  if (favObj.type == EnumFavouriteType.truck.index) {
                     return TruckTile(
                       truckInfo: TruckModel(
                         id: favObj.truckId ?? favObj.userTruckId,
@@ -143,16 +144,18 @@ class HomeFavListSection extends GetView<HomeController> {
                     );
                   }
 
-                  if (favObj.type == EnumFavouriteType.mines.name) {
+                  if (favObj.type == EnumFavouriteType.mines.index) {
                     return CompanyTile(
-                      minesInfo: {
-                        'mine_name': favObj.name ?? '',
-                        'location': '',
-                      },
+                      minesInfo: CompanyModel(
+                        id: favObj.minesId,
+                        name: favObj.name,
+                        logo: favObj.image,
+                        nameCode: favObj.nameCode,
+                      ),
                     );
                   }
 
-                  if (favObj.type == EnumFavouriteType.unknown.name) {
+                  if (favObj.type == EnumFavouriteType.unknown.index) {
                     return SizedBox.fromSize();
                   }
                   return Container();

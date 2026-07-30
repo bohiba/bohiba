@@ -23,7 +23,6 @@ class OwnerCompanyController extends GetxController {
   final emailCtrl = TextEditingController();
   final phoneCtrl = TextEditingController();
   final websiteCtrl = TextEditingController();
-  final RxBool isSavingProfile = false.obs;
 
   // ── Location reference data (states + districts from GET /locations) ────────
   final Rxn<LocationData> locationData = Rxn();
@@ -63,7 +62,6 @@ class OwnerCompanyController extends GetxController {
   // final Rxn<DateTime> contactAppointedDate = Rxn();
   final Rx<TextEditingController> contactAppointedDate =
       TextEditingController().obs;
-  final RxBool isSavingContact = false.obs;
 
   @override
   void onInit() {
@@ -123,14 +121,13 @@ class OwnerCompanyController extends GetxController {
 
   Future<void> createCompany() async {
     if (!validateProfileForm()) return;
-    isSavingProfile.value = true;
+    Get.back();
     final result = await OwnerCompanyService.createCompany(
       name: nameCtrl.text.trim(),
       email: emailCtrl.text.trim(),
       phone: phoneCtrl.text.trim(),
       website: websiteCtrl.text.trim(),
     );
-    isSavingProfile.value = false;
     if (result != null) {
       company.value = result;
       Get.back();
@@ -149,14 +146,14 @@ class OwnerCompanyController extends GetxController {
 
   Future<void> updateCompany() async {
     if (!validateProfileForm()) return;
-    isSavingProfile.value = true;
+    Get.back();
     final success = await OwnerCompanyService.updateCompany(
       name: nameCtrl.text.trim(),
       email: emailCtrl.text.trim(),
       phone: phoneCtrl.text.trim(),
       website: websiteCtrl.text.trim(),
     );
-    isSavingProfile.value = false;
+
     if (success) {
       company.value = company.value?.copyWith(
         name: nameCtrl.text.trim(),
@@ -286,13 +283,17 @@ class OwnerCompanyController extends GetxController {
   Future<void> addContact() async {
     if (!_validateContactForm()) return;
     Get.back();
-    isSavingContact.value = true;
     final result = await OwnerCompanyService.addContact(_buildContactBody());
-    isSavingContact.value = false;
     if (result != null) {
-      final updated = List<CompanyContact>.from(company.value?.contacts ?? [])
-        ..addAll(result);
-      company.value = company.value?.copyWith(contacts: updated);
+      // The server returns the full contacts list. Merge by id so that
+      // addAll(fullList) doesn't duplicate contacts already in the local model.
+      final existing = company.value?.contacts ?? [];
+      final existingIds = existing.map((c) => c.id).toSet();
+      final merged = [
+        ...existing,
+        ...result.where((c) => !existingIds.contains(c.id)),
+      ];
+      company.value = company.value?.copyWith(contacts: merged);
       Get.back();
     }
   }
@@ -300,13 +301,17 @@ class OwnerCompanyController extends GetxController {
   Future<void> updateContact(int id) async {
     if (!_validateContactForm()) return;
     Get.back();
-    isSavingContact.value = true;
     final result =
         await OwnerCompanyService.updateContact(id, _buildContactBody());
-    isSavingContact.value = false;
     if (result != null) {
-      company.value = company.value?.copyWith(contacts: result);
-      Get.back();
+      final updatedContact = result.firstWhere(
+        (c) => c.id == id,
+        orElse: () => result.first,
+      );
+      final updatedContacts = (company.value?.contacts ?? [])
+          .map((c) => c.id == id ? updatedContact : c)
+          .toList();
+      company.value = company.value?.copyWith(contacts: updatedContacts);
     }
   }
 

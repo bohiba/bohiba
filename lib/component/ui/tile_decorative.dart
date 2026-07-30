@@ -3,14 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../bohiba_colors.dart';
 
-// class TileGradientDecoration extends BoxDecoration {
-//   TileGradientDecoration()
-//       : super(
-//           color: bohibaTheme.cardColor,
-//           borderRadius: BorderRadius.circular(12.0),
-//         );
-// }
-
 class TileDecorative extends BoxDecoration {
   TileDecorative({Color? color})
       : super(

@@ -31,7 +31,7 @@ class CompanyHorizontalCard extends GetView<AllCompanyController> {
       decoration: TileDecorative(),
       child: InkWell(
         onTap: () {
-          navigator.pushNamed(AppRoute.mines, arguments: minesInfo);
+          navigator.pushNamed(AppRoute.company, arguments: minesInfo);
         },
         child: Row(
           children: [
@@ -99,7 +99,7 @@ class CompanyVerticalCard extends StatelessWidget {
     final navigator = Navigator.of(context);
     return GestureDetector(
       onTap: () {
-        navigator.pushNamed(AppRoute.mines, arguments: minesInfo);
+        navigator.pushNamed(AppRoute.company, arguments: minesInfo);
       },
       child: Container(
         width: ScreenUtils.width * 0.30,
@@ -110,36 +110,36 @@ class CompanyVerticalCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 3,
-              child: Container(
-                width: double.maxFinite,
-                height: 70.h,
-                margin: EdgeInsets.all(0.5),
-                alignment: Alignment.center,
-                decoration: TileDecorative(
-                  color: bohibaTheme.scaffoldBackgroundColor,
-                ),
-                child: Text(minesInfo.nameCode ?? ""),
+              child: BohibaNetworkImage(
+                imageUrl: "${ImagePath.companyLogo}/${minesInfo.logo}",
+                height: ScreenUtils.width,
+                width: ScreenUtils.width,
               ),
             ),
             Expanded(
               flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AutoSizeText(
-                    minesInfo.district ?? "",
-                    style: bohibaTheme.textTheme.titleMedium,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflowReplacement: MarqueeText(
-                      text: TextSpan(
-                        style: bohibaTheme.textTheme.titleMedium,
-                        text: minesInfo.district ?? "",
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtils.width5,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AutoSizeText(
+                      minesInfo.name ?? "",
+                      style: bohibaTheme.textTheme.titleMedium,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflowReplacement: MarqueeText(
+                        text: TextSpan(
+                          style: bohibaTheme.textTheme.titleMedium,
+                          text: minesInfo.nameCode ?? "",
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],

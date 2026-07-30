@@ -45,7 +45,8 @@ class DriverTile extends GetView<DriverController> {
               child: Row(
                 children: [
                   BohibaNetworkImage.circle(
-                    imageUrl: '${ImagePath.profileImage}/${driver.profile?.image}',
+                    imageUrl:
+                        '${ImagePath.profileImage}/${driver.profile?.image}',
                     size: 32.h,
                     fallbackText: driver.profile?.name,
                   ),
@@ -59,11 +60,13 @@ class DriverTile extends GetView<DriverController> {
                         maxLines: 1,
                         style: bohibaTheme.textTheme.bodyMedium,
                       ),
-                      Text(
-                        driver.profile?.driverUuid ?? '',
-                        maxLines: 1,
-                        style: bohibaTheme.textTheme.labelMedium,
-                      ),
+                      (driver.profile?.driverUuid?.isEmpty ?? true)
+                          ? SizedBox.shrink()
+                          : Text(
+                              driver.profile?.driverUuid ?? '',
+                              maxLines: 1,
+                              style: bohibaTheme.textTheme.labelMedium,
+                            ),
                     ],
                   ),
                 ],

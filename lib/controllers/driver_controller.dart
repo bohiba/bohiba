@@ -1,3 +1,7 @@
+import 'package:bohiba/controllers/home_controller.dart';
+import 'package:bohiba/dist/enums/enum_favourite_type.dart';
+import 'package:bohiba/services/favourite_service.dart';
+
 import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
 import '/services/profile_service.dart';
@@ -120,5 +124,20 @@ class DriverController extends GetxController {
       return;
     }
     selectedRateMsgIndex.value = strSuggestion;
+  }
+
+  Future<void> syncFavourite() async {
+    Map<String, dynamic> favObj = {
+      'asset_type': EnumFavouriteType.driver.index,
+      'asset_id': driverModel.value?.id,
+    };
+
+    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    driverModel.value?.isFav = success;
+    driverModel.refresh();
+
+    if (Get.isRegistered<HomeController>()) {
+      await Get.find<HomeController>().refreshFavouriteList();
+    }
   }
 }

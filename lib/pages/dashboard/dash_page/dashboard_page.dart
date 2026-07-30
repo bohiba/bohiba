@@ -1,7 +1,6 @@
 import 'package:bohiba/config/app_config.dart';
 
 import '/routes/app_route.dart';
-import '/services/global_service.dart';
 import '/extensions/bohiba_extension.dart';
 import '/services/role_permission_service.dart';
 import '/controllers/dashboard_controller.dart';

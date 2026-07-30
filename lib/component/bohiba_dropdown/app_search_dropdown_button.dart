@@ -261,6 +261,12 @@ class _AsyncSearchDropdownContentState<T>
         if (_inputController.text != newLabel) {
           _inputController.text = newLabel;
         }
+      } else if (newValue == null && !_focusNode.hasFocus && _inputController.text.isNotEmpty) {
+        // External reset (e.g. clearController() in the GetX controller nulled
+        // the Rxn) — wipe the visible text so the field returns to hint state.
+        // Guard with !hasFocus: when the user is actively typing, fieldState.value
+        // is also null (no company selected yet), and we must not clear their input.
+        _inputController.text = '';
       }
     }
   }

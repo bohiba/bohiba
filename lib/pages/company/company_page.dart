@@ -21,25 +21,8 @@ class CompanyPage extends GetView<CompaniesController> {
     return Obx(() {
       return Scaffold(
         appBar: CompanyAppBar(
-          title: controller.minesModel.value?.nameCode ?? 'NA',
+          controller: controller,
         ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        // floatingActionButton: PrimaryFloatingButton(
-        //   onPressed: () {
-        //     // SELECT VEHICLE AND SET QUEUE STATUS
-        //     showModalBottomSheet(
-        //       isScrollControlled: true,
-        //       isDismissible: false,
-        //       shape: BottomModalShape(),
-        //       context: context,
-        //       builder: (context) {
-        //         return CompanyQueueStatus(currentIndex: 2);
-        //       },
-        //     );
-        //   },
-        //   heroTag: 'set_your_queue',
-        //   label: 'SET YOUR QUEUE',
-        // ),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.only(

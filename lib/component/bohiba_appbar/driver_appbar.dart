@@ -1,3 +1,6 @@
+import 'package:bohiba/services/global_service.dart';
+import 'package:remixicon/remixicon.dart';
+
 import '/component/bohiba_text/bohiba_marquee_text.dart';
 import '/component/screen_utils.dart';
 import '/pages/driver/driver_modals/driver_menu.dart';
@@ -6,6 +9,8 @@ import '/controllers/driver_controller.dart';
 import '../../dist/enums/app_enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'appbar_icon.dart';
 
 class DriverAppbar extends GetView<DriverController>
     implements PreferredSizeWidget {
@@ -34,6 +39,21 @@ class DriverAppbar extends GetView<DriverController>
           },
         ),
         actions: [
+          Obx(
+            () {
+              GlobalService.printHandler(
+                  "isFav: ${controller.driverModel.value?.isFav}");
+              return AppBarIconBox(
+                onTap: () async => controller.syncFavourite(),
+                icon: (controller.driverModel.value?.isFav ?? false)
+                    ? Icon(
+                        Icons.favorite_rounded,
+                        color: bohibaTheme.colorScheme.tertiary,
+                      )
+                    : Icon(Remix.heart_3_line),
+              );
+            },
+          ),
           controller.driverModel.value == null
               ? SizedBox.shrink()
               : DriverMenu(

@@ -130,8 +130,9 @@ class ExplorePage extends GetView<OpenDriverListController> {
                                     arguments: openDriver,
                                   )
                                       .then((onValue) async {
-                                    if (onValue != null && onValue != false)
+                                    if (onValue != null && onValue != false) {
                                       await controller.getAllOpenDriver();
+                                    }
                                   }),
                                 );
                               }

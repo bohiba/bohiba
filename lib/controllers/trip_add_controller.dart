@@ -42,6 +42,7 @@ class TripAddController extends ImageUploadController {
   TextEditingController endedAtController = TextEditingController();
   TextEditingController statusController = TextEditingController();
   TextEditingController totalWeightController = TextEditingController();
+  TextEditingController tpNoController = TextEditingController();
   TextEditingController shortWeightController = TextEditingController();
   MoneyMaskedTextController rateController = MoneyMaskedTextController(
     initialValue: 00.00,
@@ -53,7 +54,7 @@ class TripAddController extends ImageUploadController {
 
   final List<EnumTripStatus> tripStatus =
       EnumTripStatus.values.where((e) => e != EnumTripStatus.archived).toList();
-  Rx<EnumTripStatus> strStatus = EnumTripStatus.draft.obs;
+  Rx<EnumTripStatus?> strStatus = Rxn<EnumTripStatus>();
 
   /// The currently selected origin company (shown in Origin field).
   Rxn<CompanyModel> selectedOriginCompany = Rxn<CompanyModel>();
@@ -228,7 +229,7 @@ class TripAddController extends ImageUploadController {
     if (!globalKey.currentState!.validate()) return 0;
     final String rateTrip =
         rateController.text.replaceAll(RegExp(r'[₹,]'), '').trim();
-    final int statusTrip = strStatus.value.value;
+    final int statusTrip = strStatus.value?.value ?? EnumTripStatus.draft.value;
     final String? startedAt = _toApiDate(startAtController.text);
     final String? endedAt = _toApiDate(endedAtController.text);
     final Map<String, dynamic> bodyObj = {
@@ -239,6 +240,7 @@ class TripAddController extends ImageUploadController {
       'driver_uuid': truckModel.value.driverUuid,
       'origin_id': selectedOriginCompany.value?.id,
       'destination_id': selectedDestinationCompany.value?.id,
+      'tp_no': int.tryParse(tpNoController.text.trim()),
       'material_id': selectedMineral.value?.id,
       'trip_status': statusTrip,
       'load_weight': totalWeightController.text.trim(),
@@ -292,6 +294,7 @@ class TripAddController extends ImageUploadController {
     destinationController.clear();
     transporterController.clear();
     mineralController.clear();
+    tpNoController.clear();
     statusController.clear();
     totalWeightController.clear();
     shortWeightController.clear();
@@ -301,7 +304,7 @@ class TripAddController extends ImageUploadController {
     selectedDestinationCompany.value = null;
     selectedTransporter.value = null;
     selectedMineral.value = null;
-    strStatus.value = EnumTripStatus.draft;
+    strStatus.value = null;
     availableMinerals.clear();
 
     originSearchResults.clear();
@@ -328,6 +331,7 @@ class TripAddController extends ImageUploadController {
     statusController.text = trip.tripStatus?.tripStatusName.toString() ?? '';
     totalWeightController.text = trip.loadDetail?.loadWeight.toString() ?? '';
     shortWeightController.text = trip.loadDetail?.shortWeight.toString() ?? '';
+    tpNoController.text = trip.loadDetail?.tpNo.toString() ?? '';
     rateController = MoneyMaskedTextController(
       initialValue: trip.loadDetail?.rate ?? 0.0,
       precision: 2,
@@ -340,7 +344,7 @@ class TripAddController extends ImageUploadController {
       truckModel.value = arrTruck
           .firstWhere((truck) => truck.regdNumber == trip.truck?.regdNumber);
       strStatus.value =
-          tripStatus.firstWhere((s) => s == trip.tripStatus?.toString());
+          tripStatus.firstWhere((s) => s.index == trip.tripStatus);
     } catch (e) {
       GlobalService.printHandler('Edit trip status/truck error: $e');
     }
@@ -392,6 +396,19 @@ class TripAddController extends ImageUploadController {
             );
       } catch (e) {
         GlobalService.printHandler('Edit trip destination error: $e');
+      }
+    }
+
+    // ── Transporter company ────────────────────────────────────────────────
+    if (trip.transporter?.id != null) {
+      try {
+        selectedTransporter.value = CompanyModel(
+          id: trip.transporter?.id,
+          name: trip.transporter?.name,
+          nameCode: trip.transporter?.nameCode,
+        );
+      } catch (e) {
+        GlobalService.printHandler('Edit trip transporter error: $e');
       }
     }
   }

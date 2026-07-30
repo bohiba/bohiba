@@ -197,8 +197,6 @@ class _CompanyBody extends StatelessWidget {
   }
 
   void _showAddressSheet(BuildContext context) {
-    // Pre-load location reference data for the edit path (company already has
-    // an address). The null-address path loads it eagerly after fetchCompany.
     Get.find<OwnerCompanyController>().ensureLocationsForAddressSheet();
     showModalBottomSheet(
       context: context,
@@ -431,7 +429,7 @@ class _HeroInfoChip extends StatelessWidget {
 }
 
 class _StatusBanner extends StatelessWidget {
-  final int? status;
+  final String? status;
   const _StatusBanner({this.status});
 
   @override
@@ -472,18 +470,20 @@ class _StatusBanner extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Icon(icon, size: 18.r, color: fg),
           Gap(10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   companyStatusLabel(status),
                   style: TextStyle(
                     color: fg,
-                    fontSize: 12.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -872,58 +872,38 @@ class _ProfileSheet extends StatelessWidget {
               style: bohibaTheme.textTheme.titleMedium,
             ),
             Gap(16.h),
-            RequiredLabel(label: 'Company Name *'),
+            RequiredLabel(
+              label: 'Company Name',
+              required: true,
+            ),
             TextInputField(
                 controller: controller.nameCtrl,
                 hintText: 'e.g. Mahanta Fleet Services'),
-            Gap(12.h),
             RequiredLabel(label: 'Email'),
             TextInputField(
                 controller: controller.emailCtrl,
                 hintText: 'company@email.com',
                 keyboardType: TextInputType.emailAddress),
-            Gap(12.h),
             RequiredLabel(label: 'Phone'),
             TextInputField(
-                controller: controller.phoneCtrl,
-                hintText: '+91 9xxxxxxxxx',
-                keyboardType: TextInputType.phone),
-            Gap(12.h),
+              controller: controller.phoneCtrl,
+              hintText: '9xxxxxxxxx',
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
+            ),
             RequiredLabel(label: 'Website'),
             TextInputField(
               controller: controller.websiteCtrl,
+              maxLines: 1,
               hintText: 'https://...',
               keyboardType: TextInputType.url,
             ),
-            Gap(20.h),
-            Obx(
-              () => ElevatedButton(
-                onPressed: controller.isSavingProfile.value
-                    ? null
-                    : (isCreate
-                        ? controller.createCompany
-                        : controller.updateCompany),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: bohibaTheme.primaryColor,
-                  minimumSize: Size(double.infinity, 46.h),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r)),
-                ),
-                child: controller.isSavingProfile.value
-                    ? SizedBox(
-                        width: 20.r,
-                        height: 20.r,
-                        child: const CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white),
-                      )
-                    : Text(
-                        isCreate ? 'REGISTER' : 'SAVE CHANGES',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w600),
-                      ),
-              ),
+            Gap(10.h),
+            PrimaryButton(
+              onPressed: (isCreate
+                  ? controller.createCompany
+                  : controller.updateCompany),
+              label: isCreate ? 'REGISTER' : 'SAVE CHANGES',
             ),
           ],
         ),
@@ -1179,11 +1159,6 @@ class _ContactSheet extends GetView<OwnerCompanyController> {
             Text(isEdit ? 'Edit Contact' : 'Add Contact',
                 style: bohibaTheme.textTheme.titleMedium),
             Gap(16.h),
-
-            // Designation picker — Row is eager so all chips are built inside
-            // the Obx closure and subscribe to selectedDesignation correctly.
-            // ListView.separated is lazy (itemBuilder fires outside Obx scope)
-            // and triggers GetX's "improper use" error.
             RequiredLabel(label: 'Designation'),
             Obx(() {
               final selected = controller.selectedDesignation.value;
@@ -1219,7 +1194,6 @@ class _ContactSheet extends GetView<OwnerCompanyController> {
                 ),
               );
             }),
-
             RequiredLabel(
               label: 'Full Name',
               required: true,
@@ -1233,30 +1207,28 @@ class _ContactSheet extends GetView<OwnerCompanyController> {
             ),
             TextInputField(
                 controller: controller.contactPhoneCtrl,
-                hintText: '+91 9xxxxxxxxx',
+                maxLength: 10,
+                hintText: '9xxxxxxxxx',
                 keyboardType: TextInputType.phone),
             RequiredLabel(
               label: 'Email',
             ),
             TextInputField(
                 controller: controller.contactEmailCtrl,
-                hintText: 'Optional',
+                hintText: 'example@gmail.com',
                 keyboardType: TextInputType.emailAddress),
-
             RequiredLabel(label: 'Address'),
             TextInputField(
-                controller: controller.contactAddressCtrl,
-                hintText: 'Contact personal address (optional)',
-                maxLines: 2),
-
-            // Date of appointment — controller holds a TextEditingController
-            // wrapped in Rx so the field text updates reactively after a pick.
+              controller: controller.contactAddressCtrl,
+              hintText: 'Contact personal address',
+              maxLines: 3,
+            ),
             RequiredLabel(label: 'Date of appointment'),
             Obx(() {
               final textCtrl = controller.contactAppointedDate.value;
               return DateInputField(
                 hintText:
-                    textCtrl.text.isNotEmpty ? textCtrl.text : 'Select date',
+                    textCtrl.text.isNotEmpty ? textCtrl.text : 'DD-MM-YYYY',
                 showPrefixIcon: false,
                 onTap: () async {
                   final picked = await GlobalService.datePickerModal(
@@ -1270,16 +1242,13 @@ class _ContactSheet extends GetView<OwnerCompanyController> {
                 },
               );
             }),
-
             Gap(20.h),
-            Obx(() => PrimaryButton(
-                  onPressed: controller.isSavingContact.value
-                      ? null
-                      : (isEdit
-                          ? () => controller.updateContact(existing!.id!)
-                          : controller.addContact),
-                  label: isEdit ? 'UPDATE CONTACT' : 'ADD CONTACT',
-                )),
+            PrimaryButton(
+              onPressed: (isEdit
+                  ? () => controller.updateContact(existing!.id!)
+                  : controller.addContact),
+              label: isEdit ? 'UPDATE CONTACT' : 'ADD CONTACT',
+            )
           ],
         ),
       ),

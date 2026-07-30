@@ -1,3 +1,4 @@
+import 'package:bohiba/model/company_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../company/company_card.dart';
@@ -83,8 +84,13 @@ class HomeCompanySection extends GetView<HomeController> {
                                   ? 10
                                   : controller.arrMines.value?.length,
                           itemBuilder: (context, index) {
+                            CompanyModel? companyModel =
+                                controller.arrMines.value?[index];
+                            if (companyModel == null) {
+                              return SizedBox.shrink();
+                            }
                             return CompanyVerticalCard(
-                              minesInfo: controller.arrMines.value![index],
+                              minesInfo: companyModel,
                             );
                           },
                         );

@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '/component/bohiba_buttons/primary_button.dart';
-import '/component/image_path.dart';
 import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -446,10 +445,9 @@ class GlobalService {
       toastLength: Toast.LENGTH_LONG,
       gravity: gravity ?? ToastGravity.BOTTOM,
       timeInSecForIosWeb: 5,
-      backgroundColor: bohibaTheme.colorScheme.secondary,
+      // backgroundColor: bohibaTheme.colorScheme.secondary,
       textColor: bohibaTheme.textTheme.displayLarge!.color,
       fontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
-      fontAsset: ImagePath.bohibaIcon,
     );
   }
 

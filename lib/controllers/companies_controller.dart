@@ -1,3 +1,6 @@
+import 'package:bohiba/dist/enums/enum_favourite_type.dart';
+import 'package:bohiba/services/favourite_service.dart';
+
 import '/services/company_service.dart';
 
 import '/model/truck_model.dart';
@@ -6,6 +9,8 @@ import '/model/company_model.dart';
 
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'home_controller.dart';
 
 class CompaniesController extends GetxController {
   Rx<CompanyModel?> minesModel = CompanyModel().obs;
@@ -141,5 +146,20 @@ class CompaniesController extends GetxController {
         owned: 0,
       ),
     ];
+  }
+
+  Future<void> syncFavourite() async {
+    Map<String, dynamic> favObj = {
+      'asset_type': EnumFavouriteType.mines.index,
+      'asset_id': minesModel.value?.id,
+    };
+
+    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    minesModel.value?.isFav = success;
+    minesModel.refresh();
+
+    if (Get.isRegistered<HomeController>()) {
+      await Get.find<HomeController>().refreshFavouriteList();
+    }
   }
 }

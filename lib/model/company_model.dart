@@ -1,6 +1,6 @@
 class CompanyModel {
   int? id;
-  int? isFav;
+  bool? isFav;
   String? uuid;
   String? logo;
   String? name;
@@ -23,6 +23,7 @@ class CompanyModel {
   factory CompanyModel.fromJSON(Map<String, dynamic> json) {
     return CompanyModel(
       id: json['id'],
+      isFav: json['is_fav'],
       uuid: json['uuid'],
       logo: json['logo'],
       name: json['name'],
@@ -47,7 +48,7 @@ class CompanyModel {
 
   CompanyModel({
     this.id,
-    this.isFav = 0,
+    this.isFav = false,
     this.uuid,
     this.logo,
     this.name,
@@ -91,7 +92,7 @@ class CompanyModel {
   static CompanyModel fromDB(Map<String, dynamic> mines) {
     return CompanyModel(
       id: mines['id'],
-      isFav: mines['isFav'],
+      isFav: mines['isFav'] == 1 ? true : false,
       uuid: mines['uuid'],
       logo: mines['logo'],
       name: mines['name'],

@@ -34,12 +34,10 @@ class BiometricAuthScreen extends GetView<BiometricAuthController> {
           children: [
             SizedBox(height: 50.h),
             // Profile Image
-            Obx(() => Container(
-                  child: BohibaNetworkImage.circle(
-                    imageUrl: controller.userImage.value,
-                    size: 110.r,
-                    fallbackText: controller.userName.value,
-                  ),
+            Obx(() => BohibaNetworkImage.circle(
+                  imageUrl: controller.userImage.value,
+                  size: 110.r,
+                  fallbackText: controller.userName.value,
                 )),
             SizedBox(height: 20.h),
             Obx(

@@ -1,22 +1,12 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '/controllers/theme_controller.dart';
 import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '/component/bohiba_colors.dart';
 
 class BohibaTheme {
-  final _appTheme = PrefUtils.getAppThemeMode();
-
-  ThemeData themeData() {
-    if (_appTheme == ThemeMode.dark) {
-      return darkTheme;
-    } else if (_appTheme == ThemeMode.light) {
-      return lightTheme;
-    } else {
-      return lightTheme;
-    }
-  }
-
   static ThemeData get lightTheme => _lightTheme();
   static ThemeData get darkTheme => _darkTheme();
 
@@ -642,7 +632,25 @@ class BohibaTheme {
   }
 }
 
-ThemeData get bohibaTheme => BohibaTheme().themeData();
+/// Returns the current ThemeData.
+///
+/// When called inside an [Obx] or [GetBuilder], reading [ThemeController.isDark]
+/// creates a reactive dependency — the block rebuilds automatically whenever the
+/// user switches themes, the OS flips brightness (system mode), or the time-based
+/// schedule fires.  Widgets outside reactive blocks still get the correct value on
+/// their next build because [ThemeController] is a permanent singleton and
+/// [isDark.value] is always up-to-date.
+ThemeData get bohibaTheme {
+  if (Get.isRegistered<ThemeController>()) {
+    // Reading isDark.value inside Obx registers this widget as a subscriber.
+    return Get.find<ThemeController>().isDark.value
+        ? BohibaTheme.darkTheme
+        : BohibaTheme.lightTheme;
+  }
+  // Startup fallback: ThemeController not yet registered (very early frames).
+  final stored = PrefUtils.getStoredThemeMode();
+  return stored == 'dark' ? BohibaTheme.darkTheme : BohibaTheme.lightTheme;
+}
 
 TextTheme lightTextTheme() {
   return TextTheme(

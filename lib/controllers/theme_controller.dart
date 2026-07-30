@@ -5,9 +5,14 @@ import '/services/pref_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ThemeController extends GetxController {
+class ThemeController extends GetxController with WidgetsBindingObserver {
   // The effective Flutter ThemeMode fed to GetMaterialApp.
   final Rx<ThemeMode> themeMode = ThemeMode.light.obs;
+
+  // Single reactive bool that every bohibaTheme call subscribes to inside Obx.
+  // This is the key: widgets using bohibaTheme inside Obx get a dependency here
+  // and rebuild whenever the effective dark/light state changes.
+  final RxBool isDark = false.obs;
 
   // Persisted user choice (default: light — first-launch shows light theme).
   final Rx<AppThemeMode> appThemeMode = AppThemeMode.light.obs;
@@ -21,7 +26,16 @@ class ThemeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
     _loadFromPrefs();
+  }
+
+  // Called by Flutter when the OS switches between light and dark (system mode).
+  @override
+  void didChangePlatformBrightness() {
+    if (appThemeMode.value == AppThemeMode.system) {
+      _applyEffectiveTheme();
+    }
   }
 
   void _loadFromPrefs() {
@@ -64,16 +78,26 @@ class ThemeController extends GetxController {
     }
   }
 
+  bool get _platformIsDark =>
+      WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+      Brightness.dark;
+
   void _applyEffectiveTheme() {
     switch (appThemeMode.value) {
       case AppThemeMode.light:
         themeMode.value = ThemeMode.light;
+        isDark.value = false;
       case AppThemeMode.dark:
         themeMode.value = ThemeMode.dark;
+        isDark.value = true;
       case AppThemeMode.system:
         themeMode.value = ThemeMode.system;
+        // Track the effective dark state so bohibaTheme callers stay in sync.
+        isDark.value = _platformIsDark;
       case AppThemeMode.timeBased:
-        themeMode.value = _isDarkBySchedule() ? ThemeMode.dark : ThemeMode.light;
+        final dark = _isDarkBySchedule();
+        themeMode.value = dark ? ThemeMode.dark : ThemeMode.light;
+        isDark.value = dark;
     }
   }
 
@@ -90,8 +114,8 @@ class ThemeController extends GetxController {
     final endM = end.hour * 60 + end.minute;
 
     return startM <= endM
-        ? nowM >= startM && nowM < endM          // same-day: 08:00–18:00
-        : nowM >= startM || nowM < endM;          // overnight: 22:00–06:00
+        ? nowM >= startM && nowM < endM // same-day: 08:00–18:00
+        : nowM >= startM || nowM < endM; // overnight: 22:00–06:00
   }
 
   // Polls every minute — negligible battery cost vs. second-level tracking.
@@ -146,6 +170,7 @@ class ThemeController extends GetxController {
 
   @override
   void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
     _stopTimeCheckTimer();
     super.onClose();
   }

@@ -1,3 +1,4 @@
+import '/component/bohiba_buttons/primary_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -149,29 +150,10 @@ class _ReportCard extends StatelessWidget {
                   children: [
                     Text(description, style: theme.textTheme.bodySmall),
                     Gap(10.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: onTap,
-                            icon: Icon(RemixIcons.add_large_fill,
-                                size: 16.r, color: Colors.white),
-                            label: Text(
-                              'GENERATE REPORT',
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primary,
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.r)),
-                            ),
-                          ),
-                        ),
-                      ],
+                    PrimaryTextIconButton(
+                      onPressed: onTap,
+                      label: 'Generate Report',
+                      widget: Icon(RemixIcons.add_fill),
                     ),
                   ],
                 ),
