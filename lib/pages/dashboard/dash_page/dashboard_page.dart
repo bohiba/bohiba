@@ -232,7 +232,7 @@ class DashboardPage extends GetView<DashboardController> {
                 ),
                 SingleTileTabComponent(
                   onTap: () {
-                    navigator.pushNamed(AppRoute.reportIssue);
+                    navigator.pushNamed(AppRoute.allReportedIssue);
                   },
                   icon: RemixIcons.bug_2_line,
                   title: 'Report an Issue',

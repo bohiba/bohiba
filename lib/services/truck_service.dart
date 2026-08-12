@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bohiba/dist/enums/api_status_code.dart';
+import 'package:bohiba/services/favourite_service.dart';
 
 import '../dist/enums/app_enums.dart';
 import '../model/user_model.dart';
@@ -422,6 +423,18 @@ class TruckService {
 
     int insertTruck = await _databaseService.insertData(strInsertQuery);
     return insertTruck;
+  }
+
+  static Future<bool> markFav({required Map<String, dynamic> favObj}) async {
+    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    String strUpdate =
+        ''' UPDATE $tblTrucks SET isFav = ${success == true ? 1 : 0} WHERE id = ${favObj['asset_id']}''';
+    int i = await _databaseService.updateData(strUpdate);
+
+    if (i > 0) {
+      GlobalService.printHandler('Chnaged succesfully');
+    }
+    return success;
   }
 
   static Future<int> deleteTruck({required int truckId}) async {

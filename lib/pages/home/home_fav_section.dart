@@ -8,6 +8,7 @@ import '/pages/driver/driver_tile.dart';
 
 import '../../dist/enums/app_enums.dart';
 import '/controllers/home_controller.dart';
+import '/component/bohiba_navbar/bohiba_navbar.dart';
 
 import '/model/user_model.dart';
 import '/model/truck_model.dart';
@@ -43,10 +44,9 @@ class HomeFavListSection extends GetView<HomeController> {
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () => navigatorState.pushNamed(
-                      AppRoute.favList,
-                      arguments: {'fav': controller.arrFavList},
-                    ),
+                    onTap: () => context
+                        .findAncestorStateOfType<BohibaNavBarState>()
+                        ?.switchTab(1),
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: ScreenUtils.height5,

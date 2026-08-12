@@ -55,7 +55,7 @@ class CompanyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Icons.favorite_rounded,
                         color: bohibaTheme.colorScheme.tertiary,
                       )
-                    : Icon(Remix.heart_3_line),
+                    : Icon(Icons.favorite_border_rounded),
               );
             },
           ),

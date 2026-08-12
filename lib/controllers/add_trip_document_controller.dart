@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+
 import '/controllers/image_upload_controller.dart';
 import '../dist/enums/app_enums.dart';
 import '/model/trip_model.dart';
@@ -12,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddTripDocumentController extends ImageUploadController {
+  TextEditingController docTypeController = TextEditingController();
   Rx<UploadStatus> status = UploadStatus.initial.obs;
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImg;
@@ -27,7 +30,12 @@ class AddTripDocumentController extends ImageUploadController {
   }
 
   Future<int> addDocument() async {
-    Map<String, dynamic> bodyMap = {"trip_id": trip.value?.id, "doc_type": pickedImg?.path};
+    Map<String, dynamic> bodyMap = {
+      "trip_id": trip.value?.id,
+      "doc_image": pickedImg?.path,
+      'doc_type':
+          docTypeController.text.trim().toLowerCase().replaceAll(' ', '_')
+    };
     int success = await TripService.addDocument(bodyObj: bodyMap, imageList: [
       File(pickedImg!.path),
     ]);
@@ -59,7 +67,8 @@ class AddTripDocumentController extends ImageUploadController {
         GlobalService.showAlertDialog(
           status: AlertStatus.info,
           title: 'Permission',
-          description: 'Bohiba need file permission to select image by you! Please `Allow access` to access',
+          description:
+              'Bohiba need file permission to select image by you! Please `Allow access` to access',
           discardBtnTxt: 'Deny',
           saveBtnTxt: 'Allow',
           onSave: () async {

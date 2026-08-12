@@ -158,7 +158,7 @@ class HomeDataStepper extends GetView<HomeController> {
       driverWidget: Obx(() {
         if (controller.profile.value == null) {
           return SizedBox.shrink();
-        } else if (controller.profile.value?.verified != 1) {
+        } else if (controller.profile.value?.verified != 5) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
             child: Container(
@@ -206,18 +206,3 @@ class HomeDataStepper extends GetView<HomeController> {
     );
   }
 }
-
-/*
-if (step['serviceType'] == ServiceType.trip.name) {
-                              navigatorState.pushNamed(AppRoute.addTrip);
-                            } else if (step['serviceType'] ==
-                                ServiceType.truck.name) {
-                              navigatorState.pushNamed(AppRoute.addTruck);
-                            } else if (step['serviceType'] ==
-                                ServiceType.driver.name) {
-                              navigatorState.pushNamed(AppRoute.addDriver);
-                            } else {
-                              return;
-                            }
-
- */

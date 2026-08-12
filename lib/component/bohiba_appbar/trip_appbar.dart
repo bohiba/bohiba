@@ -57,7 +57,7 @@ class TripAppBar extends GetView<TripController>
                 allowedActions: [
                   TripActionType.edit,
                   TripActionType.document,
-                  TripActionType.expense,
+                  // TripActionType.expense,
                   TripActionType.payment,
                   TripActionType.reassignment,
                   // TripActionType.share,

@@ -75,14 +75,11 @@ class ApiEndPoint {
   static String get apiEditTripExpense => '$baseUrl/trip/update-expenses';
   static String get apiDeleteTripExpense => '$baseUrl/trip/delete-expenses';
 
-  static String get apiAddTripReassign => '$baseUrl/trip/add-reassignment';
-  static String get apiEditTripReassign => '$baseUrl/trip/update-reassignment';
-  static String get apiDeleteTripReassign =>
-      '$baseUrl/trip/delete-reassignment';
+  static String get apiTripReassign => '$apiTrips/reassignments';
+  static String get apiEditTripReassign => '$apiTrips/update-reassignment';
+  static String get apiDeleteTripReassign => '$apiTrips/delete-reassignment';
 
-  static String get apiAddTripDoc => '$baseUrl/trip/add-document';
-  static String get apiGetAllTripDoc => '$baseUrl/trip/all-document';
-  static String get apiGetTripDoc => '$baseUrl/trip/get-document';
+  static String get apiTripDoc => '$apiTrips/documents';
 
   static String get addOwnerExpense => '$baseUrl/add-expense';
   static String get allOwnerExpense => '$baseUrl/all-expense';
@@ -128,6 +125,8 @@ class ApiEndPoint {
   static String get apiTripReport => '$baseUrl/report';
   static String get apiTripReportFilter => '$apiTripReport/filter';
   static String get apiTripReportGenerate => '$apiTripReport/generate';
+
+  static String get apiTickets => '$baseUrl/tickets';
 
   // Google Maps
   static const String apiNearbySearch =

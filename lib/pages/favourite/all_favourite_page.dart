@@ -31,16 +31,11 @@ class AllFavouritePage extends GetView<HomeController> {
             await controller.refreshFavouriteList();
           },
           child: (arrFavList.isEmpty)
-              ? ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: const Center(
-                        child: Text("No Favourites"),
-                      ),
-                    ),
-                  ],
+              ? Center(
+                  child: Text(
+                    'No Favourites',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 )
               : ListView.builder(
                   padding: EdgeInsets.symmetric(

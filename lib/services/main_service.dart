@@ -198,7 +198,10 @@ class MainService {
 
   static Future<List<TripModel>> syncTripLocally(List<dynamic> tripList) async {
     List<TripModel> arrTripModel = [];
-    TripService.clearAll();
+    // Must await so all five DELETE statements finish before any INSERT runs.
+    // Without await the deletes race with the loop inserts via sqflite's
+    // single-isolate queue: documents/reassignments get inserted then deleted.
+    await TripService.clearAll();
     for (Map trip in tripList) {
       Map<String, dynamic> mapTrip = TripModel.toDB(trip);
       TripModel tripModel = TripModel.fromDb(mapTrip);

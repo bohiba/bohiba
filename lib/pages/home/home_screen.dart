@@ -24,11 +24,11 @@ class HomePage extends GetView<HomeController> {
       body: CustomScrollView(
         shrinkWrap: true,
         controller: controller.scrollController,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         slivers: [
-          HomeAppBar(),
+          const HomeAppBar(),
           SliverList(
-            delegate: SliverChildListDelegate([
+            delegate: SliverChildListDelegate(const [
               HomeAccountSection(),
               HomeFavListSection(),
               HomeDataStepper(),

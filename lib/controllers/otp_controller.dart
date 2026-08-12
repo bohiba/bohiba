@@ -76,7 +76,7 @@ class OtpController extends GetxController {
       txtOtp: otpController.text,
     );
     otpController.clear();
-    if (success != 1) {
+    if (success != 'SUCCESS') {
       stopTimer();
     }
     return success;

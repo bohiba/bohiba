@@ -1,4 +1,5 @@
 import 'package:bohiba/dist/enums/api_status_code.dart';
+import 'package:bohiba/services/favourite_service.dart';
 
 import '/model/rating_model.dart';
 import '/services/rating_service.dart';
@@ -158,7 +159,8 @@ class DriverService {
         UserModel driver = UserModel.fromDB(driverList.first);
         final String? uuid = driver.profile?.driverUuid;
         if (uuid != null && uuid.isNotEmpty) {
-          driver.rating = await RatingService.getLatestRatingsForDriver(driverUuid: uuid);
+          driver.rating =
+              await RatingService.getLatestRatingsForDriver(driverUuid: uuid);
         }
         return driver;
       } else {
@@ -178,7 +180,8 @@ class DriverService {
           if (driverObj.containsKey('rating')) {
             List<dynamic> ratingList = driverObj['rating'];
             List<Map<String, dynamic>> arrRatingObj = ratingList.map((rating) {
-              final Map<String, dynamic> r = Map<String, dynamic>.from(rating as Map);
+              final Map<String, dynamic> r =
+                  Map<String, dynamic>.from(rating as Map);
               r['driverUuid'] = uuid;
               return RatingModel.toDB(r);
             }).toList();
@@ -241,6 +244,18 @@ class DriverService {
           return null;
       }
     }
+  }
+
+  static Future<bool> markFav({required Map<String, dynamic> favObj}) async {
+    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    String strUpdate =
+        ''' UPDATE $tblDriver SET isFav = ${success == true ? 1 : 0} WHERE id = ${favObj['asset_id']}''';
+    int i = await _databaseService.updateData(strUpdate);
+
+    if (i > 0) {
+      GlobalService.printHandler('Chnaged succesfully');
+    }
+    return success;
   }
 
   static Future<int> deleteDriver({required int driverId}) async {

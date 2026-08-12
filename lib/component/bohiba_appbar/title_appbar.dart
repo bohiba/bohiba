@@ -29,11 +29,13 @@ class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
         title: AutoSizeText(
           title,
           maxLines: 1,
-          style: bohibaTheme.appBarTheme.titleTextStyle,
+          style: bohibaTheme.appBarTheme.titleTextStyle
+              ?.copyWith(color: bohibaTheme.textTheme.bodySmall!.color),
           overflowReplacement: MarqueeText(
             speed: 10,
             alwaysScroll: true,
-            style: bohibaTheme.appBarTheme.titleTextStyle,
+            style: bohibaTheme.appBarTheme.titleTextStyle
+                ?.copyWith(color: bohibaTheme.textTheme.bodySmall!.color),
             text: TextSpan(
               text: title,
             ),

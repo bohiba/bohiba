@@ -38,11 +38,11 @@ class KYCScreen extends GetView<DashboardController> {
               header: 'DL Number',
               title: controller.profileModel.value?.dlNumber ?? 'NA',
             ),
-
-            // TODO: Need to make resuseable method which will take INT and return string.
             LinearBoxWidget(
               header: 'Verification Status',
-              title: controller.profileModel.value?.verified == 5 ? 'Verified' : 'Not Verified',
+              title: controller.profileModel.value?.verified == 5
+                  ? 'Verified'
+                  : 'Not Verified',
             ),
           ],
         ),

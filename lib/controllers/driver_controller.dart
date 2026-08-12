@@ -1,6 +1,5 @@
 import 'package:bohiba/controllers/home_controller.dart';
 import 'package:bohiba/dist/enums/enum_favourite_type.dart';
-import 'package:bohiba/services/favourite_service.dart';
 
 import '../dist/enums/app_enums.dart';
 import '/model/profile_model.dart';
@@ -131,8 +130,7 @@ class DriverController extends GetxController {
       'asset_type': EnumFavouriteType.driver.index,
       'asset_id': driverModel.value?.id,
     };
-
-    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    bool success = await DriverService.markFav(favObj: favObj);
     driverModel.value?.isFav = success;
     driverModel.refresh();
 

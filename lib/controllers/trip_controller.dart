@@ -127,7 +127,6 @@ class TripController extends GetxController {
     if (tripModel != null) {
       tripInfo.value = tripModel;
     } else {
-      tripInfo.value = null;
       strErrorTitle.value = 'Trip Not Found';
       strErrorDesc.value = 'Sorry we unable to find this trip';
     }
@@ -151,6 +150,11 @@ class TripController extends GetxController {
 
   Future<int> deleteTrip({required int tripId}) async {
     int deleteSucess = await TripService.deleteTrip(tripId: tripId);
+    return deleteSucess;
+  }
+
+  Future<int> deleteDocument({required int docId}) async {
+    int deleteSucess = await TripService.deleteDocument(docId: docId);
     return deleteSucess;
   }
 

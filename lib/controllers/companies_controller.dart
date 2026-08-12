@@ -1,5 +1,6 @@
+import 'package:bohiba/dist/enums/app_enums.dart';
 import 'package:bohiba/dist/enums/enum_favourite_type.dart';
-import 'package:bohiba/services/favourite_service.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '/services/company_service.dart';
 
@@ -13,10 +14,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'home_controller.dart';
 
 class CompaniesController extends GetxController {
+  RefreshController refreshController = RefreshController();
   Rx<CompanyModel?> minesModel = CompanyModel().obs;
   RxList<CompanyModel> arrMines = <CompanyModel>[].obs;
   RxList<TruckModel> arrTruck = <TruckModel>[].obs;
-  RxList<QueueStatusList> arrQueue = <QueueStatusList>[].obs;
+  // RxList<QueueStatusList> arrQueue = <QueueStatusList>[].obs;
 
   GoogleMapController? mapController;
   LatLng? lastPosition;
@@ -26,17 +28,10 @@ class CompaniesController extends GetxController {
     super.onInit();
     minesModel.value = Get.arguments as CompanyModel;
     Future.delayed(Duration.zero, () async {
-      minesModel.value =
-          await CompanyService.getCompany(minesModel.value?.id ?? 0);
-      ever(minesModel, (CompanyModel? model) async {
-        if (model?.latitude != null && model?.longitude != null) {
-          lastPosition = LatLng(model!.latitude!, model.longitude!);
-          await moveCamera(lastPosition!.latitude, lastPosition!.longitude);
-        }
-      });
+      await getCompany();
     });
 
-    arrQueue.value = getDemoQueueList();
+    // arrQueue.value = getDemoQueueList();
   }
 
   Future<void> moveCamera(double lat, double lng) async {
@@ -57,6 +52,22 @@ class CompaniesController extends GetxController {
         ),
       ),
     );
+  }
+
+  Future<void> getCompany({MethodType type = MethodType.local}) async {
+    CompanyModel? company = await CompanyService.get(
+      id: minesModel.value?.id ?? 0,
+      type: type,
+    );
+    if (company != null) {
+      minesModel.value = company;
+    }
+    ever(minesModel, (CompanyModel? model) async {
+      if (model?.latitude != null && model?.longitude != null) {
+        lastPosition = LatLng(model!.latitude!, model.longitude!);
+        await moveCamera(lastPosition!.latitude, lastPosition!.longitude);
+      }
+    });
   }
 
   @override
@@ -148,18 +159,19 @@ class CompaniesController extends GetxController {
     ];
   }
 
-  Future<void> syncFavourite() async {
+  Future<bool> syncFavourite() async {
     Map<String, dynamic> favObj = {
       'asset_type': EnumFavouriteType.mines.index,
       'asset_id': minesModel.value?.id,
     };
 
-    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    bool success = await CompanyService.markFav(favObj: favObj);
     minesModel.value?.isFav = success;
     minesModel.refresh();
 
     if (Get.isRegistered<HomeController>()) {
       await Get.find<HomeController>().refreshFavouriteList();
     }
+    return success;
   }
 }

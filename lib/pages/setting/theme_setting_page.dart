@@ -11,16 +11,15 @@ import '/dist/enums/app_enums.dart';
 import '/pages/widget/linear_box_widget.dart';
 import '/theme/bohiba_theme.dart';
 
-class ThemeSettingPage extends StatelessWidget {
+class ThemeSettingPage extends GetView<ThemeController> {
   const ThemeSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController tc = Get.find<ThemeController>();
     return Scaffold(
       appBar: TitleAppbar(title: 'Appearance'),
       body: Obx(() {
-        final mode = tc.appThemeMode.value;
+        final mode = controller.appThemeMode.value;
         return ListView(
           padding: EdgeInsets.symmetric(
             horizontal: ScreenUtils.width15,
@@ -36,28 +35,28 @@ class ThemeSettingPage extends StatelessWidget {
               label: 'Light',
               subtitle: 'Always use light theme',
               selected: mode == AppThemeMode.light,
-              onTap: () => tc.changeMode(AppThemeMode.light),
+              onTap: () => controller.changeMode(AppThemeMode.light),
             ),
             _ModeTile(
               icon: Remix.moon_line,
               label: 'Dark',
               subtitle: 'Always use dark theme',
               selected: mode == AppThemeMode.dark,
-              onTap: () => tc.changeMode(AppThemeMode.dark),
+              onTap: () => controller.changeMode(AppThemeMode.dark),
             ),
             _ModeTile(
               icon: Remix.settings_line,
               label: 'System',
               subtitle: 'Follow device system theme',
               selected: mode == AppThemeMode.system,
-              onTap: () => tc.changeMode(AppThemeMode.system),
+              onTap: () => controller.changeMode(AppThemeMode.system),
             ),
             _ModeTile(
               icon: Remix.time_line,
               label: 'Time Based',
-              subtitle: 'Switch to dark mode on a schedule',
+              subtitle: 'Swicontrollerh to dark mode on a schedule',
               selected: mode == AppThemeMode.timeBased,
-              onTap: () => tc.changeMode(AppThemeMode.timeBased),
+              onTap: () => controller.changeMode(AppThemeMode.timeBased),
             ),
 
             // --- Schedule section (only when timeBased is active) ---
@@ -75,28 +74,28 @@ class ThemeSettingPage extends StatelessWidget {
               LinearBoxWidget(
                 header: 'Dark mode starts',
                 widget: _TimeButton(
-                  time: tc.darkStart.value,
+                  time: controller.darkStart.value,
                   placeholder: 'Set time',
-                  onPick: (picked) => _saveStart(tc, context, picked),
+                  onPick: (picked) => _saveStart(controller, context, picked),
                 ),
               ),
               LinearBoxWidget(
                 header: 'Dark mode ends',
                 widget: _TimeButton(
-                  time: tc.darkEnd.value,
+                  time: controller.darkEnd.value,
                   placeholder: 'Set time',
-                  onPick: (picked) => _saveEnd(tc, context, picked),
+                  onPick: (picked) => _saveEnd(controller, context, picked),
                 ),
               ),
 
-              if (tc.darkStart.value != null || tc.darkEnd.value != null)
+              if (controller.darkStart.value != null ||
+                  controller.darkEnd.value != null)
                 Padding(
                   padding: EdgeInsets.only(top: ScreenUtils.height10),
                   child: TextButton.icon(
-                    onPressed: tc.clearSchedule,
+                    onPressed: controller.clearSchedule,
                     icon: Icon(Remix.delete_bin_line,
-                        size: 16.sp,
-                        color: bohibaTheme.colorScheme.error),
+                        size: 16.sp, color: bohibaTheme.colorScheme.error),
                     label: Text(
                       'Clear schedule',
                       style: TextStyle(color: bohibaTheme.colorScheme.error),
@@ -108,8 +107,7 @@ class ThemeSettingPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: ScreenUtils.height10),
                 child: Obx(() {
-                  final isDark =
-                      tc.themeMode.value == ThemeMode.dark;
+                  final isDark = controller.themeMode.value == ThemeMode.dark;
                   return Row(
                     children: [
                       Icon(
@@ -135,16 +133,16 @@ class ThemeSettingPage extends StatelessWidget {
     );
   }
 
-  Future<void> _saveStart(
-      ThemeController tc, BuildContext context, TimeOfDay picked) async {
-    final end = tc.darkEnd.value ?? picked;
-    await tc.saveSchedule(start: picked, end: end);
+  Future<void> _saveStart(ThemeController controller, BuildContext context,
+      TimeOfDay picked) async {
+    final end = controller.darkEnd.value ?? picked;
+    await controller.saveSchedule(start: picked, end: end);
   }
 
-  Future<void> _saveEnd(
-      ThemeController tc, BuildContext context, TimeOfDay picked) async {
-    final start = tc.darkStart.value ?? picked;
-    await tc.saveSchedule(start: start, end: picked);
+  Future<void> _saveEnd(ThemeController controller, BuildContext context,
+      TimeOfDay picked) async {
+    final start = controller.darkStart.value ?? picked;
+    await controller.saveSchedule(start: start, end: picked);
   }
 }
 
@@ -188,9 +186,11 @@ class _ModeTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon,
-                size: 22.sp,
-                color: selected ? primary : bohibaTheme.iconTheme.color),
+            Icon(
+              icon,
+              size: 22.sp,
+              color: selected ? primary : bohibaTheme.iconTheme.color,
+            ),
             Gap(12.w),
             Expanded(
               child: Column(
@@ -198,9 +198,8 @@ class _ModeTile extends StatelessWidget {
                 children: [
                   Text(label,
                       style: bohibaTheme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: selected
-                            ? FontWeight.w600
-                            : FontWeight.normal,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.normal,
                         color: selected ? primary : null,
                       )),
                   Text(subtitle, style: bohibaTheme.textTheme.bodySmall),
@@ -208,8 +207,7 @@ class _ModeTile extends StatelessWidget {
               ),
             ),
             if (selected)
-              Icon(Remix.checkbox_circle_fill,
-                  size: 20.sp, color: primary),
+              Icon(Remix.checkbox_circle_fill, size: 20.sp, color: primary),
           ],
         ),
       ),

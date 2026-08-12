@@ -71,7 +71,12 @@ class SettingPage extends GetView<SettingController> {
                     AppThemeMode.system => 'System',
                     AppThemeMode.timeBased => 'Time Based',
                   };
-                  return Text(label, style: bohibaTheme.textTheme.bodySmall);
+                  return Text(
+                    label,
+                    style: bohibaTheme.textTheme.bodyMedium?.copyWith(
+                      color: bohibaTheme.textTheme.bodySmall!.color,
+                    ),
+                  );
                 }),
               ),
               Gap(ScreenUtils.height30),

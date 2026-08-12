@@ -300,13 +300,13 @@ class TripService {
         _databaseService
             .executeQuery('SELECT * FROM $tblTrips WHERE id = $tripId'),
         _databaseService.executeQuery(
-            'SELECT * FROM $tblTripPayment WHERE tripId = $tripId'),
+            'SELECT * FROM $tblTripPayment WHERE tripId = $tripId ORDER BY paymentTime DESC'),
         _databaseService.executeQuery(
-            'SELECT * FROM $tblTripExpense WHERE tripId = $tripId'),
+            'SELECT * FROM $tblTripExpense WHERE tripId = $tripId ORDER BY expenseDate DESC'),
         _databaseService.executeQuery(
             'SELECT * FROM $tblReassignment WHERE tripId = $tripId'),
-        _databaseService
-            .executeQuery('SELECT * FROM $tblDocument WHERE tripId = $tripId'),
+        _databaseService.executeQuery(
+            'SELECT * FROM $tblDocument WHERE tripId = $tripId ORDER BY id DESC'),
       ]);
 
       final List<Map<String, dynamic>>? arrTripList = results[0];
@@ -982,11 +982,11 @@ class TripService {
   static Future<int> addReassignment({
     required Map<String, dynamic> bodyObj,
   }) async {
-    if (await DeviceInfoService.hasInternet()) return 0;
+    if (!await DeviceInfoService.hasInternet()) return 0;
 
     GlobalService.showProgress();
     ApiResponse apiResponse =
-        await _dioService.post(ApiEndPoint.apiAddTripReassign, body: bodyObj);
+        await _dioService.post(ApiEndPoint.apiTripReassign, body: bodyObj);
 
     switch (apiResponse.statusCode) {
       case 201:
@@ -998,7 +998,7 @@ class TripService {
         , reassignmentAt
         , reAssignVhNumber
         , reason
-        ) VALUE (
+        ) VALUES (
           ${sqlValue(reassignment.id)}
         , ${sqlValue(reassignment.tripId)}
         , ${sqlValue(reassignment.regdNumber)}
@@ -1011,7 +1011,7 @@ class TripService {
         if (updateTrip > 0) {
           GlobalService.showSnackBar(
             status: AlertStatus.success,
-            title: 'Reaasignment',
+            title: 'Reassignment',
             desc: apiResponse.message,
           );
         }
@@ -1128,7 +1128,7 @@ class TripService {
     if (!await DeviceInfoService.hasInternet()) return null;
     GlobalService.showProgress();
     ApiResponse res =
-        await _dioService.get('${ApiEndPoint.apiGetAllTripDoc}/$tripId');
+        await _dioService.get('${ApiEndPoint.apiTripDoc}/$tripId/all');
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:
@@ -1177,7 +1177,7 @@ class TripService {
       if (!await DeviceInfoService.hasInternet()) return null;
       GlobalService.showProgress();
       ApiResponse res =
-          await _dioService.get('${ApiEndPoint.apiGetTripDoc}/$id');
+          await _dioService.get('${ApiEndPoint.apiTripDoc}/$id/all');
       GlobalService.dismissProgress();
       switch (res.statusCode) {
         case 200:
@@ -1210,25 +1210,26 @@ class TripService {
 
     GlobalService.showProgress();
     ApiResponse res = await _dioService.upload(
-        ApiEndPoint.apiAddTripDoc, imageList,
+        ApiEndPoint.apiTripDoc, imageList,
         fileField: 'doc_image', body: bodyObj);
     GlobalService.dismissProgress();
     switch (res.statusCode) {
       case 200:
         Map<String, dynamic> docObj = TripDocument.toDB(res.data);
-        String strQueryInsert = ''' INSERT INTO $tblDocument VALUES 
-          id
-        , tripId
-        , docType
-        , image
-        , uploadedBy
-        , uploadedAt VALUES (
-           ${docObj['id']},
-        ,  ${docObj['trip_id']}
-        , '${docObj['doc_type']}'
-        , '${docObj['doc_image']}' 
-        , '${docObj['uploaded_by_uuid']}'
-        , '${docObj['updated_at']}'
+        String strQueryInsert = ''' INSERT INTO $tblDocument ( 
+           id
+         , tripId
+         , docType
+         , image
+         , uploadedBy
+         , uploadedAt 
+        ) VALUES (
+          ${docObj['id']}
+        , ${docObj['tripId']}
+        , '${docObj['docType']}'
+        , '${docObj['image']}' 
+        , '${docObj['uploadedBy']}'
+        , '${docObj['updatedAt']}'
         ); ''';
         int successDoc = await _databaseService.insertData(strQueryInsert);
         return successDoc;
@@ -1253,19 +1254,50 @@ class TripService {
     return 0;
   }
 
-  static Future<int> deleteDocument() async {
-    return 0;
+  static Future<int> deleteDocument({required int docId}) async {
+    if (!await DeviceInfoService.hasInternet()) return 0;
+    GlobalService.showProgress();
+    ApiResponse res =
+        await _dioService.delete('${ApiEndPoint.apiTripDoc}/$docId');
+
+    GlobalService.dismissProgress();
+    switch (res.statusCode) {
+      case 200:
+        int deleteSuccess = await _databaseService.delete(
+          'DELETE FROM $tblDocument WHERE id = $docId',
+        );
+
+        if (deleteSuccess > 0) {
+          GlobalService.showSnackBar(
+            status: AlertStatus.success,
+            title: 'Trip',
+            desc: "Document deleted successfully",
+          );
+        }
+        return deleteSuccess;
+      case 401:
+        GlobalService.showSnackBar(
+          status: AlertStatus.failure,
+          title: 'Trip',
+          desc: res.errorMessage,
+        );
+        return 0;
+      default:
+        GlobalService.showSnackBar(
+          status: AlertStatus.warning,
+          title: 'Trip',
+          desc: "Failed to delete document",
+        );
+        return 0;
+    }
   }
 
   static Future<int> upsertTrip(String tblName,
       {required List<Map<String, dynamic>> listData}) async {
-    for (Map<String, dynamic> item in listData) {
-      return await _databaseService.upsertData(
-        tableName: tblName,
-        data: item,
-      );
-    }
-    return 0;
+    // Use insertAllData (batch with ConflictAlgorithm.replace) so every item
+    // is processed. The old per-item loop had `return` inside, so only the
+    // first item was ever upserted (e.g. only 1 of 2 reassignments saved).
+    return _databaseService.insertAllData(tblName, listData);
   }
 
   static Future<int> insertTripInfo(

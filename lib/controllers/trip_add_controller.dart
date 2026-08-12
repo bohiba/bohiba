@@ -331,7 +331,7 @@ class TripAddController extends ImageUploadController {
     statusController.text = trip.tripStatus?.tripStatusName.toString() ?? '';
     totalWeightController.text = trip.loadDetail?.loadWeight.toString() ?? '';
     shortWeightController.text = trip.loadDetail?.shortWeight.toString() ?? '';
-    tpNoController.text = trip.loadDetail?.tpNo.toString() ?? '';
+    tpNoController.text = trip.loadDetail?.tpNo?.toString() ?? '';
     rateController = MoneyMaskedTextController(
       initialValue: trip.loadDetail?.rate ?? 0.0,
       precision: 2,
@@ -354,7 +354,7 @@ class TripAddController extends ImageUploadController {
     // so we can pre-load the minerals and pre-select the material type.
     if (trip.origin?.id != null) {
       try {
-        final company = await CompanyService.getCompany(trip.origin!.id!);
+        final company = await CompanyService.get(id: trip.origin!.id!);
         if (company != null) {
           selectedOriginCompany.value = company;
           if (company.mineralId != null && company.mineralId!.isNotEmpty) {
@@ -387,7 +387,7 @@ class TripAddController extends ImageUploadController {
     // ── Destination company ────────────────────────────────────────────────
     if (trip.destination?.id != null) {
       try {
-        final company = await CompanyService.getCompany(trip.destination!.id!);
+        final company = await CompanyService.get(id: trip.destination!.id!);
         selectedDestinationCompany.value = company ??
             CompanyModel(
               id: trip.destination?.id,

@@ -1,42 +1,22 @@
 import '/component/bohiba_appbar/title_appbar.dart';
 import '/component/bohiba_buttons/primary_button.dart';
-import '../../component/bohiba_dropdown/app_search_dropdown_button.dart';
+import '/component/bohiba_dropdown/app_search_dropdown_button.dart';
 import '/component/bohiba_inputfield/text_inputfield.dart';
 import '/component/screen_utils.dart';
 import '/pages/widget/icon_text_tile.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
-class ReportIssuePage extends StatefulWidget {
+import '/controllers/ticket_controller.dart';
+
+class ReportIssuePage extends GetView<TicketController> {
   const ReportIssuePage({super.key});
 
   @override
-  State<ReportIssuePage> createState() => _ReportIssuePageState();
-}
-
-class _ReportIssuePageState extends State<ReportIssuePage> {
-  String? selectedIssue;
-  final TextEditingController descriptionController = TextEditingController();
-  final List<String> bohibaIssues = [
-    "Login / Authentication Issue",
-    "Trip Creation Problem",
-    "Expense Entry Error",
-    "Payment Not Reflecting",
-    "Driver Assignment Issue",
-    "Truck Details Missing/Wrong",
-    "App Crashes / Not Responding",
-    "Slow Performance",
-    "Notification Not Received",
-    "Document Upload Failure",
-    "Data Sync Problem",
-    "Dark Mode / Theme Issue",
-    "Incorrect Analytics Report",
-    "Profile Update Not Saving",
-    "Other (Please Specify)"
-  ];
-  @override
   Widget build(BuildContext context) {
+    NavigatorState navigatorState = Navigator.of(context);
     return Scaffold(
       appBar: TitleAppbar(title: 'Report Issue'),
       body: SafeArea(
@@ -61,23 +41,22 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
                     AppDropdownSearch(
                       padding:
                           EdgeInsets.symmetric(vertical: ScreenUtils.height10),
-                      items: bohibaIssues,
+                      items: controller.bohibaIssues,
                       hint: 'Select bug from list',
                       labelBuilder: (issue) {
                         return issue;
                       },
                       onChanged: (p0) {
-                        setState(() {
-                          selectedIssue = p0;
-                        });
+                        controller.selectedIssue = p0;
                       },
                     ),
                     TextInputField(
                       maxLines: 6,
                       height: ScreenUtils.height * 0.15,
                       hintText: 'Describe the issue in detail',
-                      controller: descriptionController,
+                      controller: controller.descriptionController,
                       keyboardType: TextInputType.multiline,
+                      textCapitalization: TextCapitalization.sentences,
                       nextActionType: TextInputAction.done,
                     ),
                     IconTextTile(
@@ -89,7 +68,10 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
                 ),
               ),
               PrimaryButton(
-                onPressed: () {},
+                onPressed: () async =>
+                    await controller.createTicket().then((onValue) {
+                  navigatorState.pop(onValue);
+                }),
                 width: ScreenUtils.width,
                 label: 'Report',
               )

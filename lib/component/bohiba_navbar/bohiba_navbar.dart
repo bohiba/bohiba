@@ -16,10 +16,10 @@ class BohibaNavBar extends StatefulWidget {
   const BohibaNavBar({super.key});
 
   @override
-  State<BohibaNavBar> createState() => _BohibaNavBarState();
+  State<BohibaNavBar> createState() => BohibaNavBarState();
 }
 
-class _BohibaNavBarState extends State<BohibaNavBar> {
+class BohibaNavBarState extends State<BohibaNavBar> {
   int currentIndex = 0;
   int marketScreenIndex = 0;
   int userRole = UserRoles.guest;
@@ -142,16 +142,16 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
             tooltip: "Home",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Remix.compass_discover_line),
-            activeIcon: Icon(Remix.compass_discover_fill),
-            label: "Trips",
-            tooltip: "Trips",
+            icon: Icon(RemixIcons.heart_3_line),
+            activeIcon: Icon(RemixIcons.heart_3_fill),
+            label: "Favourites",
+            tooltip: "Favourites",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Remix.briefcase_line),
-            activeIcon: Icon(Remix.briefcase_fill),
-            label: "Jobs",
-            tooltip: "Jobs",
+            icon: Icon(Remix.compass_discover_line),
+            activeIcon: Icon(Remix.compass_discover_fill),
+            label: "Companies",
+            tooltip: "Companies",
           ),
           BottomNavigationBarItem(
             icon: Icon(Remix.dashboard_line),
@@ -173,8 +173,10 @@ class _BohibaNavBarState extends State<BohibaNavBar> {
     }
   }
 
-  void _onTap(int index) {
+  void switchTab(int index) {
     currentIndex = index;
     setState(() {});
   }
+
+  void _onTap(int index) => switchTab(index);
 }

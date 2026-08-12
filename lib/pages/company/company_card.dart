@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import '/component/image_path.dart';
 import '/component/bohiba_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +10,6 @@ import '/dist/component_exports.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:marquee_text/marquee_text.dart';
 
 class CompanyHorizontalCard extends GetView<AllCompanyController> {
   final CompanyModel minesInfo;
@@ -104,40 +102,31 @@ class CompanyVerticalCard extends StatelessWidget {
       child: Container(
         width: ScreenUtils.width * 0.30,
         margin: EdgeInsets.only(right: ScreenUtils.width10),
+        padding: EdgeInsets.symmetric(vertical: ScreenUtils.width10),
         decoration: TileDecorative(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              flex: 3,
-              child: BohibaNetworkImage(
-                imageUrl: "${ImagePath.companyLogo}/${minesInfo.logo}",
-                height: ScreenUtils.width,
-                width: ScreenUtils.width,
-              ),
+            BohibaNetworkImage.circle(
+              imageUrl: "${ImagePath.companyLogo}/${minesInfo.logo}",
+              size: 85.w,
             ),
             Expanded(
-              flex: 2,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: ScreenUtils.width5,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(
-                      minesInfo.name ?? "",
-                      style: bohibaTheme.textTheme.titleMedium,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflowReplacement: MarqueeText(
-                        text: TextSpan(
-                          style: bohibaTheme.textTheme.titleMedium,
-                          text: minesInfo.nameCode ?? "",
-                        ),
-                      ),
-                    ),
+                child: BohibaMarqueeText(
+                  width: ScreenUtils.width,
+                  text: minesInfo.name ?? '',
+                  overflowText: minesInfo.nameCode ?? '',
+                  alignText: TextAlign.center,
+                  alignment: Alignment.center,
+                  style: bohibaTheme.textTheme.titleMedium,
+                  marqueeTextStyle: bohibaTheme.textTheme.titleMedium,
+                  minFontSize: bohibaTheme.textTheme.titleMedium!.fontSize,
+                  preserFontSize: [
+                    bohibaTheme.textTheme.titleMedium!.fontSize!
                   ],
                 ),
               ),

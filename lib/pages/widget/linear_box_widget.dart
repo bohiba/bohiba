@@ -74,7 +74,8 @@ class LinearBoxWidget extends StatelessWidget {
               Spacer(),
               widget ?? SizedBox.shrink(),
             ],
-            if (showArrow == true)
+            if (showArrow == true) ...[
+              if (widget == null) Spacer(),
               Padding(
                 padding: EdgeInsets.only(left: 5.w),
                 child: Icon(
@@ -83,6 +84,7 @@ class LinearBoxWidget extends StatelessWidget {
                   color: bohibaTheme.primaryColor,
                 ),
               ),
+            ]
           ],
         ),
       ),

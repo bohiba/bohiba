@@ -28,7 +28,6 @@ class CompanyLocation extends GetView<CompaniesController> {
                   padding: EdgeInsets.zero,
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: false,
-                  mapType: MapType.terrain,
                   onMapCreated: (mapCtrl) async {
                     controller.mapController = mapCtrl;
                     final model = controller.minesModel.value;

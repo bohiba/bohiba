@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'package:bohiba/controllers/home_controller.dart';
-import 'package:bohiba/dist/enums/enum_favourite_type.dart';
-import 'package:bohiba/services/favourite_service.dart';
+import '/controllers/home_controller.dart';
+import '/dist/enums/enum_favourite_type.dart';
 
 import '../dist/enums/app_enums.dart';
 import '/services/truck_service.dart';
@@ -58,7 +57,7 @@ class TruckController extends ImageUploadController {
       'asset_id': truckModel.value?.id,
     };
 
-    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    bool success = await TruckService.markFav(favObj: favObj);
     truckModel.value?.isFav = success;
     truckModel.refresh();
 

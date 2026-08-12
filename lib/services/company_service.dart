@@ -1,3 +1,9 @@
+import 'package:bohiba/services/favourite_service.dart';
+
+import '/dist/enums/app_enums.dart';
+import '/services/device_info_service.dart';
+import '/services/global_service.dart';
+
 import 'db2_service.dart';
 
 import '/model/company_model.dart';
@@ -44,27 +50,69 @@ class CompanyService {
     }
   }
 
-  static Future<CompanyModel?> getCompany(int id) async {
-    String companyQuery = '''
+  static Future<bool> markFav({required Map<String, dynamic> favObj}) async {
+    bool success = await FavouriteService.addOrRemoveFav(favObj);
+    String strUpdate =
+        ''' UPDATE $tblMines SET isFav = ${success == true ? 1 : 0} WHERE id = ${favObj['asset_id']}''';
+    int i = await _databaseService.updateData(strUpdate);
+
+    if (i > 0) {
+      GlobalService.printHandler('Chnaged succesfully');
+    }
+    return success;
+  }
+
+  static Future<CompanyModel?> get(
+      {required int id, MethodType type = MethodType.local}) async {
+    CompanyModel? companyModel;
+    if (type == MethodType.local) {
+      String companyQuery = '''
       SELECT * FROM $tblMines WHERE id = $id
     ''';
-    List<Map<String, dynamic>>? companyMaps =
-        await _databaseService.executeQuery(companyQuery);
-    if (companyMaps == null || companyMaps.isEmpty) {
-      return null;
-    }
+      List<Map<String, dynamic>>? companyMaps =
+          await _databaseService.executeQuery(companyQuery);
+      if (companyMaps == null || companyMaps.isEmpty) {
+        return null;
+      }
 
-    String? strMineralIds = companyMaps.first['mineralId'];
-    List<String> arrStrMineralId = [];
-    if (strMineralIds != null && strMineralIds.isNotEmpty) {
-      arrStrMineralId = strMineralIds.split(',');
-    }
-    List<MineralModel>? arrMineralModel;
-    CompanyModel companyModel = CompanyModel.fromDB(companyMaps.first);
-    if (arrStrMineralId.isNotEmpty) {
-      arrMineralModel =
-          await MineralsService.getMineralsByIds(strMineralIds ?? '');
-      companyModel.minerals = arrMineralModel;
+      String? strMineralIds = companyMaps.first['mineralId'];
+      List<String> arrStrMineralId = [];
+      if (strMineralIds != null && strMineralIds.isNotEmpty) {
+        arrStrMineralId = strMineralIds.split(',');
+      }
+      List<MineralModel>? arrMineralModel;
+      CompanyModel companyModel = CompanyModel.fromDB(companyMaps.first);
+      if (arrStrMineralId.isNotEmpty) {
+        arrMineralModel =
+            await MineralsService.getMineralsByIds(strMineralIds ?? '');
+        companyModel.minerals = arrMineralModel;
+      }
+      return companyModel;
+    } else {
+      if (!await DeviceInfoService.hasInternet()) return null;
+      ApiResponse response =
+          await _dioService.get("${ApiEndPoint.apiCompanies}/$id");
+      if (response.status && response.data != null) {
+        companyModel = CompanyModel.fromJSON(response.data);
+
+        Map<String, dynamic> companyDB = CompanyModel.toDB(response.data);
+        String? strMineralIds = companyDB['mineralId'];
+        List<String> arrStrMineralId = [];
+        if (strMineralIds != null && strMineralIds.isNotEmpty) {
+          arrStrMineralId = strMineralIds.split(',');
+        }
+        List<MineralModel>? arrMineralModel;
+        if (arrStrMineralId.isNotEmpty) {
+          arrMineralModel =
+              await MineralsService.getMineralsByIds(strMineralIds ?? '');
+          companyModel.minerals = arrMineralModel;
+        }
+        int sucessInsert = await insert(companyDB);
+        if (sucessInsert > 0) {
+          GlobalService.printHandler(
+              "Company Service:  Insert Company Data: $sucessInsert");
+        }
+      }
     }
     return companyModel;
   }
@@ -110,6 +158,50 @@ class CompanyService {
   static Future<int> insertAll(List<Map<String, dynamic>> listMines) async {
     int sucessInsert =
         await _databaseService.insertAllData(tblMines, listMines);
+    return sucessInsert;
+  }
+
+  static Future<int> insert(Map<String, dynamic> companyDB) async {
+    String strInsert = '''
+      INSERT OR REPLACE INTO $tblMines (
+        id,
+        isFav,
+        uuid,
+        logo,
+        name,
+        nameCode,
+        website,
+        type,
+        status,
+        mineralId,
+        address,
+        state,
+        district,
+        country,
+        pinCode,
+        latitude,
+        longitude
+        ) VALUES (
+        ${sqlValue(companyDB['id'])},
+        ${sqlValue(companyDB['isFav'])},
+        ${sqlValue(companyDB['uuid'])},
+        ${sqlValue(companyDB['logo'])},
+        ${sqlValue(companyDB['name'])},
+        ${sqlValue(companyDB['nameCode'])},
+        ${sqlValue(companyDB['website'])},
+        ${sqlValue(companyDB['type'])},
+        ${sqlValue(companyDB['status'])},
+        ${sqlValue(companyDB['mineralId'])},
+        ${sqlValue(companyDB['address'])},
+        ${sqlValue(companyDB['state'])},
+        ${sqlValue(companyDB['district'])},
+        ${sqlValue(companyDB['country'])},
+        ${sqlValue(companyDB['pinCode'])},
+        ${sqlValue(companyDB['latitude'])},
+        ${sqlValue(companyDB['longitude'])}
+        )
+    ''';
+    int sucessInsert = await _databaseService.insertData(strInsert);
     return sucessInsert;
   }
 

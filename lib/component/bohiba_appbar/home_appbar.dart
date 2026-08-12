@@ -28,7 +28,7 @@ class HomeAppBar extends GetView<HomeController>
         return SliverAppBar(
           pinned: true,
           stretch: true,
-          expandedHeight: 160.h,
+          expandedHeight: 180.h,
           automaticallyImplyLeading: false,
           flexibleSpace: FlexibleSpaceBar(
             background: RoleWidget(
@@ -59,7 +59,8 @@ class HomeAppBar extends GetView<HomeController>
                   borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: BohibaNetworkImage.rounded(
-                  imageUrl: '${ImagePath.profileImage}/${controller.profile.value?.image}',
+                  imageUrl:
+                      '${ImagePath.profileImage}/${controller.profile.value?.image}',
                   width: 25.h,
                   height: 25.h,
                   radius: 6,

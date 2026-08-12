@@ -1,5 +1,7 @@
+import 'package:bohiba/dist/enums/app_enums.dart';
 import 'package:bohiba/pages/company/company_minerals_list.dart';
 import 'package:bohiba/theme/bohiba_theme.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '/controllers/companies_controller.dart';
 import '/dist/component_exports.dart';
@@ -24,65 +26,72 @@ class CompanyPage extends GetView<CompaniesController> {
           controller: controller,
         ),
         body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: ScreenUtils.height20,
-              right: ScreenUtils.width15,
-              left: ScreenUtils.width15,
-              bottom: ScreenUtils.height * 0.1,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CompanyHeader(
-                  minesModel: controller.minesModel.value,
-                ),
-                CompanyStatusGrid(
-                  mineOutsideInfo: [
-                    StatusModel(
-                      name: "TOTAL LOADS",
-                      value: "Coming Soon",
-                    ),
-                    StatusModel(
-                      name: "STATE",
-                      value: controller.minesModel.value?.district ?? '',
-                    ),
-                    StatusModel(
-                      name: "STATUS",
-                      value: controller.minesModel.value?.status ?? '',
-                      color:
-                          controller.minesModel.value?.status?.minesStatusColor,
-                    ),
-                  ],
-                ),
-                CompanyLocation(),
-                CompanyMineralsList(
-                  minerals: controller.minesModel.value?.minerals ?? [],
-                ),
-                // CompanyLiveQueueStatus(
-                //   header: [
-                //     QueueHeader(flex: 1, name: "#", textAlign: TextAlign.start),
-                //     QueueHeader(
-                //         flex: 3,
-                //         name: "VEHICLE ID",
-                //         textAlign: TextAlign.start),
-                //     QueueHeader(
-                //         flex: 3, name: "STATUS", textAlign: TextAlign.center),
-                //     QueueHeader(
-                //         flex: 2, name: "WAIT", textAlign: TextAlign.center),
-                //   ],
-                //   queueList: controller.arrQueue,
-                // ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      "More features coming soon...",
-                      style: bohibaTheme.textTheme.bodyLarge,
+          child: SmartRefresher(
+            controller: controller.refreshController,
+            onRefresh: () async {
+              await controller.getCompany(type: MethodType.api);
+              controller.refreshController.refreshCompleted();
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: ScreenUtils.height20,
+                right: ScreenUtils.width15,
+                left: ScreenUtils.width15,
+                bottom: ScreenUtils.height * 0.1,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CompanyHeader(
+                    minesModel: controller.minesModel.value,
+                  ),
+                  CompanyStatusGrid(
+                    mineOutsideInfo: [
+                      StatusModel(
+                        name: "TOTAL LOADS",
+                        value: "Coming Soon",
+                      ),
+                      StatusModel(
+                        name: "STATE",
+                        value: controller.minesModel.value?.district ?? '',
+                      ),
+                      StatusModel(
+                        name: "STATUS",
+                        value: controller.minesModel.value?.status ?? '',
+                        color: controller
+                            .minesModel.value?.status?.minesStatusColor,
+                      ),
+                    ],
+                  ),
+                  CompanyLocation(),
+                  CompanyMineralsList(
+                    minerals: controller.minesModel.value?.minerals ?? [],
+                  ),
+                  // CompanyLiveQueueStatus(
+                  //   header: [
+                  //     QueueHeader(flex: 1, name: "#", textAlign: TextAlign.start),
+                  //     QueueHeader(
+                  //         flex: 3,
+                  //         name: "VEHICLE ID",
+                  //         textAlign: TextAlign.start),
+                  //     QueueHeader(
+                  //         flex: 3, name: "STATUS", textAlign: TextAlign.center),
+                  //     QueueHeader(
+                  //         flex: 2, name: "WAIT", textAlign: TextAlign.center),
+                  //   ],
+                  //   queueList: controller.arrQueue,
+                  // ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        "More features coming soon...",
+                        style: bohibaTheme.textTheme.bodyLarge,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -14,7 +14,7 @@ class FavouriteService {
   static final DioService _dioService = DioService();
 
   static Future<List<FavouriteModel>> getFavouriteList() async {
-    String strQuery = ''' SELECT * FROM $tblUserFav ''';
+    String strQuery = ''' SELECT * FROM $tblUserFav ORDER BY id DESC''';
     List<Map<String, dynamic>> arrFav =
         await _databaseService.executeQuery(strQuery) ?? [];
     List<FavouriteModel> arrFavModel = arrFav.map((e) {

@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../company/company_card.dart';
 
 import '/controllers/home_controller.dart';
+import '/component/bohiba_navbar/bohiba_navbar.dart';
 import 'package:get/get.dart';
 
-import '/routes/app_route.dart';
 import '/component/screen_utils.dart';
 import '/theme/bohiba_theme.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,6 @@ class HomeCompanySection extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       return Visibility(
         visible: controller.arrMines.value?.isNotEmpty ?? false,
@@ -35,16 +34,9 @@ class HomeCompanySection extends GetView<HomeController> {
                     style: bohibaTheme.textTheme.headlineMedium,
                   ),
                   GestureDetector(
-                    onTap: () {
-                      navigatorState.pushNamed(AppRoute.allMines);
-                    },
-                    // onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                    //     AppRoute.navBar,
-                    //     arguments: {
-                    //       "current_index": 1,
-                    //       "market_screen_index": 0,
-                    //     },
-                    //     (route) => true),
+                    onTap: () => context
+                        .findAncestorStateOfType<BohibaNavBarState>()
+                        ?.switchTab(2),
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: ScreenUtils.height5),
@@ -65,7 +57,7 @@ class HomeCompanySection extends GetView<HomeController> {
             // Home Market Section
 
             Container(
-              height: 130.h,
+              height: 120.h,
               margin: EdgeInsets.only(
                   bottom: ScreenUtils.height25, left: ScreenUtils.width15),
               constraints:

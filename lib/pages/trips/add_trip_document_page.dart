@@ -18,6 +18,7 @@ class AddTripDocumentPage extends GetView<AddTripDocumentController> {
 
   @override
   Widget build(BuildContext context) {
+    NavigatorState navigatorState = Navigator.of(context);
     return Obx(() {
       Widget content = SizedBox();
       UploadStatus checkStatus = controller.status.value;
@@ -62,6 +63,7 @@ class AddTripDocumentPage extends GetView<AddTripDocumentController> {
               ),
               content,
               AppDropdownSearch(
+                menuController: controller.docTypeController,
                 menuHeight: ScreenUtils.height * 0.20,
                 hint: 'Choose Document type',
                 items: [
@@ -82,7 +84,12 @@ class AddTripDocumentPage extends GetView<AddTripDocumentController> {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewPadding.bottom),
                 child: PrimaryButton(
-                  onPressed: () async => await controller.addDocument(),
+                  onPressed: () async =>
+                      await controller.addDocument().then((onValue) {
+                    if (onValue > 0) {
+                      navigatorState.pop(true);
+                    }
+                  }),
                   label: 'Save',
                 ),
               ),

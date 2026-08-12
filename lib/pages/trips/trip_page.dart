@@ -6,7 +6,6 @@ import '/theme/bohiba_theme.dart';
 
 import '/controllers/trip_controller.dart';
 import '/component/bohiba_appbar/trip_appbar.dart';
-import '/services/global_service.dart';
 
 import 'trip_page_widget/basic_info_section.dart';
 import 'trip_page_widget/trip_expense_section.dart';
@@ -137,20 +136,11 @@ class TripPage extends GetView<TripController> {
 
                           // Trip Reassignment
                           TripReassignmentSection(
-                            reassignments:
-                                controller.tripInfo.value?.reassignment,
-                            onReassignTap: (reassignment) {
-                              GlobalService.showAppToast(
-                                  message: 'Coming Soon');
-                            },
+                            controller: controller,
                           ),
 
                           TripDocumentSection(
-                            documents: controller.tripInfo.value?.documents,
-                            onDocumentTap: (document) {
-                              GlobalService.showAppToast(
-                                  message: 'Coming Soon');
-                            },
+                            controller: controller,
                           ),
                           Gap(ScreenUtils.height65)
                         ],

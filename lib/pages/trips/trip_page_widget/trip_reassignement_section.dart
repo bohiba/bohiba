@@ -1,3 +1,7 @@
+import 'package:bohiba/controllers/trip_controller.dart';
+import 'package:bohiba/dist/enums/app_enums.dart';
+import 'package:bohiba/routes/app_route.dart';
+
 import '/component/screen_utils.dart';
 import '/extensions/bohiba_extension.dart';
 import '/model/trip_model.dart';
@@ -8,12 +12,16 @@ import 'package:readmore/readmore.dart';
 import 'package:remixicon/remixicon.dart';
 
 class TripReassignmentSection extends StatelessWidget {
-  final List<Reassignment>? reassignments;
-  final void Function(Reassignment reassignment)? onReassignTap;
-  const TripReassignmentSection({super.key, this.reassignments, this.onReassignTap});
+  final TripController controller;
+  // final List<Reassignment>? reassignments;
+  // final void Function(Reassignment reassignment)? onReassignTap;
+  const TripReassignmentSection({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
+    NavigatorState navigatorState = Navigator.of(context);
+    final List<Reassignment>? reassignments =
+        controller.tripInfo.value?.reassignment;
     if (reassignments?.isEmpty ?? true) return SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,11 +51,23 @@ class TripReassignmentSection extends StatelessWidget {
           itemBuilder: (context, index) {
             final Reassignment reassignment = reassignments![index];
             return InkWell(
-              onTap: onReassignTap == null
-                  ? null
-                  : () {
-                      onReassignTap!(reassignment);
-                    },
+              onTap: () {
+                navigatorState
+                    .pushNamed(
+                  AppRoute.addReassignment,
+                  arguments: reassignment,
+                )
+                    .then(
+                  (onValue) async {
+                    if (onValue != null && (onValue != false)) {
+                      await controller.getTripInfo(
+                        methodType: MethodType.api,
+                        id: controller.tripInfo.value!.id!,
+                      );
+                    }
+                  },
+                );
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(
                   vertical: ScreenUtils.height10,
@@ -80,17 +100,21 @@ class TripReassignmentSection extends StatelessWidget {
                             trimCollapsedText: ' Read more',
                             trimExpandedText: ' Show less',
                             style: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
-                              fontWeight: bohibaTheme.textTheme.bodySmall!.fontWeight,
+                              fontSize:
+                                  bohibaTheme.textTheme.labelMedium!.fontSize,
+                              fontWeight:
+                                  bohibaTheme.textTheme.bodySmall!.fontWeight,
                               color: bohibaTheme.textTheme.titleMedium!.color,
                             ),
                             moreStyle: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                              fontSize:
+                                  bohibaTheme.textTheme.labelMedium!.fontSize,
                               fontWeight: FontWeight.bold,
                               color: Colors.blue,
                             ),
                             lessStyle: TextStyle(
-                              fontSize: bohibaTheme.textTheme.labelMedium!.fontSize,
+                              fontSize:
+                                  bohibaTheme.textTheme.labelMedium!.fontSize,
                               fontWeight: FontWeight.bold,
                               color: Colors.blue,
                             ),

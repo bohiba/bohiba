@@ -90,7 +90,7 @@ class TripPaymentSection extends StatelessWidget {
                     const Spacer(),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           payment.amount == null
@@ -119,7 +119,7 @@ class TripPaymentSection extends StatelessWidget {
                       ],
                     ),
                     Gap(10.w),
-                    Icon(Remix.arrow_right_s_line),
+                    Icon(Icons.arrow_forward_ios_rounded)
                   ],
                 ),
               ),

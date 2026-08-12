@@ -212,7 +212,8 @@ class OnFetchingImageSuccessWidget<T extends ImageUploadController>
       children: [
         Container(
           width: double.maxFinite,
-          margin: EdgeInsets.symmetric(vertical: ScreenUtils.height30),
+          margin: EdgeInsets.only(
+              top: ScreenUtils.height30, bottom: ScreenUtils.height15),
           constraints: BoxConstraints(
             minHeight: ScreenUtils.height * 0.35,
           ),
@@ -235,27 +236,30 @@ class OnFetchingImageSuccessWidget<T extends ImageUploadController>
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            controller.deleteImageFile(controller.selectedImg.value!);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                RemixIcons.delete_bin_5_fill,
-                color: bohibaTheme.colorScheme.error,
-              ),
-              Gap(10.w),
-              Text(
-                'Discard Upload',
-                style: TextStyle(
-                  fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
-                  fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+        Padding(
+          padding: EdgeInsets.only(bottom: ScreenUtils.height20),
+          child: GestureDetector(
+            onTap: () {
+              controller.deleteImageFile(controller.selectedImg.value!);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  RemixIcons.delete_bin_5_fill,
                   color: bohibaTheme.colorScheme.error,
                 ),
-              ),
-            ],
+                Gap(10.w),
+                Text(
+                  'Discard Upload',
+                  style: TextStyle(
+                    fontSize: bohibaTheme.textTheme.headlineMedium!.fontSize,
+                    fontWeight: bohibaTheme.textTheme.labelMedium!.fontWeight,
+                    color: bohibaTheme.colorScheme.error,
+                  ),
+                ),
+              ],
+            ),
           ),
         )
       ],

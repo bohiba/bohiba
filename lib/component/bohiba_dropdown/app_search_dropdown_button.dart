@@ -256,17 +256,16 @@ class _AsyncSearchDropdownContentState<T>
     // didUpdateWidget before the clear sequence finishes.
     if (!_isClearing) {
       final newValue = widget.fieldState.value;
+
       if (newValue != null && !_focusNode.hasFocus) {
         final newLabel = widget.labelBuilder(newValue);
+
         if (_inputController.text != newLabel) {
           _inputController.text = newLabel;
         }
-      } else if (newValue == null && !_focusNode.hasFocus && _inputController.text.isNotEmpty) {
-        // External reset (e.g. clearController() in the GetX controller nulled
-        // the Rxn) — wipe the visible text so the field returns to hint state.
-        // Guard with !hasFocus: when the user is actively typing, fieldState.value
-        // is also null (no company selected yet), and we must not clear their input.
-        _inputController.text = '';
+      } else if (newValue == null && !_focusNode.hasFocus) {
+        _inputController.clear();
+        widget.menuController?.clear();
       }
     }
   }
@@ -275,17 +274,23 @@ class _AsyncSearchDropdownContentState<T>
     if (_focusNode.hasFocus) {
       _showOverlay();
     } else {
-      Future.delayed(const Duration(milliseconds: 150), _removeOverlay);
-      // Skip restoration when _clearAndClose triggered the unfocus — the
-      // intent is to empty the field, not restore the previous selection.
+      _removeOverlay();
+
       if (!_isClearing) {
         final selected = widget.fieldState.value;
+
         if (selected != null) {
           _inputController.text = widget.labelBuilder(selected);
+        } else {
+          _inputController.clear();
+          widget.menuController?.clear();
         }
       }
     }
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _showOverlay() {
@@ -317,15 +322,36 @@ class _AsyncSearchDropdownContentState<T>
   // Wipes input text, clears the FormField value, and notifies the controller.
   void _clearAndClose() {
     _isClearing = true;
-    _inputController.text = '';
+
+    // Clear the actual TextField controller.
     _inputController.clear();
+
+    // Clear the externally supplied controller as well.
+    widget.menuController?.clear();
+
+    // Clear FormField selection.
     widget.fieldState.didChange(null);
+
+    // Notify parent/GetX.
     widget.onChanged?.call(null);
     widget.onSearchChanged?.call('');
+
+    // Close overlay.
     _removeOverlay();
+
+    // Remove keyboard focus.
     _focusNode.unfocus();
+
+    // Force a rebuild so suffixIcon changes back to search.
+    if (mounted) {
+      setState(() {});
+    }
+
+    // Don't immediately allow didUpdateWidget to restore the value.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _isClearing = false;
+      if (mounted) {
+        _isClearing = false;
+      }
     });
   }
 

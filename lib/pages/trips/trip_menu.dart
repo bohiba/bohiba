@@ -94,8 +94,9 @@ class TripMenu extends GetView<TripController> {
               value: TripActionType.delete,
               child: Text(
                 'Delete',
-                style: bohibaTheme.textTheme.labelMedium
-                    ?.copyWith(color: bohibaTheme.colorScheme.tertiary),
+                style: TextStyle(
+                  color: bohibaTheme.colorScheme.tertiary,
+                ),
               ),
             ),
           );
@@ -140,14 +141,13 @@ class TripMenu extends GetView<TripController> {
               break;
 
             case TripActionType.expense:
-              // navigatorState
-              //     .pushNamed(AppRoute.addExpense, arguments: trip)
-              //     .then((result) {
-              //   if (onActionComplete?[TripActionType.expense] != null) {
-              //     onActionComplete![TripActionType.expense]!(result);
-              //   }
-              // });
-              GlobalService.showAppToast(message: 'Coming Soon');
+              navigatorState
+                  .pushNamed(AppRoute.addExpense, arguments: trip)
+                  .then((result) {
+                if (onActionComplete?[TripActionType.expense] != null) {
+                  onActionComplete![TripActionType.expense]!(result);
+                }
+              });
               break;
 
             case TripActionType.payment:
@@ -160,14 +160,13 @@ class TripMenu extends GetView<TripController> {
               });
               break;
             case TripActionType.reassignment:
-              // navigatorState
-              //     .pushNamed(AppRoute.addReassignment, arguments: trip)
-              //     .then((result) {
-              //   if (onActionComplete?[TripActionType.reassignment] != null) {
-              //     onActionComplete![TripActionType.reassignment]!(result);
-              //   }
-              // });
-              GlobalService.showAppToast(message: 'Coming Soon');
+              navigatorState
+                  .pushNamed(AppRoute.addReassignment, arguments: trip)
+                  .then((result) {
+                if (onActionComplete?[TripActionType.reassignment] != null) {
+                  onActionComplete![TripActionType.reassignment]!(result);
+                }
+              });
               break;
 
             case TripActionType.document:

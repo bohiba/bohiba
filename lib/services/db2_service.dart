@@ -16,7 +16,7 @@ class DatabaseService {
   static Database? _database;
 
   /// Current DB version
-  static int dbversion = 38;
+  static int dbversion = 39;
 
   /*================  DB CONFIG  =================== */
 
@@ -574,7 +574,7 @@ class DatabaseService {
   String strDocument = '''
   CREATE TABLE IF NOT EXISTS $tblDocument (
     id INTEGER PRIMARY KEY AUTOINCREMENT
-  , tripId INTEGER NOT NULL DEFAULT 0
+  , tripId INTEGER
   , docType TEXT
   , image TEXT
   , uploadedBy TEXT
